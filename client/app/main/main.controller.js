@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('bossApp')
+angular.module('boardOsApp')
   .controller('MainCtrl', function ($scope, $http, socket) {
     $scope.awesomeThings = [];
 

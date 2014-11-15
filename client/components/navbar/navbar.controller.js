@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('bossApp')
+angular.module('boardOsApp')
   .controller('NavbarCtrl', function ($scope, $location, Auth) {
     $scope.menu = [{
       'title': 'Home',

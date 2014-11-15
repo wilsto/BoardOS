@@ -1,4 +1,5 @@
-BOSS
+BoardOS
 ====
 
-Board Of Supervision System
+Board Of Supervision 
+(Operational Dashboarding)

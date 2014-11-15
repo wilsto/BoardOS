@@ -3,7 +3,7 @@
 /**
  * Removes server error when user updates input
  */
-angular.module('bossApp')
+angular.module('boardOsApp')
   .directive('mongooseError', function () {
     return {
       restrict: 'A',

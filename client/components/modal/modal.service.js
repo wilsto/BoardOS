@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('bossApp')
+angular.module('boardOsApp')
   .factory('Modal', function ($rootScope, $modal) {
     /**
      * Opens a modal

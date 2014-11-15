@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('bossApp')
+angular.module('boardOsApp')
   .controller('LoginCtrl', function ($scope, Auth, $location, $window) {
     $scope.user = {};
     $scope.errors = {};

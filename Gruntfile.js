@@ -300,7 +300,7 @@ module.exports = function (grunt) {
     ngtemplates: {
       options: {
         // This should be the name of your apps angular module
-        module: 'bossApp',
+        module: 'boardOsApp',
         htmlmin: {
           collapseBooleanAttributes: true,
           collapseWhitespace: true,
@@ -376,6 +376,12 @@ module.exports = function (grunt) {
         push: true,
         connectCommits: false,
         message: 'Built %sourceName% from commit %sourceCommit% on branch %sourceBranch%'
+      },
+      pages: {
+        options: {
+          remote: 'git@github.com:wilsto/BoardOS.git',
+          branch: 'master'
+        }
       },
       heroku: {
         options: {

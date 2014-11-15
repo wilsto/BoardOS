@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('bossApp')
+angular.module('boardOsApp')
   .config(function ($stateProvider) {
     $stateProvider
       .state('login', {
