@@ -3,87 +3,397 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <base href="/">
-    <title></title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <!-- build:css(client) app/vendor.css -->
-      <!-- bower:css -->
-      <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
-      <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
-      <!-- endbower -->
-    <!-- endbuild -->
-    <!-- build:css({.tmp,client}) app/app.css -->
-    <link rel="stylesheet" href="app/app.css">
-      <!-- injector:css -->
-      <link rel="stylesheet" href="app/account/login/login.css">
-      <link rel="stylesheet" href="app/admin/admin.css">
-      <link rel="stylesheet" href="app/app.css">
-      <link rel="stylesheet" href="app/main/main.css">
-      <link rel="stylesheet" href="components/modal/modal.css">
-      <!-- endinjector -->
-    <!-- endbuild -->
-  </head>
-  <body ng-app="boardOsApp">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <base href="/">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+  <!-- build:css(client) app/vendor.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="bower_components/ng-table/ng-table.css" />
+  <link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.css" />
+  <link rel="stylesheet" href="bower_components/angular-motion/dist/angular-motion.css" />
+  <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="bower_components/ngtoast/dist/ngToast.min.css" />
+  <!-- endbower -->
+  <!-- endbuild -->
+  <!-- build:css({.tmp,client}) app/app.css -->
+  <link rel="stylesheet" href="app/app.css">
+  <!-- injector:css -->
+  <link rel="stylesheet" href="app/account/login/login.css">
+  <link rel="stylesheet" href="app/admin/admin.css">
+  <link rel="stylesheet" href="app/app.css">
+  <link rel="stylesheet" href="app/dashboard/dashboard.css">
+  <link rel="stylesheet" href="app/dashboards/dashboards.css">
+  <link rel="stylesheet" href="app/main/main.css">
+  <link rel="stylesheet" href="components/css/custom.css">
+  <link rel="stylesheet" href="components/css/plugins.css">
+  <link rel="stylesheet" href="components/css/print.css">
+  <link rel="stylesheet" href="components/css/style-conquer.css">
+  <link rel="stylesheet" href="components/css/style-responsive.css">
+  <link rel="stylesheet" href="components/css/style.css">
+  <link rel="stylesheet" href="components/css/themes/default.css">
+  <link rel="stylesheet" href="components/modal/modal.css">
+  <!-- endinjector -->
+  <!-- endbuild -->
+</head>
+<body ng-app="boardOsApp"  class="page-header-fixed page-sidebar-closed">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
+      <![endif]-->
+<ng-toast></ng-toast>
+      <!-- BEGIN CONTAINER -->
+      <div class="page-container">
+        <!-- BEGIN SIDEBAR -->
+        <div class="page-sidebar-wrapper">
+          <div class="page-sidebar navbar-collapse collapse">
+            <!-- BEGIN SIDEBAR MENU -->
+            <!-- DOC: for circle icon style menu apply page-sidebar-menu-circle-icons class right after sidebar-toggler-wrapper -->
+            <ul class="page-sidebar-menu">
+              <li class="sidebar-toggler-wrapper">
+                <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+                <div class="sidebar-toggler">
+                </div>
+                <div class="clearfix">
+                </div>
+                <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+              </li>
+              <li class="sidebar-search-wrapper">
+                <form class="search-form" role="form" action="index.html" method="get">
+                  <div class="input-icon right">
+                    <i class="icon-magnifier"></i>
+                    <input type="text" class="form-control" name="query" placeholder="Rechercher...">
+                  </div>
+                </form>
+              </li>
+              <li class="start active ">
+                <a href="/">
+                  <i class="fa fa-dashboard"></i>
+                  <span class="title">Dashboard</span>
+                  <span class="selected"></span>
+                </a>
+                <ul class="sub-menu">
+                  <li>
+                    <a href="/">
+                      <i class="fa fa-home"></i>
+                      Home
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/dashboards">
+                      <i class="icon-list"></i>
+                      List
+                    </a>
+                  </li>
+                </ul>
+              </li>   
+              <li >
+                <a href="javascript:;">
+                  <i class="icon-calendar"></i>
+                  <span class="title">Information</span>
+                  <span class="arrow "></span>
+                </a>
+                <ul class="sub-menu">
+                  <li>
+                    <a href="/tasks">
+                      <i class="fa fa-tasks"></i>
+                      Tasks
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/calendar">
+                      <i class="icon-calendar"></i>
+                      Calendar
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/calendar">
+                      <i class="fa  fa-cogs"></i>
+                      Process
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/calendar">
+                      <i class="fa fa-file-text-o"></i>
+                      Journal Log
+                    </a>
+                  </li>
+                </ul>
+              </li>    
+              <li >
+                <a href="javascript:;">
+                  <i class="icon-puzzle"></i>
+                  <span class="title">Configuration</span>
+                  <span class="arrow "></span>
+                </a>
+                <ul class="sub-menu">
+                  <li>
+                    <a href="/config">
+                      <i class="fa fa-gear"></i>
+                      Indicateurs
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/config">
+                      <i class="icon-book-open"></i>
+                      Activités
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/config">
+                      <i class="icon-pin"></i>
+                      Contextes
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/config">
+                      <i class="icon-cursor"></i>
+                      Axes
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            <!-- END SIDEBAR MENU -->
+          </div>
+        </div>
+        <!-- END SIDEBAR -->
+        <!-- BEGIN CONTENT -->
+        <div class="page-content-wrapper">
+          <div class="page-content">
+            <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Modal title</h4>
+                  </div>
+                  <div class="modal-body">
+                    Widget settings form goes here
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-success">Save changes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+                <!-- /.modal-content -->
+              </div>
+              <!-- /.modal-dialog -->
+            </div>
+            <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <!-- BEGIN STYLE CUSTOMIZER -->
 
-    <!-- Add your site or application content here -->
-    <div ui-view=""></div>
+                        <!-- END BEGIN STYLE CUSTOMIZER -->
+                        <!-- BEGIN PAGE HEADER-->
+                        <div class="page-bar">
+                          <ul class="page-breadcrumb">
+                            <li>
+                              <i class="fa fa-home"></i>
+                              <a href="/">Home</a>
+                              <i class="fa fa-angle-right"></i>
+                            </li>
+                            <li>
+                              <a href="#">Dashboard</a>
+                            </li>
+                            <li ng-show="perimeter.name">
+                              <i class="fa fa-angle-right"></i>
+                              <a href="/dash/{{perimeter._id}}">{{perimeter.name}}</a>
+                            </li>
+                          </ul>
+                          <div class="page-toolbar">
 
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+                            <div id="dashboard-report-range" class="pull-right tooltips btn btn-fit-height btn-primary" data-container="body" data-placement="top" data-original-title="Change dashboard date range">
+                              <i class="icon-calendar"></i>&nbsp; <span class="thin uppercase visible-lg-inline-block"></span>&nbsp; <i class="fa fa-angle-down"></i>
+                            </div>
+                            <div id="dashboard-report-supervision" class="pull-right tooltips btn btn-fit-height btn-default" data-html="true"  data-content="<br/>
+                            <div class='form-group visible-lg-inline-block'>
+                              <label class='col-md-2 control-label'>Activity</label>
+                              <div class='col-md-7'>
+                                <div class='input-group'>
+                                  <span class='input-group-addon'>
+                                    <i class='fa fa-gears'></i>
+                                  </span>
+                                  <input type='text' class='form-control' placeholder='All' ng-model='perimeter.Activity' typeahead-on-select='setActivityId($item)'  typeahead='activity.name for activity in activities | filter:$viewValue' >
+                                </div>
+                              </div>
+                              <div class='col-md-3' style='float:left'>
+                                <div class='input-group input-small'>
+                                  <input type='text' class='spinner-input form-control' value='0' maxlength='1' readonly=''>
+                                  <div class='spinner-buttons input-group-btn btn-group-vertical'>
+                                    <button type='button' class='btn spinner-up btn-xs btn-info'>
+                                      <i class='fa fa-angle-up'></i>
+                                    </button>
+                                    <button type='button' class='btn spinner-down btn-xs btn-info'>
+                                      <i class='fa fa-angle-down'></i>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <br/>
+                            <div class='form-group visible-lg-inline-block'>
+                              <label class='col-md-2 control-label'>Context</label>
+                              <div class='col-md-7'>
+                                <div class='input-group'>
+                                  <span class='input-group-addon'>
+                                    <i class='fa fa-crosshairs'></i>
+                                  </span>
+                                  <input type='text' class='form-control' placeholder='All' ng-model='perimeter.Contexte' typeahead-on-select='setContextId($item)'  typeahead='contexte.name for contexte in contextes | filter:$viewValue'>
+                                </div>
+                              </div>
+                              <div class='col-md-3' style='float:left'>
+                                <div class='input-group input-small'>
+                                  <input type='text' class='spinner-input form-control' value='0' maxlength='1' readonly=''>
+                                  <div class='spinner-buttons input-group-btn btn-group-vertical'>
+                                    <button type='button' class='btn spinner-up btn-xs btn-info'>
+                                      <i class='fa fa-angle-up'></i>
+                                    </button>
+                                    <button type='button' class='btn spinner-down btn-xs btn-info'>
+                                      <i class='fa fa-angle-down'></i>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div> 
+                            <br/>
+                            <div class='form-group visible-lg-inline-block'>
+                              <label class='col-md-2 control-label'>Axe</label>
+                              <div class='col-md-7'>
+                                <div class='input-group'>
+                                  <span class='input-group-addon'>
+                                    <i class='fa fa-location-arrow'></i>
+                                  </span>
+                                  <input type='text' class='form-control' placeholder='All' ng-model='perimeter.Axe' typeahead-on-select='setAxeId($item)'  typeahead='axe.name for axe in axes | filter:$viewValue'>
+                                </div>
+                              </div>
+                              <div class='col-md-3' style='float:left'>
+                                <div class='input-group input-small'>
+                                  <input type='text' class='spinner-input form-control' value='0' maxlength='1' readonly=''>
+                                  <div class='spinner-buttons input-group-btn btn-group-vertical'>
+                                    <button type='button' class='btn spinner-up btn-xs btn-info'>
+                                      <i class='fa fa-angle-up'></i>
+                                    </button>
+                                    <button type='button' class='btn spinner-down btn-xs btn-info'>
+                                      <i class='fa fa-angle-down'></i>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div> <br/>
+                            <div class='form-group'> 
+                              <label class='col-md-2 control-label'>Tags</label>
+                              <div class='col-md-10'>
+                                <div class='input-group'>
+                                  <span class='input-group-addon'>
+                                    <i class='fa fa-tags'></i>
+                                  </span>
+                                  <input type='text' class='form-control' placeholder='None'>
+                                </div>
+                              </div>
+                            </div> <br/><br/><br/>  <div class='form-group'>
+                            <label class='col-md-2 control-label'>Type</label>
+                            <div class='col-md-10'>
+                              <div id='parent-group' class='form-group form-inline'>  
 
-      ga('create', 'UA-XXXXX-X');
-      ga('send', 'pageview');
-    </script>
+                                <div class='checkbox'>
+                                  <label>
+                                    <input type='checkbox' ng-model='perimeter.category[0]'> Objectif
+                                  </label>
+                                </div>
+                                <div class='checkbox'>
+                                  <label>
+                                    <input type='checkbox' ng-model='perimeter.category[1]'> Alerte
+                                  </label>
+                                </div>
+                                <div class='checkbox'>
+                                  <label>
+                                    <input type='checkbox' ng-model='perimeter.category[2]'> Anticipation
+                                  </label>
+                                </div>
+                                <div class='checkbox'>
+                                  <label>
+                                    <input type='checkbox' ng-model='perimeter.category[3]'> Information
+                                  </label>
+                                </div></div>
+                              </div><br/><hr/><button class='btn btn-default' ng-click='closePerimeter()'>Cancel</button><button class='btn btn-primary pull-right' ng-click='updatePerimeter(false)'>Apply</button><br/>" data-container="body" data-placement="bottom" data-original-title="Change dashboard supervision">
+                              <i class="fa fa-filter"></i>&nbsp; <span class="thin uppercase visible-lg-inline-block"></span>&nbsp; <i class="fa fa-angle-down"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- END PAGE HEADER-->
+                        <!-- Add your site or application content here -->
+                        <div class="container-fluid" style="margin:20px" ui-view=""></div>
+                      </div>
+                    </div>
+
+
+
+                    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+                    <script>
+                      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+                      ga('create', 'UA-XXXXX-X');
+                      ga('send', 'pageview');
+                    </script>
 
     <!--[if lt IE 9]>
     <script src="bower_components/es5-shim/es5-shim.js"></script>
     <script src="bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
     <!-- build:js({client,node_modules}) app/vendor.js -->
-      <!-- bower:js -->
-      <script src="bower_components/jquery/dist/jquery.js"></script>
-      <script src="bower_components/angular/angular.js"></script>
-      <script src="bower_components/angular-resource/angular-resource.js"></script>
-      <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-      <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-      <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-      <script src="bower_components/lodash/dist/lodash.compat.js"></script>
-      <script src="bower_components/angular-socket-io/socket.js"></script>
-      <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-      <!-- endbower -->
-      <script src="socket.io-client/socket.io.js"></script>
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/lodash/dist/lodash.compat.js"></script>
+    <script src="bower_components/angular-socket-io/socket.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/jquery-ui/jquery-ui.js"></script>
+    <script src="bower_components/ng-table/ng-table.js"></script>
+    <script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-strap/dist/angular-strap.js"></script>
+    <script src="bower_components/angular-strap/dist/angular-strap.tpl.js"></script>
+    <script src="bower_components/ngtoast/dist/ngToast.min.js"></script>
+    <!-- endbower -->
+    <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
 
-        <!-- build:js({.tmp,client}) app/app.js -->
-        <script src="app/app.js"></script>
-          <!-- injector:js -->
-          <script src="app/account/account.js"></script>
-          <script src="app/account/login/login.controller.js"></script>
-          <script src="app/account/settings/settings.controller.js"></script>
-          <script src="app/account/signup/signup.controller.js"></script>
-          <script src="app/admin/admin.controller.js"></script>
-          <script src="app/admin/admin.js"></script>
-          <script src="app/main/main.controller.js"></script>
-          <script src="app/main/main.js"></script>
-          <script src="components/auth/auth.service.js"></script>
-          <script src="components/auth/user.service.js"></script>
-          <script src="components/modal/modal.service.js"></script>
-          <script src="components/mongoose-error/mongoose-error.directive.js"></script>
-          <script src="components/navbar/navbar.controller.js"></script>
-          <script src="components/socket/socket.service.js"></script>
-          <!-- endinjector -->
-        <!-- endbuild -->
-</body>
-</html>
+    <!-- build:js({.tmp,client}) app/app.js -->
+    <script src="app/app.js"></script>
+    <!-- injector:js -->
+    <script src="app/account/account.js"></script>
+    <script src="app/account/login/login.controller.js"></script>
+    <script src="app/account/settings/settings.controller.js"></script>
+    <script src="app/account/signup/signup.controller.js"></script>
+    <script src="app/admin/admin.controller.js"></script>
+    <script src="app/admin/admin.js"></script>
+    <script src="app/dashboard/dashboard.controller.js"></script>
+    <script src="app/dashboard/dashboard.js"></script>
+    <script src="app/dashboards/dashboards.controller.js"></script>
+    <script src="app/dashboards/dashboards.js"></script>
+    <script src="app/main/main.controller.js"></script>
+    <script src="app/main/main.js"></script>
+    <script src="components/auth/auth.service.js"></script>
+    <script src="components/auth/user.service.js"></script>
+    <script src="components/modal/modal.service.js"></script>
+    <script src="components/mongoose-error/mongoose-error.directive.js"></script>
+    <script src="components/navbar/navbar.controller.js"></script>
+    <script src="components/socket/socket.service.js"></script>
+    <!-- endinjector -->
+    <!-- endbuild -->
+  </body>
+  </html>

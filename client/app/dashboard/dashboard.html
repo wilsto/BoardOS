@@ -1,0 +1,324 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+<!--* Modal Part-->
+
+<div class="row">
+ <!-- BEGIN OVERVIEW STATISTIC BARS-->
+ <div class="row stats-overview-cont">
+   <div class="col-md-2 col-sm-4">
+    <div class="stats-overview stat-block">
+      <div class="display stat bad huge">
+        <span class="bar-chart">
+          1,7,9,11, 14, 12, 6, 7, 4, 2,12, 10 </span>
+          <div class="percent">
+           +15%
+         </div>
+       </div>
+       <div class="details">
+        <div class="title">
+         Metrics
+       </div>
+       <div class="numbers">
+         {{summary.metrics.list.length}}
+       </div>
+       <div class="progress">
+        <span style="width: 15%;" class="progress-bar progress-bar-default" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
+          <span class="sr-only">
+            15% Complete </span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2 col-sm-4">
+
+    <div class="stats-overview stat-block">
+      <div class="display stat ok huge">
+        <span class="bar-chart">
+          5, 6, 7, 11, 14, 10, 15, 19, 15, 2 </span>
+          <div class="percent">
+           +8%
+         </div>
+       </div>
+       <div class="details">
+        <div class="title">
+         Tasks
+       </div>
+       <div class="numbers">
+        {{summary.tasks.list.length}}
+      </div>
+    </div>
+    <div class="progress">
+      <span style="width: 40%;" class="progress-bar progress-bar-default" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100">
+        <span class="sr-only">
+          66% Complete </span>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2 col-sm-4">
+    <div class="stats-overview stat-block">
+      <div class="display stat good huge">
+        <span class="bar-chart">
+          1,1,2,2,3,4,5,5,5,5</span>
+          <div class="percent">
+           +0%
+         </div>
+       </div>
+       <div class="details">
+        <div class="title">
+         Indicators
+       </div>
+       <div class="numbers">
+         {{summary.indicateurs.list.length}}
+       </div>
+       <div class="progress">
+        <span style="width: 16%;" class="progress-bar progress-bar-success" aria-valuenow="16" aria-valuemin="0" aria-valuemax="100">
+          <span class="sr-only">
+            16% Complete </span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-2 col-sm-4">
+    <div class="stats-overview stat-block">
+      <div class="display stat ok huge">
+        <span class="bar-chart">
+          2,6,8,12, 11, 15, 16, 16, 14, 12, 16 </span>
+          <div class="percent">
+           +12%
+         </div>
+       </div>
+       <div class="details">
+        <div class="title">
+         Trust
+       </div>
+       <div class="numbers">
+        {{summary.trust.sum}}%
+      </div>
+      <div class="progress">
+        <span style="width:  {{summary.trust.sum}}%;" class="progress-bar progress-bar-info" aria-valuenow=" {{summary.trust.sum}}" aria-valuemin="0" aria-valuemax="100">
+          <span class="sr-only">
+           {{summary.trust.sum}}% Complete </span>
+         </span>
+       </div>
+     </div>
+   </div>
+ </div>
+ 
+ <div class="col-md-2 col-sm-4">
+  <div class="stats-overview stat-block">
+    <div class="display stat bad huge">
+      <span class="bar-chart">
+        2,0,3,1, 3, 1, 0, 0, 1, 2, 1, 1,0 </span>
+        <div class="percent">
+         -100%
+       </div>
+     </div>
+     <div class="details">
+      <div class="title">
+       Alerts
+     </div>
+     <div class="numbers">
+      {{summary.alerts.list.length}}
+    </div>
+    <div class="progress">
+      <span style="width: 16%;" class="progress-bar progress-bar-danger" aria-valuenow="16" aria-valuemin="0" aria-valuemax="100">
+        <span class="sr-only">
+          16% Complete </span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-md-2 col-sm-4">
+  <div class="stats-overview stat-block">
+    <div class="display stat good huge">
+      <span class="bar-chart">
+        1,4,9,12, 10, 11, 9, 14, 13, 15 </span>
+        <div class="percent">
+         +16%
+       </div>
+     </div>
+     <div class="details">
+      <div class="title">
+       Goals
+     </div>
+     <div class="numbers">
+      {{summary.goals.sum}}% 
+    </div>
+    <div class="progress">
+      <span style="width: 56%;" class="progress-bar progress-bar-success" aria-valuenow="56" aria-valuemin="0" aria-valuemax="100">
+        <span class="sr-only">
+          56% Complete </span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<!-- END OVERVIEW STATISTIC BARS-->
+</div>
+<!-- Layout Part -->
+<tabset>
+
+  <tab heading="Chronology">
+    <div class="portlet">
+      <div class="portlet-title">
+        <div class="caption">
+          <i class="fa fa-calendar"></i>KPIs Timeline
+        </div>
+        
+      </div>
+      <div class="portlet-body">
+        <table class="table table-striped table-bordered table-hover" id="sample_4">
+          <thead>
+            <tr>
+              <th>
+               Indicator Name
+             </th>
+             <th>
+               1
+             </th>
+             <th>
+               2
+             </th>
+             <th>
+               3
+             </th>
+             <th>
+               4
+             </th>
+             <th>
+               5
+             </th>
+             <th>
+               6
+             </th>
+             <th>
+               7
+             </th>
+             <th>
+               8
+             </th>
+             <th>
+               9
+             </th>
+             <th>
+               10
+             </th>
+             <th>
+               11
+             </th>
+             <th>
+               12
+             </th>
+             <th>
+               By Months
+             </th>
+           </tr>
+         </thead>
+         <tbody>
+          <tr ng-repeat="indicateur in indicateurs | orderBy : Activity | filter: myFilter track by indicateur._id " on-finish-render>
+            <td>
+             <a href="/indicator/{{indicateur._id}}">{{indicateur.name}}</a>
+           </td>
+           <td>
+             <span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-right"></span>
+           </td>
+           <td>
+             <span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-right"></span>
+           </td>
+           <td>
+             <span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-right"></span>
+           </td>
+           <td>
+             <span style="color:orange" class="glyphicon glyphicon-circle-arrow-down"></span>
+           </td>
+           <td>
+             <span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-up"></span>
+           </td>
+           <td>
+             <span style="color:orange" class="glyphicon glyphicon-circle-arrow-down"></span>
+           </td>
+           <td>
+             <span style="color:red" class="glyphicon glyphicon-circle-arrow-down"></span>
+           </td>
+           <td>
+             <span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-up"></span>
+           </td>
+           <td>
+             <span style="color:grey" class="glyphicon glyphicon-dashboard"></span>
+           </td>
+           <td>
+             <span style="color:lightgrey" class="glyphicon glyphicon-unchecked"></span>
+           </td>
+           <td>
+             <span style="color:lightgrey" class="glyphicon glyphicon-unchecked"></span>
+           </td>
+           <td>
+             <span style="color:lightgrey" class="glyphicon glyphicon-unchecked"></span>
+           </td>
+           <td>
+                  <span class="bar-chart chrono"> 1,7,9,11, 14, 12, 6, 7, 4, 2,12, 10 </span>
+
+           </td>
+         </tr>
+       </tbody>
+     </table>
+   </div>
+ </div>
+
+</tab>
+  <tab heading="Now">
+    <div class="row cards" >
+
+      <div class="card-container col-lg-3 col-sm-6 col-sm-12" ng-repeat="indicateur in indicateurs | orderBy : Activity | filter: myFilter track by indicateur._id ">
+        <div id='{{indicateur._id}}'class="card card-slategray hover" ng-click="expandWidget(indicateur)">
+          <div class="front"> 
+
+            <div class="media">        
+              <span class="pull-left" style="margin-right:20px;">
+                <h2><span class="glyphicon" ng-class="{'glyphicon-record':indicateur.category=='Objectif','glyphicon-warning-sign':indicateur.category=='Alerte'}"></span></h2>
+              </span>
+
+              <div class="media-body">
+                <span style="max-height:10px"><small>{{indicateur.name}}</small></span>
+                <h2 class="media-heading animate-number" data-value="3659" data-animation-duration="1500">{{indicateur.mesureValCal}} <small> / {{indicateur.mesureRefCal}}</small></h2>
+              </div>
+            </div> 
+
+            <div class="progress-list">
+              <div class="details">
+                <div class="title">Vue {{indicateur.groupBy}}</div>
+              </div>
+              <div class="status pull-right bg-transparent-black-1">
+                <span class="animate-number" data-value="{{indicateur.percentObjectif}}" data-animation-duration="1500">{{indicateur.percentObjectif}}</span>
+              </div>
+              <div class="clearfix"></div>
+              <div class="progress progress-little progress-transparent-black">
+                <div class="progress-bar animate-progress-bar progress-bar-#3cc051" data-percentage="{{indicateur.percentObjectif}}" style="width: {{indicateur.percentObjectif}};"></div>
+              </div>
+            </div>
+            <div style="display:none" class='cardBottom' style="margin-top:30px;">
+              <div class="media-body">
+                <span><small style="color:grey">Activity : </small><br/>{{indicateur.Activity.replace(perimeter.Activity,"#")}}</span><br/>
+                <span> <small style="color:grey">Contexte : </small><br/>{{indicateur.Contexte}}</span><br/>
+                <span><small style="color:grey">Axe : </small><br/>{{indicateur.Axe}}</span><br/>
+              </div> 
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </tab>
+</tabset>
+<script>
+  jQuery(document).ready(function() {    
+   Index.initMiniCharts();
+
+   Index.initDashboardDaterange();
+ });
+</script>

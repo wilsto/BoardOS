@@ -213,7 +213,7 @@ module.exports = function (grunt) {
       target: {
         src: '<%= yeoman.client %>/index.html',
         ignorePath: '<%= yeoman.client %>/',
-        exclude: [/bootstrap-sass-official/, /bootstrap.js/, '/json3/', '/es5-shim/']
+        exclude: ['/json3/', '/es5-shim/']
       }
     },
 
@@ -376,6 +376,12 @@ module.exports = function (grunt) {
         push: true,
         connectCommits: false,
         message: 'Built %sourceName% from commit %sourceCommit% on branch %sourceBranch%'
+      },
+      pages: {
+        options: {
+          remote: 'git@github.com:wilsto/BoardOS.git',
+          branch: 'master'
+        }
       },
       heroku: {
         options: {

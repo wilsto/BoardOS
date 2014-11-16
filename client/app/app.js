@@ -6,7 +6,9 @@ angular.module('boardOsApp', [
   'ngSanitize',
   'btford.socket-io',
   'ui.router',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'xeditable',
+  'ngToast'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider
@@ -40,6 +42,10 @@ angular.module('boardOsApp', [
         }
       }
     };
+  })
+  
+  .run(function(editableOptions) {
+    editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
   })
 
   .run(function ($rootScope, $location, Auth) {
