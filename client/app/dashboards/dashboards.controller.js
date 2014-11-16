@@ -15,10 +15,10 @@ angular.module('boardOsApp')
     $scope.saveDashBoard = function() {
       if (typeof $scope.dashboard._id == 'undefined') {
         $http.post('/api/dashboards', $scope.dashboard);
-        ngToast.create('Dashboard' + $scope.dashboard.name + ' was created');
+        ngToast.create('Dashboard "' + $scope.dashboard.name + '" was created');
       } else {
         $http.post('/api/dashboards', $scope.dashboard);
-        ngToast.create('Dashboard' + $scope.dashboard.name + ' was updated');
+        ngToast.create('Dashboard "' + $scope.dashboard.name + '" was updated');
       }
       $scope.loadDashBoard();
       $scope.config = {tab1: true, tab2: false};
@@ -31,12 +31,15 @@ angular.module('boardOsApp')
     };
 
     $scope.deleteDashBoard = function(dashboard,index) {
-      $http.delete('/api/dashboards/' + dashboard._id).success(function () {
-        $scope.dashboards.splice(index, 1);
-        ngToast.create('Dashboard' + dashboard.name + ' was deleted');
-      });
-    };
+      bootbox.confirm("Are you sure?", function(result) {
+        if (result) {
+          $http.delete('/api/dashboards/' + dashboard._id).success(function () {
+              $scope.dashboards.splice(index, 1);
+              ngToast.create('Dashboard "' + dashboard.name + '" was deleted');
+          });
+        }
+      }); 
+    }; 
 
     $scope.loadDashBoard();
-
-  });
+});

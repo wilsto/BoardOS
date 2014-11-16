@@ -1105,7 +1105,7 @@ Modal header close button fix
 .modal-backdrop {
   border: 0 !important;
   outline: none !important;
-  z-index: 10049 !important;
+  /*z-index: 10049 !important;*/
 }
 
 .modal-backdrop, 
