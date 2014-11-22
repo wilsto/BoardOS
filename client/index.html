@@ -21,16 +21,20 @@
   <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.css" />
   <link rel="stylesheet" href="bower_components/ngtoast/dist/ngToast.min.css" />
   <link rel="stylesheet" href="bower_components/simple-line-icons/css/simple-line-icons.css" />
+  <link rel="stylesheet" href="bower_components/ng-nestable/lib/jquery.nestable.css" />
+  <link rel="stylesheet" href="bower_components/jstree/dist/themes/default/style.css" />
   <!-- endbower -->
   <!-- endbuild -->
   <!-- build:css({.tmp,client}) app/app.css -->
   <link rel="stylesheet" href="app/app.css">
   <!-- injector:css -->
+  <link rel="stylesheet" href="app/KPIs/KPIs.css">
   <link rel="stylesheet" href="app/account/login/login.css">
   <link rel="stylesheet" href="app/admin/admin.css">
   <link rel="stylesheet" href="app/app.css">
   <link rel="stylesheet" href="app/dashboard/dashboard.css">
   <link rel="stylesheet" href="app/dashboards/dashboards.css">
+  <link rel="stylesheet" href="app/hierarchies/hierarchies.css">
   <link rel="stylesheet" href="app/main/main.css">
   <link rel="stylesheet" href="components/css/custom.css">
   <link rel="stylesheet" href="components/css/plugins.css">
@@ -101,8 +105,14 @@
                 </a>
                 <ul class="sub-menu">
                   <li>
-                    <a href="/tasks">
+                    <a href="/KPIs">
                       <i class="fa fa-tasks"></i>
+                      KPIs
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/tasks">
+                      <i class="fa fa-check-square-o "></i>
                       Tasks
                     </a>
                   </li>
@@ -140,7 +150,7 @@
                     </a>
                   </li>
                   <li>
-                    <a href="/config">
+                    <a href="/hierarchies">
                       <i class="icon-book-open"></i>
                       Activités
                     </a>
@@ -370,7 +380,10 @@
     <script src="bower_components/angular-strap/dist/angular-strap.tpl.js"></script>
     <script src="bower_components/ngtoast/dist/ngToast.min.js"></script>
     <script src="bower_components/bootbox/bootbox.js"></script>
-    <script src="bower_components/aterrien/jQuery-Knob/js/jquery.knob.js"></script>
+    <script src="bower_components/ng-nestable/lib/jquery.nestable.js"></script>
+    <script src="bower_components/ng-nestable/src/angular-nestable.js"></script>
+    <script src="bower_components/jstree/dist/jstree.js"></script>
+    <script src="bower_components/ng-js-tree/dist/ngJsTree.js"></script>
     <!-- endbower -->
     <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
@@ -378,6 +391,8 @@
     <!-- build:js({.tmp,client}) app/app.js -->
     <script src="app/app.js"></script>
     <!-- injector:js -->
+    <script src="app/KPIs/KPIs.controller.js"></script>
+    <script src="app/KPIs/KPIs.js"></script>
     <script src="app/account/account.js"></script>
     <script src="app/account/login/login.controller.js"></script>
     <script src="app/account/settings/settings.controller.js"></script>
@@ -388,6 +403,8 @@
     <script src="app/dashboard/dashboard.js"></script>
     <script src="app/dashboards/dashboards.controller.js"></script>
     <script src="app/dashboards/dashboards.js"></script>
+    <script src="app/hierarchies/hierarchies.controller.js"></script>
+    <script src="app/hierarchies/hierarchies.js"></script>
     <script src="app/main/main.controller.js"></script>
     <script src="app/main/main.js"></script>
     <script src="components/auth/auth.service.js"></script>

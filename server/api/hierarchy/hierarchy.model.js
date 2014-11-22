@@ -1,0 +1,12 @@
+'use strict';
+
+var mongoose = require('mongoose'),
+    Schema = mongoose.Schema;
+
+var HierarchySchema = new Schema({
+
+  name: String,
+  list: Schema.Types.Mixed,
+});
+
+module.exports = mongoose.model('Hierarchy', HierarchySchema);

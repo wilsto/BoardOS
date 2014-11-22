@@ -8,7 +8,9 @@ angular.module('boardOsApp', [
   'ui.router',
   'ui.bootstrap',
   'xeditable',
-  'ngToast'
+  'ngToast',
+  'ng-nestable',
+  'ngJsTree'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider

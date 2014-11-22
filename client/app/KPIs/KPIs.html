@@ -1,0 +1,246 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+<!--* Modal Part-->
+
+<div class="row">
+  <!-- Layout Part -->
+  <tabset>
+
+    <tab heading="List" active="config.tab1">
+      <div class="portlet">
+        <div class="portlet-title">
+          <div class="caption">
+            <i class="fa fa-KPI"></i>KPIs List
+          </div>
+        </div>
+        <div class="portlet-body">
+          <table class="table table-striped table-bordered table-hover" id="sample_4">
+           <tbody>
+            <tr ng-repeat="KPI in KPIs | orderBy : Activity | filter: myFilter track by KPI._id " on-finish-render>
+              <td>
+               <a href="/KPI/{{KPI._id}}">{{KPI.name}}</a>
+             </td>
+             <td>
+               {{KPI.activity}}
+             </td>
+             <td>
+               {{KPI.context}}
+             </td>
+             <td>
+               {{KPI.axe}}
+             </td>
+             <td>
+               {{KPI.tags}}
+             </td>
+             <td>
+               {{KPI.username}}
+             </td>
+             <td>
+               <button class="btn " ng-click="edit(KPI)">Edit</button>
+             </td>
+             <td>
+               <button class="btn btn-danger" ng-click="delete(KPI, $index)">Delete</button>
+             </td>
+           </tr>
+         </tbody>
+       </table>
+     </div>
+   </div>
+
+ </tab>
+ <tab heading="Create" active="config.tab2">
+  <div class="portlet">
+    <div class="portlet-title">
+      <div class="caption">
+      <i class="fa fa-plus"></i>KPI Configuration
+      </div>
+    </div>
+    <div class="portlet-body">
+      <div class="row">
+        <div class="col-md-12">
+          <table id="KPI" class="table table-striped">
+            <tbody>
+              <tr>
+                <td style="width:15%">
+                 Name
+               </td>
+               <td style="width:50%">
+                <a href="#" editable-text="KPI.name">{{ KPI.name || 'empty' }}</a>
+              </td>
+              <td style="width:35%">
+                <span class="text-muted">
+                  Name of the KPI</span>
+                </td>
+              </tr>
+              <tr>
+                <td style="width:15%">
+                 Activity root
+               </td>
+               <td style="width:50%">
+                <a href="#" editable-text="KPI.activity">{{ KPI.activity || 'all' }}</a>
+              </td>
+              <td style="width:35%">
+                <span class="text-muted">
+                  Root of activity for KPI</span>
+                </td>
+              </tr>
+              <tr>
+                <td style="width:15%">
+                 Context Root
+               </td>
+               <td style="width:50%">
+                <a href="#" editable-text="KPI.context">{{ KPI.context || 'all' }}</a>
+              </td>
+              <td style="width:35%">
+                <span class="text-muted">
+                 Root of context for KPI</span>
+               </td>
+             </tr>       
+             <tr>
+              <td style="width:15%">
+               Axe Root
+             </td>
+             <td style="width:50%">
+              <a href="#" editable-text="KPI.axe">{{ KPI.axe || 'all' }}</a>
+            </td>
+            <td style="width:35%">
+              <span class="text-muted">
+                Root of context for KPI</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="width:15%">
+               Tags
+             </td>
+             <td style="width:50%">
+              <a href="#" editable-text="KPI.tags">{{ KPI.tags || 'empty' }}</a>
+            </td>
+            <td style="width:35%">
+              <span class="text-muted">
+                List of tags filtering the KPI tags</span>
+              </td>
+            </tr>
+            <tr>
+              <td style="width:15%">
+               Action
+             </td>
+             <td style="width:50%">
+              <a href="#" editable-text="KPI.action">{{ KPI.action || 'empty' }}</a>
+            </td>
+            <td style="width:35%">
+              <span class="text-muted">
+                Action du KPI</span>
+              </td>
+            </tr>  
+            <tr>
+              <td style="width:15%">
+               type
+             </td>
+             <td style="width:50%">
+              <a href="#" editable-text="KPI.type">{{ KPI.type || 'empty' }}</a>
+            </td>
+            <td style="width:35%">
+              <span class="text-muted">
+                type du KPI</span>
+              </td>
+            </tr>  
+            <tr>
+              <td style="width:15%">
+               groupBy
+             </td>
+             <td style="width:50%">
+              <a href="#" editable-text="KPI.groupBy">{{ KPI.groupBy || 'empty' }}</a>
+            </td>
+            <td style="width:35%">
+              <span class="text-muted">
+                groupBy du KPI</span>
+              </td>
+            </tr>  
+            <tr>
+              <td style="width:15%">
+               refresh
+             </td>
+             <td style="width:50%">
+              <a href="#" editable-text="KPI.refresh">{{ KPI.refresh || 'empty' }}</a>
+            </td>
+            <td style="width:35%">
+              <span class="text-muted">
+                refresh du KPI</span>
+              </td>
+            </tr>  
+            <tr>
+              <td style="width:15%">
+               category
+             </td>
+             <td style="width:50%">
+              <a href="#" editable-text="KPI.category">{{ KPI.category || 'empty' }}</a>
+            </td>
+            <td style="width:35%">
+              <span class="text-muted">
+                category du KPI</span>
+              </td>
+            </tr>  
+            <tr>
+              <td style="width:15%">
+               reftype
+             </td>
+             <td style="width:50%">
+              <a href="#" editable-text="KPI.reftype">{{ KPI.reftype || 'empty' }}</a>
+            </td>
+            <td style="width:35%">
+              <span class="text-muted">
+                reftype du KPI</span>
+              </td>
+            </tr>  
+            <tr>
+              <td style="width:15%">
+               reftypedetails
+             </td>
+             <td style="width:50%">
+              <a href="#" editable-text="KPI.reftypedetails">{{ KPI.reftypedetails || 'empty' }}</a>
+            </td>
+            <td style="width:35%">
+              <span class="text-muted">
+                reftypedetails du KPI</span>
+              </td>
+            </tr>  
+            <tr>
+              <td style="width:15%">
+               User Name
+             </td>
+             <td style="width:50%">
+              <a href="#" editable-text="KPI.username">{{ KPI.username || 'empty' }}</a>
+            </td>
+            <td style="width:35%">
+              <span class="text-muted">
+                Name of the creator or editor</span>
+              </td>
+            </tr>  
+            <tr>
+              <td style="width:15%">
+               Date
+             </td>
+             <td style="width:50%">
+              <a href="#" editable-bsdate="KPI.date" e-datepicker-popup="dd-MMMM-yyyy">{{ (KPI.date | date:"dd/MM/yyyy") || 'empty' }}</a>
+            </td>
+            <td style="width:35%">
+              <span class="text-muted">
+                Date of modification</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="form-actions">
+    <div class="row">
+      <div class="col-md-offset-9 col-md-9">
+        <button type="button" class="btn btn-default" ng-click="reset()">Reset</button>
+        <button type="submit" class="btn btn-info" ng-click="save()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+</tab>
+</tabset>
+

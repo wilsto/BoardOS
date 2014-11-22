@@ -35,10 +35,10 @@
              {{dashboard.username}}
            </td>
            <td>
-             <button class="btn " ng-click="editDashBoard(dashboard)">Edit</button>
+             <button class="btn " ng-click="edit(dashboard)">Edit</button>
            </td>
            <td>
-             <button class="btn btn-danger" ng-click="deleteDashBoard(dashboard, $index)">Delete</button>
+             <button class="btn btn-danger" ng-click="delete(dashboard, $index)">Delete</button>
            </td>
          </tr>
        </tbody>
@@ -151,8 +151,8 @@
         <div class="form-actions">
                         <div class="row">
                           <div class="col-md-offset-9 col-md-9">
-                            <button type="button" class="btn btn-default">Cancel</button>
-                            <button type="submit" class="btn btn-info" ng-click="saveDashBoard()">Save</button>
+                            <button type="button" class="btn btn-default" ng-click="reset()">Reset</button>
+                            <button type="submit" class="btn btn-info" ng-click="save()">Save</button>
                           </div>
                         </div>
                       </div>
