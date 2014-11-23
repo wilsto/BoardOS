@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('KPIsCtrl', function ($scope, $http, socket, ngToast,actionKPI,categoryKPI,groupByKPI) {
+  .controller('KPIsCtrl', function ($scope, $http, socket, ngToast,actionKPI,categoryKPI,groupByKPI,metricTaskFields) {
     $scope.KPIs = [];
     $scope.KPI = {};
     $scope.config = {tab1: true, tab2: false};
@@ -130,6 +130,16 @@ angular.module('boardOsApp')
             }
         }); 
 
+        $('#Category').editable({
+            title: 'Select Category',
+            type: 'checklist',
+            placement: 'right',
+            limit: 1,
+            source: categoryKPI,
+            success: function(response, newValue) {
+                  $scope.KPI.category = newValue;
+            }
+        }); 
 
         $('#Tags').editable({
             title: 'Select tags',
@@ -155,18 +165,53 @@ angular.module('boardOsApp')
             }
         }); 
 
-        $('#type').editable({
-            title: 'Select action',
+        $('#metricTaskField').editable({
+            title: 'Select field of task',
             type: 'checklist',
             placement: 'right',
             limit: 1,
-            source: [
-              {value: 'mean', text: 'mean'},
-              {value: 'sum', text: 'sum'},
-              {value: 'list', text: 'list'}
-             ],
+            source: metricTaskFields,
             success: function(response, newValue) {
-                  $scope.KPI.action = newValue;
+                  $scope.KPI.metricTaskField = newValue;
+            }
+        }); 
+
+
+        $('#refMetricTaskField').editable({
+            title: 'Select field of task for reference',
+            type: 'checklist',
+            placement: 'right',
+            limit: 1,
+            source: metricTaskFields,
+            success: function(response, newValue) {
+                  $scope.KPI.refMetricTaskField = newValue;
+            }
+        }); 
+
+        //make username editable
+        $('#metricTaskValues').editable({
+          success: function(response, newValue) {
+              $scope.KPI.metricTaskValues = newValue;
+          }
+        });
+
+
+        //make username editable
+        $('#refMetricTaskValues').editable({
+          success: function(response, newValue) {
+              $scope.KPI.refMetricTaskValues = newValue;
+          }
+        });
+
+
+        $('#groupBy').editable({
+            title: 'Select groupBy',
+            type: 'checklist',
+            placement: 'right',
+            limit: 1,
+            source: groupByKPI,
+            success: function(response, newValue) {
+                  $scope.KPI.groupBy = newValue;
             }
         }); 
 
@@ -179,16 +224,6 @@ angular.module('boardOsApp')
             }
         }); 
 
-        $('#Category').editable({
-            title: 'Select Category',
-            type: 'checklist',
-            placement: 'right',
-            limit: 1,
-            source: categoryKPI,
-            success: function(response, newValue) {
-                  $scope.KPI.category = newValue;
-            }
-        }); 
     };
 
 

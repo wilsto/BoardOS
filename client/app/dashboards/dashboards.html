@@ -2,161 +2,88 @@
 <!--* Modal Part-->
 
 <div class="row">
-<!-- Layout Part -->
-<tabset>
+  <!-- Layout Part -->
+  <tabset>
 
-  <tab heading="List" active="config.tab1">
-    <div class="portlet">
-      <div class="portlet-title">
-        <div class="caption">
-          <i class="fa fa-dashboard"></i>Dashboards List
-        </div>
-      </div>
-      <div class="portlet-body">
-        <table class="table table-striped table-bordered table-hover" id="sample_4">
-         <tbody>
-          <tr ng-repeat="dashboard in dashboards | orderBy : Activity | filter: myFilter track by dashboard._id " on-finish-render>
-            <td>
-             <a href="/indicator/{{dashboard._id}}">{{dashboard.name}}</a>
-           </td>
-            <td>
-             {{dashboard.activity}}
-           </td>
-                       <td>
-             {{dashboard.context}}
-           </td>
-                       <td>
-             {{dashboard.axe}}
-           </td>
-                       <td>
-             {{dashboard.tags}}
-           </td>
-                       <td>
-             {{dashboard.username}}
-           </td>
-           <td>
-             <button class="btn " ng-click="edit(dashboard)">Edit</button>
-           </td>
-           <td>
-             <button class="btn btn-danger" ng-click="delete(dashboard, $index)">Delete</button>
-           </td>
-         </tr>
-       </tbody>
-     </table>
-   </div>
- </div>
-
-</tab>
-  <tab heading="Create" active="config.tab2">
-<div class="portlet">
+    <tab heading="List" active="config.tab1">
+      <div class="portlet">
         <div class="portlet-title">
           <div class="caption">
-            <i class="fa fa-plus"></i>Dashboard Configuration
+            <i class="fa fa-dashboard"></i>Dashboards List
           </div>
         </div>
         <div class="portlet-body">
-          <div class="row">
-            <div class="col-md-12">
-              <table id="dashboard" class="table table-striped">
-              <tbody>
-              <tr>
-                <td style="width:15%">
-                   Name
-                </td>
-                <td style="width:50%">
-                    <a href="#" editable-text="dashboard.name">{{ dashboard.name || 'empty' }}</a>
-                </td>
-                <td style="width:35%">
-                  <span class="text-muted">
-                  Name of the dashboard</span>
-                </td>
-              </tr>
-              <tr>
-                <td style="width:15%">
-                   Activity root
-                </td>
-                <td style="width:50%">
-                    <a href="#" editable-text="dashboard.activity">{{ dashboard.activity || 'all' }}</a>
-                </td>
-                <td style="width:35%">
-                  <span class="text-muted">
-                  Root of activity for dashboard</span>
-                </td>
-              </tr>
-              <tr>
-                <td style="width:15%">
-                   Context Root
-                </td>
-                <td style="width:50%">
-                    <a href="#" editable-text="dashboard.context">{{ dashboard.context || 'all' }}</a>
-                </td>
-                <td style="width:35%">
-                  <span class="text-muted">
-                   Root of context for dashboard</span>
-                </td>
-              </tr>       
-              <tr>
-                <td style="width:15%">
-                   Axe Root
-                </td>
-                <td style="width:50%">
-                    <a href="#" editable-text="dashboard.axe">{{ dashboard.axe || 'all' }}</a>
-                </td>
-                <td style="width:35%">
-                  <span class="text-muted">
-                  Root of context for dashboard</span>
-                </td>
-              </tr>
-              <tr>
-                <td style="width:15%">
-                   Tags Filter
-                </td>
-                <td style="width:50%">
-                    <a href="#" editable-text="dashboard.tags">{{ dashboard.tags || 'empty' }}</a>
-                </td>
-                <td style="width:35%">
-                  <span class="text-muted">
-                  List of tags filtering the KPI tags</span>
-                </td>
-              </tr>
-              <tr>
-                <td style="width:15%">
-                   User Name
-                </td>
-                <td style="width:50%">
-                    <a href="#" editable-text="dashboard.username">{{ dashboard.username || 'empty' }}</a>
-                </td>
-                <td style="width:35%">
-                  <span class="text-muted">
-                  Name of the creator or editor</span>
-                </td>
-              </tr>  
-              <tr>
-                <td style="width:15%">
-                   Date
-                </td>
-                <td style="width:50%">
-                    <a href="#" editable-bsdate="dashboard.date" e-datepicker-popup="dd-MMMM-yyyy">{{ (dashboard.date | date:"dd/MM/yyyy") || 'empty' }}</a>
-                </td>
-                <td style="width:35%">
-                  <span class="text-muted">
-                  Date of modification</span>
-                </td>
-              </tr>
-              </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div class="form-actions">
-                        <div class="row">
-                          <div class="col-md-offset-9 col-md-9">
-                            <button type="button" class="btn btn-default" ng-click="reset()">Reset</button>
-                            <button type="submit" class="btn btn-info" ng-click="save()">Save</button>
-                          </div>
-                        </div>
-                      </div>
+          <table class="table table-striped table-bordered table-hover" id="sample_4">
+           <tbody>
+            <tr ng-repeat="dashboard in dashboards | orderBy : Activity | filter: myFilter track by dashboard._id " on-finish-render>
+              <td>
+               <a href="/indicator/{{dashboard._id}}">{{dashboard.name}}</a>
+             </td>
+             <td>
+               {{dashboard.activity}}
+             </td>
+             <td>
+               {{dashboard.context}}
+             </td>
+             <td>
+               {{dashboard.axe}}
+             </td>
+             <td>
+               {{dashboard.tags}}
+             </td>
+             <td>
+               {{dashboard.username}}
+             </td>
+             <td>
+               <button class="btn " ng-click="edit(dashboard)">Edit</button>
+             </td>
+             <td>
+               <button class="btn btn-danger" ng-click="delete(dashboard, $index)">Delete</button>
+             </td>
+           </tr>
+         </tbody>
+       </table>
+     </div>
+   </div>
+
+ </tab>
+ <tab heading="Create" active="config.tab2" select="loadXEditable()">
+  <div class="portlet">
+    <div class="portlet-title">
+      <div class="caption">
+        <i class="fa fa-plus"></i><a href="#" id="name">{{ dashboard.name ||'empty'}}</a>
       </div>
-  </tab>
+    </div>
+    <div class="portlet-body">
+      <div class="row">
+        <div class="col-md-12">
+
+          This dashboard summarize every KPIs in this perimeter :<br/>
+          <ul>
+            <li>Contexte : <a  href="#" id="Context" data-value="{{ dashboard.context }}"  >{{ dashboard.context ||'all'}}</a> </li>
+            <li>Activités : <a href="#" id="Activity" data-value="{{ dashboard.activity }}"  >{{ dashboard.activity ||'all'}}</a> </li>
+            <li>Axis :  <a  href="#" id="Axis" data-value="{{ dashboard.axis }}" >{{ dashboard.axis ||'all'}}</a></li>
+            <li>Category :  <a href="#" id="Category" data-value="{{ dashboard.category }}">{{ dashboard.category}}</a></li>
+            <li>TimeFrame :  <span class="focusValue">all</span></li>
+            <li>Tags Filtered :  <a  href="#" id="Tags" data-value="{{ dashboard.tags }}" >{{ dashboard.tags ||'all'}}</a></li>
+          </ul>
+
+          This dashhoard was last time modified by <a href="#" id="username">{{ dashboard.username ||'empty'}}</a> on  <a href="#" id="date" >{{ (dashboard.date | date:"dd/MM/yyyy") ||'empty'}}</a>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="form-actions">
+    <div class="row">
+      <div class="col-md-offset-9 col-md-9">
+        <button type="button" class="btn btn-default" ng-click="reset()">Reset</button>
+        <button type="submit" class="btn btn-info" ng-click="save()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+</tab>
 </tabset>
 

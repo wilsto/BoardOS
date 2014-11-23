@@ -51,224 +51,41 @@
   <div class="portlet">
     <div class="portlet-title">
       <div class="caption">
-      <i class="fa fa-plus"></i>KPI Configuration
+        <i class="fa fa-plus"></i><a href="#" id="name" data-type="text" data-placement="top" data-title="Enter name" >{{ KPI.name ||'empty'}}</a>
       </div>
     </div>
     <div class="portlet-body">
       <div class="row">
         <div class="col-md-12">
 
-          This KPI's name is <a href="#" id="name" data-type="text" data-placement="top" data-title="Enter name" >{{ KPI.name ||'empty'}}</a> and his type is <a href="#" id="Category" >{{ KPI.category}}</a>  <br/><br/>
-                            This KPI calculates every metrics in this perimeter :<br/>
-                            <ul>
-                                <li>Contexte : <a  href="#" id="Context" data-value="{{ KPI.context }}"  >{{ KPI.context ||'all'}}</a> </li>
-                                <li>Activités : <a href="#" id="Activity" data-value="{{ KPI.activity }}"  >{{ KPI.activity ||'all'}}</a> </li>
-                                <li>Axe :  <a  href="#" id="Axe" data-value="{{ KPI.axe }}" >{{ KPI.axe ||'all'}}</a></li>
-                                <li>Tags :  <a href="#" id="Tags">{{ KPI.tags }}</a></li>
-                                <li>Temps :  <span class="focusValue">Tout</span></li>
-                            </ul>
-                            This KPI calculates the <a href="#" id="Action" >{{ KPI.action ||'empty'}}</a> of metrics of <a href="#" id="mesureTaskField" >{{ KPI.mesureTaskField ||'empty'}}</a> with following values : <a href="#" id="mesureTaskValues" >{{ KPI.mesureTaskValues ||'all'}}</a><br/> 
-                            Sa valeur de référence est : <a  href="#" id="refMesureTaskField" >{{ KPI.refMesureTaskField }}</a> avec les valeurs suivantes : <a  href="#" id="refMesureTaskValues" >{{ KPI.refMesureTaskValues ||'all'}}</a><br/> 
-                            <br/>
-                            Les valeurs sont groupées dans le temps par <a href="#" id="groupBy">{{ KPI.groupBy ||'empty'}}</a> et nécessite des valeurs rafraichies tous les <a href="#" id="refresh" > {{ KPI.refresh }}</a> jours <br/>
+          This KPI's purpose is <a href="#" id="Category" >{{ KPI.category}}</a>  <br/><br/>
+          This KPI calculates every metrics in this perimeter :<br/>
+          <ul>
+            <li>Contexte : <a  href="#" id="Context" data-value="{{ KPI.context }}"  >{{ KPI.context ||'all'}}</a> </li>
+            <li>Activités : <a href="#" id="Activity" data-value="{{ KPI.activity }}"  >{{ KPI.activity ||'all'}}</a> </li>
+            <li>Axe :  <a  href="#" id="Axe" data-value="{{ KPI.axe }}" >{{ KPI.axe ||'all'}}</a></li>
+            <li>TimeFrame :  <span class="focusValue">all</span></li>
+          </ul>
+          This KPI calculates the <a href="#" id="Action" >{{ KPI.action ||'empty'}}</a> of metrics of <a href="#" id="metricTaskField" >{{ KPI.metricTaskField ||'empty'}}</a> with following values : <a href="#" id="metricTaskValues" >{{ KPI.metricTaskValues ||'all'}}</a><br/> 
+          Reference values will be metrics of <a  href="#" id="refMetricTaskField" >{{ KPI.refMetricTaskField ||'empty'}}</a> with following values : <a  href="#" id="refMetricTaskValues" >{{ KPI.refMetricTaskValues ||'all'}}</a><br/> 
+          <br/>
+          Values are grouped in time by <a href="#" id="groupBy">{{ KPI.groupBy ||'empty'}}</a> and need to be refreshed every <a href="#" id="refresh" > {{ KPI.refresh }}</a> days <br/><br/>
+          Following tags has been attached to this KPI : <a href="#" id="Tags">{{ KPI.tags }}</a> <br/><br/>
 
+          This KPI was last time modified by <a href="#" id="username">{{ KPI.username ||'empty'}}</a> on  <a href="#" id="date" >{{ (KPI.date | date:"dd/MM/yyyy") ||'empty'}}</a>
 
-          <table id="KPI" class="table table-striped">
-            <tbody>
-              <tr>
-                <td style="width:15%">
-                 Name
-               </td>
-               <td style="width:50%">
-                 <a href="#" id="name" data-type="text" data-placement="top" data-title="Enter name" >{{ KPI.name ||'empty'}}</a>
-              </td>
-              <td style="width:35%">
-                <span class="text-muted">
-                  Name of the KPI</span>
-                </td>
-              </tr>
-              <tr>
-                <td style="width:15%">
-                 Activity root
-               </td>
-               <td style="width:50%">
-               <a href="#" id="Activity" data-value="{{ KPI.activity }}"  >{{ KPI.activity ||'all'}}</a>
-              </td>
-              <td style="width:35%">
-                <span class="text-muted">
-                  Root of activity for KPI</span>
-                </td>
-              </tr>
-              <tr>
-                <td style="width:15%">
-                 Context Root
-               </td>
-               <td style="width:50%">
-                <a  href="#" id="Context" data-value="{{ KPI.context }}"  >{{ KPI.context ||'all'}}</a>
-              </td>
-              <td style="width:35%">
-                <span class="text-muted">
-                 Root of context for KPI</span>
-               </td>
-             </tr>       
-             <tr>
-              <td style="width:15%">
-               Axe Root
-             </td>
-             <td style="width:50%">
-              <a  href="#" id="Axe" data-value="{{ KPI.axe }}" >{{ KPI.axe ||'all'}}</a>
-            </td>
-            <td style="width:35%">
-              <span class="text-muted">
-                Root of context for KPI</span>
-              </td>
-            </tr>
-            <tr>
-              <td style="width:15%">
-               Tags
-             </td>
-             <td style="width:50%">
-              <a href="#" id="Tags">{{ KPI.tags }}</a>
-            </td>
-            <td style="width:35%">
-              <span class="text-muted">
-                List of tags filtering the KPI tags</span>
-              </td>
-            </tr>
-            <tr>
-              <td style="width:15%">
-               category
-             </td>
-             <td style="width:50%">
-              <a href="#" id="Category" >{{ KPI.category}}</a>
-            </td>
-            <td style="width:35%">
-              <span class="text-muted">
-                category du KPI</span>
-              </td>
-            </tr>  
-            <tr>
-              <td style="width:15%">
-               refresh
-             </td>
-             <td style="width:50%">
-              <a href="#" id="refresh" >{{ KPI.refresh }}</a>
-            </td>
-            <td style="width:35%">
-              <span class="text-muted">
-                refresh du KPI</span>
-              </td>
-            </tr>  
-            <tr>
-              <td style="width:15%">
-               Action
-             </td>
-             <td style="width:50%">
-              <a href="#" id="Action" >{{ KPI.action ||'empty'}}</a>
-            </td>
-            <td style="width:35%">
-              <span class="text-muted">
-                Action du KPI</span>
-              </td>
-            </tr>  
-            <tr>
-              <td style="width:15%">
-               mesureTaskField
-             </td>
-             <td style="width:50%">
-              <a href="#" id="mesureTaskField" >{{ KPI.mesureTaskField ||'empty'}}</a>
-            </td>
-            <td style="width:35%">
-              <span class="text-muted">
-                mesureTaskField du KPI</span>
-              </td>
-            </tr>  
-            <tr>
-              <td style="width:15%">
-               mesureTaskValues
-             </td>
-             <td style="width:50%">
-              <a href="#" id="mesureTaskValues" >{{ KPI.mesureTaskValues ||'empty'}}</a>
-            </td>
-            <td style="width:35%">
-              <span class="text-muted">
-                mesureTaskValues du KPI</span>
-              </td>
-            </tr> 
-            <tr>
-              <td style="width:15%">
-               refMesureTaskField
-             </td>
-             <td style="width:50%">
-              <a  href="#" id="refMesureTaskField" >{{ KPI.refMesureTaskField }}</a>
-            </td>
-            <td style="width:35%">
-              <span class="text-muted">
-                refMesureTaskField du KPI</span>
-              </td>
-            </tr>  
-            <tr>
-              <td style="width:15%">
-               refMesureTaskValues
-             </td>
-             <td style="width:50%">
-              <a  href="#" id="refMesureTaskValues">{{ KPI.refMesureTaskValues ||'empty'}}</a>
-            </td>
-            <td style="width:35%">
-              <span class="text-muted">
-                refMesureTaskValues du KPI</span>
-              </td>
-            </tr>  
-            <tr>
-              <td style="width:15%">
-               groupBy
-             </td>
-             <td style="width:50%">
-              <a href="#" id="groupBy">{{ KPI.groupBy ||'empty'}}</a>
-            </td>
-            <td style="width:35%">
-              <span class="text-muted">
-                groupBy du KPI</span>
-              </td>
-            </tr>  
-            <tr>
-              <td style="width:15%">
-               User Name
-             </td>
-             <td style="width:50%">
-              <a xeditable href="#" id="username" ng-model="KPI.username">{{ KPI.username ||'empty'}}</a>
-            </td>
-            <td style="width:35%">
-              <span class="text-muted">
-                Name of the creator or editor</span>
-              </td>
-            </tr>  
-            <tr>
-              <td style="width:15%">
-               Date
-             </td>
-             <td style="width:50%">
-              <a xeditable href="#" id="date"  ng-model="KPI.date">{{ (KPI.date | date:"dd/MM/yyyy") ||'empty'}}</a>
-            </td>
-            <td style="width:35%">
-              <span class="text-muted">
-                Date of modification</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        </div>
+      </div>
+    </div>
+    <div class="form-actions">
+      <div class="row">
+        <div class="col-md-offset-9 col-md-9">
+          <button type="button" class="btn btn-default" ng-click="reset()">Reset</button>
+          <button type="submit" class="btn btn-info" ng-click="save()">Save</button>
+        </div>
       </div>
     </div>
   </div>
-  <div class="form-actions">
-    <div class="row">
-      <div class="col-md-offset-9 col-md-9">
-        <button type="button" class="btn btn-default" ng-click="reset()">Reset</button>
-        <button type="submit" class="btn btn-info" ng-click="save()">Save</button>
-      </div>
-    </div>
-  </div>
-</div>
 </tab>
 </tabset>
 

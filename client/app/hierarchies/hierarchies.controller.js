@@ -6,11 +6,11 @@ angular.module('boardOsApp')
   $scope.Hierarchy = {};
   $scope.config = {tab1: true, tab2: false};
   $scope.serialNest = [];
-  $scope.HierarchyType ="Activity";
   $scope.newId = 1;
   $scope.newNode = {};
 
   $scope.treeConfig = {
+    version : 1,
     core : {
       animation: true,
       error : function(error) {
@@ -31,11 +31,11 @@ angular.module('boardOsApp')
         icon : 'glyphicon glyphicon-cloud'
       }
     },
-    version : 1,
     plugins : ['wholerow','types','contextmenu','dnd','search','unique','themes','ui']
   };
 
   $scope.load = function() {
+      $scope.hierarchies = [];
     $http.get('/api/hierarchies').success(function(hierarchies) {
       var filterHierarchy = hierarchies.filter(function(obj){          return obj.name == $scope.HierarchyType;      });
       $scope.hierarchies = (filterHierarchy.length == 0) ? [] : filterHierarchy[0].list;
@@ -49,7 +49,6 @@ angular.module('boardOsApp')
   };
 
   $scope.save = function() {
-    console.log($scope.treeInstance);
     if (typeof $scope.HierarchyType !== 'undefined') {
       $scope.treeData = $scope.hierarchies;
       $scope.treeData.forEach(function(v){ delete v.__uiNodeId });      

@@ -81,26 +81,45 @@ angular.module('boardOsApp', [
   {value: 'Finished', text: 'Finished'}
 ])
 
+.constant('metricTaskFields',
+[   
+    {value: 'charge', text: 'Charge'},
+    {value: 'délai', text: 'Délai'},
+    {value: 'avancement', text: 'Avancement'},
+    {value: 'confiance', text: 'Confiance'},
+    {value: 'startDate', text: 'Début'},
+    {value: 'endDate', text: 'Fin'},
+    {value: 'progress', text: 'Progress'},
+    {value: 'status', text: 'Statut'},
+    {value: 'constante', text: 'Constante'}
+  ])
+
 .constant('categoryKPI',
 [                                                                                                                                                                                                             
-  {value: 'Goal', text: 'Goal'},
   {value: 'Alert', text: 'Alert'},
   {value: 'Anticipation', text: 'Anticipation'},
+  {value: 'Goal', text: 'Goal'},
   {value: 'Information', text: 'Information'}
 ])
 
 .constant('actionKPI',
 [                                                                                                                                                                                                             
+  {value: 'Count', text: 'Count'},
+  {value: 'List', text: 'List'},
   {value: 'Mean', text: 'Mean'},
-  {value: 'Sum', text: 'Sum'},
-  {value: 'List', text: 'List'}
+  {value: 'Min', text: 'Min'},
+  {value: 'Max', text: 'Max'},
+  {value: 'Sum', text: 'Sum'}
 ])
 
 .constant('groupByKPI',
 [                                                                                                                                                                                                             
+  {value: 'None', text: 'None'},
+  {value: 'Day', text: 'Day'},
   {value: 'Week', text: 'Week'},
   {value: 'Month', text: 'Month'},
   {value: 'Year', text: 'Year'}
+
 ])
 
   .run(function ($rootScope, $location, Auth) {
