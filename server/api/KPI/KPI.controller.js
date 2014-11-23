@@ -39,6 +39,7 @@ exports.create = function(req, res) {
 
 // Updates an existing kpi in the DB.
 exports.update = function(req, res) {
+  console.log(req.body);
   if(req.body._id) { delete req.body._id; }
   KPI.findById(req.params.id, function (err, kpi) {
     if (err) { return handleError(res, err); }

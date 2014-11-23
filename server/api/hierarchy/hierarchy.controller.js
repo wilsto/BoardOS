@@ -10,7 +10,7 @@
 'use strict';
 
 var _ = require('lodash');
-var Hierarchy = require('./Hierarchy.model');
+var Hierarchy = require('./hierarchy.model');
 
 // Get list of hierarchies
 exports.index = function(req, res) {
@@ -26,6 +26,20 @@ exports.show = function(req, res) {
     if(err) { return handleError(res, err); }
     if(!hierarchy) { return res.send(404); }
     return res.json(hierarchy);
+  });
+};
+
+// Get a single hierarchy
+exports.list = function(req, res) {
+  console.log(req.params.id);
+  Hierarchy.find({name:req.params.id}, function (err, hierarchy) {
+    console.log(hierarchy);
+    if(err) { return handleError(res, err); }
+    if(!hierarchy) { return res.send(404); }
+    _.each(hierarchy[0].list, function(obj, key) {
+      return obj.id = obj.text;
+    })
+    return res.json(hierarchy[0].list);
   });
 };
 

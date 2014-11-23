@@ -37,13 +37,19 @@ angular.module('boardOsApp')
 
   $scope.load = function() {
     $http.get('/api/hierarchies').success(function(hierarchies) {
-      $scope.hierarchies = hierarchies[0].list;
+      var filterHierarchy = hierarchies.filter(function(obj){          return obj.name == $scope.HierarchyType;      });
+      $scope.hierarchies = (filterHierarchy.length == 0) ? [] : filterHierarchy[0].list;
       $scope.treeConfig.version++;
     });
   };
 
+  $scope.loadMe = function(HierarchyType) {
+    $scope.HierarchyType =HierarchyType;
+    $scope.load();
+  };
+
   $scope.save = function() {
-    console.log($scope.hierarchies);
+    console.log($scope.treeInstance);
     if (typeof $scope.HierarchyType !== 'undefined') {
       $scope.treeData = $scope.hierarchies;
       $scope.treeData.forEach(function(v){ delete v.__uiNodeId });      
@@ -88,9 +94,8 @@ angular.module('boardOsApp')
   };
 
   $scope.createNode = function(e, data) {
-    console.log(data);
-    $scope.hierarchies.push({ id : 'ajson'+ (data.node.children.length+1).toString(), parent : data.node.parent, text : data.node.text });
-    console.log( $scope.hierarchies);
+    console.log(data.node);
+    $scope.hierarchies.push({ id : 'ajson'+ (Math.round(Math.random() * 100000)).toString(), parent : data.node.parent, text : data.node.text });
   };
 
   $scope.deleteNode = function(e, data) {

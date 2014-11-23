@@ -15,6 +15,6 @@ var DashboardSchema = new Schema({
   axe: String,
   username: String,
   date: String
-});
+}, { strict: false });
 
 module.exports = mongoose.model('Dashboard', DashboardSchema);

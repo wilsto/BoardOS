@@ -7,7 +7,6 @@ angular.module('boardOsApp', [
   'btford.socket-io',
   'ui.router',
   'ui.bootstrap',
-  'xeditable',
   'ngToast',
   'ng-nestable',
   'ngJsTree'
@@ -46,9 +45,63 @@ angular.module('boardOsApp', [
     };
   })
   
-  .run(function(editableOptions) {
-    editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
-  })
+
+.directive('xeditable', function($timeout) {
+    return {
+        restrict: 'A',
+        require: "ngModel",
+        link: function(scope, element, attrs, ngModel) {
+            var loadXeditable = function() {
+                angular.element(element).editable({
+                    display: function(value, srcData) {
+                        ngModel.$setViewValue(value);
+                        scope.$apply();
+                    }
+                });
+            }
+            $timeout(function() {
+                loadXeditable();
+            }, 10);
+        }
+    };
+})
+
+.constant('progressStatusTask',
+[                                                                                                                                                                                                             
+  {value: 'On time', text: 'On time'},
+  {value: 'At Risk', text: 'At Risk'},
+  {value: 'Late', text: 'Late'}
+])
+
+.constant('statusTask',
+[                                                                                                                                                                                                             
+  {value: 'Not Started', text: 'Not Started'},
+  {value: 'In Progress', text: 'In Progress'},
+  {value: 'Withdrawn', text: 'Withdrawn'},
+  {value: 'Finished', text: 'Finished'}
+])
+
+.constant('categoryKPI',
+[                                                                                                                                                                                                             
+  {value: 'Goal', text: 'Goal'},
+  {value: 'Alert', text: 'Alert'},
+  {value: 'Anticipation', text: 'Anticipation'},
+  {value: 'Information', text: 'Information'}
+])
+
+.constant('actionKPI',
+[                                                                                                                                                                                                             
+  {value: 'Mean', text: 'Mean'},
+  {value: 'Sum', text: 'Sum'},
+  {value: 'List', text: 'List'}
+])
+
+.constant('groupByKPI',
+[                                                                                                                                                                                                             
+  {value: 'Week', text: 'Week'},
+  {value: 'Month', text: 'Month'},
+  {value: 'Year', text: 'Year'}
+])
 
   .run(function ($rootScope, $location, Auth) {
     // Redirect to login if route requires auth and you're not logged in

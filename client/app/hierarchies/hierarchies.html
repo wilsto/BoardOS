@@ -1,29 +1,21 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 <!--* Modal Part-->
 
+
 <div class="row">
   <!-- Layout Part -->
   <tabset>
-    <tab heading="Activity" active="config.tab1">
-      <div class="row">
-        <div class="col-md-5">
-        <div id='mytree' js-tree="treeConfig" ng-model="hierarchies" tree="treeInstance" tree-events="ready:readyCB;select_node:selectNode;create_node:createNode;rename_node:renameNode;delete_node:deleteNode"></div>
-        </div>
-        <div class="col-md-7">
-          <div id="details">fdsdf</div>
-        </div>
-      </div>
+    <tab heading="Activities" active="config.tab1" select="loadMe('Activity')">
 
-      <div class="form-actions">
-        <div class="row">
-          <div class="col-md-offset-9 col-md-9">
-            <button type="button" class="btn btn-default" ng-click="reset()">Reset</button>
-            <button type="submit" class="btn btn-info" ng-click="save()">Save</button>
-          </div>
-        </div>
-      </div>
     </tab>
-    <tab heading="Create" active="config.tab2">
+    <tab heading="Contexts" active="config.tab2" select="loadMe('Context')">
+
+    </tab>
+    <tab heading="Axis" active="config.tab3" select="loadMe('Axe')">
+
+    </tab>
+
+    <tab heading="Create" active="config.tab4">
       <div class="portlet">
         <div class="portlet-title">
           <div class="caption">
@@ -219,4 +211,25 @@
     </div>
   </tab>
 </tabset>
+<div class="row">
+  <div class="col-md-6">
+    <button type="button" class="btn btn-success btn-sm" onclick="demo_create();"><i class="glyphicon glyphicon-asterisk"></i> Create</button>
+    <button type="button" class="btn btn-warning btn-sm" onclick="demo_rename();"><i class="glyphicon glyphicon-pencil"></i> Rename</button>
+    <button type="button" class="btn btn-danger btn-sm" onclick="demo_delete();"><i class="glyphicon glyphicon-remove"></i> Delete</button><br/><br/>
+  </div>
+  <div class="col-md-6">
+    <div class="pull-right">
+      <button type="button" class="btn btn-default" ng-click="reset()">Reset</button>
+      <button type="submit" class="btn btn-info" ng-click="save()">Save</button>
+    </div>            
+  </div>
+</div>
+<div class="row">
 
+  <div class="col-md-5">
+    <div id='mytree' js-tree="treeConfig" ng-model="hierarchies" tree="treeInstance" tree-events="ready:readyCB;select_node:selectNode;create_node:createNode;rename_node:renameNode;delete_node:deleteNode"></div>
+  </div>
+  <div class="col-md-7">
+    <div id="details">fdsdf</div>
+  </div>
+</div>
