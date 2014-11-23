@@ -37,7 +37,7 @@ exports.list = function(req, res) {
     if(err) { return handleError(res, err); }
     if(!hierarchy) { return res.send(404); }
     _.each(hierarchy[0].list, function(obj, key) {
-      return obj.id = obj.text;
+       obj.id = obj.text;
     })
     return res.json(hierarchy[0].list);
   });

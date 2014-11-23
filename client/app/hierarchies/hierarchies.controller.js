@@ -1,3 +1,4 @@
+/*global bootbox:false */
 'use strict';
 
 angular.module('boardOsApp')
@@ -13,9 +14,6 @@ angular.module('boardOsApp')
     version : 1,
     core : {
       animation: true,
-      error : function(error) {
-        $log.error('treeCtrl: error from js tree - ' + angular.toJson(error));
-      },
       check_callback : true,
       theme : {responsive:true},
       worker : true
@@ -37,8 +35,8 @@ angular.module('boardOsApp')
   $scope.load = function() {
       $scope.hierarchies = [];
     $http.get('/api/hierarchies').success(function(hierarchies) {
-      var filterHierarchy = hierarchies.filter(function(obj){          return obj.name == $scope.HierarchyType;      });
-      $scope.hierarchies = (filterHierarchy.length == 0) ? [] : filterHierarchy[0].list;
+      var filterHierarchy = hierarchies.filter(function(obj){          return obj.name === $scope.HierarchyType;      });
+      $scope.hierarchies = (filterHierarchy.length === 0) ? [] : filterHierarchy[0].list;
       $scope.treeConfig.version++;
     });
   };
@@ -51,7 +49,7 @@ angular.module('boardOsApp')
   $scope.save = function() {
     if (typeof $scope.HierarchyType !== 'undefined') {
       $scope.treeData = $scope.hierarchies;
-      $scope.treeData.forEach(function(v){ delete v.__uiNodeId });      
+      $scope.treeData.forEach(function(v){ delete v.__uiNodeId;});      
       $http.put('/api/hierarchies/'+ $scope.HierarchyType, $scope.treeData);
       ngToast.create('Hierarchy "' + $scope.HierarchyType + '" was updated');
     }
@@ -69,7 +67,7 @@ angular.module('boardOsApp')
   };
 
   $scope.delete = function(Hierarchy,index) {
-    bootbox.confirm("Are you sure?", function(result) {
+    bootbox.confirm('Are you sure?', function(result) {
       if (result) {
         $http.delete('/api/hierarchies/' + Hierarchy._id).success(function () {
           $scope.hierarchies.splice(index, 1);
@@ -99,7 +97,7 @@ angular.module('boardOsApp')
 
   $scope.deleteNode = function(e, data) {
     angular.forEach($scope.hierarchies, function(obj, key ) {
-        if(obj.id == data.node.id) {
+        if(obj.id === data.node.id) {
               $scope.hierarchies.splice(key,1);
         }   
       });
@@ -107,7 +105,7 @@ angular.module('boardOsApp')
 
   $scope.renameNode = function(e, data) {
     angular.forEach($scope.hierarchies, function(obj, key ) {
-        if(obj.id == data.node.id) {
+        if(obj.id === data.node.id) {
               $scope.hierarchies[key].text = data.node.text;
         }   
       });
