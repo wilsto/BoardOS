@@ -4,37 +4,38 @@
 
 <div class="row">
   <!-- Layout Part -->
-  <tabset>
-    <tab heading="Contexts" active="config.tab1" select="loadMe('Context')">
-
-    </tab>
-    <tab heading="Activities" active="config.tab2" select="loadMe('Activity')">
-
-    </tab>
-    <tab heading="Axis" active="config.tab3" select="loadMe('Activity')">
-
-    </tab>
-
-</tabset>
-<div class="row">
-  <div class="col-md-6">
-    <button type="button" class="btn btn-success btn-sm" onclick="demo_create();"><i class="glyphicon glyphicon-asterisk"></i> Create</button>
-    <button type="button" class="btn btn-warning btn-sm" onclick="demo_rename();"><i class="glyphicon glyphicon-pencil"></i> Rename</button>
-    <button type="button" class="btn btn-danger btn-sm" onclick="demo_delete();"><i class="glyphicon glyphicon-remove"></i> Delete</button><br/><br/>
+  <div class="row">
+    <div class="col-md-2">
+      <div class="list-group">
+        <a href="#" class="list-group-item active" ng-click="loadMe('Context')">Contexts</a>
+        <a href="#" class="list-group-item" ng-click="loadMe('Activity')">Activities</a>
+        <a href="#" class="list-group-item" ng-click="loadMe('Axis')">Axis</a>
+        <a href="#" class="list-group-item">KPI properties</a>
+        <a href="#" class="list-group-item">Tasks properties</a>
+      </div>
+    </div>
+        <div class="col-md-10">
+    <div class="row">
+      <div class="col-md-5">
+        <button type="button" class="btn btn-success btn-sm" onclick="demo_create();"><i class="glyphicon glyphicon-asterisk"></i> Create</button>
+        <button type="button" class="btn btn-warning btn-sm" onclick="demo_rename();"><i class="glyphicon glyphicon-pencil"></i> Rename</button>
+        <button type="button" class="btn btn-danger btn-sm" onclick="demo_delete();"><i class="glyphicon glyphicon-remove"></i> Delete</button><br/><br/>
+      </div>
+      <div class="col-md-5">
+        <div class="pull-right">
+          <button type="button" class="btn btn-default" ng-click="reset()">Reset</button>
+          <button type="submit" class="btn btn-info" ng-click="save()">Save</button>
+        </div>            
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-5">
+        <div id='mytree' js-tree="treeConfig" ng-model="hierarchies" tree="treeInstance" tree-events="ready:readyCB;select_node:selectNode;create_node:createNode;rename_node:renameNode;delete_node:deleteNode"></div>
+      </div>
+      <div class="col-md-7">
+        <div id="details">fdsdf</div>
+      </div>
+    </div>
+    </div>
   </div>
-  <div class="col-md-6">
-    <div class="pull-right">
-      <button type="button" class="btn btn-default" ng-click="reset()">Reset</button>
-      <button type="submit" class="btn btn-info" ng-click="save()">Save</button>
-    </div>            
-  </div>
-</div>
-<div class="row">
 
-  <div class="col-md-5">
-    <div id='mytree' js-tree="treeConfig" ng-model="hierarchies" tree="treeInstance" tree-events="ready:readyCB;select_node:selectNode;create_node:createNode;rename_node:renameNode;delete_node:deleteNode"></div>
-  </div>
-  <div class="col-md-7">
-    <div id="details">fdsdf</div>
-  </div>
-</div>

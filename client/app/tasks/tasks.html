@@ -1,0 +1,116 @@
+<div ng-include="'components/navbar/navbar.html'">
+</div>
+
+<!-- Layout Part -->
+<tabset>
+
+    <tab heading="List" active="config.tab1">
+        <div class="stretch col-md-12" id="home">
+            <div class="portlet tasks-widget">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-check"></i>Tasks
+                    </div>
+                    <div class="tools">
+                        <a href="#portlet-config" data-toggle="modal" class="config"></a>
+                        <a href="" class="reload"></a>
+                    </div>
+                    <div class="actions">
+                        <div class="btn-group">
+                            <a class="btn btn-info btn-sm dropdown-toggle" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                             Filter <i class="fa fa-angle-down"></i>
+                           </a>
+                            <ul class="dropdown-menu pull-right">
+                                <li>
+                                    <a href="#">Pending <span class="badge badge-warning">
+                                      4 </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">Completed <span class="badge badge-success">
+                                      12 </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">Overdue <span class="badge badge-important">
+                                      9 </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="task-content">
+                        <div class="scroller" style="height: 100%;" data-always-visible="1" data-rail-visible1="1">
+                            <!-- START TASK LIST -->
+                            <ul class="task-list">
+                                <li ng-repeat="task in tasks track by $index" on-finish-render>
+                                    <div class="task-title">
+
+                                        <span class="task-title-sp"> 
+                                          &nbsp;&nbsp;<a href="/task/{{task._id}}" >{{task.name}} </a>
+                                        </span>&nbsp;&nbsp;
+                                        <span class="label label-sm label-default">
+                                          {{task.activity}} 
+                                        </span>&nbsp;&nbsp;
+                                        <span class="label label-sm label-default">
+                                          {{task.context}}
+                                        </span>
+                                        <span class="pull-right leger">
+                                            {{task.mesures[task.mesures.length-1].startDate | date:'shortDate'}}&nbsp;&nbsp;
+                                            <span class="label label-sm" ng-class="{'label-warning':task.mesures[task.mesures.length-1].status =='In Progress','label-success':task.mesures[task.mesures.length-1].status =='Finished','label-danger':task.mesures[task.mesures.length-1].status =='Late'}">
+                                              {{task.mesures[task.mesures.length-1].status}}
+                                            </span>
+                                            &nbsp;&nbsp;{{task.mesures[task.mesures.length-1].endDate | date:'shortDate'}}&nbsp;&nbsp;
+                                            <span class="label label-sm" ng-class="{'label-warning':task.mesures[task.mesures.length-1].progress =='At Risk','label-success':task.mesures[task.mesures.length-1].progress =='On time','label-danger':task.mesures[task.mesures.length-1].progress =='Late'}">
+                                              {{task.mesures[task.mesures.length-1].progress}} 
+                                            </span>
+                                        </span>
+                                    </div>
+                                </li>
+                            </ul>
+                            <!-- END START TASK LIST -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        </div>
+    </tab>
+    <tab heading="Create" active="config.tab2" select="loadXEditable()">
+
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-plus"></i><a href="#" id="name" data-type="text" data-placement="top" data-title="Enter name">{{ task.name ||'empty'}}</a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        This task will takes metrics in this perimeter :
+                        <br/>
+                        <ul>
+                            <li>Context: <a href="#" id="Context" data-value="{{ task.context }}">{{ task.context ||'all'}}</a> </li>
+                            <li>Activity : <a href="#" id="Activity" data-value="{{ task.activity }}">{{ task.activity ||'all'}}</a> </li>
+                        </ul>
+
+                        This task was last time modified by <a href="#" id="username">{{ task.username ||'empty'}}</a> on <a href="#" id="date">{{ (task.date | date:"dd/MM/yyyy") ||'empty'}}</a>
+
+                    </div>
+                </div>
+            </div>
+            <div class="form-actions">
+                <div class="row">
+                    <div class="col-md-offset-9 col-md-9">
+                        <button type="button" class="btn btn-default" ng-click="reset()">Reset</button>
+                        <button type="submit" class="btn btn-info" ng-click="save()">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </tab>
+</tabset>

@@ -33,7 +33,6 @@ angular.module('boardOsApp')
   };
 
   $scope.load = function() {
-      $scope.hierarchies = [];
     $http.get('/api/hierarchies').success(function(hierarchies) {
       var filterHierarchy = hierarchies.filter(function(obj){          return obj.name === $scope.HierarchyType;      });
       $scope.hierarchies = (filterHierarchy.length === 0) ? [] : filterHierarchy[0].list;
