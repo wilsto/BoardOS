@@ -7,11 +7,13 @@
  * DELETE  /tasks/:id          ->  destroy
  */
 
-'use strict';
+ 'use strict';
 
-var _ = require('lodash');
-var Task = require('./task.model');
-
+ var _ = require('lodash');
+ var Q = require('q');
+ var Task = require('./task.model');
+ var Metric = require('../metric/metric.model');
+ var mTask = {};
 // Get list of tasks
 exports.index = function(req, res) {
   Task.find(function (err, tasks) {
@@ -22,20 +24,42 @@ exports.index = function(req, res) {
 
 // Get a single task
 exports.show = function(req, res) {
-  Task.findById(req.params.id, function (err, task) {
-    if(err) { return handleError(res, err); }
-    if(!task) { return res.send(404); }
-    return res.json(task);
+
+  Q()
+  .then(function () {
+    var deferred = Q.defer();
+    Task.findById(req.params.id, function (err, task) {
+      if(err) { return handleError(res, err); }
+      if(!task) { return res.send(404); }
+      mTask = task.toObject();
+      mTask.metrics = [];
+      Metric.find({}, function (err, metric) {
+        _.each(metric, function(rowdata, index) {  // pour chaque enregistrement
+          if (rowdata.context.indexOf(mTask.context) >=0 && rowdata.activity.indexOf(mTask.activity) >=0 ) {
+            mTask.metrics.push (rowdata);
+          }
+        });
+        deferred.resolve(mTask);
+      })
+    })
+    return deferred.promise;
+  })
+  .then(function () {
+    console.log(mTask);
+    var deferred = Q.defer();
+    return res.json(mTask);
+    deferred.resolve(mTask);
+    return deferred.promise;
   });
 };
 
 // Creates a new task in the DB.
 exports.create = function(req, res) {
-    console.log(req.body);
-    var newTask = new Task(req.body, false);
-    newTask.save(function(err) {
-      res.send(200);
-    });
+  console.log(req.body);
+  var newTask = new Task(req.body, false);
+  newTask.save(function(err) {
+    res.send(200);
+  });
 
 };
 

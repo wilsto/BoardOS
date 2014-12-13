@@ -15,6 +15,7 @@ module.exports = function(app) {
   app.use('/api/KPIs', require('./api/KPI'));
   app.use('/api/hierarchies', require('./api/hierarchy'));
   app.use('/api/tasks', require('./api/task'));
+  app.use('/api/metrics', require('./api/metric'));
 
   app.use('/auth', require('./auth'));
   

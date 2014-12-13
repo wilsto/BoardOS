@@ -178,14 +178,14 @@
                   METRICS COUNT <i class="fa fa-img-up"></i>
                 </span>
                 <span class="sale-num">
-                  {{task.mesures.length}} </span>
+                  {{task.metrics.length}} </span>
                 </li>
                 <li>
                   <span class="sale-info">
                     LAST ENTRY <i class="fa fa-img-down"></i>
                   </span>
                   <span class="sale-num">
-                    {{task.mesures[task.mesures.length-1].date  | date:'shortDate'}} </span>
+                    {{task.metrics[task.metrics.length-1].date  | date:'shortDate'}} </span>
                   </li>
                 </ul>
               </div>
@@ -214,14 +214,14 @@
                 <th>Confiance</th>
                 <th>Fin</th>
                 <th>Comments</th>
-                <th><button ng-click='openMesure(task.mesures[task.mesures.length-1],true)' type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus"></span></button></th>
+                <th><button ng-click='openMesure(task, task.metrics[task.metrics.length-1],true)' type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus"></span></button></th>
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="mesure in task.mesures | filter:search | orderBy:'date' track by $index" ng-show="mesure._id">
+              <tr ng-repeat="mesure in task.metrics | filter:search | orderBy:'date' track by $index" ng-show="mesure._id">
                 <td>{{mesure.date | date:'shortDate'}}</td>
-                <td>{{mesure.Activity.replace(task.Activity,"#")}}</td>
-                <td>{{mesure.Contexte.replace(task.Contexte,"#")}}</td>
+                <td>{{mesure.activity.replace(task.activity,"#")}}</td>
+                <td>{{mesure.context.replace(task.context,"#")}}</td>
                 <td>{{mesure.startDate | date:'shortDate'}}</td>
                 <td>{{mesure.charge}}</td>
                 <td>{{mesure.status}}</td>
@@ -230,7 +230,7 @@
                 <td>{{mesure.endDate | date:'shortDate'}}</td>
                 <td>{{mesure.Comments}}</td>
                 <td style="width:25px">
-                  <button ng-click="openMesure(mesure,false)"type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></button>
+                  <button ng-click="openMesure(task, mesure,false)"type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></button>
                 </td>
               </tbody>
             </table>
