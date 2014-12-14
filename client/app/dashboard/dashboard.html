@@ -2,162 +2,140 @@
 <!--* Modal Part-->
 
 <div class="row">
+    <div class="row profile">
+      <div class="col-md-2">
+        <ul class="list-unstyled profile-nav">
+          <li>
+            <img src="assets/images/dashboard.jpg" class="img-responsive" alt=""/>
+          </li>
+          <li>
+            <a href="#">Pinned <span>
+              3 </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-10">
+        <div class="row">
+          <div class="col-md-8 profile-info">
+            <h1>{{dashboard.name}}</h1><br/>
+            <ul class="list list-inline">
+              <li>
+                <i class="fa fa-map-marker"></i><span style="color:lightgrey"> Context </span> {{dashboard.context}}
+              </li><br/><br/>
+              <li>
+                <i class="fa fa-calendar"></i><span style="color:lightgrey"> Activity </span>  {{dashboard.activity}}
+              </li><br/><br/>
+              <li>
+                <i class="fa fa-crosshairs"></i><span style="color:lightgrey"> Axe </span>  {{dashboard.axe}}
+              </li><br/><br/>
+              <li>
+                <i class="icon-cursor"></i><span style="color:lightgrey"> Category </span>  {{dashboard.category}}
+              </li>
+            </ul>
+          </div>
+          <!--end col-md-8-->
+          <div class="col-md-4">
+            <div class="portlet sale-summary">
+              <div class="portlet-title">
+                <div class="caption">
+                  Summary
+                </div>
+                <div class="tools">
+                  <a class="reload" href="javascript:;"></a>
+                </div>
+              </div>
+              <div class="portlet-body">
+                <ul class="list-unstyled">
+                  <li>
+                    <span class="sale-info">
+                      TASKS COUNT <i class="fa fa-img-up"></i>
+                    </span>
+                    <span class="sale-num">
+                      {{dashboard.tasks.length}} </span>
+                    </li>
+                    <li>
+                      <span class="sale-info">
+                        METRICS COUNT <i class="fa fa-img-up"></i>
+                      </span>
+                      <span class="sale-num">
+                        {{dashboard.metrics.length}} </span>
+                      </li>
+                      <li>
+                        <span class="sale-info">
+                          LAST ENTRY <i class="fa fa-img-down"></i>
+                        </span>
+                        <span class="sale-num">
+                          {{dashboard.metrics[dashboard.metrics.length-1].date  | date:'shortDate'}} </span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <!--end col-md-4-->
+              </div>
+              <!--end row-->
+            </div>
+          </div>
+
  <!-- BEGIN OVERVIEW STATISTIC BARS-->
  <div class="row stats-overview-cont">
+
    <div class="col-md-2 col-sm-4">
     <div class="stats-overview stat-block">
-      <div class="display stat bad huge">
-        <span class="bar-chart">
-          1,7,9,11, 14, 12, 6, 7, 4, 2,12, 10 </span>
-          <div class="percent">
-           +15%
-         </div>
-       </div>
        <div class="details">
-        <div class="title">
-         Metrics
-       </div>
-       <div class="numbers">
-         {{summary.metrics.list.length}}
-       </div>
-       <div class="progress">
-        <span style="width: 15%;" class="progress-bar progress-bar-default" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100">
-          <span class="sr-only">
-            15% Complete </span>
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-2 col-sm-4">
-
-    <div class="stats-overview stat-block">
-      <div class="display stat ok huge">
-        <span class="bar-chart">
-          5, 6, 7, 11, 14, 10, 15, 19, 15, 2 </span>
-          <div class="percent">
-           +8%
-         </div>
-       </div>
-       <div class="details">
-        <div class="title">
-         Tasks
-       </div>
-       <div class="numbers">
-        {{summary.tasks.list.length}}
-      </div>
-    </div>
-    <div class="progress">
-      <span style="width: 40%;" class="progress-bar progress-bar-default" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100">
-        <span class="sr-only">
-          66% Complete </span>
-        </span>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-2 col-sm-4">
-    <div class="stats-overview stat-block">
-      <div class="display stat good huge">
-        <span class="bar-chart">
-          1,1,2,2,3,4,5,5,5,5</span>
-          <div class="percent">
-           +0%
-         </div>
-       </div>
-       <div class="details">
-        <div class="title">
-         Indicators
-       </div>
-       <div class="numbers">
-         {{summary.indicateurs.list.length}}
-       </div>
-       <div class="progress">
-        <span style="width: 16%;" class="progress-bar progress-bar-success" aria-valuenow="16" aria-valuemin="0" aria-valuemax="100">
-          <span class="sr-only">
-            16% Complete </span>
-          </span>
-        </div>
+        <div class="title">KPIs</div>
+       <nvd3 options="options" data="data"></nvd3>
       </div>
     </div>
   </div>
 
-  <div class="col-md-2 col-sm-4">
+   <div class="col-md-2 col-sm-4">
     <div class="stats-overview stat-block">
-      <div class="display stat ok huge">
-        <span class="bar-chart">
-          2,6,8,12, 11, 15, 16, 16, 14, 12, 16 </span>
-          <div class="percent">
-           +12%
-         </div>
-       </div>
        <div class="details">
-        <div class="title">
-         Trust
-       </div>
-       <div class="numbers">
-        {{summary.trust.sum}}%
+        <div class="title">Tasks</div>
+       <nvd3 options="optionsTasks" data="data"></nvd3>
       </div>
-      <div class="progress">
-        <span style="width:  {{summary.trust.sum}}%;" class="progress-bar progress-bar-info" aria-valuenow=" {{summary.trust.sum}}" aria-valuemin="0" aria-valuemax="100">
-          <span class="sr-only">
-           {{summary.trust.sum}}% Complete </span>
-         </span>
-       </div>
-     </div>
-   </div>
- </div>
+    </div>
+  </div>
+
+   <div class="col-md-2 col-sm-4">
+    <div class="stats-overview stat-block">
+       <div class="details">
+        <div class="title">Metrics</div>
+       <nvd3 options="optionsMetrics" data="data"></nvd3>
+      </div>
+    </div>
+  </div>
+
+   <div class="col-md-2 col-sm-4">
+    <div class="stats-overview stat-block">
+       <div class="details">
+        <div class="title">Alerts</div>
+       <nvd3 options="optionsAlerts" data="data"></nvd3>
+      </div>
+    </div>
+  </div>
  
- <div class="col-md-2 col-sm-4">
-  <div class="stats-overview stat-block">
-    <div class="display stat bad huge">
-      <span class="bar-chart">
-        2,0,3,1, 3, 1, 0, 0, 1, 2, 1, 1,0 </span>
-        <div class="percent">
-         -100%
-       </div>
-     </div>
-     <div class="details">
-      <div class="title">
-       Alerts
-     </div>
-     <div class="numbers">
-      {{summary.alerts.list.length}}
+   <div class="col-md-2 col-sm-4">
+    <div class="stats-overview stat-block">
+       <div class="details">
+        <div class="title">Goals</div>
+       <nvd3 options="optionsGoals" data="data"></nvd3>
+      </div>
     </div>
-    <div class="progress">
-      <span style="width: 16%;" class="progress-bar progress-bar-danger" aria-valuenow="16" aria-valuemin="0" aria-valuemax="100">
-        <span class="sr-only">
-          16% Complete </span>
-        </span>
+  </div>
+
+   <div class="col-md-2 col-sm-4">
+    <div class="stats-overview stat-block">
+       <div class="details">
+        <div class="title">Trust</div>
+       <nvd3 options="optionsTrust" data="data"></nvd3>
       </div>
     </div>
   </div>
 </div>
-<div class="col-md-2 col-sm-4">
-  <div class="stats-overview stat-block">
-    <div class="display stat good huge">
-      <span class="bar-chart">
-        1,4,9,12, 10, 11, 9, 14, 13, 15 </span>
-        <div class="percent">
-         +16%
-       </div>
-     </div>
-     <div class="details">
-      <div class="title">
-       Goals
-     </div>
-     <div class="numbers">
-      {{summary.goals.sum}}% 
-    </div>
-    <div class="progress">
-      <span style="width: 56%;" class="progress-bar progress-bar-success" aria-valuenow="56" aria-valuemin="0" aria-valuemax="100">
-        <span class="sr-only">
-          56% Complete </span>
-        </span>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
+
 <!-- END OVERVIEW STATISTIC BARS-->
 </div>
 <!-- Layout Part -->
@@ -220,9 +198,9 @@
            </tr>
          </thead>
          <tbody>
-          <tr ng-repeat="indicateur in indicateurs | orderBy : Activity | filter: myFilter track by indicateur._id " on-finish-render>
+          <tr ng-repeat="KPI in dashboard.kpis | orderBy : Activity | filter: myFilter track by KPI._id " on-finish-render>
             <td>
-             <a href="/indicator/{{indicateur._id}}">{{indicateur.name}}</a>
+             <a href="/KPI/{{KPI._id}}">{{KPI.name}}</a>
            </td>
            <td>
              <span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-right"></span>
@@ -274,38 +252,38 @@
   <tab heading="Now">
     <div class="row cards" >
 
-      <div class="card-container col-lg-3 col-sm-6 col-sm-12" ng-repeat="indicateur in indicateurs | orderBy : Activity | filter: myFilter track by indicateur._id ">
-        <div id='{{indicateur._id}}'class="card card-slategray hover" ng-click="expandWidget(indicateur)">
+      <div class="card-container col-lg-3 col-sm-6 col-sm-12" ng-repeat="KPI in KPIs | orderBy : Activity | filter: myFilter track by KPI._id ">
+        <div id='{{KPI._id}}'class="card card-slategray hover" ng-click="expandWidget(KPI)">
           <div class="front"> 
 
             <div class="media">        
               <span class="pull-left" style="margin-right:20px;">
-                <h2><span class="glyphicon" ng-class="{'glyphicon-record':indicateur.category=='Objectif','glyphicon-warning-sign':indicateur.category=='Alerte'}"></span></h2>
+                <h2><span class="glyphicon" ng-class="{'glyphicon-record':KPI.category=='Objectif','glyphicon-warning-sign':KPI.category=='Alerte'}"></span></h2>
               </span>
 
               <div class="media-body">
-                <span style="max-height:10px"><small>{{indicateur.name}}</small></span>
-                <h2 class="media-heading animate-number" data-value="3659" data-animation-duration="1500">{{indicateur.mesureValCal}} <small> / {{indicateur.mesureRefCal}}</small></h2>
+                <span style="max-height:10px"><small>{{KPI.name}}</small></span>
+                <h2 class="media-heading animate-number" data-value="3659" data-animation-duration="1500">{{KPI.mesureValCal}} <small> / {{KPI.mesureRefCal}}</small></h2>
               </div>
             </div> 
 
             <div class="progress-list">
               <div class="details">
-                <div class="title">Vue {{indicateur.groupBy}}</div>
+                <div class="title">Vue {{KPI.groupBy}}</div>
               </div>
               <div class="status pull-right bg-transparent-black-1">
-                <span class="animate-number" data-value="{{indicateur.percentObjectif}}" data-animation-duration="1500">{{indicateur.percentObjectif}}</span>
+                <span class="animate-number" data-value="{{KPI.percentObjectif}}" data-animation-duration="1500">{{KPI.percentObjectif}}</span>
               </div>
               <div class="clearfix"></div>
               <div class="progress progress-little progress-transparent-black">
-                <div class="progress-bar animate-progress-bar progress-bar-#3cc051" data-percentage="{{indicateur.percentObjectif}}" style="width: {{indicateur.percentObjectif}};"></div>
+                <div class="progress-bar animate-progress-bar progress-bar-#3cc051" data-percentage="{{KPI.percentObjectif}}" style="width: {{KPI.percentObjectif}};"></div>
               </div>
             </div>
             <div style="display:none" class='cardBottom' style="margin-top:30px;">
               <div class="media-body">
-                <span><small style="color:grey">Activity : </small><br/>{{indicateur.Activity.replace(perimeter.Activity,"#")}}</span><br/>
-                <span> <small style="color:grey">Contexte : </small><br/>{{indicateur.Contexte}}</span><br/>
-                <span><small style="color:grey">Axe : </small><br/>{{indicateur.Axe}}</span><br/>
+                <span><small style="color:grey">Activity : </small><br/>{{KPI.Activity.replace(perimeter.Activity,"#")}}</span><br/>
+                <span> <small style="color:grey">Contexte : </small><br/>{{KPI.Contexte}}</span><br/>
+                <span><small style="color:grey">Axe : </small><br/>{{KPI.Axe}}</span><br/>
               </div> 
             </div>
           </div>

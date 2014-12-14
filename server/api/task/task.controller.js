@@ -14,6 +14,7 @@
  var Task = require('./task.model');
  var Metric = require('../metric/metric.model');
  var mTask = {};
+ 
 // Get list of tasks
 exports.index = function(req, res) {
   Task.find(function (err, tasks) {
