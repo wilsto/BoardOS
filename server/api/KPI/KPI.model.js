@@ -9,7 +9,7 @@ var KPISchema = new Schema({
   context: String,
   axe: String,
   tags:String,
-  category:String,
+  categories: Schema.Types.Mixed,
   refresh:Number,
   action:String,
   metricTaskField:String,

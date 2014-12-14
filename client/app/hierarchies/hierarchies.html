@@ -1,41 +1,81 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 <!--* Modal Part-->
 
-
 <div class="row">
   <!-- Layout Part -->
-  <div class="row">
-    <div class="col-md-2">
-      <div class="list-group">
-        <a href="#" class="list-group-item active" ng-click="loadMe('Context')">Contexts</a>
-        <a href="#" class="list-group-item" ng-click="loadMe('Activity')">Activities</a>
-        <a href="#" class="list-group-item" ng-click="loadMe('Axis')">Axis</a>
-        <a href="#" class="list-group-item">KPI properties</a>
-        <a href="#" class="list-group-item">Tasks properties</a>
-      </div>
+  <div class="row profile">
+    <div class="col-md-3">
+      <ul class="list-unstyled profile-nav">
+        <li>
+          <img src="assets/images/configuration.jpg" class="img-responsive" alt=""/>
+        </li>
+
+      </ul>
     </div>
-        <div class="col-md-10">
-    <div class="row">
-      <div class="col-md-5">
-        <button type="button" class="btn btn-success btn-sm" onclick="demo_create();"><i class="glyphicon glyphicon-asterisk"></i> Create</button>
-        <button type="button" class="btn btn-warning btn-sm" onclick="demo_rename();"><i class="glyphicon glyphicon-pencil"></i> Rename</button>
-        <button type="button" class="btn btn-danger btn-sm" onclick="demo_delete();"><i class="glyphicon glyphicon-remove"></i> Delete</button><br/><br/>
+    <div class="col-md-9">
+      <div class="row">
+        <div class="col-md-12 profile-info">
+          <h1>Board Of Supervision Configuration</h1><br/>
+          <ul class="list list-inline">
+            <li>
+              <i class="fa fa-map-marker"></i><span style="color:lightgrey"> Context </span> {{KPI.context}}
+            </li><br/><br/>
+            <li>
+              <i class="fa fa-calendar"></i><span style="color:lightgrey"> Activity </span>  {{KPI.activity}}
+            </li>
+          </ul>
+        </div>
+        <!--end col-md-8-->
+
+        <!--end row-->
       </div>
-      <div class="col-md-5">
-        <div class="pull-right">
-          <button type="button" class="btn btn-default" ng-click="reset()">Reset</button>
-          <button type="submit" class="btn btn-info" ng-click="save()">Save</button>
-        </div>            
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-5">
-        <div id='mytree' js-tree="treeConfig" ng-model="hierarchies" tree="treeInstance" tree-events="ready:readyCB;select_node:selectNode;create_node:createNode;rename_node:renameNode;delete_node:deleteNode"></div>
-      </div>
-      <div class="col-md-7">
-        <div id="details">fdsdf</div>
-      </div>
-    </div>
     </div>
   </div>
 
+  <div class="col-md-2">
+    <ul class="ver-inline-menu tabbable margin-bottom-10">
+      <li class="active">
+        <a data-toggle="tab" ng-click="loadMe('Context')" href="#tab_1-1">
+          <i class="fa fa-recycle"></i>Contexts 
+        </a>
+        <span class="after"></span>
+      </li>
+      <li>
+        <a data-toggle="tab" ng-click="loadMe('Activity')" href="#tab_2-2"><i class="fa fa-cog"></i>Activities</a>
+      </li>
+      <li>
+        <a data-toggle="tab" ng-click="loadMe('Axis')" href="#tab_3-3"><i class="fa fa-bar-chart-o"></i>Axis</a>
+      </li>
+      <li>
+        <a data-toggle="tab" ng-click="loadMe('Axis')" href="#tab_3-3"><i class="fa fa-bar-chart-o"></i>KPI properties</a>
+      </li>
+      <li>
+        <a data-toggle="tab" ng-click="loadMe('Axis')" href="#tab_3-3"><i class="fa fa-bar-chart-o"></i>Tasks properties</a>
+      </li>
+    </ul>
+  </div>
+
+<div class="col-md-10">
+  <div class="row">
+    <div class="col-md-5">
+      <button type="button" class="btn btn-success btn-sm" onclick="demo_create();"><i class="glyphicon glyphicon-asterisk"></i> Create</button>
+      <button type="button" class="btn btn-warning btn-sm" onclick="demo_rename();"><i class="glyphicon glyphicon-pencil"></i> Rename</button>
+      <button type="button" class="btn btn-danger btn-sm" onclick="demo_delete();"><i class="glyphicon glyphicon-remove"></i> Delete</button><br/><br/>
+    </div>
+    <div class="col-md-5">
+      <div class="pull-right">
+        <button type="button" class="btn btn-default" ng-click="reset()">Reset</button>
+        <button type="submit" class="btn btn-info" ng-click="save()">Save</button>
+      </div>            
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-5">
+      <div id='mytree' js-tree="treeConfig" ng-model="hierarchies" tree="treeInstance" tree-events="ready:readyCB;select_node:selectNode;create_node:createNode;rename_node:renameNode;delete_node:deleteNode"></div>
+    </div>
+    <div class="col-md-7">
+      <div id="details">fdsdf</div>
+    </div>
+  </div>
+</div>
+</div>

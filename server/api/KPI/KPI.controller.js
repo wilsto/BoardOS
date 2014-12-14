@@ -11,6 +11,11 @@
 
 var _ = require('lodash');
 var KPI = require('./KPI.model');
+var Q = require('q');
+var Dashboard = require('../dashboard/dashboard.model');
+var Task = require('../task/task.model');
+var Metric = require('../metric/metric.model');
+var mKPI = {};
 
 // Get list of KPIs
 exports.index = function(req, res) {
@@ -22,10 +27,65 @@ exports.index = function(req, res) {
 
 // Get a single kpi
 exports.show = function(req, res) {
-  KPI.findById(req.params.id, function (err, kpi) {
-    if(err) { return handleError(res, err); }
-    if(!kpi) { return res.send(404); }
-    return res.json(kpi);
+Q()
+  .then(function () {
+    // Get a single kpi
+    var deferred = Q.defer();
+    KPI.findById(req.params.id, function (err, kpi) {
+      if(err) { return handleError(res, err); }
+      if(!kpi) { return res.send(404); }
+      mKPI = kpi.toObject();
+      deferred.resolve(mKPI);
+    })
+    return deferred.promise;
+  })
+  .then(function () {
+      // Get related dashboards
+      var deferred = Q.defer();
+      mKPI.dashboards = [];
+      Dashboard.find({}, function (err, dashboard) {
+        _.each(dashboard, function(rowdata, index) { 
+          if (rowdata.context.indexOf(mKPI.context) >=0 && rowdata.activity.indexOf(mKPI.activity) >=0 ) {
+            mKPI.dashboards.push (rowdata);
+          }
+        });
+        deferred.resolve(mKPI);
+      })
+      return deferred.promise;
+    })
+  .then(function () {
+      // Get related Tasks
+      var deferred = Q.defer();
+      mKPI.tasks = [];
+      Task.find({}, function (err, task) {
+        _.each(task, function(rowdata, index) { 
+          if (rowdata.context.indexOf(mKPI.context) >=0 && rowdata.activity.indexOf(mKPI.activity) >=0 ) {
+            mKPI.tasks.push (rowdata);
+          }
+        });
+        deferred.resolve(mKPI);
+      })
+      return deferred.promise;
+    })  
+  .then( function () {
+    // Get related metrics
+    var deferred = Q.defer();
+    mKPI.metrics = [];
+    Metric.find({}, function (err, metric) {
+      _.each(metric, function(rowdata, index) {  
+        if (rowdata.context.indexOf(mKPI.context) >=0 && rowdata.activity.indexOf(mKPI.activity) >=0 ) {
+          mKPI.metrics.push (rowdata);
+        }
+      });
+      deferred.resolve(mKPI);
+    })
+    return deferred.promise;
+    })
+  .then(function () {
+    var deferred = Q.defer();
+    return res.json(mKPI);
+    deferred.resolve(mKPI);
+    return deferred.promise;
   });
 };
 
