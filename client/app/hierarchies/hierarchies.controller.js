@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-.controller('hierarchiesCtrl', function ($scope, $http, socket, ngToast) {
+.controller('hierarchiesCtrl', function ($scope, $http, ngToast) {
   $scope.hierarchies = [];
   $scope.Hierarchy = {};
   $scope.config = {tab1: true, tab2: false};

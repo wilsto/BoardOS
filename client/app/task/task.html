@@ -1,477 +1,468 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 <!--* Modal Part-->
-
 <script type="text/ng-template" id="myMesureContent.html">
-  <div class="modal-header">
-    <h3>Ajouter</h3>
-  </div>
-  <div class="modal-body">
-    <!-- FORM -->
-
-    <!-- date -->
-    <div class="row">
-      <div class="col-md-6">  <h4>Début Tache</h4>
-        <p class="input-group">
-          <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.startDate" is-open="opened2" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer" placeholder="Entrer la date de début de la tache" />
-          <span class="input-group-btn">
-            <button class="btn btn-default" ng-click="open2($event)">
-              <span class="glyphicon glyphicon-chevron-down">
-              </span>
-            </button>
-          </span>
-        </p>
+    <div class="modal-header">
+      <h3>Ajouter</h3>
+    </div>
+    <div class="modal-body">
+      <!-- FORM -->
+    
+      <!-- date -->
+      <div class="row">
+        <div class="col-md-6">  <h4>Début Tache</h4>
+          <p class="input-group">
+            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.startDate" is-open="opened2" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer" placeholder="Entrer la date de début de la tache" />
+            <span class="input-group-btn">
+              <button class="btn btn-default" ng-click="open2($event)">
+                <span class="glyphicon glyphicon-chevron-down">
+                </span>
+              </button>
+            </span>
+          </p>
+        </div>
+        <div class="col-md-6">  <h4>Fin Tache</h4>
+          <p class="input-group">
+            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.endDate" is-open="opened3" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer" placeholder="Entrer la date de début de la tache" />
+            <span class="input-group-btn">
+              <button class="btn btn-default" ng-click="open3($event)">
+                <span class="glyphicon glyphicon-calendar">
+                </span>
+              </button>
+            </span>
+          </p>
+        </div>
       </div>
-      <div class="col-md-6">  <h4>Fin Tache</h4>
-        <p class="input-group">
-          <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.endDate" is-open="opened3" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer" placeholder="Entrer la date de début de la tache" />
-          <span class="input-group-btn">
-            <button class="btn btn-default" ng-click="open3($event)">
-              <span class="glyphicon glyphicon-calendar">
-              </span>
-            </button>
-          </span>
-        </p>
+    
+      <!-- date -->
+      <div class="row">
+        <div class="col-md-4">  
+          <p class="input-group">
+            <label>Charge</label>
+            <input type="text" name="load" class="form-control"  ng-model="formData.load" placeholder="Entrer la load">
+            <span class="help-block">
+            </span>
+    
+          </p>
+        </div>
+    
+        <div class="col-md-4">  
+          <p class="input-group">
+            <label>% progress</label>
+            <input type="text" name="progress" class="form-control"  ng-model="formData.progress" placeholder="Entrer le pourcentage d'progress">
+            <span class="help-block">
+            </span>
+    
+          </p>
+        </div>
+        <div class="col-md-4">  
+          <p class="input-group">
+            <label>Statut</label>
+            <input type="text" name="status" class="form-control" ng-model="formData.status" typeahead-on-select="$item"  typeahead="statut.name for statut in taskStatus" placeholder="Entrer le statut">
+            <span class="help-block">
+            </span>
+          </p>
+        </div>
+      </div>
+    
+      <!-- date -->
+      <div class="row">
+        <div class="col-md-4">
+          <p class="input-group">
+            <label>Date</label>
+            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.date" is-open="opened1" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer" placeholder="Entrer la date de la mesure"/>
+            <span class="input-group-btn">
+              <button class="btn btn-default" ng-click="open1($event)">
+                <span class="glyphicon glyphicon-calendar">
+                </span>
+              </button>
+            </span>
+          </p>
+        </div>
+        <div class="col-md-4">  
+          <p class="input-group">
+            <label>Etat de progressStatusion</label>
+            <input type="text" name="progressStatus" class="form-control" ng-model="formData.progressStatus" typeahead-on-select="$item"  typeahead="progressStatus.name for progressStatus in progressStatusStatus" placeholder="Entrer l'état de progressStatusion">
+            <span class="help-block">
+            </span>
+    
+          </p>
+        </div>
+        <div class="col-md-4">  
+          <p class="input-group">
+            <label>% trust</label>
+            <input type="text" name="trust" class="form-control"  ng-model="formData.trust" placeholder="Entrer le pourcentage de trust">
+            <span class="help-block">
+            </span>
+    
+          </p>
+        </div>
+      </div>
+    
+    
+      <!-- date -->
+      <div class="row">
+        <div class="col-md-12">  
+          <label>comments</label>
+          <textarea name="comments" class="form-control" rows="4" ng-model="formData.comments" placeholder="Add a comment (optional)"></textarea>
+        </div>
+      </div>
+    
+      <div ng-show="debug==true">
+    
+        SHOW DATA FROM INPUTS AS THEY ARE BEING TYPED 
+        <pre>
+          {{ formData }}
+        </pre>
       </div>
     </div>
-
-    <!-- date -->
-    <div class="row">
-      <div class="col-md-4">  
-        <p class="input-group">
-          <label>Charge</label>
-          <input type="text" name="load" class="form-control"  ng-model="formData.load" placeholder="Entrer la load">
-          <span class="help-block">
-          </span>
-
-        </p>
-      </div>
-
-      <div class="col-md-4">  
-        <p class="input-group">
-          <label>% progress</label>
-          <input type="text" name="progress" class="form-control"  ng-model="formData.progress" placeholder="Entrer le pourcentage d'progress">
-          <span class="help-block">
-          </span>
-
-        </p>
-      </div>
-      <div class="col-md-4">  
-        <p class="input-group">
-          <label>Statut</label>
-          <input type="text" name="status" class="form-control" ng-model="formData.status" typeahead-on-select="$item"  typeahead="statut.name for statut in taskStatus" placeholder="Entrer le statut">
-          <span class="help-block">
-          </span>
-        </p>
+    <div class="modal-footer">
+      <div style="float:left"><button class="btn btn-alert" ng-click="debug=!debug">Debug Mode</button><button ng-show='formData._id' class="btn btn-danger" ng-click="DeleteData(formData._id)">Delete Mesure</button></div>
+      <div style="float:right">
+        <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+        <button class="btn btn-success" ng-click="ok()">Update</button>
       </div>
     </div>
-
-    <!-- date -->
-    <div class="row">
-      <div class="col-md-4">
-        <p class="input-group">
-          <label>Date</label>
-          <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.date" is-open="opened1" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer" placeholder="Entrer la date de la mesure"/>
-          <span class="input-group-btn">
-            <button class="btn btn-default" ng-click="open1($event)">
-              <span class="glyphicon glyphicon-calendar">
-              </span>
-            </button>
-          </span>
-        </p>
-      </div>
-      <div class="col-md-4">  
-        <p class="input-group">
-          <label>Etat de progressStatusion</label>
-          <input type="text" name="progressStatus" class="form-control" ng-model="formData.progressStatus" typeahead-on-select="$item"  typeahead="progressStatus.name for progressStatus in progressStatusStatus" placeholder="Entrer l'état de progressStatusion">
-          <span class="help-block">
-          </span>
-
-        </p>
-      </div>
-      <div class="col-md-4">  
-        <p class="input-group">
-          <label>% trust</label>
-          <input type="text" name="trust" class="form-control"  ng-model="formData.trust" placeholder="Entrer le pourcentage de trust">
-          <span class="help-block">
-          </span>
-
-        </p>
-      </div>
-    </div>
-
-
-    <!-- date -->
-    <div class="row">
-      <div class="col-md-12">  
-        <label>comments</label>
-        <textarea name="comments" class="form-control" rows="4" ng-model="formData.comments" placeholder="Add a comment (optional)"></textarea>
-      </div>
-    </div>
-
-    <div ng-show="debug==true">
-
-      SHOW DATA FROM INPUTS AS THEY ARE BEING TYPED 
-      <pre>
-        {{ formData }}
-      </pre>
-    </div>
-  </div>
-  <div class="modal-footer">
-    <div style="float:left"><button class="btn btn-alert" ng-click="debug=!debug">Debug Mode</button><button ng-show='formData._id' class="btn btn-danger" ng-click="DeleteData(formData._id)">Delete Mesure</button></div>
-    <div style="float:right">
-      <button class="btn btn-default" ng-click="cancel()">Cancel</button>
-      <button class="btn btn-success" ng-click="ok()">Update</button>
-    </div>
-  </div>
-
+    
 </script>
-
 <!-- BEGIN PAGE CONTENT-->
 <div class="row profile">
-  <div class="col-md-12">
-    <!--BEGIN TABS-->
-    <div class="row">
-      <div class="col-md-3">
-        <ul class="list-unstyled profile-nav">
-          <li>
-            <img src="assets/images/Tasks.png" class="img-responsive" alt=""/>
-            <a href="#" class="profile-edit">edit</a>
-          </li>
-          <li>
-            <a href="#">Projects</a>
-          </li>
-          <li>
-            <a href="#">Actors <span>
-              3 </span>
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div class="col-md-9">
+    <div class="col-md-12">
+        <!--BEGIN TABS-->
         <div class="row">
-          <div class="col-md-8 profile-info">
-            <h1>{{task.name}}</h1><br/>
-            <ul class="list list-inline">
-              <li>
-               <i class="fa fa-map-marker"></i><span style="color:lightgrey"> Context </span> {{task.context}}
-             </li><br/><br/>
-             <li>
-               <i class="fa fa-calendar"></i><span style="color:lightgrey"> Activity </span>  {{task.activity}}
-             </li>
-           </ul>
-         </div>
-         <!--end col-md-8-->
-         <div class="col-md-4">
-          <div class="portlet sale-summary">
-            <div class="portlet-title">
-              <div class="caption">
-               Summary
-             </div>
-             <div class="tools">
-              <a class="reload" href="javascript:;"></a>
-            </div>
-          </div>
-          <div class="portlet-body">
-            <ul class="list-unstyled">
-              <li>
-                <span class="sale-info">
-                  METRICS COUNT <i class="fa fa-img-up"></i>
-                </span>
-                <span class="sale-num">
-                  {{task.metrics.length}} </span>
-                </li>
-                <li>
-                  <span class="sale-info">
-                    LAST ENTRY <i class="fa fa-img-down"></i>
-                  </span>
-                  <span class="sale-num">
-                    {{task.metrics[task.metrics.length-1].date  | date:'shortDate'}} </span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <!--end col-md-4-->
-        </div>
-        <!--end row-->
-      </div>
-    </div>
-<div class="row">
-    <tabset>
-      <tab heading="Metrics">
-
-        <div class="portlet-body">
-          <table class="table table-striped table-bordered table-advance table-hover">
-            <thead>
-              <tr>
-                <th>Saisie</th>
-                <th>Activity</th>
-                <th>Context</th>
-                <th>Start</th>
-                <th>Load</th>
-                <th>Status</th>
-                <th>Progress</th>
-                <th>Trust</th>
-                <th>End</th>
-                <th>comments</th>
-                <th><button ng-click='openMesure(task, task.metrics[task.metrics.length-1],true)' type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus"></span></button></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="mesure in task.metrics | filter:search | orderBy:'date' track by $index" ng-show="mesure._id">
-                <td>{{mesure.date | date:'shortDate'}}</td>
-                <td>{{mesure.activity.replace(task.activity,"#")}}</td>
-                <td>{{mesure.context.replace(task.context,"#")}}</td>
-                <td>{{mesure.startDate | date:'shortDate'}}</td>
-                <td>{{mesure.load}}</td>
-                <td>{{mesure.status}}</td>
-                <td>{{mesure.progress}}% - {{mesure.progressStatus}}</td>
-                <td>{{mesure.trust}}</td>
-                <td>{{mesure.endDate | date:'shortDate'}}</td>
-                <td>{{mesure.comments}}</td>
-                <td style="width:25px">
-                  <button ng-click="openMesure(task, mesure,false)"type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></button>
-                </td>
-              </tbody>
-            </table>
-          </div>
-        </tab>
-        <!--tab_1_2-->
-        <tab heading="Actors">
-          <div class="row">
-            <div class="col-md-12 user-info">
-              <img alt="" src="assets/images/Will.png" style="width:45px" class="img-responsive"/>
-              <div class="details">
-                <div>
-                  <a href="#">Will</a>
-                </div>
-                <div>
-                  29 Jan 2013 10:45AM
-                </div>
-              </div>
-            </div>
-            <div class="col-md-12 user-info">
-              <img alt="" src="assets/images/avatar.png" class="img-responsive"/>
-              <div class="details">
-                <div>
-                  <a href="#">Jimmy</a>
-                </div>
-                <div>
-                  19 Jan 2013 10:45AM
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-12 user-info">
-              <img alt="" src="assets/images/avatar.png" class="img-responsive"/>
-              <div class="details">
-                <div>
-                  <a href="#">Alexandra</a>
-                </div>
-                <div>
-                  19 Jan 2013 12:45PM
-                </div>
-              </div>
-            </div>
-            <div class="col-md-12 user-info">
-              <img alt="" src="assets/images/avatar.png" class="img-responsive"/>
-              <div class="details">
-                <div>
-                  <a href="#">Pascale</a>
-                </div>
-                <div>
-                  19 Jan 2013 11:55PM
-                </div>
-              </div>
-            </div>
-          </div>
-        </tab>
-
-        <tab heading="Edit">
-          <div class="row profile-account">
             <div class="col-md-3">
-              <ul class="ver-inline-menu tabbable margin-bottom-10">
-                <li class="active">
-                  <a data-toggle="tab" href="#tab_1-1">
-                    <i class="fa fa-cog"></i> Personal info </a>
-                    <span class="after">
-                    </span>
-                  </li>
-                  <li>
-                    <a data-toggle="tab" href="#tab_2-2"><i class="fa fa-picture-o"></i> Change Avatar</a>
-                  </li>
-                  <li>
-                    <a data-toggle="tab" href="#tab_3-3"><i class="fa fa-lock"></i> Change Password</a>
-                  </li>
-                  <li>
-                    <a data-toggle="tab" href="#tab_4-4"><i class="fa fa-eye"></i> Privacity Settings</a>
-                  </li>
+                <ul class="list-unstyled profile-nav">
+                    <li>
+                        <img src="assets/images/Tasks.png" class="img-responsive" alt=""/>
+                        <a href="#" class="profile-edit">edit</a>
+                    </li>
+                    <li>
+                        <a href="#">Projects</a>
+                    </li>
+                    <li>
+                        <a href="#">Actors <span>
+                        3 </span>
+                        </a>
+                    </li>
                 </ul>
-              </div>
-              <div class="col-md-9">
-                <div class="tab-content">
-                  <div id="tab_1-1" class="tab-pane active">
-                    <form role="form" action="#">
-                      <div class="form-group">
-                        <label class="control-label">First Name</label>
-                        <input type="text" placeholder="John" class="form-control"/>
-                      </div>
-                      <div class="form-group">
-                        <label class="control-label">Last Name</label>
-                        <input type="text" placeholder="Doe" class="form-control"/>
-                      </div>
-                      <div class="form-group">
-                        <label class="control-label">Mobile Number</label>
-                        <input type="text" placeholder="+1 646 580 DEMO (6284)" class="form-control"/>
-                      </div>
-                      <div class="form-group">
-                        <label class="control-label">Interests</label>
-                        <input type="text" placeholder="Design, Web etc." class="form-control"/>
-                      </div>
-                      <div class="form-group">
-                        <label class="control-label">Occupation</label>
-                        <input type="text" placeholder="Web Developer" class="form-control"/>
-                      </div>
-                      <div class="form-group">
-                        <label class="control-label">About</label>
-                        <textarea class="form-control" rows="3" placeholder="We are KeenThemes!!!"></textarea>
-                      </div>
-                      <div class="form-group">
-                        <label class="control-label">Website Url</label>
-                        <input type="text" placeholder="http://www.mywebsite.com" class="form-control"/>
-                      </div>
-                      <div class="margiv-top-10">
-                        <a href="#" class="btn btn-success">Save Changes</a>
-                        <a href="#" class="btn btn-default">Cancel</a>
-                      </div>
-                    </form>
-                  </div>
-                  <div id="tab_2-2" class="tab-pane">
-                    <p>
-                     Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod.
-                   </p>
-                   <form action="#" role="form">
-                    <div class="form-group">
-                      <div class="thumbnail" style="width: 310px;">
-                        <img src="http://www.placehold.it/310x170/EFEFEF/AAAAAA&amp;text=no+image" alt="">
-                      </div>
-                      <div class="margin-top-10 fileupload fileupload-new" data-provides="fileupload">
-                        <div class="input-group input-group-fixed">
-                          <span class="input-group-btn">
-                            <span class="uneditable-input">
-                              <i class="fa fa-file fileupload-exists"></i>
-                              <span class="fileupload-preview">
-                              </span>
-                            </span>
-                          </span>
-                          <span class="btn btn-default btn-file">
-                            <span class="fileupload-new">
-                              <i class="fa fa-paper-clip"></i> Select file </span>
-                              <span class="fileupload-exists">
-                                <i class="fa fa-undo"></i> Change </span>
-                                <input type="file" class="default"/>
-                              </span>
-                              <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> Remove</a>
-                            </div>
-                          </div>
-                          <span class="label label-danger">
-                            NOTE! </span>
-                            <span>
-                              Attached image thumbnail is supported in Latest Firefox, Chrome, Opera, Safari and Internet Explorer 10 only </span>
-                            </div>
-                            <div class="margin-top-10">
-                              <a href="#" class="btn btn-success">Submit</a>
-                              <a href="#" class="btn btn-default">Cancel</a>
-                            </div>
-                          </form>
-                        </div>
-                        <div id="tab_3-3" class="tab-pane">
-                          <form action="#">
-                            <div class="form-group">
-                              <label class="control-label">Current Password</label>
-                              <input type="password" class="form-control"/>
-                            </div>
-                            <div class="form-group">
-                              <label class="control-label">New Password</label>
-                              <input type="password" class="form-control"/>
-                            </div>
-                            <div class="form-group">
-                              <label class="control-label">Re-type New Password</label>
-                              <input type="password" class="form-control"/>
-                            </div>
-                            <div class="margin-top-10">
-                              <a href="#" class="btn btn-success">Change Password</a>
-                              <a href="#" class="btn btn-default">Cancel</a>
-                            </div>
-                          </form>
-                        </div>
-                        <div id="tab_4-4" class="tab-pane">
-                          <form action="#" >
-                            <table class="table table-bordered table-striped">
-                              <tr>
-                                <td>
-                                 Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus..
-                               </td>
-                               <td>
-                                <label class="uniform-inline">
-                                  <input type="radio" name="optionsRadios1" value="option1"/>
-                                  Yes </label>
-                                  <label class="uniform-inline">
-                                    <input type="radio" name="optionsRadios1" value="option2" checked/>
-                                    No </label>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td>
-                                   Enim eiusmod high life accusamus terry richardson ad squid wolf moon
-                                 </td>
-                                 <td>
-                                  <label class="uniform-inline">
-                                    <input type="checkbox" value=""/> Yes </label>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td>
-                                   Enim eiusmod high life accusamus terry richardson ad squid wolf moon
-                                 </td>
-                                 <td>
-                                  <label class="uniform-inline">
-                                    <input type="checkbox" value=""/> Yes </label>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td>
-                                   Enim eiusmod high life accusamus terry richardson ad squid wolf moon
-                                 </td>
-                                 <td>
-                                  <label class="uniform-inline">
-                                    <input type="checkbox" value=""/> Yes </label>
-                                  </td>
-                                </tr>
-                              </table>
-                              <!--end profile-settings-->
-                              <div class="margin-top-10">
-                                <a href="#" class="btn btn-success">Save Changes</a>
-                                <a href="#" class="btn btn-default">Cancel</a>
-                              </div>
-                            </form>
-                          </div>
-                        </div>
-                      </div>
-                      <!--end col-md-9-->
-                    </div>
-
-                <!--END TABS-->
-              </div>
             </div>
-            <!-- END PAGE CONTENT-->
-          </div>
-        </tab>
-    <!--end tab-pane-->
-  </tabset>
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-md-8 profile-info">
+                        <h1>{{task.name}}</h1>
+                        <br/>
+                        <ul class="list list-inline">
+                            <li>
+                                <i class="fa fa-map-marker"></i><span style="color:lightgrey"> Context </span> {{task.context}}
+                            </li>
+                            <br/><br/>
+                            <li>
+                                <i class="fa fa-calendar"></i><span style="color:lightgrey"> Activity </span>  {{task.activity}}
+                            </li>
+                        </ul>
+                    </div>
+                    <!--end col-md-8-->
+                    <div class="col-md-4">
+                        <div class="portlet sale-summary">
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    Summary
+                                </div>
+                                <div class="tools">
+                                    <a class="reload" href="javascript:;"></a>
+                                </div>
+                            </div>
+                            <div class="portlet-body">
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <span class="sale-info">
+                                        METRICS COUNT <i class="fa fa-img-up"></i>
+                                        </span>
+                                        <span class="sale-num">
+                                        {{task.metrics.length}} </span>
+                                    </li>
+                                    <li>
+                                        <span class="sale-info">
+                                        LAST ENTRY <i class="fa fa-img-down"></i>
+                                        </span>
+                                        <span class="sale-num">
+                                        {{task.metrics[task.metrics.length-1].date  | date:'shortDate'}} </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end col-md-4-->
+                </div>
+                <!--end row-->
+            </div>
+        </div>
+        <div class="row">
+            <tabset>
+                <tab heading="Metrics">
+                    <div class="portlet-body">
+                        <table class="table table-striped table-bordered table-advance table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Saisie</th>
+                                    <th>Activity</th>
+                                    <th>Context</th>
+                                    <th>Start</th>
+                                    <th>Load</th>
+                                    <th>Status</th>
+                                    <th>Progress</th>
+                                    <th>Trust</th>
+                                    <th>End</th>
+                                    <th>comments</th>
+                                    <th><button ng-click='openMesure(task, task.metrics[task.metrics.length-1],true)' type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus"></span></button></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="mesure in task.metrics | filter:search | orderBy:'date' track by $index" ng-show="mesure._id">
+                                    <td>{{mesure.date | date:'shortDate'}}</td>
+                                    <td>{{mesure.activity.replace(task.activity,"#")}}</td>
+                                    <td>{{mesure.context.replace(task.context,"#")}}</td>
+                                    <td>{{mesure.startDate | date:'shortDate'}}</td>
+                                    <td>{{mesure.load}}</td>
+                                    <td>{{mesure.status}}</td>
+                                    <td>{{mesure.progress}}% - {{mesure.progressStatus}}</td>
+                                    <td>{{mesure.trust}}</td>
+                                    <td>{{mesure.endDate | date:'shortDate'}}</td>
+                                    <td>{{mesure.comments}}</td>
+                                    <td style="width:25px">
+                                        <button ng-click="openMesure(task, mesure,false)"type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></button>
+                                    </td>
+                            </tbody>
+                        </table>
+                    </div>
+                </tab>
+                <!--tab_1_2-->
+                <tab heading="Actors">
+                    <div class="row">
+                        <div class="col-md-12 user-info">
+                            <img alt="" src="assets/images/Will.png" style="width:45px" class="img-responsive"/>
+                            <div class="details">
+                                <div>
+                                    <a href="#">Will</a>
+                                </div>
+                                <div>
+                                    29 Jan 2013 10:45AM
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 user-info">
+                            <img alt="" src="assets/images/avatar.png" class="img-responsive"/>
+                            <div class="details">
+                                <div>
+                                    <a href="#">Jimmy</a>
+                                </div>
+                                <div>
+                                    19 Jan 2013 10:45AM
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 user-info">
+                            <img alt="" src="assets/images/avatar.png" class="img-responsive"/>
+                            <div class="details">
+                                <div>
+                                    <a href="#">Alexandra</a>
+                                </div>
+                                <div>
+                                    19 Jan 2013 12:45PM
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 user-info">
+                            <img alt="" src="assets/images/avatar.png" class="img-responsive"/>
+                            <div class="details">
+                                <div>
+                                    <a href="#">Pascale</a>
+                                </div>
+                                <div>
+                                    19 Jan 2013 11:55PM
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </tab>
+                <tab heading="Edit">
+                    <div class="row profile-account">
+                        <div class="col-md-3">
+                            <ul class="ver-inline-menu tabbable margin-bottom-10">
+                                <li class="active">
+                                    <a data-toggle="tab" href="#tab_1-1">
+                                    <i class="fa fa-cog"></i> Personal info </a>
+                                    <span class="after">
+                                    </span>
+                                </li>
+                                <li>
+                                    <a data-toggle="tab" href="#tab_2-2"><i class="fa fa-picture-o"></i> Change Avatar</a>
+                                </li>
+                                <li>
+                                    <a data-toggle="tab" href="#tab_3-3"><i class="fa fa-lock"></i> Change Password</a>
+                                </li>
+                                <li>
+                                    <a data-toggle="tab" href="#tab_4-4"><i class="fa fa-eye"></i> Privacity Settings</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="tab-content">
+                                <div id="tab_1-1" class="tab-pane active">
+                                    <form role="form" action="#">
+                                        <div class="form-group">
+                                            <label class="control-label">First Name</label>
+                                            <input type="text" placeholder="John" class="form-control"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Last Name</label>
+                                            <input type="text" placeholder="Doe" class="form-control"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Mobile Number</label>
+                                            <input type="text" placeholder="+1 646 580 DEMO (6284)" class="form-control"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Interests</label>
+                                            <input type="text" placeholder="Design, Web etc." class="form-control"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Occupation</label>
+                                            <input type="text" placeholder="Web Developer" class="form-control"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">About</label>
+                                            <textarea class="form-control" rows="3" placeholder="We are KeenThemes!!!"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Website Url</label>
+                                            <input type="text" placeholder="http://www.mywebsite.com" class="form-control"/>
+                                        </div>
+                                        <div class="margiv-top-10">
+                                            <a href="#" class="btn btn-success">Save Changes</a>
+                                            <a href="#" class="btn btn-default">Cancel</a>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div id="tab_2-2" class="tab-pane">
+                                    <p>
+                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod.
+                                    </p>
+                                    <form action="#" role="form">
+                                        <div class="form-group">
+                                            <div class="thumbnail" style="width: 310px;">
+                                                <img src="http://www.placehold.it/310x170/EFEFEF/AAAAAA&amp;text=no+image" alt="">
+                                            </div>
+                                            <div class="margin-top-10 fileupload fileupload-new" data-provides="fileupload">
+                                                <div class="input-group input-group-fixed">
+                                                    <span class="input-group-btn">
+                                                    <span class="uneditable-input">
+                                                    <i class="fa fa-file fileupload-exists"></i>
+                                                    <span class="fileupload-preview">
+                                                    </span>
+                                                    </span>
+                                                    </span>
+                                                    <span class="btn btn-default btn-file">
+                                                    <span class="fileupload-new">
+                                                    <i class="fa fa-paper-clip"></i> Select file </span>
+                                                    <span class="fileupload-exists">
+                                                    <i class="fa fa-undo"></i> Change </span>
+                                                    <input type="file" class="default"/>
+                                                    </span>
+                                                    <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> Remove</a>
+                                                </div>
+                                            </div>
+                                            <span class="label label-danger">
+                                            NOTE! </span>
+                                            <span>
+                                            Attached image thumbnail is supported in Latest Firefox, Chrome, Opera, Safari and Internet Explorer 10 only </span>
+                                        </div>
+                                        <div class="margin-top-10">
+                                            <a href="#" class="btn btn-success">Submit</a>
+                                            <a href="#" class="btn btn-default">Cancel</a>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div id="tab_3-3" class="tab-pane">
+                                    <form action="#">
+                                        <div class="form-group">
+                                            <label class="control-label">Current Password</label>
+                                            <input type="password" class="form-control"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">New Password</label>
+                                            <input type="password" class="form-control"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label">Re-type New Password</label>
+                                            <input type="password" class="form-control"/>
+                                        </div>
+                                        <div class="margin-top-10">
+                                            <a href="#" class="btn btn-success">Change Password</a>
+                                            <a href="#" class="btn btn-default">Cancel</a>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div id="tab_4-4" class="tab-pane">
+                                    <form action="#" >
+                                        <table class="table table-bordered table-striped">
+                                            <tr>
+                                                <td>
+                                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus..
+                                                </td>
+                                                <td>
+                                                    <label class="uniform-inline">
+                                                    <input type="radio" name="optionsRadios1" value="option1"/>
+                                                    Yes </label>
+                                                    <label class="uniform-inline">
+                                                    <input type="radio" name="optionsRadios1" value="option2" checked/>
+                                                    No </label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Enim eiusmod high life accusamus terry richardson ad squid wolf moon
+                                                </td>
+                                                <td>
+                                                    <label class="uniform-inline">
+                                                    <input type="checkbox" value=""/> Yes </label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Enim eiusmod high life accusamus terry richardson ad squid wolf moon
+                                                </td>
+                                                <td>
+                                                    <label class="uniform-inline">
+                                                    <input type="checkbox" value=""/> Yes </label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Enim eiusmod high life accusamus terry richardson ad squid wolf moon
+                                                </td>
+                                                <td>
+                                                    <label class="uniform-inline">
+                                                    <input type="checkbox" value=""/> Yes </label>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <!--end profile-settings-->
+                                        <div class="margin-top-10">
+                                            <a href="#" class="btn btn-success">Save Changes</a>
+                                            <a href="#" class="btn btn-default">Cancel</a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <!--end col-md-9-->
+                    </div>
+                    <!--END TABS-->
+                </tab>
+            </tabset>
+        </div>
     </div>
-  </div>
-  <!-- END CONTENT -->
+    <!-- END PAGE CONTENT-->
 </div>
-      <!-- END CONTAINER -->

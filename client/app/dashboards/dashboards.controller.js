@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('DashboardsCtrl', function ($scope, $http, socket, ngToast,categoryKPI) {
+  .controller('DashboardsCtrl', function ($scope, $http, ngToast,categoryKPI) {
     $scope.dashboards = [];
     $scope.dashboard = {};
     $scope.config = {tab1: true, tab2: false};

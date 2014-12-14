@@ -80,7 +80,7 @@ angular.module('boardOsApp')
     };
 
     $scope.dateOptions = {
-      'year-format': "'yyyy'",
+      'year-format': '"yyyy"',
       'starting-day': 1
     };
 
@@ -106,10 +106,6 @@ $scope.ok = function () {
   });
 }
 
-
-  if ($rootScope.opendata == 'activities') $rootScope.activities.push($scope.formData);
-  if ($rootScope.opendata == 'axes')  $rootScope.axes.push($scope.formData);
-  if ($rootScope.opendata == 'contextes')  $rootScope.contextes.push($scope.formData);
 };
 
 $scope.cancel = function () {

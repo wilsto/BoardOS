@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-.controller('KPICtrl', function ($scope, $http, socket, ngToast,actionKPI,categoryKPI,groupByKPI,metricTaskFields, $stateParams, calLibrary) {
+.controller('KPICtrl', function ($scope, $http, ngToast,actionKPI,categoryKPI,groupByKPI,metricTaskFields, $stateParams, calLibrary) {
 
   $http.get('/api/hierarchies/list/Context').success(function(contexts) {
     $scope.contexts = contexts;
@@ -20,8 +20,6 @@ angular.module('boardOsApp')
   $scope.categoryKPI = categoryKPI;
   $scope.groupByKPI = groupByKPI;
   $scope.metricTaskFields = metricTaskFields;
-
-
 
   $scope.load = function() {
     $http.get('/api/KPIs/' + $stateParams.id).success(function(KPI) {
@@ -42,7 +40,7 @@ angular.module('boardOsApp')
           },
           x: function(d){ return d[0]; },
           y: function(d){ return d[1]; },
-          average: function(d) { return d.mean },
+          average: function(d) { return d.mean ;},
 
           transitionDuration: 500,
           useInteractiveGuideline: true,
@@ -50,7 +48,7 @@ angular.module('boardOsApp')
           xAxis: {
             axisLabel: 'Dates',
             tickFormat: function(d) {
-              return d3.time.format('%m/%d/%y')(new Date(d))
+              return d3.time.format('%m/%d/%y')(new Date(d));
             },
             showMaxMin: false,
             staggerLabels: false
@@ -75,8 +73,8 @@ angular.module('boardOsApp')
                 y: function(d){return d.y;},
                 showLabels: true,
                 pie: {
-                    startAngle: function(d) { return d.startAngle/2 -Math.PI/2 },
-                    endAngle: function(d) { return d.endAngle/2 -Math.PI/2 }
+                    startAngle: function(d) { return d.startAngle/2 -Math.PI/2 ;},
+                    endAngle: function(d) { return d.endAngle/2 -Math.PI/2 ;}
                 },
                 transitionDuration: 500,
                 legend: {
@@ -92,11 +90,11 @@ angular.module('boardOsApp')
 
         $scope.dataDonut = [
             {
-                key: "Late",
+                key: 'Late',
                 y: 2
             },
             {
-                key: "On time",
+                key: 'On time',
                 y: 3
             }
         ];

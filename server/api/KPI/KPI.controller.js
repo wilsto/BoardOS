@@ -102,9 +102,9 @@ Q()
           // valeurs principales
           if (typeof checksType !== "undefined" ) {
             _.each(checksType, function(check) {
-                 if (metric[mKPI.metricTaskField] == check) { 
+                 if (metric[mKPI.metricTaskField] === check) { 
                   mKPI.metricValues.push({value:metric[mKPI.metricTaskField],date:metric.date});
-                 } ; // avec indexOf pour le like
+                 } // avec indexOf pour le like
              });
           } else {
               mKPI.metricValues.push({value:metric[mKPI.metricTaskField],date:metric.date});
@@ -113,9 +113,9 @@ Q()
           // valeurs références
           if (typeof refChecksType !== "undefined"  ) {
             _.each(refChecksType, function(check) {
-                 if (metric[mKPI.metricTaskField] == check) { 
+                 if (metric[mKPI.metricTaskField] === check) { 
                   mKPI.refMetricValues.push({value:metric[mKPI.metricTaskField],date:metric.date});
-                 } ; // avec indexOf pour le like
+                 }  // avec indexOf pour le like
              });
           } else {
               mKPI.refMetricValues.push({value:metric[mKPI.metricTaskField],date:metric.date});
@@ -151,10 +151,7 @@ Q()
     return deferred.promise;
   })
   .then(function () {
-    var deferred = Q.defer();
     return res.json(mKPI);
-    deferred.resolve(mKPI);
-    return deferred.promise;
   });
 };
 

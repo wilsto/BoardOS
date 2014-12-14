@@ -46,17 +46,12 @@ exports.show = function(req, res) {
     return deferred.promise;
   })
   .then(function () {
-    console.log(mTask);
-    var deferred = Q.defer();
     return res.json(mTask);
-    deferred.resolve(mTask);
-    return deferred.promise;
   });
 };
 
 // Creates a new task in the DB.
 exports.create = function(req, res) {
-  console.log(req.body);
   var newTask = new Task(req.body, false);
   newTask.save(function(err) {
     res.send(200);

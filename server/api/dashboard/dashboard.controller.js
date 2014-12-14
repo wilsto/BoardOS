@@ -82,10 +82,7 @@ exports.show = function(req, res) {
     return deferred.promise;
     })
   .then(function () {
-    var deferred = Q.defer();
     return res.json(mDashboard);
-    deferred.resolve(mDashboard);
-    return deferred.promise;
   });
 };
 

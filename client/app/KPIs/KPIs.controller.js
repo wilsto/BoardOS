@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('KPIsCtrl', function ($scope, $http, socket, ngToast,actionKPI,categoryKPI,groupByKPI,metricTaskFields) {
+  .controller('KPIsCtrl', function ($scope, $http, ngToast,actionKPI,categoryKPI,groupByKPI,metricTaskFields) {
     $scope.KPIs = [];
     $scope.KPI = {};
     $scope.config = {tab1: true, tab2: false};
