@@ -63,15 +63,15 @@ angular.module('boardOsApp', [
 
 .constant('metricTaskFields',
 [   
-    {value: 'charge', text: 'Charge'},
-    {value: 'délai', text: 'Délai'},
-    {value: 'avancement', text: 'Avancement'},
-    {value: 'confiance', text: 'Confiance'},
-    {value: 'startDate', text: 'Début'},
-    {value: 'endDate', text: 'Fin'},
+    {value: 'load', text: 'Load'},
+    {value: 'duration', text: 'Duration'},
     {value: 'progress', text: 'Progress'},
+    {value: 'trust', text: 'Trust'},
+    {value: 'startDate', text: 'Start'},
+    {value: 'endDate', text: 'End'},
+    {value: 'progressStatus', text: 'progressStatus'},
     {value: 'status', text: 'Statut'},
-    {value: 'constante', text: 'Constante'}
+    {value: 'constant', text: 'Constant'}
   ])
 
 .constant('categoryKPI',

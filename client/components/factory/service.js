@@ -11,7 +11,7 @@ angular.module('boardOsApp').service('profile', function() {
     }
 });
 
-angular.module('boardOsApp').factory('srvLibrary2', ['$http', '$rootScope', '$q', '$timeout',function($http,$rootScope,$q, $timeout) {
+angular.module('boardOsApp').factory('srvLibrary2', function($http) {
 var dataFactory = {};
 
 		dataFactory.getActivities= function() {
@@ -103,7 +103,7 @@ var dataFactory = {};
 
 		};
 		return dataFactory;
-}]);
+});
 
 angular.module('boardOsApp').directive('onFinishRender', function ($timeout) {
 	return {
@@ -119,10 +119,9 @@ angular.module('boardOsApp').directive('onFinishRender', function ($timeout) {
 });
 
 
-angular.module('boardOsApp').factory('calLibrary', ['$http', '$rootScope', '$q', '$routeParams','$timeout',function($http,$rootScope,$q, $routeParams,$timeout) {
+angular.module('boardOsApp').factory('calLibrary', function() {
 	var sdo = {
 		getSumByMonth: function(data, field) {
-				console.log('data',data);
 
 				var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
 				  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -152,34 +151,73 @@ angular.module('boardOsApp').factory('calLibrary', ['$http', '$rootScope', '$q',
 				      "User_Count": value
 				  };
 				});
-				console.log('result',result);
 				return result;
+		},
+		getCountByMonth: function(data, field) {
+
+				var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+				  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+				var dateResult = [];
+				var i;
+				var yourDate = new Date();
+				for (i=0;i<12;i++){
+					dateResult.push(new Date(yourDate.getFullYear(), yourDate.getMonth() - i, 1));
+				}
+
+				var map_result = _.map(dateResult, function (item) {
+				  var d = new Date(new Number(new Date(item)));
+				  var month = d.getFullYear()  + ", " +  monthNames[d.getMonth()];
+				  return {
+				      "label": month,
+				      "value": 0
+				  };
+				});
+
+				$.each(data, function (key,item) {
+				  var d = new Date(new Number(new Date(item[field])));
+				  var month = d.getFullYear()  + ", " +  monthNames[d.getMonth()];
+				  $.each(map_result, function (keyMap,itemMap) {
+					  if (itemMap.label === month) {
+					    itemMap.value += 1;
+					  }
+					});
+
+				});
+
+				return map_result.reverse();
 		},
 		getSumCumul : function(ref, value){
 
-			var result={ref:[],val:[]};
+			var result=[
+				{key: "Real", values: [], mean: 0},
+	            {key: "Ref", values: [], mean: 0}
+	            ];
 
 			/*cumulative à faire */
 			var lastval = 0;
-			$.each(ref, function( indexref, valueref ) {
-				result.ref.push([indexref,indexref+1]);
+
+    		var refSort = _.sortBy(ref, function(obj){ return obj.date });
+    		console.log(refSort);
+    		var valueSort = _.sortBy(value, function(obj){ return obj.date });
+			$.each(refSort, function( indexref, valueref ) {
+				result[1].values.push([new Date(valueref.date).getTime(),indexref+1]);
 				var blnFind = false;
-			  	$.each(value, function( index, value ) {
+			  	$.each(valueSort, function( index, value ) {
 			  		if (valueref.date == value.date) {
 			  			blnFind = true;
 			  			lastval = index+1;
 			  		} 
 				});
-			  	result.val.push([indexref,lastval]);
+			  	result[0].values.push([new Date(valueref.date).getTime(),lastval]);
 			});
 
-/*			var result = myarray.concat();
+			/*	var result = myarray.concat();
 			for (var i = 0; i < myarray.length; i++){
 			    result[i] = myarray.slice(0, i + 1).reduce(function(p, i){ return p + i; });
 			}*/
-			console.log('resultCumul',result);
 			return result;
 		}
 	}
 	return sdo;
-}]);
+});

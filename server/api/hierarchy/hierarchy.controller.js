@@ -31,9 +31,7 @@ exports.show = function(req, res) {
 
 // Get a single hierarchy
 exports.list = function(req, res) {
-  console.log(req.params.id);
   Hierarchy.find({name:req.params.id}, function (err, hierarchy) {
-    console.log(hierarchy);
     if(err) { return handleError(res, err); }
     if(!hierarchy) { return res.send(404); }
     _.each(hierarchy[0].list, function(obj, key) {

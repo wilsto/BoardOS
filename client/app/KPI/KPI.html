@@ -206,7 +206,7 @@
             </div>
           </div>
           <tabset>
-            <tab>
+            <tab active="true">
               <tab-heading>
               View 
             </tab-heading>
@@ -219,9 +219,7 @@
                     </div>
                   </div>
                   <div class="portlet-body">
-                    <div class="visual big">
-                      <input class="knobify" data-width="250" data-fgcolor="#169ef4" data-thickness=".2" data-skin="tron" data-displayprevious="true" value="{{KPI.percentObjectif}}" data-max="100" data-min="0"/>
-                    </div>
+                      <nvd3 options="optionsDonut" data="dataDonut"></nvd3>
                   </div>
                 </div>
                 <!-- END PORTLET-->
@@ -233,15 +231,32 @@
                     <div class="caption">
                       <i class="icon-bar-chart"></i>KPI Evolution
                     </div>
+                    <div class="pull-right">
+                      <select id="selectChart" ng-model="options.chart.type">
+                      <option value="bulletChart">Bullet Chart</option>
+                      <option value="cumulativeLineChart">Cumulative Line Chart</option>
+                      <option value="discreteBarChart">DiscreteBar Chart</option>
+                      <option value="donutChart">Donut Chart</option>
+                      <option value="historicalBarChart">HistoricalBar Chart</option>
+                      <option value="lineChart" selected="selected">Line Chart</option>
+                      <option value="linePlusBarChart">Line + Bar Chart</option>
+                      <option value="linePlusBarWithFocusChart">Line + Bar with Focus Chart</option>
+                      <option value="lineWithFisheyeChart">Line with Fisheye Chart</option>
+                      <option value="lineWithFocusChart">Line with Focus Chart</option>
+                      <option value="multiBarChart">MultiBar Chart</option>
+                      <option value="multiBarHorizontalChart">MultiBar Horizontal Chart</option>
+                      <option value="multiChart">Multi Chart</option>
+                      <option value="parallelCoordinates">Parallel Coordinates</option>
+                      <option value="pieChart">Pie Chart</option>
+                      <option value="scatterChart">Scatter Chart</option>
+                      <option value="scatterPlusLineChart">Scatter + Line Chart</option>
+                      <option value="sparklinePlus">SparkLine Chart</option>
+                      <option value="stackedAreaChart">Stacked Area Chart</option>
+                      </select>
+                    </div>
                   </div>
                   <div class="portlet-body">
-                    <div id="site_statistics_loading">
-                      <img src="assets/images/loading.gif" alt="loading"/>
-                    </div>
-                    <div id="site_statistics_content" class="display-none">
-                      <div id="site_statistics" class="chart">
-                      </div>
-                    </div>
+<nvd3 options="options" data="data"></nvd3>
                   </div>
                 </div>
                 <!-- END PORTLET-->
@@ -366,7 +381,7 @@
       </div>
 
     </tab>
-    <tab heading="Edit" active="true">
+    <tab heading="Edit" >
       <div class="row profile-account">
         <div class="col-md-3">
           <ul class="ver-inline-menu tabbable margin-bottom-10">

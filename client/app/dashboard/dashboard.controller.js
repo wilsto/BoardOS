@@ -1,11 +1,27 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('DashboardCtrl', function ($scope, $http, socket, $stateParams) {
+  .controller('DashboardCtrl', function ($scope, $http, socket, $stateParams, calLibrary) {
     $scope.dashboard = [];
 
     $http.get('/api/dashboards/'+$stateParams.id).success(function(dashboard) {
       $scope.dashboard = dashboard;
+
+$scope.dataKPIs = [{values: [] }];
+$scope.dataTasks = [{values: [] }];
+$scope.dataMetrics = [{values: [] }];
+
+      $scope.predataKPIs = calLibrary.getCountByMonth($scope.dashboard.kpis, 'date');
+      $scope.predataTasks = calLibrary.getCountByMonth($scope.dashboard.tasks, 'date');
+      $scope.predataMetrics = calLibrary.getCountByMonth($scope.dashboard.metrics, 'date');
+
+$scope.dataKPIs[0].values = $scope.predataKPIs;
+$scope.dataTasks[0].values = $scope.predataTasks;
+$scope.dataMetrics[0].values = $scope.predataMetrics;
+
+console.log('KPIByMonth',$scope.KPIByMonth);
+console.log('dataKPIByMonth',$scope.data);
+console.log(JSON.stringify($scope.data)) 
     });
 
 $scope.options = {
@@ -29,21 +45,8 @@ $scope.options = {
     }
 };
 
-$scope.data = [{
-    values: [
-        { "label" : "May" , "value" : 2 },
-        { "label" : "Jun" , "value" : 0 },
-        { "label" : "Jul" , "value" : 3 },
-        { "label" : "Aug" , "value" : 1 },
-        { "label" : "Sep" , "value" : 0 },
-        { "label" : "Oct" , "value" : 0 },
-        { "label" : "Nov" , "value" : 1 },
-        { "label" : "Dec" , "value" : 1 }
-        ]
-    }];
-
 $scope.optionsTasks = angular.copy($scope.options);
-$scope.optionsTasks .chart.color =  ["#9467bd"];
+$scope.optionsTasks.chart.color =  ["#9467bd"];
 
 $scope.optionsMetrics = angular.copy($scope.options);
 $scope.optionsMetrics.chart.color =  ["#ff7f0e"];

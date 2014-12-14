@@ -39,7 +39,7 @@
       <div class="col-md-4">  
         <p class="input-group">
           <label>Charge</label>
-          <input type="text" name="charge" class="form-control"  ng-model="formData.charge" placeholder="Entrer la charge">
+          <input type="text" name="load" class="form-control"  ng-model="formData.load" placeholder="Entrer la load">
           <span class="help-block">
           </span>
 
@@ -48,8 +48,8 @@
 
       <div class="col-md-4">  
         <p class="input-group">
-          <label>% avancement</label>
-          <input type="text" name="avancement" class="form-control"  ng-model="formData.avancement" placeholder="Entrer le pourcentage d'avancement">
+          <label>% progress</label>
+          <input type="text" name="progress" class="form-control"  ng-model="formData.progress" placeholder="Entrer le pourcentage d'progress">
           <span class="help-block">
           </span>
 
@@ -81,8 +81,8 @@
       </div>
       <div class="col-md-4">  
         <p class="input-group">
-          <label>Etat de progression</label>
-          <input type="text" name="progress" class="form-control" ng-model="formData.progress" typeahead-on-select="$item"  typeahead="progress.name for progress in progressStatus" placeholder="Entrer l'état de progression">
+          <label>Etat de progressStatusion</label>
+          <input type="text" name="progressStatus" class="form-control" ng-model="formData.progressStatus" typeahead-on-select="$item"  typeahead="progressStatus.name for progressStatus in progressStatusStatus" placeholder="Entrer l'état de progressStatusion">
           <span class="help-block">
           </span>
 
@@ -90,8 +90,8 @@
       </div>
       <div class="col-md-4">  
         <p class="input-group">
-          <label>% confiance</label>
-          <input type="text" name="confiance" class="form-control"  ng-model="formData.confiance" placeholder="Entrer le pourcentage de confiance">
+          <label>% trust</label>
+          <input type="text" name="trust" class="form-control"  ng-model="formData.trust" placeholder="Entrer le pourcentage de trust">
           <span class="help-block">
           </span>
 
@@ -103,8 +103,8 @@
     <!-- date -->
     <div class="row">
       <div class="col-md-12">  
-        <label>Comments</label>
-        <textarea name="Comments" class="form-control" rows="4" ng-model="formData.Comments" placeholder="Add a comment (optional)"></textarea>
+        <label>comments</label>
+        <textarea name="comments" class="form-control" rows="4" ng-model="formData.comments" placeholder="Add a comment (optional)"></textarea>
       </div>
     </div>
 
@@ -207,13 +207,13 @@
                 <th>Saisie</th>
                 <th>Activity</th>
                 <th>Context</th>
-                <th>Début</th>
-                <th>Charge</th>
+                <th>Start</th>
+                <th>Load</th>
                 <th>Status</th>
                 <th>Progress</th>
-                <th>Confiance</th>
-                <th>Fin</th>
-                <th>Comments</th>
+                <th>Trust</th>
+                <th>End</th>
+                <th>comments</th>
                 <th><button ng-click='openMesure(task, task.metrics[task.metrics.length-1],true)' type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus"></span></button></th>
               </tr>
             </thead>
@@ -223,12 +223,12 @@
                 <td>{{mesure.activity.replace(task.activity,"#")}}</td>
                 <td>{{mesure.context.replace(task.context,"#")}}</td>
                 <td>{{mesure.startDate | date:'shortDate'}}</td>
-                <td>{{mesure.charge}}</td>
+                <td>{{mesure.load}}</td>
                 <td>{{mesure.status}}</td>
-                <td>{{mesure.avancement}}% - {{mesure.progress}}</td>
-                <td>{{mesure.confiance}}</td>
+                <td>{{mesure.progress}}% - {{mesure.progressStatus}}</td>
+                <td>{{mesure.trust}}</td>
                 <td>{{mesure.endDate | date:'shortDate'}}</td>
-                <td>{{mesure.Comments}}</td>
+                <td>{{mesure.comments}}</td>
                 <td style="width:25px">
                   <button ng-click="openMesure(task, mesure,false)"type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></button>
                 </td>
