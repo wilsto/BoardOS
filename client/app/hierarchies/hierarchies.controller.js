@@ -9,6 +9,7 @@ angular.module('boardOsApp')
   $scope.serialNest = [];
   $scope.newId = 1;
   $scope.newNode = {};
+  $scope.HierarchyType = 'Context';
 
   $scope.treeConfig = {
     version : 1,
@@ -33,9 +34,8 @@ angular.module('boardOsApp')
   };
 
   $scope.load = function() {
-    $http.get('/api/hierarchies').success(function(hierarchies) {
-      var filterHierarchy = hierarchies.filter(function(obj){          return obj.name === $scope.HierarchyType;      });
-      $scope.hierarchies = (filterHierarchy.length === 0) ? [] : filterHierarchy[0].list;
+    $http.get('/api/hierarchies/list/' + $scope.HierarchyType).success(function(hierarchies)  {
+      $scope.hierarchies = hierarchies.list ;
       $scope.treeConfig.version++;
     });
   };
@@ -81,7 +81,9 @@ angular.module('boardOsApp')
   $scope.selectNode = function(e, data) {
     //console.log(data);
     if(data && data.selected && data.selected.length) {
-      $('#details').html(data.node.text).show();
+      var filterHierarchy = $scope.hierarchies.filter(function(obj){          return obj.id === data.node.id;      });
+      console.log(filterHierarchy);
+      $('#details').html(filterHierarchy[0].longname).show();
     }
     else {
       $('#details').hide();

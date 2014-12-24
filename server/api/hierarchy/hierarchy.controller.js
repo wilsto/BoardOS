@@ -11,6 +11,7 @@
 
 var _ = require('lodash');
 var Hierarchy = require('./hierarchy.model');
+var tools = require('../../config/tools');
 
 // Get list of hierarchies
 exports.index = function(req, res) {
@@ -34,10 +35,8 @@ exports.list = function(req, res) {
   Hierarchy.find({name:req.params.id}, function (err, hierarchy) {
     if(err) { return handleError(res, err); }
     if(!hierarchy) { return res.send(404); }
-    _.each(hierarchy[0].list, function(obj, key) {
-       obj.id = obj.text;
-    })
-    return res.json(hierarchy[0].list);
+    tools.buildHierarchy(hierarchy[0].list,'list');
+    return res.json(hierarchy[0]);
   });
 };
 

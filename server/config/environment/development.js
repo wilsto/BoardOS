@@ -8,5 +8,5 @@ module.exports = {
     uri: 'mongodb://localhost/boardos-dev'
   },
 
-  seedDB: true
+  seedDB: false
 };
