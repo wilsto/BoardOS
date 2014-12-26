@@ -101,7 +101,29 @@ angular.module('boardOsApp', [
 
 ])
 
-  .run(function ($rootScope, $location, Auth) {
+  .run(function ($rootScope, $location, Auth, $http,progressStatusTask,statusTask,metricTaskFields,categoryKPI,actionKPI,groupByKPI) {
+    $rootScope.constant = {};
+    $rootScope.constant.progressStatusTask = progressStatusTask;
+    $rootScope.constant.statusTask = statusTask;
+    $rootScope.constant.metricTaskFields = metricTaskFields;
+    $rootScope.constant.categoryKPI = categoryKPI;
+    $rootScope.constant.actionKPI = actionKPI;
+    $rootScope.constant.groupByKPI = groupByKPI;
+
+    // Mettre les informations transversales en mémoire
+    $http.get('/api/hierarchies/list/Context').success(function(contexts) {
+      $rootScope.contexts = contexts.list;
+    });
+
+    $http.get('/api/hierarchies/list/Activity').success(function(activities) {
+      $rootScope.activities = activities.list;
+    });
+
+    $http.get('/api/hierarchies/list/Axis').success(function(axes) {
+      $rootScope.axes = axes.list;
+    });  
+
+
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$stateChangeStart', function (event, next) {
       Auth.isLoggedInAsync(function(loggedIn) {

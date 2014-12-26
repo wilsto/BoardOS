@@ -38,7 +38,7 @@
         <div class="col-md-4">  
           <p class="input-group">
             <label>Charge</label>
-            <input type="text" name="load" class="form-control"  ng-model="formData.load" placeholder="Entrer la load">
+            <input type="text" name="load" class="form-control"  ng-model="formData.load" placeholder="Entrer la charge">
             <span class="help-block">
             </span>
     
@@ -57,7 +57,7 @@
         <div class="col-md-4">  
           <p class="input-group">
             <label>Statut</label>
-            <input type="text" name="status" class="form-control" ng-model="formData.status" typeahead-on-select="$item"  typeahead="statut.name for statut in taskStatus" placeholder="Entrer le statut">
+            <input type="text" placeholder="" class="form-control" ng-model="formData.status" typeahead="statut.value for statut in constant.statusTask  | limitTo:8"/>
             <span class="help-block">
             </span>
           </p>
@@ -81,7 +81,7 @@
         <div class="col-md-4">  
           <p class="input-group">
             <label>Etat de progressStatusion</label>
-            <input type="text" name="progressStatus" class="form-control" ng-model="formData.progressStatus" typeahead-on-select="$item"  typeahead="progressStatus.name for progressStatus in progressStatusStatus" placeholder="Entrer l'état de progressStatusion">
+            <input type="text" name="progressStatus" class="form-control" ng-model="formData.progressStatus" typeahead-on-select="$item"  typeahead="statut.value for statut in constant.progressStatusTask  | limitTo:8" placeholder="Progress Status">
             <span class="help-block">
             </span>
     
@@ -113,6 +113,15 @@
         <pre>
           {{ formData }}
         </pre>
+        <div class="col-md-4">  
+          <p class="input-group">
+            <label>Charge</label>
+            <input type="text" name="actor" class="form-control" ng-model="formData.actor">
+            <span class="help-block">
+            </span>
+    
+          </p>
+        </div>
       </div>
     </div>
     <div class="modal-footer">
@@ -286,181 +295,64 @@
                         </div>
                     </div>
                 </tab>
-                <tab heading="Edit">
-                    <div class="row profile-account">
-                        <div class="col-md-3">
-                            <ul class="ver-inline-menu tabbable margin-bottom-10">
-                                <li class="active">
-                                    <a data-toggle="tab" href="#tab_1-1">
-                                    <i class="fa fa-cog"></i> Personal info </a>
-                                    <span class="after">
-                                    </span>
-                                </li>
-                                <li>
-                                    <a data-toggle="tab" href="#tab_2-2"><i class="fa fa-picture-o"></i> Change Avatar</a>
-                                </li>
-                                <li>
-                                    <a data-toggle="tab" href="#tab_3-3"><i class="fa fa-lock"></i> Change Password</a>
-                                </li>
-                                <li>
-                                    <a data-toggle="tab" href="#tab_4-4"><i class="fa fa-eye"></i> Privacity Settings</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-md-9">
-                            <div class="tab-content">
-                                <div id="tab_1-1" class="tab-pane active">
-                                    <form role="form" action="#">
-                                        <div class="form-group">
-                                            <label class="control-label">First Name</label>
-                                            <input type="text" placeholder="John" class="form-control"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">Last Name</label>
-                                            <input type="text" placeholder="Doe" class="form-control"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">Mobile Number</label>
-                                            <input type="text" placeholder="+1 646 580 DEMO (6284)" class="form-control"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">Interests</label>
-                                            <input type="text" placeholder="Design, Web etc." class="form-control"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">Occupation</label>
-                                            <input type="text" placeholder="Web Developer" class="form-control"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">About</label>
-                                            <textarea class="form-control" rows="3" placeholder="We are KeenThemes!!!"></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">Website Url</label>
-                                            <input type="text" placeholder="http://www.mywebsite.com" class="form-control"/>
-                                        </div>
-                                        <div class="margiv-top-10">
-                                            <a href="#" class="btn btn-success">Save Changes</a>
-                                            <a href="#" class="btn btn-default">Cancel</a>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div id="tab_2-2" class="tab-pane">
-                                    <p>
-                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod.
-                                    </p>
-                                    <form action="#" role="form">
-                                        <div class="form-group">
-                                            <div class="thumbnail" style="width: 310px;">
-                                                <img src="http://www.placehold.it/310x170/EFEFEF/AAAAAA&amp;text=no+image" alt="">
-                                            </div>
-                                            <div class="margin-top-10 fileupload fileupload-new" data-provides="fileupload">
-                                                <div class="input-group input-group-fixed">
-                                                    <span class="input-group-btn">
-                                                    <span class="uneditable-input">
-                                                    <i class="fa fa-file fileupload-exists"></i>
-                                                    <span class="fileupload-preview">
-                                                    </span>
-                                                    </span>
-                                                    </span>
-                                                    <span class="btn btn-default btn-file">
-                                                    <span class="fileupload-new">
-                                                    <i class="fa fa-paper-clip"></i> Select file </span>
-                                                    <span class="fileupload-exists">
-                                                    <i class="fa fa-undo"></i> Change </span>
-                                                    <input type="file" class="default"/>
-                                                    </span>
-                                                    <a href="#" class="btn btn-danger fileupload-exists" data-dismiss="fileupload"><i class="fa fa-trash-o"></i> Remove</a>
-                                                </div>
-                                            </div>
-                                            <span class="label label-danger">
-                                            NOTE! </span>
-                                            <span>
-                                            Attached image thumbnail is supported in Latest Firefox, Chrome, Opera, Safari and Internet Explorer 10 only </span>
-                                        </div>
-                                        <div class="margin-top-10">
-                                            <a href="#" class="btn btn-success">Submit</a>
-                                            <a href="#" class="btn btn-default">Cancel</a>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div id="tab_3-3" class="tab-pane">
-                                    <form action="#">
-                                        <div class="form-group">
-                                            <label class="control-label">Current Password</label>
-                                            <input type="password" class="form-control"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">New Password</label>
-                                            <input type="password" class="form-control"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label">Re-type New Password</label>
-                                            <input type="password" class="form-control"/>
-                                        </div>
-                                        <div class="margin-top-10">
-                                            <a href="#" class="btn btn-success">Change Password</a>
-                                            <a href="#" class="btn btn-default">Cancel</a>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div id="tab_4-4" class="tab-pane">
-                                    <form action="#" >
-                                        <table class="table table-bordered table-striped">
-                                            <tr>
-                                                <td>
-                                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus..
-                                                </td>
-                                                <td>
-                                                    <label class="uniform-inline">
-                                                    <input type="radio" name="optionsRadios1" value="option1"/>
-                                                    Yes </label>
-                                                    <label class="uniform-inline">
-                                                    <input type="radio" name="optionsRadios1" value="option2" checked/>
-                                                    No </label>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Enim eiusmod high life accusamus terry richardson ad squid wolf moon
-                                                </td>
-                                                <td>
-                                                    <label class="uniform-inline">
-                                                    <input type="checkbox" value=""/> Yes </label>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Enim eiusmod high life accusamus terry richardson ad squid wolf moon
-                                                </td>
-                                                <td>
-                                                    <label class="uniform-inline">
-                                                    <input type="checkbox" value=""/> Yes </label>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    Enim eiusmod high life accusamus terry richardson ad squid wolf moon
-                                                </td>
-                                                <td>
-                                                    <label class="uniform-inline">
-                                                    <input type="checkbox" value=""/> Yes </label>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        <!--end profile-settings-->
-                                        <div class="margin-top-10">
-                                            <a href="#" class="btn btn-success">Save Changes</a>
-                                            <a href="#" class="btn btn-default">Cancel</a>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <!--end col-md-9-->
+              <tab>
+                <tab-heading>
+                    Edit 
+                </tab-heading>
+                <div class="row profile-account">
+                    <div class="col-md-3">
+                        <ul class="ver-inline-menu tabbable margin-bottom-10">
+                            <li class="active">
+                                <a data-toggle="tab" href="#tab_1-1">
+                                <i class="fa fa-recycle"></i>Change Perimeter </a>
+                                <span class="after">
+                                </span>
+                            </li>
+                        </ul>
                     </div>
-                    <!--END TABS-->
-                </tab>
+                    <div class="col-md-9">
+                        <div class="tab-content">
+                            <div id="tab_1-1" class="tab-pane active">
+                                <form role="form" class="form-horizontal" action="#">
+                                    <div class="form-body">
+                                        <div class="form-group">
+                                            <label  class="col-md-3 control-label">Name</label>
+                                            <div class="col-md-9">
+                                                <input  type="text" placeholder="" class="form-control" ng-model="task.name"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">Context</label>
+                                            <div class="col-md-9">
+                                                <input type="text" placeholder="" class="form-control" ng-model="task.context" typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:8"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">Activity</label>
+                                            <div class="col-md-9">
+                                                <input type="text" placeholder="" class="form-control" ng-model="task.activity" typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:8"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">Tags</label>
+                                            <div class="col-md-9">
+                                                <input type="text" placeholder="" class="form-control" ng-model="task.tags" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-actions">
+                                        <div class="pull-right">
+                                            <a href="#" class="btn btn-success" ng-click="save()">Save Changes</a>
+                                            <a href="#" class="btn btn-default" ng-click="reset()">Cancel</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- END CONTENT -->
+                        </div>
+                    </div>
+                </div>
+            </tab>
             </tabset>
         </div>
     </div>

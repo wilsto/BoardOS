@@ -4,17 +4,6 @@
 angular.module('boardOsApp')
 .controller('KPICtrl', function ($scope, $http, ngToast,actionKPI,categoryKPI,groupByKPI,metricTaskFields, $stateParams, calLibrary) {
 
-  $http.get('/api/hierarchies/list/Context').success(function(contexts) {
-    $scope.contexts = contexts.list;
-  });
-
-  $http.get('/api/hierarchies/list/Activity').success(function(activities) {
-    $scope.activities = activities.list;
-  });
-
-  $http.get('/api/hierarchies/list/Axis').success(function(axes) {
-    $scope.axes = axes.list;
-  });  
 
   $scope.actionKPI = actionKPI;
   $scope.categoryKPI = categoryKPI;

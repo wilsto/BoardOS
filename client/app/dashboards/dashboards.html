@@ -2,14 +2,13 @@
 <!--* Modal Part-->
 
 <div class="row">
-  <!-- Layout Part -->
-  <tabset>
-
-    <tab heading="List" active="config.tab1">
       <div class="portlet">
         <div class="portlet-title">
           <div class="caption">
             <i class="fa fa-dashboard"></i>Dashboards List
+          </div>
+          <div class="pull-right">
+            <a class="btn btn-primary" href="/dashboard/">Create</a>
           </div>
         </div>
         <div class="portlet-body">
@@ -61,45 +60,6 @@
          </table>
        </div>
      </div>
+</div>
 
-   </tab>
-   <tab heading="Create" active="config.tab2" select="loadXEditable()">
-    <div class="portlet">
-      <div class="portlet-title">
-        <div class="caption">
-          <i class="fa fa-plus"></i><a href="#" id="name">{{ dashboard.name ||'empty'}}</a>
-        </div>
-      </div>
-      <div class="portlet-body">
-        <div class="row">
-          <div class="col-md-12">
-
-            This dashboard summarize every KPIs in this perimeter :<br/>
-            <ul>
-              <li>Contexte : <a  href="#" id="Context" data-value="{{ dashboard.context }}"  >{{ dashboard.context ||'all'}}</a> </li>
-              <li>Activités : <a href="#" id="Activity" data-value="{{ dashboard.activity }}"  >{{ dashboard.activity ||'all'}}</a> </li>
-              <li>Axis :  <a  href="#" id="Axis" data-value="{{ dashboard.axis }}" >{{ dashboard.axis ||'all'}}</a></li>
-              <li>Category :  <a href="#" id="Category" data-value="{{ dashboard.category }}">{{ dashboard.category}}</a></li>
-              <li>TimeFrame :  <span class="focusValue">all</span></li>
-              <li>Tags Filtered :  <a  href="#" id="Tags" data-value="{{ dashboard.tags }}" >{{ dashboard.tags ||'all'}}</a></li>
-            </ul>
-
-            This dashhoard was last time modified by <a href="#" id="username">{{ dashboard.username ||'empty'}}</a> on  <a href="#" id="date" >{{ (dashboard.date | date:"dd/MM/yyyy") ||'empty'}}</a>
-
-          </div>
-
-        </div>
-      </div>
-    </div>
-    <div class="form-actions">
-      <div class="row">
-        <div class="col-md-offset-9 col-md-9">
-          <button type="button" class="btn btn-default" ng-click="reset()">Reset</button>
-          <button type="submit" class="btn btn-info" ng-click="save()">Save</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</tab>
-</tabset>
 

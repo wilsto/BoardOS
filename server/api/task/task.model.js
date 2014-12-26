@@ -8,6 +8,7 @@ var TaskSchema = new Schema({
   activity: String,
   context: String,
   username: String,
+  tags: String,
   date: String
 }, { strict: false });
 

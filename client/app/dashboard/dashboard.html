@@ -292,6 +292,115 @@
       </div>
     </div>
   </tab>
+  <tab>
+    <tab-heading>
+    Edit 
+  </tab-heading>
+  <div class="row profile-account">
+    <div class="col-md-3">
+      <ul class="ver-inline-menu tabbable margin-bottom-10">
+        <li class="active">
+          <a data-toggle="tab" href="#tab_1-1">
+            <i class="fa fa-recycle"></i>Change Perimeter </a>
+            <span class="after">
+            </span>
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-9">
+        <div class="tab-content">
+          <div id="tab_1-1" class="tab-pane active">
+            <form role="form" class="form-horizontal" action="#">
+              <div class="form-body">
+                <div class="form-group">
+                  <label  class="col-md-3 control-label">Name</label>
+                  <div class="col-md-9">
+                    <input  type="text" placeholder="" class="form-control" ng-model="dashboard.name"/>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-3 control-label">Context</label>
+                  <div class="col-md-9">
+                    <input type="text" placeholder="" class="form-control" ng-model="dashboard.context" typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:8"/>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-3 control-label">Activity</label>
+                  <div class="col-md-9">
+                    <input type="text" placeholder="" class="form-control" ng-model="dashboard.activity" typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:8"/>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-3 control-label">Axis</label>
+                  <div class="col-md-9">
+                    <input type="text" placeholder="Communication,  etc." class="form-control" ng-model="dashboard.axe" typeahead="axe.longname for axe in axes | filter:$viewValue | limitTo:8"/>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-3 control-label">Categories</label>
+                  <div class="col-md-9">
+                    <div class="col-md-offset-1 checkbox-list">
+                      <label class="checkbox">
+                        <div class="checker" >
+                          <span>
+                            <input type="checkbox"  ng-model="dashboard.categories[0]" >
+                          </span>
+                        </div>
+                        Goal 
+                      </label>
+                      <label class="checkbox">
+                        <div class="checker" >
+                          <span>
+                            <input type="checkbox" ng-model="dashboard.categories[1]" >
+                          </span>
+                        </div>
+                        Alert
+                      </label>
+                      <label class="checkbox">
+                        <div class="checker" >
+                          <span>
+                            <input type="checkbox" ng-model="dashboard.categories[2]"  >
+                          </span>
+                        </div>
+                        Anticipation 
+                      </label>
+                      <label class="checkbox">
+                        <div class="checker">
+                          <span>
+                            <input type="checkbox" ng-model="dashboard.categories[3]" >
+                          </span>
+                        </div>
+                        Information* 
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-3 control-label">TimeFrame</label>
+                  <div class="col-md-9">
+                    <input type="text" placeholder="" class="form-control"/>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-3 control-label">Tags</label>
+                  <div class="col-md-9">
+                    <input type="text" placeholder="" class="form-control" ng-model="dashboard.tags" />
+                  </div>
+                </div>
+              </div>
+              <div class="form-actions">
+                <div class="pull-right">
+                  <a href="#" class="btn btn-success" ng-click="save()">Save Changes</a>
+                  <a href="#" class="btn btn-default" ng-click="reset()">Cancel</a>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- END CONTENT -->
+        </div>
+      </div>
+    </div>
+  </tab>
 </tabset>
 <!-- <script>
   jQuery(document).ready(function() {    

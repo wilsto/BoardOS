@@ -13,8 +13,6 @@ module.exports = {
 
     var roots = [], children = {}, list = [];
 
-    console.log(arry);
-
     // find the top level nodes and hash the children based on parent
     for (var i = 0, len = arry.length; i < len; ++i) {
         var item = arry[i];
@@ -36,7 +34,6 @@ module.exports = {
         }
     };
 
-    console.log(roots);
     // enumerate through to handle the case where there are multiple roots
     for (var i = 0, len = roots.length; i < len; ++i) {
         list.push({text:roots[i].value.longname,id:roots[i].value.id});

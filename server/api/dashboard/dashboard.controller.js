@@ -31,12 +31,23 @@ exports.show = function(req, res) {
   .then(function () {
     // Get a single dashboard
     var deferred = Q.defer();
-    Dashboard.findById(req.params.id, function (err, dashboard) {
-      if(err) { return handleError(res, err); }
-      if(!dashboard) { return res.send(404); }
-      mDashboard = dashboard.toObject();
-      deferred.resolve(mDashboard);
-    })
+    if (typeof req.params.id === 'undefined') {
+      Dashboard.find(function (err, dashboard) {
+        if(err) { return handleError(res, err); }
+        if(!dashboard) { return res.send(404); }
+        mDashboard = {context:'',activity:''};
+        mDashboard.list = dashboard;
+        deferred.resolve(mDashboard);
+      })
+    } else {
+      Dashboard.findById(req.params.id, function (err, dashboard) {
+        if(err) { return handleError(res, err); }
+        if(!dashboard) { return res.send(404); }
+        mDashboard = dashboard.toObject();
+        deferred.resolve(mDashboard);
+      })
+    }
+
     return deferred.promise;
   })
   .then(function () {

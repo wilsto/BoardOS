@@ -8,6 +8,7 @@ var DashboardSchema = new Schema({
   activity: String,
   context: String,
   axis: String,
+  categories: Schema.Types.Mixed,
   category: String,
   tags: String,
   username: String,

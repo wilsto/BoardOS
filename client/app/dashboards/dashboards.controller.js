@@ -14,6 +14,7 @@ angular.module('boardOsApp')
     };
 
     $scope.save = function() {
+    console.log($scope.dashboard);
       if (typeof $scope.dashboard._id === 'undefined') {
         $http.post('/api/dashboards', $scope.dashboard);
         ngToast.create('Dashboard "' + $scope.dashboard.name + '" was created');
@@ -44,103 +45,6 @@ angular.module('boardOsApp')
 
     $scope.load();
 
-    $scope.loadXEditable = function() {
-    
-        //toggle `popup` / `inline` mode
-        $.fn.editable.defaults.mode = 'popup';     
-        
-        //make username editable
-        $('#name').editable({
-          success: function(response, newValue) {
-              $scope.dashboard.name = newValue;
-          }
-        });
 
-        var countries = [];
-        $.each({'BD': 'Bangladesh', 'BE': 'Belgium'}, function(k, v) {
-            countries.push({id: k, text: v});
-        }); 
-
-        $('#Activity').editable({
-            title: 'Select activity',
-            source: '/api/hierarchies/list/Activity',
-            type: 'select2',
-            select2: {
-                width: 300,
-                placeholder: 'Select activity',
-                allowClear: true,
-                sortResults: function(results, container, query) {
-                        if (query.term) {
-                            // use the built in javascript sort function
-                            return results.sort(function(a, b) {
-                                if (a.text.length > b.text.length) {
-                                    return 1;
-                                } else if (a.text.length < b.text.length) {
-                                    return -1;
-                                } else {
-                                    return 0;
-                                }
-                            });
-                        }
-                        return results;
-                    }
-            },
-            success: function(response, newValue) {
-                $scope.dashboard.activity = newValue;
-            }
-        }); 
-
-        $('#Context').editable({
-            title: 'Select context',
-            source: '/api/hierarchies/list/Context',
-            type: 'select2',
-            select2: {
-                width: 300,
-                placeholder: 'Select context',
-                allowClear: true
-            },
-            success: function(response, newValue) {
-                $scope.dashboard.context = newValue;
-            }
-        }); 
-
-        $('#Axis').editable({
-            title: 'Select axe',
-            source: countries,
-            type: 'select2',
-            select2: {
-                width: 300,
-                placeholder: 'Select axis',
-                allowClear: true
-            }, 
-            success: function(response, newValue) {
-                $scope.dashboard.axis = newValue;
-            }
-        }); 
-
-        $('#Category').editable({
-            title: 'Select Category',
-            type: 'checklist',
-            placement: 'right',
-            source: categoryKPI,
-            success: function(response, newValue) {
-                  $scope.dashboard.category = newValue;
-            }
-        }); 
-
-        $('#Tags').editable({
-            title: 'Select tags',
-            type: 'select2',
-            select2: {
-                tags: ['html', 'javascript', 'css', 'ajax'],
-                tokenSeparators: [',', ' ']
-            },
-            inputclass: 'input-large',
-            success: function(response, newValue) {
-                  $scope.dashboard.tags = newValue;
-            }
-        }); 
-
-    };
 
 });
