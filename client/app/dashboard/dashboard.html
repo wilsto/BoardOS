@@ -2,138 +2,138 @@
 <!--* Modal Part-->
 
 <div class="row">
-    <div class="row profile">
-      <div class="col-md-2">
-        <ul class="list-unstyled profile-nav">
-          <li>
-            <img src="assets/images/dashboard.jpg" class="img-responsive" alt=""/>
-          </li>
-          <li>
-            <a href="#">Pinned <span>
-              3 </span>
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div class="col-md-10">
-        <div class="row">
-          <div class="col-md-8 profile-info">
-            <h1>{{dashboard.name}}</h1><br/>
-            <ul class="list list-inline">
-              <li>
-                <i class="fa fa-map-marker"></i><span style="color:lightgrey"> Context </span> {{dashboard.context}}
-              </li><br/><br/>
-              <li>
-                <i class="fa fa-calendar"></i><span style="color:lightgrey"> Activity </span>  {{dashboard.activity}}
-              </li><br/><br/>
-              <li>
-                <i class="fa fa-crosshairs"></i><span style="color:lightgrey"> Axis </span>  {{dashboard.axe  || 'All'}}
-              </li><br/><br/>
-              <li>
-                <i class="icon-cursor"></i><span style="color:lightgrey"> Category </span>  {{dashboard.category}}
-              </li>
-            </ul>
-          </div>
-          <!--end col-md-8-->
-          <div class="col-md-4">
-            <div class="portlet sale-summary">
-              <div class="portlet-title">
-                <div class="caption">
-                  Summary
-                </div>
-                <div class="tools">
-                  <a class="reload" href="javascript:;"></a>
-                </div>
+  <div class="row profile">
+    <div class="col-md-2">
+      <ul class="list-unstyled profile-nav">
+        <li>
+          <img src="assets/images/dashboard.jpg" class="img-responsive" alt=""/>
+        </li>
+        <li>
+          <a href="#">Pinned <span>
+            3 </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-10">
+      <div class="row">
+        <div class="col-md-8 profile-info">
+          <h1>{{dashboard.name}}</h1><br/>
+          <ul class="list list-inline">
+            <li>
+              <i class="fa fa-map-marker"></i><span style="color:lightgrey"> Context </span> {{dashboard.context || 'All'}}
+            </li><br/><br/>
+            <li>
+              <i class="fa fa-calendar"></i><span style="color:lightgrey"> Activity </span>  {{dashboard.activity || 'All'}}
+            </li><br/><br/>
+            <li>
+              <i class="fa fa-crosshairs"></i><span style="color:lightgrey"> Axis </span>  {{dashboard.axe  || 'All'}}
+            </li><br/><br/>
+            <li>
+              <i class="icon-cursor"></i><span style="color:lightgrey"> Category </span>  {{dashboard.category || 'All'}}
+            </li>
+          </ul>
+        </div>
+        <!--end col-md-8-->
+        <div class="col-md-4">
+          <div class="portlet sale-summary">
+            <div class="portlet-title">
+              <div class="caption">
+                Summary
               </div>
-              <div class="portlet-body">
-                <ul class="list-unstyled">
+              <div class="tools">
+                <a class="reload" href="javascript:;"></a>
+              </div>
+            </div>
+            <div class="portlet-body">
+              <ul class="list-unstyled">
+                <li>
+                  <span class="sale-info">
+                    TASKS COUNT <i class="fa fa-img-up"></i>
+                  </span>
+                  <span class="sale-num">
+                    {{dashboard.tasks.length}} </span>
+                  </li>
                   <li>
                     <span class="sale-info">
-                      TASKS COUNT <i class="fa fa-img-up"></i>
+                      METRICS COUNT <i class="fa fa-img-up"></i>
                     </span>
                     <span class="sale-num">
-                      {{dashboard.tasks.length}} </span>
+                      {{dashboard.metrics.length}} </span>
                     </li>
                     <li>
                       <span class="sale-info">
-                        METRICS COUNT <i class="fa fa-img-up"></i>
+                        LAST ENTRY <i class="fa fa-img-down"></i>
                       </span>
                       <span class="sale-num">
-                        {{dashboard.metrics.length}} </span>
+                        {{dashboard.metrics[dashboard.metrics.length-1].date  | date:'shortDate'}} </span>
                       </li>
-                      <li>
-                        <span class="sale-info">
-                          LAST ENTRY <i class="fa fa-img-down"></i>
-                        </span>
-                        <span class="sale-num">
-                          {{dashboard.metrics[dashboard.metrics.length-1].date  | date:'shortDate'}} </span>
-                        </li>
-                      </ul>
-                    </div>
+                    </ul>
                   </div>
                 </div>
-                <!--end col-md-4-->
               </div>
-              <!--end row-->
+              <!--end col-md-4-->
             </div>
+            <!--end row-->
           </div>
+        </div>
 
- <!-- BEGIN OVERVIEW STATISTIC BARS-->
- <div class="row stats-overview-cont">
+        <!-- BEGIN OVERVIEW STATISTIC BARS-->
+        <div class="row stats-overview-cont">
 
-   <div class="col-md-2 col-sm-4">
-    <div class="stats-overview stat-block">
+         <div class="col-md-2 col-sm-4">
+          <div class="stats-overview stat-block">
+           <div class="details">
+            <div class="title"><a href="/KPIs"><span style="font-weight:bold;color:#1f77b4">{{dashboard.kpis.length}}</span> KPIs</a></div>
+            <nvd3 options="options" data="dataKPIs"></nvd3>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-2 col-sm-4">
+        <div class="stats-overview stat-block">
+         <div class="details">
+          <div class="title"><a href="/tasks"><span style="font-weight:bold;color:#9467bd">{{dashboard.tasks.length}}</span> Tasks</a></div>
+          <nvd3 options="optionsTasks" data="dataTasks"></nvd3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-2 col-sm-4">
+      <div class="stats-overview stat-block">
        <div class="details">
-        <div class="title">KPIs</div>
-       <nvd3 options="options" data="dataKPIs"></nvd3>
+       <div class="title"><a href="/metrics"><span style="font-weight:bold;color:#ff7f0e">{{dashboard.metrics.length}}</span> Metrics</a></div>
+        <nvd3 options="optionsMetrics" data="dataMetrics"></nvd3>
       </div>
     </div>
   </div>
 
-   <div class="col-md-2 col-sm-4">
+  <div class="col-md-2 col-sm-4">
     <div class="stats-overview stat-block">
-       <div class="details">
-        <div class="title">Tasks</div>
-       <nvd3 options="optionsTasks" data="dataTasks"></nvd3>
-      </div>
+     <div class="details">
+      <div class="title">Alerts</div>
+      <nvd3 options="optionsAlerts" data="data"></nvd3>
     </div>
   </div>
+</div>
 
-   <div class="col-md-2 col-sm-4">
-    <div class="stats-overview stat-block">
-       <div class="details">
-        <div class="title">Metrics</div>
-       <nvd3 options="optionsMetrics" data="dataMetrics"></nvd3>
-      </div>
-    </div>
+<div class="col-md-2 col-sm-4">
+  <div class="stats-overview stat-block">
+   <div class="details">
+    <div class="title">Goals</div>
+    <nvd3 options="optionsGoals" data="data"></nvd3>
   </div>
+</div>
+</div>
 
-   <div class="col-md-2 col-sm-4">
-    <div class="stats-overview stat-block">
-       <div class="details">
-        <div class="title">Alerts</div>
-       <nvd3 options="optionsAlerts" data="data"></nvd3>
-      </div>
-    </div>
+<div class="col-md-2 col-sm-4">
+  <div class="stats-overview stat-block">
+   <div class="details">
+    <div class="title">Trust</div>
+    <nvd3 options="optionsTrust" data="data"></nvd3>
   </div>
- 
-   <div class="col-md-2 col-sm-4">
-    <div class="stats-overview stat-block">
-       <div class="details">
-        <div class="title">Goals</div>
-       <nvd3 options="optionsGoals" data="data"></nvd3>
-      </div>
-    </div>
-  </div>
-
-   <div class="col-md-2 col-sm-4">
-    <div class="stats-overview stat-block">
-       <div class="details">
-        <div class="title">Trust</div>
-       <nvd3 options="optionsTrust" data="data"></nvd3>
-      </div>
-    </div>
-  </div>
+</div>
+</div>
 </div>
 
 <!-- END OVERVIEW STATISTIC BARS-->
@@ -141,7 +141,10 @@
 <!-- Layout Part -->
 <tabset>
 
-  <tab heading="Chronology">
+  <tab >
+    <tab-heading>
+  KPIs <span class="badge badge-default"> {{dashboard.kpis.length}}</span>
+</tab-heading>
     <div class="portlet">
       <div class="portlet-title">
         <div class="caption">
@@ -153,254 +156,271 @@
         <table class="table table-striped table-bordered table-hover" id="sample_4">
           <thead>
             <tr>
-              <th>
-               KPI Name
-             </th>
-             <th>
-               1
-             </th>
-             <th>
-               2
-             </th>
-             <th>
-               3
-             </th>
-             <th>
-               4
-             </th>
-             <th>
-               5
-             </th>
-             <th>
-               6
-             </th>
-             <th>
-               7
-             </th>
-             <th>
-               8
-             </th>
-             <th>
-               9
-             </th>
-             <th>
-               10
-             </th>
-             <th>
-               11
-             </th>
-             <th>
-               12
-             </th>
-             <th>
-               By Months
-             </th>
+               <th>KPI Name</th>
+               <th></th>
+               <th>1</th>
+               <th>2</th>
+               <th>3</th>
+               <th>4</th>
+               <th>5</th>
+               <th>6</th>
+               <th>7</th>
+               <th>8</th>
+               <th>9</th>
+               <th>10</th>
+               <th>11</th>
+               <th>12</th>
+               <th>By Months</th>
            </tr>
          </thead>
          <tbody>
           <tr ng-repeat="KPI in dashboard.kpis | orderBy : Activity | filter: myFilter track by KPI._id " on-finish-render>
-            <td>
-             <a href="/KPI/{{KPI._id}}">{{KPI.name}}</a>
-           </td>
-           <td>
-             <span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-right"></span>
-           </td>
-           <td>
-             <span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-right"></span>
-           </td>
-           <td>
-             <span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-right"></span>
-           </td>
-           <td>
-             <span style="color:orange" class="glyphicon glyphicon-circle-arrow-down"></span>
-           </td>
-           <td>
-             <span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-up"></span>
-           </td>
-           <td>
-             <span style="color:orange" class="glyphicon glyphicon-circle-arrow-down"></span>
-           </td>
-           <td>
-             <span style="color:red" class="glyphicon glyphicon-circle-arrow-down"></span>
-           </td>
-           <td>
-             <span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-up"></span>
-           </td>
-           <td>
-             <span style="color:grey" class="glyphicon glyphicon-dashboard"></span>
-           </td>
-           <td>
-             <span style="color:lightgrey" class="glyphicon glyphicon-unchecked"></span>
-           </td>
-           <td>
-             <span style="color:lightgrey" class="glyphicon glyphicon-unchecked"></span>
-           </td>
-           <td>
-             <span style="color:lightgrey" class="glyphicon glyphicon-unchecked"></span>
-           </td>
-           <td>
-                  <span class="bar-chart chrono"> 1,7,9,11, 14, 12, 6, 7, 4, 2,12, 10 </span>
-
-           </td>
-         </tr>
-       </tbody>
-     </table>
-   </div>
- </div>
+            <td><a href="/KPI/{{KPI._id}}">{{KPI.name}}</a></td>
+            <td>{{KPI.category}}</td>
+            <td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-right"></span></td>
+            <td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-right"></span></td>
+            <td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-right"></span></td>
+            <td><span style="color:orange" class="glyphicon glyphicon-circle-arrow-down"></span></td>
+            <td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-up"></span></td>
+            <td><span style="color:orange" class="glyphicon glyphicon-circle-arrow-down"></span></td>
+            <td><span style="color:red" class="glyphicon glyphicon-circle-arrow-down"></span></td>
+            <td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-up"></span></td>
+            <td><span style="color:grey" class="glyphicon glyphicon-dashboard"></span></td>
+            <td><span style="color:lightgrey" class="glyphicon glyphicon-unchecked"></span></td>
+            <td><span style="color:lightgrey" class="glyphicon glyphicon-unchecked"></span></td>
+            <td><span style="color:lightgrey" class="glyphicon glyphicon-unchecked"></span></td>
+            <td><span class="bar-chart chrono"> 1,7,9,11, 14, 12, 6, 7, 4, 2,12, 10 </span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
 </tab>
-  <tab heading="Now">
-    <div class="row cards" >
-
-      <div class="card-container col-lg-3 col-sm-6 col-sm-12" ng-repeat="KPI in KPIs | orderBy : Activity | filter: myFilter track by KPI._id ">
-        <div id='{{KPI._id}}'class="card card-slategray hover" ng-click="expandWidget(KPI)">
-          <div class="front"> 
-
-            <div class="media">        
-              <span class="pull-left" style="margin-right:20px;">
-                <h2><span class="glyphicon" ng-class="{'glyphicon-record':KPI.category=='Objectif','glyphicon-warning-sign':KPI.category=='Alerte'}"></span></h2>
-              </span>
-
-              <div class="media-body">
-                <span style="max-height:10px"><small>{{KPI.name}}</small></span>
-                <h2 class="media-heading animate-number" data-value="3659" data-animation-duration="1500">{{KPI.mesureValCal}} <small> / {{KPI.mesureRefCal}}</small></h2>
-              </div>
-            </div> 
-
-            <div class="progress-list">
-              <div class="details">
-                <div class="title">Vue {{KPI.groupBy}}</div>
-              </div>
-              <div class="status pull-right bg-transparent-black-1">
-                <span class="animate-number" data-value="{{KPI.percentObjectif}}" data-animation-duration="1500">{{KPI.percentObjectif}}</span>
-              </div>
-              <div class="clearfix"></div>
-              <div class="progress progress-little progress-transparent-black">
-                <div class="progress-bar animate-progress-bar progress-bar-#3cc051" data-percentage="{{KPI.percentObjectif}}" style="width: {{KPI.percentObjectif}};"></div>
-              </div>
-            </div>
-            <div style="display:none" class='cardBottom' style="margin-top:30px;">
-              <div class="media-body">
-                <span><small style="color:grey">Activity : </small><br/>{{KPI.Activity.replace(perimeter.Activity,"#")}}</span><br/>
-                <span> <small style="color:grey">Contexte : </small><br/>{{KPI.Contexte}}</span><br/>
-                <span><small style="color:grey">Axe : </small><br/>{{KPI.Axe}}</span><br/>
-              </div> 
-            </div>
-          </div>
-        </div>
-
+<tab>
+  <tab-heading>
+  Tasks <span class="badge badge-default"> {{dashboard.tasks.length}}</span>
+</tab-heading>
+<div class="portlet-body">
+  <table class="table table-striped table-bordered table-advance table-hover">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Activity</th>
+        <th>Context</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="task in dashboard.tasks | filter:search | orderBy:'name' track by $index" ng-show="task._id">
+        <td><a href="/task/{{task._id}}" >{{task.name}}</a></td>
+        <td>{{task.activity.replace(dashboard.activity,"#")}}</td>
+        <td>{{task.context.replace(dashboard.context,"#")}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</tab>
+<tab>
+  <tab-heading>
+  Metrics <span class="badge badge-default"> {{dashboard.metrics.length}}</span>
+</tab-heading>
+<div class="portlet-body">
+  <table class="table table-striped table-bordered table-advance table-hover">
+    <thead>
+      <tr>
+        <th>Actor</th>
+        <th>Entered</th>
+        <th>Activity</th>
+        <th>Context</th>
+        <th>Start</th>
+        <th>Load <small>(days)</small></th>
+        <th>Status</th>
+        <th>Progress</th>
+        <th>Trust</th>
+        <th>End</th>
+        <th>Comments</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="metric in dashboard.metrics | filter:search | orderBy:'date' track by $index" ng-show="metric._id"  on-finish-render>
+        <td><img alt="Will" src="assets/images/Will.png" style="width:45px" class="img-responsive"/>
+        </td>
+        <td>{{metric.date | date:'shortDate'}}</td>
+        <td>{{metric.activity.replace(dashboard.activity,"#")}}</td>
+        <td>{{metric.context.replace(dashboard.context,"#")}}</td>
+        <td>{{metric.startDate | date:'shortDate'}}</td>
+        <td>{{metric.load}}</td>
+        <td>{{metric.status}}</td>
+        <td>{{metric.progress}}% - {{metric.progressStatus}}</td>
+        <td>{{metric.trust}}</td>
+        <td>{{metric.endDate | date:'shortDate'}}</td>
+        <td>{{metric.comments}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</tab>
+<!--tab_1_2-->
+<tab>
+  <tab-heading>
+  Actors <span class="badge badge-default">4</span>
+</tab-heading>
+<div class="row">
+  <div class="col-md-12 user-info">
+    <img alt="" src="assets/images/Will.png" style="width:45px" class="img-responsive"/>
+    <div class="details">
+      <div>
+        <a href="#">Will</a>
+      </div>
+      <div>
+        29 Jan 2013 10:45AM
       </div>
     </div>
-  </tab>
-  <tab>
-    <tab-heading>
-    Edit 
-  </tab-heading>
-  <div class="row profile-account">
-    <div class="col-md-3">
-      <ul class="ver-inline-menu tabbable margin-bottom-10">
-        <li class="active">
-          <a data-toggle="tab" href="#tab_1-1">
-            <i class="fa fa-recycle"></i>Change Perimeter </a>
-            <span class="after">
-            </span>
-          </li>
-        </ul>
+  </div>
+  <div class="col-md-12 user-info">
+    <img alt="" src="assets/images/avatar.png" class="img-responsive"/>
+    <div class="details">
+      <div>
+        <a href="#">Jimmy</a>
       </div>
-      <div class="col-md-9">
-        <div class="tab-content">
-          <div id="tab_1-1" class="tab-pane active">
-            <form role="form" class="form-horizontal" action="#">
-              <div class="form-body">
-                <div class="form-group">
-                  <label  class="col-md-3 control-label">Name</label>
-                  <div class="col-md-9">
-                    <input  type="text" placeholder="" class="form-control" ng-model="dashboard.name"/>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-md-3 control-label">Context</label>
-                  <div class="col-md-9">
-                    <input type="text" placeholder="" class="form-control" ng-model="dashboard.context" typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:8"/>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-md-3 control-label">Activity</label>
-                  <div class="col-md-9">
-                    <input type="text" placeholder="" class="form-control" ng-model="dashboard.activity" typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:8"/>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-md-3 control-label">Axis</label>
-                  <div class="col-md-9">
-                    <input type="text" placeholder="Communication,  etc." class="form-control" ng-model="dashboard.axe" typeahead="axe.longname for axe in axes | filter:$viewValue | limitTo:8"/>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-md-3 control-label">Categories</label>
-                  <div class="col-md-9">
-                    <div class="col-md-offset-1 checkbox-list">
-                      <label class="checkbox">
-                        <div class="checker" >
-                          <span>
-                            <input type="checkbox"  ng-model="dashboard.categories[0]" >
-                          </span>
-                        </div>
-                        Goal 
-                      </label>
-                      <label class="checkbox">
-                        <div class="checker" >
-                          <span>
-                            <input type="checkbox" ng-model="dashboard.categories[1]" >
-                          </span>
-                        </div>
-                        Alert
-                      </label>
-                      <label class="checkbox">
-                        <div class="checker" >
-                          <span>
-                            <input type="checkbox" ng-model="dashboard.categories[2]"  >
-                          </span>
-                        </div>
-                        Anticipation 
-                      </label>
-                      <label class="checkbox">
-                        <div class="checker">
-                          <span>
-                            <input type="checkbox" ng-model="dashboard.categories[3]" >
-                          </span>
-                        </div>
-                        Information* 
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-md-3 control-label">TimeFrame</label>
-                  <div class="col-md-9">
-                    <input type="text" placeholder="" class="form-control"/>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-md-3 control-label">Tags</label>
-                  <div class="col-md-9">
-                    <input type="text" placeholder="" class="form-control" ng-model="dashboard.tags" />
-                  </div>
-                </div>
-              </div>
-              <div class="form-actions">
-                <div class="pull-right">
-                  <a href="#" class="btn btn-success" ng-click="save()">Save Changes</a>
-                  <a href="#" class="btn btn-default" ng-click="reset()">Cancel</a>
-                </div>
-              </div>
-            </form>
-          </div>
-          <!-- END CONTENT -->
-        </div>
+      <div>
+        19 Jan 2013 10:45AM
       </div>
     </div>
-  </tab>
+  </div>
+  <div class="col-md-12 user-info">
+    <img alt="" src="assets/images/avatar.png" class="img-responsive"/>
+    <div class="details">
+      <div>
+        <a href="#">Alexandra</a>
+      </div>
+      <div>
+        19 Jan 2013 12:45PM
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 user-info">
+    <img alt="" src="assets/images/avatar.png" class="img-responsive"/>
+    <div class="details">
+      <div>
+        <a href="#">Pascale</a>
+      </div>
+      <div>
+        19 Jan 2013 11:55PM
+      </div>
+    </div>
+  </div>
+</div>
+</tab>
+<tab>
+  <tab-heading>
+  Edit 
+</tab-heading>
+<div class="row profile-account">
+  <div class="col-md-3">
+    <ul class="ver-inline-menu tabbable margin-bottom-10">
+      <li class="active">
+        <a data-toggle="tab" href="#tab_1-1">
+          <i class="fa fa-recycle"></i>Change Perimeter </a>
+          <span class="after">
+          </span>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-9">
+      <div class="tab-content">
+        <div id="tab_1-1" class="tab-pane active">
+          <form role="form" class="form-horizontal" action="#">
+            <div class="form-body">
+              <div class="form-group">
+                <label  class="col-md-3 control-label">Name</label>
+                <div class="col-md-9">
+                  <input  type="text" placeholder="" class="form-control" ng-model="dashboard.name"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-3 control-label">Context</label>
+                <div class="col-md-9">
+                  <input type="text" placeholder="" class="form-control" ng-model="dashboard.context" typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:8"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-3 control-label">Activity</label>
+                <div class="col-md-9">
+                  <input type="text" placeholder="" class="form-control" ng-model="dashboard.activity" typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:8"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-3 control-label">Axis</label>
+                <div class="col-md-9">
+                  <input type="text" placeholder="Communication,  etc." class="form-control" ng-model="dashboard.axe" typeahead="axe.longname for axe in axes | filter:$viewValue | limitTo:8"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-3 control-label">Categories</label>
+                <div class="col-md-9">
+                  <div class="col-md-offset-1 checkbox-list">
+                    <label class="checkbox">
+                      <div class="checker" >
+                        <span>
+                          <input type="checkbox"  ng-model="dashboard.categories[0]" >
+                        </span>
+                      </div>
+                      Goal 
+                    </label>
+                    <label class="checkbox">
+                      <div class="checker" >
+                        <span>
+                          <input type="checkbox" ng-model="dashboard.categories[1]" >
+                        </span>
+                      </div>
+                      Alert
+                    </label>
+                    <label class="checkbox">
+                      <div class="checker" >
+                        <span>
+                          <input type="checkbox" ng-model="dashboard.categories[2]"  >
+                        </span>
+                      </div>
+                      Anticipation 
+                    </label>
+                    <label class="checkbox">
+                      <div class="checker">
+                        <span>
+                          <input type="checkbox" ng-model="dashboard.categories[3]" >
+                        </span>
+                      </div>
+                      Information* 
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-3 control-label">TimeFrame</label>
+                <div class="col-md-9">
+                  <input type="text" placeholder="" class="form-control"/>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-3 control-label">Tags</label>
+                <div class="col-md-9">
+                  <input type="text" placeholder="" class="form-control" ng-model="dashboard.tags" />
+                </div>
+              </div>
+            </div>
+            <div class="form-actions">
+              <div class="pull-right">
+                <a href="#" class="btn btn-success" ng-click="save()">Save Changes</a>
+                <a href="#" class="btn btn-default" ng-click="reset()">Cancel</a>
+              </div>
+            </div>
+          </form>
+        </div>
+        <!-- END CONTENT -->
+      </div>
+    </div>
+  </div>
+</tab>
 </tabset>
 <!-- <script>
   jQuery(document).ready(function() {    

@@ -6,16 +6,16 @@
    <div class="col-md-2 col-sm-4">
     <div class="stats-overview stat-block">
        <div class="details">
-        <div class="title">KPIs</div>
+        <div class="title"><a href="/KPIs"><span style="font-weight:bold;color:#1f77b4">{{dataDashboards.kpis.length}}</span> KPIs</a></div>
        <nvd3 options="options" data="dataKPIs"></nvd3>
       </div>
     </div>
   </div>
 
    <div class="col-md-2 col-sm-4">
-    <div class="stats-overview stat-block">
+    <div class="stats-overview stat-block" >
        <div class="details">
-        <div class="title">Tasks</div>
+        <div class="title"><a href="/tasks"><span style="font-weight:bold;color:#9467bd">{{dataDashboards.tasks.length}}</span> Tasks</a></div>
        <nvd3 options="optionsTasks" data="dataTasks"></nvd3>
       </div>
     </div>
@@ -24,12 +24,11 @@
    <div class="col-md-2 col-sm-4">
     <div class="stats-overview stat-block">
        <div class="details">
-        <div class="title">Metrics</div>
+        <div class="title"><a href="/metrics"><span style="font-weight:bold;color:#ff7f0e">{{dataDashboards.metrics.length}}</span> Metrics</a></div>
        <nvd3 options="optionsMetrics" data="dataMetrics"></nvd3>
       </div>
     </div>
   </div>
-
    <div class="col-md-2 col-sm-4">
     <div class="stats-overview stat-block">
        <div class="details">
@@ -61,8 +60,6 @@
 </div>
 <div class="row">
 <div class="col-md-6 col-sm-6">
-    <h2>Actions To Do </h2>
-    <div class="col-md-12 col-sm-12">
         <div class="portlet">
             <div class="portlet-title">
                 <div class="caption">
@@ -396,27 +393,47 @@
             </div>
         </div>
     </div>
-</div>
-<div class="col-md-6 col-sm-6">
-<h2>Your Dashboards</h2>
+<div class="col-md-6 col-sm-6"> 
 <!-- BEGIN OVERVIEW STATISTIC BLOCKS-->
-<div class="row">
-    <div class="col-lg-6 col-md-6 col-sm-12" ng-repeat="dashboard in dashboards track by dashboard._id" on-finish-render>
-        <div class="circle-stat stat-block">
-            <div class="visual">
-                <input class="knobify" data-width="75" data-fgcolor="#89c4f4" data-thickness=".2" data-skin="tron" data-displayprevious="true" value="+19" data-max="100" data-min="-100"/>
-            </div>
-            <div class="details">
-                <div class="title">
-                    <a href="/dashboard/{{dashboard._id}} " >{{dashboard.name}} <i class="fa fa-caret-up"></i></a>
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-bell-o"></i>Your Dashboards <span style="display:inline;"><a href="/dashboards">view all</a></span>
                 </div>
-                <span class="label label-danger " >
-                <i class="fa fa-bullhorn"></i> 7 </span>
-                <span class="label label-default">
-                <i class="fa fa-eye"></i> 6 </span>
-                <span class="label label-info">
-                <i class="fa fa-info"></i> 3 </span>
+                <div class="tools">
+                    <a href="" class="collapse"></a>
+                    <a href="#portlet-config" data-toggle="modal" class="config"></a>
+                    <a href="" class="reload"></a>
+                    <a href="" class="remove"></a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-12" ng-repeat="dashboard in dashboards track by dashboard._id">
+                        <div class="circle-stat stat-block">
+                            <div class="visual">
+                               <nvd3 options="optionsDonut" data="dataDonut"></nvd3>
+                            </div>
+                            <div class="details">
+                                <div class="title">
+                                    <a href="/dashboard/{{dashboard._id}} " >{{dashboard.name}} <i class="fa fa-caret-up"></i></a>
+                                </div>
+                                <span class="label label-danger " >
+                                <i class="fa fa-bullhorn"></i> 7 </span>
+                                <span class="label label-default">
+                                <i class="fa fa-eye"></i> 6 </span>
+                                <span class="label label-info">
+                                <i class="fa fa-info"></i> 3 </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12">
+                        <div class="circle-stat stat-block" style="text-align:center">
+                                <a href="/dashboards" ><i style="line-height:98px;font-size:100px;color:lightgrey" class="fa fa-plus-circle"></i></a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
     </div>
-</div>

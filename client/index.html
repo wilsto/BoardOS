@@ -194,135 +194,30 @@
                             <li>
                               <i class="fa fa-home"></i>
                               <a href="/">Home</a>
-                              <i class="fa fa-angle-right"></i>
-                            </li>
-                            <li>
-                              <a href="#">Dashboard</a>
                             </li>
                             <li ng-show="perimeter.name">
                               <i class="fa fa-angle-right"></i>
-                              <a href="/dash/{{perimeter._id}}">{{perimeter.name}}</a>
+                              <i class="fa fa-dashboard"></i> <span style="color:lightgrey"> Dashboard  </span><a href="/dashboard/{{perimeter.id}}">  {{perimeter.name}}</a>
+                              <button type="button" class="btn btn-xs btn-warning" ng-show="perimeter.name !==perimeter.name">Restore</button>
+                            </li>
+                            <li ng-show="perimeter.name">
+                              <i class="fa fa-angle-right"></i>
+                              <span style="color:lightgrey"><i class="fa fa-calendar"></i> Activity </span><a href="/dashboard/{{perimeter._id}}"> {{perimeter.activity || 'All'}}</a>
+                            </li>
+                            <li ng-show="perimeter.name">
+                              <i class="fa fa-angle-right"></i>
+                              <span style="color:lightgrey"><i class="fa fa-map-marker"></i> Context </span><a href="/dash/{{perimeter._id}}"> {{perimeter.context || 'All'}}</a>
+                            </li>
+                            <li ng-show="perimeter.name">
+                              <i class="fa fa-angle-right"></i>
+                              <span style="color:lightgrey"><i class="fa fa-crosshairs"></i> Axis </span><a href="/dash/{{perimeter._id}}"> {{perimeter.axe || 'All'}}</a>
+                            </li>
+                            <li ng-show="perimeter.name">
+                              <i class="fa fa-angle-right"></i>
+                              <span style="color:lightgrey"><i class="icon-cursor"></i> Categories </span><a href="/dash/{{perimeter._id}}"> {{perimeter.category || 'All'}}</a>
                             </li>
                           </ul>
-                          <div class="page-toolbar">
 
-                            <div id="dashboard-report-range" class="pull-right tooltips btn btn-fit-height btn-primary" data-container="body" data-placement="top" data-original-title="Change dashboard date range">
-                              <i class="fa fa-calendar"></i>&nbsp; <span class="thin uppercase visible-lg-inline-block"></span>&nbsp; <i class="fa fa-angle-down"></i>
-                            </div>
-                            <div id="dashboard-report-supervision" class="pull-right tooltips btn btn-fit-height btn-default" data-html="true"  data-content="<br/>
-                            <div class='form-group visible-lg-inline-block'>
-                              <label class='col-md-2 control-label'>Activity</label>
-                              <div class='col-md-7'>
-                                <div class='input-group'>
-                                  <span class='input-group-addon'>
-                                    <i class='fa fa-gears'></i>
-                                  </span>
-                                  <input type='text' class='form-control' placeholder='All' ng-model='perimeter.Activity' typeahead-on-select='setActivityId($item)'  typeahead='activity.name for activity in activities | filter:$viewValue' >
-                                </div>
-                              </div>
-                              <div class='col-md-3' style='float:left'>
-                                <div class='input-group input-small'>
-                                  <input type='text' class='spinner-input form-control' value='0' maxlength='1' readonly=''>
-                                  <div class='spinner-buttons input-group-btn btn-group-vertical'>
-                                    <button type='button' class='btn spinner-up btn-xs btn-info'>
-                                      <i class='fa fa-angle-up'></i>
-                                    </button>
-                                    <button type='button' class='btn spinner-down btn-xs btn-info'>
-                                      <i class='fa fa-angle-down'></i>
-                                    </button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <br/>
-                            <div class='form-group visible-lg-inline-block'>
-                              <label class='col-md-2 control-label'>Context</label>
-                              <div class='col-md-7'>
-                                <div class='input-group'>
-                                  <span class='input-group-addon'>
-                                    <i class='fa fa-crosshairs'></i>
-                                  </span>
-                                  <input type='text' class='form-control' placeholder='All' ng-model='perimeter.Contexte' typeahead-on-select='setContextId($item)'  typeahead='contexte.name for contexte in contextes | filter:$viewValue'>
-                                </div>
-                              </div>
-                              <div class='col-md-3' style='float:left'>
-                                <div class='input-group input-small'>
-                                  <input type='text' class='spinner-input form-control' value='0' maxlength='1' readonly=''>
-                                  <div class='spinner-buttons input-group-btn btn-group-vertical'>
-                                    <button type='button' class='btn spinner-up btn-xs btn-info'>
-                                      <i class='fa fa-angle-up'></i>
-                                    </button>
-                                    <button type='button' class='btn spinner-down btn-xs btn-info'>
-                                      <i class='fa fa-angle-down'></i>
-                                    </button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div> 
-                            <br/>
-                            <div class='form-group visible-lg-inline-block'>
-                              <label class='col-md-2 control-label'>Axe</label>
-                              <div class='col-md-7'>
-                                <div class='input-group'>
-                                  <span class='input-group-addon'>
-                                    <i class='fa fa-location-arrow'></i>
-                                  </span>
-                                  <input type='text' class='form-control' placeholder='All' ng-model='perimeter.Axe' typeahead-on-select='setAxeId($item)'  typeahead='axe.name for axe in axes | filter:$viewValue'>
-                                </div>
-                              </div>
-                              <div class='col-md-3' style='float:left'>
-                                <div class='input-group input-small'>
-                                  <input type='text' class='spinner-input form-control' value='0' maxlength='1' readonly=''>
-                                  <div class='spinner-buttons input-group-btn btn-group-vertical'>
-                                    <button type='button' class='btn spinner-up btn-xs btn-info'>
-                                      <i class='fa fa-angle-up'></i>
-                                    </button>
-                                    <button type='button' class='btn spinner-down btn-xs btn-info'>
-                                      <i class='fa fa-angle-down'></i>
-                                    </button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div> <br/>
-                            <div class='form-group'> 
-                              <label class='col-md-2 control-label'>Tags</label>
-                              <div class='col-md-10'>
-                                <div class='input-group'>
-                                  <span class='input-group-addon'>
-                                    <i class='fa fa-tags'></i>
-                                  </span>
-                                  <input type='text' class='form-control' placeholder='None'>
-                                </div>
-                              </div>
-                            </div> <br/><br/><br/>  <div class='form-group'>
-                            <label class='col-md-2 control-label'>Type</label>
-                            <div class='col-md-10'>
-                              <div id='parent-group' class='form-group form-inline'>  
-
-                                <div class='checkbox'>
-                                  <label>
-                                    <input type='checkbox' ng-model='perimeter.category[0]'> Objectif
-                                  </label>
-                                </div>
-                                <div class='checkbox'>
-                                  <label>
-                                    <input type='checkbox' ng-model='perimeter.category[1]'> Alerte
-                                  </label>
-                                </div>
-                                <div class='checkbox'>
-                                  <label>
-                                    <input type='checkbox' ng-model='perimeter.category[2]'> Anticipation
-                                  </label>
-                                </div>
-                                <div class='checkbox'>
-                                  <label>
-                                    <input type='checkbox' ng-model='perimeter.category[3]'> Information
-                                  </label>
-                                </div></div>
-                              </div><br/><hr/><button class='btn btn-default' ng-click='closePerimeter()'>Cancel</button><button class='btn btn-primary pull-right' ng-click='updatePerimeter(false)'>Apply</button><br/>" data-container="body" data-placement="bottom" data-original-title="Change dashboard supervision">
-                              <i class="fa fa-filter"></i>&nbsp; <span class="thin uppercase visible-lg-inline-block"></span>&nbsp; <i class="fa fa-angle-down"></i>
-                            </div>
-                          </div>
                         </div>
                         <!-- END PAGE HEADER-->
                         <!-- Add your site or application content here -->

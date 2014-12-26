@@ -212,6 +212,7 @@
                         <table class="table table-striped table-bordered table-advance table-hover">
                             <thead>
                                 <tr>
+                                    <th>Actor</th>
                                     <th>Saisie</th>
                                     <th>Activity</th>
                                     <th>Context</th>
@@ -226,19 +227,20 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="mesure in task.metrics | filter:search | orderBy:'date' track by $index" ng-show="mesure._id">
-                                    <td>{{mesure.date | date:'shortDate'}}</td>
-                                    <td>{{mesure.activity.replace(task.activity,"#")}}</td>
-                                    <td>{{mesure.context.replace(task.context,"#")}}</td>
-                                    <td>{{mesure.startDate | date:'shortDate'}}</td>
-                                    <td>{{mesure.load}}</td>
-                                    <td>{{mesure.status}}</td>
-                                    <td>{{mesure.progress}}% - {{mesure.progressStatus}}</td>
-                                    <td>{{mesure.trust}}</td>
-                                    <td>{{mesure.endDate | date:'shortDate'}}</td>
-                                    <td>{{mesure.comments}}</td>
+                                <tr ng-repeat="metric in task.metrics | filter:search | orderBy:'date' track by $index" ng-show="metric._id">
+                                     <td><img alt="{{metric.actor}}" ng-src="assets/images/avatars/{{metric.actor}}.png" style="width:25px" class="img-responsive"/></td>
+                                    <td>{{metric.date | date:'shortDate'}}</td>
+                                    <td>{{metric.activity.replace(task.activity,"#")}}</td>
+                                    <td>{{metric.context.replace(task.context,"#")}}</td>
+                                    <td>{{metric.startDate | date:'shortDate'}}</td>
+                                    <td>{{metric.load}}</td>
+                                    <td>{{metric.status}}</td>
+                                    <td>{{metric.progress}}% - {{metric.progressStatus}}</td>
+                                    <td>{{metric.trust}}</td>
+                                    <td>{{metric.endDate | date:'shortDate'}}</td>
+                                    <td>{{metric.comments}}</td>
                                     <td style="width:25px">
-                                        <button ng-click="openMesure(task, mesure,false)"type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></button>
+                                        <button ng-click="openMesure(task, metric,false)"type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></button>
                                     </td>
                             </tbody>
                         </table>

@@ -35,7 +35,7 @@
                             </li>
                             <br/><br/>
                             <li>
-                                <i class="icon-cursor"></i><span style="color:lightgrey"> Category </span>  {{KPI.categories}}
+                                <i class="icon-cursor"></i><span style="color:lightgrey"> Category </span>  {{KPI.category || 'All'}}
                             </li>
                         </ul>
                     </div>
@@ -186,8 +186,7 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="metric in KPI.metrics | filter:search | orderBy:'date' track by $index" ng-show="metric._id"  on-finish-render>
-                                <td><img alt="Will" src="assets/images/Will.png" style="width:45px" class="img-responsive"/>
-                                </td>
+                                <td><img alt="{{metric.actor}}" ng-src="assets/images/avatars/{{metric.actor}}.png" style="width:25px" class="img-responsive"/></td>
                                 <td>{{metric.date | date:'shortDate'}}</td>
                                 <td>{{metric.activity.replace(KPI.activity,"#")}}</td>
                                 <td>{{metric.context.replace(KPI.context,"#")}}</td>
@@ -307,42 +306,12 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-md-3 control-label">Categories</label>
+                                            <label class="col-md-3 control-label">Category</label>
                                             <div class="col-md-9">
-                                                <div class="col-md-offset-1 checkbox-list">
-                                                    <label class="checkbox">
-                                                        <div class="checker" >
-                                                            <span>
-                                                            <input type="checkbox"  ng-model="KPI.categories[0]" >
-                                                            </span>
-                                                        </div>
-                                                        Goal 
-                                                    </label>
-                                                    <label class="checkbox">
-                                                        <div class="checker" >
-                                                            <span>
-                                                            <input type="checkbox" ng-model="KPI.categories[1]" >
-                                                            </span>
-                                                        </div>
-                                                        Alert
-                                                    </label>
-                                                    <label class="checkbox">
-                                                        <div class="checker" >
-                                                            <span>
-                                                            <input type="checkbox" ng-model="KPI.categories[2]"  >
-                                                            </span>
-                                                        </div>
-                                                        Anticipation 
-                                                    </label>
-                                                    <label class="checkbox">
-                                                        <div class="checker">
-                                                            <span>
-                                                            <input type="checkbox" ng-model="KPI.categories[3]" >
-                                                            </span>
-                                                        </div>
-                                                        Information* 
-                                                    </label>
-                                                </div>
+                                                    <input type="radio" ng-model="KPI.category" value="Goal">  Goal <br/>
+                                                    <input type="radio" ng-model="KPI.category" value="Alert"> Alert <br/>
+                                                    <input type="radio" ng-model="KPI.category" value="Anticipation"> Anticipation <br/>
+                                                    <input type="radio" ng-model="KPI.category" value="Information"> Information <br/>
                                             </div>
                                         </div>
                                         <div class="form-group">

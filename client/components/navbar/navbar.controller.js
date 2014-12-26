@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('NavbarCtrl', function ($scope, $location, Auth) {
+  .controller('NavbarCtrl', function ($scope, $rootScope, $location, Auth) {
     $scope.menu = [{
       'title': 'Home',
       'link': '/'
@@ -10,7 +10,7 @@ angular.module('boardOsApp')
     $scope.isCollapsed = true;
     $scope.isLoggedIn = Auth.isLoggedIn();
     $scope.isAdmin = Auth.isAdmin();
-    $scope.currentUser = Auth.getCurrentUser();
+    $rootScope.currentUser = Auth.getCurrentUser();
 
     $scope.logout = function() {
       Auth.logout();

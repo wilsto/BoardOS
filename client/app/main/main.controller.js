@@ -5,14 +5,15 @@ angular.module('boardOsApp')
     $scope.loadDashBoard = function() {
       $http.get('/api/dashboards').success(function(dashboards) {
       $scope.dashboards = dashboards.list;
+      $scope.dataDashboards = dashboards;
 
       $scope.dataKPIs = [{values: [] }];
       $scope.dataTasks = [{values: [] }];
       $scope.dataMetrics = [{values: [] }];
 
-      $scope.predataKPIs = calLibrary.getCountByMonth(dashboards.kpis, 'date');
-      $scope.predataTasks = calLibrary.getCountByMonth(dashboards.tasks, 'date');
-      $scope.predataMetrics = calLibrary.getCountByMonth(dashboards.metrics, 'date');
+      $scope.predataKPIs = calLibrary.getByMonth(dashboards.kpis, 'date','value');
+      $scope.predataTasks = calLibrary.getByMonth(dashboards.tasks, 'date','value');
+      $scope.predataMetrics = calLibrary.getByMonth(dashboards.metrics, 'date','value');
 
       $scope.dataKPIs[0].values = $scope.predataKPIs;
       $scope.dataTasks[0].values = $scope.predataTasks;
@@ -39,7 +40,7 @@ angular.module('boardOsApp')
       '#1f77b4'
       ],
       x: function(d){ return d.label; },
-      y: function(d){ return d.value; },
+      y: function(d){ return d.count; },
       showValues: false,
       transitionDuration: 500
     }
@@ -60,5 +61,33 @@ angular.module('boardOsApp')
   $scope.optionsTrust = angular.copy($scope.options);
   $scope.optionsTrust.chart.color =  ['#bcbd22'];
 
+
+
+      $scope.optionsDonut = {
+        chart: {
+          type: 'pieChart',
+          height: 150,
+          donut: true,
+          x: function(d){return d.key;},
+          y: function(d){return d.y;},
+          showLabels: false,
+          pie: {
+            startAngle: function(d) { return d.startAngle -Math.PI ;},
+            endAngle: function(d) { return d.endAngle -Math.PI ;}
+          },
+          transitionDuration: 500
+        }
+      };
+
+      $scope.dataDonut = [
+      {
+        key: 'Late',
+        y: 2
+      },
+      {
+        key: 'On time',
+        y: 3
+      }
+      ];
 
   });

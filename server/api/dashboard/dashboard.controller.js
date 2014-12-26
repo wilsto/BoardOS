@@ -56,7 +56,11 @@ exports.show = function(req, res) {
       mDashboard.kpis = [];
       KPI.find({}, function (err, kpi) {
         _.each(kpi, function(rowdata, index) { 
-          if (rowdata.context.indexOf(mDashboard.context) >=0 && rowdata.activity.indexOf(mDashboard.activity) >=0 ) {
+          if (typeof mDashboard.context === 'undefined' )  { mDashboard.context = ''};
+          if (typeof mDashboard.activity === 'undefined' )  { mDashboard.activity = ''};
+          if (typeof rowdata.context === 'undefined' || rowdata.context === '')  { rowdata.context = mDashboard.context};
+          if (typeof rowdata.activity === 'undefined' || rowdata.activity === '')  { rowdata.activity = mDashboard.activity};         
+          if (rowdata.context.indexOf(mDashboard.context) >=0  && rowdata.activity.indexOf(mDashboard.activity) >=0 ) {
             mDashboard.kpis.push (rowdata);
           }
         });
@@ -70,7 +74,8 @@ exports.show = function(req, res) {
       mDashboard.tasks = [];
       Task.find({}, function (err, task) {
         _.each(task, function(rowdata, index) { 
-          if (rowdata.context.indexOf(mDashboard.context) >=0 && rowdata.activity.indexOf(mDashboard.activity) >=0 ) {
+
+         if (rowdata.context.indexOf(mDashboard.context) >=0  && rowdata.activity.indexOf(mDashboard.activity) >=0 ) {
             mDashboard.tasks.push (rowdata);
           }
         });
@@ -84,7 +89,7 @@ exports.show = function(req, res) {
     mDashboard.metrics = [];
     Metric.find({}, function (err, metric) {
       _.each(metric, function(rowdata, index) {  
-        if (rowdata.context.indexOf(mDashboard.context) >=0 && rowdata.activity.indexOf(mDashboard.activity) >=0 ) {
+        if (rowdata.context.indexOf(mDashboard.context) >=0  && rowdata.activity.indexOf(mDashboard.activity) >=0 ) {
           mDashboard.metrics.push (rowdata);
         }
       });

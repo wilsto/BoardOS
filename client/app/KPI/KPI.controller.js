@@ -2,8 +2,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-.controller('KPICtrl', function ($scope, $http, ngToast,actionKPI,categoryKPI,groupByKPI,metricTaskFields, $stateParams, calLibrary) {
-
+.controller('KPICtrl', function ($scope,$rootScope, Auth, $http, ngToast,actionKPI,categoryKPI,groupByKPI,metricTaskFields, $stateParams, calLibrary) {
 
   $scope.actionKPI = actionKPI;
   $scope.categoryKPI = categoryKPI;
@@ -11,11 +10,11 @@ angular.module('boardOsApp')
   $scope.metricTaskFields = metricTaskFields;
 
   $scope.load = function() {
-    $http.get('/api/KPIs/' + $stateParams.id).success(function(KPI) {
+    $http.get('/api/KPIs/'+$stateParams.id, {params:{activity: $rootScope.perimeter.activity, context: $rootScope.perimeter.context}}).success(function(KPI) {
       $scope.KPI = KPI;
 
-      $scope.KPIByMonth = calLibrary.getCountByMonth($scope.KPI.metricValues, 'date');
-      console.log('KPIByMonth',$scope.KPIByMonth);
+      $scope.KPIByMonth = calLibrary.getByMonth($scope.KPI.metricValues, 'date', 'value');
+      $scope.KPIRefByMonth = calLibrary.getByMonth($scope.KPI.refMetricValues, 'date', 'value');
       
       $scope.options = {
         chart: {
@@ -53,40 +52,40 @@ angular.module('boardOsApp')
 
       $scope.data = calLibrary.getSumCumul($scope.KPI.refMetricValues, $scope.KPI.metricValues);
 
- $scope.optionsDonut = {
-            chart: {
-                type: 'pieChart',
-                height: 250,
-                donut: true,
-                x: function(d){return d.key;},
-                y: function(d){return d.y;},
-                showLabels: true,
-                pie: {
-                    startAngle: function(d) { return d.startAngle/2 -Math.PI/2 ;},
-                    endAngle: function(d) { return d.endAngle/2 -Math.PI/2 ;}
-                },
-                transitionDuration: 500,
-                legend: {
-                    margin: {
-                        top: 5,
-                        right: 5,
-                        bottom: 5,
-                        left: 0
-                    }
-                }
+      $scope.optionsDonut = {
+        chart: {
+          type: 'pieChart',
+          height: 250,
+          donut: true,
+          x: function(d){return d.key;},
+          y: function(d){return d.y;},
+          showLabels: true,
+          pie: {
+            startAngle: function(d) { return d.startAngle/2 -Math.PI/2 ;},
+            endAngle: function(d) { return d.endAngle/2 -Math.PI/2 ;}
+          },
+          transitionDuration: 500,
+          legend: {
+            margin: {
+              top: 5,
+              right: 5,
+              bottom: 5,
+              left: 0
             }
-        };
+          }
+        }
+      };
 
-        $scope.dataDonut = [
-            {
-                key: 'Late',
-                y: 2
-            },
-            {
-                key: 'On time',
-                y: 3
-            }
-        ];
+      $scope.dataDonut = [
+      {
+        key: 'Late',
+        y: 2
+      },
+      {
+        key: 'On time',
+        y: 3
+      }
+      ];
 
 
 
@@ -94,7 +93,26 @@ angular.module('boardOsApp')
 };
 
 $scope.save = function() {
+
+  //clean KPI
+  $scope.KPI.activity = ($scope.KPI.originalActivity === '') ? '' : $scope.KPI.activity;
+  $scope.KPI.context = ($scope.KPI.originalContext === '') ? '' : $scope.KPI.context;
   delete $scope.KPI.__v;
+  delete $scope.KPI.originalActivity;
+  delete $scope.KPI.originalContext;
+  delete $scope.KPI.dashboards;
+  delete $scope.KPI.metrics;
+  delete $scope.KPI.tasks;
+  delete $scope.KPI.kpis;
+  delete $scope.KPI.categories;
+  delete $scope.KPI.metricValues;
+  delete $scope.KPI.metricValuesCal;
+  delete $scope.KPI.percentObjectif;
+  delete $scope.KPI.refMetricValues;
+  delete $scope.KPI.refMetricValuesCal;
+
+  $scope.KPI.actor = $rootScope.currentUser.name;
+  $scope.KPI.date = Date.now();
 
   if (typeof $scope.KPI._id === 'undefined') {
     $http.post('/api/KPIs', $scope.KPI);

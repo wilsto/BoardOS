@@ -121,39 +121,7 @@ angular.module('boardOsApp').directive('onFinishRender', function ($timeout) {
 
 angular.module('boardOsApp').factory('calLibrary', function() {
 	var sdo = {
-		getSumByMonth: function(data, field) {
-
-				var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-				  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-				var map_result = _.map(data, function (item) {
-				  var d = new Date(new Number(new Date(item[field])));
-				  var month = d.getFullYear()  + ", " +  monthNames[d.getMonth()];
-				  return {
-				      "Month": month,
-				      "User_Count": 1
-				  };
-				});
-
-				var result_temp = _.reduce(map_result, function (memo, item) {
-				  if (memo[item.Month] === undefined) {
-				      memo[item.Month] = item.User_Count;
-				  }else{
-				      memo[item.Month] += item.User_Count;
-				  }
-				  return memo;
-				},{});
-
-				//then wrap the result to the format you expected.
-				var result = _.map(result_temp, function(value, key){
-				  return {
-				      "Month": key,
-				      "User_Count": value
-				  };
-				});
-				return result;
-		},
-		getCountByMonth: function(data, field) {
+		getByMonth: function(data, fieldDate, field) {
 
 				var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
 				  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -170,19 +138,27 @@ angular.module('boardOsApp').factory('calLibrary', function() {
 				  var month = d.getFullYear()  + ", " +  monthNames[d.getMonth()];
 				  return {
 				      "label": month,
-				      "value": 0
+				      "count": 0,
+				      "sum": 0,
+				      "mean":0
 				  };
 				});
 
 				$.each(data, function (key,item) {
-				  var d = new Date(new Number(new Date(item[field])));
+				  var d = new Date(new Number(new Date(item[fieldDate])));
 				  var month = d.getFullYear()  + ", " +  monthNames[d.getMonth()];
 				  $.each(map_result, function (keyMap,itemMap) {
 					  if (itemMap.label === month) {
-					    itemMap.value += 1;
+			    		itemMap.count += 1;
+			    		itemMap.sum += parseInt(item[field],10);
 					  }
-					});
+				  });
+				});
 
+				$.each(map_result, function (keyMap,itemMap) {
+				    if (itemMap.count > 0) {
+				    	itemMap.mean = itemMap.sum / itemMap.count;
+				    }
 				});
 
 				return map_result.reverse();
@@ -198,7 +174,7 @@ angular.module('boardOsApp').factory('calLibrary', function() {
 			var lastval = 0;
 
     		var refSort = _.sortBy(ref, function(obj){ return obj.date });
-    		console.log(refSort);
+
     		var valueSort = _.sortBy(value, function(obj){ return obj.date });
 			$.each(refSort, function( indexref, valueref ) {
 				result[1].values.push([new Date(valueref.date).getTime(),indexref+1]);

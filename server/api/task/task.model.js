@@ -7,9 +7,9 @@ var TaskSchema = new Schema({
   name: String,
   activity: String,
   context: String,
-  username: String,
+  actor: String,
   tags: String,
-  date: String
+  date:{ type: Date, default: Date.now }
 }, { strict: false });
 
 module.exports = mongoose.model('Task', TaskSchema);

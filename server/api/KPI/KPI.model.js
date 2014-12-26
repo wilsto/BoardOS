@@ -9,7 +9,7 @@ var KPISchema = new Schema({
   context: String,
   axe: String,
   tags:String,
-  categories: Schema.Types.Mixed,
+  category: String,
   refresh:Number,
   action:String,
   metricTaskField:String,
@@ -17,7 +17,7 @@ var KPISchema = new Schema({
   refMetricTaskField:String,
   refMetricTaskValues:String,
   groupBy:String,
-  username:String,
+  actor:String,
   date:{ type: Date, default: Date.now }
 }, { strict: false });
 

@@ -35,6 +35,8 @@ Q()
       if(err) { return handleError(res, err); }
       if(!kpi) { return res.send(404); }
       mKPI = kpi.toObject();
+      if (typeof mKPI.context === 'undefined' || mKPI.context === '')  { mKPI.context = (typeof req.query.context === 'undefined') ? '':req.query.context; mKPI.originalContext = ''};
+      if (typeof mKPI.activity === 'undefined' || mKPI.activity === '')  {mKPI.activity = (typeof req.query.activity === 'undefined') ? '':req.query.activity; mKPI.originalActivity = ''};
       deferred.resolve(mKPI);
     })
     return deferred.promise;
@@ -45,6 +47,8 @@ Q()
       mKPI.dashboards = [];
       Dashboard.find({}, function (err, dashboard) {
         _.each(dashboard, function(rowdata, index) { 
+          if (typeof rowdata.context === 'undefined' || rowdata.context === '')  { rowdata.context = mKPI.context};
+          if (typeof rowdata.activity === 'undefined' || rowdata.activity === '')  { rowdata.activity = mKPI.activity};  
           if (rowdata.context.indexOf(mKPI.context) >=0 && rowdata.activity.indexOf(mKPI.activity) >=0 ) {
             mKPI.dashboards.push (rowdata.toObject());
           }
@@ -91,7 +95,6 @@ Q()
       }
       if (typeof mKPI.refMetricTaskValues !== "undefined" &&  mKPI.refMetricTaskValues.length > 0) {
         var refChecksType = mKPI.refMetricTaskValues.split(' + ');
-        console.log(refChecksType);
       }
 
         //Value for calculation
@@ -111,14 +114,18 @@ Q()
           }
 
           // valeurs références
-          if (typeof refChecksType !== "undefined"  ) {
+          if (mKPI.refChecksType !== 'undefined'  ) {
+            if (mKPI.refMetricTaskField === 'constant') {
+                mKPI.refMetricValues.push({value:mKPI.refMetricTaskValues,date:metric.date});
+            } else {
             _.each(refChecksType, function(check) {
                  if (metric[mKPI.metricTaskField] === check) { 
                   mKPI.refMetricValues.push({value:metric[mKPI.metricTaskField],date:metric.date});
                  }  // avec indexOf pour le like
              });
+          }
           } else {
-              mKPI.refMetricValues.push({value:metric[mKPI.metricTaskField],date:metric.date});
+                mKPI.refMetricValues.push({value:metric[mKPI.metricTaskField],date:metric.date});
           }
 
       });
@@ -129,6 +136,16 @@ Q()
         case 'count':
           mKPI.metricValuesCal = mKPI.metricValues.length;
           mKPI.refMetricValuesCal = mKPI.refMetricValues.length;
+          break;
+        case 'Mean':
+          var sumMetricValuesCal = 0;
+          var sumRefMetricValuesCal = 0;
+          for( var i = 0; i < mKPI.metricValues.length; i++ ){
+              sumMetricValuesCal += parseInt( mKPI.metricValues[i].value, 10 ); //don't forget to add the base
+              sumRefMetricValuesCal += parseInt( mKPI.refMetricValues[i].value, 10 ); //don't forget to add the base
+          }
+          mKPI.metricValuesCal = sumMetricValuesCal/ mKPI.metrics.length;
+          mKPI.refMetricValuesCal = sumRefMetricValuesCal/ mKPI.refMetricValues.length;
           break;
         default :
           if (typeof mKPI.metrics[mKPI.metrics.length - 1] !== "undefined") { mKPI.metricValues = mKPI.metrics[mKPI.metrics.length - 1][mKPI.type];}

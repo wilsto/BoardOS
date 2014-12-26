@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-.controller('DashboardCtrl', function ($scope, $http, $stateParams, calLibrary, ngToast) {
+.controller('DashboardCtrl', function ($scope,  $rootScope, $http, $stateParams, calLibrary, ngToast, $cookieStore) {
   
   $scope.dashboard = {name:''};
 
@@ -10,13 +10,21 @@ angular.module('boardOsApp')
     $http.get('/api/dashboards/'+$stateParams.id).success(function(dashboard) {
       $scope.dashboard = dashboard;
 
+      $rootScope.perimeter.name = dashboard.name;
+      $rootScope.perimeter.id = dashboard._id;
+      $rootScope.perimeter.activity = dashboard.activity;
+      $rootScope.perimeter.context = dashboard.context;
+      $rootScope.perimeter.axis = dashboard.axis;
+      $rootScope.perimeter.category = dashboard.category;
+      $cookieStore.put('perimeter',$rootScope.perimeter);
+
       $scope.dataKPIs = [{values: [] }];
       $scope.dataTasks = [{values: [] }];
       $scope.dataMetrics = [{values: [] }];
 
-      $scope.predataKPIs = calLibrary.getCountByMonth($scope.dashboard.kpis, 'date');
-      $scope.predataTasks = calLibrary.getCountByMonth($scope.dashboard.tasks, 'date');
-      $scope.predataMetrics = calLibrary.getCountByMonth($scope.dashboard.metrics, 'date');
+      $scope.predataKPIs = calLibrary.getByMonth($scope.dashboard.kpis, 'date','value');
+      $scope.predataTasks = calLibrary.getByMonth($scope.dashboard.tasks, 'date','value');
+      $scope.predataMetrics = calLibrary.getByMonth($scope.dashboard.metrics, 'date','value');
 
       $scope.dataKPIs[0].values = $scope.predataKPIs;
       $scope.dataTasks[0].values = $scope.predataTasks;
@@ -63,7 +71,7 @@ console.log($scope.dashboard);
       '#1f77b4'
       ],
       x: function(d){ return d.label; },
-      y: function(d){ return d.value; },
+      y: function(d){ return d.count; },
       showValues: false,
       transitionDuration: 500
     }

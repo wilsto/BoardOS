@@ -101,7 +101,19 @@ angular.module('boardOsApp', [
 
 ])
 
-  .run(function ($rootScope, $location, Auth, $http,progressStatusTask,statusTask,metricTaskFields,categoryKPI,actionKPI,groupByKPI) {
+  .run(function ($rootScope, $location, Auth, $http,progressStatusTask,statusTask,metricTaskFields,categoryKPI,actionKPI,groupByKPI, $cookieStore) {
+   
+    $rootScope.perimeter = $cookieStore.get('perimeter');
+    if (typeof $rootScope.perimeter === 'undefined') {
+      $rootScope.perimeter = {};
+      $rootScope.perimeter.name = '';
+      $rootScope.perimeter.id = '';
+      $rootScope.perimeter.activity = '';
+      $rootScope.perimeter.context = '';
+      $rootScope.perimeter.axis = '';
+      $rootScope.perimeter.category = '';
+    }
+
     $rootScope.constant = {};
     $rootScope.constant.progressStatusTask = progressStatusTask;
     $rootScope.constant.statusTask = statusTask;

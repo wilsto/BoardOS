@@ -5,7 +5,6 @@ angular.module('boardOsApp')
 
   $scope.load = function() {      
     $http.get('/api/tasks/'+$stateParams.id).success(function (data) { 
-      console.log(data);
       $scope.task = data;
     });
  };
@@ -18,6 +17,10 @@ $scope.save = function() {
   delete $scope.task.kpis;
   delete $scope.task.metrics;
   delete $scope.task.tasks;
+
+  $scope.task.actor = $rootScope.currentUser.name;
+  $scope.task.date = Date.now();
+      console.log($scope.task);
 
   if (typeof $scope.task._id === 'undefined') {
     $http.post('/api/tasks', $scope.task);
@@ -119,6 +122,8 @@ $scope.save = function() {
 
     $scope.ok = function () {
       $modalInstance.close();
+      $scope.formData.actor = $rootScope.currentUser.name;
+
       if ($rootScope.newItem === false) {
         $http.put('/api/metrics/'+$scope.formData._id, $scope.formData)
         .success(function(data) {

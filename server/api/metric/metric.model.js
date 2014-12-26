@@ -16,7 +16,7 @@ var MetricSchema = new Schema({
   startDate: String,
   status: String,
   trust: String,
-  username: String
+  actor: String
 }, { strict: false });
 
 module.exports = mongoose.model('Metric', MetricSchema);
