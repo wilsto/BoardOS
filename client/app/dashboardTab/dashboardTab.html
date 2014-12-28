@@ -98,6 +98,7 @@
 				<th>Trust</th>
 				<th>End</th>
 				<th>Comments</th>
+				<th><button ng-click='open(data, data.metrics[task.metrics.length-1],true)' type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus"></span></button></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -113,6 +114,9 @@
 				<td>{{metric.trust}}</td>
 				<td>{{metric.endDate | date:'shortDate'}}</td>
 				<td>{{metric.comments}}</td>
+				<td style="width:25px">
+                     <button ng-click="openMesure(data, metric,false)"type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></button>
+                </td>
 			</tr>
 		</tbody>
 	</table>
@@ -121,7 +125,7 @@
 	<!--############-->  
 	<div class="row"  ng-if="dashboardType === 'actors'">
 		<div class="col-md-12 user-info">
-			<img alt="" src="assets/images/Will.png" style="width:45px" class="img-responsive"/>
+			<img alt="" src="assets/images/avatars/Will.png" style="width:45px" class="img-responsive"/>
 			<div class="details">
 				<div>
 					<a href="#">Will</a>
@@ -132,7 +136,7 @@
 			</div>
 		</div>
 		<div class="col-md-12 user-info">
-			<img alt="" src="assets/images/avatar.png" class="img-responsive"/>
+			<img alt="" src="assets/images/avatars/avatar.png" class="img-responsive"/>
 			<div class="details">
 				<div>
 					<a href="#">Jimmy</a>
@@ -143,7 +147,7 @@
 			</div>
 		</div>
 		<div class="col-md-12 user-info">
-			<img alt="" src="assets/images/avatar.png" class="img-responsive"/>
+			<img alt="" src="assets/images/avatars/avatar.png" class="img-responsive"/>
 			<div class="details">
 				<div>
 					<a href="#">Alexandra</a>
@@ -154,7 +158,7 @@
 			</div>
 		</div>
 		<div class="col-md-12 user-info">
-			<img alt="" src="assets/images/avatar.png" class="img-responsive"/>
+			<img alt="" src="assets/images/avatars/avatar.png" class="img-responsive"/>
 			<div class="details">
 				<div>
 					<a href="#">Pascale</a>

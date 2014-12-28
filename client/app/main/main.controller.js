@@ -25,7 +25,14 @@ angular.module('boardOsApp')
       });
     };
 
+    $scope.loadLog = function() {
+      $http.get('/api/logs').success(function(logs) {
+        $scope.logs = logs;
+      });
+    };
+
     $scope.loadDashBoard();
+    $scope.loadLog();
 
 
   $scope.options = {

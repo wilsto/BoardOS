@@ -52,6 +52,22 @@ angular.module('boardOsApp')
 
       $scope.data = calLibrary.getSumCumul($scope.KPI.refMetricValues, $scope.KPI.metricValues);
 
+ $scope.optionsGoal = {
+            chart: {
+                type: 'bulletChart',
+                height: 70,
+                transitionDuration: 500
+            }
+        };
+
+        $scope.dataGoal = {
+            "title":$scope.KPI.name,
+            "ranges": [33,66,100],
+            "measures": [$scope.KPI.percentObjectif.replace('%','')],
+            "markers": [80]
+        }
+
+
       $scope.optionsDonut = {
         chart: {
           type: 'pieChart',

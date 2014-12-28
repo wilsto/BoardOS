@@ -237,8 +237,8 @@
                     <tab heading="Journal Log">
                         <div class="scroller" style="height: 250px;" data-always-visible="1" data-rail-visible1="1">
                             <ul class="feeds">
-                                <li>
-                                    <a href="#">
+                                <li ng-repeat="log in logs | limitTo:50 |  orderBy:data:reverse">
+                                    <a href="/{{log.type}}/{{log.refId}}">
                                         <div class="col1">
                                             <div class="cont">
                                                 <div class="cont-col1">
@@ -248,37 +248,14 @@
                                                 </div>
                                                 <div class="cont-col2">
                                                     <div class="desc">
-                                                        CL1-78989-020 Referenced
+                                                        {{log.info}}
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col2">
                                             <div class="date">
-                                                Today
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <div class="col1">
-                                            <div class="cont">
-                                                <div class="cont-col1">
-                                                    <div class="label label-sm label-info">
-                                                        <i class="fa fa-bell"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="cont-col2">
-                                                    <div class="desc">
-                                                        TD CL3-20098-074 Metrics Filled
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col2">
-                                            <div class="date">
-                                                Yesterday
+                                                {{log.moment}}
                                             </div>
                                         </div>
                                     </a>

@@ -9,6 +9,7 @@ var errors = require('./components/errors');
 module.exports = function(app) {
 
   // Insert routes below
+  app.use('/api/logs', require('./api/log'));
   app.use('/api/things', require('./api/thing'));
   app.use('/api/users', require('./api/user'));
   app.use('/api/dashboards', require('./api/dashboard'));
@@ -16,6 +17,7 @@ module.exports = function(app) {
   app.use('/api/hierarchies', require('./api/hierarchy'));
   app.use('/api/tasks', require('./api/task'));
   app.use('/api/metrics', require('./api/metric'));
+  app.use('/api/logs', require('./api/log'));
 
   app.use('/auth', require('./auth'));
   

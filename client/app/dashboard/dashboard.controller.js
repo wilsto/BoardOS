@@ -29,7 +29,10 @@ angular.module('boardOsApp')
       $scope.dataMetrics[0].values = $scope.predataMetrics;
 
     });
+    } else {
+       $scope.dashboard = {name:''};
     }
+
   };
 
   $scope.load();
@@ -44,10 +47,16 @@ $scope.save = function() {
 console.log($scope.dashboard);
   if (typeof $scope.dashboard._id === 'undefined') {
     $http.post('/api/dashboards', $scope.dashboard);
-    ngToast.create('dashboard "' + $scope.dashboard.name + '" was created');
+
+    var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was created';
+    $http.post('/api/logs', {info:logInfo, actor:$rootScope.currentUser.name});
+    ngToast.create(logInfo);
   } else {
     $http.put('/api/dashboards/'+ $scope.dashboard._id , $scope.dashboard);
-    ngToast.create('dashboard "' + $scope.dashboard.name + '" was updated');
+
+    var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was updated';
+    $http.post('/api/logs', {info:logInfo, actor:$rootScope.currentUser.name});
+    ngToast.create(logInfo);
   }
 
   $scope.load();
