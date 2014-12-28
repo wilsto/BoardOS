@@ -2,6 +2,9 @@
 
 angular.module('boardOsApp')
   .controller('MainCtrl', function ($scope, $http, calLibrary) {
+
+    $scope.Math = window.Math;
+    
     $scope.loadDashBoard = function() {
       $http.get('/api/dashboards').success(function(dashboards) {
       $scope.dashboards = dashboards.list;
@@ -60,34 +63,5 @@ angular.module('boardOsApp')
 
   $scope.optionsTrust = angular.copy($scope.options);
   $scope.optionsTrust.chart.color =  ['#bcbd22'];
-
-
-
-      $scope.optionsDonut = {
-        chart: {
-          type: 'pieChart',
-          height: 150,
-          donut: true,
-          x: function(d){return d.key;},
-          y: function(d){return d.y;},
-          showLabels: false,
-          pie: {
-            startAngle: function(d) { return d.startAngle -Math.PI ;},
-            endAngle: function(d) { return d.endAngle -Math.PI ;}
-          },
-          transitionDuration: 500
-        }
-      };
-
-      $scope.dataDonut = [
-      {
-        key: 'Late',
-        y: 2
-      },
-      {
-        key: 'On time',
-        y: 3
-      }
-      ];
 
   });

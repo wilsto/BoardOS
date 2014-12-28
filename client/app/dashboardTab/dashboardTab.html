@@ -1,0 +1,171 @@
+<div class="portlet-body">
+
+	<!-- table dashboard (see ng-if) -->  
+	<!--############-->  
+	<table class="table table-striped table-bordered table-advance table-hover"  ng-if="dashboardType === 'dashboards'">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Activity</th>
+				<th>Context</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="dashboard in dataTable | filter:search | orderBy:'name' track by $index" ng-show="dashboard._id">
+				<td><a href="/dashboard/{{dashboard._id}}" >{{dashboard.name}}</a></td>
+				<td>{{dashboard.activity.replace(data.activity,"#")}}</td>
+				<td>{{dashboard.context.replace(data.context,"#")}}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<!-- table KPI (see ng-if) -->  
+	<!--############-->  
+
+        <table class="table table-striped table-bordered table-hover" id="sample_4" ng-if="dashboardType === 'kpis'">
+          <thead>
+            <tr>
+               <th>KPI Name</th>
+               <th></th>
+               <th>1</th>
+               <th>2</th>
+               <th>3</th>
+               <th>4</th>
+               <th>5</th>
+               <th>6</th>
+               <th>7</th>
+               <th>8</th>
+               <th>9</th>
+               <th>10</th>
+               <th>11</th>
+               <th>12</th>
+               <th>By Months</th>
+           </tr>
+         </thead>
+         <tbody>
+          <tr ng-repeat="KPI in dataTable | orderBy : Activity | filter: myFilter track by KPI._id " on-finish-render>
+            <td><a href="/KPI/{{KPI._id}}">{{KPI.name}}</a></td>
+            <td>{{KPI.category}}</td>
+            <td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-right"></span></td>
+            <td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-right"></span></td>
+            <td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-right"></span></td>
+            <td><span style="color:orange" class="glyphicon glyphicon-circle-arrow-down"></span></td>
+            <td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-up"></span></td>
+            <td><span style="color:orange" class="glyphicon glyphicon-circle-arrow-down"></span></td>
+            <td><span style="color:red" class="glyphicon glyphicon-circle-arrow-down"></span></td>
+            <td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-up"></span></td>
+            <td><span style="color:grey" class="glyphicon glyphicon-dashboard"></span></td>
+            <td><span style="color:lightgrey" class="glyphicon glyphicon-unchecked"></span></td>
+            <td><span style="color:lightgrey" class="glyphicon glyphicon-unchecked"></span></td>
+            <td><span style="color:lightgrey" class="glyphicon glyphicon-unchecked"></span></td>
+            <td><span class="bar-chart chrono"> 1,7,9,11, 14, 12, 6, 7, 4, 2,12, 10 </span></td>
+          </tr>
+        </tbody>
+      </table>
+
+	<!-- table task (see ng-if)  -->  
+	<!--############-->  
+	<table class="table table-striped table-bordered table-advance table-hover"  ng-if="dashboardType === 'tasks'">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Activity</th>
+				<th>Context</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="task in dataTable | filter:search | orderBy:'name' track by $index" ng-show="task._id">
+				<td><a href="/task/{{task._id}}" >{{task.name}}</a></td>
+				<td>{{task.activity.replace(data.activity,"#")}}</td>
+				<td>{{task.context.replace(data.context,"#")}}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<!-- table metrics (see ng-if)  -->  
+	<!--############-->  
+	<table class="table table-striped table-bordered table-advance table-hover"  ng-if="dashboardType === 'metrics'">
+		<thead>
+			<tr>
+				<th>Actor</th>
+				<th>Entered</th>
+				<th>Activity</th>
+				<th>Context</th>
+				<th>Start</th>
+				<th>Load <small>(days)</small></th>
+				<th>Status</th>
+				<th>Progress</th>
+				<th>Trust</th>
+				<th>End</th>
+				<th>Comments</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="metric in dataTable | filter:search | orderBy:'date' track by $index" ng-show="metric._id"  on-finish-render>
+				<td><img alt="{{metric.actor}}" ng-src="assets/images/avatars/{{metric.actor}}.png" style="width:25px" class="img-responsive"/></td>
+				<td>{{metric.date | date:'shortDate'}}</td>
+				<td>{{metric.activity.replace(data.activity,"#")}}</td>
+				<td>{{metric.context.replace(data.context,"#")}}</td>
+				<td>{{metric.startDate | date:'shortDate'}}</td>
+				<td>{{metric.load}}</td>
+				<td>{{metric.status}}</td>
+				<td>{{metric.progress}}% - {{metric.progressStatus}}</td>
+				<td>{{metric.trust}}</td>
+				<td>{{metric.endDate | date:'shortDate'}}</td>
+				<td>{{metric.comments}}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<!-- table actor (see ng-if)  -->  
+	<!--############-->  
+	<div class="row"  ng-if="dashboardType === 'actors'">
+		<div class="col-md-12 user-info">
+			<img alt="" src="assets/images/Will.png" style="width:45px" class="img-responsive"/>
+			<div class="details">
+				<div>
+					<a href="#">Will</a>
+				</div>
+				<div>
+					29 Jan 2013 10:45AM
+				</div>
+			</div>
+		</div>
+		<div class="col-md-12 user-info">
+			<img alt="" src="assets/images/avatar.png" class="img-responsive"/>
+			<div class="details">
+				<div>
+					<a href="#">Jimmy</a>
+				</div>
+				<div>
+					19 Jan 2013 10:45AM
+				</div>
+			</div>
+		</div>
+		<div class="col-md-12 user-info">
+			<img alt="" src="assets/images/avatar.png" class="img-responsive"/>
+			<div class="details">
+				<div>
+					<a href="#">Alexandra</a>
+				</div>
+				<div>
+					19 Jan 2013 12:45PM
+				</div>
+			</div>
+		</div>
+		<div class="col-md-12 user-info">
+			<img alt="" src="assets/images/avatar.png" class="img-responsive"/>
+			<div class="details">
+				<div>
+					<a href="#">Pascale</a>
+				</div>
+				<div>
+					19 Jan 2013 11:55PM
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+</div>

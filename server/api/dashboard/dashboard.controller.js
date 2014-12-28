@@ -61,7 +61,7 @@ exports.show = function(req, res) {
           if (typeof rowdata.context === 'undefined' || rowdata.context === '')  { rowdata.context = mDashboard.context};
           if (typeof rowdata.activity === 'undefined' || rowdata.activity === '')  { rowdata.activity = mDashboard.activity};         
           if (rowdata.context.indexOf(mDashboard.context) >=0  && rowdata.activity.indexOf(mDashboard.activity) >=0 ) {
-            mDashboard.kpis.push (rowdata);
+            mDashboard.kpis.push (rowdata.toObject());
           }
         });
         deferred.resolve(mDashboard);
@@ -74,9 +74,17 @@ exports.show = function(req, res) {
       mDashboard.tasks = [];
       Task.find({}, function (err, task) {
         _.each(task, function(rowdata, index) { 
-
+          rowdata =rowdata.toObject()
          if (rowdata.context.indexOf(mDashboard.context) >=0  && rowdata.activity.indexOf(mDashboard.activity) >=0 ) {
             mDashboard.tasks.push (rowdata);
+
+          // get last kpis metrics
+          _.each(mDashboard.kpis, function(kpidata, index) {  
+              if (rowdata.context.indexOf(kpidata.context) >=0  && rowdata.activity.indexOf(kpidata.activity) >=0 ) {
+                  rowdata.timetowait = Math.min(kpidata.refresh, (rowdata.timetowait == null) ? Infinity : rowdata.timetowait );
+              }
+          });
+
           }
         });
         deferred.resolve(mDashboard);
@@ -90,7 +98,17 @@ exports.show = function(req, res) {
     Metric.find({}, function (err, metric) {
       _.each(metric, function(rowdata, index) {  
         if (rowdata.context.indexOf(mDashboard.context) >=0  && rowdata.activity.indexOf(mDashboard.activity) >=0 ) {
-          mDashboard.metrics.push (rowdata);
+          mDashboard.metrics.push (rowdata.toObject());
+          // get last tasks metrics
+          _.each(mDashboard.tasks, function(taskdata, index) {  
+              if (rowdata.context.indexOf(taskdata.context) >=0  && rowdata.activity.indexOf(taskdata.activity) >=0 ) {
+                  var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+                  var firstDate = new Date(rowdata.date);
+                  var secondDate = new Date();
+                  taskdata.timewaited = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
+                  taskdata.timebetween =  taskdata.timetowait - taskdata.timewaited;
+              }
+          });
         }
       });
       deferred.resolve(mDashboard);

@@ -105,20 +105,6 @@ var dataFactory = {};
 		return dataFactory;
 });
 
-angular.module('boardOsApp').directive('onFinishRender', function ($timeout) {
-	return {
-		apirict: 'A',
-		link: function (scope, element, attr) {
-			if (scope.$last === true) {
-				$timeout(function () {
-					scope.$emit('ngRepeatFinished');
-				});
-			}
-		}
-	}
-});
-
-
 angular.module('boardOsApp').factory('calLibrary', function() {
 	var sdo = {
 		getByMonth: function(data, fieldDate, field) {

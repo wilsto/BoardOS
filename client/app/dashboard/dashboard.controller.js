@@ -3,8 +3,6 @@
 angular.module('boardOsApp')
 .controller('DashboardCtrl', function ($scope,  $rootScope, $http, $stateParams, calLibrary, ngToast, $cookieStore) {
   
-  $scope.dashboard = {name:''};
-
   $scope.load = function() {
     if ($stateParams.id) {
     $http.get('/api/dashboards/'+$stateParams.id).success(function(dashboard) {

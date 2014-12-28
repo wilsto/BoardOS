@@ -1,65 +1,65 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 <div class="row">
     <!-- BEGIN OVERVIEW STATISTIC BARS-->
- <div class="row stats-overview-cont">
+    <div class="row stats-overview-cont">
 
-   <div class="col-md-2 col-sm-4">
-    <div class="stats-overview stat-block">
-       <div class="details">
-        <div class="title"><a href="/KPIs"><span style="font-weight:bold;color:#1f77b4">{{dataDashboards.kpis.length}}</span> KPIs</a></div>
-       <nvd3 options="options" data="dataKPIs"></nvd3>
-      </div>
+       <div class="col-md-2 col-sm-4">
+        <div class="stats-overview stat-block">
+           <div class="details">
+            <div class="title"><a href="/KPIs"><span style="font-weight:bold;color:#1f77b4">{{dataDashboards.kpis.length}}</span> KPIs</a></div>
+            <nvd3 options="options" data="dataKPIs"></nvd3>
+        </div>
     </div>
-  </div>
+</div>
 
-   <div class="col-md-2 col-sm-4">
+<div class="col-md-2 col-sm-4">
     <div class="stats-overview stat-block" >
        <div class="details">
         <div class="title"><a href="/tasks"><span style="font-weight:bold;color:#9467bd">{{dataDashboards.tasks.length}}</span> Tasks</a></div>
-       <nvd3 options="optionsTasks" data="dataTasks"></nvd3>
-      </div>
+        <nvd3 options="optionsTasks" data="dataTasks"></nvd3>
     </div>
-  </div>
+</div>
+</div>
 
-   <div class="col-md-2 col-sm-4">
+<div class="col-md-2 col-sm-4">
     <div class="stats-overview stat-block">
        <div class="details">
         <div class="title"><a href="/metrics"><span style="font-weight:bold;color:#ff7f0e">{{dataDashboards.metrics.length}}</span> Metrics</a></div>
-       <nvd3 options="optionsMetrics" data="dataMetrics"></nvd3>
-      </div>
+        <nvd3 options="optionsMetrics" data="dataMetrics"></nvd3>
     </div>
-  </div>
-   <div class="col-md-2 col-sm-4">
+</div>
+</div>
+<div class="col-md-2 col-sm-4">
     <div class="stats-overview stat-block">
        <div class="details">
         <div class="title">Alerts</div>
-       <nvd3 options="optionsAlerts" data="data"></nvd3>
-      </div>
+        <nvd3 options="optionsAlerts" data="data"></nvd3>
     </div>
-  </div>
- 
-   <div class="col-md-2 col-sm-4">
+</div>
+</div>
+
+<div class="col-md-2 col-sm-4">
     <div class="stats-overview stat-block">
        <div class="details">
         <div class="title">Goals</div>
-       <nvd3 options="optionsGoals" data="data"></nvd3>
-      </div>
+        <nvd3 options="optionsGoals" data="data"></nvd3>
     </div>
-  </div>
+</div>
+</div>
 
-   <div class="col-md-2 col-sm-4">
+<div class="col-md-2 col-sm-4">
     <div class="stats-overview stat-block">
        <div class="details">
         <div class="title">Trust</div>
-       <nvd3 options="optionsTrust" data="data"></nvd3>
-      </div>
+        <nvd3 options="optionsTrust" data="data"></nvd3>
     </div>
-  </div>
 </div>
-    <!-- END OVERVIEW STATISTIC BARS-->
+</div>
+</div>
+<!-- END OVERVIEW STATISTIC BARS-->
 </div>
 <div class="row">
-<div class="col-md-6 col-sm-6">
+    <div class="col-md-6 col-sm-6">
         <div class="portlet">
             <div class="portlet-title">
                 <div class="caption">
@@ -78,134 +78,34 @@
                     <tab heading="Metrics">
                         <div class="scroller" style="height: 250px;" data-always-visible="1" data-rail-visible="0">
                             <ul class="feeds">
-                                <li>
-                                    <div class="col1">
-                                        <div class="cont">
-                                            <div class="cont-col1">
-                                                <div class="label label-sm label-danger">
-                                                    <i class="fa fa-bell"></i>
-                                                </div>
-                                            </div>
-                                            <div class="cont-col2">
-                                                <div class="desc">
-                                                    SDTM CL2-78989-008 <span class="label label-sm label-danger "> Take action</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col2">
-                                        <div class="date">
-                                            <span style="color:red">17 days ago</span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <a href="/task/Q4D5DzSdwo3xchDt">
+                                <li ng-repeat="task in dataDashboards.tasks | orderBy:timebetween">
+                                    <a ng-href="/task/{{task._id}}">
                                         <div class="col1">
                                             <div class="cont">
                                                 <div class="cont-col1">
-                                                    <div class="label label-sm label-danger">
+                                                    <div class="label label-sm label-danger" ng-show="task.timebetween <= 0 && task.timebetween !== null ">
                                                         <i class="fa fa-bell"></i>
                                                     </div>
+                                                    <div class="label label-sm label-default" ng-show="task.timebetween > 0 && task.timebetween !== null ">
+                                                        <i class="fa fa-clock-o"></i>
+                                                    </div>
                                                 </div>
-                                                <div class="cont-col2">
-                                                    <div class="desc">
-                                                        SOP Codobase <span class="label label-sm label-danger ">
-                                                        Take action
+                                                <div class="cont-col2 qs">
+                                                <div class="desc" popover-html-unsafe="Context : {{task.context}} </p>  Activity : {{task.activity}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="right" popover-delay ="1000">
+                                                        {{task.name}} 
+                                                        <span class="label label-sm label-danger " ng-show="task.timebetween <= 0 && task.timebetween !== null "> Take action</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col2">
                                             <div class="date">
-                                                <span style="color:red">Today</span>
+                                                <span style="color:red" ng-show="task.timebetween <= 0 && task.timebetween !== null ">{{ Math.abs(task.timebetween) }} days ago</span>
+                                                <span ng-show="task.timebetween > 0 && task.timebetween !== null" >in {{ Math.abs(task.timebetween) }} days </span>
+                                                <span style="color:orange" ng-show="task.timebetween === null" > no defined KPI </span>
                                             </div>
                                         </div>
                                     </a>
-                                </li>
-                                <li>
-                                    <div class="col1">
-                                        <div class="cont">
-                                            <div class="cont-col1">
-                                                <div class="label label-sm label-warning">
-                                                    <i class="fa fa-bullhorn"></i>
-                                                </div>
-                                            </div>
-                                            <div class="cont-col2">
-                                                <div class="desc">
-                                                    TD CL2-20098-072 
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col2">
-                                        <div class="date">
-                                            4 days
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="col1">
-                                        <div class="cont">
-                                            <div class="cont-col1">
-                                                <div class="label label-sm label-warning">
-                                                    <i class="fa fa-bullhorn"></i>
-                                                </div>
-                                            </div>
-                                            <div class="cont-col2">
-                                                <div class="desc">
-                                                    SDTM STD Onco v1.2
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col2">
-                                        <div class="date">
-                                            7 days
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="col1">
-                                        <div class="cont">
-                                            <div class="cont-col1">
-                                                <div class="label label-sm label-success">
-                                                    <i class="fa fa-bullhorn"></i>
-                                                </div>
-                                            </div>
-                                            <div class="cont-col2">
-                                                <div class="desc">
-                                                    Reporting CL3-20098-083
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col2">
-                                        <div class="date">
-                                            13 days
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="col1">
-                                        <div class="cont">
-                                            <div class="cont-col1">
-                                                <div class="label label-sm label-success">
-                                                    <i class="fa fa-bullhorn"></i>
-                                                </div>
-                                            </div>
-                                            <div class="cont-col2">
-                                                <div class="desc">
-                                                    SOP Codobase
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col2">
-                                        <div class="date">
-                                            13 days
-                                        </div>
-                                    </div>
                                 </li>
                             </ul>
                         </div>
@@ -393,8 +293,8 @@
             </div>
         </div>
     </div>
-<div class="col-md-6 col-sm-6"> 
-<!-- BEGIN OVERVIEW STATISTIC BLOCKS-->
+    <div class="col-md-6 col-sm-6"> 
+        <!-- BEGIN OVERVIEW STATISTIC BLOCKS-->
         <div class="portlet">
             <div class="portlet-title">
                 <div class="caption">
@@ -409,31 +309,17 @@
             </div>
             <div class="portlet-body">
                 <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-12" ng-repeat="dashboard in dashboards track by dashboard._id">
-                        <div class="circle-stat stat-block">
-                            <div class="visual">
-                               <nvd3 options="optionsDonut" data="dataDonut"></nvd3>
-                            </div>
-                            <div class="details">
-                                <div class="title">
-                                    <a href="/dashboard/{{dashboard._id}} " >{{dashboard.name}} <i class="fa fa-caret-up"></i></a>
-                                </div>
-                                <span class="label label-danger " >
-                                <i class="fa fa-bullhorn"></i> 7 </span>
-                                <span class="label label-default">
-                                <i class="fa fa-eye"></i> 6 </span>
-                                <span class="label label-info">
-                                <i class="fa fa-info"></i> 3 </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-12">
-                        <div class="circle-stat stat-block" style="text-align:center">
-                                <a href="/dashboards" ><i style="line-height:98px;font-size:100px;color:lightgrey" class="fa fa-plus-circle"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    <div class="col-md-6 col-sm-12" ng-repeat="dashboard in dashboards track by dashboard._id" dashboard-widget>
 
-    </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <div class="circle-stat stat-block" style="text-align:center">
+                         <h4 style="background-color:lightgrey;line-height:35px;margin-top:-3px"> <a href="/dashboard/{{dashboard._id}}" >Attach a new one </a></h4>
+                         <a href="/dashboards" ><i style="line-height:98px;font-size:100px;color:lightgrey" class="fa fa-plus-circle"></i></a>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
+ </divW
