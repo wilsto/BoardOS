@@ -14,7 +14,6 @@ angular.module('boardOsApp', [
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider
       .otherwise('/');
-
     $locationProvider.html5Mode(true);
     $httpProvider.interceptors.push('authInterceptor');
   })
@@ -102,7 +101,7 @@ angular.module('boardOsApp', [
 ])
 
   .run(function ($rootScope, $location, Auth, $http,progressStatusTask,statusTask,metricTaskFields,categoryKPI,actionKPI,groupByKPI, $cookieStore) {
-   
+
     $rootScope.perimeter = $cookieStore.get('perimeter');
     if (typeof $rootScope.perimeter === 'undefined') {
       $rootScope.perimeter = {};

@@ -54,7 +54,7 @@
   <!-- endinjector -->
   <!-- endbuild -->
 </head>
-<body ng-app="boardOsApp" class="page-header-fixed page-sidebar-closed">
+<body ng-app="boardOsApp" class="page-header-fixed page-sidebar-closed ">
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
       <![endif]-->
@@ -227,7 +227,11 @@
                       </div>
                     </div>
 
-
+<!-- BEGIN FOOTER -->
+<div class="footer">
+<div class="container"></div>
+</div>
+<!-- END FOOTER -->
 
                     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
                     <script>
@@ -272,6 +276,7 @@
     <script src="bower_components/d3/d3.js"></script>
     <script src="bower_components/nvd3/nv.d3.js"></script>
     <script src="bower_components/angular-nvd3/dist/angular-nvd3.min.js"></script>
+    <script src="bower_components/zingchart/src/zingchart-html5-min.js"></script>
     <!-- endbower -->
     <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
@@ -307,11 +312,17 @@
     <script src="components/auth/user.service.js"></script>
     <script src="components/factory/directives.js"></script>
     <script src="components/factory/service.js"></script>
+    <script src="components/js/app.js"></script>
     <script src="components/modal/modal.service.js"></script>
     <script src="components/mongoose-error/mongoose-error.directive.js"></script>
     <script src="components/navbar/navbar.controller.js"></script>
     <script src="components/socket/socket.service.js"></script>
     <!-- endinjector -->
     <!-- endbuild -->
+    <script>
+jQuery(document).ready(function() {    
+   layoutApp.init(); // initlayout and core plugins
+});
+</script>
   </body>
   </html>

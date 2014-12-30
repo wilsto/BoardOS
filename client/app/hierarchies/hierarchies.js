@@ -6,6 +6,7 @@ angular.module('boardOsApp')
       .state('hierarchies', {
         url: '/hierarchies',
         templateUrl: 'app/hierarchies/hierarchies.html',
-        controller: 'hierarchiesCtrl'
+        controller: 'hierarchiesCtrl',
+        authenticate: true
       });
   });

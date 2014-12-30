@@ -6,6 +6,7 @@ angular.module('boardOsApp')
       .state('dashboard', {
         url: '/dashboard/:id',
         templateUrl: 'app/dashboard/dashboard.html',
-        controller: 'DashboardCtrl'
+        controller: 'DashboardCtrl',
+        authenticate: true
       });
   });

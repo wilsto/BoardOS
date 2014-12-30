@@ -6,6 +6,7 @@ angular.module('boardOsApp')
       .state('tasks', {
         url: '/tasks',
         templateUrl: 'app/tasks/tasks.html',
-        controller: 'TasksCtrl'
+        controller: 'TasksCtrl',
+        authenticate: true
       });
   });

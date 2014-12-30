@@ -6,6 +6,7 @@ angular.module('boardOsApp')
       .state('KPIs', {
         url: '/KPIs',
         templateUrl: 'app/KPIs/KPIs.html',
-        controller: 'KPIsCtrl'
+        controller: 'KPIsCtrl',
+        authenticate: true
       });
   });

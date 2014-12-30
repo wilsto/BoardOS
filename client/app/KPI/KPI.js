@@ -6,6 +6,7 @@ angular.module('boardOsApp')
       .state('KPI', {
         url: '/KPI/:id',
         templateUrl: 'app/KPI/KPI.html',
-        controller: 'KPICtrl'
+        controller: 'KPICtrl',
+        authenticate: true
       });
   });

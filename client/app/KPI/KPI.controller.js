@@ -18,33 +18,36 @@ angular.module('boardOsApp')
       
       $scope.options = {
         chart: {
-          type: 'multiBarChart',
-          height: 350,
+          type: 'scatterChart',
+          width: 350,
+          height: 250,
           margin : {
             top: 20,
             right: 20,
             bottom: 20,
             left: 65
           },
-          x: function(d){ return d[0]; },
-          y: function(d){ return d[1]; },
-          average: function(d) { return d.mean ;},
-
+          showLabels: true,
           transitionDuration: 500,
           useInteractiveGuideline: true,
-
+          x: function(d){return d.x;},
+          y: function(d){return d.y;},
           xAxis: {
             axisLabel: 'Dates',
             tickFormat: function(d) {
-              return d3.time.format('%m/%d/%y')(new Date(d));
+              return "On time";
             },
-            showMaxMin: false,
-            staggerLabels: false
+            showMaxMin: true,
+            staggerLabels: true
           },
 
           yAxis: {
-            axisLabel: $scope.KPI.action,
-            showMaxMin: false,
+            axisLabel: 'Confidence in futur',
+            showMaxMin: true,
+                        tickFormat: function(d) {
+              return "High";
+            },
+            staggerLabels: true,
             axisLabelDistance: 20
           }
         }
@@ -52,20 +55,20 @@ angular.module('boardOsApp')
 
       $scope.data = calLibrary.getSumCumul($scope.KPI.refMetricValues, $scope.KPI.metricValues);
 
- $scope.optionsGoal = {
-            chart: {
-                type: 'bulletChart',
-                height: 70,
-                transitionDuration: 500
-            }
-        };
-
-        $scope.dataGoal = {
-            "title":$scope.KPI.name,
-            "ranges": [33,66,100],
-            "measures": [$scope.KPI.percentObjectif.replace('%','')],
-            "markers": [80]
+      $scope.optionsGoal = {
+        chart: {
+          type: 'bulletChart',
+          height: 70,
+          transitionDuration: 500
         }
+      };
+
+      $scope.dataGoal = {
+        "title":$scope.KPI.name,
+        "ranges": [33,66,100],
+        "measures": [$scope.KPI.percentObjectif.replace('%','')],
+        "markers": [80]
+      }
 
 
       $scope.optionsDonut = {
@@ -103,6 +106,153 @@ angular.module('boardOsApp')
       }
       ];
 
+      $scope.dataScatter = [
+          {"key":"Ontime + High Confidence",
+              "values":[{"x":0.8,"y":80,"size":20},{"x":0.8,"y":92,"size":20}]
+          },
+         {"key":"On time + Low Confidence",
+            "values":[{"x":0.7,"y":20,"size":20},{"x":0.9,"y":30,"size":20}]
+          },
+         {"key":"Late + High Confidence",
+             "values":[{"x":-0.8,"y":0,"size":8},{"x":-0.4,"y":23,"size":15}]
+        },
+          {"key":"Late + Low Confidence",
+            "values":[{"x":-0.5,"y":50,"size":10},{"x":-0.7,"y":26,"size":35}]
+         }
+     ];
+
+
+var myChart=
+{
+"graphset":[
+    {
+        "type":"bubble",
+        "plotarea":{
+            "background-color":"#fff",
+            "alpha":0.9,
+            "margin":"50px 40px 50px 50px"
+        },
+        "scale-y":{
+            "label":{
+                "text":"Confidence in futur"
+            },
+            "values":"0:100:20",
+            "line-color":"#aaadb3",
+            "shadow":0,
+            "tick":{
+                "line-color":"#aaadb3"
+            },
+            "minor-ticks":1,
+            "minor-tick":{
+                "visible":false,
+                "line-color":"#aaadb3",
+                "shadow":0
+            },
+            "guide":{
+                "line-color":"#aaadb3",
+                "alpha":0.3,
+                "line-style":"solid"
+            },
+            "minor-guide":{
+                "line-color":"#aaadb3",
+                "alpha":0.2,
+                "line-style":"dashed"
+            },
+            "item":{
+                "padding-right":"5px",
+                "font-family":"Arial",
+                "font-size":"11px",
+                "font-color":"#676b72"
+            }
+        },
+        "scale-x":{
+            "labels":["Late","At Risk","On Time"],
+            "label":{
+                "text":"Deliveries"
+            },
+            "line-color":"#aaadb3",
+            "shadow":0,
+            "tick":{
+                "line-color":"#aaadb3"
+            },
+            "minor-ticks":1,
+            "minor-tick":{
+                "visible":false,
+                "line-color":"#aaadb3",
+                "shadow":0
+            },
+            "guide":{
+                "line-color":"#aaadb3",
+                "alpha":0.3,
+                "line-style":"solid"
+            },
+            "minor-guide":{
+                "line-color":"#aaadb3",
+                "alpha":0.2,
+                "line-style":"dashed"
+            },
+            "item":{
+                "padding-top":"5px",
+                "font-family":"Arial",
+                "font-size":"11px",
+                "font-color":"#676b72"
+            }
+        },
+        "plot":{
+            "size-factor":3,
+            "value-box":{
+                "type":"all",
+                "text":"%t",
+                "font-color":"#000"
+            }
+        },
+        "series":[
+            {
+                "values":[
+                [1,100,8],
+                [2,40,2],
+                [3,70,1]
+                ],
+                "text":"Define cartography",
+                "marker":{
+                    "background-color":"#1F77B4    #1F77B4",
+                    "border-width":"1px",
+                    "border-color":"#4682B4   ",
+                    "fill-type":"linear",
+                    "shadow":true,
+                    "shadow-distance":"2px",
+                    "shadow-blur":0,
+                    "shadow-angle":90,
+                    "shadow-color":"#000000",
+                    "shadow-alpha":0.1
+                },
+                "hover-marker":{
+                    "background-color":"#1F77B4 #1F77B4",
+                    "border-color":"#4682B4   "
+                },
+                "tooltip":{
+                    "shadow":true,
+                    "background-color":"#1F77B4",
+                    "border-radius":"8px",
+                    "padding":"5px 10px",
+                    "shadow-distance":"2px",
+                    "shadow-blur":0,
+                    "shadow-angle":90,
+                    "shadow-color":"#000000",
+                    "shadow-alpha":0.1
+                }
+            }
+        ]
+    }
+]
+};
+
+ zingchart.render({
+        id:"myChartDiv",
+        data:myChart,
+        height:400,
+        width:"100%"
+    });
 
 
     });

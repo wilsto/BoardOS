@@ -82,11 +82,13 @@
                 <!--end row-->
             </div>
         </div>
+
         <tabset>
             <tab active="true">
                 <tab-heading>
                     View 
                 </tab-heading>
+
                 <nvd3 options="optionsGoal" data="dataGoal" ng-if="KPI.category==='Goal'"></nvd3><br/>
                 <div class="row" >
                     <div class="col-md-3">
@@ -134,7 +136,8 @@
                                 </div>
                             </div>
                             <div class="portlet-body">
-                                <nvd3 options="options" data="data"></nvd3>
+                                <nvd3 options="options" data="dataScatter"></nvd3>
+                                <div id="myChartDiv"></div>
                             </div>
                         </div>
                         <!-- END PORTLET-->
