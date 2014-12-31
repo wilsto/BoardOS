@@ -15,7 +15,9 @@
  var Dashboard = require('../dashboard/dashboard.model');
  var Task = require('../task/task.model');
  var Metric = require('../metric/metric.model');
+ var tools = require('../../config/tools');
  var mKPI = {};
+ var myGroup  = [];
 
 // Get list of KPIs
 exports.index = function(req, res) {
@@ -163,44 +165,17 @@ exports.show = function(req, res) {
 
       mKPI.percentObjectif = (mKPI.metricValuesCal / mKPI.refMetricValuesCal) * 100;
 
+      mKPI.metricsGroupBy = tools.groupByMonth(mKPI.metrics,'date',mKPI.metricTaskField);
+      mKPI.metricsGroupByTask = tools.groupByTask(mKPI.metrics, mKPI.tasks, mKPI.metricTaskField);
+
       // graphics
       mKPI.graphs = [];
-      var myChart0=
-          {
-          "graphset":[
-              {
-              "type":"hbullet",
-              "title":{
-                      "text":"KPI This " + mKPI.groupTimeBy+ " (Base 100)",
-                      "text-align":"left",
-                      "font-size":"13px",
-                      "font-color":"#000000",
-                      "font-family":"Arial",
-                      "background-color":"none"
-              },
-              "plotarea":{
-                  "background-color":"transparent",
-                  "margin":"35px 20px 20px 20px"
-              },    
-              "plot":{
-                   "goal":{
-                      "background-color":"#169ef4",
-                      "border-width":0
-                   }
-              },
-              "series":[
-                  {
-                      "values":[mKPI.percentObjectif],
-                      "background-color":"#859900",
-                      "alpha":"0.6",
-                      "goals":[100]
-                  }
-              ]
-              }
-          ]
-          };
-
+      var myChart0 = tools.buildChart(mKPI,'hBullet');
+      var myChart1 = tools.buildChart(mKPI,'Bar');
+      var myChart2 = tools.buildChart(mKPI,'Bubble');
       mKPI.graphs.push(myChart0);
+      mKPI.graphs.push(myChart1);
+      mKPI.graphs.push(myChart2);
 
       deferred.resolve(mKPI);
       return deferred.promise;
