@@ -17,6 +17,7 @@ var KPISchema = new Schema({
   refMetricTaskField:String,
   refMetricTaskValues:String,
   groupBy:String,
+  groupTimeBy:String,
   actor:String,
   date:{ type: Date, default: Date.now }
 }, { strict: false });

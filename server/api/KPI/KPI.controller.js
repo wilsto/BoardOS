@@ -7,15 +7,15 @@
  * DELETE  /KPIs/:id          ->  destroy
  */
 
-'use strict';
+ 'use strict';
 
-var _ = require('lodash');
-var KPI = require('./KPI.model');
-var Q = require('q');
-var Dashboard = require('../dashboard/dashboard.model');
-var Task = require('../task/task.model');
-var Metric = require('../metric/metric.model');
-var mKPI = {};
+ var _ = require('lodash');
+ var KPI = require('./KPI.model');
+ var Q = require('q');
+ var Dashboard = require('../dashboard/dashboard.model');
+ var Task = require('../task/task.model');
+ var Metric = require('../metric/metric.model');
+ var mKPI = {};
 
 // Get list of KPIs
 exports.index = function(req, res) {
@@ -27,7 +27,7 @@ exports.index = function(req, res) {
 
 // Get a single kpi
 exports.show = function(req, res) {
-Q()
+  Q()
   .then(function () {
     // Get a single kpi
     var deferred = Q.defer();
@@ -97,61 +97,61 @@ Q()
         var refChecksType = mKPI.refMetricTaskValues.split(' + ');
       }
 
-        //Value for calculation
-        mKPI.metricValues = [];
-        mKPI.refMetricValues = [];
-        _.each(mKPI.metrics, function(metric){ 
+      //Value for calculation
+      mKPI.metricValues = [];
+      mKPI.refMetricValues = [];
+      _.each(mKPI.metrics, function(metric){ 
 
-          // valeurs principales
-          if (typeof checksType !== "undefined" ) {
-            _.each(checksType, function(check) {
-                 if (metric[mKPI.metricTaskField] === check) { 
-                  mKPI.metricValues.push({value:metric[mKPI.metricTaskField],date:metric.date});
-                 } // avec indexOf pour le like
+        // valeurs principales
+        if (typeof checksType !== "undefined" ) {
+          _.each(checksType, function(check) {
+           if (metric[mKPI.metricTaskField] === check) { 
+            mKPI.metricValues.push({value:metric[mKPI.metricTaskField],date:metric.date});
+               } // avec indexOf pour le like
              });
-          } else {
-              mKPI.metricValues.push({value:metric[mKPI.metricTaskField],date:metric.date});
-          }
+        } else {
+          mKPI.metricValues.push({value:metric[mKPI.metricTaskField],date:metric.date});
+        }
 
-          // valeurs références
-          if (mKPI.refChecksType !== 'undefined'  ) {
-            if (mKPI.refMetricTaskField === 'constant') {
-                mKPI.refMetricValues.push({value:mKPI.refMetricTaskValues,date:metric.date});
-            } else {
+        // valeurs références
+        if (mKPI.refChecksType !== 'undefined'  ) {
+          if (mKPI.refMetricTaskField === 'constant') {
+            mKPI.refMetricValues.push({value:mKPI.refMetricTaskValues,date:metric.date});
+          } else {
             _.each(refChecksType, function(check) {
-                 if (metric[mKPI.metricTaskField] === check) { 
-                  mKPI.refMetricValues.push({value:metric[mKPI.metricTaskField],date:metric.date});
-                 }  // avec indexOf pour le like
+             if (metric[mKPI.metricTaskField] === check) { 
+              mKPI.refMetricValues.push({value:metric[mKPI.metricTaskField],date:metric.date});
+               }  // avec indexOf pour le like
              });
           }
-          } else {
-                mKPI.refMetricValues.push({value:metric[mKPI.metricTaskField],date:metric.date});
-          }
+        } else {
+          mKPI.refMetricValues.push({value:metric[mKPI.metricTaskField],date:metric.date});
+        }
 
       });
 
 
-      // Réaliser des calculs
-      switch(mKPI.action) {
-        case 'count':
-          mKPI.metricValuesCal = mKPI.metricValues.length;
-          mKPI.refMetricValuesCal = mKPI.refMetricValues.length;
-          break;
-        case 'Mean':
-          var sumMetricValuesCal = 0;
-          var sumRefMetricValuesCal = 0;
-          for( var i = 0; i < mKPI.metricValues.length; i++ ){
-              sumMetricValuesCal += parseInt( mKPI.metricValues[i].value, 10 ); //don't forget to add the base
-              sumRefMetricValuesCal += parseInt( mKPI.refMetricValues[i].value, 10 ); //don't forget to add the base
+    // Réaliser des calculs
+    switch(mKPI.action) {
+      case 'count':
+      mKPI.metricValuesCal = mKPI.metricValues.length;
+      mKPI.refMetricValuesCal = mKPI.refMetricValues.length;
+      break;
+      case 'Mean':
+      var sumMetricValuesCal = 0;
+      var sumRefMetricValuesCal = 0;
+      for( var i = 0; i < mKPI.metricValues.length; i++ ){
+            sumMetricValuesCal += parseInt( mKPI.metricValues[i].value, 10 ); //don't forget to add the base
+            sumRefMetricValuesCal += parseInt( mKPI.refMetricValues[i].value, 10 ); //don't forget to add the base
           }
           mKPI.metricValuesCal = sumMetricValuesCal/ mKPI.metrics.length;
           mKPI.refMetricValuesCal = sumRefMetricValuesCal/ mKPI.refMetricValues.length;
           break;
-        default :
+          default :
           if (typeof mKPI.metrics[mKPI.metrics.length - 1] !== "undefined") { mKPI.metricValues = mKPI.metrics[mKPI.metrics.length - 1][mKPI.type];}
           if (typeof mKPI.metrics[mKPI.metrics.length - 2] !== "undefined") { mKPI.metricPrevVal = mKPI.metrics[mKPI.metrics.length - 2][mKPI.type];}
           mKPI.refMetricValues = 100;                              
-      }
+        }
 
       //calcul de l'age de la dernière metric
 /*      if (typeof mKPI.metrics[metrics.length - 1] !== "undefined") {
@@ -161,23 +161,61 @@ Q()
         mKPI.ageVal = diff.day ;
       }*/
 
-      mKPI.percentObjectif = (mKPI.metricValuesCal / mKPI.refMetricValuesCal) * 100 +'%';
-    
+      mKPI.percentObjectif = (mKPI.metricValuesCal / mKPI.refMetricValuesCal) * 100;
 
-    deferred.resolve(mKPI);
-    return deferred.promise;
-  })
-  .then(function () {
-    return res.json(mKPI);
-  });
+      // graphics
+      mKPI.graphs = [];
+      var myChart0=
+          {
+          "graphset":[
+              {
+              "type":"hbullet",
+              "title":{
+                      "text":"KPI This " + mKPI.groupTimeBy+ " (Base 100)",
+                      "text-align":"left",
+                      "font-size":"13px",
+                      "font-color":"#000000",
+                      "font-family":"Arial",
+                      "background-color":"none"
+              },
+              "plotarea":{
+                  "background-color":"transparent",
+                  "margin":"35px 20px 20px 20px"
+              },    
+              "plot":{
+                   "goal":{
+                      "background-color":"#169ef4",
+                      "border-width":0
+                   }
+              },
+              "series":[
+                  {
+                      "values":[mKPI.percentObjectif],
+                      "background-color":"#859900",
+                      "alpha":"0.6",
+                      "goals":[100]
+                  }
+              ]
+              }
+          ]
+          };
+
+      mKPI.graphs.push(myChart0);
+
+      deferred.resolve(mKPI);
+      return deferred.promise;
+    })
+.then(function () {
+  return res.json(mKPI);
+});
 };
 
 // Creates a new kpi in the DB.
 exports.create = function(req, res) {
-    var newKPI = new KPI(req.body, false);
-    newKPI.save(function(err) {
-      res.send(200);
-    });
+  var newKPI = new KPI(req.body, false);
+  newKPI.save(function(err) {
+    res.send(200);
+  });
 };
 
 // Updates an existing kpi in the DB.
@@ -212,7 +250,7 @@ function handleError(res, err) {
 }
 
 
- function dateDiff(date1, date2){
+function dateDiff(date1, date2){
     var diff = {}                           // Initialisation du retour
     var tmp = date2 - date1;
 
@@ -229,4 +267,4 @@ function handleError(res, err) {
     diff.day = tmp;
 
     return diff;
-}
+  }

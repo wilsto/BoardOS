@@ -97,8 +97,8 @@
                                 </div>
                             </div>
                             <div class="portlet-body">
-                                <div id="myChartDiv0"></div>
                                 <div id="myChartDiv1"></div>
+                                <div id="myChartDiv0"></div>
 
                             </div>
                         </div>
@@ -266,10 +266,16 @@
                                                 <input type="text" placeholder="" class="form-control" ng-model="KPI.refMetricTaskValues" />
                                             </div>
                                         </div>
+                                         <div class="form-group">
+                                            <label class="col-md-3 control-label">Group By</label>
+                                            <div class="col-md-9">
+                                                <input type="text" placeholder="" class="form-control" ng-model="KPI.groupBy" typeahead="groupBy.value for groupBy in groupByKPI | filter:$viewValue | limitTo:8"/>
+                                            </div>
+                                        </div>
                                         <div class="form-group">
                                             <label class="col-md-3 control-label">Group in time By</label>
                                             <div class="col-md-9">
-                                                <input type="text" placeholder="" class="form-control" ng-model="KPI.groupBy" typeahead="groupBy.value for groupBy in groupByKPI | filter:$viewValue | limitTo:8"/>
+                                                <input type="text" placeholder="" class="form-control" ng-model="KPI.groupTimeBy" typeahead="groupTimeBy.value for groupTimeBy in groupTimeByKPI | filter:$viewValue | limitTo:8"/>
                                             </div>
                                         </div>
                                         <div class="form-group">

@@ -23,20 +23,29 @@ var myChart0=
 "graphset":[
     {
     "type":"hbullet",
+    "title":{
+            "text":"KPI Now (Base 100)",
+            "text-align":"left",
+            "font-size":"13px",
+            "font-color":"#000000",
+            "font-family":"Arial",
+            "background-color":"none"
+    },
     "plotarea":{
         "background-color":"transparent",
-        "margin":"0px 20px 20px 20px"
+        "margin":"35px 20px 20px 20px"
     },    
     "plot":{
          "goal":{
-            "background-color":"#859900",
+            "background-color":"#169ef4",
             "border-width":0
          }
     },
     "series":[
         {
             "values":[80],
-            "background-color":"#169ef4",
+            "background-color":"#859900",
+            "alpha":"0.6",
             "goals":[100]
         }
     ]
@@ -47,97 +56,18 @@ var myChart0=
 var myChart1={
 "graphset":[
     {
-        "type":"pie",
-        "height":"50%",
-        "width":"100%",
-        "background-color":"transparent",
-        "value-box":{
-            "visible":true
-        },
-        "plot":{
-            "slice":50,
-            "ref-angle":270,
-            "detach":true,
-            "hover-state":{
-                "visible":false
-            },
-            "value-box":{
-                "visible":true,
-                "type":"first",
-                "connected":false,
-                "placement":"in",
-                "text":"%v",
-                "rules":[
-                    {
-                        "rule":"%v < 50",
-                        "visible":false
-                    }
-                ],
-                "font-color":"#000000",
-                "font-size":"20px",
-                "font-family":"arial",
-                "offset-x":"-30%",
-                "offset-y":"-50%"
-            },
-            "tooltip":{
-                "rules":[
-                    {
-                        "rule":"%i == 0",
-                        "text":"%v %t Completed",
-                        "shadow":false,
-                        "border-radius":4
-                    },
-                    {
-                        "rule":"%i == 1",
-                        "text":"%v Remaining",
-                        "shadow":false,
-                        "border-radius":4
-                    }
-                ]
-            },
-            "animation":{
-                "delay":0,
-                "effect":2,
-                "speed":"600",
-                "method":"0",
-                "sequence":"1"
-            }
-        },
-        "series":[
-            {
-                "values":[52],
-                "text":"Steps",
-                "background-color":"#169ef4",
-                "border-width":"0px",
-                "shadow":0
-            },
-            {
-                "values":[11],
-                "background-color":"#dadada",
-                "alpha":"0.5",
-                "border-color":"#dadada",
-                "border-width":"1px",
-                "shadow":0
-            }
-        ]
-    },
-    {
         "type":"bar",
-        "height":"50%",
-        "width":"94%",
-        "x":"3%",
-        "y":"53%",
+        "height":"100%",
+        "width":"100%",
         "background-color":"#ffffff",
         "border-radius":4,
         "title":{
-            "text":"Step Tracker",
+            "text":"KPI History",
             "text-align":"left",
             "font-size":"13px",
             "font-color":"#000000",
             "font-family":"Arial",
-            "background-color":"none",
-            "offset-x":"10%",
-            "offset-y":"10%"
+            "background-color":"none"        
         },
         "legend":{
             "toggle-action":"remove",
@@ -157,27 +87,22 @@ var myChart1={
                 "text":"%plot-description"
             }
         },
+        "crosshair-x":{},
         "tooltip":{
-            "text":"%t<br><strong>%v</strong>",
-            "font-family":"arial",
-            "font-weight":"normal",
-            "font-size":"12px",
-            "border-radius":4,
-            "shadow":false,
-            "callout":true,
-            "padding":"5 10"
+  "visible":"false"
         },
         "plot":{
+            "stacked":true,
             "background-color":"#000000",
             "animation":{
                 "effect":"4"
             }
         },
         "plotarea":{
-            "margin":"35% 3.5% 20% 7.5%"
+
         },
         "scale-x":{
-            "values":["12AM","2AM","4AM","6AM","8AM","10AM","<strong>NOON</strong>","2PM","4PM","6PM","8PM","10PM","12AM"],
+            "values":["-12","-11","-10","-9","-8","-7","-6","-5","-4","-3","-2","-1","Now"],
             "line-color":"#adadad",
             "line-width":"1px",
             "item":{
@@ -186,14 +111,13 @@ var myChart1={
                 "offset-y":"-2%"
             },
             "guide":{
-                "visible":false
+                "visible":true
             },
             "tick":{
                 "visible":false
             }
         },
         "scale-y":{
-            "values":"0:300:100",
             "line-color":"none",
             "item":{
                 "font-size":"10px",
@@ -210,30 +134,33 @@ var myChart1={
         },
         "series":[
             {
-                "text":"Light",
+                "text":"On Time",
+                "values":[null,null,null,3,2,7,11,8,20,10,5,5,4],
+                "background-color":"#859900",
+                "alpha":"0.7",
+                "description":"> 5 Miles / Hour",
+                "hover-state":{
+                    "background-color":"#859900"
+                }
+            },
+            {
+                "text":"At Risk",
                 "background-color":"#FABE28",
+                                "alpha":"0.7",
                 "description":"< 3 Miles / Hour",
                 "hover-state":{
                     "background-color":"#FFC942"
                 },
-                "values":[null,null,null,170,220,240,260,250,20,10,5]
+                "values":[null,null,null,7,2,4,6,5,1,1,5,1,2]
             },
             {
-                "text":"Moderate",
-                "values":[null,null,null,30,50,40,104,34,8,15,5,0],
-                "background-color":"#FF8A00",
+                "text":"Late",
+                "values":[null,null,null,3,5,4,1,4,1,1,5,1,0],
+                "background-color":"#CB4B16",
+                "alpha":"0.7",
                 "description":"> 3 Miles / Hour < 5 Miles / Hour",
                 "hover-state":{
-                    "background-color":"#FF9619"
-                }
-            },
-            {
-                "text":"Intense",
-                "values":[null,null,null,33,22,17,11,8,200,100,50],
-                "background-color":"#88C100",
-                "description":"> 5 Miles / Hour",
-                "hover-state":{
-                    "background-color":"#91CE00"
+                    "background-color":"#CB4B16"
                 }
             }
         ]
@@ -277,7 +204,7 @@ var myChart2=
                 ],
                 "text":"Define needs",
                 "marker":{
-                    "background-color":"#B58900 #B58900",
+                    "background-color":"#FF9619 #FF9619",
                     "alpha":"0.6"
                 }
             },
@@ -319,7 +246,7 @@ var myChart2=
 
  zingchart.render({
         id:"myChartDiv0",
-        data:myChart0,
+        data:$scope.KPI.graphs[0],
         height:100,
         width:"100%"
     });
@@ -327,7 +254,7 @@ var myChart2=
  zingchart.render({
         id:"myChartDiv1",
         data:myChart1,
-        height:400,
+        height:300,
         width:"100%"
     });
 
