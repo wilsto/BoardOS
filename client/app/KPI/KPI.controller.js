@@ -13,233 +13,227 @@ angular.module('boardOsApp')
     $http.get('/api/KPIs/'+$stateParams.id, {params:{activity: $rootScope.perimeter.activity, context: $rootScope.perimeter.context}}).success(function(KPI) {
       $scope.KPI = KPI;
 
-      $scope.KPIByMonth = calLibrary.getByMonth($scope.KPI.metricValues, 'date', 'value');
-      $scope.KPIRefByMonth = calLibrary.getByMonth($scope.KPI.refMetricValues, 'date', 'value');
+      //$scope.KPIByMonth = calLibrary.getByMonth($scope.KPI.metricValues, 'date', 'value');
+      //$scope.KPIRefByMonth = calLibrary.getByMonth($scope.KPI.refMetricValues, 'date', 'value');
       
-      $scope.options = {
-        chart: {
-          type: 'scatterChart',
-          width: 350,
-          height: 250,
-          margin : {
-            top: 20,
-            right: 20,
-            bottom: 20,
-            left: 65
-          },
-          showLabels: true,
-          transitionDuration: 500,
-          useInteractiveGuideline: true,
-          x: function(d){return d.x;},
-          y: function(d){return d.y;},
-          xAxis: {
-            axisLabel: 'Dates',
-            tickFormat: function(d) {
-              return "On time";
-            },
-            showMaxMin: true,
-            staggerLabels: true
-          },
+      //$scope.data = calLibrary.getSumCumul($scope.KPI.refMetricValues, $scope.KPI.metricValues);
 
-          yAxis: {
-            axisLabel: 'Confidence in futur',
-            showMaxMin: true,
-                        tickFormat: function(d) {
-              return "High";
-            },
-            staggerLabels: true,
-            axisLabelDistance: 20
-          }
-        }
-      };
-
-      $scope.data = calLibrary.getSumCumul($scope.KPI.refMetricValues, $scope.KPI.metricValues);
-
-      $scope.optionsGoal = {
-        chart: {
-          type: 'bulletChart',
-          height: 70,
-          transitionDuration: 500
-        }
-      };
-
-      $scope.dataGoal = {
-        "title":$scope.KPI.name,
-        "ranges": [33,66,100],
-        "measures": [$scope.KPI.percentObjectif.replace('%','')],
-        "markers": [80]
-      }
-
-
-      $scope.optionsDonut = {
-        chart: {
-          type: 'pieChart',
-          height: 250,
-          donut: true,
-          x: function(d){return d.key;},
-          y: function(d){return d.y;},
-          showLabels: true,
-          pie: {
-            startAngle: function(d) { return d.startAngle/2 -Math.PI/2 ;},
-            endAngle: function(d) { return d.endAngle/2 -Math.PI/2 ;}
-          },
-          transitionDuration: 500,
-          legend: {
-            margin: {
-              top: 5,
-              right: 5,
-              bottom: 5,
-              left: 0
-            }
-          }
-        }
-      };
-
-      $scope.dataDonut = [
-      {
-        key: 'Late',
-        y: 2
-      },
-      {
-        key: 'On time',
-        y: 3
-      }
-      ];
-
-      $scope.dataScatter = [
-          {"key":"Ontime + High Confidence",
-              "values":[{"x":0.8,"y":80,"size":20},{"x":0.8,"y":92,"size":20}]
-          },
-         {"key":"On time + Low Confidence",
-            "values":[{"x":0.7,"y":20,"size":20},{"x":0.9,"y":30,"size":20}]
-          },
-         {"key":"Late + High Confidence",
-             "values":[{"x":-0.8,"y":0,"size":8},{"x":-0.4,"y":23,"size":15}]
-        },
-          {"key":"Late + Low Confidence",
-            "values":[{"x":-0.5,"y":50,"size":10},{"x":-0.7,"y":26,"size":35}]
-         }
-     ];
-
-
-var myChart=
+var myChart0=
 {
 "graphset":[
     {
-        "type":"bubble",
-        "plotarea":{
-            "background-color":"#fff",
-            "alpha":0.9,
-            "margin":"50px 40px 50px 50px"
-        },
-        "scale-y":{
-            "label":{
-                "text":"Confidence in futur"
-            },
-            "values":"0:100:20",
-            "line-color":"#aaadb3",
-            "shadow":0,
-            "tick":{
-                "line-color":"#aaadb3"
-            },
-            "minor-ticks":1,
-            "minor-tick":{
-                "visible":false,
-                "line-color":"#aaadb3",
-                "shadow":0
-            },
-            "guide":{
-                "line-color":"#aaadb3",
-                "alpha":0.3,
-                "line-style":"solid"
-            },
-            "minor-guide":{
-                "line-color":"#aaadb3",
-                "alpha":0.2,
-                "line-style":"dashed"
-            },
-            "item":{
-                "padding-right":"5px",
-                "font-family":"Arial",
-                "font-size":"11px",
-                "font-color":"#676b72"
-            }
-        },
-        "scale-x":{
-            "labels":["Late","At Risk","On Time"],
-            "label":{
-                "text":"Deliveries"
-            },
-            "line-color":"#aaadb3",
-            "shadow":0,
-            "tick":{
-                "line-color":"#aaadb3"
-            },
-            "minor-ticks":1,
-            "minor-tick":{
-                "visible":false,
-                "line-color":"#aaadb3",
-                "shadow":0
-            },
-            "guide":{
-                "line-color":"#aaadb3",
-                "alpha":0.3,
-                "line-style":"solid"
-            },
-            "minor-guide":{
-                "line-color":"#aaadb3",
-                "alpha":0.2,
-                "line-style":"dashed"
-            },
-            "item":{
-                "padding-top":"5px",
-                "font-family":"Arial",
-                "font-size":"11px",
-                "font-color":"#676b72"
-            }
+    "type":"hbullet",
+    "plotarea":{
+        "background-color":"transparent",
+        "margin":"0px 20px 20px 20px"
+    },    
+    "plot":{
+         "goal":{
+            "background-color":"#859900",
+            "border-width":0
+         }
+    },
+    "series":[
+        {
+            "values":[80],
+            "background-color":"#169ef4",
+            "goals":[100]
+        }
+    ]
+    }
+]
+};
+
+var myChart1={
+"graphset":[
+    {
+        "type":"pie",
+        "height":"50%",
+        "width":"100%",
+        "background-color":"transparent",
+        "value-box":{
+            "visible":true
         },
         "plot":{
-            "size-factor":3,
+            "slice":50,
+            "ref-angle":270,
+            "detach":true,
+            "hover-state":{
+                "visible":false
+            },
             "value-box":{
-                "type":"all",
-                "text":"%t",
-                "font-color":"#000"
+                "visible":true,
+                "type":"first",
+                "connected":false,
+                "placement":"in",
+                "text":"%v",
+                "rules":[
+                    {
+                        "rule":"%v < 50",
+                        "visible":false
+                    }
+                ],
+                "font-color":"#000000",
+                "font-size":"20px",
+                "font-family":"arial",
+                "offset-x":"-30%",
+                "offset-y":"-50%"
+            },
+            "tooltip":{
+                "rules":[
+                    {
+                        "rule":"%i == 0",
+                        "text":"%v %t Completed",
+                        "shadow":false,
+                        "border-radius":4
+                    },
+                    {
+                        "rule":"%i == 1",
+                        "text":"%v Remaining",
+                        "shadow":false,
+                        "border-radius":4
+                    }
+                ]
+            },
+            "animation":{
+                "delay":0,
+                "effect":2,
+                "speed":"600",
+                "method":"0",
+                "sequence":"1"
             }
         },
         "series":[
             {
-                "values":[
-                [1,100,8],
-                [2,40,2],
-                [3,70,1]
-                ],
-                "text":"Define cartography",
-                "marker":{
-                    "background-color":"#1F77B4    #1F77B4",
-                    "border-width":"1px",
-                    "border-color":"#4682B4   ",
-                    "fill-type":"linear",
-                    "shadow":true,
-                    "shadow-distance":"2px",
-                    "shadow-blur":0,
-                    "shadow-angle":90,
-                    "shadow-color":"#000000",
-                    "shadow-alpha":0.1
+                "values":[52],
+                "text":"Steps",
+                "background-color":"#169ef4",
+                "border-width":"0px",
+                "shadow":0
+            },
+            {
+                "values":[11],
+                "background-color":"#dadada",
+                "alpha":"0.5",
+                "border-color":"#dadada",
+                "border-width":"1px",
+                "shadow":0
+            }
+        ]
+    },
+    {
+        "type":"bar",
+        "height":"50%",
+        "width":"94%",
+        "x":"3%",
+        "y":"53%",
+        "background-color":"#ffffff",
+        "border-radius":4,
+        "title":{
+            "text":"Step Tracker",
+            "text-align":"left",
+            "font-size":"13px",
+            "font-color":"#000000",
+            "font-family":"Arial",
+            "background-color":"none",
+            "offset-x":"10%",
+            "offset-y":"10%"
+        },
+        "legend":{
+            "toggle-action":"remove",
+            "layout":"x3",
+            "x":"52.5%",
+            "shadow":false,
+            "border-color":"none",
+            "background-color":"none",
+            "item":{
+                "font-color":"#000000"
+            },
+            "marker":{
+                "type":"circle",
+                "border-width":0
+            },
+            "tooltip":{
+                "text":"%plot-description"
+            }
+        },
+        "tooltip":{
+            "text":"%t<br><strong>%v</strong>",
+            "font-family":"arial",
+            "font-weight":"normal",
+            "font-size":"12px",
+            "border-radius":4,
+            "shadow":false,
+            "callout":true,
+            "padding":"5 10"
+        },
+        "plot":{
+            "background-color":"#000000",
+            "animation":{
+                "effect":"4"
+            }
+        },
+        "plotarea":{
+            "margin":"35% 3.5% 20% 7.5%"
+        },
+        "scale-x":{
+            "values":["12AM","2AM","4AM","6AM","8AM","10AM","<strong>NOON</strong>","2PM","4PM","6PM","8PM","10PM","12AM"],
+            "line-color":"#adadad",
+            "line-width":"1px",
+            "item":{
+                "font-size":"10px",
+                "font-family":"arial",
+                "offset-y":"-2%"
+            },
+            "guide":{
+                "visible":false
+            },
+            "tick":{
+                "visible":false
+            }
+        },
+        "scale-y":{
+            "values":"0:300:100",
+            "line-color":"none",
+            "item":{
+                "font-size":"10px",
+                "font-family":"arial",
+                "offset-x":"2%"
+            },
+            "guide":{
+                "line-style":"solid",
+                "line-color":"#adadad"
+            },
+            "tick":{
+                "visible":false
+            }
+        },
+        "series":[
+            {
+                "text":"Light",
+                "background-color":"#FABE28",
+                "description":"< 3 Miles / Hour",
+                "hover-state":{
+                    "background-color":"#FFC942"
                 },
-                "hover-marker":{
-                    "background-color":"#1F77B4 #1F77B4",
-                    "border-color":"#4682B4   "
-                },
-                "tooltip":{
-                    "shadow":true,
-                    "background-color":"#1F77B4",
-                    "border-radius":"8px",
-                    "padding":"5px 10px",
-                    "shadow-distance":"2px",
-                    "shadow-blur":0,
-                    "shadow-angle":90,
-                    "shadow-color":"#000000",
-                    "shadow-alpha":0.1
+                "values":[null,null,null,170,220,240,260,250,20,10,5]
+            },
+            {
+                "text":"Moderate",
+                "values":[null,null,null,30,50,40,104,34,8,15,5,0],
+                "background-color":"#FF8A00",
+                "description":"> 3 Miles / Hour < 5 Miles / Hour",
+                "hover-state":{
+                    "background-color":"#FF9619"
+                }
+            },
+            {
+                "text":"Intense",
+                "values":[null,null,null,33,22,17,11,8,200,100,50],
+                "background-color":"#88C100",
+                "description":"> 5 Miles / Hour",
+                "hover-state":{
+                    "background-color":"#91CE00"
                 }
             }
         ]
@@ -247,13 +241,102 @@ var myChart=
 ]
 };
 
+var myChart2=
+{
+"graphset":[
+    {
+        "type":"bubble",
+        "plotarea":{
+            "background-color":"transparent",
+            "margin":"0px 0px 50px 50px"
+        },
+        "scale-y":{
+            "label":{
+                "text":"Delivery Deadline (days)"
+            }
+        },
+        "scale-x":{
+            "labels":["Late","At Risk","On Time"],
+            "label":{
+                "text":"Vs scheduled"
+            },
+            "values":"1:3:1"
+        },
+        "plot":{
+            "size-factor":3,
+            "value-box":{
+                "type":"all",
+                "text":"%t",
+                "placement":"bottom"
+            }
+        },
+        "series":[
+            {
+                "values":[
+                  [2,40,22]
+                ],
+                "text":"Define needs",
+                "marker":{
+                    "background-color":"#B58900 #B58900",
+                    "alpha":"0.6"
+                }
+            },
+            {
+                "values":[
+                  [1,30,18]
+                ],
+                "text":"Portal",
+                "marker":{
+                    "background-color":"#CB4B16  #CB4B16",
+                    "alpha":"0.6"
+                }
+            },
+            {
+                "values":[
+                  [1,10,8]
+                ],
+                "text":"Dashboard",
+                "marker":{
+                    "background-color":"#CB4B16  #CB4B16",
+                    "alpha":"0.6"
+                }
+            },
+            {
+                "values":[
+                  [3,9,40]
+                ],
+                "text":"Define cartography",
+                "marker":{
+                    "background-color":"#859900 #859900",
+                    "alpha":"0.6"
+                }
+            }
+
+        ]
+    }
+]
+};
+
  zingchart.render({
-        id:"myChartDiv",
-        data:myChart,
+        id:"myChartDiv0",
+        data:myChart0,
+        height:100,
+        width:"100%"
+    });
+
+ zingchart.render({
+        id:"myChartDiv1",
+        data:myChart1,
         height:400,
         width:"100%"
     });
 
+ zingchart.render({
+        id:"myChartDiv2",
+        data:myChart2,
+        height:400,
+        width:"100%"
+    });
 
     });
 };

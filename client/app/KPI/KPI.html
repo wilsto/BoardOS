@@ -88,56 +88,32 @@
                 <tab-heading>
                     View 
                 </tab-heading>
-
-                <nvd3 options="optionsGoal" data="dataGoal" ng-if="KPI.category==='Goal'"></nvd3><br/>
                 <div class="row" >
-                    <div class="col-md-3">
+                    <div class="col-md-6">
                         <div class="portlet">
                             <div class="portlet-title">
                                 <div class="caption">
-                                    <i class="icon-bar-chart"></i>KPI Status
+                                    <i class="icon-bar-chart"></i>Past
                                 </div>
                             </div>
                             <div class="portlet-body">
-                                <nvd3 options="optionsDonut" data="dataDonut"></nvd3>
+                                <div id="myChartDiv0"></div>
+                                <div id="myChartDiv1"></div>
+
                             </div>
                         </div>
                         <!-- END PORTLET-->
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-6">
                         <!-- BEGIN PORTLET-->
                         <div class="portlet">
                             <div class="portlet-title">
                                 <div class="caption">
-                                    <i class="icon-bar-chart"></i>KPI Evolution
-                                </div>
-                                <div class="pull-right">
-                                    <select id="selectChart" ng-model="options.chart.type">
-                                        <option value="bulletChart">Bullet Chart</option>
-                                        <option value="cumulativeLineChart">Cumulative Line Chart</option>
-                                        <option value="discreteBarChart">DiscreteBar Chart</option>
-                                        <option value="donutChart">Donut Chart</option>
-                                        <option value="historicalBarChart">HistoricalBar Chart</option>
-                                        <option value="lineChart" selected="selected">Line Chart</option>
-                                        <option value="linePlusBarChart">Line + Bar Chart</option>
-                                        <option value="linePlusBarWithFocusChart">Line + Bar with Focus Chart</option>
-                                        <option value="lineWithFisheyeChart">Line with Fisheye Chart</option>
-                                        <option value="lineWithFocusChart">Line with Focus Chart</option>
-                                        <option value="multiBarChart">MultiBar Chart</option>
-                                        <option value="multiBarHorizontalChart">MultiBar Horizontal Chart</option>
-                                        <option value="multiChart">Multi Chart</option>
-                                        <option value="parallelCoordinates">Parallel Coordinates</option>
-                                        <option value="pieChart">Pie Chart</option>
-                                        <option value="scatterChart">Scatter Chart</option>
-                                        <option value="scatterPlusLineChart">Scatter + Line Chart</option>
-                                        <option value="sparklinePlus">SparkLine Chart</option>
-                                        <option value="stackedAreaChart">Stacked Area Chart</option>
-                                    </select>
+                                    <i class="icon-bar-chart"></i>Future
                                 </div>
                             </div>
                             <div class="portlet-body">
-                                <nvd3 options="options" data="dataScatter"></nvd3>
-                                <div id="myChartDiv"></div>
+                                <div id="myChartDiv2"></div>
                             </div>
                         </div>
                         <!-- END PORTLET-->
