@@ -4,21 +4,21 @@
  */
 
  'use strict';
- var _ = require('lodash');
+var _ = require('lodash');
+var Hierarchies = require('../api/hierarchy/hierarchy.model');
+var events = require('events');
+var hierarchyEmitter = new events.EventEmitter();
 
-function giveMeMyColor (value) {
-        switch (value) {
-            //status
-            case 'Finished' : return '#859900';break;
-            case 'In Progress' : return '#337ab7';break;
-
-            //progreStatus
-            case 'On time' : return '#859900';break;
-            case 'At Risk' : return '#FFC942';break;
-            case 'Late' : return '#CB4B16';break;
-            default: return '#cccccc';
-        };
-}
+function groupByMulti (obj, values, context) {
+    if (!values.length)
+        return obj;
+    var byFirst = _.groupBy(obj, values[0], context),
+        rest = values.slice(1);
+    for (var prop in byFirst) {
+        byFirst[prop] = groupByMulti(byFirst[prop], rest, context);
+    }
+    return byFirst;
+};
 
  module.exports = {
     giveMeMyColor: function (value) {
@@ -70,12 +70,11 @@ function giveMeMyColor (value) {
               break;
               case 'Bar' :
                 var mySeries = [];
-
                 _.forEach(mKPI.metricsGroupBy, function(item, key) {
                     mySeries.push( {
                         "text":key,
                         "values":_.pluck(item,'count'),
-                        "background-color":giveMeMyColor(key),
+                        "background-color":_.compact(_.uniq(_.pluck(item,'color'))),
                         "alpha":"0.7",
                         "description":"<= Scheduled deadline"
                     })
@@ -171,12 +170,20 @@ function giveMeMyColor (value) {
             break;
             case 'Bubble' :
             var mySeries = [];
-
-                console.log('mKPI.metricsGroupByTask',mKPI.metricsGroupByTask)
-                _.forEach(mKPI.metricsGroupByTask, function(item, key) {
-                    mySeries.push( item)
+                var metricsByTask = _.chain(mKPI.metricsGroupByTask).pairs().sortBy(function(item) { return item[0]; }).last().value(); // on prend les taches du dernier mois
+                _.forEach(metricsByTask[1], function(item, key) { // pour chaque tache
+                    var lastMetric = _.chain(item).sortBy('date').last().value(); // on prend la dernière mesure
+                    mySeries.push( {
+                         "values":[
+                                      [lastMetric.value, lastMetric.daysToDeadline, lastMetric.load]
+                          ],
+                        "text":lastMetric.taskname || 'No task',
+                        "marker":{
+                            "background-color":lastMetric.color,
+                            "alpha":"0.6"
+                        }
+                    } );
                 });
-                console.log('mySeries',mySeries)
 
             var myChart=
                 {
@@ -249,8 +256,7 @@ function giveMeMyColor (value) {
         if (type='Treeview') {return roots};        
     },
     groupByMonth: function(metrics, fieldDate, field) {
-        var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 
         var dateResult = [];
         var i;
@@ -261,7 +267,7 @@ function giveMeMyColor (value) {
 
         var map_result = _.map(dateResult, function (item) {
           var d = new Date(new Number(new Date(item)));
-          var month = d.getFullYear()  + ", " +  monthNames[d.getMonth()];
+          var month = d.getFullYear()   + "." + ("0" + d.getMonth()).slice(-2);
           return {
               "label": month,
               "count": null
@@ -274,17 +280,22 @@ function giveMeMyColor (value) {
         map_result.reverse() // par ordre croissant
         var myGroup = {};
 
-        _.forEach(metrics, function (item) {
-            var d = new Date(new Number(new Date(item[fieldDate])));
-            var month = d.getFullYear()  + ", " +  monthNames[d.getMonth()];
+        _.forEach(metrics, function (metric) {
+            var d = new Date(new Number(new Date(metric[fieldDate])));
+            var month = d.getFullYear()  + "." + ("0" + d.getMonth()).slice(-2) ;
 
-            if (typeof myGroup[item[field]] === 'undefined') {
-                myGroup[item[field]] = _.clone(map_result,true);           
+            if (typeof myGroup[metric[field]] === 'undefined') {
+                myGroup[metric[field]] = _.clone(map_result,true);           
             }
 
-            _.forEach(myGroup[item[field]], function (itemMap) {
+            _.forEach(myGroup[metric[field]], function (itemMap) {
                 if (itemMap.label === month) {
                     itemMap.count += 1;
+
+                    itemMap.color = metric.color;
+                    itemMap.value = metric.value;
+                    itemMap.description = metric.description;
+
                 }
             });
         });
@@ -293,27 +304,15 @@ function giveMeMyColor (value) {
     },
     groupByTask: function(metrics, tasks, field) {
 
-        console.log(metrics)
-        console.log(tasks)
-        console.log(field)
         var myGroup = {};
-        _.forEach(tasks, function (item) {
-            console.log(item.name)
-            if (typeof myGroup[item.name] === 'undefined') {
-                myGroup[item.name] = {
-                     "values":[
-                                  [3,9,40]
-                      ],
-                    "text":item.name,
-                    "marker":{
-                        "background-color":"#859900",
-                        "alpha":"0.6"
-                    }
-                };
-            }
-        })
-        console.log(myGroup)
-        return myGroup;
+
+        // on trie
+        var sortMetrics = _.sortBy(metrics, 'date');
+
+        // on groupe
+        var groupMetrics = groupByMulti(sortMetrics,['month','taskname'])
+
+        return groupMetrics;
     }
 };
 

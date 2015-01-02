@@ -10,12 +10,17 @@
  'use strict';
 
  var _ = require('lodash');
+ var moment = require('moment');
+
  var KPI = require('./KPI.model');
  var Q = require('q');
  var Dashboard = require('../dashboard/dashboard.model');
  var Task = require('../task/task.model');
  var Metric = require('../metric/metric.model');
+ var Hierarchies = require('../hierarchy/hierarchy.model');
+var hierarchyValues = {};
  var tools = require('../../config/tools');
+
  var mKPI = {};
  var myGroup  = [];
 
@@ -43,6 +48,16 @@ exports.show = function(req, res) {
     })
     return deferred.promise;
   })
+  .then(function () {
+    // Get a single hierarchy
+    var deferred = Q.defer();
+    Hierarchies.find({name:'Task'}, function (err, hierarchy) {
+      if(err) { return handleError(res, err); }
+      hierarchyValues = hierarchy[0].list;
+      deferred.resolve(mKPI);
+    })
+    return deferred.promise;
+  })  
   .then(function () {
       // Get related dashboards
       var deferred = Q.defer();
@@ -90,7 +105,6 @@ exports.show = function(req, res) {
   .then(function () {
     var deferred = Q.defer();
 
-
       //Valeurs
       if (typeof mKPI.metricTaskValues !== "undefined" && mKPI.metricTaskValues.length > 0) {
         var checksType = mKPI.metricTaskValues.split(' + ');
@@ -99,6 +113,8 @@ exports.show = function(req, res) {
         var refChecksType = mKPI.refMetricTaskValues.split(' + ');
       }
 
+      // on ajoute des caractéristiques aux métriques
+      //##############################################
       //Value for calculation
       mKPI.metricValues = [];
       mKPI.refMetricValues = [];
@@ -130,30 +146,52 @@ exports.show = function(req, res) {
           mKPI.refMetricValues.push({value:metric[mKPI.metricTaskField],date:metric.date});
         }
 
+        // ajouter les propriétés des métriques
+        var Value = _.filter(hierarchyValues, function(item) { return  item.text.toLowerCase() === metric[mKPI.metricTaskField].toLowerCase(); });
+        if (Value.length > 0 ) {
+          metric.color = Value[0].color;
+          metric.value = Value[0].value;
+          metric.description = Value[0].description;          
+        }
+
+        // grouper par mois 
+        var d = new Date(new Number(new Date(metric.date)));
+        metric.month = d.getFullYear()  + "." + ("0" + d.getMonth()).slice(-2) ;
+
+        //metric.taskname = []; à vérifier qu'il n'y est qu'une tache avec le meme context, activity
+        _.forEach(mKPI.tasks, function (task) {
+            if (metric.context === task.context && metric.activity === task.activity) {
+                metric.taskname = task.name;
+            }
+        }); 
+
+        // nombre de jours séparant la date de fin
+        metric.daysToDeadline = moment(metric.endDate).diff(moment(),'days');
+
       });
 
 
     // Réaliser des calculs
     switch(mKPI.action) {
       case 'count':
-      mKPI.metricValuesCal = mKPI.metricValues.length;
-      mKPI.refMetricValuesCal = mKPI.refMetricValues.length;
-      break;
+        mKPI.metricValuesCal = mKPI.metricValues.length;
+        mKPI.refMetricValuesCal = mKPI.refMetricValues.length;
+        break;
       case 'Mean':
-      var sumMetricValuesCal = 0;
-      var sumRefMetricValuesCal = 0;
-      for( var i = 0; i < mKPI.metricValues.length; i++ ){
-            sumMetricValuesCal += parseInt( mKPI.metricValues[i].value, 10 ); //don't forget to add the base
-            sumRefMetricValuesCal += parseInt( mKPI.refMetricValues[i].value, 10 ); //don't forget to add the base
-          }
-          mKPI.metricValuesCal = sumMetricValuesCal/ mKPI.metrics.length;
-          mKPI.refMetricValuesCal = sumRefMetricValuesCal/ mKPI.refMetricValues.length;
-          break;
-          default :
-          if (typeof mKPI.metrics[mKPI.metrics.length - 1] !== "undefined") { mKPI.metricValues = mKPI.metrics[mKPI.metrics.length - 1][mKPI.type];}
-          if (typeof mKPI.metrics[mKPI.metrics.length - 2] !== "undefined") { mKPI.metricPrevVal = mKPI.metrics[mKPI.metrics.length - 2][mKPI.type];}
-          mKPI.refMetricValues = 100;                              
+        var sumMetricValuesCal = 0;
+        var sumRefMetricValuesCal = 0;
+        for( var i = 0; i < mKPI.metricValues.length; i++ ){
+              sumMetricValuesCal += parseInt( mKPI.metricValues[i].value, 10 ); //don't forget to add the base
+              sumRefMetricValuesCal += parseInt( mKPI.refMetricValues[i].value, 10 ); //don't forget to add the base
         }
+        mKPI.metricValuesCal = sumMetricValuesCal/ mKPI.metrics.length;
+        mKPI.refMetricValuesCal = sumRefMetricValuesCal/ mKPI.refMetricValues.length;
+        break;
+        default :
+        if (typeof mKPI.metrics[mKPI.metrics.length - 1] !== "undefined") { mKPI.metricValues = mKPI.metrics[mKPI.metrics.length - 1][mKPI.type];}
+        if (typeof mKPI.metrics[mKPI.metrics.length - 2] !== "undefined") { mKPI.metricPrevVal = mKPI.metrics[mKPI.metrics.length - 2][mKPI.type];}
+        mKPI.refMetricValues = 100;                              
+    }
 
       //calcul de l'age de la dernière metric
 /*      if (typeof mKPI.metrics[metrics.length - 1] !== "undefined") {
@@ -167,6 +205,7 @@ exports.show = function(req, res) {
 
       mKPI.metricsGroupBy = tools.groupByMonth(mKPI.metrics,'date',mKPI.metricTaskField);
       mKPI.metricsGroupByTask = tools.groupByTask(mKPI.metrics, mKPI.tasks, mKPI.metricTaskField);
+      var test = "e" ;
 
       // graphics
       mKPI.graphs = [];
