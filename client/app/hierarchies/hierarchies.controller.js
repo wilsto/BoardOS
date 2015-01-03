@@ -63,7 +63,7 @@ angular.module('boardOsApp')
       $http.put('/api/hierarchies/'+ $scope.HierarchyType, $scope.treeData);
       ngToast.create('Hierarchy "' + $scope.HierarchyType + '" was updated');
     }
-    $scope.load();
+    //$scope.load();
   };
 
   $scope.edit = function(Hierarchy) {

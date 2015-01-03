@@ -1,12 +1,65 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 
-<div class="container">
-  <p>The delete user and user index api routes are restricted to users with the 'admin' role.</p>
-  <ul class="list-group">
-    <li class="list-group-item" ng-repeat="user in users">
-        <strong>{{user.name}}</strong><br>
-        <span class="text-muted">{{user.email}}</span>
-        <a ng-click="delete(user)" class="trash"><span class="glyphicon glyphicon-trash pull-right"></span></a>
-    </li>
-  </ul>
+<table class="table table-hover members-table middle-align ng-scope">
+	<thead>
+		<tr>
+			<th></th>
+			<th class="hidden-xs hidden-sm"></th>
+			<th>Name and Role</th>
+			<th class="hidden-xs hidden-sm">E-Mail</th>
+			<th>ID</th>
+			<th>Settings</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="user in users track by user._id">
+			<td class="user-cb">
+				<div class="cbr-replaced cbr-checked"><div class="cbr-input"><input type="checkbox" class="cbr cbr-done" name="members-list[]" value="1" checked=""></div><div class="cbr-state"><span></span></div></div>
+			</td>
+			<td class="user-image hidden-xs hidden-sm">
+				<a href="/settings">
+					<img alt="{{user.name}}" ng-src="assets/images/avatars/{{user.name}}.png" style="width:25px" class="img-circle"/>
+				</a>
+
+			</td>
+			<td class="user-name">
+				<a href="/settings" class="name">{{user.name}}</a>
+				<span class="pull-right" style="color:lightgrey;margin-right:25px">{{user.role}}</span>
+			</td>
+			<td class="hidden-xs hidden-sm">
+				<span class="email">{{user.email}}</span>
+			</td>
+			<td class="user-id">
+				{{user._id}}
+			</td>
+			<td class="action-links">
+				<a href="" class="delete" ng-click="delete(user)">
+					<i class="linecons-trash"></i>
+					Delete
+				</a>
+			</td>
+		</tr>
+
+	</tbody>
+</table>
+
+<div class="row ng-scope">
+	<div class="col-sm-12">
+
+		<div class="members-table-actions">
+			<div class="selected-items">
+				<span>{{users.length}}</span>
+				members selected
+			</div>
+
+			<div class="selected-actions">
+				<a href="" class="edit">Edit Profile</a>
+				or
+				<a href="" class="delete">Delete</a>
+			</div>
+		</div>
+
+	</div>
 </div>
+
+</div><!-- end ngRepeat: tab in tabs -->

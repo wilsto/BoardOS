@@ -4,9 +4,14 @@ angular.module('boardOsApp')
 .controller('TaskCtrl', function($rootScope, $scope, $http, $stateParams, $modal, ngToast){
 
   $scope.load = function() {      
-    $http.get('/api/tasks/'+$stateParams.id).success(function (data) { 
-      $scope.task = data;
-    });
+    if ($stateParams.id) {
+        $http.get('/api/tasks/'+$stateParams.id).success(function (data) { 
+          $scope.task = data;
+          console.log($scope.task);
+        });
+    } else {
+       $scope.task = {};
+    }
  };
 
  $scope.load();
@@ -24,10 +29,18 @@ $scope.save = function() {
 
   if (typeof $scope.task._id === 'undefined') {
     $http.post('/api/tasks', $scope.task);
-    ngToast.create('task "' + $scope.task.name + '" was created');
+
+    var logInfo = 'Task "' + $scope.task.name + '" was created';
+    $http.post('/api/logs', {info:logInfo, actor:$rootScope.currentUser.name});
+    ngToast.create(logInfo);
+
   } else {
     $http.put('/api/tasks/'+ $scope.task._id , $scope.task);
-    ngToast.create('task "' + $scope.task.name + '" was updated');
+    
+    var logInfo = 'Task "' + $scope.task.name + '" was updated';
+    $http.post('/api/logs', {info:logInfo, actor:$rootScope.currentUser.name});
+    ngToast.create(logInfo);
+
   }
 
   $scope.load();

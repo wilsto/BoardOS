@@ -11,7 +11,7 @@ exports.index = function(req, res) {
     _.each(logs, function(rowdata, index) { 
           rowdata.moment = moment(rowdata.date).fromNow(); 
     });
-    return res.json(200, logs);
+    return res.json(200, _.first(logs.reverse(),20));
   });
 };
 

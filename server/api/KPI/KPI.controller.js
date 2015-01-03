@@ -66,7 +66,7 @@ exports.show = function(req, res) {
         _.each(dashboard, function(rowdata, index) { 
           if (typeof rowdata.context === 'undefined' || rowdata.context === '')  { rowdata.context = mKPI.context};
           if (typeof rowdata.activity === 'undefined' || rowdata.activity === '')  { rowdata.activity = mKPI.activity};  
-          if (rowdata.context.indexOf(mKPI.context) >=0 && rowdata.activity.indexOf(mKPI.activity) >=0 ) {
+          if (mKPI.context.indexOf(rowdata.context) >=0 && mKPI.activity.indexOf(rowdata.activity) >=0 ) {
             mKPI.dashboards.push (rowdata.toObject());
           }
         });
@@ -216,10 +216,17 @@ exports.show = function(req, res) {
       mKPI.graphs.push(myChart1);
       mKPI.graphs.push(myChart2);
 
+    var actorsObject = _.countBy(mKPI.metrics,'actor');
+    mKPI.actors = _.map(actorsObject, function(value, key) {
+      return {name: key, count:value};
+    });
+
+
       deferred.resolve(mKPI);
       return deferred.promise;
     })
 .then(function () {
+
   return res.json(mKPI);
 });
 };

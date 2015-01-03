@@ -1,3 +1,152 @@
+<!--* Modal Part-->
+<script type="text/ng-template" id="myMesureContent.html">
+	<div class="modal-header" style='background:lightgrey'>
+		<h3>Enter Metric Information</h3>
+	</div>
+	<div class="modal-body">
+		<!-- FORM -->
+
+		<div class="row">
+			<div class="col-md-6">  <h4 style="font-size:14px">Context of task</h4>
+				<p class="input-group">
+					<input type="text" name="context" class="form-control"  ng-model="formData.context" >
+
+				</p>
+			</div>
+			<div class="col-md-6">  <h4 style="font-size:14px">Activity of task</h4>
+				<p class="input-group">
+					<input type="text" name="activity" class="form-control"  ng-model="formData.activity" >
+
+				</p>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-md-4">  <h4 style="font-size:14px">Starting date of task</h4>
+				<p class="input-group">
+					<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.startDate" is-open="opened2" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer"  />
+					<span class="input-group-btn">
+						<button class="btn btn-default" ng-click="open2($event)">
+							<span class="glyphicon glyphicon-chevron-down">
+							</span>
+						</button>
+					</span>
+				</p>
+			</div>
+			<div class="col-md-4">  <h4 style="font-size:14px">Ending date of task</h4>
+				<p class="input-group">
+					<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.endDate" is-open="opened3" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer"/>
+					<span class="input-group-btn">
+						<button class="btn btn-default" ng-click="open3($event)">
+							<span class="glyphicon glyphicon-chevron-down">
+							</span>
+						</button>
+					</span>
+				</p>
+			</div>
+			<div class="col-md-4">   <h4 style="font-size:14px">Load of task</h4>
+				<p class="input-group">
+					<input type="text" name="load" class="form-control"  ng-model="formData.load" >
+					<span class="help-block">
+					</span>
+
+				</p>
+			</div>
+		</div>
+<hr/>
+		<div class="row">
+			<div class="col-md-4">  
+				<p class="input-group">
+					<label>% progress</label>
+					<input type="text" name="progress" class="form-control"  ng-model="formData.progress" >
+					<span class="help-block">
+					</span>
+
+				</p>
+			</div>
+			<div class="col-md-4">  
+				<p class="input-group">
+					<label>Status</label>
+					<input type="text" class="form-control" ng-model="formData.status" typeahead="statut.value for statut in constant.statusTask  | limitTo:8"/>
+					<span class="help-block">
+					</span>
+				</p>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-4">  
+				<p class="input-group">
+					<label>Progress Status</label>
+					<input type="text" name="progressStatus" class="form-control" ng-model="formData.progressStatus" typeahead-on-select="$item"  typeahead="statut.value for statut in constant.progressStatusTask  | limitTo:8" >
+					<span class="help-block">
+					</span>
+
+				</p>
+			</div>
+			<div class="col-md-4">  
+				<p class="input-group">
+					<label>% Confidence</label>
+					<input type="text" name="trust" class="form-control"  ng-model="formData.trust" >
+					<span class="help-block">
+					</span>
+
+				</p>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-md-12">  
+				<label>comments</label>
+				<textarea name="comments" class="form-control" rows="4" ng-model="formData.comments"></textarea>
+			</div>
+		</div>
+
+		<div ng-show="debug==true">
+
+			SHOW DATA FROM INPUTS AS THEY ARE BEING TYPED 
+			<pre>
+				{{ formData }}
+			</pre>
+			<div class="col-md-4">  <h4 style="font-size:14px">Actor</h4>
+				<p class="input-group">
+					<input type="text" name="actor" class="form-control" ng-model="formData.actor">
+					<span class="help-block">
+					</span>
+
+				</p>
+			</div>
+			<div class="row">
+				<div class="col-md-4"><h4 style="font-size:14px">Entry Date</h4>
+					<p class="input-group">
+						<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.date" is-open="opened1" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer" />
+						<span class="input-group-btn">
+							<button class="btn btn-default" ng-click="open1($event)">
+								<span class="glyphicon glyphicon-chevron-down">
+								</span>
+							</button>
+						</span>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<div style="float:left">
+			<button class="btn btn-alert" ng-click="debug=!debug">Debug Mode</button>
+			<button ng-show='formData._id' class="btn btn-danger" ng-click="DeleteData(formData._id)">Delete Mesure</button>
+			<button ng-hide='formData._id' class="btn btn-warning" ng-click="reloadLast()">Reload Last Mesure</button>
+		</div>
+		<div style="float:right">
+			<button class="btn btn-default" ng-click="cancel()">Cancel</button>
+			<button class="btn btn-success" ng-click="ok()">Update</button>
+		</div>
+	</div>
+
+</script>
+
 <div class="portlet-body">
 
 	<!-- table dashboard (see ng-if) -->  
@@ -22,46 +171,46 @@
 	<!-- table KPI (see ng-if) -->  
 	<!--############-->  
 
-        <table class="table table-striped table-bordered table-hover" id="sample_4" ng-if="dashboardType === 'kpis'">
-          <thead>
-            <tr>
-               <th>KPI Name</th>
-               <th></th>
-               <th>1</th>
-               <th>2</th>
-               <th>3</th>
-               <th>4</th>
-               <th>5</th>
-               <th>6</th>
-               <th>7</th>
-               <th>8</th>
-               <th>9</th>
-               <th>10</th>
-               <th>11</th>
-               <th>12</th>
-               <th>By Months</th>
-           </tr>
-         </thead>
-         <tbody>
-          <tr ng-repeat="KPI in dataTable | orderBy : Activity | filter: myFilter track by KPI._id " on-finish-render>
-            <td><a href="/KPI/{{KPI._id}}">{{KPI.name}}</a></td>
-            <td>{{KPI.category}}</td>
-            <td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-right"></span></td>
-            <td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-right"></span></td>
-            <td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-right"></span></td>
-            <td><span style="color:orange" class="glyphicon glyphicon-circle-arrow-down"></span></td>
-            <td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-up"></span></td>
-            <td><span style="color:orange" class="glyphicon glyphicon-circle-arrow-down"></span></td>
-            <td><span style="color:red" class="glyphicon glyphicon-circle-arrow-down"></span></td>
-            <td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-up"></span></td>
-            <td><span style="color:grey" class="glyphicon glyphicon-dashboard"></span></td>
-            <td><span style="color:lightgrey" class="glyphicon glyphicon-unchecked"></span></td>
-            <td><span style="color:lightgrey" class="glyphicon glyphicon-unchecked"></span></td>
-            <td><span style="color:lightgrey" class="glyphicon glyphicon-unchecked"></span></td>
-            <td><span class="bar-chart chrono"> 1,7,9,11, 14, 12, 6, 7, 4, 2,12, 10 </span></td>
-          </tr>
-        </tbody>
-      </table>
+	<table class="table table-striped table-bordered table-hover" id="sample_4" ng-if="dashboardType === 'kpis'">
+		<thead>
+			<tr>
+				<th>KPI Name</th>
+				<th></th>
+				<th>1</th>
+				<th>2</th>
+				<th>3</th>
+				<th>4</th>
+				<th>5</th>
+				<th>6</th>
+				<th>7</th>
+				<th>8</th>
+				<th>9</th>
+				<th>10</th>
+				<th>11</th>
+				<th>12</th>
+				<th>By Months</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="KPI in dataTable | orderBy : Activity | filter: myFilter track by KPI._id " on-finish-render>
+				<td><a href="/KPI/{{KPI._id}}">{{KPI.name}}</a></td>
+				<td>{{KPI.category}}</td>
+				<td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-right"></span></td>
+				<td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-right"></span></td>
+				<td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-right"></span></td>
+				<td><span style="color:orange" class="glyphicon glyphicon-circle-arrow-down"></span></td>
+				<td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-up"></span></td>
+				<td><span style="color:orange" class="glyphicon glyphicon-circle-arrow-down"></span></td>
+				<td><span style="color:red" class="glyphicon glyphicon-circle-arrow-down"></span></td>
+				<td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-up"></span></td>
+				<td><span style="color:grey" class="glyphicon glyphicon-dashboard"></span></td>
+				<td><span style="color:lightgrey" class="glyphicon glyphicon-unchecked"></span></td>
+				<td><span style="color:lightgrey" class="glyphicon glyphicon-unchecked"></span></td>
+				<td><span style="color:lightgrey" class="glyphicon glyphicon-unchecked"></span></td>
+				<td><span class="bar-chart chrono"> 1,7,9,11, 14, 12, 6, 7, 4, 2,12, 10 </span></td>
+			</tr>
+		</tbody>
+	</table>
 
 	<!-- table task (see ng-if)  -->  
 	<!--############-->  
@@ -71,6 +220,7 @@
 				<th>Name</th>
 				<th>Activity</th>
 				<th>Context</th>
+				<th ><a href="task/" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus"></span></a></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -78,6 +228,9 @@
 				<td><a href="/task/{{task._id}}" >{{task.name}}</a></td>
 				<td>{{task.activity.replace(data.activity,"#")}}</td>
 				<td>{{task.context.replace(data.context,"#")}}</td>
+				<td style="width:25px">
+					<a ng-href="task/{{task._id}}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></button>
+				</td>
 			</tr>
 		</tbody>
 	</table>
@@ -98,12 +251,12 @@
 				<th>Trust</th>
 				<th>End</th>
 				<th>Comments</th>
-				<th><button ng-click='open(data, data.metrics[task.metrics.length-1],true)' type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus"></span></button></th>
+				<th ng-if="page === 'task'"><button ng-click='openMetric(data, data.metrics[task.metrics.length-1],true)' type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus"></span></button></th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr ng-repeat="metric in dataTable | filter:search | orderBy:'date' track by $index" ng-show="metric._id"  on-finish-render>
-				<td><img alt="{{metric.actor}}" ng-src="assets/images/avatars/{{metric.actor}}.png" style="width:25px" class="img-responsive"/></td>
+				<td><img alt="{{metric.actor}}" ng-src="assets/images/avatars/{{metric.actor}}.png" style="width:25px" class="img-circle"/></td>
 				<td>{{metric.date | date:'shortDate'}}</td>
 				<td>{{metric.activity.replace(data.activity,"#")}}</td>
 				<td>{{metric.context.replace(data.context,"#")}}</td>
@@ -114,9 +267,9 @@
 				<td>{{metric.trust}}</td>
 				<td>{{metric.endDate | date:'shortDate'}}</td>
 				<td>{{metric.comments}}</td>
-				<td style="width:25px">
-                     <button ng-click="openMesure(data, metric,false)"type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></button>
-                </td>
+				<td ng-if="page === 'task'" style="width:25px">
+					<button ng-click="openMetric(data, metric,false)"type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></button>
+				</td>
 			</tr>
 		</tbody>
 	</table>
@@ -124,47 +277,14 @@
 	<!-- table actor (see ng-if)  -->  
 	<!--############-->  
 	<div class="row"  ng-if="dashboardType === 'actors'">
-		<div class="col-md-12 user-info">
-			<img alt="" src="assets/images/avatars/Will.png" style="width:45px" class="img-responsive"/>
+		<div class="col-md-12 user-info" ng-repeat="actor in dataTable">
+			<img alt="" ng-src="assets/images/avatars/{{actor.name}}.png" style="width:45px" class="img-circle"/>
 			<div class="details">
 				<div>
-					<a href="#">Will</a>
+					<a href="#">{{actor.name}}</a>
 				</div>
 				<div>
-					29 Jan 2013 10:45AM
-				</div>
-			</div>
-		</div>
-		<div class="col-md-12 user-info">
-			<img alt="" src="assets/images/avatars/avatar.png" class="img-responsive"/>
-			<div class="details">
-				<div>
-					<a href="#">Jimmy</a>
-				</div>
-				<div>
-					19 Jan 2013 10:45AM
-				</div>
-			</div>
-		</div>
-		<div class="col-md-12 user-info">
-			<img alt="" src="assets/images/avatars/avatar.png" class="img-responsive"/>
-			<div class="details">
-				<div>
-					<a href="#">Alexandra</a>
-				</div>
-				<div>
-					19 Jan 2013 12:45PM
-				</div>
-			</div>
-		</div>
-		<div class="col-md-12 user-info">
-			<img alt="" src="assets/images/avatars/avatar.png" class="img-responsive"/>
-			<div class="details">
-				<div>
-					<a href="#">Pascale</a>
-				</div>
-				<div>
-					19 Jan 2013 11:55PM
+					{{actor.count}} metrics
 				</div>
 			</div>
 		</div>

@@ -8,6 +8,7 @@ angular.module('boardOsApp', [
   'ui.bootstrap',
   'ngToast',
   'ngJsTree',
+  'ngDialog',
   'nvd3'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {

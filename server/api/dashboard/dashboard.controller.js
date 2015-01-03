@@ -78,15 +78,15 @@ exports.show = function(req, res) {
         _.each(task, function(rowdata, index) { 
           rowdata =rowdata.toObject()
          if (rowdata.context.indexOf(mDashboard.context) >=0  && rowdata.activity.indexOf(mDashboard.activity) >=0 ) {
-            mDashboard.tasks.push (rowdata);
 
           // get last kpis metrics
           _.each(mDashboard.kpis, function(kpidata, index) {  
               if (rowdata.context.indexOf(kpidata.context) >=0  && rowdata.activity.indexOf(kpidata.activity) >=0 ) {
-                  rowdata.timetowait = Math.min(kpidata.refresh, (rowdata.timetowait == null) ? Infinity : rowdata.timetowait );
+                  rowdata.timetowait = Math.min((typeof kpidata.refresh === 'undefined') ? Infinity : kpidata.refresh , (typeof rowdata.timetowait === 'undefined') ? Infinity : rowdata.timetowait );
               }
           });
 
+          mDashboard.tasks.push (rowdata);
           }
         });
         deferred.resolve(mDashboard);
@@ -97,20 +97,23 @@ exports.show = function(req, res) {
     // Get related metrics
     var deferred = Q.defer();
     mDashboard.metrics = [];
-    Metric.find({}, function (err, metric) {
+    Metric.find({},{}, {sort:{
+        date: 1 //Sort by Date Added DESC
+    }},function (err, metric) {
       _.each(metric, function(rowdata, index) {  
         if (rowdata.context.indexOf(mDashboard.context) >=0  && rowdata.activity.indexOf(mDashboard.activity) >=0 ) {
-          mDashboard.metrics.push (rowdata.toObject());
           // get last tasks metrics
           _.each(mDashboard.tasks, function(taskdata, index) {  
-              if (rowdata.context.indexOf(taskdata.context) >=0  && rowdata.activity.indexOf(taskdata.activity) >=0 ) {
-                  var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+              if (rowdata.context === taskdata.context  && rowdata.activity === taskdata.activity ) { // pour la tache
+                  var oneDay = 24*60*60*1000; 
                   var firstDate = new Date(rowdata.date);
                   var secondDate = new Date();
                   taskdata.timewaited = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime())/(oneDay)));
                   taskdata.timebetween =  taskdata.timetowait - taskdata.timewaited;
+                  taskdata.lastmetric = rowdata;
               }
           });
+          mDashboard.metrics.push (rowdata.toObject());
         }
       });
       deferred.resolve(mDashboard);
@@ -118,6 +121,10 @@ exports.show = function(req, res) {
     return deferred.promise;
     })
   .then(function () {
+    var actorsObject = _.countBy(mDashboard.metrics,'actor');
+    mDashboard.actors = _.map(actorsObject, function(value, key) {
+      return {name: key, count:value};
+    });
     return res.json(mDashboard);
   });
 };

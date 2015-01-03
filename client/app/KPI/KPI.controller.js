@@ -13,25 +13,27 @@ angular.module('boardOsApp')
     $http.get('/api/KPIs/'+$stateParams.id, {params:{activity: $rootScope.perimeter.activity, context: $rootScope.perimeter.context}}).success(function(KPI) {
       $scope.KPI = KPI;
 
- zingchart.render({
-        id:"myChartDiv0",
-        data:$scope.KPI.graphs[0],
-        height:100,
-        width:"100%"
-    });
+  setTimeout( function(){
+      zingchart.render({
+              id:"myChartDiv0",
+              data:$scope.KPI.graphs[0],
+              height:100,
+              width:"100%"
+       });
 
- zingchart.render({
-        id:"myChartDiv1",
-        data:$scope.KPI.graphs[1],
-        height:300,
-        width:"100%"
-    });
+      zingchart.render({
+              id:"myChartDiv1",
+              data:$scope.KPI.graphs[1],
+              height:300,
+              width:"100%"
+      });
 
- zingchart.render({
-        id:"myChartDiv2",
-        data:$scope.KPI.graphs[2],
-        height:400,
-        width:"100%"
+      zingchart.render({
+              id:"myChartDiv2",
+              data:$scope.KPI.graphs[2],
+              height:400,
+              width:"100%"
+      });
     });
 
     });

@@ -1,138 +1,5 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
-<!--* Modal Part-->
-<script type="text/ng-template" id="myMesureContent.html">
-    <div class="modal-header">
-      <h3>Ajouter</h3>
-    </div>
-    <div class="modal-body">
-      <!-- FORM -->
-    
-      <!-- date -->
-      <div class="row">
-        <div class="col-md-6">  <h4>Début Tache</h4>
-          <p class="input-group">
-            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.startDate" is-open="opened2" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer" placeholder="Entrer la date de début de la tache" />
-            <span class="input-group-btn">
-              <button class="btn btn-default" ng-click="open2($event)">
-                <span class="glyphicon glyphicon-chevron-down">
-                </span>
-              </button>
-            </span>
-          </p>
-        </div>
-        <div class="col-md-6">  <h4>Fin Tache</h4>
-          <p class="input-group">
-            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.endDate" is-open="opened3" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer" placeholder="Entrer la date de début de la tache" />
-            <span class="input-group-btn">
-              <button class="btn btn-default" ng-click="open3($event)">
-                <span class="glyphicon glyphicon-calendar">
-                </span>
-              </button>
-            </span>
-          </p>
-        </div>
-      </div>
-    
-      <!-- date -->
-      <div class="row">
-        <div class="col-md-4">  
-          <p class="input-group">
-            <label>Charge</label>
-            <input type="text" name="load" class="form-control"  ng-model="formData.load" placeholder="Entrer la charge">
-            <span class="help-block">
-            </span>
-    
-          </p>
-        </div>
-    
-        <div class="col-md-4">  
-          <p class="input-group">
-            <label>% progress</label>
-            <input type="text" name="progress" class="form-control"  ng-model="formData.progress" placeholder="Entrer le pourcentage d'progress">
-            <span class="help-block">
-            </span>
-    
-          </p>
-        </div>
-        <div class="col-md-4">  
-          <p class="input-group">
-            <label>Statut</label>
-            <input type="text" placeholder="" class="form-control" ng-model="formData.status" typeahead="statut.value for statut in constant.statusTask  | limitTo:8"/>
-            <span class="help-block">
-            </span>
-          </p>
-        </div>
-      </div>
-    
-      <!-- date -->
-      <div class="row">
-        <div class="col-md-4">
-          <p class="input-group">
-            <label>Date</label>
-            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.date" is-open="opened1" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer" placeholder="Entrer la date de la mesure"/>
-            <span class="input-group-btn">
-              <button class="btn btn-default" ng-click="open1($event)">
-                <span class="glyphicon glyphicon-calendar">
-                </span>
-              </button>
-            </span>
-          </p>
-        </div>
-        <div class="col-md-4">  
-          <p class="input-group">
-            <label>Etat de progressStatusion</label>
-            <input type="text" name="progressStatus" class="form-control" ng-model="formData.progressStatus" typeahead-on-select="$item"  typeahead="statut.value for statut in constant.progressStatusTask  | limitTo:8" placeholder="Progress Status">
-            <span class="help-block">
-            </span>
-    
-          </p>
-        </div>
-        <div class="col-md-4">  
-          <p class="input-group">
-            <label>% trust</label>
-            <input type="text" name="trust" class="form-control"  ng-model="formData.trust" placeholder="Entrer le pourcentage de trust">
-            <span class="help-block">
-            </span>
-    
-          </p>
-        </div>
-      </div>
-    
-    
-      <!-- date -->
-      <div class="row">
-        <div class="col-md-12">  
-          <label>comments</label>
-          <textarea name="comments" class="form-control" rows="4" ng-model="formData.comments" placeholder="Add a comment (optional)"></textarea>
-        </div>
-      </div>
-    
-      <div ng-show="debug==true">
-    
-        SHOW DATA FROM INPUTS AS THEY ARE BEING TYPED 
-        <pre>
-          {{ formData }}
-        </pre>
-        <div class="col-md-4">  
-          <p class="input-group">
-            <label>Charge</label>
-            <input type="text" name="actor" class="form-control" ng-model="formData.actor">
-            <span class="help-block">
-            </span>
-    
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <div style="float:left"><button class="btn btn-alert" ng-click="debug=!debug">Debug Mode</button><button ng-show='formData._id' class="btn btn-danger" ng-click="DeleteData(formData._id)">Delete Mesure</button></div>
-      <div style="float:right">
-        <button class="btn btn-default" ng-click="cancel()">Cancel</button>
-        <button class="btn btn-success" ng-click="ok()">Update</button>
-      </div>
-    </div>
-    
-</script>
+
 <!-- BEGIN PAGE CONTENT-->
 <div class="row profile">
     <div class="col-md-12">
@@ -208,41 +75,33 @@
         <div class="row">
             <tabset>
                 <!--tab Metrics-->
-                <tab>
+                <tab ng-if="task._id" active="true">
                     <tab-heading>
                     Metrics 
                     <span class="badge badge-default"> {{task.metrics.length}}</span>
                     </tab-heading>
                     <div dashboard-tab dashboard-type="metrics" dashboard-data="task" ng-if="task"></div>
                 </tab>
-                <tab>
+                <tab ng-if="task._id" >
                     <tab-heading>
                       KPIs 
-                      <span class="badge badge-default"> {{dashboard.kpis.length}}</span>
+                      <span class="badge badge-default"> {{task.kpis.length}}</span>
                     </tab-heading>
                     <div dashboard-tab dashboard-type="kpis" dashboard-data="task" ng-if="task"></div>
                 </tab>
                 <!--tab Dashboard-->
-                <tab>
+                <tab ng-if="task._id" >
                     <tab-heading>
                       Dashboards 
-                      <span class="badge badge-default"> {{dashboard.dashboards.length}}</span>
+                      <span class="badge badge-default"> {{task.dashboards.length}}</span>
                     </tab-heading>
-                    <div dashboard-tab dashboard-type="dashboard" dashboard-data="task" ng-if="task"></div>
-                </tab>
-                <!--tab Tasks-->
-                <tab>
-                    <tab-heading>
-                    Tasks 
-                    <span class="badge badge-default"> {{dashboard.tasks.length}}</span>
-                    </tab-heading>
-                    <div dashboard-tab dashboard-type="tasks" dashboard-data="task" ng-if="task"></div>
+                    <div dashboard-tab dashboard-type="dashboards" dashboard-data="task" ng-if="task"></div>
                 </tab>
                 <!--tab Actors-->
-                <tab>
+                <tab ng-if="task._id" >
                     <tab-heading>
                     Actors 
-                    <span class="badge badge-default">4</span>
+                    <span class="badge badge-default">{{task.actors.length}}</span>
                     </tab-heading>
                     <div dashboard-tab dashboard-type="actors" dashboard-data="task" ng-if="task"></div>
                 </tab>
