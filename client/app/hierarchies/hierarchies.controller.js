@@ -15,13 +15,16 @@ angular.module('boardOsApp')
     version : 1,
     core : {
       animation: true,
+      error : function(error) {
+            console.log('treeCtrl: error from js tree - ' + angular.toJson(error));
+        },
       check_callback : true,
       theme : {responsive:true},
       worker : true
     },
     types : {
       default : {
-        icon : 'glyphicon glyphicon-flash'
+        icon : 'glyphicon glyphicon-star-empty'
       },
       star : {
         icon : 'glyphicon glyphicon-star'
@@ -37,12 +40,20 @@ angular.module('boardOsApp')
     $http.get('/api/hierarchies/list/' + $scope.HierarchyType).success(function(hierarchies)  {
       $scope.hierarchies = hierarchies.list ;
       $scope.treeConfig.version++;
+       $scope.selectedNode = null;
     });
   };
 
   $scope.loadMe = function(HierarchyType) {
     $scope.HierarchyType =HierarchyType;
     $scope.load();
+  };
+
+
+  $scope.create = function() {
+    $scope.hierarchies.push({ id : 'ajson'+ (Math.round(Math.random() * 100000)).toString(), parent : '#', text : 'new Node' });
+    $scope.treeConfig.version++;
+
   };
 
   $scope.save = function() {
@@ -53,12 +64,10 @@ angular.module('boardOsApp')
       ngToast.create('Hierarchy "' + $scope.HierarchyType + '" was updated');
     }
     $scope.load();
-    $scope.config = {tab1: true, tab2: false};
   };
 
   $scope.edit = function(Hierarchy) {
     $scope.Hierarchy = Hierarchy;
-    $scope.config = {tab1: false, tab2: true};
   };
 
   $scope.reset = function() {
@@ -79,16 +88,12 @@ angular.module('boardOsApp')
   $scope.load();
   
   $scope.selectNode = function(e, data) {
-    //console.log(data);
     if(data && data.selected && data.selected.length) {
-      var filterHierarchy = $scope.hierarchies.filter(function(obj){          return obj.id === data.node.id;      });
-      console.log(filterHierarchy);
-      $('#details').html(filterHierarchy[0].longname).show();
+      $scope.$apply( // ?? workaround avec apply, à chercher pourquoi
+         $scope.selectedNode = $scope.hierarchies.filter(function(obj){ return obj.id === data.node.id;})[0]
+      );
     }
-    else {
-      $('#details').hide();
-      $('#details').html('Select a file from the tree.').show();
-    }
+
   };
 
   $scope.createNode = function(e, data) {
@@ -111,5 +116,6 @@ angular.module('boardOsApp')
         }   
       });
   };
+
 
 });

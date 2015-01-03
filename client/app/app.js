@@ -7,7 +7,6 @@ angular.module('boardOsApp', [
   'ui.router',
   'ui.bootstrap',
   'ngToast',
-  'ng-nestable',
   'ngJsTree',
   'nvd3'
 ])

@@ -211,7 +211,7 @@ function groupByMulti (obj, values, context) {
                             "value-box":{
                                 "type":"all",
                                 "text":"%t",
-                                "placement":"bottom"
+                                "placement":"right"
                             }
                         },
                         "series":mySeries

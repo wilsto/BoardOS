@@ -55,26 +55,66 @@
     </ul>
   </div>
 
-<div class="col-md-10">
-  <div class="row">
-    <div class="col-md-5">
-      <button type="button" class="btn btn-success btn-sm" onclick="demo_create();"><i class="glyphicon glyphicon-asterisk"></i> Create</button>
-      <button type="button" class="btn btn-warning btn-sm" onclick="demo_rename();"><i class="glyphicon glyphicon-pencil"></i> Rename</button>
-      <button type="button" class="btn btn-danger btn-sm" onclick="demo_delete();"><i class="glyphicon glyphicon-remove"></i> Delete</button><br/><br/>
-    </div>
-    <div class="col-md-5">
-      <div class="pull-right">
-        <button type="button" class="btn btn-default" ng-click="reset()">Reset</button>
-        <button type="submit" class="btn btn-info" ng-click="save()">Save</button>
-      </div>            
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-5">
-      <div id='mytree' js-tree="treeConfig" ng-model="hierarchies" tree="treeInstance" tree-events="ready:readyCB;select_node:selectNode;create_node:createNode;rename_node:renameNode;delete_node:deleteNode"></div>
+  <div class="col-md-10">
+    <div class="row">
+      <div class="col-md-5">
+        <div class="portlet">
+          <div class="portlet-title">
+            <div class="caption">
+             <button type="button" style="margin-top:-5px" class="btn btn-default btn-xs" ng-click="create()"><i class="glyphicon glyphicon-asterisk"></i> Create a new root</button>
+           </div>
+           <div class="tools">
+            <button type="submit" style="margin-top:-4px" class="btn btn-info btn-xs pull-right" ng-click="save()">Save</button>   
+          </div>
+        </div>
+        <div class="portlet-body">
+          <div id='mytree' class="jstree" js-tree="treeConfig" ng-model="hierarchies" tree="treeInstance" tree-events="select_node:selectNode;create_node:createNode;rename_node:renameNode;delete_node:deleteNode">
+          </div>
+        </div>
+      </div>
     </div>
     <div class="col-md-7">
-      <div id="details">fdsdf</div>
+        <div class="portlet"  ng-show="selectedNode">
+          <div class="portlet-title">
+            <div class="caption">
+             Details
+           </div>
+           <div class="tools">
+            <button type="submit" style="margin-top:-4px" class="btn btn-success btn-xs pull-right" ng-click="saveDetails()">Save changes</button>   
+            <button type="submit" style="margin-top:-4px;margin-right:15px" class="btn btn-danger btn-xs pull-right" ng-click="deleteDetails()">Delete</button>   
+          </div>
+        </div>
+        <div class="portlet-body">
+           <form role="form" class="form-horizontal" action="#">
+          <div class="form-body">
+            <div class="form-group">
+              <label  class="col-md-3 control-label">Name</label>
+              <div class="col-md-9">
+                <input  type="text" placeholder="" class="form-control" ng-model="selectedNode.text"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-3 control-label">Description</label>
+              <div class="col-md-9">
+                <input type="text" placeholder="" class="form-control" ng-model="selectedNode.description"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-3 control-label">Value</label>
+              <div class="col-md-9">
+                <input type="text" placeholder="" class="form-control" ng-model="selectedNode.value" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-3 control-label">Color</label>
+              <div class="col-md-9">
+                <input type="text" placeholder="#xxxxxx" class="form-control" ng-model="selectedNode.color"/>
+              </div>
+            </div>
+          </div>
+        </form>
+        </div>
+      </div>
     </div>
   </div>
 </div>
