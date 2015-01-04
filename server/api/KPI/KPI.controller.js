@@ -105,48 +105,10 @@ exports.show = function(req, res) {
   .then(function () {
     var deferred = Q.defer();
 
-      //Valeurs
-      if (typeof mKPI.metricTaskValues !== "undefined" && mKPI.metricTaskValues.length > 0) {
-        var checksType = mKPI.metricTaskValues.split(' + ');
-      }
-      if (typeof mKPI.refMetricTaskValues !== "undefined" &&  mKPI.refMetricTaskValues.length > 0) {
-        var refChecksType = mKPI.refMetricTaskValues.split(' + ');
-      }
-
-      // on ajoute des caractéristiques aux métriques
-      //##############################################
-      //Value for calculation
-      mKPI.metricValues = [];
-      mKPI.refMetricValues = [];
+      // ajouter les propriétés des métriques
+      //##############################################  
       _.each(mKPI.metrics, function(metric){ 
-
-        // valeurs principales
-        if (typeof checksType !== "undefined" ) {
-          _.each(checksType, function(check) {
-           if (metric[mKPI.metricTaskField] === check) { 
-            mKPI.metricValues.push({value:metric[mKPI.metricTaskField],date:metric.date});
-               } // avec indexOf pour le like
-             });
-        } else {
-          mKPI.metricValues.push({value:metric[mKPI.metricTaskField],date:metric.date});
-        }
-
-        // valeurs références
-        if (mKPI.refChecksType !== 'undefined'  ) {
-          if (mKPI.refMetricTaskField === 'constant') {
-            mKPI.refMetricValues.push({value:mKPI.refMetricTaskValues,date:metric.date});
-          } else {
-            _.each(refChecksType, function(check) {
-             if (metric[mKPI.metricTaskField] === check) { 
-              mKPI.refMetricValues.push({value:metric[mKPI.metricTaskField],date:metric.date});
-               }  // avec indexOf pour le like
-             });
-          }
-        } else {
-          mKPI.refMetricValues.push({value:metric[mKPI.metricTaskField],date:metric.date});
-        }
-
-        // ajouter les propriétés des métriques
+       
         var Value = _.filter(hierarchyValues, function(item) { return  item.text.toLowerCase() === metric[mKPI.metricTaskField].toLowerCase(); });
         if (Value.length > 0 ) {
           metric.color = Value[0].color;
@@ -154,9 +116,8 @@ exports.show = function(req, res) {
           metric.description = Value[0].description;          
         }
 
-        // grouper par mois 
-        var d = new Date(new Number(new Date(metric.date)));
-        metric.month = d.getFullYear()  + "." + ("0" + d.getMonth()).slice(-2) ;
+        // ajouter information par mois 
+        metric.groupTimeByValue = moment(metric.date).format("YYYY.MM");
 
         //metric.taskname = []; à vérifier qu'il n'y est qu'une tache avec le meme context, activity
         _.forEach(mKPI.tasks, function (task) {
@@ -170,42 +131,23 @@ exports.show = function(req, res) {
 
       });
 
+      // on ajoute des caractéristiques aux KPI
+      //##############################################
+      mKPI.metricsGroupBy ={};
+      mKPI.metricsGroupBy.Task = tools.groupMultiBy(mKPI.metrics, ['taskname']);
+      mKPI.metricsGroupBy.TaskTime = tools.groupMultiBy(mKPI.metrics, ['taskname','groupTimeByValue']);
+      mKPI.metricsGroupBy.Field = tools.groupMultiBy(mKPI.metrics, [mKPI.metricTaskField]);
+      mKPI.metricsGroupBy.FieldTime = tools.groupMultiBy(mKPI.metrics, [mKPI.metricTaskField,'groupTimeByValue']);
+      mKPI.metricsGroupBy.Time = tools.groupMultiBy(mKPI.metrics, ['groupTimeByValue']);
 
-    // Réaliser des calculs
-    switch(mKPI.action) {
-      case 'count':
-        mKPI.metricValuesCal = mKPI.metricValues.length;
-        mKPI.refMetricValuesCal = mKPI.refMetricValues.length;
-        break;
-      case 'Mean':
-        var sumMetricValuesCal = 0;
-        var sumRefMetricValuesCal = 0;
-        for( var i = 0; i < mKPI.metricValues.length; i++ ){
-              sumMetricValuesCal += parseInt( mKPI.metricValues[i].value, 10 ); //don't forget to add the base
-              sumRefMetricValuesCal += parseInt( mKPI.refMetricValues[i].value, 10 ); //don't forget to add the base
-        }
-        mKPI.metricValuesCal = sumMetricValuesCal/ mKPI.metrics.length;
-        mKPI.refMetricValuesCal = sumRefMetricValuesCal/ mKPI.refMetricValues.length;
-        break;
-        default :
-        if (typeof mKPI.metrics[mKPI.metrics.length - 1] !== "undefined") { mKPI.metricValues = mKPI.metrics[mKPI.metrics.length - 1][mKPI.type];}
-        if (typeof mKPI.metrics[mKPI.metrics.length - 2] !== "undefined") { mKPI.metricPrevVal = mKPI.metrics[mKPI.metrics.length - 2][mKPI.type];}
-        mKPI.refMetricValues = 100;                              
-    }
 
-      //calcul de l'age de la dernière metric
-/*      if (typeof mKPI.metrics[metrics.length - 1] !== "undefined") {
-        var date1 = new Date(mKPI.metrics[metrics.length - 1].date);                               
-        var date2 = new Date();
-        var diff = dateDiff(date1, date2);
-        mKPI.ageVal = diff.day ;
-      }*/
-
-      mKPI.percentObjectif = (mKPI.metricValuesCal / mKPI.refMetricValuesCal) * 100;
-
-      mKPI.metricsGroupBy = tools.groupByMonth(mKPI.metrics,'date',mKPI.metricTaskField);
-      mKPI.metricsGroupByTask = tools.groupByTask(mKPI.metrics, mKPI.tasks, mKPI.metricTaskField);
-      var test = "e" ;
+      // a changer pour les bars
+      mKPI.metricsGroupBy.oldTime = tools.groupByTime(tools.groupMultiBy(mKPI.metrics, ['groupTimeByValue','taskname']),'date',mKPI.metricTaskField);
+    
+      mKPI.calcul = {};
+      mKPI.calcul.time = _.map( mKPI.metricsGroupBy.Time, function(value, key) {
+        return {month: key, valueKPI:tools.calculKPI(value,mKPI)};
+      });
 
       // graphics
       mKPI.graphs = [];
@@ -216,11 +158,10 @@ exports.show = function(req, res) {
       mKPI.graphs.push(myChart1);
       mKPI.graphs.push(myChart2);
 
-    var actorsObject = _.countBy(mKPI.metrics,'actor');
-    mKPI.actors = _.map(actorsObject, function(value, key) {
-      return {name: key, count:value};
-    });
-
+      // la liste des acteurs
+      mKPI.actors = _.map( _.countBy(mKPI.metrics,'actor'), function(value, key) {
+        return {name: key, count:value};
+      });
 
       deferred.resolve(mKPI);
       return deferred.promise;

@@ -5,6 +5,9 @@
 
  'use strict';
 var _ = require('lodash');
+var moment = require('moment');
+var math = require('mathjs');
+
 var Hierarchies = require('../api/hierarchy/hierarchy.model');
 var events = require('events');
 var hierarchyEmitter = new events.EventEmitter();
@@ -58,7 +61,7 @@ function groupByMulti (obj, values, context) {
                             "series":
                             [
                                 {
-                                    "values":[mKPI.percentObjectif],
+                                    "values":[_.last(mKPI.calcul.time).valueKPI],
                                     "background-color":"#859900",
                                     "alpha":"0.6",
                                     "goals":[100]
@@ -70,7 +73,7 @@ function groupByMulti (obj, values, context) {
               break;
               case 'Bar' :
                 var mySeries = [];
-                _.forEach(mKPI.metricsGroupBy, function(item, key) {
+                _.forEach(mKPI.metricsGroupBy.oldTime, function(item, key) {
                     mySeries.push( {
                         "text":key,
                         "values":_.pluck(item,'count'),
@@ -78,8 +81,8 @@ function groupByMulti (obj, values, context) {
                         "alpha":"0.7",
                         "description":"<= Scheduled deadline"
                     })
+                    var myLabels = _.pluck(item,'label');
                 });
-
 
               var myChart={
                 "graphset":[
@@ -119,7 +122,7 @@ function groupByMulti (obj, values, context) {
                     },
                     "crosshair-x":{},
                     "tooltip":{
-                        "visible":true
+                        "visible":true,
                     },
                     "plot":{
                         "stacked":true,
@@ -170,19 +173,22 @@ function groupByMulti (obj, values, context) {
             break;
             case 'Bubble' :
             var mySeries = [];
-                var metricsByTask = _.chain(mKPI.metricsGroupByTask).pairs().sortBy(function(item) { return item[0]; }).last().value(); // on prend les taches du dernier mois
-                _.forEach(metricsByTask[1], function(item, key) { // pour chaque tache
-                    var lastMetric = _.chain(item).sortBy('date').last().value(); // on prend la dernière mesure
-                    mySeries.push( {
-                         "values":[
-                                      [lastMetric.value, lastMetric.daysToDeadline, lastMetric.load]
-                          ],
-                        "text":lastMetric.taskname || 'No task',
-                        "marker":{
-                            "background-color":lastMetric.color,
-                            "alpha":"0.6"
-                        }
-                    } );
+                _.forEach(mKPI.metricsGroupBy.TaskTime, function(item, key) { // pour chaque tache
+                    var lastMonth = _.chain(item).pairs().sortBy(function(item) { return item[0]; }).last().value(); // on prend le derniere mois avec une mesure
+                    var lastMetric = _.chain(lastMonth[1]).sortBy('date').last().value();
+                    
+                    if (lastMetric.status !== 'Finished') {// not finished
+                        mySeries.push( {
+                             "values":[
+                                          [lastMetric.value, lastMetric.daysToDeadline, lastMetric.load]
+                              ],
+                            "text":lastMetric.taskname || 'No task',
+                            "marker":{
+                                "background-color":lastMetric.color,
+                                "alpha":"0.6"
+                            }
+                        } );
+                    }
                 });
 
             var myChart=
@@ -255,7 +261,7 @@ function groupByMulti (obj, values, context) {
         if (type='list') {return list};
         if (type='Treeview') {return roots};        
     },
-    groupByMonth: function(metrics, fieldDate, field) {
+    groupByTime: function(metrics, fieldDate, field) {
 
 
         var dateResult = [];
@@ -266,10 +272,8 @@ function groupByMulti (obj, values, context) {
         }
 
         var map_result = _.map(dateResult, function (item) {
-          var d = new Date(new Number(new Date(item)));
-          var month = d.getFullYear()   + "." + ("0" + d.getMonth()).slice(-2);
           return {
-              "label": month,
+              "label": moment(item).format("YYYY.MM"),
               "count": null
               //,
               //"sum": null,
@@ -280,39 +284,71 @@ function groupByMulti (obj, values, context) {
         map_result.reverse() // par ordre croissant
         var myGroup = {};
 
-        _.forEach(metrics, function (metric) {
-            var d = new Date(new Number(new Date(metric[fieldDate])));
-            var month = d.getFullYear()  + "." + ("0" + d.getMonth()).slice(-2) ;
+        _.forEach(metrics, function (task,key) { 
+            var month = key;
+            _.forEach(task, function (metrics,key) {// pour chaque tache
 
-            if (typeof myGroup[metric[field]] === 'undefined') {
-                myGroup[metric[field]] = _.clone(map_result,true);           
-            }
+                var metric = _.chain(metrics).sortBy('date').last().value(); // prendre la dernière metric
 
-            _.forEach(myGroup[metric[field]], function (itemMap) {
-                if (itemMap.label === month) {
-                    itemMap.count += 1;
-
-                    itemMap.color = metric.color;
-                    itemMap.value = metric.value;
-                    itemMap.description = metric.description;
-
+                if (typeof myGroup[metric[field]] === 'undefined') {
+                    myGroup[metric[field]] = _.clone(map_result,true);           
                 }
+
+                _.forEach(myGroup[metric[field]], function (itemMap) {
+                    if (itemMap.label === month) {
+                        itemMap.count += 1;
+
+                        itemMap.color = metric.color;
+                        itemMap.value = metric.value;
+                        itemMap.description = metric.description;
+
+                    }
+                });
             });
         });
-
         return myGroup;
     },
-    groupByTask: function(metrics, tasks, field) {
-
+    groupMultiBy: function(metrics, fields) {
         var myGroup = {};
-
-        // on trie
-        var sortMetrics = _.sortBy(metrics, 'date');
-
-        // on groupe
-        var groupMetrics = groupByMulti(sortMetrics,['month','taskname'])
-
+        var sortMetrics = _.sortBy(metrics, fields[0]);// on trie
+        var groupMetrics = groupByMulti(sortMetrics,fields)   // on groupe
         return groupMetrics;
+    },
+    calculKPI: function(metrics, kpi) {
+
+        var calcul, calculMain, calculRef;
+        var action = kpi.action;
+        var values = kpi.metricTaskValues && kpi.metricTaskValues.split(' + ');
+        var refValues = kpi.refMetricTaskValues && kpi.refMetricTaskValues.split(' + ');
+        var field = kpi.metricTaskField;
+        var refField = kpi.refMetricTaskField;
+
+        var filteredMetrics = _.filter(metrics,function (metric) {return (typeof values === 'undefined')? 1 : _.contains(values,metric[field]);});
+        var filteredRefMetrics = (refField === 'constant') ? refValues :_.filter(metrics,function (metric) {return _.contains(refValues,metric[refField]);});
+
+        console.log(kpi)
+        console.log(field)
+        console.log(values)
+        console.log(filteredMetrics)
+        console.log(filteredRefMetrics)
+
+
+        // Réaliser des calculs
+        switch(action) {
+          case 'count':
+            calculMain = filteredMetrics.length;
+            calculRef =  (refField === 'constant') ? metrics.length : filteredRefMetrics.length;
+            break;                             
+          case 'mean':       
+            calculMain = math.mean(_.pluck(filteredMetrics,field).map(Number));
+            calculRef = 100;
+            break;        
+        }
+        console.log( calculMain)
+
+        calcul = (calculMain / calculRef) *100
+
+        return calcul;
     }
 };
 
