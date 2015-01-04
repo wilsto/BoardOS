@@ -35,7 +35,7 @@ exports.list = function(req, res) {
   Hierarchy.find({name:req.params.id}, function (err, hierarchy) {
     if(err) { return handleError(res, err); }
     if(!hierarchy) { return res.send(404); }
-    tools.buildHierarchy(hierarchy[0].list,'list');
+    if(hierarchy[0]) {tools.buildHierarchy(hierarchy[0].list,'list')};
     return res.json(hierarchy[0]);
   });
 };

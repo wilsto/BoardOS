@@ -281,7 +281,7 @@ Form Layouts
 }
 
 .form-inline input {
-  margin-bottom: 0px !important;
+  margin-bottom: 0 !important;
 }
 
 /* Control Label */
@@ -353,7 +353,7 @@ Form Layouts
   }
 }
 .form .form-section {
-  margin: 30px 0px 25px 0px;
+  margin: 30px 0 25px 0;
   padding-bottom: 5px;
   border-bottom: 1px solid #eee;
 }
@@ -826,7 +826,7 @@ h7 .label {
 
 .nav.nav-stacked > li > a > .badge {
   margin-top: 1px;
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 /***
@@ -841,7 +841,7 @@ Iconic Labels
 
 .ie9 .label.label-icon, 
 .ie10 .label.label-icon {
-  padding: 3px 0px 3px 3px;
+  padding: 3px 0 3px 3px;
 } 
 
 .label.label-icon > i {
@@ -1004,7 +1004,7 @@ wells
 .tabs-below > .nav-tabs,
 .tabs-below > .nav-pills {
   border-bottom: 0;
-  margin-bottom: 0px;
+  margin-bottom: 0;
   margin-top: 10px;
 }
 
@@ -1091,7 +1091,7 @@ Bootstrap modal
 Modal header close button fix
 ***/
 .modal-header .close {
-  margin-top: 0px !important;
+  margin-top: 0 !important;
 }
 
 .modal > .loading {

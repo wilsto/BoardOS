@@ -1,20 +1,7 @@
 'use strict';
 
-angular.module('boardOsApp').directive('onFinishRender', function ($timeout) {
-	return {
-		restrict: 'A',
-		link: function (scope, element, attr) {
-			if (scope.$last === true) {
-				$timeout(function () {
-					scope.$emit('ngRepeatFinished');
-				});
-			}
-		}
-	}
-});
-
-angular.module("boardOsApp")
-    .directive("popoverHtmlUnsafePopup", function () {
+angular.module('boardOsApp')
+  .directive('popoverHtmlUnsafePopup', function () {
       return {
         restrict: "EA",
         replace: true,
@@ -29,6 +16,6 @@ angular.module("boardOsApp")
       };
     })
 
-    .directive("popoverHtmlUnsafe", [ "$tooltip", function ($tooltip) {
+angular.module("boardOsApp").directive("popoverHtmlUnsafe", [ "$tooltip", function ($tooltip) {
       return $tooltip("popoverHtmlUnsafe", "popover", "click");
-    }]);
+}]);

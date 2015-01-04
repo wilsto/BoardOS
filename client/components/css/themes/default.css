@@ -105,7 +105,7 @@ ul.page-sidebar-menu > li.active > a i {
   color: #ffffff;
 }
 ul.page-sidebar-menu > li > ul.sub-menu > li:first-child {
-  border-top: 0px !important;
+  border-top: 0 !important;
 }
 ul.page-sidebar-menu > li > ul.sub-menu > li.active > a,
 ul.page-sidebar-menu > li > ul.sub-menu > li > a:hover {
