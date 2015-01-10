@@ -66,7 +66,7 @@ exports.show = function(req, res) {
         _.each(dashboard, function(rowdata, index) { 
           if (typeof rowdata.context === 'undefined' || rowdata.context === '')  { rowdata.context = mKPI.context};
           if (typeof rowdata.activity === 'undefined' || rowdata.activity === '')  { rowdata.activity = mKPI.activity};  
-          if (mKPI.context.indexOf(rowdata.context) >=0 && mKPI.activity.indexOf(rowdata.activity) >=0 ) {
+          if (mKPI.dashboards && mKPI.context.indexOf(rowdata.context) >=0 && mKPI.activity.indexOf(rowdata.activity) >=0 ) {
             mKPI.dashboards.push (rowdata.toObject());
           }
         });
@@ -80,7 +80,7 @@ exports.show = function(req, res) {
       mKPI.tasks = [];
       Task.find({}, function (err, task) {
         _.each(task, function(rowdata, index) { 
-          if (rowdata.context.indexOf(mKPI.context) >=0 && rowdata.activity.indexOf(mKPI.activity) >=0 ) {
+          if (mKPI.tasks && rowdata.context.indexOf(mKPI.context) >=0 && rowdata.activity.indexOf(mKPI.activity) >=0 ) {
             mKPI.tasks.push (rowdata.toObject());
           }
         });
@@ -94,7 +94,7 @@ exports.show = function(req, res) {
     mKPI.metrics = [];
     Metric.find({}, function (err, metric) {
       _.each(metric, function(rowdata, index) {  
-        if (rowdata.context.indexOf(mKPI.context) >=0 && rowdata.activity.indexOf(mKPI.activity) >=0 ) {
+        if (mKPI.metrics && rowdata.context.indexOf(mKPI.context) >=0 && rowdata.activity.indexOf(mKPI.activity) >=0 ) {
           mKPI.metrics.push (rowdata.toObject());
         }
       });
@@ -184,7 +184,6 @@ exports.create = function(req, res) {
 
 // Updates an existing kpi in the DB.
 exports.update = function(req, res) {
-  console.log(req.body);
   if(req.body._id) { delete req.body._id; }
   KPI.findById(req.params.id, function (err, kpi) {
     if (err) { return handleError(res, err); }

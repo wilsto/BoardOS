@@ -12,6 +12,7 @@
 var _ = require('lodash');
 var Q = require('q');
 var moment = require('moment');
+var http = require('http');
 
 var Dashboard = require('./dashboard.model');
 var KPI = require('../KPI/KPI.model');
@@ -78,10 +79,44 @@ exports.show = function(req, res) {
           if (typeof rowdata.context === 'undefined' || rowdata.context === '')  { rowdata.context = mDashboard.context};
           if (typeof rowdata.activity === 'undefined' || rowdata.activity === '')  { rowdata.activity = mDashboard.activity};         
           if (rowdata.context.indexOf(mDashboard.context) >=0  && rowdata.activity.indexOf(mDashboard.activity) >=0 ) {
-            mDashboard.kpis.push (rowdata.toObject());
+           //mDashboard.kpis.push (rowdata.toObject());
+            console.log('rowdata',rowdata);
+            console.log('request.headers.host',( req.headers.host.match(/:/g) ) ? req.headers.host.slice( 0, req.headers.host.indexOf(":") ) : req.headers.host);
+
+            /**
+             * HOW TO Make an HTTP Call - GET
+             */
+            // options for GET
+            var optionsget = {
+                host : ( req.headers.host.match(/:/g) ) ? req.headers.host.slice( 0, req.headers.host.indexOf(":") ) : req.headers.host, // here only the domain name
+                port:9000,
+                path : '/api/kpis/' + rowdata._id, // the rest of the url with parameters if needed
+                method : 'GET' // do GET
+            };
+             
+            // do the GET request
+            var reqGet = http.request(optionsget, function(res) {
+                console.log("statusCode: ", res);
+                // uncomment it for header details
+                //console.log("headers: ", res.headers);
+             
+                res.on('end', function(d) {
+                    console.info('GET result:\n');
+                    process.stdout.write(d);
+                    mDashboard.kpis.push (JSON.parse(d));
+                    console.info('\n\nCall completed');
+                });
+             
+            });
+
+            reqGet.end();
+            reqGet.on('error', function(e) {
+                console.error(e);
+            });
           }
         });
         deferred.resolve(mDashboard);
+
       })
       return deferred.promise;
     })
@@ -135,65 +170,6 @@ exports.show = function(req, res) {
     })
     return deferred.promise;
     })
-.then(function () {
-    var deferred = Q.defer();
-
-      // ajouter les propriétés des métriques
-      //##############################################  
-      _.each(mDashboard.metrics, function(metric){ 
-       
-        // ajouter information par mois 
-        metric.groupTimeByValue = moment(metric.date).format("YYYY.MM");
-
-        //metric.taskname = []; à vérifier qu'il n'y est qu'une tache avec le meme context, activity
-        _.forEach(mDashboard.tasks, function (task) {
-            if (metric.context === task.context && metric.activity === task.activity) {
-                metric.taskname = task.name;
-            }
-        }); 
-
-        // nombre de jours séparant la date de fin
-        metric.daysToDeadline = moment(metric.endDate).diff(moment(),'days');
-
-      });
-
-      // on ajoute des caractéristiques aux KPI
-      //##############################################
-      mDashboard.metricsGroupBy ={};
-      mDashboard.metricsGroupBy.KPI = tools.groupMultiBy(mDashboard.metrics, ['name']);
-      mDashboard.metricsGroupBy.TaskTime = tools.groupMultiBy(mDashboard.metrics, ['taskname','groupTimeByValue']);
-      mDashboard.metricsGroupBy.Field = tools.groupMultiBy(mDashboard.metrics, [mDashboard.metricTaskField]);
-      mDashboard.metricsGroupBy.FieldTime = tools.groupMultiBy(mDashboard.metrics, [mDashboard.metricTaskField,'groupTimeByValue']);
-      mDashboard.metricsGroupBy.Time = tools.groupMultiBy(mDashboard.metrics, ['groupTimeByValue']);
-
-
-      // a changer pour les bars
-      mDashboard.metricsGroupBy.oldTime = tools.groupByTime(tools.groupMultiBy(mDashboard.metrics, ['groupTimeByValue','taskname']),'date',mDashboard.metricTaskField);
-    
-      mDashboard.calcul = {};
-      mDashboard.calcul.time = _.map( mDashboard.metricsGroupBy.Time, function(value, key) {        return {month: key, valueKPI:tools.calculKPI(value,mDashboard)};      });
-      mDashboard.calcul.task = _.map( mDashboard.metricsGroupBy.Task, function(value, key) {        return {task: key, valueKPI:tools.calculKPI(value,mDashboard)};      });
-      mDashboard.calcul.taskTime = _.map( mDashboard.metricsGroupBy.TaskTime, function(value, key) {     
-         return {task: key, time:_.map( value, function(value2, key2) {        return {month: key2, valueKPI:tools.calculKPI(value2,mDashboard)};      }) };
-     });
-
-      // graphics
-      mDashboard.graphs = [];
-      var myChart0 = tools.buildChart(mDashboard,'hBullet');
-      var myChart1 = tools.buildChart(mDashboard,'Bar');
-      var myChart2 = tools.buildChart(mDashboard,'Bubble');
-      mDashboard.graphs.push(myChart0);
-      mDashboard.graphs.push(myChart1);
-      mDashboard.graphs.push(myChart2);
-
-      // la liste des acteurs
-      mDashboard.actors = _.map( _.countBy(mDashboard.metrics,'actor'), function(value, key) {
-        return {name: key, count:value};
-      });
-
-      deferred.resolve(mDashboard);
-      return deferred.promise;
-    })
   .then(function () {
     var actorsObject = _.countBy(mDashboard.metrics,'actor');
     mDashboard.actors = _.map(actorsObject, function(value, key) {
@@ -205,7 +181,6 @@ exports.show = function(req, res) {
 
 // Creates a new dashboard in the DB.
 exports.create = function(req, res) {
-    console.log(req.body);
     var newDashboard = new Dashboard(req.body, false);
     newDashboard.save(function(err) {
       res.send(200);

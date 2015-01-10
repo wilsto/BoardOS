@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-.controller('DashboardCtrl', function ($scope,  $rootScope, $http, $stateParams, calLibrary, ngToast, $cookieStore) {
+.controller('DashboardCtrl', function ($scope,  $rootScope, $http, $stateParams, calLibrary, ngToast, $cookieStore, $q) {
   
   $scope.load = function() {
     if ($stateParams.id) {
@@ -16,17 +16,24 @@ angular.module('boardOsApp')
       $rootScope.perimeter.category = dashboard.category;
       $cookieStore.put('perimeter',$rootScope.perimeter);
 
+      $scope.dashboard.fullKPIs = [];
+/*      $scope.getKPIs( function () {
+        $scope.dashboard.kpis = $scope.dashboard.fullKPIs;
+        delete $scope.dashboard.fullKPIs; 
+        $scope.predataKPIs = calLibrary.getByMonth($scope.dashboard.kpis, 'date','value');
+        $scope.dataKPIs[0].values = $scope.predataKPIs;
+      });*/
+
       $scope.dataKPIs = [{values: [] }];
       $scope.dataTasks = [{values: [] }];
       $scope.dataMetrics = [{values: [] }];
 
-      $scope.predataKPIs = calLibrary.getByMonth($scope.dashboard.kpis, 'date','value');
       $scope.predataTasks = calLibrary.getByMonth($scope.dashboard.tasks, 'date','value');
       $scope.predataMetrics = calLibrary.getByMonth($scope.dashboard.metrics, 'date','value');
 
-      $scope.dataKPIs[0].values = $scope.predataKPIs;
       $scope.dataTasks[0].values = $scope.predataTasks;
-      $scope.dataMetrics[0].values = $scope.predataMetrics;
+      $scope.dataMetrics[0].values = $scope.predataMetrics;     
+
 
     });
     } else {
@@ -37,10 +44,29 @@ angular.module('boardOsApp')
 
   $scope.load();
 
+$scope.getKPI = function(id, callback) {
+  return $http.get('/api/KPIs/'+id, {params:{activity: $rootScope.perimeter.activity, context: $rootScope.perimeter.context}}).success(function(data) {
+    return callback(data);
+  });
+}
+
+$scope.getKPIs = function (callback) {
+    var prom = [];
+    $scope.dashboard.kpis.forEach(function (obj, i) {
+        prom.push($scope.getKPI(obj._id, function(value){
+            $scope.dashboard.fullKPIs.push(value);
+        }));
+    });
+    $q.all(prom).then(function () {
+        callback();
+    });
+};
+
 $scope.save = function() {
 
   delete $scope.dashboard.__v;
   delete $scope.dashboard.kpis;
+  delete $scope.dashboard.fullKPIs;
   delete $scope.dashboard.metrics;
   delete $scope.dashboard.tasks;
 

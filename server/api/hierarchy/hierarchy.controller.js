@@ -51,10 +51,7 @@ exports.create = function(req, res) {
 // Updates an existing hierarchy in the DB.
 exports.update = function(req, res) {
   var upsertData= {name:req.params.id, list: req.body};
-  console.log(req.body);
-  console.log(upsertData);
   Hierarchy.update({name:req.params.id}, upsertData, {upsert: true}, function (err, hierarchy) {
-    console.log('Updating '+ req.params.id);
     return res.json(200, hierarchy);
   });
 };

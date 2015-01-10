@@ -31,7 +31,6 @@ exports.show = function(req, res) {
 
 // Creates a new metric in the DB.
 exports.create = function(req, res) {
-    console.log(req.body);
     var newMetric = new Metric(req.body, false);
     newMetric.save(function(err) {
       res.send(200);

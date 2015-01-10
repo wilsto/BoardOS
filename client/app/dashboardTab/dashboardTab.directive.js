@@ -14,9 +14,6 @@ angular.module('boardOsApp')
 		  scope.dataTable = scope.data[scope.dashboardType];
       scope.page =  $location.path().split('/')[1];
 
-
-
-
      /**
      * Display DirectBar for Task
      */
@@ -65,9 +62,9 @@ angular.module('boardOsApp')
     if (scope.page === 'dashboard' && scope.dashboardType=== 'kpis') {
       _.forEach(scope.dataTable, function(value2, key2) {
         value2.data = [{values: [] }];
+        console.log('value2',value2);
         _.forEach(scope.data.calcul.taskTime, function(value, key) {
           if (value.task === value2.name) {
-            console.log('value',value);
             console.log('value2',value2);
             value2.data[0].values = calLibrary.displayLastYear(value.time,'month','valueKPI');
           }
