@@ -22,6 +22,7 @@ angular.module('boardOsApp')
       $scope.dataTasks[0].values = $scope.predataTasks;
       $scope.dataMetrics[0].values = $scope.predataMetrics;
         
+        console.log('$scope.dataKPIs[0].values',$scope.dataKPIs[0].values);
       });
     };
 

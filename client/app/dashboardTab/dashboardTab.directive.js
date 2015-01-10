@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .directive('dashboardTab', function (ngDialog, $location, $rootScope) {
+  .directive('dashboardTab', function (ngDialog, $location, $rootScope, calLibrary) {
     return {
 		templateUrl: 'app/dashboardTab/dashboardTab.html',
 		restrict: 'EA',
@@ -13,6 +13,95 @@ angular.module('boardOsApp')
      */
 		  scope.dataTable = scope.data[scope.dashboardType];
       scope.page =  $location.path().split('/')[1];
+
+
+
+
+     /**
+     * Display DirectBar for Task
+     */
+    if (scope.page === 'KPI' && scope.dashboardType=== 'tasks') {
+      _.forEach(scope.dataTable, function(value2, key2) {
+        value2.data = [{values: [] }];
+        _.forEach(scope.data.calcul.taskTime, function(value, key) {
+          if (value.task === value2.name) {
+            value2.data[0].values = calLibrary.displayLastYear(value.time,'month','valueKPI');
+          }
+        });
+      });
+
+      scope.options = {
+        chart: {
+          type: 'discreteBarChart',
+          height: 20,
+          width: 260,
+          margin : {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
+          },
+          showXAxis : true,
+          showYAxis : false,
+          color: function(d){ 
+            switch (true) {
+              case d.value === null : return ['none'] ;break;  
+              case d.value > 66: return ['#2ca02c'] ;break;  
+              default: return ['#CB4B16'] ;
+            }
+          },
+          x: function(d){ return d.month; },
+          y: function(d){ return 100; },
+          showValues: false,
+          transitionDuration: 500
+        }
+      };
+
+    };
+
+     /**
+     * Display DirectBar for KPI
+     */
+    if (scope.page === 'dashboard' && scope.dashboardType=== 'kpis') {
+      _.forEach(scope.dataTable, function(value2, key2) {
+        value2.data = [{values: [] }];
+        _.forEach(scope.data.calcul.taskTime, function(value, key) {
+          if (value.task === value2.name) {
+            console.log('value',value);
+            console.log('value2',value2);
+            value2.data[0].values = calLibrary.displayLastYear(value.time,'month','valueKPI');
+          }
+        });
+      });
+
+      scope.options = {
+        chart: {
+          type: 'discreteBarChart',
+          height: 20,
+          width: 260,
+          margin : {
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0
+          },
+          showXAxis : true,
+          showYAxis : false,
+          color: function(d){ 
+            switch (true) {
+              case d.value === null : return ['none'] ;break;  
+              case d.value > 66: return ['#2ca02c'] ;break;  
+              default: return ['#CB4B16'] ;
+            }
+          },
+          x: function(d){ return d.month; },
+          y: function(d){ return 100; },
+          showValues: false,
+          transitionDuration: 500
+        }
+      };
+
+    };
 
      /**
      * Modal

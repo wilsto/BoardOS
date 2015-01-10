@@ -2,6 +2,35 @@
 
 angular.module('boardOsApp').factory('calLibrary', function() {
 	var sdo = {
+	 	displayLastYear: function(data, fieldDate, field) {
+
+	 		var dateResult = [];
+	        var i;
+	        var yourDate = new Date();
+	        for (i=0;i<12;i++){
+	            dateResult.push(new Date(yourDate.getFullYear(), yourDate.getMonth() - i, 1));
+	        }
+
+	        var map_result = _.map(dateResult, function (item) {
+	          return {
+	              "month": moment(item).format("YYYY.MM"),
+	              "value": null
+	            };
+	        });
+
+	        map_result.reverse() // par ordre croissant
+
+			$.each(data, function (key,item) {
+				  $.each(map_result, function (keyMap,itemMap) {
+					  if (itemMap.month === item[fieldDate]) {
+			    		itemMap.value = item[field];
+					  }
+				  });
+			});
+
+			return map_result;
+
+	     },
 		getByMonth: function(data, fieldDate, field) {
 
 				var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",

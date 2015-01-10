@@ -145,9 +145,11 @@ exports.show = function(req, res) {
       mKPI.metricsGroupBy.oldTime = tools.groupByTime(tools.groupMultiBy(mKPI.metrics, ['groupTimeByValue','taskname']),'date',mKPI.metricTaskField);
     
       mKPI.calcul = {};
-      mKPI.calcul.time = _.map( mKPI.metricsGroupBy.Time, function(value, key) {
-        return {month: key, valueKPI:tools.calculKPI(value,mKPI)};
-      });
+      mKPI.calcul.time = _.map( mKPI.metricsGroupBy.Time, function(value, key) {        return {month: key, valueKPI:tools.calculKPI(value,mKPI)};      });
+      mKPI.calcul.task = _.map( mKPI.metricsGroupBy.Task, function(value, key) {        return {task: key, valueKPI:tools.calculKPI(value,mKPI)};      });
+      mKPI.calcul.taskTime = _.map( mKPI.metricsGroupBy.TaskTime, function(value, key) {     
+         return {task: key, time:_.map( value, function(value2, key2) {        return {month: key2, valueKPI:tools.calculKPI(value2,mKPI)};      }) };
+     });
 
       // graphics
       mKPI.graphs = [];

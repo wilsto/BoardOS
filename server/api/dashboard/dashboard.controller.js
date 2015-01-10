@@ -11,12 +11,17 @@
 
 var _ = require('lodash');
 var Q = require('q');
+var moment = require('moment');
+
 var Dashboard = require('./dashboard.model');
 var KPI = require('../KPI/KPI.model');
 var Task = require('../task/task.model');
 var Metric = require('../metric/metric.model');
-var moment = require('moment');
+var Hierarchies = require('../hierarchy/hierarchy.model');
 
+var tools = require('../../config/tools');
+
+var hierarchyValues = {};
 var mDashboard = {};
 
 // Get list of dashboards
@@ -52,6 +57,16 @@ exports.show = function(req, res) {
 
     return deferred.promise;
   })
+  .then(function () {
+    // Get a single hierarchy
+    var deferred = Q.defer();
+    Hierarchies.find({name:'Task'}, function (err, hierarchy) {
+      if(err) { return handleError(res, err); }
+      hierarchyValues = hierarchy[0].list;
+      deferred.resolve(mDashboard);
+    })
+    return deferred.promise;
+  })  
   .then(function () {
       // Get related KPIs
       var deferred = Q.defer();
@@ -119,6 +134,65 @@ exports.show = function(req, res) {
       deferred.resolve(mDashboard);
     })
     return deferred.promise;
+    })
+.then(function () {
+    var deferred = Q.defer();
+
+      // ajouter les propriétés des métriques
+      //##############################################  
+      _.each(mDashboard.metrics, function(metric){ 
+       
+        // ajouter information par mois 
+        metric.groupTimeByValue = moment(metric.date).format("YYYY.MM");
+
+        //metric.taskname = []; à vérifier qu'il n'y est qu'une tache avec le meme context, activity
+        _.forEach(mDashboard.tasks, function (task) {
+            if (metric.context === task.context && metric.activity === task.activity) {
+                metric.taskname = task.name;
+            }
+        }); 
+
+        // nombre de jours séparant la date de fin
+        metric.daysToDeadline = moment(metric.endDate).diff(moment(),'days');
+
+      });
+
+      // on ajoute des caractéristiques aux KPI
+      //##############################################
+      mDashboard.metricsGroupBy ={};
+      mDashboard.metricsGroupBy.KPI = tools.groupMultiBy(mDashboard.metrics, ['name']);
+      mDashboard.metricsGroupBy.TaskTime = tools.groupMultiBy(mDashboard.metrics, ['taskname','groupTimeByValue']);
+      mDashboard.metricsGroupBy.Field = tools.groupMultiBy(mDashboard.metrics, [mDashboard.metricTaskField]);
+      mDashboard.metricsGroupBy.FieldTime = tools.groupMultiBy(mDashboard.metrics, [mDashboard.metricTaskField,'groupTimeByValue']);
+      mDashboard.metricsGroupBy.Time = tools.groupMultiBy(mDashboard.metrics, ['groupTimeByValue']);
+
+
+      // a changer pour les bars
+      mDashboard.metricsGroupBy.oldTime = tools.groupByTime(tools.groupMultiBy(mDashboard.metrics, ['groupTimeByValue','taskname']),'date',mDashboard.metricTaskField);
+    
+      mDashboard.calcul = {};
+      mDashboard.calcul.time = _.map( mDashboard.metricsGroupBy.Time, function(value, key) {        return {month: key, valueKPI:tools.calculKPI(value,mDashboard)};      });
+      mDashboard.calcul.task = _.map( mDashboard.metricsGroupBy.Task, function(value, key) {        return {task: key, valueKPI:tools.calculKPI(value,mDashboard)};      });
+      mDashboard.calcul.taskTime = _.map( mDashboard.metricsGroupBy.TaskTime, function(value, key) {     
+         return {task: key, time:_.map( value, function(value2, key2) {        return {month: key2, valueKPI:tools.calculKPI(value2,mDashboard)};      }) };
+     });
+
+      // graphics
+      mDashboard.graphs = [];
+      var myChart0 = tools.buildChart(mDashboard,'hBullet');
+      var myChart1 = tools.buildChart(mDashboard,'Bar');
+      var myChart2 = tools.buildChart(mDashboard,'Bubble');
+      mDashboard.graphs.push(myChart0);
+      mDashboard.graphs.push(myChart1);
+      mDashboard.graphs.push(myChart2);
+
+      // la liste des acteurs
+      mDashboard.actors = _.map( _.countBy(mDashboard.metrics,'actor'), function(value, key) {
+        return {name: key, count:value};
+      });
+
+      deferred.resolve(mDashboard);
+      return deferred.promise;
     })
   .then(function () {
     var actorsObject = _.countBy(mDashboard.metrics,'actor');

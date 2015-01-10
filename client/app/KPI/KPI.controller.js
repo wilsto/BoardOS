@@ -39,6 +39,7 @@ angular.module('boardOsApp')
     });
 };
 
+
 $scope.save = function() {
 
   //clean KPI

@@ -326,11 +326,11 @@ function groupByMulti (obj, values, context) {
         var filteredMetrics = _.filter(metrics,function (metric) {return (typeof values === 'undefined')? 1 : _.contains(values,metric[field]);});
         var filteredRefMetrics = (refField === 'constant') ? refValues :_.filter(metrics,function (metric) {return _.contains(refValues,metric[refField]);});
 
-        console.log(kpi)
-        console.log(field)
-        console.log(values)
-        console.log(filteredMetrics)
-        console.log(filteredRefMetrics)
+        console.log('kpi',kpi)
+        console.log('field',field)
+        console.log('values',values)
+        console.log('filteredMetrics',filteredMetrics)
+        console.log('filteredRefMetrics',filteredRefMetrics)
 
 
         // Réaliser des calculs
