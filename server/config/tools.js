@@ -332,7 +332,7 @@ function groupByMulti (obj, values, context) {
         console.log('filteredMetrics',filteredMetrics)
         console.log('filteredRefMetrics',filteredRefMetrics)*/
 
-
+console.log('metrics',metrics);
         // Réaliser des calculs
         switch(action) {
           case 'count':
@@ -346,7 +346,7 @@ function groupByMulti (obj, values, context) {
         }
         //console.log( calculMain)
 
-        calcul = (calculMain / calculRef) *100
+        calcul = parseInt((calculMain / calculRef) *100);
 
         return calcul;
     }

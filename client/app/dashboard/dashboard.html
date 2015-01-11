@@ -102,7 +102,7 @@
     <div class="col-md-2 col-sm-4">
       <div class="stats-overview stat-block">
        <div class="details">
-       <div class="title"><a href="/metrics"><span style="font-weight:bold;color:#ff7f0e">{{dashboard.metrics.length}}</span> Metrics</a></div>
+       <div class="title"><a href="/metrics"><span style="font-weight:bold;color:#87CEEB">{{dashboard.metrics.length}}</span> Metrics</a></div>
         <nvd3 options="optionsMetrics" data="dataMetrics"></nvd3>
       </div>
     </div>
@@ -120,8 +120,8 @@
 <div class="col-md-2 col-sm-4">
   <div class="stats-overview stat-block">
    <div class="details">
-    <div class="title">Goals</div>
-    <nvd3 options="optionsGoals" data="data"></nvd3>
+    <div class="title"><span style="font-weight:bold;color:#2CA02C">{{dashboard.kpis.length}}</span> Goals</div>
+    <nvd3 options="optionsGoals" data="dataGoals"></nvd3>
   </div>
 </div>
 </div>

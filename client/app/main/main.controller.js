@@ -13,16 +13,22 @@ angular.module('boardOsApp')
       $scope.dataKPIs = [{values: [] }];
       $scope.dataTasks = [{values: [] }];
       $scope.dataMetrics = [{values: [] }];
+      $scope.dataGoals = [{values: [] }];
 
       $scope.predataKPIs = calLibrary.getByMonth(dashboards.kpis, 'date','value');
       $scope.predataTasks = calLibrary.getByMonth(dashboards.tasks, 'date','value');
       $scope.predataMetrics = calLibrary.getByMonth(dashboards.metrics, 'date','value');
 
+     var dataGoals = [];
+      _.forEach(dashboards.kpis, function(kpi, key) {
+         if (kpi.category ==='Goal')  {dataGoals.push(_.pluck(calLibrary.displayLastYear(kpi.calcul.time,'month','valueKPI'),'value'))};
+      });
+
       $scope.dataKPIs[0].values = $scope.predataKPIs;
       $scope.dataTasks[0].values = $scope.predataTasks;
       $scope.dataMetrics[0].values = $scope.predataMetrics;
+      $scope.dataGoals[0].values = calLibrary.getCalculByMonth(dataGoals);     
         
-        console.log('$scope.dataKPIs[0].values',$scope.dataKPIs[0].values);
       });
     };
 
@@ -61,13 +67,13 @@ angular.module('boardOsApp')
   $scope.optionsTasks.chart.color =  ['#9467bd'];
 
   $scope.optionsMetrics = angular.copy($scope.options);
-  $scope.optionsMetrics.chart.color =  ['#ff7f0e'];
+  $scope.optionsMetrics.chart.color =  ['#87CEEB'];
 
   $scope.optionsAlerts = angular.copy($scope.options);
   $scope.optionsAlerts.chart.color =  ['#d62728'];
 
   $scope.optionsGoals = angular.copy($scope.options);
-  $scope.optionsGoals.chart.color =  ['#2ca02c'];
+  $scope.optionsGoals.chart.color =  function(d){  return  calLibrary.giveMeMyColor(d.count); };
 
   $scope.optionsTrust = angular.copy($scope.options);
   $scope.optionsTrust.chart.color =  ['#bcbd22'];

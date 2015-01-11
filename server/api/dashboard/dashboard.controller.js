@@ -11,8 +11,6 @@
 
 var _ = require('lodash');
 var Q = require('q');
-var moment = require('moment');
-var http = require('http');
 
 var Dashboard = require('./dashboard.model');
 var KPI = require('../KPI/KPI.model');
@@ -21,6 +19,7 @@ var Metric = require('../metric/metric.model');
 var Hierarchies = require('../hierarchy/hierarchy.model');
 
 var tools = require('../../config/tools');
+ var getData = require('../../config/getData');
 
 var hierarchyValues = {};
 var mDashboard = {};
@@ -59,65 +58,50 @@ exports.show = function(req, res) {
     return deferred.promise;
   })
   .then(function () {
-    // Get a single hierarchy
-    var deferred = Q.defer();
-    Hierarchies.find({name:'Task'}, function (err, hierarchy) {
-      if(err) { return handleError(res, err); }
-      hierarchyValues = hierarchy[0].list;
-      deferred.resolve(mDashboard);
-    })
-    return deferred.promise;
-  })  
-  .then(function () {
-      // Get related KPIs
-      var deferred = Q.defer();
-      mDashboard.kpis = [];
-      KPI.find({}, function (err, kpi) {
-        _.each(kpi, function(rowdata, index) { 
-          if (typeof mDashboard.context === 'undefined' )  { mDashboard.context = ''};
-          if (typeof mDashboard.activity === 'undefined' )  { mDashboard.activity = ''};
-          if (typeof rowdata.context === 'undefined' || rowdata.context === '')  { rowdata.context = mDashboard.context};
-          if (typeof rowdata.activity === 'undefined' || rowdata.activity === '')  { rowdata.activity = mDashboard.activity};         
-          if (rowdata.context.indexOf(mDashboard.context) >=0  && rowdata.activity.indexOf(mDashboard.activity) >=0 ) {
-           //mDashboard.kpis.push (rowdata.toObject());
-            console.log('rowdata',rowdata);
-            console.log('request.headers.host',( req.headers.host.match(/:/g) ) ? req.headers.host.slice( 0, req.headers.host.indexOf(":") ) : req.headers.host);
+        // Get related KPIs
+        var deferred = Q.defer();
 
-            /**
-             * HOW TO Make an HTTP Call - GET
-             */
-            // options for GET
-            var optionsget = {
-                host : ( req.headers.host.match(/:/g) ) ? req.headers.host.slice( 0, req.headers.host.indexOf(":") ) : req.headers.host, // here only the domain name
-                port:9000,
-                path : '/api/kpis/' + rowdata._id, // the rest of the url with parameters if needed
-                method : 'GET' // do GET
-            };
-             
-            // do the GET request
-            var reqGet = http.request(optionsget, function(res) {
-                console.log("statusCode: ", res);
-                // uncomment it for header details
-                //console.log("headers: ", res.headers);
-             
-                res.on('end', function(d) {
-                    console.info('GET result:\n');
-                    process.stdout.write(d);
-                    mDashboard.kpis.push (JSON.parse(d));
-                    console.info('\n\nCall completed');
-                });
-             
+
+        KPI.find({}, function (err, kpis) {
+
+            mDashboard.kpis = [];
+           var promises = [];
+
+            _.each(kpis, function(rowdata, index) { 
+                if (typeof mDashboard.context === 'undefined' )  { mDashboard.context = ''};
+                if (typeof mDashboard.activity === 'undefined' )  { mDashboard.activity = ''};
+                if (typeof rowdata.context === 'undefined' || rowdata.context === '')  { rowdata.context = mDashboard.context};
+                if (typeof rowdata.activity === 'undefined' || rowdata.activity === '')  { rowdata.activity = mDashboard.activity};         
+                if (rowdata.context.indexOf(mDashboard.context) >=0  && rowdata.activity.indexOf(mDashboard.activity) >=0 ) {
+                  var mKPI = rowdata.toObject();
+
+                  var KPIInfo = {params:{},query:{}};
+                  KPIInfo.params.id = mKPI._id;
+                  KPIInfo.query.context = mDashboard.context;
+                  KPIInfo.query.activity = mDashboard.activity;
+                  // Get a single kpi
+                  promises.push(KPIInfo);
+                }
             });
 
-            reqGet.end();
-            reqGet.on('error', function(e) {
-                console.error(e);
+            var lastPromise = promises.reduce(function(promise, KPIToGet) {
+                return promise.then( function() {
+                  getData.KPIById(KPIToGet, function(newKPI){
+                      mDashboard.kpis.push(newKPI);
+                  })
+                  return Q.delay(50);
+                }
+
+                  );
+            }, Q.resolve());
+
+            lastPromise
+              .then(function() {
+                  deferred.resolve(mDashboard);
             });
-          }
+
         });
-        deferred.resolve(mDashboard);
 
-      })
       return deferred.promise;
     })
   .then(function () {

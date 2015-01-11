@@ -16,25 +16,30 @@ angular.module('boardOsApp')
       $rootScope.perimeter.category = dashboard.category;
       $cookieStore.put('perimeter',$rootScope.perimeter);
 
-      $scope.dashboard.fullKPIs = [];
-/*      $scope.getKPIs( function () {
-        $scope.dashboard.kpis = $scope.dashboard.fullKPIs;
-        delete $scope.dashboard.fullKPIs; 
-        $scope.predataKPIs = calLibrary.getByMonth($scope.dashboard.kpis, 'date','value');
-        $scope.dataKPIs[0].values = $scope.predataKPIs;
-      });*/
-
       $scope.dataKPIs = [{values: [] }];
       $scope.dataTasks = [{values: [] }];
       $scope.dataMetrics = [{values: [] }];
+      $scope.dataGoals = [{values: [] }];
 
+      $scope.predataKPIs = calLibrary.getByMonth($scope.dashboard.kpis, 'date','value');
       $scope.predataTasks = calLibrary.getByMonth($scope.dashboard.tasks, 'date','value');
       $scope.predataMetrics = calLibrary.getByMonth($scope.dashboard.metrics, 'date','value');
 
+
+     var dataGoals = [];
+      _.forEach($scope.dashboard.kpis, function(kpi, key) {
+           if (kpi.category ==='Goal')  {dataGoals.push(_.pluck(calLibrary.displayLastYear(kpi.calcul.time,'month','valueKPI'),'value'))};
+        });
+
+      $scope.dataKPIs[0].values = $scope.predataKPIs;
       $scope.dataTasks[0].values = $scope.predataTasks;
       $scope.dataMetrics[0].values = $scope.predataMetrics;     
+      $scope.dataGoals[0].values = calLibrary.getCalculByMonth(dataGoals);     
 
 
+
+      console.log('dataGoals',dataGoals);
+      console.log('$scope.dataGoals[0]',$scope.dataGoals[0]);
     });
     } else {
        $scope.dashboard = {name:''};
@@ -44,24 +49,6 @@ angular.module('boardOsApp')
 
   $scope.load();
 
-$scope.getKPI = function(id, callback) {
-  return $http.get('/api/KPIs/'+id, {params:{activity: $rootScope.perimeter.activity, context: $rootScope.perimeter.context}}).success(function(data) {
-    return callback(data);
-  });
-}
-
-$scope.getKPIs = function (callback) {
-    var prom = [];
-    $scope.dashboard.kpis.forEach(function (obj, i) {
-        prom.push($scope.getKPI(obj._id, function(value){
-            $scope.dashboard.fullKPIs.push(value);
-        }));
-    });
-    $q.all(prom).then(function () {
-        callback();
-    });
-};
-
 $scope.save = function() {
 
   delete $scope.dashboard.__v;
@@ -70,7 +57,6 @@ $scope.save = function() {
   delete $scope.dashboard.metrics;
   delete $scope.dashboard.tasks;
 
-console.log($scope.dashboard);
   if (typeof $scope.dashboard._id === 'undefined') {
     $http.post('/api/dashboards', $scope.dashboard);
 
@@ -114,13 +100,13 @@ console.log($scope.dashboard);
   $scope.optionsTasks.chart.color =  ['#9467bd'];
 
   $scope.optionsMetrics = angular.copy($scope.options);
-  $scope.optionsMetrics.chart.color =  ['#ff7f0e'];
+  $scope.optionsMetrics.chart.color =  ['#87CEEB'];
 
   $scope.optionsAlerts = angular.copy($scope.options);
   $scope.optionsAlerts.chart.color =  ['#d62728'];
 
   $scope.optionsGoals = angular.copy($scope.options);
-  $scope.optionsGoals.chart.color =  ['#2ca02c'];
+  $scope.optionsGoals.chart.color =  function(d){  return  calLibrary.giveMeMyColor(d.count); };
 
   $scope.optionsTrust = angular.copy($scope.options);
   $scope.optionsTrust.chart.color =  ['#bcbd22'];

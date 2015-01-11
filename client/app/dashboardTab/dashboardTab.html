@@ -175,38 +175,26 @@
 			<tr>
 				<th>KPI Name</th>
 				<th  style="text-align:center;">Type</th>
-				<th  style="text-align:center;">-11</th>
-				<th  style="text-align:center;">-10</th>
-				<th  style="text-align:center;">-9</th>
-				<th  style="text-align:center;">-8</th>
-				<th  style="text-align:center;">-7</th>
-				<th  style="text-align:center;">-6</th>
-				<th  style="text-align:center;">-5</th>
-				<th  style="text-align:center;">-4</th>
-				<th  style="text-align:center;">-3</th>
-				<th  style="text-align:center;">-2</th>
-				<th  style="text-align:center;">-1</th>
-				<th  style="text-align:center;">Now</th>
-				<th  style="text-align:center;">Global</th>
+				<th ng-repeat="date in dataTable[0].data[0].values" style="text-align:center;font-size:12px">{{date.month}}</th>
 			</tr>
 		</thead>
 		<tbody style="text-align:center;">
-			<tr ng-repeat="KPI in dataTable | orderBy : Activity | filter: myFilter  track by KPI._id " on-finish-render>
+			<tr ng-repeat="KPI in dataTable | orderBy : 'category':'reverse' track by KPI._id " on-finish-render>
 				<td style="text-align:left;"><a href="/KPI/{{KPI._id}}">{{KPI.name}}</a></td>
 				<td>{{KPI.category}}</td>
-				<td><span style="color:lightgrey" class="glyphicon glyphicon-unchecked"></span></td>
-				<td><span style="color:lightgrey" class="glyphicon glyphicon-unchecked"></span></td>
-				<td><span style="color:lightgrey" class="glyphicon glyphicon-unchecked"></span></td>
-				<td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-right"></span></td>
-				<td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-right"></span></td>
-				<td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-right"></span></td>
-				<td><span style="color:orange" class="glyphicon glyphicon-circle-arrow-down"></span></td>
-				<td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-up"></span></td>
-				<td><span style="color:orange" class="glyphicon glyphicon-circle-arrow-down"></span></td>
-				<td><span style="color:red" class="glyphicon glyphicon-circle-arrow-down"></span></td>
-				<td><span style="color:#3cc051" class="glyphicon glyphicon-circle-arrow-up"></span></td>
-				<td><span style="color:grey" class="glyphicon glyphicon-dashboard"></span></td>
-				<td ng-if="page === 'dashboard'" ><nvd3 options="options" data="KPI.data"></nvd3></td>
+				<td> <span class="badge"  ng-style="{'background-color':giveMeMyColor(KPI.data[0].values[0].value)}"  style="height:25px;line-height:20px;width:100%">{{KPI.data[0].values[0].value}}</span><span style="color:lightgrey" class="glyphicon" ng-class="{'glyphicon-unchecked':KPI.data[0].values[0].value ===null}"></span></td>
+				<td> <span class="badge" ng-style="{'background-color':giveMeMyColor(KPI.data[0].values[1].value)}"  style="height:25px;line-height:20px;width:100%">{{KPI.data[0].values[1].value}}</span><span style="color:lightgrey" class="glyphicon" ng-class="{'glyphicon-unchecked':KPI.data[0].values[1].value ===null}"></span></td>
+				<td> <span class="badge" ng-style="{'background-color':giveMeMyColor(KPI.data[0].values[2].value)}"  style="height:25px;line-height:20px;width:100%">{{KPI.data[0].values[2].value}}</span><span style="color:lightgrey" class="glyphicon" ng-class="{'glyphicon-unchecked':KPI.data[0].values[2].value ===null}"></span></td>
+				<td> <span class="badge" ng-style="{'background-color':giveMeMyColor(KPI.data[0].values[3].value)}"  style="height:25px;line-height:20px;width:100%">{{KPI.data[0].values[3].value}}</span><span style="color:lightgrey" class="glyphicon" ng-class="{'glyphicon-unchecked':KPI.data[0].values[3].value ===null}"></span></td>
+				<td> <span class="badge" ng-style="{'background-color':giveMeMyColor(KPI.data[0].values[4].value)}"  style="height:25px;line-height:20px;width:100%">{{KPI.data[0].values[4].value}}</span><span style="color:lightgrey" class="glyphicon" ng-class="{'glyphicon-unchecked':KPI.data[0].values[4].value ===null}"></span></td>
+				<td> <span class="badge" ng-style="{'background-color':giveMeMyColor(KPI.data[0].values[5].value)}"  style="height:25px;line-height:20px;width:100%">{{KPI.data[0].values[5].value}}</span><span style="color:lightgrey" class="glyphicon" ng-class="{'glyphicon-unchecked':KPI.data[0].values[5].value ===null}"></span></td>
+				<td> <span class="badge" ng-style="{'background-color':giveMeMyColor(KPI.data[0].values[6].value)}"  style="height:25px;line-height:20px;width:100%">{{KPI.data[0].values[6].value}}</span><span style="color:lightgrey" class="glyphicon" ng-class="{'glyphicon-unchecked':KPI.data[0].values[6].value ===null}"></span></td>
+				<td> <span class="badge" ng-style="{'background-color':giveMeMyColor(KPI.data[0].values[7].value)}"  style="height:25px;line-height:20px;width:100%">{{KPI.data[0].values[7].value}}</span><span style="color:lightgrey" class="glyphicon" ng-class="{'glyphicon-unchecked':KPI.data[0].values[7].value ===null}"></span></td>
+				<td> <span class="badge" ng-style="{'background-color':giveMeMyColor(KPI.data[0].values[8].value)}"  style="height:25px;line-height:20px;width:100%">{{KPI.data[0].values[8].value}}</span><span style="color:lightgrey" class="glyphicon" ng-class="{'glyphicon-unchecked':KPI.data[0].values[8].value ===null}"></span></td>
+				<td> <span class="badge" ng-style="{'background-color':giveMeMyColor(KPI.data[0].values[9].value)}"  style="height:25px;line-height:20px;width:100%">{{KPI.data[0].values[9].value}}</span><span style="color:lightgrey" class="glyphicon" ng-class="{'glyphicon-unchecked':KPI.data[0].values[9].value ===null}"></span></td>
+				<td> <span class="badge" ng-style="{'background-color':giveMeMyColor(KPI.data[0].values[10].value)}"  style="height:25px;line-height:20px;width:100%">{{KPI.data[0].values[10].value}}</span><span style="color:lightgrey" class="glyphicon" ng-class="{'glyphicon-unchecked':KPI.data[0].values[10].value ===null}"></span></td>
+				<td> <span class="badge" ng-style="{'background-color':giveMeMyColor(KPI.data[0].values[11].value)}"  style="height:25px;line-height:20px;width:100%">{{KPI.data[0].values[11].value}}</span><span style="color:lightgrey" class="glyphicon" ng-class="{'glyphicon-unchecked':KPI.data[0].values[11].value ===null}"></span></td>
+				<td ng-if="page === 'dashboard2'" ><nvd3 options="options" data="KPI.data"></nvd3></td>
 			</tr>
 		</tbody>
 	</table>
@@ -285,7 +273,7 @@
 					<a href="#">{{actor.name}}</a>
 				</div>
 				<div>
-					{{actor.count}} metrics
+					{{actor.value}} metrics
 				</div>
 			</div>
 		</div>

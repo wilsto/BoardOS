@@ -14,15 +14,20 @@ angular.module('boardOsApp')
 		  scope.dataTable = scope.data[scope.dashboardType];
       scope.page =  $location.path().split('/')[1];
 
+
+      scope.giveMeMyColor = function (value) {
+        return calLibrary.giveMeMyColor(value)
+      }
+
      /**
      * Display DirectBar for Task
      */
     if (scope.page === 'KPI' && scope.dashboardType=== 'tasks') {
-      _.forEach(scope.dataTable, function(value2, key2) {
-        value2.data = [{values: [] }];
+      _.forEach(scope.dataTable, function(kpi, key2) {
+        kpi.data = [{values: [] }];
         _.forEach(scope.data.calcul.taskTime, function(value, key) {
-          if (value.task === value2.name) {
-            value2.data[0].values = calLibrary.displayLastYear(value.time,'month','valueKPI');
+          if (value.task === kpi.name) {
+            kpi.data[0].values = calLibrary.displayLastYear(value.time,'month','valueKPI');
           }
         });
       });
@@ -60,43 +65,37 @@ angular.module('boardOsApp')
      * Display DirectBar for KPI
      */
     if (scope.page === 'dashboard' && scope.dashboardType=== 'kpis') {
-      _.forEach(scope.dataTable, function(value2, key2) {
-        value2.data = [{values: [] }];
-        console.log('value2',value2);
-        _.forEach(scope.data.calcul.taskTime, function(value, key) {
-          if (value.task === value2.name) {
-            console.log('value2',value2);
-            value2.data[0].values = calLibrary.displayLastYear(value.time,'month','valueKPI');
-          }
+         _.forEach(scope.dataTable, function(kpi, key) {
+            kpi.data = [{values: [] }];
+            kpi.data[0].values = calLibrary.displayLastYear(kpi.calcul.time,'month','valueKPI');
         });
-      });
 
-      scope.options = {
-        chart: {
-          type: 'discreteBarChart',
-          height: 20,
-          width: 260,
-          margin : {
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0
-          },
-          showXAxis : true,
-          showYAxis : false,
-          color: function(d){ 
-            switch (true) {
-              case d.value === null : return ['none'] ;break;  
-              case d.value > 66: return ['#2ca02c'] ;break;  
-              default: return ['#CB4B16'] ;
-            }
-          },
-          x: function(d){ return d.month; },
-          y: function(d){ return 100; },
-          showValues: false,
-          transitionDuration: 500
-        }
-      };
+        scope.options = {
+          chart: {
+            type: 'discreteBarChart',
+            height: 20,
+            width: 400,
+            margin : {
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0
+            },
+            showXAxis : true,
+            showYAxis : false,
+            color: function(d){ 
+              switch (true) {
+                case d.value === null : return ['none'] ;break;  
+                case d.value > 66: return ['#2ca02c'] ;break;  
+                default: return ['#CB4B16'] ;
+              }
+            },
+            x: function(d){ return d.month; },
+            y: function(d){ return d.value; },
+            showValues: false,
+            transitionDuration: 500
+          }
+        };
 
     };
 
