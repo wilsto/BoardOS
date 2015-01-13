@@ -111,8 +111,8 @@
   <div class="col-md-2 col-sm-4">
     <div class="stats-overview stat-block">
      <div class="details">
-      <div class="title">Alerts</div>
-      <nvd3 options="optionsAlerts" data="data"></nvd3>
+      <div class="title"><span style="font-weight:bold;color:#CB4B16">{{alertsNb}}</span> Alerts</div>
+      <nvd3 options="optionsAlerts" data="dataAlerts"></nvd3>
     </div>
   </div>
 </div>
@@ -120,7 +120,7 @@
 <div class="col-md-2 col-sm-4">
   <div class="stats-overview stat-block">
    <div class="details">
-    <div class="title"><span style="font-weight:bold;color:#2CA02C">{{dashboard.kpis.length}}</span> Goals</div>
+    <div class="title"><span style="font-weight:bold;color:#2CA02C">{{goalsNb}}%</span> Goals</div>
     <nvd3 options="optionsGoals" data="dataGoals"></nvd3>
   </div>
 </div>

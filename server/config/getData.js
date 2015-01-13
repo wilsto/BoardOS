@@ -22,7 +22,7 @@ var tools = require('./tools');
 
 module.exports = {
     KPIById: function (req, callback) {
-    	
+
 		Q()
 		  .then(function () {
 		    // Get a single kpi
@@ -98,13 +98,12 @@ module.exports = {
 			    //##############################################  
 			    _.each(mKPI.metrics, function(metric){ 
 			       
-			        var Value = _.filter(hierarchyValues, function(item) { return  item.text.toLowerCase() === metric[mKPI.metricTaskField].toLowerCase(); });
-			        if (Value.length > 0 ) {
-			          metric.color = Value[0].color;
-			          metric.value = Value[0].value;
-			          metric.description = Value[0].description;          
-			        }
-
+			        // ajouter calcul auto
+			        // nombre de jours séparant la date de début, fin, entre les deux
+			        metric.duration = moment(metric.endDate).diff(metric.startDate,'days');
+			        metric.timeToBegin = moment(metric.startDate).diff(moment(),'days');
+			        metric.timeToEnd = moment(metric.endDate).diff(moment(),'days');
+			    	
 			        // ajouter information par mois 
 			        metric.groupTimeByValue = moment(metric.date).format("YYYY.MM");
 
@@ -115,8 +114,15 @@ module.exports = {
 			            }
 			        }); 
 
-			        // nombre de jours séparant la date de fin
-			        metric.daysToDeadline = moment(metric.endDate).diff(moment(),'days');
+			        // ajout des couleurs
+			        if (typeof metric[mKPI.metricTaskField] === 'string' ) {
+				        var Value = _.filter(hierarchyValues, function(item) { return mKPI.metricTaskField && item.text.toLowerCase() === metric[mKPI.metricTaskField].toLowerCase(); });
+				        if (Value.length > 0 ) {
+				          metric.color = Value[0].color;
+				          metric.value = Value[0].value;
+				          metric.description = Value[0].description;          
+				        }
+			    	}
 			    });
 
 				// on ajoute des caractéristiques aux KPI
@@ -133,8 +139,8 @@ module.exports = {
 			    mKPI.metricsGroupBy.oldTime = tools.groupByTime(tools.groupMultiBy(mKPI.metrics, ['groupTimeByValue','taskname']),'date',mKPI.metricTaskField);
 			    
 			    mKPI.calcul = {};
-			    mKPI.calcul.time = _.map( mKPI.metricsGroupBy.Time, function(value, key) {        return {month: key, valueKPI:tools.calculKPI(value,mKPI), color:value[0].color};      });
-			    mKPI.calcul.task = _.map( mKPI.metricsGroupBy.Task, function(value, key) {        return {task: key, valueKPI:tools.calculKPI(value,mKPI), color:value[0].color};      });
+			    mKPI.calcul.time = _.map( mKPI.metricsGroupBy.Time, function(value, key) {  console.log('value',value);      return {month: key, valueKPI:tools.calculKPI(value,mKPI)};      });
+			    mKPI.calcul.task = _.map( mKPI.metricsGroupBy.Task, function(value, key) {        return {task: key, valueKPI:tools.calculKPI(value,mKPI)};      });
 			    mKPI.calcul.taskTime = _.map( mKPI.metricsGroupBy.TaskTime, function(value, key) {     
 			         return {task: key, time:_.map( value, function(value2, key2) {        return {month: key2, valueKPI:tools.calculKPI(value2,mKPI)};      }) };
 			    });

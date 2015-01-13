@@ -2,11 +2,21 @@
 
 angular.module('boardOsApp').factory('calLibrary', function() {
 	var sdo = {
-		giveMeMyColor: function (value) {
-	        switch (true) {
-	          case (value >= 80) : return '#859900'; break;
-	          case (value >= 40) : return '#FF7F0E'; break;
-	          default: return '#CB4B16';
+		giveMeMyColor: function (value, category) {
+
+	        if (category === 'Alert') {
+		        switch (true) {
+		          case (value > 0) : return '#CB4B16'; break;
+		          case (value === 0) : return '#859900'; break;
+		        }
+	        }
+
+			if (category === 'Goal' || typeof category === 'undefined') {
+		        switch (true) {
+		          case (value >= 80) : return '#859900'; break;
+		          case (value >= 10) : return '#FF7F0E'; break;
+		          default: return '#CB4B16';
+		        }
 	        }
 	    },
 		displayLastYear: function(data, fieldDate, field) {
@@ -108,10 +118,13 @@ angular.module('boardOsApp').factory('calLibrary', function() {
 
 			// some de valerus de tableaux déjà par mois
 			//arrays = [[1,2,3,4,5,6], [1,1,1,1,1,1], [2,2,2,2,2,2]];
-			var result = _.map(_.zip.apply(_, arrays), function(pieces) {
-				return _.reduce(pieces, function(m, p) {return m+p;}, 0);
-			});
-
+			if (arrays.length > 1 ) {
+				var result = _.map(_.zip.apply(_, arrays), function(pieces) {
+					return _.reduce(pieces, function(m, p) {return m+p;}, 0);
+				});
+			} else {
+				var result = arrays[0];
+			}
 
 			// mise par mois
 			var dateResult = [];
@@ -135,6 +148,7 @@ angular.module('boardOsApp').factory('calLibrary', function() {
        		// association des deux
 			$.each(map_result, function (keyMap,itemMap) {
 				itemMap.count = parseInt(result[keyMap] /arrays.length)  ;
+				itemMap.sum = result[keyMap] ;
 			});
 
 			return map_result;

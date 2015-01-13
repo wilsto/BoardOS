@@ -15,8 +15,8 @@ angular.module('boardOsApp')
       scope.page =  $location.path().split('/')[1];
 
 
-      scope.giveMeMyColor = function (value) {
-        return calLibrary.giveMeMyColor(value)
+      scope.giveMeMyColor = function (value, category) {
+        return calLibrary.giveMeMyColor(value, category)
       }
 
      /**

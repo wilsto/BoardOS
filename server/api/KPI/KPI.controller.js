@@ -33,7 +33,6 @@ exports.show = function(req, res) {
   Q()
   .then(function () {
       var deferred = Q.defer();
- 
       // Get a single kpi
       getData.KPIById(req, function (data) {
           mKPI = data;

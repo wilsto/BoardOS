@@ -20,26 +20,33 @@ angular.module('boardOsApp')
       $scope.dataTasks = [{values: [] }];
       $scope.dataMetrics = [{values: [] }];
       $scope.dataGoals = [{values: [] }];
+      $scope.dataAlerts = [{values: [] }];
 
       $scope.predataKPIs = calLibrary.getByMonth($scope.dashboard.kpis, 'date','value');
       $scope.predataTasks = calLibrary.getByMonth($scope.dashboard.tasks, 'date','value');
       $scope.predataMetrics = calLibrary.getByMonth($scope.dashboard.metrics, 'date','value');
 
-
-     var dataGoals = [];
+      var dataGoals = [];
+      var dataAlerts= [];
       _.forEach($scope.dashboard.kpis, function(kpi, key) {
            if (kpi.category ==='Goal')  {dataGoals.push(_.pluck(calLibrary.displayLastYear(kpi.calcul.time,'month','valueKPI'),'value'))};
-        });
+           if (kpi.category ==='Alert')  {dataAlerts.push(_.pluck(calLibrary.displayLastYear(kpi.calcul.time,'month','valueKPI'),'value'))};
+          
+      });
+       console.log('$scope.dataGoals ',$scope.dataGoals );
 
       $scope.dataKPIs[0].values = $scope.predataKPIs;
       $scope.dataTasks[0].values = $scope.predataTasks;
       $scope.dataMetrics[0].values = $scope.predataMetrics;     
       $scope.dataGoals[0].values = calLibrary.getCalculByMonth(dataGoals);     
+      $scope.dataAlerts[0].values = calLibrary.getCalculByMonth(dataAlerts);     
 
-
-
-      console.log('dataGoals',dataGoals);
-      console.log('$scope.dataGoals[0]',$scope.dataGoals[0]);
+       console.log('$scope.dataGoals ',$scope.dataGoals[0].values );
+       console.log('$scope.dataAlerts ',$scope.dataAlerts[0].values );
+      $scope.goalsNb = _.last($scope.dataGoals[0].values).count;   
+      $scope.alertsNb =_.last($scope.dataAlerts[0].values).sum;  
+       console.log('$scope.goalsNb ',$scope.goalsNb );
+       console.log('$scope.alertsNb ',$scope.alertsNb );
     });
     } else {
        $scope.dashboard = {name:''};
@@ -103,7 +110,8 @@ $scope.save = function() {
   $scope.optionsMetrics.chart.color =  ['#87CEEB'];
 
   $scope.optionsAlerts = angular.copy($scope.options);
-  $scope.optionsAlerts.chart.color =  ['#d62728'];
+  $scope.optionsAlerts.chart.color =  ['#CB4B16'];
+  $scope.optionsAlerts.chart.y = function(d){ return d.sum; };
 
   $scope.optionsGoals = angular.copy($scope.options);
   $scope.optionsGoals.chart.color =  function(d){  return  calLibrary.giveMeMyColor(d.count); };

@@ -180,7 +180,7 @@ function groupByMulti (obj, values, context) {
                     if (lastMetric.status !== 'Finished') {// not finished
                         mySeries.push( {
                              "values":[
-                                          [lastMetric.value, lastMetric.daysToDeadline, lastMetric.load]
+                                          [lastMetric.value, lastMetric.timeToEnd, lastMetric.load]
                               ],
                             "text":lastMetric.taskname || 'No task',
                             "marker":{
@@ -316,37 +316,49 @@ function groupByMulti (obj, values, context) {
     },
     calculKPI: function(metrics, kpi) {
 
-        var calcul, calculMain, calculRef;
+        var calcul, calculMain, calculRef, filteredMetrics, filteredRefMetrics;
         var action = kpi.action;
         var values = kpi.metricTaskValues && kpi.metricTaskValues.split(' + ');
         var refValues = kpi.refMetricTaskValues && kpi.refMetricTaskValues.split(' + ');
         var field = kpi.metricTaskField;
         var refField = kpi.refMetricTaskField;
 
-        var filteredMetrics = _.filter(metrics,function (metric) {return (typeof values === 'undefined')? 1 : _.contains(values,metric[field]);});
-        var filteredRefMetrics = (refField === 'constant') ? refValues :_.filter(metrics,function (metric) {return _.contains(refValues,metric[refField]);});
+        if (kpi.category === 'Goal') {
+            filteredMetrics = _.filter(metrics,function (metric) {return (typeof values === 'undefined')? 1 : _.contains(values,metric[field]);});
+            filteredRefMetrics = (refField === 'constant') ?  refValues : _.filter(metrics,function (metric) {return _.contains(refValues,metric[refField]);});
 
-/*        console.log('kpi',kpi)
-        console.log('field',field)
-        console.log('values',values)
-        console.log('filteredMetrics',filteredMetrics)
-        console.log('filteredRefMetrics',filteredRefMetrics)*/
+            // Réaliser des calculs
+            switch(action) {
+              case 'count':
+                calculMain = filteredMetrics.length;
+                calculRef =  (refField === 'constant') ? metrics.length : filteredRefMetrics.length;
+                break;                             
+              case 'mean':       
+                calculMain = math.mean(_.pluck(filteredMetrics,field).map(Number));
+                calculRef = 100;
+                break;        
+            }
 
-console.log('metrics',metrics);
-        // Réaliser des calculs
-        switch(action) {
-          case 'count':
-            calculMain = filteredMetrics.length;
-            calculRef =  (refField === 'constant') ? metrics.length : filteredRefMetrics.length;
-            break;                             
-          case 'mean':       
-            calculMain = math.mean(_.pluck(filteredMetrics,field).map(Number));
-            calculRef = 100;
-            break;        
+            calcul = parseInt((calculMain / calculRef) *100);
         }
-        //console.log( calculMain)
+        if (kpi.category === 'Alert') {
+            console.log('refValues',parseInt(refValues[0]));
+            switch (refField) {
+                case 'constant' : filteredMetrics = _.filter(metrics,function (metric) {return metric[field] == refValues[0] });
+                case 'upperLimit' : filteredMetrics = _.filter(metrics,function (metric) {return metric[field] > parseInt(refValues[0]) });
+                case 'lowerLimit' : filteredMetrics = _.filter(metrics,function (metric) {return metric[field] < parseInt(refValues[0]) });
+            }
+            console.log('filteredMetrics',filteredMetrics);
 
-        calcul = parseInt((calculMain / calculRef) *100);
+            // Réaliser des calculs
+            switch(action) {
+              case 'count':
+                calculMain = filteredMetrics.length;
+                break;                                    
+            }
+
+            calcul = calculMain;
+        }
 
         return calcul;
     }
