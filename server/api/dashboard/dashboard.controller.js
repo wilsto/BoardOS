@@ -39,18 +39,18 @@ exports.show = function(req, res) {
     // Get a single dashboard
     var deferred = Q.defer();
     if (typeof req.params.id === 'undefined') {
-      Dashboard.find(function (err, dashboard) {
+      Dashboard.find().lean().exec(function (err, dashboard) {
         if(err) { return handleError(res, err); }
         if(!dashboard) { return res.send(404); }
         mDashboard = {context:'',activity:''};
-        mDashboard.list = dashboard;
+        mDashboard.dashboards = dashboard;
         deferred.resolve(mDashboard);
       })
     } else {
-      Dashboard.findById(req.params.id, function (err, dashboard) {
+      Dashboard.findById(req.params.id).lean().exec(function (err, dashboard) {
         if(err) { return handleError(res, err); }
         if(!dashboard) { return res.send(404); }
-        mDashboard = dashboard.toObject();
+        mDashboard = dashboard;
         deferred.resolve(mDashboard);
       })
     }
@@ -64,15 +64,14 @@ exports.show = function(req, res) {
 
         KPI.find({}, function (err, kpis) {
 
-            mDashboard.kpis = [];
+           mDashboard.kpis = [];
            var promises = [];
 
-            _.each(kpis, function(rowdata, index) { 
-                if (typeof mDashboard.context === 'undefined' )  { mDashboard.context = ''};
-                if (typeof mDashboard.activity === 'undefined' )  { mDashboard.activity = ''};
-                if (typeof rowdata.context === 'undefined' || rowdata.context === '')  { rowdata.context = mDashboard.context};
-                if (typeof rowdata.activity === 'undefined' || rowdata.activity === '')  { rowdata.activity = mDashboard.activity};         
-                if (rowdata.context.indexOf(mDashboard.context) >=0  && rowdata.activity.indexOf(mDashboard.activity) >=0 ) {
+          if (typeof mDashboard.context === 'undefined' )  { mDashboard.context = ''};
+          if (typeof mDashboard.activity === 'undefined' )  { mDashboard.activity = ''};
+          
+          _.each(kpis, function(rowdata, index) { 
+                if ((typeof rowdata.context === 'undefined' || rowdata.context === '' || rowdata.context.indexOf(mDashboard.context) >=0)  && (typeof rowdata.activity === 'undefined' || rowdata.activity === '' || rowdata.activity.indexOf(mDashboard.activity) >=0 )) {
                   var mKPI = rowdata.toObject();
 
                   var KPIInfo = {params:{},query:{}};
@@ -82,7 +81,7 @@ exports.show = function(req, res) {
                   // Get a single kpi
                   promises.push(KPIInfo);
                 }
-            });
+          });
 
             var lastPromise = promises.reduce(function(promise, KPIToGet) {
                 return promise.then( function() {
@@ -97,6 +96,26 @@ exports.show = function(req, res) {
 
             lastPromise
               .then(function() {
+
+                  // si multi dashboards, on recolle chaque KPIs dans chaque dashboard
+                  if (typeof req.params.id === 'undefined') {
+                      _.each(mDashboard.dashboards, function(thisDashboard, index) { 
+                          if (typeof thisDashboard.context === 'undefined' )  { thisDashboard.context = ''};
+                          if (typeof thisDashboard.activity === 'undefined' )  { thisDashboard.activity = ''};
+
+                          var dashboardInfo = {};
+                          dashboardInfo.context = thisDashboard.context;
+                          dashboardInfo.activity = thisDashboard.activity;   
+                          thisDashboard.kpis = [];
+
+                          _.each(mDashboard.kpis, function(rowdata, index) { 
+                              if ((typeof rowdata.context === 'undefined' || rowdata.context === '' || rowdata.context.indexOf(thisDashboard.context) >=0)  && (typeof rowdata.activity === 'undefined' || rowdata.activity === '' || rowdata.activity.indexOf(thisDashboard.activity) >=0 )) {
+                                thisDashboard.kpis.push(getData.shrinkPerimeterOfKPI(_.clone(rowdata), dashboardInfo));
+                              }
+                          });
+                      });
+                  }
+
                   deferred.resolve(mDashboard);
             });
 

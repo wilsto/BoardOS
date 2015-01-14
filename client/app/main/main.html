@@ -271,10 +271,10 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <span style="color:green;font-size:22px">{{dashboard.dataGoals}}<span style="font-size:15px" ng-if="dashboard.dataGoals !== '-'">% </span></span> <span class="badge" style="background:green;width:25px;font-size:15px" ng-if="dashboard.dataGoals === '####'"  >{{dashboard.nbGoals}}</span>
+                                    <span ng-style="goalColor(dashboard.dataGoals)" style="font-size:22px">{{dashboard.dataGoals}}<span style="font-size:15px" ng-if="dashboard.dataGoals !== '-'">% </span></span> <span class="badge" style="background:green;width:25px;font-size:15px" ng-if="dashboard.dataGoals === '####'"  >{{dashboard.nbGoals}}</span>
                                 </td>
                                 <td>
-                                   <span style="color:red;font-size:22px">{{dashboard.dataAlerts}}</span><span style="color:red;font-size:15px"> /{{dashboard.nbAlerts}}</span>
+                                   <span ng-style="alertColor(dashboard.dataAlerts)" style="font-size:22px">{{dashboard.dataAlerts}}</span><span style="color:lightgrey;font-size:15px" ng-if="dashboard.dataGoals === '####'" > /{{dashboard.nbAlerts}}</span>
                                </td>
                                <td>
                                 <span style="color:lightgrey">xx days ago</span>

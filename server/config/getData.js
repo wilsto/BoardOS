@@ -127,37 +127,7 @@ module.exports = {
 
 				// on ajoute des caractéristiques aux KPI
 				//##############################################
-				mKPI.metricsGroupBy ={};
-				mKPI.metricsGroupBy.Task = tools.groupMultiBy(mKPI.metrics, ['taskname']);
-				mKPI.metricsGroupBy.TaskTime = tools.groupMultiBy(mKPI.metrics, ['taskname','groupTimeByValue']);
-				mKPI.metricsGroupBy.Field = tools.groupMultiBy(mKPI.metrics, [mKPI.metricTaskField]);
-				mKPI.metricsGroupBy.FieldTime = tools.groupMultiBy(mKPI.metrics, [mKPI.metricTaskField,'groupTimeByValue']);
-				mKPI.metricsGroupBy.Time = tools.groupMultiBy(mKPI.metrics, ['groupTimeByValue']);
-
-
-			    // a changer pour les bars
-			    mKPI.metricsGroupBy.oldTime = tools.groupByTime(tools.groupMultiBy(mKPI.metrics, ['groupTimeByValue','taskname']),'date',mKPI.metricTaskField);
-			    
-			    mKPI.calcul = {};
-			    mKPI.calcul.time = _.map( mKPI.metricsGroupBy.Time, function(value, key) {  console.log('value',value);      return {month: key, valueKPI:tools.calculKPI(value,mKPI)};      });
-			    mKPI.calcul.task = _.map( mKPI.metricsGroupBy.Task, function(value, key) {        return {task: key, valueKPI:tools.calculKPI(value,mKPI)};      });
-			    mKPI.calcul.taskTime = _.map( mKPI.metricsGroupBy.TaskTime, function(value, key) {     
-			         return {task: key, time:_.map( value, function(value2, key2) {        return {month: key2, valueKPI:tools.calculKPI(value2,mKPI)};      }) };
-			    });
-
-			    // la liste des acteurs
-			    mKPI.actors = _.map( _.countBy(mKPI.metrics,'actor'), function(value, key) {
-			        return {name: key, count:value};
-			    });
-
-		      // graphics
-		      mKPI.graphs = [];
-		      var myChart0 = tools.buildChart(mKPI,'hBullet');
-		      var myChart1 = tools.buildChart(mKPI,'Bar');
-		      var myChart2 = tools.buildChart(mKPI,'Bubble');
-		      mKPI.graphs.push(myChart0);
-		      mKPI.graphs.push(myChart1);
-		      mKPI.graphs.push(myChart2);
+				module.exports.addCalculToKPI(mKPI);
 
 		      deferred.resolve(mKPI);
 		      return deferred.promise;
@@ -165,5 +135,56 @@ module.exports = {
 		  .then(function () {
 				callback(mKPI);
 		  });
+    },
+    addCalculToKPI: function (mKPI) {
+		// on ajoute des caractéristiques aux KPI
+		//##############################################
+		mKPI.metricsGroupBy ={};
+		mKPI.metricsGroupBy.Task = tools.groupMultiBy(mKPI.metrics, ['taskname']);
+		mKPI.metricsGroupBy.TaskTime = tools.groupMultiBy(mKPI.metrics, ['taskname','groupTimeByValue']);
+		mKPI.metricsGroupBy.Field = tools.groupMultiBy(mKPI.metrics, [mKPI.metricTaskField]);
+		mKPI.metricsGroupBy.FieldTime = tools.groupMultiBy(mKPI.metrics, [mKPI.metricTaskField,'groupTimeByValue']);
+		mKPI.metricsGroupBy.Time = tools.groupMultiBy(mKPI.metrics, ['groupTimeByValue']);
+
+
+	    // a changer pour les bars
+	    mKPI.metricsGroupBy.oldTime = tools.groupByTime(tools.groupMultiBy(mKPI.metrics, ['groupTimeByValue','taskname']),'date',mKPI.metricTaskField);
+	    
+	    mKPI.calcul = {};
+	    mKPI.calcul.time = _.map( mKPI.metricsGroupBy.Time, function(value, key) {  return {month: key, valueKPI:tools.calculKPI(value,mKPI)};      });
+	    mKPI.calcul.task = _.map( mKPI.metricsGroupBy.Task, function(value, key) {  return {task: key, valueKPI:tools.calculKPI(value,mKPI)};      });
+	    mKPI.calcul.taskTime = _.map( mKPI.metricsGroupBy.TaskTime, function(value, key) {     
+	         return {task: key, time:_.map( value, function(value2, key2) {        return {month: key2, valueKPI:tools.calculKPI(value2,mKPI)};      }) };
+	    });
+
+	    // la liste des acteurs
+	    mKPI.actors = _.map( _.countBy(mKPI.metrics,'actor'), function(value, key) {
+	        return {name: key, count:value};
+	    });
+
+	  // graphics
+	  mKPI.graphs = [];
+	  var myChart0 = tools.buildChart(mKPI,'hBullet');
+	  var myChart1 = tools.buildChart(mKPI,'Bar');
+	  var myChart2 = tools.buildChart(mKPI,'Bubble');
+	  mKPI.graphs.push(myChart0);
+	  mKPI.graphs.push(myChart1);
+	  mKPI.graphs.push(myChart2);
+    },
+    shrinkPerimeterOfKPI: function (kpi, perimeter) {
+    	//shrink metrics
+		var metrics = kpi.metrics;
+		delete kpi.metrics;
+		kpi.metrics = _.filter(metrics, function(rowdata){console.log('rowdata.context',rowdata.context);return ( rowdata.context.indexOf(perimeter.context) >=0)  && (rowdata.activity.indexOf(perimeter.activity) >=0 ); });
+
+    	//reinit kpi
+    	kpi.metricsGroupBy ={};
+    	kpi.metricsGroupBy ={};
+    	kpi.graphs ={};
+
+    	// recalcul kpi
+		module.exports.addCalculToKPI(kpi);    
+
+		return kpi;	
     }
 };

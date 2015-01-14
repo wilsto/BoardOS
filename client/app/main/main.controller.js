@@ -7,7 +7,7 @@ angular.module('boardOsApp')
     
     $scope.loadDashBoard = function() {
       $http.get('/api/dashboards').success(function(dashboards) {
-      $scope.dashboards = dashboards.list;
+      $scope.dashboards = dashboards.dashboards;
       $scope.dataDashboards = dashboards;
 
       $scope.dataKPIs = [{values: [] }];
@@ -40,28 +40,15 @@ angular.module('boardOsApp')
       $scope.alertsNb =_.last($scope.dataAlerts[0].values).sum;  
 
       //calcul goals and alerts per dashboard
-      _.forEach(dashboards.list, function(dashboard, key) {
+      _.forEach(dashboards.dashboards, function(dashboard, key) {
         dashboard.nbGoals = 0;
         dashboard.nbAlerts = 0;
         var dataGoals = 0;
         var dataAlerts= 0;
-        console.log('dashboard.name',dashboard.name);
-        _.forEach(dashboards.kpis, function(kpi, key) {
 
-            console.log('kpi.name',kpi.name);
-            console.log('dashboard.context',dashboard.context);
-            console.log('kpi.context',kpi.context);
-            console.log('dashboard.activity',dashboard.activity);
-            console.log('kpi.activity',kpi.activity);
-            var context = (typeof kpi.context === 'undefined' || kpi.context === '')  ? dashboard.context : kpi.context;
-            var activity = (typeof kpi.activity === 'undefined' || kpi.activity === '')  ? dashboard.activity : kpi.activity;
- 
-
-            if (context.indexOf(dashboard.context) >=0  && activity.indexOf(dashboard.activity) >=0 ) {
-              console.log('last',_.last(kpi.calcul.time).valueKPI);
+        _.forEach(dashboard.kpis, function(kpi, key) {
               if (kpi.category ==='Goal')  {dashboard.nbGoals += 1; dataGoals += _.last(kpi.calcul.time).valueKPI};
-              if (kpi.category ==='Alert')  {dashboard.nbAlerts += 1; dataAlerts = _.last(kpi.calcul.time).valueKPI};
-            }
+              if (kpi.category ==='Alert')  {dashboard.nbAlerts += 1; dataAlerts += _.last(kpi.calcul.time).valueKPI};
         });
 
         dashboard.dataGoals = (dashboard.nbGoals > 0) ? parseInt(dataGoals / dashboard.nbGoals) : '-';
@@ -76,6 +63,14 @@ angular.module('boardOsApp')
       $http.get('/api/logs').success(function(logs) {
         $scope.logs = logs;
       });
+    };
+
+    $scope.goalColor= function(value) {
+      return {color :calLibrary.giveMeMyColor(value)}; 
+    };
+
+    $scope.alertColor= function(value) {
+      return {color :calLibrary.giveMeMyColor(value, 'Alert')}; 
     };
 
     $scope.loadDashBoard();

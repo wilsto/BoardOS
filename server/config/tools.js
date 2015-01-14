@@ -342,13 +342,11 @@ function groupByMulti (obj, values, context) {
             calcul = parseInt((calculMain / calculRef) *100);
         }
         if (kpi.category === 'Alert') {
-            console.log('refValues',parseInt(refValues[0]));
             switch (refField) {
                 case 'constant' : filteredMetrics = _.filter(metrics,function (metric) {return metric[field] == refValues[0] });
                 case 'upperLimit' : filteredMetrics = _.filter(metrics,function (metric) {return metric[field] > parseInt(refValues[0]) });
                 case 'lowerLimit' : filteredMetrics = _.filter(metrics,function (metric) {return metric[field] < parseInt(refValues[0]) });
             }
-            console.log('filteredMetrics',filteredMetrics);
 
             // Réaliser des calculs
             switch(action) {
