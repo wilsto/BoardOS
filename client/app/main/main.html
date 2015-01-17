@@ -76,7 +76,7 @@
                 <!--BEGIN TABS-->
                 <tabset>
                     <tab heading="Metrics">
-                        <div class="scroller" style="height: 300px;" data-always-visible="1" data-rail-visible="0">
+                        <div class="scroller" style="height: 300px;overflow:auto" data-always-visible="1" data-rail-visible="0">
                             <ul class="feeds">
                                 <li ng-repeat="task in dataDashboards.tasks | filter:{$:'!Finished'} | orderBy:'timebetween'">
                                     <a ng-href="/task/{{task._id}}">
@@ -115,7 +115,7 @@
                         Close Supervising 
                         <span class="badge badge-danger"> {{taskToSupervise.length}}</span>
                     </tab-heading>
-                    <div class="scroller" style="height: 300px;" data-always-visible="1" data-rail-visible="0">
+                    <div class="scroller" style="height: 300px;overflow:auto" data-always-visible="1" data-rail-visible="0">
                         <ul class="feeds">
                             <li ng-repeat="task in taskToSupervise = (dataDashboards.tasks | filter:{$:'!On Time'} | orderBy:'timebetween')">
                              <a ng-href="/task/{{task._id}}">
@@ -144,7 +144,7 @@
          </div>
      </tab>
      <tab heading="Calendar">
-        <div class="scroller" style="height: 300px;" data-always-visible="1" data-rail-visible1="1">
+        <div class="scroller" style="height: 300px;overflow:auto" data-always-visible="1" data-rail-visible1="1">
             <ul class="feeds">
                 <li>
                     <a href="#">
@@ -196,7 +196,7 @@
         </div>
     </tab>
     <tab heading="Journal Log">
-        <div class="scroller" style="height: 300px;" data-always-visible="1" data-rail-visible1="1">
+        <div class="scroller" style="height: 300px;overflow:auto" data-always-visible="1" data-rail-visible1="1">
             <ul class="feeds">
                 <li ng-repeat="log in logs | limitTo:50 ">
                     <div class="col1">

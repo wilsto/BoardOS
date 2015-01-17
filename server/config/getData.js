@@ -28,11 +28,9 @@ module.exports = {
 		    // Get a single kpi
 		    var deferred = Q.defer();
 		    KPI.findById(req.params.id, function (err, kpi) {
-		      if(err) { return handleError(res, err); }
-		      if(!kpi) { return res.send(404); }
 		      mKPI = kpi.toObject();
-		      if (typeof mKPI.context === 'undefined' || mKPI.context === '')  { mKPI.context = (typeof req.query.context === 'undefined') ? '':req.query.context; mKPI.originalContext = ''};
-		      if (typeof mKPI.activity === 'undefined' || mKPI.activity === '')  {mKPI.activity = (typeof req.query.activity === 'undefined') ? '':req.query.activity; mKPI.originalActivity = ''};
+		      if (typeof mKPI.context === 'undefined' || mKPI.context === '')  { mKPI.context = (typeof req.query.context === 'undefined') ? '':req.query.context; mKPI.originalContext = ''}
+		      if (typeof mKPI.activity === 'undefined' || mKPI.activity === '')  {mKPI.activity = (typeof req.query.activity === 'undefined') ? '':req.query.activity; mKPI.originalActivity = ''}
 		      deferred.resolve(mKPI);
 		    })
 		    return deferred.promise;
@@ -41,7 +39,6 @@ module.exports = {
 		    // Get a single hierarchy
 		    var deferred = Q.defer();
 		    Hierarchies.find({name:'Task'}, function (err, hierarchy) {
-		      if(err) { return handleError(res, err); }
 		      hierarchyValues = hierarchy[0].list;
 		      deferred.resolve(mKPI);
 		    })
@@ -53,8 +50,8 @@ module.exports = {
 		      mKPI.dashboards = [];
 		      Dashboard.find({}, function (err, dashboard) {
 		        _.each(dashboard, function(rowdata, index) { 
-		          if (typeof rowdata.context === 'undefined' || rowdata.context === '')  { rowdata.context = mKPI.context};
-		          if (typeof rowdata.activity === 'undefined' || rowdata.activity === '')  { rowdata.activity = mKPI.activity};  
+		          if (typeof rowdata.context === 'undefined' || rowdata.context === '')  { rowdata.context = mKPI.context}
+		          if (typeof rowdata.activity === 'undefined' || rowdata.activity === '')  { rowdata.activity = mKPI.activity}
 		          if (mKPI.dashboards && mKPI.context.indexOf(rowdata.context) >=0 && mKPI.activity.indexOf(rowdata.activity) >=0 ) {
 		            mKPI.dashboards.push (rowdata.toObject());
 		          }
@@ -175,7 +172,7 @@ module.exports = {
     	//shrink metrics
 		var metrics = kpi.metrics;
 		delete kpi.metrics;
-		kpi.metrics = _.filter(metrics, function(rowdata){console.log('rowdata.context',rowdata.context);return ( rowdata.context.indexOf(perimeter.context) >=0)  && (rowdata.activity.indexOf(perimeter.activity) >=0 ); });
+		kpi.metrics = _.filter(metrics, function(rowdata){return ( rowdata.context.indexOf(perimeter.context) >=0)  && (rowdata.activity.indexOf(perimeter.activity) >=0 ); });
 
     	//reinit kpi
     	kpi.metricsGroupBy ={};

@@ -67,8 +67,8 @@ exports.show = function(req, res) {
            mDashboard.kpis = [];
            var promises = [];
 
-          if (typeof mDashboard.context === 'undefined' )  { mDashboard.context = ''};
-          if (typeof mDashboard.activity === 'undefined' )  { mDashboard.activity = ''};
+          if (typeof mDashboard.context === 'undefined' )  { mDashboard.context = ''}
+          if (typeof mDashboard.activity === 'undefined' )  { mDashboard.activity = ''}
           
           _.each(kpis, function(rowdata, index) { 
                 if ((typeof rowdata.context === 'undefined' || rowdata.context === '' || rowdata.context.indexOf(mDashboard.context) >=0)  && (typeof rowdata.activity === 'undefined' || rowdata.activity === '' || rowdata.activity.indexOf(mDashboard.activity) >=0 )) {
@@ -100,8 +100,8 @@ exports.show = function(req, res) {
                   // si multi dashboards, on recolle chaque KPIs dans chaque dashboard
                   if (typeof req.params.id === 'undefined') {
                       _.each(mDashboard.dashboards, function(thisDashboard, index) { 
-                          if (typeof thisDashboard.context === 'undefined' )  { thisDashboard.context = ''};
-                          if (typeof thisDashboard.activity === 'undefined' )  { thisDashboard.activity = ''};
+                          if (typeof thisDashboard.context === 'undefined' )  { thisDashboard.context = ''}
+                          if (typeof thisDashboard.activity === 'undefined' )  { thisDashboard.activity = ''}
 
                           var dashboardInfo = {};
                           dashboardInfo.context = thisDashboard.context;
@@ -185,8 +185,8 @@ exports.show = function(req, res) {
 // Creates a new dashboard in the DB.
 exports.create = function(req, res) {
     var newDashboard = new Dashboard(req.body, false);
-    newDashboard.save(function(err) {
-      res.send(200);
+    newDashboard.save(function(err, doc) {
+      res.send(200, doc);
     });
 
 };

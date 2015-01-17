@@ -9,7 +9,7 @@ angular.module('boardOsApp')
 
     $scope.load = function() {
       $http.get('/api/dashboards').success(function(dashboards) {
-        $scope.dashboards = dashboards.list;
+        $scope.dashboards = dashboards.dashboards;
       });
     };
 

@@ -9,12 +9,13 @@
   "immed": true,
   "indent": 2,
   "latedef": true,
+  "multistr": true,
   "newcap": true,
   "noarg": true,
   "quotmark": "single",
   "regexp": true,
   "undef": true,
-  "unused": true,
+  "unused": false,
   "strict": true,
   "trailing": true,
   "smarttabs": true,
@@ -34,6 +35,7 @@
     "browser": true,
     "element": true,
     "by": true,
+    "zingchart": true,
     "d3":true
   }
 }

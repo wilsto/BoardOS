@@ -16,8 +16,8 @@ angular.module('boardOsApp')
 
 
       scope.giveMeMyColor = function (value, category) {
-        return calLibrary.giveMeMyColor(value, category)
-      }
+        return calLibrary.giveMeMyColor(value, category);
+      };
 
      /**
      * Display DirectBar for Task
@@ -47,8 +47,8 @@ angular.module('boardOsApp')
           showYAxis : false,
           color: function(d){ 
             switch (true) {
-              case d.value === null : return ['none'] ;break;  
-              case d.value > 66: return ['#2ca02c'] ;break;  
+              case d.value === null : return ['none'];
+              case d.value > 66: return ['#2ca02c'] ; 
               default: return ['#CB4B16'] ;
             }
           },
@@ -59,7 +59,7 @@ angular.module('boardOsApp')
         }
       };
 
-    };
+    }
 
      /**
      * Display DirectBar for KPI
@@ -85,8 +85,8 @@ angular.module('boardOsApp')
             showYAxis : false,
             color: function(d){ 
               switch (true) {
-                case d.value === null : return ['none'] ;break;  
-                case d.value > 66: return ['#2ca02c'] ;break;  
+                case d.value === null : return ['none'] ;  
+                case d.value > 66: return ['#2ca02c'] ;  
                 default: return ['#CB4B16'] ;
               }
             },
@@ -97,7 +97,7 @@ angular.module('boardOsApp')
           }
         };
 
-    };
+    }
 
      /**
      * Modal
@@ -115,7 +115,7 @@ angular.module('boardOsApp')
 
                 if (typeof $scope.formData === 'undefined') {
                   $scope.formData =  (scope.dataTable.length === 0) ? {} : _.clone(_.last(_.sortBy(scope.dataTable,'date')),true);
-                  delete $scope.formData._id ;             ;
+                  delete $scope.formData._id ;
                   $scope.formData.date = new Date();
                   $scope.formData.activity = scope.data.activity; 
                   $scope.formData.context = scope.data.context;

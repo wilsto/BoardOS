@@ -13,7 +13,7 @@ angular.module('boardOsApp')
 
     $scope.Load = function(){
         $http.get('/api/tasks').success(function (data) { 
-            $scope.tasks =  data;
+            $scope.tasks =  data.tasks;
         });
     };
 

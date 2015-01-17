@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-.controller('KPICtrl', function ($scope,$rootScope, Auth, $http, ngToast,actionKPI,categoryKPI,groupByKPI,metricTaskFields, $stateParams, calLibrary) {
+.controller('KPICtrl', function ($scope,$rootScope, Auth, $http, ngToast,actionKPI,categoryKPI,groupByKPI,metricTaskFields, $stateParams, calLibrary, $location) {
 
   $scope.actionKPI = actionKPI;
   $scope.categoryKPI = categoryKPI;
@@ -16,24 +16,24 @@ angular.module('boardOsApp')
           console.log('KPI',KPI);
           setTimeout( function(){
               zingchart.render({
-                      id:"myChartDiv0",
+                      id:'myChartDiv0',
                       data:$scope.KPI.graphs[0],
                       height:100,
-                      width:"100%"
+                      width:'100%'
                });
 
               zingchart.render({
-                      id:"myChartDiv1",
+                      id:'myChartDiv1',
                       data:$scope.KPI.graphs[1],
                       height:300,
-                      width:"100%"
+                      width:'100%'
               });
 
               zingchart.render({
-                      id:"myChartDiv2",
+                      id:'myChartDiv2',
                       data:$scope.KPI.graphs[2],
                       height:400,
-                      width:"100%"
+                      width:'100%'
               });
           });
         });
@@ -65,20 +65,21 @@ $scope.save = function() {
   $scope.KPI.date = Date.now();
 
   if (typeof $scope.KPI._id === 'undefined') {
-    $http.post('/api/KPIs', $scope.KPI);
-
-    var logInfo = 'KPI "' + $scope.KPI.name + '" was created';
-    $http.post('/api/logs', {info:logInfo, actor:$rootScope.currentUser.name});
-    ngToast.create(logInfo);
+    $http.post('/api/KPIs', $scope.KPI).success(function(data){
+      var logInfo = 'KPI "' + $scope.KPI.name + '" was created';
+      $http.post('/api/logs', {info:logInfo, actor:$rootScope.currentUser.name});
+      ngToast.create(logInfo);
+      $location.path('/KPI/'+data._id);
+    });
 
   } else {
-    $http.put('/api/KPIs/'+ $scope.KPI._id , $scope.KPI);
+    $http.put('/api/KPIs/'+ $scope.KPI._id , $scope.KPI).success(function(){
+      var logInfo = 'KPI "' + $scope.KPI.name + '" was updated';
+      $http.post('/api/logs', {info:logInfo, actor:$rootScope.currentUser.name});
+      ngToast.create(logInfo);    
+    });
 
-    var logInfo = 'KPI "' + $scope.KPI.name + '" was updated';
-    $http.post('/api/logs', {info:logInfo, actor:$rootScope.currentUser.name});
-    ngToast.create(logInfo);    
   }
-  $scope.load();
 };
 
 $scope.edit = function(KPI) {

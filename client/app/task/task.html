@@ -9,15 +9,6 @@
                 <ul class="list-unstyled profile-nav">
                     <li>
                         <img src="assets/images/Tasks.png" class="img-responsive" alt=""/>
-                        <a href="#" class="profile-edit">edit</a>
-                    </li>
-                    <li>
-                        <a href="#">Projects</a>
-                    </li>
-                    <li>
-                        <a href="#">Actors <span>
-                        3 </span>
-                        </a>
                     </li>
                 </ul>
             </div>
@@ -38,34 +29,17 @@
                     </div>
                     <!--end col-md-8-->
                     <div class="col-md-4">
-                        <div class="portlet sale-summary">
-                            <div class="portlet-title">
-                                <div class="caption">
-                                    Summary
-                                </div>
-                                <div class="tools">
-                                    <a class="reload" href="javascript:;"></a>
-                                </div>
-                            </div>
-                            <div class="portlet-body">
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <span class="sale-info">
-                                        METRICS COUNT <i class="fa fa-img-up"></i>
-                                        </span>
-                                        <span class="sale-num">
-                                        {{task.metrics.length}} </span>
-                                    </li>
-                                    <li>
-                                        <span class="sale-info">
-                                        LAST ENTRY <i class="fa fa-img-down"></i>
-                                        </span>
-                                        <span class="sale-num">
-                                        {{task.metrics[task.metrics.length-1].date  | date:'shortDate'}} </span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                     <ul class="list-unstyled profile-nav">
+                   
+                    <li>
+                        <a href="#" ng-click="load()"> <i class="fa fa-refresh"></i> Reload Me</a>
+                    </li>
+                    <li>
+                        <a href="#"> <i class="fa fa-eye"></i> Watch this task <span>
+                        No </span>
+                        </a>
+                    </li>
+                </ul>
                     </div>
                     <!--end col-md-4-->
                 </div>
@@ -113,8 +87,14 @@
                     <div class="col-md-3">
                         <ul class="ver-inline-menu tabbable margin-bottom-10">
                             <li class="active">
-                                <a data-toggle="tab" href="#tab_1-1">
+                                <a data-toggle="tab"  href="#tab_1-1">
                                 <i class="fa fa-recycle"></i>Change Perimeter </a>
+                                <span class="after">
+                                </span>
+                            </li>
+                            <li >
+                                <a data-toggle="tab"  href="#tab_1-2">
+                                <i class="fa fa-bomb"></i>Danger Zone </a>
                                 <span class="after">
                                 </span>
                             </li>
@@ -157,6 +137,9 @@
                                         </div>
                                     </div>
                                 </form>
+                            </div>
+                            <div id="tab_1-2" class="tab-pane">
+                                <button class="btn btn-danger">Delete this task</button>
                             </div>
                             <!-- END CONTENT -->
                         </div>

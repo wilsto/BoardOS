@@ -34,8 +34,8 @@ exports.show = function(req, res) {
 exports.list = function(req, res) {
   Hierarchy.find({name:req.params.id}, function (err, hierarchy) {
     if(err) { return handleError(res, err); }
-    if(!hierarchy) { return res.send(404); }
-    if(hierarchy[0]) {tools.buildHierarchy(hierarchy[0].list,'list')};
+    if(!hierarchy) { return res.send(404)}
+    if(hierarchy[0]) {tools.buildHierarchy(hierarchy[0].list,'list')}
     return res.json(hierarchy[0]);
   });
 };
@@ -43,8 +43,8 @@ exports.list = function(req, res) {
 // Creates a new hierarchy in the DB.
 exports.create = function(req, res) {
     var newHierarchy = new Hierarchy(req.body, false);
-    newHierarchy.save(function(err) {
-      res.send(200);
+    newHierarchy.save(function(err, doc) {
+      res.send(200, doc);
     });
 };
 

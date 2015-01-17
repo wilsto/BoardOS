@@ -1,4 +1,4 @@
-// Generated on 2014-11-15 using generator-angular-fullstack 2.0.13
+// Generated on 2015-01-16 using generator-angular-fullstack 2.0.13
 'use strict';
 
 module.exports = function (grunt) {
@@ -17,7 +17,8 @@ module.exports = function (grunt) {
     cdnify: 'grunt-google-cdn',
     protractor: 'grunt-protractor-runner',
     injector: 'grunt-asset-injector',
-    buildcontrol: 'grunt-build-control'
+    buildcontrol: 'grunt-build-control',
+    removelogging: 'grunt-remove-logging'
   });
 
   // Time how long tasks take. Can help when optimizing build times
@@ -213,7 +214,7 @@ module.exports = function (grunt) {
       target: {
         src: '<%= yeoman.client %>/index.html',
         ignorePath: '<%= yeoman.client %>/',
-        exclude: ['/json3/', '/es5-shim/']
+        exclude: [/bootstrap-sass-official/, /bootstrap.js/, '/json3/', '/es5-shim/']
       }
     },
 
@@ -271,7 +272,11 @@ module.exports = function (grunt) {
         }]
       }
     },
-
+    removelogging: {
+        dist: {
+          src: ['<%= yeoman.dist %>/public/app/*.app.js','<%= yeoman.dist %>/server/**/*.js'] // Each file will be overwritten with the output!
+        }
+      },
     svgmin: {
       dist: {
         files: [{
@@ -376,12 +381,6 @@ module.exports = function (grunt) {
         push: true,
         connectCommits: false,
         message: 'Built %sourceName% from commit %sourceCommit% on branch %sourceBranch%'
-      },
-      pages: {
-        options: {
-          remote: 'git@github.com:wilsto/BoardOS.git',
-          branch: 'master'
-        }
       },
       heroku: {
         options: {
@@ -518,17 +517,8 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('serve', function (target) {
-    
     if (target === 'dist') {
-      return grunt.task.run([
-        'build',
-        'env:all', 
-        'env:prod', 
-        'express:prod', 
-        'wait', 
-        'open', 
-        'express-keepalive'
-      ]);
+      return grunt.task.run(['build', 'env:all', 'env:prod', 'express:prod', 'wait', 'open', 'express-keepalive']);
     }
 
     if (target === 'debug') {

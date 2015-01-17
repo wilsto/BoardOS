@@ -49,8 +49,8 @@ exports.show = function(req, res) {
 // Creates a new kpi in the DB.
 exports.create = function(req, res) {
   var newKPI = new KPI(req.body, false);
-  newKPI.save(function(err) {
-    res.send(200);
+  newKPI.save(function(err,doc) {
+    res.send(200,doc);
   });
 };
 

@@ -21,21 +21,21 @@ function groupByMulti (obj, values, context) {
         byFirst[prop] = groupByMulti(byFirst[prop], rest, context);
     }
     return byFirst;
-};
+}
 
  module.exports = {
-    giveMeMyColor: function (value) {
-        return giveMeMyColor(value);
-    },
     buildChart: function (mKPI, KPIType) {
+        var myChart;
+        var mySeries = [];
         switch  (KPIType) {
             case 'hBullet' :
-            var myChart=
+            myChart=
                 {
                   "graphset":
                     [
                         {
                         "type":"hbullet",
+                        "background-color":"#ffffff",
                         "title":
                             {
                               "text":"KPI This " + mKPI.groupTimeBy+ " (Base 100)",
@@ -72,7 +72,7 @@ function groupByMulti (obj, values, context) {
                 };
               break;
               case 'Bar' :
-                var mySeries = [];
+
                 _.forEach(mKPI.metricsGroupBy.oldTime, function(item, key) {
                     mySeries.push( {
                         "text":key,
@@ -84,7 +84,7 @@ function groupByMulti (obj, values, context) {
                     var myLabels = _.pluck(item,'label');
                 });
 
-              var myChart={
+              myChart={
                 "graphset":[
                 {
                     "type":"bar",
@@ -172,7 +172,6 @@ function groupByMulti (obj, values, context) {
             };
             break;
             case 'Bubble' :
-            var mySeries = [];
                 _.forEach(mKPI.metricsGroupBy.TaskTime, function(item, key) { // pour chaque tache
                     var lastMonth = _.chain(item).pairs().sortBy(function(item) { return item[0]; }).last().value(); // on prend le derniere mois avec une mesure
                     var lastMetric = _.chain(lastMonth[1]).sortBy('date').last().value();
@@ -191,11 +190,12 @@ function groupByMulti (obj, values, context) {
                     }
                 });
 
-            var myChart=
+            myChart=
                 {
                 "graphset":[
                     {
                         "type":"bubble",
+                        "background-color":"#ffffff",
                         "plotarea":{
                             "background-color":"none",
                             "margin":"0px 0px 50px 50px"
@@ -230,13 +230,13 @@ function groupByMulti (obj, values, context) {
     },
     buildHierarchy: function (arry, type) {
 
-        var roots = [], children = {}, list = [];
+        var roots = [], children = {}, list = [], i, len ;
 
         // find the top level nodes and hash the children based on parent
-        for (var i = 0, len = arry.length; i < len; ++i) {
+        for (i = 0, len = arry.length; i < len; ++i) {
             var item = arry[i];
             var p = item.parent;
-            var target = (p == '#') ? roots : (children[p] || (children[p] = []));
+            var target = (p === '#') ? roots : (children[p] || (children[p] = []));
             item.longname = item.text;
             target.push({ value: item });
         }
@@ -245,7 +245,7 @@ function groupByMulti (obj, values, context) {
         var findChildren = function(parent,longname) {
             if (children[parent.value.id]) {
                 parent.children = children[parent.value.id];
-                for (var i = 0, len = parent.children.length; i < len; ++i) {
+                for (i = 0, len = parent.children.length; i < len; ++i) {
                     parent.children[i].value.longname = parent.value.longname+'.'+parent.children[i].value.text;
                     list.push({text:parent.children[i].value.text, longName:parent.children[i].value.longname,id:parent.children[i].value.id});
                     findChildren(parent.children[i],parent.value.longname);
@@ -254,12 +254,12 @@ function groupByMulti (obj, values, context) {
         };
 
         // enumerate through to handle the case where there are multiple roots
-        for (var i = 0, len = roots.length; i < len; ++i) {
+        for (i = 0, len = roots.length; i < len; ++i) {
             list.push({text:roots[i].value.longname,id:roots[i].value.id});
             findChildren(roots[i]);
         }
-        if (type='list') {return list};
-        if (type='Treeview') {return roots};        
+        if (type==='list') {return list}
+        if (type==='Treeview') {return roots}    
     },
     groupByTime: function(metrics, fieldDate, field) {
 
@@ -343,8 +343,8 @@ function groupByMulti (obj, values, context) {
         }
         if (kpi.category === 'Alert') {
             switch (refField) {
-                case 'constant' : filteredMetrics = _.filter(metrics,function (metric) {return metric[field] == refValues[0] });
-                case 'upperLimit' : filteredMetrics = _.filter(metrics,function (metric) {return metric[field] > parseInt(refValues[0]) });
+                case 'constant' : filteredMetrics = _.filter(metrics,function (metric) {return metric[field] === refValues[0] });  break; 
+                case 'upperLimit' : filteredMetrics = _.filter(metrics,function (metric) {return metric[field] > parseInt(refValues[0]) });  break; 
                 case 'lowerLimit' : filteredMetrics = _.filter(metrics,function (metric) {return metric[field] < parseInt(refValues[0]) });
             }
 

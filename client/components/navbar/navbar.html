@@ -15,36 +15,28 @@
           <li class="dropdown" id="header_notification_bar">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
               <i class="fa fa-bell-o"></i>
-              <span class="badge badge-danger">
-                2 </span>
-              </a>
+              <span class="badge badge-danger" ng-show="navBarTasksAlerts.length>0">
+                  {{navBarTasksAlerts.length}} </span>
+                </a>
               <ul class="dropdown-menu extended notification">
                 <li>
                   <p>
-                    You have 2 notifications
+                    You have {{navBarTasksAlerts.length}} notifications
                   </p>
                 </li>
                 <li>
-                  <ul class="dropdown-menu-list scroller" style="height: 250px;">
-                    <li>
+                  <ul class="dropdown-menu-list scroller" style="height: 250px;overflow:auto">
+                    <li ng-repeat="taskAlert in navBarTasksAlerts | orderBy:'timebetween' track by $index">
                       <a href="#">
                         <span class="label label-sm label-icon label-danger">
                           <i class="fa fa-bell"></i>
                         </span>&nbsp;
-                        SDTM CL2-78989-008 <br/><span class="time pull-right">
-                        17 days ago </span>
+                        {{taskAlert.name}}
+                        <span class="time pull-right" style="color:red" ng-show="taskAlert.timebetween <= 0 && taskAlert.timebetween !== null ">{{ Math.abs(taskAlert.timebetween) }} days ago</span>
+                        <span class="time pull-right" ng-show="taskAlert.timebetween > 0 && taskAlert.timebetween !== null" >in {{ Math.abs(taskAlert.timebetween) }} days </span>
+                        <span class="time pull-right" style="color:orange" ng-show="taskAlert.timebetween === null" > no defined KPI </span>
                       </a>
                     </li>
-                    <li>
-                      <a href="#">
-                        <span class="label label-sm label-icon label-danger">
-                          <i class="fa fa-bell"></i>
-                        </span>&nbsp;
-                        SOP Codobase <br/>
-                        <span class="time  pull-right"> Today </span>
-                      </a>
-                    </li>
-
                   </ul>
                 </li>
                 <li class="external">
@@ -57,27 +49,27 @@
             <li class="dropdown" id="header_task_bar">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                 <i class="fa fa-tasks"></i>
-                <span class="badge badge-warning" style="color:black" ng-show="tasks.length>0">
-                  {{tasks.length}} </span>
+                <span class="badge badge-warning" style="color:black" ng-show="navBarTasks.length>0">
+                  {{navBarTasks.length}} </span>
                 </a>
                 <ul class="dropdown-menu extended tasks">
                   <li>
                     <p>
-                      You have {{tasks.length}} pending tasks
+                      You have {{navBarTasks.length}} pending tasks
                     </p>
                   </li>
                   <li>
-                    <ul class="dropdown-menu-list scroller" style="height: 250px;">
-                      <li ng-repeat="task in tasks | filter:search | orderBy:'mesures[task.mesures.length-1].avancement' track by $index" ng-show="task._id">
+                    <ul class="dropdown-menu-list scroller" style="height: 250px;overflow:auto">
+                      <li ng-repeat="task in navBarTasks | orderBy:'lastmetric.endDate' track by $index">
                         <a href="/task/{{task._id}}">
                           <span class="task">
                             <span class="desc">
                               {{task.name}} </span>
                               <span class="percent">
-                                {{task.mesures[task.mesures.length-1].avancement}}% </span>
+                                {{task.lastmetric.progress}}% </span>
                               </span>
                               <span class="progress">
-                                <span style="width: {{task.mesures[task.mesures.length-1].avancement}}%;" class="progress-bar progress-bar-success" aria-valuenow="{{task.mesures[task.mesures.length-1].avancement}}" aria-valuemin="0" aria-valuemax="100">
+                                <span style="width: {{task.lastmetric.progress}}%;" class="progress-bar progress-bar-success" aria-valuenow="{{task.lastmetric.progress}}" aria-valuemin="0" aria-valuemax="100">
                                   <span class="sr-only">
                                     40% Complete </span>
                                   </span>

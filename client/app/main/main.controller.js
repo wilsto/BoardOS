@@ -26,8 +26,8 @@ angular.module('boardOsApp')
       $scope.goalsNb= 0;
       $scope.alertsNb = 0;
       _.forEach(dashboards.kpis, function(kpi, key) {
-           if (kpi.category ==='Goal')  {dataGoals.push(_.pluck(calLibrary.displayLastYear(kpi.calcul.time,'month','valueKPI'),'value'))};
-           if (kpi.category ==='Alert')  {dataAlerts.push(_.pluck(calLibrary.displayLastYear(kpi.calcul.time,'month','valueKPI'),'value'))};
+           if (kpi.category ==='Goal')  {dataGoals.push(_.pluck(calLibrary.displayLastYear(kpi.calcul.time,'month','valueKPI'),'value'));}
+           if (kpi.category ==='Alert')  {dataAlerts.push(_.pluck(calLibrary.displayLastYear(kpi.calcul.time,'month','valueKPI'),'value'));}
         });      
 
       $scope.dataKPIs[0].values = $scope.predataKPIs;
@@ -47,8 +47,8 @@ angular.module('boardOsApp')
         var dataAlerts= 0;
 
         _.forEach(dashboard.kpis, function(kpi, key) {
-              if (kpi.category ==='Goal')  {dashboard.nbGoals += 1; dataGoals += _.last(kpi.calcul.time).valueKPI};
-              if (kpi.category ==='Alert')  {dashboard.nbAlerts += 1; dataAlerts += _.last(kpi.calcul.time).valueKPI};
+              if (kpi.category ==='Goal')  {dashboard.nbGoals += 1; dataGoals += _.last(kpi.calcul.time).valueKPI;}
+              if (kpi.category ==='Alert')  {dashboard.nbAlerts += 1; dataAlerts += _.last(kpi.calcul.time).valueKPI;}
         });
 
         dashboard.dataGoals = (dashboard.nbGoals > 0) ? parseInt(dataGoals / dashboard.nbGoals) : '-';

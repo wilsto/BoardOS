@@ -12,22 +12,38 @@ angular.module('boardOsApp', [
   'nvd3'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
-    $urlRouterProvider
-      .otherwise('/');
+    $urlRouterProvider.otherwise('/');
     $locationProvider.html5Mode(true);
     $httpProvider.interceptors.push('authInterceptor');
-  })
 
-  .config(['$httpProvider', function($httpProvider) {
     //initialize get if not there
     if (!$httpProvider.defaults.headers.get) {
         $httpProvider.defaults.headers.get = {};    
     }
     //disable IE ajax request caching
     $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
-    //$httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache'; 
-    //$httpProvider.defaults.headers.get['Pragma'] = 'no-cache';
-  }])
+    $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache'; 
+    $httpProvider.defaults.headers.get.Pragma = 'no-cache';
+  })
+
+/*  .config(function ($httpProvider) {
+        $httpProvider.requestInterceptors.push('httpRequestInterceptorIECacheSlayer');
+    })
+    // IE 8 cache problem - Request Interceptor - https://github.com/angular/angular.js/issues/1418#issuecomment-11750815
+    .factory('httpRequestInterceptorIECacheSlayer', function($log) {
+        return function(promise) {
+            return promise.then(function(request) {
+                // If not a partial, append timestamp query string
+                if(request.url.indexOf("partials/") === -1) {
+                    var d = new Date();
+                    request.url = request.url + '?cacheSlayer=' + d.getTime();
+                }
+                $log.info('request.url = ' + request.url);
+                // return the config object to pass it on to the next interceptor
+                return request;
+            });
+        };
+    });*/
 
   .factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {
     return {

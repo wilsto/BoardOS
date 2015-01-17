@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-.controller('DashboardCtrl', function ($scope,  $rootScope, $http, $stateParams, calLibrary, ngToast, $cookieStore, $q) {
+.controller('DashboardCtrl', function ($scope,  $rootScope, $http, $stateParams, calLibrary, ngToast, $cookieStore, $location) {
   
   $scope.load = function() {
     if ($stateParams.id) {
@@ -28,9 +28,9 @@ angular.module('boardOsApp')
 
       var dataGoals = [];
       var dataAlerts= [];
-      _.forEach($scope.dashboard.kpis, function(kpi, key) {
-           if (kpi.category ==='Goal')  {dataGoals.push(_.pluck(calLibrary.displayLastYear(kpi.calcul.time,'month','valueKPI'),'value'))};
-           if (kpi.category ==='Alert')  {dataAlerts.push(_.pluck(calLibrary.displayLastYear(kpi.calcul.time,'month','valueKPI'),'value'))};
+      _.forEach($scope.dashboard.kpis, function(kpi) {
+           if (kpi.category ==='Goal')  {dataGoals.push(_.pluck(calLibrary.displayLastYear(kpi.calcul.time,'month','valueKPI'),'value'));}
+           if (kpi.category ==='Alert')  {dataAlerts.push(_.pluck(calLibrary.displayLastYear(kpi.calcul.time,'month','valueKPI'),'value'));}
           
       });
        console.log('$scope.dataGoals ',$scope.dataGoals );
@@ -65,20 +65,20 @@ $scope.save = function() {
   delete $scope.dashboard.tasks;
 
   if (typeof $scope.dashboard._id === 'undefined') {
-    $http.post('/api/dashboards', $scope.dashboard);
-
-    var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was created';
-    $http.post('/api/logs', {info:logInfo, actor:$rootScope.currentUser.name});
-    ngToast.create(logInfo);
+    $http.post('/api/dashboards', $scope.dashboard).success(function(data){
+         var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was created';
+        $http.post('/api/logs', {info:logInfo, actor:$rootScope.currentUser.name});
+        ngToast.create(logInfo);
+        $location.path('/dashboard/'+data._id);
+    });
   } else {
-    $http.put('/api/dashboards/'+ $scope.dashboard._id , $scope.dashboard);
-
-    var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was updated';
-    $http.post('/api/logs', {info:logInfo, actor:$rootScope.currentUser.name});
-    ngToast.create(logInfo);
+    $http.put('/api/dashboards/'+ $scope.dashboard._id , $scope.dashboard).success(function(){
+        var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was updated';
+        $http.post('/api/logs', {info:logInfo, actor:$rootScope.currentUser.name});
+        ngToast.create(logInfo);
+    });
   }
 
-  $scope.load();
 };
 
 
