@@ -6,7 +6,6 @@ angular.module('boardOsApp', [
   'ngSanitize',
   'ui.router',
   'ui.bootstrap',
-  'ngToast',
   'ngJsTree',
   'ngDialog',
   'nvd3'

@@ -1,13 +1,14 @@
 'use strict';
 
 angular.module('boardOsApp')
-.controller('TaskCtrl', function($rootScope, $scope, $http, $stateParams, ngToast, $location){
+.controller('TaskCtrl', function($rootScope, $scope, $http, $stateParams, $location){
 
   $scope.load = function() {      
     if ($stateParams.id) {
       $http.get('/api/tasks/'+$stateParams.id).success(function (data) { 
         $scope.task = data;
-            ngToast.create('Task "' + $scope.task.name + '" loaded');
+                    $.growl({  icon: "fa fa-paw",  message: 'Task "' + $scope.task.name + '" loaded'});
+
       });
     } else {
      $scope.task = {};
@@ -30,7 +31,7 @@ angular.module('boardOsApp')
     $http.post('/api/tasks', $scope.task).success(function(data){
       var logInfo = 'Task "' + $scope.task.name + '" was created';
       $http.post('/api/logs', {info:logInfo, actor:$rootScope.currentUser.name});
-      ngToast.create(logInfo);
+      $.growl({  icon: "fa fa-paw",  message:logInfo});
       $location.path('/task/'+data._id);
 
     });
@@ -38,7 +39,7 @@ angular.module('boardOsApp')
     $http.put('/api/tasks/'+ $scope.task._id , $scope.task).success(function(data){
       var logInfo = 'Task "' + $scope.task.name + '" was updated';
       $http.post('/api/logs', {info:logInfo, actor:$rootScope.currentUser.name});
-      ngToast.create(logInfo);
+      $.growl({  icon: "fa fa-paw",  message:logInfo});
     });
   }
 };

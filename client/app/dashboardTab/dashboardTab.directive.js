@@ -108,7 +108,7 @@ angular.module('boardOsApp')
             template: 'myMesureContent.html',
             className: 'ngdialog-theme-plain',
             closeByDocument: false,
-            controller: ['$scope', '$http', '$rootScope', 'ngToast', function($scope, $http, $rootScope, ngToast) {
+            controller: ['$scope', '$http', '$rootScope', function($scope, $http, $rootScope) {
               
                 // controller logic
                 $scope.formData = mesure;
@@ -182,7 +182,7 @@ angular.module('boardOsApp')
 
                         var logInfo = 'A Metric for Task "' + scope.data.name + '" was updated';
                         $http.post('/api/logs', {info:logInfo, actor:$rootScope.currentUser.name});
-                        ngToast.create(logInfo);
+                        $.growl({  icon: "fa fa-paw",  message:logInfo});
 
                         $scope.closeThisDialog();
                     });
@@ -191,7 +191,7 @@ angular.module('boardOsApp')
 
                         var logInfo = 'A Metric for Task "' + scope.data.name + '" was created';
                         $http.post('/api/logs', {info:logInfo, actor:$rootScope.currentUser.name});
-                        ngToast.create(logInfo);
+                        $.growl({  icon: "fa fa-paw",  message:logInfo});
 
                         scope.dataTable.push($scope.formData);
                         $scope.closeThisDialog();

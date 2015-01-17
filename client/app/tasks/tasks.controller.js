@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-.controller('TasksCtrl', function ($rootScope, $scope, $http,  ngToast,statusTask, progressStatusTask){
+.controller('TasksCtrl', function ($rootScope, $scope, $http, statusTask, progressStatusTask){
     $scope.tasks = [];
     $scope.task = {};
 
@@ -23,10 +23,10 @@ angular.module('boardOsApp')
 
         if (typeof $scope.task._id === 'undefined') {
             $http.post('/api/tasks', $scope.task);
-            ngToast.create('Task "' + $scope.task.name + '" was created');
+            $.growl({  icon: "fa fa-paw",  message:'Task "' + $scope.task.name + '" was created'});
         } else {
             $http.put('/api/tasks/'+ $scope.task._id , $scope.task);
-            ngToast.create('Task "' + $scope.task.name + '" was updated');
+            $.growl({  icon: "fa fa-paw",  message:'Task "' + $scope.task.name + '" was updated'});
         }
         $scope.load();
         $scope.config = {tab1: true, tab2: false};
@@ -47,7 +47,7 @@ angular.module('boardOsApp')
             if (result) {
                 $http.delete('/api/tasks/' + task._id).success(function () {
                     $scope.tasks.splice(index, 1);
-                    ngToast.create('task "' + task.name + '" was deleted');
+                    $.growl({  icon: "fa fa-paw",  message:'task "' + task.name + '" was deleted'});
                 });
             }
         }); 

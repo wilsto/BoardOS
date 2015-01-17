@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-.controller('hierarchiesCtrl', function ($scope, $http, ngToast) {
+.controller('hierarchiesCtrl', function ($scope, $http) {
   $scope.hierarchies = [];
   $scope.Hierarchy = {};
   $scope.config = {tab1: true, tab2: false};
@@ -61,7 +61,7 @@ angular.module('boardOsApp')
       $scope.treeData = $scope.hierarchies;
       $scope.treeData.forEach(function(v){ delete v.__uiNodeId;});      
       $http.put('/api/hierarchies/'+ $scope.HierarchyType, $scope.treeData);
-      ngToast.create('Hierarchy "' + $scope.HierarchyType + '" was updated');
+      $.growl({  icon: "fa fa-paw",  message:'Hierarchy "' + $scope.HierarchyType + '" was updated'});
     }
     //$scope.load();
   };
@@ -79,7 +79,7 @@ angular.module('boardOsApp')
       if (result) {
         $http.delete('/api/hierarchies/' + Hierarchy._id).success(function () {
           $scope.hierarchies.splice(index, 1);
-          ngToast.create('Hierarchy "' + Hierarchy.name + '" was deleted');
+          $.growl({  icon: "fa fa-paw",  message:'Hierarchy "' + Hierarchy.name + '" was deleted'});
         });
       }
     }); 

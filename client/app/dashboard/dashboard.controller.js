@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-.controller('DashboardCtrl', function ($scope,  $rootScope, $http, $stateParams, calLibrary, ngToast, $cookieStore, $location) {
+.controller('DashboardCtrl', function ($scope,  $rootScope, $http, $stateParams, calLibrary, $cookieStore, $location) {
   
   $scope.load = function() {
     if ($stateParams.id) {
@@ -68,14 +68,14 @@ $scope.save = function() {
     $http.post('/api/dashboards', $scope.dashboard).success(function(data){
          var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was created';
         $http.post('/api/logs', {info:logInfo, actor:$rootScope.currentUser.name});
-        ngToast.create(logInfo);
+        $.growl({  icon: "fa fa-paw",  message: logInfo});
         $location.path('/dashboard/'+data._id);
     });
   } else {
     $http.put('/api/dashboards/'+ $scope.dashboard._id , $scope.dashboard).success(function(){
         var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was updated';
         $http.post('/api/logs', {info:logInfo, actor:$rootScope.currentUser.name});
-        ngToast.create(logInfo);
+        $.growl({  icon: "fa fa-paw",  message: logInfo});
     });
   }
 

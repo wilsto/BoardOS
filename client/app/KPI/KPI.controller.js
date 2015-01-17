@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-.controller('KPICtrl', function ($scope,$rootScope, Auth, $http, ngToast,actionKPI,categoryKPI,groupByKPI,metricTaskFields, $stateParams, calLibrary, $location) {
+.controller('KPICtrl', function ($scope,$rootScope, Auth, $http, actionKPI,categoryKPI,groupByKPI,metricTaskFields, $stateParams, calLibrary, $location) {
 
   $scope.actionKPI = actionKPI;
   $scope.categoryKPI = categoryKPI;
@@ -68,7 +68,7 @@ $scope.save = function() {
     $http.post('/api/KPIs', $scope.KPI).success(function(data){
       var logInfo = 'KPI "' + $scope.KPI.name + '" was created';
       $http.post('/api/logs', {info:logInfo, actor:$rootScope.currentUser.name});
-      ngToast.create(logInfo);
+      $.growl({  icon: "fa fa-paw",  message:logInfo});
       $location.path('/KPI/'+data._id);
     });
 
@@ -76,7 +76,7 @@ $scope.save = function() {
     $http.put('/api/KPIs/'+ $scope.KPI._id , $scope.KPI).success(function(){
       var logInfo = 'KPI "' + $scope.KPI.name + '" was updated';
       $http.post('/api/logs', {info:logInfo, actor:$rootScope.currentUser.name});
-      ngToast.create(logInfo);    
+      $.growl({  icon: "fa fa-paw",  message:logInfo});    
     });
 
   }
@@ -97,7 +97,7 @@ $scope.delete = function(KPI,index) {
     if (result) {
       $http.delete('/api/KPIs/' + KPI._id).success(function () {
         $scope.KPIs.splice(index, 1);
-        ngToast.create('KPI "' + KPI.name + '" was deleted');
+        $.growl({  icon: "fa fa-paw",  message:'KPI "' + KPI.name + '" was deleted'});
       });
     }
   }); 

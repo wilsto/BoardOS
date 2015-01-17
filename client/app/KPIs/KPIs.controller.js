@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('KPIsCtrl', function ($scope, $http, ngToast,actionKPI,categoryKPI,groupByKPI,metricTaskFields) {
+  .controller('KPIsCtrl', function ($scope, $http, actionKPI,categoryKPI,groupByKPI,metricTaskFields) {
     $scope.KPIs = [];
     $scope.KPI = {};
     $scope.config = {tab1: true, tab2: false};
@@ -19,10 +19,10 @@ angular.module('boardOsApp')
 
       if (typeof $scope.KPI._id === 'undefined') {
         $http.post('/api/KPIs', $scope.KPI);
-        ngToast.create('KPI "' + $scope.KPI.name + '" was created');
+        $.growl({  icon: "fa fa-paw",  message:'KPI "' + $scope.KPI.name + '" was created'});
       } else {
         $http.put('/api/KPIs/'+ $scope.KPI._id , $scope.KPI);
-        ngToast.create('KPI "' + $scope.KPI.name + '" was updated');
+        $.growl({  icon: "fa fa-paw",  message:'KPI "' + $scope.KPI.name + '" was updated'});
       }
       $scope.load();
       $scope.config = {tab1: true, tab2: false};
@@ -43,7 +43,7 @@ angular.module('boardOsApp')
         if (result) {
           $http.delete('/api/KPIs/' + KPI._id).success(function () {
               $scope.KPIs.splice(index, 1);
-              ngToast.create('KPI "' + KPI.name + '" was deleted');
+              $.growl({  icon: "fa fa-paw",  message:'KPI "' + KPI.name + '" was deleted'});
           });
         }
       }); 
