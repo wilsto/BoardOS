@@ -14,7 +14,7 @@ angular.module('boardOsApp')
     };
 
     $scope.save = function() {
-    console.log($scope.dashboard);
+    
       if (typeof $scope.dashboard._id === 'undefined') {
         $http.post('/api/dashboards', $scope.dashboard);
         ngToast.create('Dashboard "' + $scope.dashboard.name + '" was created');
@@ -27,7 +27,7 @@ angular.module('boardOsApp')
     };
 
     $scope.edit = function(dashboard) {
-      console.log(dashboard);
+      
       $scope.dashboard = dashboard;
       $scope.config = {tab1: false, tab2: true};
     };

@@ -7,7 +7,7 @@ angular.module('boardOsApp')
       $scope.navBarTasks = tasks.tasks;
       $scope.navBarTasks = _.filter(tasks.tasks, function(task) {return task.lastmetric.progress < 100 ; });
       $scope.navBarTasksAlerts = _.filter(tasks.tasks, function(task) {return task.timebetween <= 0 ; });
-      console.log('tasks',tasks);
+      
     });
 
     $scope.login = function() {
@@ -18,7 +18,7 @@ angular.module('boardOsApp')
 
     $scope.login();
 
-    $scope.$on('UserLoggedIn', function() { console.log('mass');     
+    $scope.$on('UserLoggedIn', function() {      
       $rootScope.isLoggedIn = Auth.isLoggedIn();
       $rootScope.isAdmin = Auth.isAdmin();
       $rootScope.currentUser = Auth.getCurrentUser();

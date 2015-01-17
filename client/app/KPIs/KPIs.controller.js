@@ -15,7 +15,7 @@ angular.module('boardOsApp')
 
     $scope.save = function() {
       delete $scope.KPI.__v;
-      console.log($scope.KPI );
+      
 
       if (typeof $scope.KPI._id === 'undefined') {
         $http.post('/api/KPIs', $scope.KPI);
@@ -94,7 +94,7 @@ angular.module('boardOsApp')
             },
             success: function(response, newValue) {
                 $scope.KPI.activity = newValue;
-                console.log($scope.KPI.activity );
+                
 
             }
         }); 
@@ -110,7 +110,7 @@ angular.module('boardOsApp')
             },
             success: function(response, newValue) {
                 $scope.KPI.context = newValue;
-                console.log($scope.KPI.context );
+                
 
             }
         }); 
@@ -126,7 +126,7 @@ angular.module('boardOsApp')
             }, 
             success: function(response, newValue) {
                 $scope.KPI.axe = newValue;
-                console.log($scope.KPI.axe );
+                
 
             }
         }); 

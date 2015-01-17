@@ -13,7 +13,7 @@ angular.module('boardOsApp')
     if ($stateParams.id) {    
         $http.get('/api/KPIs/'+$stateParams.id, {params:{activity: $rootScope.perimeter.activity, context: $rootScope.perimeter.context}}).success(function(KPI) {
           $scope.KPI = KPI;
-          console.log('KPI',KPI);
+          
           setTimeout( function(){
               zingchart.render({
                       id:'myChartDiv0',

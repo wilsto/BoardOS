@@ -33,7 +33,7 @@ angular.module('boardOsApp')
            if (kpi.category ==='Alert')  {dataAlerts.push(_.pluck(calLibrary.displayLastYear(kpi.calcul.time,'month','valueKPI'),'value'));}
           
       });
-       console.log('$scope.dataGoals ',$scope.dataGoals );
+       
 
       $scope.dataKPIs[0].values = $scope.predataKPIs;
       $scope.dataTasks[0].values = $scope.predataTasks;
@@ -41,12 +41,12 @@ angular.module('boardOsApp')
       $scope.dataGoals[0].values = calLibrary.getCalculByMonth(dataGoals);     
       $scope.dataAlerts[0].values = calLibrary.getCalculByMonth(dataAlerts);     
 
-       console.log('$scope.dataGoals ',$scope.dataGoals[0].values );
-       console.log('$scope.dataAlerts ',$scope.dataAlerts[0].values );
+       
+       
       $scope.goalsNb = _.last($scope.dataGoals[0].values).count;   
       $scope.alertsNb =_.last($scope.dataAlerts[0].values).sum;  
-       console.log('$scope.goalsNb ',$scope.goalsNb );
-       console.log('$scope.alertsNb ',$scope.alertsNb );
+       
+       
     });
     } else {
        $scope.dashboard = {name:''};

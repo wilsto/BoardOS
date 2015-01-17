@@ -175,7 +175,7 @@ angular.module('boardOsApp')
                 $scope.format = 'dd-MMMM-yyyy';
 
                 $scope.ok = function () {
-                  console.log(' $scope.formData', $scope.formData);
+                  
                   delete $scope.formData.___v;
                   if ($scope.formData._id) {
                     $http.put('/api/metrics/'+$scope.formData._id, $scope.formData).success(function(data) {

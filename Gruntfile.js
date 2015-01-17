@@ -274,7 +274,7 @@ module.exports = function (grunt) {
     },
     removelogging: {
         dist: {
-          src: ['<%= yeoman.dist %>/public/app/*.app.js','<%= yeoman.dist %>/server/**/*.js'] // Each file will be overwritten with the output!
+          src: ['<%= yeoman.client %>/{app,components}/**/*.js'] // Each file will be overwritten with the output!
         }
       },
     svgmin: {
@@ -595,6 +595,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean:dist',
     'concurrent:dist',
+    'removelogging',
     'injector',
     'wiredep',
     'useminPrepare',

@@ -19,7 +19,7 @@ angular.module('boardOsApp')
 
     $scope.save = function() {
         delete $scope.task.__v;
-        console.log($scope.task );
+        
 
         if (typeof $scope.task._id === 'undefined') {
             $http.post('/api/tasks', $scope.task);

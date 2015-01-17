@@ -16,7 +16,7 @@ angular.module('boardOsApp')
     core : {
       animation: true,
       error : function(error) {
-            console.log('treeCtrl: error from js tree - ' + angular.toJson(error));
+            
         },
       check_callback : true,
       theme : {responsive:true},
@@ -97,7 +97,7 @@ angular.module('boardOsApp')
   };
 
   $scope.createNode = function(e, data) {
-    console.log(data.node);
+    
     $scope.hierarchies.push({ id : 'ajson'+ (Math.round(Math.random() * 100000)).toString(), parent : data.node.parent, text : data.node.text });
   };
 
