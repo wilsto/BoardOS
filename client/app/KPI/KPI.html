@@ -11,7 +11,7 @@
                     </li>
                     <li>
                         <a href="#">Dashboards Used<span>
-                        {{KPI.dashboards.length}}  </span>
+                            {{KPI.dashboards.length}}  </span>
                         </a>
                     </li>
                 </ul>
@@ -54,85 +54,85 @@
                                 <ul class="list-unstyled">
                                     <li>
                                         <span class="sale-info">
-                                        TASKS COUNT <i class="fa fa-img-up"></i>
+                                            TASKS COUNT <i class="fa fa-img-up"></i>
                                         </span>
                                         <span class="sale-num">
-                                        {{KPI.tasks.length}} </span>
-                                    </li>
-                                    <li>
-                                        <span class="sale-info">
-                                        METRICS COUNT <i class="fa fa-img-up"></i>
-                                        </span>
-                                        <span class="sale-num">
-                                        {{KPI.metrics.length}} </span>
-                                    </li>
-                                    <li>
-                                        <span class="sale-info">
-                                        LAST ENTRY <i class="fa fa-img-down"></i>
-                                        </span>
-                                        <span class="sale-num">
-                                        {{KPI.metrics[KPI.metrics.length-1].date  | date:'shortDate'}} </span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <!--end col-md-4-->
-                </div>
-                <!--end row-->
-            </div>
-        </div>
-
-        <tabset>
-            <tab ng-if="KPI._id" active="true">
-                <tab-heading>
-                    View 
-                </tab-heading>
-                <div class="row" >
-                    <div class="col-md-6">
-                        <div class="portlet">
-                            <div class="portlet-title">
-                                <div class="caption">
-                                    <i class="icon-bar-chart"></i>Past
+                                            {{KPI.tasks.length}} </span>
+                                        </li>
+                                        <li>
+                                            <span class="sale-info">
+                                                METRICS COUNT <i class="fa fa-img-up"></i>
+                                            </span>
+                                            <span class="sale-num">
+                                                {{KPI.metrics.length}} </span>
+                                            </li>
+                                            <li>
+                                                <span class="sale-info">
+                                                    LAST ENTRY <i class="fa fa-img-down"></i>
+                                                </span>
+                                                <span class="sale-num">
+                                                    {{KPI.metrics[KPI.metrics.length-1].date  | date:'shortDate'}} </span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
+                                <!--end col-md-4-->
                             </div>
-                            <div class="portlet-body">
-                                <div id="myChartDiv1"></div>
-                                <div id="myChartDiv0"></div>
+                            <!--end row-->
+                        </div>
+                    </div>
 
-                            </div>
-                        </div>
-                        <!-- END PORTLET-->
-                    </div>
-                    <div class="col-md-6">
-                        <!-- BEGIN PORTLET-->
-                        <div class="portlet">
-                            <div class="portlet-title">
-                                <div class="caption">
-                                    <i class="icon-bar-chart"></i>Future
+                    <tabset>
+                        <tab ng-if="KPI._id" active="true">
+                            <tab-heading>
+                            View 
+                        </tab-heading>
+                        <div class="row" >
+                            <div class="col-md-6">
+                                <div class="portlet">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <i class="icon-bar-chart"></i>Past
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <div id="myChartDiv1"></div>
+                                        <div id="myChartDiv0"></div>
+
+                                    </div>
                                 </div>
+                                <!-- END PORTLET-->
                             </div>
-                            <div class="portlet-body">
-                                <div id="myChartDiv2"></div>
+                            <div class="col-md-6">
+                                <!-- BEGIN PORTLET-->
+                                <div class="portlet">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <i class="icon-bar-chart"></i>Future
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <div id="myChartDiv2"></div>
+                                    </div>
+                                </div>
+                                <!-- END PORTLET-->
                             </div>
                         </div>
-                        <!-- END PORTLET-->
-                    </div>
-                </div>
-            </tab>
-            <!--tab Dashboard-->
-            <tab ng-if="KPI._id">
-                <tab-heading>
-                Dashboards 
-                <span class="badge badge-default"> {{KPI.dashboards.length}}</span>
-                </tab-heading>
-                <div dashboard-tab dashboard-type="dashboards" dashboard-data="KPI" ng-if="KPI"></div>
-            </tab>
-            <!--tab Tasks-->
-            <tab ng-if="KPI._id">
-                <tab-heading>
-                Tasks 
-                <span class="badge badge-default"> {{KPI.tasks.length}}</span>
+                    </tab>
+                    <!--tab Dashboard-->
+                    <tab ng-if="KPI._id">
+                        <tab-heading>
+                        Dashboards 
+                        <span class="badge badge-default"> {{KPI.dashboards.length}}</span>
+                    </tab-heading>
+                    <div dashboard-tab dashboard-type="dashboards" dashboard-data="KPI" ng-if="KPI"></div>
+                </tab>
+                <!--tab Tasks-->
+                <tab ng-if="KPI._id">
+                    <tab-heading>
+                    Tasks 
+                    <span class="badge badge-default"> {{KPI.tasks.length}}</span>
                 </tab-heading>
                 <div dashboard-tab dashboard-type="tasks" dashboard-data="KPI" ng-if="KPI"></div>
             </tab>
@@ -141,169 +141,185 @@
                 <tab-heading>
                 Metrics 
                 <span class="badge badge-default"> {{KPI.metrics.length}}</span>
-                </tab-heading>
-                <div dashboard-tab dashboard-type="metrics" dashboard-data="KPI" ng-if="KPI"></div>
-            </tab>
-            <!--tab Actors-->
-            <tab ng-if="KPI._id">
-                <tab-heading>
-                Actors 
-                <span class="badge badge-default">{{KPI.actors.length}}</span>
-                </tab-heading>
-                <div dashboard-tab dashboard-type="actors" dashboard-data="KPI" ng-if="KPI"></div>
-            </tab>
-            <!--tab Edit-->
-            <tab>
-                <tab-heading>
-                    Edit 
-                </tab-heading>
-                <div class="row profile-account">
-                    <div class="col-md-3">
-                        <ul class="ver-inline-menu tabbable margin-bottom-10">
-                            <li class="active">
-                                <a data-toggle="tab" href="#tab_1-1">
-                                <i class="fa fa-recycle"></i>Change Perimeter </a>
-                                <span class="after">
-                                </span>
-                            </li>
-                            <li >
-                                <a data-toggle="tab" href="#tab_2-2"><i class="fa fa-cog"></i>Change calculation</a>
-                            </li>
-                            <li>
-                                <a data-toggle="tab" href="#tab_3-3"><i class="fa fa-bar-chart-o"></i>Change graphics</a>
-                            </li>
-                        </ul>
+            </tab-heading>
+            <div dashboard-tab dashboard-type="metrics" dashboard-data="KPI" ng-if="KPI"></div>
+        </tab>
+        <!--tab Actors-->
+        <tab ng-if="KPI._id">
+            <tab-heading>
+            Actors 
+            <span class="badge badge-default">{{KPI.actors.length}}</span>
+        </tab-heading>
+        <div dashboard-tab dashboard-type="actors" dashboard-data="KPI" ng-if="KPI"></div>
+    </tab>
+    <!--tab Edit-->
+    <tab>
+        <tab-heading>
+        Edit 
+    </tab-heading>
+    <div class="row profile-account">
+        <div class="col-md-3">
+            <ul class="ver-inline-menu margin-bottom-10">
+                <li class="active">
+                    <a data-toggle="tab" ng-click="changeTab($event, 1)">
+                        <i class="fa fa-recycle"></i>Change Perimeter </a>
+                        <span class="after">
+                        </span>
+                    </li>
+                    <li >
+                        <a data-toggle="tab" ng-click="changeTab($event, 2)"><i class="fa fa-cog"></i>Change calculation</a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" ng-click="changeTab($event, 3)"><i class="fa fa-bar-chart-o"></i>Change graphics</a>
+                    </li>
+                    <li >
+                      <a data-toggle="tab" ng-click="changeTab($event, 4)" style="background:#FF6666;color:white" ng-show="KPI._id">
+                        <i class="fa fa-bomb"></i>Danger Zone
+                      </a>
+                      <span class="after">            </span>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-9">
+                <div class="tab-content">
+                    <div id="tab1" class="tab " ng-show="activeTab === 1">
+                        <form role="form" class="form-horizontal" action="#">
+                            <div class="form-body">
+                                <div class="form-group">
+                                    <label  class="col-md-3 control-label">Name</label>
+                                    <div class="col-md-9">
+                                        <input  type="text" placeholder="" class="form-control" ng-model="KPI.name"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Context</label>
+                                    <div class="col-md-9">
+                                        <input type="text" placeholder="" class="form-control" ng-model="KPI.context" typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:8"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Activity</label>
+                                    <div class="col-md-9">
+                                        <input type="text" placeholder="" class="form-control" ng-model="KPI.activity" typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:8"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Axis</label>
+                                    <div class="col-md-9">
+                                        <input type="text" placeholder="Communication,  etc." class="form-control" ng-model="KPI.axe" typeahead="axe.longname for axe in axes | filter:$viewValue | limitTo:8"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Category</label>
+                                    <div class="col-md-9">
+                                        <input type="radio" ng-model="KPI.category" value="Goal">  Goal <br/>
+                                        <input type="radio" ng-model="KPI.category" value="Alert"> Alert <br/>
+                                        <input type="radio" ng-model="KPI.category" value="Anticipation"> Anticipation <br/>
+                                        <input type="radio" ng-model="KPI.category" value="Information"> Information <br/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">TimeFrame</label>
+                                    <div class="col-md-9">
+                                        <input type="text" placeholder="" class="form-control"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Tags</label>
+                                    <div class="col-md-9">
+                                        <input type="text" placeholder="" class="form-control" ng-model="KPI.tags" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <div class="pull-right">
+                                    <a href="#" class="btn btn-success" ng-click="save()">Save Changes</a>
+                                    <a href="#" class="btn btn-default" ng-click="reset()">Cancel</a>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                    <div class="col-md-9">
-                        <div class="tab-content">
-                            <div id="tab_1-1" class="tab-pane active">
-                                <form role="form" class="form-horizontal" action="#">
-                                    <div class="form-body">
-                                        <div class="form-group">
-                                            <label  class="col-md-3 control-label">Name</label>
-                                            <div class="col-md-9">
-                                                <input  type="text" placeholder="" class="form-control" ng-model="KPI.name"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-3 control-label">Context</label>
-                                            <div class="col-md-9">
-                                                <input type="text" placeholder="" class="form-control" ng-model="KPI.context" typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:8"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-3 control-label">Activity</label>
-                                            <div class="col-md-9">
-                                                <input type="text" placeholder="" class="form-control" ng-model="KPI.activity" typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:8"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-3 control-label">Axis</label>
-                                            <div class="col-md-9">
-                                                <input type="text" placeholder="Communication,  etc." class="form-control" ng-model="KPI.axe" typeahead="axe.longname for axe in axes | filter:$viewValue | limitTo:8"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-3 control-label">Category</label>
-                                            <div class="col-md-9">
-                                                    <input type="radio" ng-model="KPI.category" value="Goal">  Goal <br/>
-                                                    <input type="radio" ng-model="KPI.category" value="Alert"> Alert <br/>
-                                                    <input type="radio" ng-model="KPI.category" value="Anticipation"> Anticipation <br/>
-                                                    <input type="radio" ng-model="KPI.category" value="Information"> Information <br/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-3 control-label">TimeFrame</label>
-                                            <div class="col-md-9">
-                                                <input type="text" placeholder="" class="form-control"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-3 control-label">Tags</label>
-                                            <div class="col-md-9">
-                                                <input type="text" placeholder="" class="form-control" ng-model="KPI.tags" />
-                                            </div>
-                                        </div>
+                    <div id="tab2" class="tab" ng-show="activeTab === 2">
+                        <form role="form" class="form-horizontal" action="#">
+                            <div class="form-body">
+                                <div class="form-group">
+                                    <label  class="col-md-3 control-label">Action</label>
+                                    <div class="col-md-9">
+                                        <input  type="text" placeholder="" class="form-control" ng-model="KPI.action" typeahead="action.value for action in actionKPI | filter:$viewValue | limitTo:8"/>
                                     </div>
-                                    <div class="form-actions">
-                                        <div class="pull-right">
-                                            <a href="#" class="btn btn-success" ng-click="save()">Save Changes</a>
-                                            <a href="#" class="btn btn-default" ng-click="reset()">Cancel</a>
-                                        </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Field</label>
+                                    <div class="col-md-9">
+                                        <input type="text" placeholder="" class="form-control" ng-model="KPI.metricTaskField" typeahead="field.value for field in metricTaskFields | filter:$viewValue | limitTo:8"/>
                                     </div>
-                                </form>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Values</label>
+                                    <div class="col-md-9">
+                                        <input type="text" placeholder="" class="form-control" ng-model="KPI.metricTaskValues" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Reference Field</label>
+                                    <div class="col-md-9">
+                                        <input type="text" placeholder="" class="form-control" ng-model="KPI.refMetricTaskField" typeahead="field.value for field in metricTaskFields | filter:$viewValue | limitTo:8"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Reference Values</label>
+                                    <div class="col-md-9">
+                                        <input type="text" placeholder="" class="form-control" ng-model="KPI.refMetricTaskValues" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Group By</label>
+                                    <div class="col-md-9">
+                                        <input type="text" placeholder="" class="form-control" ng-model="KPI.groupBy" typeahead="groupBy.value for groupBy in groupByKPI | filter:$viewValue | limitTo:8"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Group in time By</label>
+                                    <div class="col-md-9">
+                                        <input type="text" placeholder="" class="form-control" ng-model="KPI.groupTimeBy" typeahead="groupTimeBy.value for groupTimeBy in groupTimeByKPI | filter:$viewValue | limitTo:8"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Need to be refreshed every <small>(days)</small></label>
+                                    <div class="col-md-9">
+                                        <input type="text" placeholder="" class="form-control" ng-model="KPI.refresh" />
+                                    </div>
+                                </div>
                             </div>
-                            <div id="tab_2-2" class="tab-pane ">
-                                <form role="form" class="form-horizontal" action="#">
-                                    <div class="form-body">
-                                        <div class="form-group">
-                                            <label  class="col-md-3 control-label">Action</label>
-                                            <div class="col-md-9">
-                                                <input  type="text" placeholder="" class="form-control" ng-model="KPI.action" typeahead="action.value for action in actionKPI | filter:$viewValue | limitTo:8"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-3 control-label">Field</label>
-                                            <div class="col-md-9">
-                                                <input type="text" placeholder="" class="form-control" ng-model="KPI.metricTaskField" typeahead="field.value for field in metricTaskFields | filter:$viewValue | limitTo:8"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-3 control-label">Values</label>
-                                            <div class="col-md-9">
-                                                <input type="text" placeholder="" class="form-control" ng-model="KPI.metricTaskValues" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-3 control-label">Reference Field</label>
-                                            <div class="col-md-9">
-                                                <input type="text" placeholder="" class="form-control" ng-model="KPI.refMetricTaskField" typeahead="field.value for field in metricTaskFields | filter:$viewValue | limitTo:8"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-3 control-label">Reference Values</label>
-                                            <div class="col-md-9">
-                                                <input type="text" placeholder="" class="form-control" ng-model="KPI.refMetricTaskValues" />
-                                            </div>
-                                        </div>
-                                         <div class="form-group">
-                                            <label class="col-md-3 control-label">Group By</label>
-                                            <div class="col-md-9">
-                                                <input type="text" placeholder="" class="form-control" ng-model="KPI.groupBy" typeahead="groupBy.value for groupBy in groupByKPI | filter:$viewValue | limitTo:8"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-3 control-label">Group in time By</label>
-                                            <div class="col-md-9">
-                                                <input type="text" placeholder="" class="form-control" ng-model="KPI.groupTimeBy" typeahead="groupTimeBy.value for groupTimeBy in groupTimeByKPI | filter:$viewValue | limitTo:8"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-3 control-label">Need to be refreshed every <small>(days)</small></label>
-                                            <div class="col-md-9">
-                                                <input type="text" placeholder="" class="form-control" ng-model="KPI.refresh" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-actions">
-                                        <div class="pull-right">
-                                            <a href="#" class="btn btn-success" ng-click="save()">Save Changes</a>
-                                            <a href="#" class="btn btn-default" ng-click="reset()">Cancel</a>
-                                        </div>
-                                    </div>
-                                </form>
+                            <div class="form-actions">
+                                <div class="pull-right">
+                                    <a href="#" class="btn btn-success" ng-click="save()">Save Changes</a>
+                                    <a href="#" class="btn btn-default" ng-click="reset()">Cancel</a>
+                                </div>
                             </div>
-                            <div id="tab_3-3" class="tab-pane">
-                                <p>
-                                    Not yet implemented
-                                </p>
-                            </div>
-                            <!-- END CONTENT -->
-                        </div>
+                        </form>
                     </div>
-                </div>
-            </tab>
-        </tabset>
-    </div>
+                    <div id="tab3" class="tab" ng-show="activeTab === 3">
+                        <p>
+                            Not yet implemented
+                        </p>
+                    </div>
+                    <div id="tab2" class="tab" ng-show="activeTab === 4">
+                        <div class="form-body">
+                          <div class="form-group">
+                          <label  class="col-md-3 control-label">Once you delete your KPI, there is no going back. Please be certain.</label>
+                              <div class="col-md-9">
+                                  <button class="btn btn-danger" ng-click="delete()">Delete this KPI</button>
+                              </div>
+                          </div>
+                      </div>                               
+                  </div>
+                  <!-- END CONTENT -->
+              </div>
+          </div>
+      </div>
+  </tab>
+</tabset>
+</div>
 </div>
 <!-- END CONTAINER -->

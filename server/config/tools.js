@@ -27,6 +27,7 @@ function groupByMulti (obj, values, context) {
     buildChart: function (mKPI, KPIType) {
         var myChart;
         var mySeries = [];
+        var myValues = _.last(mKPI.calcul.time) && _.last(mKPI.calcul.time).valueKPI;
         switch  (KPIType) {
             case 'hBullet' :
             myChart=
@@ -61,7 +62,7 @@ function groupByMulti (obj, values, context) {
                             "series":
                             [
                                 {
-                                    "values":[_.last(mKPI.calcul.time).valueKPI],
+                                    "values":[myValues],
                                     "background-color":"#859900",
                                     "alpha":"0.6",
                                     "goals":[100]

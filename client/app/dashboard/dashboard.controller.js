@@ -3,6 +3,9 @@
 angular.module('boardOsApp')
 .controller('DashboardCtrl', function ($scope,  $rootScope, $http, $stateParams, calLibrary, $cookieStore, $location) {
   
+$scope.activeTab = 1;
+
+  
   $scope.load = function() {
     if ($stateParams.id) {
     $http.get('/api/dashboards/'+$stateParams.id).success(function(dashboard) {
@@ -34,7 +37,6 @@ angular.module('boardOsApp')
           
       });
        
-
       $scope.dataKPIs[0].values = $scope.predataKPIs;
       $scope.dataTasks[0].values = $scope.predataTasks;
       $scope.dataMetrics[0].values = $scope.predataMetrics;     
@@ -56,6 +58,12 @@ angular.module('boardOsApp')
 
   $scope.load();
 
+$scope.changeTab = function (e, tabNb) {
+    $('.ver-inline-menu li').removeClass('active');
+    $(e.target).closest('li').addClass('active');
+    $scope.activeTab = tabNb;
+}
+
 $scope.save = function() {
 
   delete $scope.dashboard.__v;
@@ -67,20 +75,30 @@ $scope.save = function() {
   if (typeof $scope.dashboard._id === 'undefined') {
     $http.post('/api/dashboards', $scope.dashboard).success(function(data){
          var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was created';
-        $http.post('/api/logs', {info:logInfo, actor:$rootScope.currentUser.name});
+        $http.post('/api/logs', {info:logInfo, actor:$scope.currentUser});
         $.growl({  icon: "fa fa-paw",  message: logInfo});
         $location.path('/dashboard/'+data._id);
     });
   } else {
     $http.put('/api/dashboards/'+ $scope.dashboard._id , $scope.dashboard).success(function(){
         var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was updated';
-        $http.post('/api/logs', {info:logInfo, actor:$rootScope.currentUser.name});
+        $http.post('/api/logs', {info:logInfo, actor:$scope.currentUser});
         $.growl({  icon: "fa fa-paw",  message: logInfo});
     });
   }
 
 };
 
+$scope.delete = function() {
+  bootbox.confirm('Are you sure?', function(result) {
+    if (result) {
+      $http.delete('/api/dashboards/' + $scope.dashboard._id).success(function () {
+        $.growl({  icon: "fa fa-paw",  message:'dashboard "' + $scope.dashboard.name + '" was deleted'});
+        $location.path('/dashboards');
+      });
+    }
+  }); 
+}; 
 
   $scope.options = {
     chart: {

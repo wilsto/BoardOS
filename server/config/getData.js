@@ -130,8 +130,9 @@ module.exports = {
 		      return deferred.promise;
 		    })
 		  .then(function () {
-				callback(mKPI);
-		  });
+			 callback(mKPI);
+		  })
+		  .then(null, console.error);
     },
     addCalculToKPI: function (mKPI) {
 		// on ajoute des caractéristiques aux KPI

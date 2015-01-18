@@ -181,7 +181,7 @@ angular.module('boardOsApp')
                     $http.put('/api/metrics/'+$scope.formData._id, $scope.formData).success(function(data) {
 
                         var logInfo = 'A Metric for Task "' + scope.data.name + '" was updated';
-                        $http.post('/api/logs', {info:logInfo, actor:$rootScope.currentUser.name});
+                        $http.post('/api/logs', {info:logInfo, actor:$scope.currentUser});
                         $.growl({  icon: "fa fa-paw",  message:logInfo});
 
                         $scope.closeThisDialog();
@@ -190,7 +190,7 @@ angular.module('boardOsApp')
                     $http.post('/api/metrics', $scope.formData).success(function(data) {
 
                         var logInfo = 'A Metric for Task "' + scope.data.name + '" was created';
-                        $http.post('/api/logs', {info:logInfo, actor:$rootScope.currentUser.name});
+                        $http.post('/api/logs', {info:logInfo, actor:$scope.currentUser});
                         $.growl({  icon: "fa fa-paw",  message:logInfo});
 
                         scope.dataTable.push($scope.formData);

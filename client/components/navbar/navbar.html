@@ -1,120 +1,121 @@
-    <!-- BEGIN HEADER -->
-    <div class="header navbar navbar-fixed-top" ng-controller='NavbarCtrl'>
-      <!-- BEGIN TOP NAVIGATION BAR -->
-      <div class="header-inner">
-        <!-- BEGIN LOGO -->
-         <img src="assets/images/rainbow_logo.jpg" style="vertical-align:middle;display:inline-block;" alt="logo"/>
-         <span style="margin-left:5px;font-size:30px;color:white;display:inline-block; vertical-align:middle"> BOSS </span><span style="margin-left:15px;font-size:16px;color:lightgrey;display:inline-block; vertical-align:middle"> Board Of Supervision System</span>
-        <!-- END LOGO -->
-        <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+    <div ng-controller='NavbarCtrl'>
+      <!-- BEGIN HEADER -->
+      <div class="header navbar navbar-fixed-top" ng-if="currentUser.name">
+        <!-- BEGIN TOP NAVIGATION BAR -->
+        <div class="header-inner" >
+          <!-- BEGIN LOGO -->
+          <img src="assets/images/rainbow_logo.jpg" style="vertical-align:middle;display:inline-block;" alt="logo"/>
+          <span style="margin-left:5px;font-size:30px;color:white;display:inline-block; vertical-align:middle"> BOSS </span><span style="margin-left:15px;font-size:16px;color:lightgrey;display:inline-block; vertical-align:middle"> Board Of Supervision System</span>
+          <!-- END LOGO -->
+          <!-- BEGIN RESPONSIVE MENU TOGGLER -->
 
-        <!-- END RESPONSIVE MENU TOGGLER -->
-        <!-- BEGIN TOP NAVIGATION MENU -->
-        <ul class="nav navbar-nav pull-right" ng-show="isLoggedIn">
-          <!-- BEGIN NOTIFICATION DROPDOWN -->
-          <li class="dropdown" id="header_notification_bar">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-              <i class="fa fa-bell-o"></i>
-              <span class="badge badge-danger" ng-show="navBarTasksAlerts.length>0">
+          <!-- END RESPONSIVE MENU TOGGLER -->
+          <!-- BEGIN TOP NAVIGATION MENU -->
+          <ul class="nav navbar-nav pull-right">
+            <!-- BEGIN NOTIFICATION DROPDOWN -->
+            <li class="dropdown" id="header_notification_bar">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                <i class="fa fa-bell-o"></i>
+                <span class="badge badge-danger" ng-show="navBarTasksAlerts.length>0">
                   {{navBarTasksAlerts.length}} </span>
                 </a>
-              <ul class="dropdown-menu extended notification">
-                <li>
-                  <p>
-                    You have {{navBarTasksAlerts.length}} notifications
-                  </p>
-                </li>
-                <li>
-                  <ul class="dropdown-menu-list scroller" style="height: 250px;overflow:auto">
-                    <li ng-repeat="taskAlert in navBarTasksAlerts | orderBy:'timebetween' track by $index">
-                      <a href="#">
-                        <span class="label label-sm label-icon label-danger">
-                          <i class="fa fa-bell"></i>
-                        </span>&nbsp;
-                        {{taskAlert.name}}
-                        <span class="time pull-right" style="color:red" ng-show="taskAlert.timebetween <= 0 && taskAlert.timebetween !== null ">{{ Math.abs(taskAlert.timebetween) }} days ago</span>
-                        <span class="time pull-right" ng-show="taskAlert.timebetween > 0 && taskAlert.timebetween !== null" >in {{ Math.abs(taskAlert.timebetween) }} days </span>
-                        <span class="time pull-right" style="color:orange" ng-show="taskAlert.timebetween === null" > no defined KPI </span>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <li class="external">
-                  <a href="#">See all notifications <i class="fa fa-angle-right"></i></a>
-                </li>
-              </ul>
-            </li>
-            <!-- END NOTIFICATION DROPDOWN -->
-            <!-- BEGIN TODO DROPDOWN -->
-            <li class="dropdown" id="header_task_bar">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                <i class="fa fa-tasks"></i>
-                <span class="badge badge-warning" style="color:black" ng-show="navBarTasks.length>0">
-                  {{navBarTasks.length}} </span>
-                </a>
-                <ul class="dropdown-menu extended tasks">
+                <ul class="dropdown-menu extended notification">
                   <li>
                     <p>
-                      You have {{navBarTasks.length}} pending tasks
+                      You have {{navBarTasksAlerts.length}} notifications
                     </p>
                   </li>
                   <li>
                     <ul class="dropdown-menu-list scroller" style="height: 250px;overflow:auto">
-                      <li ng-repeat="task in navBarTasks | orderBy:'lastmetric.endDate' track by $index">
-                        <a href="/task/{{task._id}}">
-                          <span class="task">
-                            <span class="desc">
-                              {{task.name}} </span>
-                              <span class="percent">
-                                {{task.lastmetric.progress}}% </span>
-                              </span>
-                              <span class="progress">
-                                <span style="width: {{task.lastmetric.progress}}%;" class="progress-bar progress-bar-success" aria-valuenow="{{task.lastmetric.progress}}" aria-valuemin="0" aria-valuemax="100">
-                                  <span class="sr-only">
-                                    40% Complete </span>
-                                  </span>
+                      <li ng-repeat="taskAlert in navBarTasksAlerts | orderBy:'timebetween' track by $index">
+                        <a href="#">
+                          <span class="label label-sm label-icon label-danger">
+                            <i class="fa fa-bell"></i>
+                          </span>&nbsp;
+                          {{taskAlert.name}}
+                          <span class="time pull-right" style="color:red" ng-show="taskAlert.timebetween <= 0 && taskAlert.timebetween !== null ">{{ Math.abs(taskAlert.timebetween) }} days ago</span>
+                          <span class="time pull-right" ng-show="taskAlert.timebetween > 0 && taskAlert.timebetween !== null" >in {{ Math.abs(taskAlert.timebetween) }} days </span>
+                          <span class="time pull-right" style="color:orange" ng-show="taskAlert.timebetween === null" > no defined KPI </span>
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="external">
+                    <a href="#">See all notifications <i class="fa fa-angle-right"></i></a>
+                  </li>
+                </ul>
+              </li>
+              <!-- END NOTIFICATION DROPDOWN -->
+              <!-- BEGIN TODO DROPDOWN -->
+              <li class="dropdown" id="header_task_bar">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                  <i class="fa fa-tasks"></i>
+                  <span class="badge badge-warning" style="color:black" ng-show="navBarTasks.length>0">
+                    {{navBarTasks.length}} </span>
+                  </a>
+                  <ul class="dropdown-menu extended tasks">
+                    <li>
+                      <p>
+                        You have {{navBarTasks.length}} pending tasks
+                      </p>
+                    </li>
+                    <li>
+                      <ul class="dropdown-menu-list scroller" style="height: 250px;overflow:auto">
+                        <li ng-repeat="task in navBarTasks | orderBy:'lastmetric.endDate' track by $index">
+                          <a href="/task/{{task._id}}">
+                            <span class="task">
+                              <span class="desc">
+                                {{task.name}} </span>
+                                <span class="percent">
+                                  {{task.lastmetric.progress}}% </span>
                                 </span>
-                              </a>
-                            </li>
-                          </ul>
-                        </li>
-                        <li class="external">
-                          <a href="/tasks">See all tasks <i class="fa fa-angle-right"></i></a>
-                        </li>
-                      </ul>
-                    </li>
-                    <!-- END TODO DROPDOWN -->
-                    <li class="devider">
-                      &nbsp;
-                    </li>
-                    <!-- BEGIN USER LOGIN DROPDOWN -->
-                    <li class="dropdown user">
-                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                        <img alt="" ng-src="assets/images/avatars/{{currentUser.name || 'avatar'}}_small.png"/>
-                        <span class="username username-hide-on-mobile">{{currentUser.name}} </span>
-                        <i class="fa fa-angle-down"></i>
-                      </a>
-                      <ul class="dropdown-menu" ng-show="isLoggedIn">
-                        <li>
-                          <a href="/settings"><i class="fa fa-user"></i> My Profile</a>
-                        </li>
-                        <li>
-                          <a href="/calendar"><i class="fa fa-calendar"></i> My Calendar</a>
-                        </li>
-                        <li class="divider">
-                        </li>
-                        <li>
-                          <a href="#0" ng-click="logout()"><i class="fa fa-key"></i> Log Out</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <!-- END USER LOGIN DROPDOWN -->
-                  </ul>
-                  <!-- END TOP NAVIGATION MENU -->
+                                <span class="progress">
+                                  <span style="width: {{task.lastmetric.progress}}%;" class="progress-bar progress-bar-success" aria-valuenow="{{task.lastmetric.progress}}" aria-valuemin="0" aria-valuemax="100">
+                                    <span class="sr-only">
+                                      40% Complete </span>
+                                    </span>
+                                  </span>
+                                </a>
+                              </li>
+                            </ul>
+                          </li>
+                          <li class="external">
+                            <a href="/tasks">See all tasks <i class="fa fa-angle-right"></i></a>
+                          </li>
+                        </ul>
+                      </li>
+                      <!-- END TODO DROPDOWN -->
+                      <li class="devider">
+                        &nbsp;
+                      </li>
+                      <!-- BEGIN USER LOGIN DROPDOWN -->
+                      <li class="dropdown user">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                          <img alt="" ng-src="assets/images/avatars/{{currentUser.name || 'avatar'}}_small.png"/>
+                          <span class="username username-hide-on-mobile">{{currentUser.name}} </span>
+                          <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                          <li>
+                            <a href="/settings"><i class="fa fa-user"></i> My Profile</a>
+                          </li>
+                          <li>
+                            <a href="/calendar"><i class="fa fa-calendar"></i> My Calendar</a>
+                          </li>
+                          <li class="divider">
+                          </li>
+                          <li>
+                            <a href="#0" ng-click="logout()"><i class="fa fa-key"></i> Log Out</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <!-- END USER LOGIN DROPDOWN -->
+                    </ul>
+                    <!-- END TOP NAVIGATION MENU -->
+                  </div>
+                  <!-- END TOP NAVIGATION BAR -->
                 </div>
-                <!-- END TOP NAVIGATION BAR -->
+                <!-- END HEADER -->
+                <div class="clearfix">
+                </div>
               </div>
-              <!-- END HEADER -->
-              <div class="clearfix">
-              </div>
-              

@@ -6,6 +6,11 @@ Website: http://www.keenthemes.com/
 Purchase: http://themeforest.net/item/conquer-responsive-admin-dashboard-template/3716838?ref=keenthemes
 */
 
+[ng-cloak]
+{
+  display: none !important;
+}
+
 /***
 Reset and overrides  
 ***/

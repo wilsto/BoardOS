@@ -15,7 +15,7 @@ angular.module('boardOsApp')
         })
         .then( function() {
           // Logged in, redirect to home
-          $scope.$broadcast('UserLoggedIn');
+          $scope.$emit ('UserLogChange');
           $location.path('/');
         })
         .catch( function(err) {

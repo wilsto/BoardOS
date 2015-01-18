@@ -25,6 +25,7 @@ Login page
   top:        0; 
   left:       0; 
   position:   fixed;
+  overflow: auto;
 }
 
 .login .logo {
@@ -173,7 +174,7 @@ Login page
 
   .login .content {
     padding1: 20px; 
-    width: 280px;
+    width: 85%;
   }
 
   .login .content h3 {

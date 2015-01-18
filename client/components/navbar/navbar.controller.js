@@ -5,27 +5,14 @@ angular.module('boardOsApp')
 
     $http.get('/api/tasks').success(function(tasks) {
       $scope.navBarTasks = tasks.tasks;
-      $scope.navBarTasks = _.filter(tasks.tasks, function(task) {return task.lastmetric.progress < 100 ; });
+      $scope.navBarTasks = _.filter(tasks.tasks, function(task) {return task.lastmetric && task.lastmetric.progress < 100 ; });
       $scope.navBarTasksAlerts = _.filter(tasks.tasks, function(task) {return task.timebetween <= 0 ; });
       
     });
 
-    $scope.login = function() {
-      $rootScope.isLoggedIn = Auth.isLoggedIn();
-      $rootScope.isAdmin = Auth.isAdmin();
-      $rootScope.currentUser = Auth.getCurrentUser();
-    };
-
-    $scope.login();
-
-    $scope.$on('UserLoggedIn', function() {      
-      $rootScope.isLoggedIn = Auth.isLoggedIn();
-      $rootScope.isAdmin = Auth.isAdmin();
-      $rootScope.currentUser = Auth.getCurrentUser();
-    });
-
     $scope.logout = function() {
       Auth.logout();
+      $scope.$emit ('UserLogChange');
       $location.path('/login');
     };
 

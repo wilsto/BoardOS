@@ -9,7 +9,7 @@
   <!-- BEGIN LOGIN -->
   <div class="content">
    <a href="index.html">
-    <img src="assets/images/logo.png" alt=""/>
+    <img src="assets/images/logo.png" alt="" class="img-responsive"/>
   </a> <!-- BEGIN LOGIN FORM -->
   <form class="login-form" name="form" ng-submit="login(form)" novalidate >
     <h3 class="form-title">Login to your account</h3>
@@ -39,6 +39,7 @@
           <button type="submit" class="btn btn-info pull-right">
             Login </button>
           </div>
+           <input type="submit" value="Submit" style="display:none"/> 
           <button class="btn" ng-click="ShowHelp = ! ShowHelp" ng-init="ShowHelp = false"><i class="fa fa-question"></i> Help Me</button>
           <div class="forget-password" ng-show="ShowHelp">
             <h4>Forgot your password ?</h4>
