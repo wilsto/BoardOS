@@ -46,29 +46,7 @@
               </div>
             </div>
             <div class="portlet-body">
-              <ul class="list-unstyled">
-                <li>
-                  <span class="sale-info">
-                    TASKS COUNT <i class="fa fa-img-up"></i>
-                  </span>
-                  <span class="sale-num">
-                    {{dashboard.tasks.length}} </span>
-                  </li>
-                  <li>
-                    <span class="sale-info">
-                      METRICS COUNT <i class="fa fa-img-up"></i>
-                    </span>
-                    <span class="sale-num">
-                      {{dashboard.metrics.length}} </span>
-                    </li>
-                    <li>
-                      <span class="sale-info">
-                        LAST ENTRY <i class="fa fa-img-down"></i>
-                      </span>
-                      <span class="sale-num">
-                        {{dashboard.metrics[dashboard.metrics.length-1].date  | date:'shortDate'}} </span>
-                      </li>
-                    </ul>
+              <div id="myChartQCT"></div>
                   </div>
                 </div>
               </div>

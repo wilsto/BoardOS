@@ -219,6 +219,15 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label class="col-md-3 control-label">Constraint</label>
+                                    <div class="col-md-9">
+                                        <input type="radio" ng-model="KPI.constraint" value="Quality">  Quality <br/>
+                                        <input type="radio" ng-model="KPI.constraint" value="Cost"> Cost <br/>
+                                        <input type="radio" ng-model="KPI.constraint" value="Time"> Time <br/>
+
+                                    </div>
+                                </div>                                
+                                <div class="form-group">
                                     <label class="col-md-3 control-label">TimeFrame</label>
                                     <div class="col-md-9">
                                         <input type="text" placeholder="" class="form-control"/>

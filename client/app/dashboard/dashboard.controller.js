@@ -30,29 +30,141 @@ $scope.activeTab = 1;
       $scope.predataMetrics = calLibrary.getByMonth($scope.dashboard.metrics, 'date','value');
 
       var dataGoals = [];
+      var dataGoalsTime = [];
       var dataAlerts= [];
       _.forEach($scope.dashboard.kpis, function(kpi) {
-           if (kpi.category ==='Goal')  {dataGoals.push(_.pluck(calLibrary.displayLastYear(kpi.calcul.time,'month','valueKPI'),'value'));}
+           if (kpi.category ==='Goal')  {
+              var SeriesOfGoals = _.pluck(calLibrary.displayLastYear(kpi.calcul.time,'month','valueKPI'),'value');
+              dataGoals.push(SeriesOfGoals);
+              dataGoalsTime.push({name:kpi.constraint,value:_.last(SeriesOfGoals) })
+            }
            if (kpi.category ==='Alert')  {dataAlerts.push(_.pluck(calLibrary.displayLastYear(kpi.calcul.time,'month','valueKPI'),'value'));}
-          
       });
-       
       $scope.dataKPIs[0].values = $scope.predataKPIs;
       $scope.dataTasks[0].values = $scope.predataTasks;
       $scope.dataMetrics[0].values = $scope.predataMetrics;     
       $scope.dataGoals[0].values = calLibrary.getCalculByMonth(dataGoals);     
       $scope.dataAlerts[0].values = calLibrary.getCalculByMonth(dataAlerts);     
 
+      var scoreOnQCT = _.chain(dataGoalsTime)
+                                            .flatten()
+                                            .groupBy(function(value) { return value.name; })
+                                            .map(function(value, key) {
+                                              var sum = _.reduce(value, function(memo, val) { return memo + val.value; }, 0);
+                                              return {name: key, value: sum / value.length};
+                                            })
+                                            .value();
+         var scoreQualityOnQCT = _.filter(scoreOnQCT, function(data){ return data.name === 'Quality'})[0] || {value:0};
+         var scoreCostOnQCT = _.filter(scoreOnQCT, function(data){ return data.name === 'Cost'})[0] || {value:0};
+         var scoreTimeOnQCT = _.filter(scoreOnQCT, function(data){ return data.name === 'Time'})[0] || {value:0};
+
        
        
+       
+
+
+      //var scoreTimeOnQCT = _.reduce(_.filter(dataGoals, function(data) {return data.constraint === 'Time' }), function(memo, num) {return memo + _.last(num);    }, 0) / (dataGoals.length === 0 ? 1 : dataGoals.length);
+
       $scope.goalsNb = _.last($scope.dataGoals[0].values).count;   
       $scope.alertsNb =_.last($scope.dataAlerts[0].values).sum;  
-       
+
+        var mydata = {
+        "graphset":[
+            {
+                "type":"radar",
+                "background-color":"white",
+                "plotarea":{
+                    "margin":"10px 10px 0px 0px"
+                },
+                "tooltip":{
+                    "text":"%t<br>%k Is %v",
+                    "shadow":0,
+                    "border-radius":3
+                },
+                "scale-k":{
+                    "background-color":"none",
+                    "-ref-angle":4,
+                    "values":["Quality","Time","Cost"],
+                    "item":{
+                        "font-size":"14px",
+                        "padding-left":"30px",
+                        "padding-bottom":"15px",
+                        "-visible":false
+                    },
+                    "guide":{
+                        "line-color":"#818181",
+                        "line-style":"solid",
+                        "line-width":"2px",
+                        "items":[
+                            {
+                                "background-color":"#fff"
+                            }
+                        ]
+                    },
+                    "tick":{
+                        "visible":false
+                    }
+                },
+                "scale-v":{
+                    "values":[0,20,40,60,80,100],
+                    "-visible":false,
+                    "ref-line":{
+                        "line-width":"1px",
+                        "line-color":"#818181"
+                    },
+                    "guide":{
+                        "-visible":false,
+                        "line-width":".5px",
+                        "line-style":"dashed"
+                    },
+                    "tick":{
+                        "-placement":"cross",
+                        "size":10,
+                        "line-width":".5px",
+                        "line-length":0.55,
+                        "line-color":"#818181"
+                    },
+                    "item":{
+                        "padding-left":"9.5px",
+                        "-padding-bottom":"12.5px",
+                        "font-size":"8px"
+                    }
+                },
+                "series":[
+                    {
+                        "values":[scoreQualityOnQCT.value,scoreTimeOnQCT.value,scoreCostOnQCT.value],
+                        "aspect":"area",
+                        "text": $scope.dashboard.name,
+                        "line-color":"#6fbbff",
+                        "background-color":"#6fbbff",
+                        "line-width":"3px",
+                        "alpha":"0.85",
+                        "marker":{
+                            "background-color":"#6fbbff",
+                            "size":"4",
+                            "border-color":"#6fbbff",
+                            "alpha":"0.55"
+                        }
+                    }
+                ]
+            }
+        ]
+        }
+
+      setTimeout( function(){
+          zingchart.render({
+                  id:'myChartQCT',
+                  data:mydata,
+                  height:200,
+                  width:'100%'
+          });
+      });
        
     });
     } else {
        $scope.dashboard = {name:''};
     }
+
 
   };
 
@@ -136,5 +248,9 @@ $scope.delete = function() {
 
   $scope.optionsTrust = angular.copy($scope.options);
   $scope.optionsTrust.chart.color =  ['#bcbd22'];
+
+
+
+
 
 });

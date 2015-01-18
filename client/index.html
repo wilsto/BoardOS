@@ -203,11 +203,11 @@
                 <i class="fa fa-angle-right"></i>
                 <span style="color:lightgrey"><i class="fa fa-map-marker"></i> Context </span><a href="/dash/{{perimeter._id}}"> {{perimeter.context || 'All'}}</a>
               </li>
-              <li ng-show="perimeter.name">
+              <li ng-show="perimeter.name === '#hide'">
                 <i class="fa fa-angle-right"></i>
                 <span style="color:lightgrey"><i class="fa fa-crosshairs"></i> Axis </span><a href="/dash/{{perimeter._id}}"> {{perimeter.axe || 'All'}}</a>
               </li>
-              <li ng-show="perimeter.name">
+              <li ng-show="perimeter.name === '#hide'">
                 <i class="fa fa-angle-right"></i>
                 <span style="color:lightgrey"><i class="icon-cursor"></i> Categories </span><a href="/dash/{{perimeter._id}}"> {{perimeter.category || 'All'}}</a>
               </li>

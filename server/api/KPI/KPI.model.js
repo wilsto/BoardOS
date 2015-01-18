@@ -10,6 +10,7 @@ var KPISchema = new Schema({
   axe: String,
   tags:String,
   category: String,
+  constraint:String,
   refresh:Number,
   action:String,
   metricTaskField:String,
