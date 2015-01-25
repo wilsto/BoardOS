@@ -9,6 +9,14 @@ var TaskSchema = new Schema({
   context: String,
   actor: String,
   tags: String,
+  load:String,
+  budget:String,
+  impact:String,
+  deliverables:String,
+  risks:String,
+  startDate:String,
+  endDate:String,
+  previous:String,
   date:{ type: Date, default: Date.now }
 }, { strict: false });
 

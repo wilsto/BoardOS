@@ -17,10 +17,10 @@ angular.module('boardOsApp')
     
       if (typeof $scope.dashboard._id === 'undefined') {
         $http.post('/api/dashboards', $scope.dashboard);
-        $.growl({  icon: "fa fa-paw",  message:'Dashboard "' + $scope.dashboard.name + '" was created'});
+        $.growl({  icon: 'fa fa-info-circle',  message:'Dashboard "' + $scope.dashboard.name + '" was created'});
       } else {
         $http.put('/api/dashboards/'+ $scope.dashboard._id, $scope.dashboard);
-        $.growl({  icon: "fa fa-paw",  message:'Dashboard "' + $scope.dashboard.name + '" was updated'});
+        $.growl({  icon: 'fa fa-info-circle',  message:'Dashboard "' + $scope.dashboard.name + '" was updated'});
       }
       $scope.load();
       $scope.config = {tab1: true, tab2: false};
@@ -37,7 +37,7 @@ angular.module('boardOsApp')
         if (result) {
           $http.delete('/api/dashboards/' + dashboard._id).success(function () {
               $scope.dashboards.splice(index, 1);
-              $.growl({  icon: "fa fa-paw",  message:'Dashboard "' + dashboard.name + '" was deleted'});
+              $.growl({  icon: 'fa fa-info-circle',  message:'Dashboard "' + dashboard.name + '" was deleted'});
           });
         }
       }); 

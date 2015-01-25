@@ -101,6 +101,9 @@ module.exports = {
 			        metric.timeToBegin = moment(metric.startDate).diff(moment(),'days');
 			        metric.timeToEnd = moment(metric.endDate).diff(moment(),'days');
 			    	
+			        // predictedCharge
+			        metric.projectedWorkload = parseInt(parseInt(metric.timeSpent) * 100 / parseInt(metric.progress));
+
 			        // ajouter information par mois 
 			        metric.groupTimeByValue = moment(metric.date).format("YYYY.MM");
 
@@ -161,13 +164,15 @@ module.exports = {
 	    });
 
 	  // graphics
-	  mKPI.graphs = [];
-	  var myChart0 = tools.buildChart(mKPI,'hBullet');
-	  var myChart1 = tools.buildChart(mKPI,'Bar');
-	  var myChart2 = tools.buildChart(mKPI,'Bubble');
-	  mKPI.graphs.push(myChart0);
-	  mKPI.graphs.push(myChart1);
-	  mKPI.graphs.push(myChart2);
+		  mKPI.graphs = [];
+		  
+		  var myChart0 = tools.buildChart(mKPI,'hBullet');
+		  var myChart1 = tools.buildChart(mKPI,'Bar');
+		  var myChart2 = tools.buildChart(mKPI,'Bubble');
+		  mKPI.graphs.push(myChart0);
+		  mKPI.graphs.push(myChart1);
+		  mKPI.graphs.push(myChart2);
+		
     },
     shrinkPerimeterOfKPI: function (kpi, perimeter) {
     	//shrink metrics

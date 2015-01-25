@@ -9,7 +9,7 @@ angular.module('boardOsApp')
     if ($stateParams.id) {
       $http.get('/api/tasks/'+$stateParams.id).success(function (data) { 
         $scope.task = data;
-        $.growl({  icon: "fa fa-paw",  message: 'Task "' + $scope.task.name + '" loaded'});
+        $.growl({  icon: 'fa fa-info-circle',  message: 'Task "' + $scope.task.name + '" loaded'});
       });
     } else {
      $scope.task = {};
@@ -22,7 +22,7 @@ angular.module('boardOsApp')
   $('.ver-inline-menu li').removeClass('active');
   $(e.target).closest('li').addClass('active');
   $scope.activeTab = tabNb;
-}
+};
 
 $scope.save = function() {
 
@@ -37,16 +37,16 @@ $scope.save = function() {
   if (typeof $scope.task._id === 'undefined') {
     $http.post('/api/tasks', $scope.task).success(function(data){
       var logInfo = 'Task "' + $scope.task.name + '" was created';
-      $http.post('/api/logs', {info:logInfo, actor:$scope.currentUser});
-      $.growl({  icon: "fa fa-paw",  message:logInfo});
+      $http.post('/api/logs', {info:logInfo, actor:$scope.currentUser.name});
+      $.growl({  icon: 'fa fa-info-circle',  message:logInfo});
       $location.path('/task/'+data._id);
 
     });
   } else {
     $http.put('/api/tasks/'+ $scope.task._id , $scope.task).success(function(data){
       var logInfo = 'Task "' + $scope.task.name + '" was updated';
-      $http.post('/api/logs', {info:logInfo, actor:$scope.currentUser});
-      $.growl({  icon: "fa fa-paw",  message:logInfo});
+      $http.post('/api/logs', {info:logInfo, actor:$scope.currentUser.name});
+      $.growl({  icon: 'fa fa-info-circle',  message:logInfo});
     });
   }
 };
@@ -55,7 +55,7 @@ $scope.delete = function() {
   bootbox.confirm('Are you sure?', function(result) {
     if (result) {
       $http.delete('/api/tasks/' + $scope.task._id).success(function () {
-        $.growl({  icon: "fa fa-paw",  message:'task "' + $scope.task.name + '" was deleted'});
+        $.growl({  icon: 'fa fa-info-circle',  message:'task "' + $scope.task.name + '" was deleted'});
         $location.path('/tasks');
       });
     }

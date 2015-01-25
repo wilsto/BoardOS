@@ -36,6 +36,7 @@
     "element": true,
     "by": true,
     "zingchart": true,
-    "d3":true
+    "d3":true,
+    "bootbox":true
   }
 }

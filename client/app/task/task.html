@@ -93,6 +93,18 @@
                                 </span>
                             </li>
                             <li >
+                                <a data-toggle="tab" ng-click="changeTab($event, 4)">
+                                <i class="fa fa-bookmark"></i>Qualification</a>
+                                <span class="after">
+                                </span>
+                            </li>
+                            <li >
+                                <a data-toggle="tab" ng-click="changeTab($event, 3)">
+                                <i class="fa fa-eye"></i>Forecast</a>
+                                <span class="after">
+                                </span>
+                            </li>                            
+                            <li >
                                 <a data-toggle="tab" ng-click="changeTab($event, 2)" style="background:#FF6666;color:white">
                                 <i class="fa fa-bomb"></i>Danger Zone </a>
                                 <span class="after">
@@ -100,10 +112,10 @@
                             </li>
                         </ul>
                     </div>
+                    <form role="form" class="form-horizontal" action="#">
                     <div class="col-md-9">
                         <div class="tab-content">
                             <div id="tab1" class="tab" ng-show="activeTab === 1">
-                                <form role="form" class="form-horizontal" action="#">
                                     <div class="form-body">
                                         <div class="form-group">
                                             <label  class="col-md-3 control-label">Name</label>
@@ -130,14 +142,63 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-actions">
-                                        <div class="pull-right">
-                                            <a href="#" class="btn btn-success" ng-click="save()">Save Changes</a>
-                                            <a href="#" class="btn btn-default" ng-click="reset()">Cancel</a>
-                                        </div>
-                                    </div>
-                                </form>
                             </div>
+                            <div id="tab2" class="tab" ng-show="activeTab === 3">
+                                    <div class="form-body">
+                                        <div class="form-group">
+                                            <label  class="col-md-3 control-label">Reference Start</label>
+                                            <div class="col-md-9">
+                                                <input  type="text" placeholder="" class="form-control" ng-model="task.startDate"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">Reference End</label>
+                                            <div class="col-md-9">
+                                                <input type="text" placeholder="" class="form-control" ng-model="task.endDate" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label  class="col-md-3 control-label">Reference Work Load</label>
+                                            <div class="col-md-9">
+                                                <input  type="text" placeholder="" class="form-control" ng-model="task.load"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">Reference Budget (k€)</label>
+                                            <div class="col-md-9">
+                                                <input type="text" placeholder="" class="form-control" ng-model="task.budget" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">Deliverables</label>
+                                            <div class="col-md-9">
+                                                <input type="text" placeholder="" class="form-control" ng-model="task.deliverables"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">Risks</label>
+                                            <div class="col-md-9">
+                                                <input type="text" placeholder="" class="form-control" ng-model="task.risks" />
+                                            </div>
+                                        </div>
+                                    </div>                          
+                            </div>
+                            <div id="tab2" class="tab" ng-show="activeTab === 4">
+                                    <div class="form-body">
+                                        <div class="form-group">
+                                            <label  class="col-md-3 control-label">Overall Impact</label>
+                                            <div class="col-md-9">
+                                                <input  type="text" placeholder="" class="form-control" ng-model="task.impact"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label  class="col-md-3 control-label">Previous task</label>
+                                            <div class="col-md-9">
+                                                <input  type="text" placeholder="" class="form-control" ng-model="task.previous"/>
+                                            </div>
+                                        </div>
+                                    </div>                            
+                            </div>                            
                             <div id="tab2" class="tab" ng-show="activeTab === 2">
                                     <div class="form-body">
                                         <div class="form-group">
@@ -148,6 +209,13 @@
                                         </div>
                                     </div>                               
                             </div>
+                             <div class="form-actions">
+                                        <div class="pull-right">
+                                            <a href="#" class="btn btn-success" ng-click="save()">Save Changes</a>
+                                            <a href="#" class="btn btn-default" ng-click="reset()">Cancel</a>
+                                        </div>
+                                    </div>
+                                </form>
                             <!-- END CONTENT -->
                         </div>
                     </div>

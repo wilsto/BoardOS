@@ -23,10 +23,10 @@ angular.module('boardOsApp')
 
         if (typeof $scope.task._id === 'undefined') {
             $http.post('/api/tasks', $scope.task);
-            $.growl({  icon: "fa fa-paw",  message:'Task "' + $scope.task.name + '" was created'});
+            $.growl({  icon: 'fa fa-info-circle',  message:'Task "' + $scope.task.name + '" was created'});
         } else {
             $http.put('/api/tasks/'+ $scope.task._id , $scope.task);
-            $.growl({  icon: "fa fa-paw",  message:'Task "' + $scope.task.name + '" was updated'});
+            $.growl({  icon: 'fa fa-info-circle',  message:'Task "' + $scope.task.name + '" was updated'});
         }
         $scope.load();
     };
@@ -45,7 +45,7 @@ angular.module('boardOsApp')
             if (result) {
                 $http.delete('/api/tasks/' + task._id).success(function () {
                     $scope.tasks.splice(index, 1);
-                    $.growl({  icon: "fa fa-paw",  message:'task "' + task.name + '" was deleted'});
+                    $.growl({  icon: 'fa fa-info-circle',  message:'task "' + task.name + '" was deleted'});
                 });
             }
         }); 

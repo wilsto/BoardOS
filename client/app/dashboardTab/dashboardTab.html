@@ -1,108 +1,161 @@
+
+
 <!--* Modal Part-->
 <script type="text/ng-template" id="myMesureContent.html">
-	<div class="modal-header" style='background:lightgrey'>
-		<h3>Enter Metric Information</h3>
-	</div>
 	<div class="modal-body">
 		<!-- FORM -->
 
 		<div class="row">
-			<div class="col-md-6">  <h4 style="font-size:14px">Context of task</h4>
-				<p class="input-group">
-					<input type="text" name="context" class="form-control"  ng-model="formData.context" >
+			<div class="col-md-3" style='background:lightgrey'> 
+				<h3>Task Information</h3>
 
-				</p>
+				<div class="col-md-12">  <h4 style="font-size:14px">Context of task</h4>
+					<p class="input-group">
+						<input type="text" name="context" class="form-control"  ng-model="formData.context" >
+
+					</p>
+				</div>
+				<div class="col-md-12">  <h4 style="font-size:14px">Activity of task</h4>
+					<p class="input-group">
+						<input type="text" name="activity" class="form-control"  ng-model="formData.activity" >
+
+					</p>
+				</div>
+				<div class="col-md-12">  <h4 style="font-size:14px">Starting date of task</h4>
+					<p class="input-group">
+						<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.startDate" is-open="opened2" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer"  />
+						<span class="input-group-btn">
+							<button class="btn btn-default" ng-click="open2($event)">
+								<span class="glyphicon glyphicon-chevron-down">
+								</span>
+							</button>
+						</span>
+					</p>
+				</div>
+				<div class="col-md-12">  <h4 style="font-size:14px">Ending date of task</h4>
+					<p class="input-group">
+						<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.endDate" is-open="opened3" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer"/>
+						<span class="input-group-btn">
+							<button class="btn btn-default" ng-click="open3($event)">
+								<span class="glyphicon glyphicon-chevron-down">
+								</span>
+							</button>
+						</span>
+					</p>
+				</div>
+				<div class="col-md-12">   <h4 style="font-size:14px">Global WorkLoad (days)</h4>
+					<p class="input-group">
+						<input type="text" name="load" class="form-control"  ng-model="formData.load" >
+						<span class="help-block">
+						</span>
+					</p>
+				<br/>
+				<br/>
+				<br/>
+				</div>
 			</div>
-			<div class="col-md-6">  <h4 style="font-size:14px">Activity of task</h4>
-				<p class="input-group">
-					<input type="text" name="activity" class="form-control"  ng-model="formData.activity" >
-
-				</p>
-			</div>
-		</div>
 
 
-		<div class="row">
-			<div class="col-md-4">  <h4 style="font-size:14px">Starting date of task</h4>
-				<p class="input-group">
-					<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.startDate" is-open="opened2" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer"  />
-					<span class="input-group-btn">
-						<button class="btn btn-default" ng-click="open2($event)">
-							<span class="glyphicon glyphicon-chevron-down">
+			<div class="col-md-9"> 
+				<h3>Enter Metric Information</h3>
+				<div class="row">
+					<div class="col-md-4"> 
+						<p class="input-group">
+							<label>Time already spent</label>
+							<input type="text" name="timeSpent" class="form-control"  ng-model="formData.timeSpent" >
+							<span class="help-block">
 							</span>
-						</button>
-					</span>
-				</p>
-			</div>
-			<div class="col-md-4">  <h4 style="font-size:14px">Ending date of task</h4>
-				<p class="input-group">
-					<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.endDate" is-open="opened3" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer"/>
-					<span class="input-group-btn">
-						<button class="btn btn-default" ng-click="open3($event)">
-							<span class="glyphicon glyphicon-chevron-down">
+						</p>
+					</div>
+					<div class="col-md-4">  
+						<p class="input-group">
+							<label>% progress</label>
+							<input type="text" name="progress" class="form-control"  ng-model="formData.progress" >
+							<span class="help-block">
 							</span>
-						</button>
-					</span>
-				</p>
-			</div>
-			<div class="col-md-4">   <h4 style="font-size:14px">Load of task</h4>
-				<p class="input-group">
-					<input type="text" name="load" class="form-control"  ng-model="formData.load" >
-					<span class="help-block">
-					</span>
+						</p>
+					</div>
 
-				</p>
-			</div>
-		</div>
-<hr/>
-		<div class="row">
-			<div class="col-md-4">  
-				<p class="input-group">
-					<label>% progress</label>
-					<input type="text" name="progress" class="form-control"  ng-model="formData.progress" >
-					<span class="help-block">
-					</span>
+				</div>
+				<div class="row">
+					<div class="col-md-4">  
+						<p class="input-group">
+							<label>Progress Status</label>
+							<input type="text" name="progressStatus" class="form-control" ng-model="formData.progressStatus" typeahead-on-select="$item"  typeahead="statut.value for statut in constant.progressStatusTask  | limitTo:8" >
+							<span class="help-block">
+							</span>
+						</p>
+					</div>
+					<div class="col-md-4">  
+						<p class="input-group">
+							<label>% Confidence</label>
+							<input type="text" name="trust" class="form-control"  ng-model="formData.trust" >
+							<span class="help-block">
+							</span>
 
-				</p>
-			</div>
-			<div class="col-md-4">  
-				<p class="input-group">
-					<label>Status</label>
-					<input type="text" class="form-control" ng-model="formData.status" typeahead="statut.value for statut in constant.statusTask  | limitTo:8"/>
-					<span class="help-block">
-					</span>
-				</p>
-			</div>
-		</div>
+						</p>
+					</div>
+					<div class="col-md-4">  
+						<p class="input-group">
+							<label>Status</label>
+							<input type="text" class="form-control" ng-model="formData.status" typeahead="statut.value for statut in constant.statusTask  | limitTo:8"/>
+							<span class="help-block">
+							</span>
+						</p>
+					</div>
+				</div>
+				<div class="row" ng-if="formData.status === 'Finished'">
+					<div class="col-md-4">  
+						<p class="input-group">
+							<label>Quality as defined</label>
+							<input type="text" name="deliverableStatus" class="form-control" ng-model="formData.deliverableStatus" >
+							<span class="help-block">
+							</span>
+						</p>
+					</div>
+					<div class="col-md-4">  
+						<p class="input-group">
+						<label>Reason for rework</label>
+						<input type="text" name="reworkReason" class="form-control" rows="2" ng-model="formData.reworkReason">
+						</p>
+					</div>
+				</div>
+				<div class="row" ng-if="formData.status === 'Finished'">
+					<div class="col-md-4">  
+						<p class="input-group">
+							<label>% User Satisfaction</label>
+							<input type="text" name="userSatisfaction" class="form-control"  ng-model="formData.userSatisfaction" >
+							<span class="help-block">
+							</span>
 
-		<div class="row">
-			<div class="col-md-4">  
-				<p class="input-group">
-					<label>Progress Status</label>
-					<input type="text" name="progressStatus" class="form-control" ng-model="formData.progressStatus" typeahead-on-select="$item"  typeahead="statut.value for statut in constant.progressStatusTask  | limitTo:8" >
-					<span class="help-block">
-					</span>
+						</p>
+					</div>
+					<div class="col-md-4">  
+						<p class="input-group">
+							<label>% Actors Satisfaction</label>
+							<input type="text" name="actorSatisfaction" class="form-control" ng-model="formData.actorSatisfaction"/>
+							<span class="help-block">
+							</span>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">  
+						<label>comments</label>
+						<textarea name="comments" class="form-control" rows="2" ng-model="formData.comments"></textarea>
+					</div>
+				</div>
+				<div class="row" style="padding-top:50px">
 
-				</p>
+					<div class="col-md-offset-8 col-md-3">
+						<input type="text" class="pull-right form-control" datepicker-popup="{{format}}" ng-model="formData.date" is-open="opened1" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer" ng-click="open1($event)"/>
+					</div>
+					<div class="col-md-1">
+						<img alt="{{formData.actor}}" ng-src="assets/images/avatars/{{formData.actor}}.png" style="width:50px" class="img-circle"/>
+					</div>
+				</div>
 			</div>
-			<div class="col-md-4">  
-				<p class="input-group">
-					<label>% Confidence</label>
-					<input type="text" name="trust" class="form-control"  ng-model="formData.trust" >
-					<span class="help-block">
-					</span>
-
-				</p>
-			</div>
-		</div>
-
-
-		<div class="row">
-			<div class="col-md-12">  
-				<label>comments</label>
-				<textarea name="comments" class="form-control" rows="4" ng-model="formData.comments"></textarea>
-			</div>
-		</div>
+		</div>		
 
 		<div ng-show="debug==true">
 
@@ -221,66 +274,401 @@
 				<td  ng-if="page === 'KPI'" ><nvd3 options="options" data="task.data"></nvd3></td>
 				<td style="width:25px">
 					<a ng-href="task/{{task._id}}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></button>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 
-	<!-- table metrics (see ng-if)  -->  
-	<!--############-->  
-	<table class="table table-striped table-bordered table-advance table-hover"  ng-if="dashboardType === 'metrics'">
-		<thead>
-			<tr>
-				<th>Actor</th>
-				<th>Entered</th>
-				<th>Activity</th>
-				<th>Context</th>
-				<th>Start</th>
-				<th>Load <small>(days)</small></th>
-				<th>Status</th>
-				<th>Progress</th>
-				<th>Trust</th>
-				<th>End</th>
-				<th>Comments</th>
-				<th ng-if="page === 'task'"><button ng-click='openMetric(data, data.metrics[task.metrics.length-1],true)' type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus"></span></button></th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr ng-repeat="metric in dataTable | filter:search | orderBy:'date' track by $index" ng-show="metric._id"  on-finish-render>
-				<td><img alt="{{metric.actor}}" ng-src="assets/images/avatars/{{metric.actor}}.png" style="width:25px" class="img-circle"/></td>
-				<td>{{metric.date | date:'shortDate'}}</td>
-				<td>{{metric.activity.replace(data.activity,"#")}}</td>
-				<td>{{metric.context.replace(data.context,"#")}}</td>
-				<td>{{metric.startDate | date:'shortDate'}}</td>
-				<td>{{metric.load}}</td>
-				<td>{{metric.status}}</td>
-				<td>{{metric.progress}}% - {{metric.progressStatus}}</td>
-				<td>{{metric.trust}}</td>
-				<td>{{metric.endDate | date:'shortDate'}}</td>
-				<td>{{metric.comments}}</td>
-				<td ng-if="page === 'task'" style="width:25px">
-					<button ng-click="openMetric(data, metric,false)"type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></button>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+		<!-- table metrics (see ng-if)  -->  
+		<!--############-->  
+		<table class="table table-striped table-bordered table-advance table-hover"  ng-if="dashboardType === 'metrics'">
+			<thead>
+				<tr>
+					<th>Actor</th>
+					<th>Entered</th>
+					<th>Activity</th>
+					<th>Context</th>
+					<th>Start</th>
+					<th>Load <small>(days)</small></th>
+					<th>Status</th>
+					<th>Progress</th>
+					<th>Trust</th>
+					<th>End</th>
+					<th>Comments</th>
+					<th ng-if="page === 'task'"><button ng-click='openMetric(data, data.metrics[task.metrics.length-1],true)' type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus"></span></button></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="metric in dataTable | filter:search | orderBy:'date' track by $index" ng-show="metric._id"  on-finish-render>
+					<td><img alt="{{metric.actor}}" ng-src="assets/images/avatars/{{metric.actor}}.png" style="width:25px" class="img-circle"/></td>
+					<td>{{metric.date | date:'shortDate'}}</td>
+					<td>{{metric.activity.replace(data.activity,"#")}}</td>
+					<td>{{metric.context.replace(data.context,"#")}}</td>
+					<td>{{metric.startDate | date:'shortDate'}}</td>
+					<td>{{metric.load}}</td>
+					<td>{{metric.status}}</td>
+					<td>{{metric.progress}}% - {{metric.progressStatus}}</td>
+					<td>{{metric.trust}}</td>
+					<td>{{metric.endDate | date:'shortDate'}}</td>
+					<td>{{metric.comments}}</td>
+					<td ng-if="page === 'task'" style="width:25px">
+						<button ng-click="openMetric(data, metric,false)" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 
-	<!-- table actor (see ng-if)  -->  
-	<!--############-->  
-	<div class="row"  ng-if="dashboardType === 'actors'">
-		<div class="col-md-12 user-info" ng-repeat="actor in dataTable">
-			<img alt="" ng-src="assets/images/avatars/{{actor.name}}.png" style="width:45px" class="img-circle"/>
-			<div class="details">
-				<div>
-					<a href="#">{{actor.name}}</a>
+		<!-- table actor (see ng-if)  -->  
+		<!--############-->  
+		<div class="row"  ng-if="dashboardType === 'actors'">
+			<div class="col-md-12 user-info" ng-repeat="actor in dataTable">
+				<img alt="" ng-src="assets/images/avatars/{{actor.name}}.png" style="width:45px" class="img-circle"/>
+				<div class="details">
+					<div>
+						<a href="#">{{actor.name}}</a>
+					</div>
+					<div>
+						{{actor.value}} metrics
+					</div>
 				</div>
-				<div>
-					{{actor.value}} metrics
+			</div>
+		</div>
+
+		<!-- table help (see ng-if)  -->  
+		<!--############-->  
+		<div class="row"  ng-if="dashboardType === 'help'">
+			<div class="row">
+				<div class="col-md-3">
+					<ul class="ver-inline-menu tabbable margin-bottom-10">
+						<li class="active">
+							<a data-toggle="tab" href="#Help_General">
+							<i class="fa fa-briefcase"></i> General Questions </a>
+							<span class="after">
+							</span>
+						</li>
+						<li>
+							<a data-toggle="tab" href="#Help_Dashboard"><i class="fa fa-group"></i> Dashboard</a>
+						</li>
+						<li>
+							<a data-toggle="tab" href="#Help_KPI"><i class="fa fa-leaf"></i> KPI</a>
+						</li>
+						<li>
+							<a data-toggle="tab" href="#Help_Task"><i class="fa fa-info-circle"></i> Task</a>
+						</li>
+						<li>
+							<a data-toggle="tab" href="#Help_Metric"><i class="fa fa-tint"></i> Metric</a>
+						</li>
+						<li>
+							<a data-toggle="tab" href="#Help_Other"><i class="fa fa-plus"></i> Other Questions</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-md-9">
+					<div class="tab-content">
+						<div id="Help_General" class="tab-pane active">
+							<div id="accordion1" class="panel-group">
+								<div class="panel panel-default" >
+									<div class="panel-heading">
+										<h4 class="panel-title">
+										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#accordion1_1" id="help_1_title">
+										1. Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry ? </a>
+										<button ng-click="markdownMe('help_1_title')"  type="button" class="btn btn-default btn-xs">Edit</button>
+										</h4>
+									</div>
+									<div id="accordion1_1" class="panel-collapse collapse in">
+										<div id="help_1" class="panel-body">
+											 Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#accordion1_2">
+										2. Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry ? </a>
+										</h4>
+									</div>
+									<div id="accordion1_2" class="panel-collapse collapse">
+										<div class="panel-body">
+											 Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-success">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#accordion1_3">
+										3. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor ? </a>
+										</h4>
+									</div>
+									<div id="accordion1_3" class="panel-collapse collapse">
+										<div class="panel-body">
+											 Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-warning">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#accordion1_4">
+										4. Wolf moon officia aute, non cupidatat skateboard dolor brunch ? </a>
+										</h4>
+									</div>
+									<div id="accordion1_4" class="panel-collapse collapse">
+										<div class="panel-body">
+											 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-danger">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#accordion1_5">
+										5. Leggings occaecat craft beer farm-to-table, raw denim aesthetic ? </a>
+										</h4>
+									</div>
+									<div id="accordion1_5" class="panel-collapse collapse">
+										<div class="panel-body">
+											 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#accordion1_6">
+										6. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth ? </a>
+										</h4>
+									</div>
+									<div id="accordion1_6" class="panel-collapse collapse">
+										<div class="panel-body">
+											 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#accordion1_7">
+										7. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft ? </a>
+										</h4>
+									</div>
+									<div id="accordion1_7" class="panel-collapse collapse">
+										<div class="panel-body">
+											 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="Help_Dashboard" class="tab-pane">
+							<div id="accordion2" class="panel-group">
+								<div class="panel panel-warning">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#accordion2_1">
+										1. Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry ? </a>
+										</h4>
+									</div>
+									<div id="accordion2_1" class="panel-collapse collapse in">
+										<div class="panel-body">
+											<p>
+												 Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+											</p>
+											<p>
+												 Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+											</p>
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-danger">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#accordion2_2">
+										2. Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry ? </a>
+										</h4>
+									</div>
+									<div id="accordion2_2" class="panel-collapse collapse">
+										<div class="panel-body">
+											 Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-success">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#accordion2_3">
+										3. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor ? </a>
+										</h4>
+									</div>
+									<div id="accordion2_3" class="panel-collapse collapse">
+										<div class="panel-body">
+											 Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#accordion2_4">
+										4. Wolf moon officia aute, non cupidatat skateboard dolor brunch ? </a>
+										</h4>
+									</div>
+									<div id="accordion2_4" class="panel-collapse collapse">
+										<div class="panel-body">
+											 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#accordion2_5">
+										5. Leggings occaecat craft beer farm-to-table, raw denim aesthetic ? </a>
+										</h4>
+									</div>
+									<div id="accordion2_5" class="panel-collapse collapse">
+										<div class="panel-body">
+											 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#accordion2_6">
+										6. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth ? </a>
+										</h4>
+									</div>
+									<div id="accordion2_6" class="panel-collapse collapse">
+										<div class="panel-body">
+											 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#accordion2_7">
+										7. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft ? </a>
+										</h4>
+									</div>
+									<div id="accordion2_7" class="panel-collapse collapse">
+										<div class="panel-body">
+											 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="Help_KPI" class="tab-pane">
+							<div id="accordion3" class="panel-group">
+								<div class="panel panel-danger">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#accordion3_1">
+										1. Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry ? </a>
+										</h4>
+									</div>
+									<div id="accordion3_1" class="panel-collapse collapse in">
+										<div class="panel-body">
+											<p>
+												 Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.
+											</p>
+											<p>
+												 Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.
+											</p>
+											<p>
+												 Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+											</p>
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-success">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#accordion3_2">
+										2. Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry ? </a>
+										</h4>
+									</div>
+									<div id="accordion3_2" class="panel-collapse collapse">
+										<div class="panel-body">
+											 Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#accordion3_3">
+										3. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor ? </a>
+										</h4>
+									</div>
+									<div id="accordion3_3" class="panel-collapse collapse">
+										<div class="panel-body">
+											 Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#accordion3_4">
+										4. Wolf moon officia aute, non cupidatat skateboard dolor brunch ? </a>
+										</h4>
+									</div>
+									<div id="accordion3_4" class="panel-collapse collapse">
+										<div class="panel-body">
+											 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#accordion3_5">
+										5. Leggings occaecat craft beer farm-to-table, raw denim aesthetic ? </a>
+										</h4>
+									</div>
+									<div id="accordion3_5" class="panel-collapse collapse">
+										<div class="panel-body">
+											 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#accordion3_6">
+										6. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth ? </a>
+										</h4>
+									</div>
+									<div id="accordion3_6" class="panel-collapse collapse">
+										<div class="panel-body">
+											 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion3" href="#accordion3_7">
+										7. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft ? </a>
+										</h4>
+									</div>
+									<div id="accordion3_7" class="panel-collapse collapse">
+										<div class="panel-body">
+											 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div style="margin-top:25px">
+							<button class="btn pull-right" ng-click="addHelpEntry()">Add help entry</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-
-
-
-</div>

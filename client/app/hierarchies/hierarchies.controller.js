@@ -58,10 +58,10 @@ angular.module('boardOsApp')
 
   $scope.save = function() {
     if (typeof $scope.HierarchyType !== 'undefined') {
-      $scope.treeData = $scope.hierarchies;
+      $scope.treeData = angular.copy($scope.hierarchies);
       $scope.treeData.forEach(function(v){ delete v.__uiNodeId;});      
       $http.put('/api/hierarchies/'+ $scope.HierarchyType, $scope.treeData);
-      $.growl({  icon: "fa fa-paw",  message:'Hierarchy "' + $scope.HierarchyType + '" was updated'});
+      $.growl({  icon: 'fa fa-info-circle',  message:'Hierarchy "' + $scope.HierarchyType + '" was updated'});
     }
     //$scope.load();
   };
@@ -79,7 +79,7 @@ angular.module('boardOsApp')
       if (result) {
         $http.delete('/api/hierarchies/' + Hierarchy._id).success(function () {
           $scope.hierarchies.splice(index, 1);
-          $.growl({  icon: "fa fa-paw",  message:'Hierarchy "' + Hierarchy.name + '" was deleted'});
+          $.growl({  icon: 'fa fa-info-circle',  message:'Hierarchy "' + Hierarchy.name + '" was deleted'});
         });
       }
     }); 
@@ -97,8 +97,7 @@ angular.module('boardOsApp')
   };
 
   $scope.createNode = function(e, data) {
-    
-    $scope.hierarchies.push({ id : 'ajson'+ (Math.round(Math.random() * 100000)).toString(), parent : data.node.parent, text : data.node.text });
+    $scope.hierarchies.push({ id : data.node.id, parent : data.node.parent, text : data.node.text });
   };
 
   $scope.deleteNode = function(e, data) {

@@ -6,6 +6,7 @@ angular.module('boardOsApp', [
   'ngSanitize',
   'ui.router',
   'ui.bootstrap',
+  'btford.socket-io',
   'ngJsTree',
   'ngDialog',
   'nvd3'
@@ -87,7 +88,10 @@ angular.module('boardOsApp', [
 
 .constant('metricTaskFields',
 [   
+    {value: 'Constant', text: 'Constant'},
     {value: 'load', text: 'Load'},
+    {value: 'timeSpent', text: 'Time Spent'},
+    {value: 'projectedWorkload', text: 'Projected Work Load'},
     {value: 'duration', text: 'Duration'},
     {value: 'progress', text: 'Progress'},
     {value: 'trust', text: 'Trust'},
@@ -95,7 +99,10 @@ angular.module('boardOsApp', [
     {value: 'endDate', text: 'End'},
     {value: 'progressStatus', text: 'progressStatus'},
     {value: 'status', text: 'Statut'},
-    {value: 'constant', text: 'Constant'}
+    {value: 'deliverableStatus', text: 'deliverableStatus'},
+    {value: 'userSatisfaction', text: 'userSatisfaction'},
+    {value: 'actorSatisfaction', text: 'actorSatisfaction'},
+    {value: 'reworkReason', text: 'reworkReason'}
   ])
 
 .constant('categoryKPI',
@@ -104,6 +111,16 @@ angular.module('boardOsApp', [
   {value: 'Anticipation', text: 'Anticipation'},
   {value: 'Goal', text: 'Goal'},
   {value: 'Information', text: 'Information'}
+])
+
+.constant('listValuesKPI',
+[                                                                                                                                                                                                             
+  {value: 'AllValues', text: 'AllValues'},
+  {value: 'UniqueValues', text: 'UniqueValues'},
+  {value: 'LastValue', text: 'LastValue'},
+  {value: 'FirstValue', text: 'FirstValue'},
+  {value: 'ValuesLessThan', text: 'ValuesLessThan'},
+  {value: 'ValuesMoreThan', text: 'ValuesMoreThan'}
 ])
 
 .constant('actionKPI',
@@ -163,7 +180,7 @@ angular.module('boardOsApp', [
 
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$stateChangeStart', function (event, next) {
-      Auth.isLoggedInAsync(function(loggedIn) {
+      Auth.isLoggedIn(function(loggedIn) {
         if (next.authenticate && !loggedIn) {
           $location.path('/login');
         }

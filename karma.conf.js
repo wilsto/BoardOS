@@ -9,19 +9,36 @@ module.exports = function(config) {
     // testing framework to use (jasmine/mocha/qunit/...)
     frameworks: ['jasmine'],
 
+    reporters: ['progress', 'growl'],
+
     // list of files / patterns to load in the browser
     files: [
       'client/bower_components/jquery/dist/jquery.js',
       'client/bower_components/angular/angular.js',
       'client/bower_components/angular-mocks/angular-mocks.js',
+      'client/bower_components/bootstrap/dist/js/bootstrap.js',
+      'client/bower_components/bootstrap.growl/bootstrap-growl.js',
       'client/bower_components/angular-resource/angular-resource.js',
       'client/bower_components/angular-cookies/angular-cookies.js',
       'client/bower_components/angular-sanitize/angular-sanitize.js',
-      'client/bower_components/angular-route/angular-route.js',
       'client/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
-      'client/bower_components/lodash/dist/lodash.compat.js',
+      'client/bower_components/angular-animate/angular-animate.js',
+      'client/bower_components/angular-strap/dist/angular-strap.js',
+      'client/bower_components/angular-strap/dist/angular-strap.tpl.js',
       'client/bower_components/angular-socket-io/socket.js',
       'client/bower_components/angular-ui-router/release/angular-ui-router.js',
+      'client/bower_components/d3/d3.js',
+      'client/bower_components/nvd3/nv.d3.js',
+      'client/bower_components/angular-nvd3/dist/angular-nvd3.min.js',
+      'client/bower_components/ng-table/ng-table.js',
+      'client/bower_components/jstree/dist/jstree.js',
+      'client/bower_components/ng-js-tree/dist/ngJsTree.js',
+      'client/bower_components/select2/select2.js',
+      'client/bower_components/ngDialog/js/ngDialog.js',
+      'client/bower_components/lodash/dist/lodash.compat.js',
+      'client/bower_components/moment/moment.js',
+      'client/bower_components/zingchart/src/zingchart-html5-min.js',
+      'client/bower_components/bootbox/bootbox.js',
       'client/app/app.js',
       'client/app/app.coffee',
       'client/app/**/*.js',
@@ -60,7 +77,7 @@ module.exports = function(config) {
 
 
     // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: false,
+    autoWatch: true,
 
 
     // Start these browsers, currently available:

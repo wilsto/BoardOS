@@ -2,15 +2,15 @@
 'use strict';
 
 angular.module('boardOsApp')
-.controller('KPICtrl', function ($scope,$rootScope, Auth, $http, actionKPI,categoryKPI,groupByKPI,metricTaskFields, $stateParams, calLibrary, $location) {
+.controller('KPICtrl', function ($scope,$rootScope, Auth, $http, actionKPI,categoryKPI,groupByKPI,metricTaskFields, listValuesKPI, $stateParams, calLibrary, $location) {
 
 $scope.activeTab = 1;
-
 
   $scope.actionKPI = actionKPI;
   $scope.categoryKPI = categoryKPI;
   $scope.groupByKPI = groupByKPI;
   $scope.metricTaskFields = metricTaskFields;
+  $scope.listValuesKPI = listValuesKPI;
 
   $scope.load = function() {
     if ($stateParams.id) {    
@@ -49,7 +49,7 @@ $scope.changeTab = function (e, tabNb) {
     $('.ver-inline-menu li').removeClass('active');
     $(e.target).closest('li').addClass('active');
     $scope.activeTab = tabNb;
-}
+};
 
 $scope.save = function() {
 
@@ -76,16 +76,16 @@ $scope.save = function() {
   if (typeof $scope.KPI._id === 'undefined') {
     $http.post('/api/KPIs', $scope.KPI).success(function(data){
       var logInfo = 'KPI "' + $scope.KPI.name + '" was created';
-      $http.post('/api/logs', {info:logInfo, actor:$scope.currentUser});
-      $.growl({  icon: "fa fa-paw",  message:logInfo});
+      $http.post('/api/logs', {info:logInfo, actor:$scope.currentUser.name});
+      $.growl({  icon: 'fa fa-info-circle',  message:logInfo});
       $location.path('/KPI/'+data._id);
     });
 
   } else {
     $http.put('/api/KPIs/'+ $scope.KPI._id , $scope.KPI).success(function(){
       var logInfo = 'KPI "' + $scope.KPI.name + '" was updated';
-      $http.post('/api/logs', {info:logInfo, actor:$scope.currentUser});
-      $.growl({  icon: "fa fa-paw",  message:logInfo});    
+      $http.post('/api/logs', {info:logInfo, actor:$scope.currentUser.name});
+      $.growl({  icon: 'fa fa-info-circle',  message:logInfo});    
     });
 
   }
@@ -105,7 +105,7 @@ $scope.delete = function(KPI,index) {
   bootbox.confirm('Are you sure?', function(result) {
     if (result) {
       $http.delete('/api/KPIs/' + $scope.KPI._id).success(function () {
-        $.growl({  icon: "fa fa-paw",  message:'KPI "' + $scope.KPI.name + '" was deleted'});
+        $.growl({  icon: 'fa fa-info-circle',  message:'KPI "' + $scope.KPI.name + '" was deleted'});
         $location.path('/KPIs');
       });
     }

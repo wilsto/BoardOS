@@ -11,10 +11,15 @@ var MetricSchema = new Schema({
   date: String,
   endDate: String,
   load: String,
+  timeSpent: String,
   progress: String,
   progressStatus: String,
   startDate: String,
   status: String,
+  deliverableStatus:String,
+  userSatisfaction:String,
+  actorSatisfaction:String,
+  reworkReason:String,
   trust: String,
   actor: String
 }, { strict: false });

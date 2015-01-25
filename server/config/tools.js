@@ -318,48 +318,43 @@ function groupByMulti (obj, values, context) {
     calculKPI: function(metrics, kpi) {
 
         var calcul, calculMain, calculRef, filteredMetrics, filteredRefMetrics;
-        var action = kpi.action;
+        var action = kpi.action.toLowerCase();
         var values = kpi.metricTaskValues && kpi.metricTaskValues.split(' + ');
         var refValues = kpi.refMetricTaskValues && kpi.refMetricTaskValues.split(' + ');
         var field = kpi.metricTaskField;
         var refField = kpi.refMetricTaskField;
 
-        if (kpi.category === 'Goal') {
-            filteredMetrics = _.filter(metrics,function (metric) {return (typeof values === 'undefined')? 1 : _.contains(values,metric[field]);});
-            filteredRefMetrics = (refField === 'constant') ?  refValues : _.filter(metrics,function (metric) {return _.contains(refValues,metric[refField]);});
+        if (kpi.whereField) {metrics = _.filter(metrics,function (metric) {return metric[kpi.whereField] === kpi.whereValues })}
 
-            // Réaliser des calculs
-            switch(action) {
-              case 'count':
-                calculMain = filteredMetrics.length;
-                calculRef =  (refField === 'constant') ? metrics.length : filteredRefMetrics.length;
-                break;                             
-              case 'mean':       
-                calculMain = math.mean(_.pluck(filteredMetrics,field).map(Number));
-                calculRef = 100;
-                break;        
+        filteredMetrics = _.filter(metrics,function (metric) {return (typeof values === 'undefined' ||  values.length === 0 || typeof metric[field] === 'undefined')? 1 : _.contains(values,metric[field]);});
+        filteredRefMetrics = (refField.toLowerCase() === 'constant') ?  refValues : _.filter(metrics,function (metric) {return  (typeof refValues === 'undefined' ||  refValues.length === 0 || typeof metric[refField] === 'undefined')? 1 : _.contains(refValues,metric[refField]);});
+
+        // Réaliser des calculs
+        switch(action) {
+          case 'count':
+            calculMain = filteredMetrics.length;
+            calculRef =  (refField.toLowerCase() === 'constant') ? metrics.length : filteredRefMetrics.length;
+            break;                             
+          case 'mean':       
+            var arrayValues = _.compact(_.pluck(filteredMetrics,field).map(Number));
+            if (arrayValues.length) {calculMain = math.mean(_.compact(_.pluck(filteredMetrics,field).map(Number)))}
+            var arrayRefValues = _.compact(_.pluck(filteredRefMetrics,refField).map(Number));
+
+            if (arrayRefValues.length) {
+                calculRef = math.mean(_.compact(_.pluck(filteredMetrics,refField).map(Number)))
+            } else {
+                if (refField.toLowerCase() === 'constant') {calculRef = parseInt(refValues) }
             }
-
-            calcul = parseInt((calculMain / calculRef) *100);
+            break;        
         }
-        if (kpi.category === 'Alert') {
-            switch (refField) {
-                case 'constant' : filteredMetrics = _.filter(metrics,function (metric) {return metric[field] === refValues[0] });  break; 
-                case 'upperLimit' : filteredMetrics = _.filter(metrics,function (metric) {return metric[field] > parseInt(refValues[0]) });  break; 
-                case 'lowerLimit' : filteredMetrics = _.filter(metrics,function (metric) {return metric[field] < parseInt(refValues[0]) });
-            }
 
-            // Réaliser des calculs
-            switch(action) {
-              case 'count':
-                calculMain = filteredMetrics.length;
-                break;                                    
-            }
-
-            calcul = calculMain;
+        switch (kpi.category) {
+            case 'Goal' : calcul = parseInt((calculMain / calculRef) *100);break;
+            case 'Alert' : calcul = parseInt(calculMain);break;
         }
 
         return calcul;
+
     }
 };
 

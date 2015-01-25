@@ -15,11 +15,12 @@ angular.module('boardOsApp')
       $scope.dataMetrics = [{values: [] }];
       $scope.dataGoals = [{values: [] }];
       $scope.dataAlerts = [{values: [] }];
+      $scope.dataConfidence = [{values: [] }];
 
       $scope.predataKPIs = calLibrary.getByMonth(dashboards.kpis, 'date','value');
       $scope.predataTasks = calLibrary.getByMonth(dashboards.tasks, 'date','value');
       $scope.predataMetrics = calLibrary.getByMonth(dashboards.metrics, 'date','value');
-
+      $scope.predataConfidence = calLibrary.getByMonth(dashboards.metrics, 'date','trust');
 
       var dataGoals = [];
       var dataAlerts= [];
@@ -33,11 +34,13 @@ angular.module('boardOsApp')
       $scope.dataKPIs[0].values = $scope.predataKPIs;
       $scope.dataTasks[0].values = $scope.predataTasks;
       $scope.dataMetrics[0].values = $scope.predataMetrics;
+      $scope.dataConfidence[0].values = $scope.predataConfidence;
       $scope.dataGoals[0].values = calLibrary.getCalculByMonth(dataGoals);     
       $scope.dataAlerts[0].values = calLibrary.getCalculByMonth(dataAlerts);  
 
       $scope.goalsNb = _.last($scope.dataGoals[0].values).count;   
       $scope.alertsNb =_.last($scope.dataAlerts[0].values).sum;  
+      $scope.confidence = parseInt(_.last($scope.dataConfidence[0].values).mean); 
 
       //calcul goals and alerts per dashboard
       _.forEach(dashboards.dashboards, function(dashboard, key) {
@@ -46,9 +49,11 @@ angular.module('boardOsApp')
         var dataGoals = 0;
         var dataAlerts= 0;
 
+          
         _.forEach(dashboard.kpis, function(kpi, key) {
-              if (kpi.category ==='Goal')  {dashboard.nbGoals += 1; dataGoals += _.last(kpi.calcul.time).valueKPI;}
-              if (kpi.category ==='Alert')  {dashboard.nbAlerts += 1; dataAlerts += _.last(kpi.calcul.time).valueKPI;}
+          
+              if (kpi.category ==='Goal' && kpi.calcul.time.length > 0)  {dashboard.nbGoals += 1; dataGoals += _.last(kpi.calcul.time).valueKPI;}
+              if (kpi.category ==='Alert' && kpi.calcul.time.length > 0)  {dashboard.nbAlerts += 1; dataAlerts += _.last(kpi.calcul.time).valueKPI;}
         });
 
         dashboard.dataGoals = (dashboard.nbGoals > 0) ? parseInt(dataGoals / dashboard.nbGoals) : '-';
@@ -111,7 +116,8 @@ angular.module('boardOsApp')
   $scope.optionsGoals = angular.copy($scope.options);
   $scope.optionsGoals.chart.color =  function(d){  return  calLibrary.giveMeMyColor(d.count); };
 
-  $scope.optionsTrust = angular.copy($scope.options);
-  $scope.optionsTrust.chart.color =  ['#bcbd22'];
+  $scope.optionsConfidence = angular.copy($scope.options);
+  $scope.optionsConfidence.chart.color =  ['#bcbd22'];
+  $scope.optionsConfidence.chart.y = function(d){ return d.mean; };
 
   });

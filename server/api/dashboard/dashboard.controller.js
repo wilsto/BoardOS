@@ -20,7 +20,6 @@ var Hierarchies = require('../hierarchy/hierarchy.model');
 
 var tools = require('../../config/tools');
  var getData = require('../../config/getData');
-
 var hierarchyValues = {};
 var mDashboard = {};
 
@@ -78,6 +77,7 @@ exports.show = function(req, res) {
                   KPIInfo.params.id = mKPI._id;
                   KPIInfo.query.context = mDashboard.context;
                   KPIInfo.query.activity = mDashboard.activity;
+                  KPIInfo.query.url = 'Dashboard';
                   // Get a single kpi
                   promises.push(KPIInfo);
                 }
