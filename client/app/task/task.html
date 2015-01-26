@@ -79,6 +79,12 @@
                     </tab-heading>
                     <div dashboard-tab dashboard-type="actors" dashboard-data="task" ng-if="task"></div>
                 </tab>
+                <tab ng-if="task._id">
+                    <tab-heading>
+                        Help
+                    </tab-heading>
+                    <div dashboard-tab dashboard-type="help" dashboard-data="task" ng-if="task"></div>
+                </tab>
               <tab>
                 <tab-heading>
                     Edit 

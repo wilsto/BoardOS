@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-    .directive('dashboardTab', function(ngDialog, $location, $rootScope, calLibrary) {
+    .directive('dashboardTab', function(ngDialog, $location, $rootScope, calLibrary, Auth, $http) {
         return {
             templateUrl: 'app/dashboardTab/dashboardTab.html',
             restrict: 'EA',
@@ -10,15 +10,43 @@ angular.module('boardOsApp')
                 data: '=dashboardData'
             },
             link: function(scope, element, attrs) {
+
+                 scope.helpCategory = 'General';
                 /**
                  * Display Table
                  */
                 scope.dataTable = scope.data[scope.dashboardType];
                 scope.page = $location.path().split('/')[1];
 
+                Auth.isAdmin(function(data) {
+                    //scope.isAdmin = data; A modifier plus tard ?
+                    scope.isAdmin = true;
+                });
 
                 scope.giveMeMyColor = function(value, category) {
                     return calLibrary.giveMeMyColor(value, category);
+                };
+
+                scope.loadHelp = function() {
+                    $http.get('/api/helps').success(function(helps)  {
+                      scope.helps = helps ; 
+                    });
+                };
+
+                scope.createNewHelp = function() {
+                    $http.post('/api/helps', {title:'new',info:'to describe',category:scope.helpCategory}).success(function(){
+                        scope.loadHelp();
+                    });
+                    $.growl({  icon: 'fa fa-info-circle',  message:'New help was updated'});
+                };
+
+                if (scope.dashboardType === 'help') {
+                    scope.loadHelp();
+
+                }
+
+                scope.changeTab = function(name) {
+                    scope.helpCategory= name;
                 };
 
                 /**
@@ -125,15 +153,23 @@ angular.module('boardOsApp')
                         savable: true,
                         hideable: true,
                         onSave: function(e) {
-                            e.blur();
+
+                            if (e.$element[0].id.indexOf('title_') >= 0) {
+                                $http.put('/api/helps/'+e.$element[0].id.replace('help_','').replace('title_',''), {title:e.getContent()}).success(function(){
+                                    scope.loadHelp();
+                                    $.growl({  icon: 'fa fa-info-circle',  message:'Help title was updated'});
+                                    e.blur();
+                                });
+                            } else {
+                                $http.put('/api/helps/'+e.$element[0].id.replace('help_',''), {info:e.getContent()}).success(function(){
+                                    scope.loadHelp();
+                                    $.growl({  icon: 'fa fa-info-circle',  message:'Help content was updated'});
+                                    e.blur();
+                                });
+                            }
                         }
                     });
                 };
-
-                scope.addHelpEntry = function() {
-
-                };
-
 
      /**
      * Modal

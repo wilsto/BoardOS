@@ -172,6 +172,26 @@ function groupByMulti (obj, values, context) {
                 ]
             };
             break;
+            case 'Line' :
+              myChart={
+                "graphset":[
+                    {
+                        "type":"line",
+                        "title":{
+                            "text":"Line"
+                        },
+                        "series":[
+                            {
+                                "values":[16,7,14,11,24,42,26,13,32,12]
+                            },
+                            {
+                                "values":[35,22,35,30,46,45,33,26,23,27]
+                            }
+                        ]
+                    }
+                ]
+                };
+            break;      
             case 'Bubble' :
                 _.forEach(mKPI.metricsGroupBy.TaskTime, function(item, key) { // pour chaque tache
                     var lastMonth = _.chain(item).pairs().sortBy(function(item) { return item[0]; }).last().value(); // on prend le derniere mois avec une mesure

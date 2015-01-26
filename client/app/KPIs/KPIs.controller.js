@@ -14,8 +14,7 @@ angular.module('boardOsApp')
     };
 
     $scope.save = function() {
-      delete $scope.KPI.__v;
-      
+      delete $scope.KPI.__v;      
 
       if (typeof $scope.KPI._id === 'undefined') {
         $http.post('/api/KPIs', $scope.KPI);

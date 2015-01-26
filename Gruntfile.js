@@ -62,7 +62,7 @@ module.exports = function (grunt) {
           '!<%= yeoman.client %>/{app,components}/**/*.spec.js',
           '!<%= yeoman.client %>/{app,components}/**/*.mock.js',
           '!<%= yeoman.client %>/app/app.js'],
-        tasks: ['injector:scripts']
+        tasks: ['injector:scripts', 'newer:jshint:all','karma']
       },
       injectCss: {
         files: [
@@ -87,6 +87,7 @@ module.exports = function (grunt) {
       livereload: {
         files: [
           '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.css',
+          '{.tmp,<%= yeoman.client %>}/app/*.html',
           '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.html',
           '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.js',
           '!{.tmp,<%= yeoman.client %>}{app,components}/**/*.spec.js',
@@ -518,7 +519,14 @@ module.exports = function (grunt) {
 
   grunt.registerTask('serve', function (target) {
     if (target === 'dist') {
-      return grunt.task.run(['build', 'env:all', 'env:prod', 'express:prod', 'wait', 'open', 'express-keepalive']);
+      return grunt.task.run([
+        'build',
+        'env:all',
+        'env:prod',
+        'express:prod',
+        'wait',
+        'open',
+        'express-keepalive']);
     }
 
     if (target === 'debug') {
@@ -541,6 +549,7 @@ module.exports = function (grunt) {
       'wiredep',
       'autoprefixer',
       'express:dev',
+      'newer:jshint',
       'wait',
       'open',
       'watch'

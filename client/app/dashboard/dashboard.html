@@ -39,7 +39,7 @@
           <div class="portlet sale-summary">
             <div class="portlet-title">
               <div class="caption">
-                Summary
+                Summary Scope
               </div>
               <div class="tools">
                 <a class="reload" href="javascript:;"></a>
@@ -141,14 +141,14 @@
 </tab-heading>
 <div dashboard-tab dashboard-type="tasks" dashboard-data="dashboard" ng-if="dashboard"></div>
 </tab>
-<!--tab Metrics-->
+<!--tab Metrics
 <tab ng-if="dashboard._id">
   <tab-heading>
   Metrics 
   <span class="badge badge-default"> {{dashboard.metrics.length || 0}}</span>
 </tab-heading>
 <div dashboard-tab dashboard-type="metrics" dashboard-data="dashboard" ng-if="dashboard"></div>
-</tab>
+</tab>-->
 <!--tab Actors-->
 <tab ng-if="dashboard._id">
   <tab-heading>
@@ -156,6 +156,13 @@
   <span class="badge badge-default">{{dashboard.actors.length || 0}}</span>
 </tab-heading>
 <div dashboard-tab dashboard-type="actors" dashboard-data="dashboard" ng-if="dashboard"></div>
+</tab>
+<!--tab Help-->
+<tab ng-if="dashboard._id">
+    <tab-heading>
+        Help
+    </tab-heading>
+    <div dashboard-tab dashboard-type="help" dashboard-data="dashboard" ng-if="dashboard"></div>
 </tab>
 <tab>
   <tab-heading>
