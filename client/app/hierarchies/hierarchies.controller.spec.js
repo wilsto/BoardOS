@@ -15,7 +15,7 @@ describe('Controller: hierarchiesCtrl', function () {
     httpResponse = {list: ['hierarchyX']};
     httpBackend.when('GET', '/api/hierarchies/list/Context').respond(httpResponse);
     httpBackend.when('GET', '/api/hierarchies/list/Activity').respond(httpResponse);
-    httpBackend.when('GET', '/api/hierarchies/list/Axis').respond(httpResponse);;
+    httpBackend.when('GET', '/api/hierarchies/list/Axis').respond(httpResponse);
     // Get hold of a scope (i.e. the root scope)
     scope = $rootScope.$new();
     createController = function() {
