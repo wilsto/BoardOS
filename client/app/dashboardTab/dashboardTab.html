@@ -284,10 +284,10 @@
 					<th>Entered</th>
 					<th></th>
 					<th>Start</th>
-					<th>End</th>
-					<th>Status</th>
 					<th>Time Spent</th>
 					<th>Progress</th>
+					<th>End</th>
+					<th>Status</th>
 					<th>Confidence</th>
 					<th>Comments</th>
 					<th ng-if="page === 'task'"><button ng-click='openMetric(data, data.metrics[task.metrics.length-1],true)' type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus"></span></button></th>
@@ -299,10 +299,10 @@
 					<td>{{metric.date | date:'shortDate'}}</td>
 					<td><div class="desc" popover-html-unsafe="Context : {{metric.context}} </p>  Activity : {{metric.activity}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="right" popover-delay ="1000"><i class="fa fa-recycle"></i></div></td>
 					<td>{{metric.startDate | date:'shortDate'}}</td>
-					<td>{{metric.endDate | date:'shortDate'}}</td>
-					<td>{{metric.status}}</td>
 					<td>{{metric.timeSpent}}</td>
 					<td>{{metric.progress}}% <span class="label pull-right" ng-class="{'label-danger':metric.progressStatus==='Late','label-success':metric.progressStatus==='On time','label-warning':metric.progressStatus==='At Risk' }">  {{metric.progressStatus}} </span></td>
+					<td>{{metric.endDate | date:'shortDate'}}</td>
+					<td>{{metric.status}} <span ng-if="metric.reworkReason" class="label" ng-class="{'label-danger':metric.reworkReason==='Internal','label-warning':metric.progressStatus==='External' }">  {{metric.reworkReason}} Rework </span></td>
 					<td>{{metric.trust}}</td>
 					<td>{{metric.comments}}</td>
 					<td ng-if="page === 'task'" style="width:25px">
