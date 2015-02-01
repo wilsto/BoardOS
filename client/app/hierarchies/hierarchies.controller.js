@@ -60,7 +60,7 @@ angular.module('boardOsApp')
     if (typeof $scope.HierarchyType !== 'undefined') {
       $scope.treeData = angular.copy($scope.hierarchies);
       $scope.treeData.forEach(function(v){ delete v.__uiNodeId;});     
-      console.log('$scope.treeData',$scope.treeData); 
+       
       $http.put('/api/hierarchies/'+ $scope.HierarchyType, $scope.treeData);
       $.growl({  icon: 'fa fa-info-circle',  message:'Hierarchy "' + $scope.HierarchyType + '" was updated'});
     }
@@ -112,7 +112,7 @@ angular.module('boardOsApp')
               $scope.hierarchies.splice(key,1);
         }   
       });
-    verboseHierarchy(data)
+    verboseHierarchy(data);
   };
 
   $scope.renameNode = function(e, data) {

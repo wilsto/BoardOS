@@ -35,3 +35,11 @@ server.listen(config.port, config.ip, function () {
 
 // Expose app
 exports = module.exports = app;
+
+var postmark = require('postmark')('308974d8-3847-4675-8666-9dd2feadcfc4');
+postmark.send({
+    'From': 'donotreply@example.com', 
+    'To': 'willy.stophe.pro@gmail.com', 
+    'Subject': 'Test', 
+    'TextBody': 'Test Message'
+});
