@@ -9,7 +9,13 @@ module.exports = function(config) {
     // testing framework to use (jasmine/mocha/qunit/...)
     frameworks: ['jasmine'],
 
-    reporters: ['progress', 'growl'],
+    reporters: ['progress', 'growl', 'html'],
+
+    // the default configuration
+    htmlReporter: {
+      outputDir: 'karma_html',
+      templatePath: __dirname+'/node_modules/karma-html-reporter/jasmine_template.html'
+    },
 
     // list of files / patterns to load in the browser
     files: [

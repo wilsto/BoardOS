@@ -2,10 +2,11 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('KPIsCtrl', function ($scope, $http, actionKPI,categoryKPI,groupByKPI,metricTaskFields) {
+  .controller('KPIsCtrl', function ($scope, $http, Auth, actionKPI,categoryKPI,groupByKPI,metricTaskFields) {
     $scope.KPIs = [];
     $scope.KPI = {};
     $scope.config = {tab1: true, tab2: false};
+    $scope.isAdmin = Auth.isAdmin();
 
     $scope.load = function() {
       $http.get('/api/KPIs').success(function(KPIs) {

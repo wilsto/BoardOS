@@ -4,21 +4,21 @@ angular.module('boardOsApp').factory('calLibrary', function() {
 	var sdo = {
 		giveMeMyColor: function (value, category) {
 
-	        if (category === 'Alert') {
-		        switch (true) {
-		          case (value > 0) : return '#CB4B16';
-		          case (value === 0) : return '#859900'; 
-		        }
-	        }
+			if (category === 'Alert') {
+				switch (true) {
+					case (value > 0) : return '#CB4B16';
+					case (value === 0) : return '#859900'; 
+				}
+			}
 
 			if (category === 'Goal' || typeof category === 'undefined') {
-		        switch (true) {
-		          case (value >= 80) : return '#859900'; 
-		          case (value >= 10) : return '#FF7F0E';
-		          default: return '#CB4B16';
-		        }
-	        }
-	    },
+				switch (true) {
+					case (value >= 80) : return '#859900'; 
+					case (value >= 10) : return '#FF7F0E';
+					default: return '#CB4B16';
+				}
+			}
+		},
 		displayLastYear: function(data, fieldDate, field) {
 
 			var dateResult = [];
@@ -120,7 +120,7 @@ angular.module('boardOsApp').factory('calLibrary', function() {
 			//arrays = [[1,2,3,4,5,6], [1,1,1,1,1,1], [2,2,2,2,2,2]];
 			var result;
 			if (arrays.length > 1 ) {
-				 result = _.map(_.zip.apply(_, arrays), function(pieces) {
+				result = _.map(_.zip.apply(_, arrays), function(pieces) {
 					return _.reduce(pieces, function(m, p) {return m+p;}, 0);
 				});
 			} else {
@@ -143,17 +143,17 @@ angular.module('boardOsApp').factory('calLibrary', function() {
 					'mean':0
 				};
 			});
-       		
+
        		 map_result.reverse(); // par ordre croissant
 
        		// association des deux
-			$.each(map_result, function (keyMap,itemMap) {
-				itemMap.count = parseInt(result[keyMap] /arrays.length)  ;
-				itemMap.sum = result[keyMap] ;
-			});
+       		$.each(map_result, function (keyMap,itemMap) {
+       			itemMap.count = parseInt(result[keyMap] /arrays.length)  ;
+       			itemMap.sum = result[keyMap] ;
+       		});
 
-			return map_result;
-		}
-	};
-	return sdo;
-});
+       		return map_result;
+       	}
+       };
+       return sdo;
+   });

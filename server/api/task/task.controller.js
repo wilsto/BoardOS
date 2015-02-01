@@ -27,6 +27,15 @@ exports.index = function(req, res) {
   });
 };
 
+// Get list of tasks
+exports.search = function(req, res) {
+  console.log('req.query',req.query.activity);
+  Task.find({activity:req.query.activity, context:req.query.context},function (err, tasks) {
+    if(err) { return handleError(res, err); }
+    return res.json(200, tasks);
+  });
+};
+
 // Get a single task
 exports.show = function(req, res) {
 
@@ -70,7 +79,7 @@ exports.show = function(req, res) {
         _.each(dashboard, function(rowdata, index) { 
           if (typeof rowdata.context === 'undefined' || rowdata.context === '')  { rowdata.context = mTask.context}
           if (typeof rowdata.activity === 'undefined' || rowdata.activity === '')  { rowdata.activity = mTask.activity}
-          if (mTask.context.indexOf(rowdata.context) >=0 && mTask.activity.indexOf(rowdata.activity) >=0 ) {
+          if (typeof rowdata.context === 'undefined' || mTask.context.indexOf(rowdata.context) >=0 && typeof rowdata.activity === 'undefined' || mTask.activity.indexOf(rowdata.activity) >=0 ) {
             mTask.dashboards.push (rowdata.toObject());
           }
         });

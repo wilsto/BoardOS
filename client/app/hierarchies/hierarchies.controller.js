@@ -59,7 +59,8 @@ angular.module('boardOsApp')
   $scope.save = function() {
     if (typeof $scope.HierarchyType !== 'undefined') {
       $scope.treeData = angular.copy($scope.hierarchies);
-      $scope.treeData.forEach(function(v){ delete v.__uiNodeId;});      
+      $scope.treeData.forEach(function(v){ delete v.__uiNodeId;});     
+      console.log('$scope.treeData',$scope.treeData); 
       $http.put('/api/hierarchies/'+ $scope.HierarchyType, $scope.treeData);
       $.growl({  icon: 'fa fa-info-circle',  message:'Hierarchy "' + $scope.HierarchyType + '" was updated'});
     }
@@ -92,12 +93,17 @@ angular.module('boardOsApp')
       $scope.$apply( // ?? workaround avec apply, à chercher pourquoi
          $scope.selectedNode = $scope.hierarchies.filter(function(obj){ return obj.id === data.node.id;})[0]
       );
+          var parents = [];
+          _.each(data.node.parents, function (thisNode) {
+              parents.push(thisNode);
+          });
     }
 
   };
 
   $scope.createNode = function(e, data) {
     $scope.hierarchies.push({ id : data.node.id, parent : data.node.parent, text : data.node.text });
+    verboseHierarchy(data);
   };
 
   $scope.deleteNode = function(e, data) {
@@ -106,6 +112,7 @@ angular.module('boardOsApp')
               $scope.hierarchies.splice(key,1);
         }   
       });
+    verboseHierarchy(data)
   };
 
   $scope.renameNode = function(e, data) {
@@ -113,8 +120,24 @@ angular.module('boardOsApp')
         if(obj.id === data.node.id) {
               $scope.hierarchies[key].text = data.node.text;
         }   
-      });
+    });
+    verboseHierarchy(data);
+
   };
 
+  $scope.loadNode = function(e, data) {      
+      verboseHierarchy(data);
+  };
+
+
+  function verboseHierarchy(data) {
+       angular.forEach($scope.hierarchies, function(obj, key ) {
+        // on recherche les parents et on les concatène.
+        var parentPath = _.compact(_.map(data.instance._model.data[obj.id].parents.reverse(), function (parent) {
+          return data.instance._model.data[parent].text;
+        })).join('.'); 
+        $scope.hierarchies[key].longname = (parentPath.length >  0) ? parentPath+ '.' + obj.text: obj.text;
+      });
+  }
 
 });

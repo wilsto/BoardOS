@@ -53,10 +53,6 @@ Login page
   color: #555;
 }
 
-.login .content p {
-  color: #222;
-}
-
 .login .content .login-form,
 .login .content .forget-form {
     padding: 0px;

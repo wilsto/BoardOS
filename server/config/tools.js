@@ -263,9 +263,10 @@ function groupByMulti (obj, values, context) {
         }
 
         // function to recursively build the tree
-        var findChildren = function(parent,longname) {
+        var findChildren = function(parent, longName) {
             if (children[parent.value.id]) {
                 parent.children = children[parent.value.id];
+                //if (parent.id ="ajson1639") {console.log('parent',parent);}
                 for (i = 0, len = parent.children.length; i < len; ++i) {
                     parent.children[i].value.longname = parent.value.longname+'.'+parent.children[i].value.text;
                     list.push({text:parent.children[i].value.text, longName:parent.children[i].value.longname,id:parent.children[i].value.id});
@@ -279,6 +280,7 @@ function groupByMulti (obj, values, context) {
             list.push({text:roots[i].value.longname,id:roots[i].value.id});
             findChildren(roots[i]);
         }
+        //console.log('roots',roots);
         if (type==='list') {return list}
         if (type==='Treeview') {return roots}    
     },

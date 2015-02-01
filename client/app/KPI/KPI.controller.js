@@ -5,6 +5,7 @@ angular.module('boardOsApp')
 .controller('KPICtrl', function ($scope,$rootScope, Auth, $http, actionKPI,categoryKPI,groupByKPI,metricTaskFields, listValuesKPI, $stateParams, calLibrary, $location) {
 
 $scope.activeTab = 1;
+$scope.isAdmin = Auth.isAdmin();
 
   $scope.actionKPI = actionKPI;
   $scope.categoryKPI = categoryKPI;
