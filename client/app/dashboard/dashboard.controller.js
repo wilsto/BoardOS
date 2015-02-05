@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-.controller('DashboardCtrl', function ($scope,  $rootScope, $http, $stateParams, calLibrary, $cookieStore, $location) {
+.controller('DashboardCtrl', function ($scope,  $rootScope, $http, $stateParams, myLibrary, $cookieStore, $location) {
 
   $scope.activeTab = 1;
 
@@ -26,28 +26,28 @@ angular.module('boardOsApp')
         $scope.dataAlerts = [{values: [] }];
         $scope.dataConfidence = [{values: [] }];
 
-        $scope.predataKPIs = calLibrary.getByMonth($scope.dashboard.kpis, 'date','value');
-        $scope.predataTasks = calLibrary.getByMonth($scope.dashboard.tasks, 'date','value');
-        $scope.predataMetrics = calLibrary.getByMonth($scope.dashboard.metrics, 'date','value');
-        $scope.predataConfidence = calLibrary.getByMonth($scope.dashboard.metrics, 'date','trust');
+        $scope.predataKPIs = myLibrary.getByMonth($scope.dashboard.kpis, 'date','value');
+        $scope.predataTasks = myLibrary.getByMonth($scope.dashboard.tasks, 'date','value');
+        $scope.predataMetrics = myLibrary.getByMonth($scope.dashboard.metrics, 'date','value');
+        $scope.predataConfidence = myLibrary.getByMonth($scope.dashboard.metrics, 'date','trust');
 
         var dataGoals = [];
         var dataGoalsTime = [];
         var dataAlerts= [];
         _.forEach($scope.dashboard.kpis, function(kpi) {
          if (kpi.category ==='Goal')  {
-          var SeriesOfGoals = _.pluck(calLibrary.displayLastYear(kpi.calcul.time,'month','valueKPI'),'value');
+          var SeriesOfGoals = _.pluck(myLibrary.displayLastYear(kpi.calcul.time,'month','valueKPI'),'value');
           dataGoals.push(SeriesOfGoals);
           dataGoalsTime.push({name:kpi.constraint,value:_.last(SeriesOfGoals) });
         }
-        if (kpi.category ==='Alert')  {dataAlerts.push(_.pluck(calLibrary.displayLastYear(kpi.calcul.time,'month','valueKPI'),'value'));}
+        if (kpi.category ==='Alert')  {dataAlerts.push(_.pluck(myLibrary.displayLastYear(kpi.calcul.time,'month','valueKPI'),'value'));}
       });
         $scope.dataKPIs[0].values = $scope.predataKPIs;
         $scope.dataTasks[0].values = $scope.predataTasks;
         $scope.dataMetrics[0].values = $scope.predataMetrics;     
         $scope.dataConfidence[0].values = $scope.predataConfidence;
-        $scope.dataGoals[0].values = calLibrary.getCalculByMonth(dataGoals);     
-        $scope.dataAlerts[0].values = calLibrary.getCalculByMonth(dataAlerts);     
+        $scope.dataGoals[0].values = myLibrary.getCalculByMonth(dataGoals);     
+        $scope.dataAlerts[0].values = myLibrary.getCalculByMonth(dataAlerts);     
 
         var scoreOnQCT = _.chain(dataGoalsTime)
         .flatten()
@@ -161,7 +161,8 @@ angular.module('boardOsApp')
 
       });
 } else {
- $scope.dashboard = {name:''};
+ $scope.dashboard = {name:'',owner:$scope.currentUser._id};
+ console.log('$scope.dashboard',$scope.dashboard);
 }
 
 
@@ -243,7 +244,7 @@ $scope.optionsAlerts.chart.color =  ['#CB4B16'];
 $scope.optionsAlerts.chart.y = function(d){ return d.sum; };
 
 $scope.optionsGoals = angular.copy($scope.options);
-$scope.optionsGoals.chart.color =  function(d){  return  calLibrary.giveMeMyColor(d.count); };
+$scope.optionsGoals.chart.color =  function(d){  return  myLibrary.giveMeMyColor(d.count); };
 
   $scope.optionsConfidence = angular.copy($scope.options);
   $scope.optionsConfidence.chart.color =  ['#bcbd22'];

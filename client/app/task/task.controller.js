@@ -8,7 +8,17 @@ angular.module('boardOsApp')
   $scope.task = {};
   $scope.taskAlreadyExist = {id:null,name:null};
 
-  $scope.load = function() {      
+  $scope.isAdmin = false;
+  Auth.isAdmin(function(data) {
+      $scope.isAdmin = data;
+  });
+
+  $scope.isManager = false;
+  Auth.isManager(function(data) {
+     $scope.isManager = data;
+  });
+
+  $scope.loadTask = function() {      
     if ($stateParams.id) {
       $http.get('/api/tasks/'+$stateParams.id).success(function (data) { 
         $scope.task = data;
@@ -17,7 +27,11 @@ angular.module('boardOsApp')
     } 
   };
 
-  $scope.load();
+  $scope.loadTask();
+
+  $rootScope.$on('reloadTask', function(data) { 
+     $scope.loadTask();
+  });
 
   $scope.changeTab = function (e, tabNb) {
     $('.ver-inline-menu li').removeClass('active');

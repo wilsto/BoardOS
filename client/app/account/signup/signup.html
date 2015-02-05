@@ -1,12 +1,18 @@
-<div ng-include="'components/navbar/navbar.html'"></div>
 
-<div class="container">
-  <div class="row">
-    <div class="col-sm-12">
-      <h1>Sign up</h1>
-    </div>
-    <div class="col-sm-12">
-      <form class="form" name="form" ng-submit="register(form)" novalidate>
+<div class="login">
+  <!-- BEGIN LOGO -->
+  <div class="logo">
+    <a href="index.html">
+    </a>
+  </div>
+  <!-- END LOGO -->
+  <!-- BEGIN LOGIN -->
+  <div class="content">
+   <a href="index.html">
+    <img src="assets/images/logo.png" alt="" class="img-responsive"/>
+  </a> <!-- BEGIN LOGIN FORM -->
+  <div class="alert alert-danger center" style="text-align:center" role="alert"> <h4 >Ask for a new account</h4>Will need an approbation from admin</div>
+   <form class="form" name="form" ng-submit="register(form)" novalidate>
 
         <div class="form-group" ng-class="{ 'has-success': form.name.$valid && submitted,
                                             'has-error': form.name.$invalid && submitted }">
@@ -63,14 +69,14 @@
           </a>
         </div>
 
-        <hr>
-        <div>
+        <hr ng-if="1===2">
+        <div ng-if="1===2">
           <a class="btn btn-google-plus" href="" ng-click="loginOauth('google')">
             <i class="fa fa-google-plus"></i> Connect with Google+
           </a>
         </div>
       </form>
-    </div>
-  </div>
-  <hr>
-</div>
+   </div>
+   <br/><br/><br/>
+ </div>
+

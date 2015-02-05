@@ -189,6 +189,26 @@ angular.module('boardOsApp')
           });
       },
 
+       /**
+        * Check if a user is an manager
+        *   (synchronous|asynchronous)
+        *
+        * @param  {Function|*} callback - optional, function(is)
+        * @return {Bool|Promise}
+        */
+      isManager: function(callback) {
+        if (arguments.length === 0) {
+          return (currentUser.role === 'manager' || currentUser.role === 'admin');
+        }
+
+        return this.getCurrentUser(null)
+          .then(function(user) {
+            var is = (user.role === 'manager' || user.role === 'admin') ;
+            safeCb(callback)(is);
+            return is;
+          });
+      },
+
       /**
        * Get auth token
        *

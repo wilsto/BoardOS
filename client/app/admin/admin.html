@@ -1,5 +1,56 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
+	<div class="pull-right">
+		<button class="btn" ng-show="edit===false" ng-init="edit=false" ng-click="edit=true">Create New User</button>
+		<button class="btn btn-primary" ng-show="edit===true" ng-click="">Save User</button>
+	</div>
+	<div>
+		Search : <input type="text" ng-model="searchFilter" ng-init="searchFilter=null">
+	</div>
 
+<div style="border:1px solid black;padding:15px;padding-top:0px;margin:50px" ng-show="edit===true">
+		<form action="">
+			<div class="row">
+	
+			<div class="col-md-12"> 
+				<h3>Enter User Information</h3>
+				<div class="row">
+					<div class="col-md-4"> 
+						<p class="input-group">
+							<label>User Name</label>
+							<input type="text" name="name" class="form-control"  ng-model="formData.name" >
+							<span class="help-block">
+							</span>
+						</p>
+					</div>
+					<div class="col-md-4">  
+						<p class="input-group">
+							<label>eMail</label>
+							<input type="text" name="email" class="form-control"  ng-model="formData.email" >
+							<span class="help-block">
+							</span>
+						</p>
+					</div>
+					<div class="col-md-4">  
+						<p class="input-group">
+							<label>Role</label>
+							<input type="text" name="role" class="form-control" ng-model="formData.role" typeahead-on-select="$item"  typeahead="role.value for role in roles  | limitTo:8" >
+							<span class="help-block">
+							</span>
+						</p>
+					</div>
+
+				</div>
+				<div class="row">
+					<div class="col-md-12">  
+						<label>comments</label>
+						<textarea name="comments" class="form-control" rows="2" ng-model="formData.comments"></textarea>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+		</form>
+</div>
 <table class="table table-hover members-table middle-align ng-scope">
 	<thead>
 		<tr>
@@ -18,13 +69,23 @@
 			</td>
 			<td class="user-image hidden-xs hidden-sm">
 				<a href="/settings">
-					<img alt="{{user.name}}" ng-src="assets/images/avatars/{{user.name}}.png" style="width:25px" class="img-circle"/>
+					<img alt="{{user.name}}" ng-src="assets/images/avatars/{{user.name}}.png" style="width:25px" class="img-circle" err-src="assets/images/avatars/avatar_small.png"/>
 				</a>
 
 			</td>
 			<td class="user-name">
 				<a href="/settings" class="name">{{user.name}}</a>
-				<span class="pull-right" style="color:lightgrey;margin-right:25px">{{user.role}}</span>
+				<!-- Split button -->
+				<div class="btn-group pull-right">
+				  <button type="button" class="btn btn-xs">{{user.role.charAt(0).toUpperCase() + user.role.slice(1) }}</button>
+				  <button type="button" class="btn btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+				    <span class="caret"></span>
+				    <span class="sr-only">Toggle Dropdown</span>
+				  </button>
+				  <ul class="dropdown-menu" role="menu">
+				    <li ng-repeat="role in roles | orderBy :'text'"><a href="#" ng-click="changeRole(user, role)">{{role.text.charAt(0).toUpperCase() + role.text.slice(1) }}</a></li>
+				  </ul>
+				</div>
 			</td>
 			<td class="hidden-xs hidden-sm">
 				<span class="email">{{user.email}}</span>
@@ -60,6 +121,7 @@
 		</div>
 
 	</div>
+
 </div>
 
 </div><!-- end ngRepeat: tab in tabs -->

@@ -11,8 +11,8 @@ var DashboardSchema = new Schema({
   categories: Schema.Types.Mixed,
   category: String,
   tags: String,
-  username: String,
-  date: String
+  owner: String,
+  date:{ type: Date, default: Date.now }
 }, { strict: false });
 
 module.exports = mongoose.model('Dashboard', DashboardSchema);

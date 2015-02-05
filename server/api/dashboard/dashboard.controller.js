@@ -38,7 +38,8 @@ exports.show = function(req, res) {
     // Get a single dashboard
     var deferred = Q.defer();
     if (typeof req.params.id === 'undefined') {
-      Dashboard.find().lean().exec(function (err, dashboard) {
+      var filterUser = (req.params.userId) ? {owner:req.params.userId}: null;
+      Dashboard.find(filterUser).lean().exec(function (err, dashboard) {
         if(err) { return handleError(res, err); }
         if(!dashboard) { return res.send(404); }
         mDashboard = {context:'',activity:''};
@@ -185,6 +186,7 @@ exports.show = function(req, res) {
 // Creates a new dashboard in the DB.
 exports.create = function(req, res) {
     var newDashboard = new Dashboard(req.body, false);
+    console.log('newDashboard',newDashboard);
     newDashboard.save(function(err, doc) {
       res.send(200, doc);
     });

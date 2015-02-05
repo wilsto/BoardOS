@@ -2,10 +2,11 @@
 'use strict';
 
 angular.module('boardOsApp')
-.controller('KPICtrl', function ($scope,$rootScope, Auth, $http, actionKPI,categoryKPI,groupByKPI,metricTaskFields, listValuesKPI, $stateParams, calLibrary, $location) {
+.controller('KPICtrl', function ($scope,$rootScope, Auth, $http, actionKPI,categoryKPI,groupByKPI,metricTaskFields, listValuesKPI, $stateParams, myLibrary, $location) {
 
 $scope.activeTab = 1;
 $scope.isAdmin = Auth.isAdmin();
+$scope.isManager = Auth.isManager();
 
   $scope.actionKPI = actionKPI;
   $scope.categoryKPI = categoryKPI;

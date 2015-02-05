@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('boardOsApp')
-    .directive('dashboardTab', function(ngDialog, $location, $rootScope, calLibrary, Auth, $http) {
+    .directive('dashboardTab', function(ngDialog, $location, $rootScope, myLibrary, Auth, $http) {
         return {
             templateUrl: 'app/dashboardTab/dashboardTab.html',
             restrict: 'EA',
             scope: {
                 dashboardType: '@',
-                data: '=dashboardData'
+                dashboardData: '='
             },
             link: function(scope, element, attrs) {
 
@@ -15,16 +15,26 @@ angular.module('boardOsApp')
                 /**
                  * Display Table
                  */
-                scope.dataTable = scope.data[scope.dashboardType];
+                
+  scope.$watch('dashboardData', function() {
+    console.log('data change', scope.dashboardData);
+                    scope.dataTable = scope.dashboardData[scope.dashboardType];
+  });
+
+                scope.dataTable = scope.dashboardData[scope.dashboardType];
                 scope.page = $location.path().split('/')[1];
 
                 Auth.isAdmin(function(data) {
-                    //scope.isAdmin = data; A modifier plus tard ?
-                    scope.isAdmin = true;
+                    scope.isAdmin = data;
+                });
+
+                scope.isManager = false;
+                Auth.isManager(function(data) {
+                    scope.isManager = data;
                 });
 
                 scope.giveMeMyColor = function(value, category) {
-                    return calLibrary.giveMeMyColor(value, category);
+                    return myLibrary.giveMeMyColor(value, category);
                 };
 
                 scope.loadHelp = function() {
@@ -57,9 +67,9 @@ angular.module('boardOsApp')
                         kpi.data = [{
                             values: []
                         }];
-                        _.forEach(scope.data.calcul.taskTime, function(value, key) {
+                        _.forEach(scope.dashboardData.calcul.taskTime, function(value, key) {
                             if (value.task === kpi.name) {
-                                kpi.data[0].values = calLibrary.displayLastYear(value.time, 'month', 'valueKPI');
+                                kpi.data[0].values = myLibrary.displayLastYear(value.time, 'month', 'valueKPI');
                             }
                         });
                     });
@@ -108,7 +118,7 @@ angular.module('boardOsApp')
                         kpi.data = [{
                             values: []
                         }];
-                        kpi.data[0].values = calLibrary.displayLastYear(kpi.calcul.time, 'month', 'valueKPI');
+                        kpi.data[0].values = myLibrary.displayLastYear(kpi.calcul.time, 'month', 'valueKPI');
                     });
 
                     scope.options = {
@@ -189,8 +199,8 @@ angular.module('boardOsApp')
                   $scope.formData =  (scope.dataTable.length === 0) ? {} : _.clone(_.last(_.sortBy(scope.dataTable,'date')),true);
                   delete $scope.formData._id ;
                   $scope.formData.date = new Date();
-                  $scope.formData.activity = scope.data.activity; 
-                  $scope.formData.context = scope.data.context;
+                  $scope.formData.activity = scope.dashboardData.activity; 
+                  $scope.formData.context = scope.dashboardData.context;
                 }
 
                 $scope.showWeeks = true;
@@ -198,7 +208,7 @@ angular.module('boardOsApp')
                 $scope.today = function() {
                   $scope.date = new Date();
                 };
-                            $scope.today();
+                $scope.today();
 
                 $scope.toggleWeeks = function () {
                   $scope.showWeeks = ! $scope.showWeeks;
@@ -251,21 +261,18 @@ angular.module('boardOsApp')
                   delete $scope.formData.___v;
                   if ($scope.formData._id) {
                     $http.put('/api/metrics/'+$scope.formData._id, $scope.formData).success(function(data) {
-
-                        var logInfo = 'A Metric for Task "' + scope.data.name + '" was updated';
+                        var logInfo = 'A Metric for Task "' + scope.dashboardData.name + '" was updated';
                         $http.post('/api/logs', {info:logInfo, actor:$scope.currentUser});
                         $.growl({  icon: 'fa fa-info-circle',  message:logInfo});
-
+                        $rootScope.$broadcast('reloadTask','data');
                         $scope.closeThisDialog();
                     });
                   }else{
                     $http.post('/api/metrics', $scope.formData).success(function(data) {
-
-                        var logInfo = 'A Metric for Task "' + scope.data.name + '" was created';
+                        var logInfo = 'A Metric for Task "' + scope.dashboardData.name + '" was created';
                         $http.post('/api/logs', {info:logInfo, actor:$scope.currentUser});
                         $.growl({  icon: 'fa fa-info-circle',  message:logInfo});
-
-                        scope.dataTable.push($scope.formData);
+                        $rootScope.$broadcast('reloadTask','data');
                         $scope.closeThisDialog();
                     });
                   }

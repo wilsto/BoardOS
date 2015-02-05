@@ -8,7 +8,7 @@ angular.module('boardOsApp')
     $scope.dashboards = [];
 
     $scope.load = function() {
-      $http.get('/api/dashboards').success(function(dashboards) {
+      $http.get('/api/dashboards/user/'+$scope.currentUser._id).success(function(dashboards) {
         $scope.dashboards = dashboards.dashboards;
         $scope.tasks = dashboards.tasks;
       });
@@ -30,4 +30,16 @@ angular.module('boardOsApp')
         });
       }
 		};
+
+  $scope.deleteDashboard = function(dashboard,index) {
+    bootbox.confirm('Are you sure?', function(result) {
+      if (result) {
+        $http.delete('/api/dashboards/' + dashboard._id).success(function () {
+          $scope.dashboards.splice(index, 1);
+          $.growl({  icon: 'fa fa-info-circle',  message:'Dashboard "' + dashboard.name + '" was deleted'});
+        });
+      }
+    }); 
+  }; 
+
   });

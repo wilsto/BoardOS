@@ -4,6 +4,7 @@ var User = require('./user.model');
 var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
+var postmark = require('postmark')('308974d8-3847-4675-8666-9dd2feadcfc4');
 
 var validationError = function(res, err) {
   return res.json(422, err);
@@ -30,6 +31,13 @@ exports.create = function (req, res, next) {
   newUser.save(function(err, user) {
     if (err) return validationError(res, err);
     var token = jwt.sign({_id: user._id }, config.secrets.session, { expiresInMinutes: 60*5 });
+
+    postmark.send({
+        'From': 'willy@stophe.fr', 
+        'To': user.email, 
+        'Subject': 'Registration', 
+        'TextBody': 'Hello ' + user.name + ', Thanks to your registration to BOSS.'
+    });
     res.json({ token: token });
   });
 };
@@ -80,6 +88,21 @@ exports.changePassword = function(req, res, next) {
 };
 
 /**
+ * Change a users role
+ */
+exports.changeRole = function(req, res, next) {
+  var userId = String(req.body.userId);
+  var newRole = String(req.body.newRole);
+  User.findById(userId, function (err, user) {
+      user.role = newRole;
+      user.save(function(err) {
+        if (err) return validationError(res, err);
+        res.send(200);
+      });
+  });
+};
+
+/**
  * Get my info
  */
 exports.me = function(req, res, next) {
@@ -91,6 +114,13 @@ exports.me = function(req, res, next) {
     if (!user) return res.json(401);
     res.json(user);
   });
+};
+
+/**
+ * Get roles
+ */
+exports.getRoles = function(req, res, next) {
+  res.json(config.userRoles);
 };
 
 /**

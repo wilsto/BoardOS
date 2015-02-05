@@ -1,7 +1,24 @@
 'use strict';
 
-angular.module('boardOsApp').factory('calLibrary', function() {
+angular.module('boardOsApp').factory('myLibrary', function() {
+	var pleaseWaitDiv = $('<div class="modal" style="padding-top:25%" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false"> \
+		<div style="margin-left:30%; margin-right:30%">\
+		<div class="modal-body" style="background:white;border-radius:10px;"> \
+		<h2 style="margin-top:-5px">Processing...</h2> \
+		<div class="progress "> \
+		<div class="progress-bar progress-bar-striped active" style="width: 100%;"></div> \
+		</div>\
+		</div>\
+		</div>\
+		</div>');
+
 	var sdo = {
+		showPleaseWait: function() {
+			pleaseWaitDiv.modal();
+		},
+		hidePleaseWait: function () {
+			pleaseWaitDiv.modal('hide');
+		},
 		giveMeMyColor: function (value, category) {
 
 			if (category === 'Alert') {

@@ -151,7 +151,7 @@
 						<input type="text" class="pull-right form-control" datepicker-popup="{{format}}" ng-model="formData.date" is-open="opened1" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer" ng-click="open1($event)"/>
 					</div>
 					<div class="col-md-1">
-						<img alt="{{formData.actor}}" ng-src="assets/images/avatars/{{formData.actor}}.png" style="width:50px" class="img-circle"/>
+						<img alt="{{formData.actor}}" ng-src="assets/images/avatars/{{formData.actor}}.png" style="width:50px" class="img-circle" err-src="assets/images/avatars/avatar_small.png"/>
 					</div>
 				</div>
 			</div>
@@ -261,14 +261,14 @@
 			<tr>
 				<th>Name</th>
 				<th ng-if="page === 'KPI'" >KPI Status</th>
-				<th ><a href="task/" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus"></span></a></th>
+				<th ng-if="isManager"><a href="task/" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus" ></span></a></th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr ng-repeat="task in dataTable | filter:search | orderBy:'name' track by $index" ng-show="task._id">
 				<td> <div class="desc" popover-html-unsafe="Context : {{task.context}} </p>  Activity : {{task.activity}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="right" popover-delay ="1000"><a href="/task/{{task._id}}" >{{task.name}}</a></div></td>
 				<td  ng-if="page === 'KPI'" ><nvd3 options="options" data="task.data"></nvd3></td>
-				<td style="width:25px">
+				<td style="width:25px" ng-if="isManager">
 					<a ng-href="task/{{task._id}}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></button>
 					</td>
 				</tr>
@@ -295,7 +295,7 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="metric in dataTable | filter:search | orderBy:'date' track by $index" ng-show="metric._id"  on-finish-render>
-					<td><img alt="{{metric.actor}}" ng-src="assets/images/avatars/{{metric.actor}}.png" style="width:25px" class="img-circle"/></td>
+					<td><img alt="{{metric.actor}}" ng-src="assets/images/avatars/{{metric.actor}}.png" style="width:25px" class="img-circle" err-src="assets/images/avatars/avatar_small.png"/></td>
 					<td>{{metric.date | date:'shortDate'}}</td>
 					<td><div class="desc" popover-html-unsafe="Context : {{metric.context}} </p>  Activity : {{metric.activity}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="right" popover-delay ="1000"><i class="fa fa-recycle"></i></div></td>
 					<td>{{metric.startDate | date:'shortDate'}}</td>
@@ -316,7 +316,7 @@
 		<!--############-->  
 		<div class="row"  ng-if="dashboardType === 'actors'">
 			<div class="col-md-12 user-info" ng-repeat="actor in dataTable">
-				<img alt="" ng-src="assets/images/avatars/{{actor.name}}.png" style="width:45px" class="img-circle"/>
+				<img alt="" ng-src="assets/images/avatars/{{actor.name}}.png" style="width:45px" class="img-circle" err-src="assets/images/avatars/avatar_small.png"/>
 				<div class="details">
 					<div>
 						<a href="#">{{actor.name}}</a>

@@ -29,7 +29,6 @@ exports.index = function(req, res) {
 
 // Get list of tasks
 exports.search = function(req, res) {
-  console.log('req.query',req.query.activity);
   Task.find({activity:req.query.activity, context:req.query.context},function (err, tasks) {
     if(err) { return handleError(res, err); }
     return res.json(200, tasks);
