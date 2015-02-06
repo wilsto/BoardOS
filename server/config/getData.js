@@ -157,7 +157,7 @@ module.exports = {
 	    mKPI.calcul.taskTime = _.map( mKPI.metricsGroupBy.TaskTime, function(value, key) {     
 	         return {task: key, time:_.map( value, function(value2, key2) {        return {month: key2, valueKPI:tools.calculKPI(value2,mKPI)};      }) };
 	    });
-
+	    
 	    // la liste des acteurs
 	    mKPI.actors = _.map( _.countBy(mKPI.metrics,'actor'), function(value, key) {
 	        return {name: key, count:value};

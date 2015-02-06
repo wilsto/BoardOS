@@ -163,9 +163,17 @@ angular.module('boardOsApp').factory('myLibrary', function() {
 
        		 map_result.reverse(); // par ordre croissant
 
+       		// On ne compte que les array avec des valeurs pour les moyennes
+       		var compactArrays =[];
+       		$.each(arrays, function (keyMap,anArray) {
+       			if (_.compact(anArray).length > 0) {
+       				compactArrays.push(anArray);
+       			}
+       		});
+  
        		// association des deux
        		$.each(map_result, function (keyMap,itemMap) {
-       			itemMap.count = parseInt(result[keyMap] /arrays.length)  ;
+       			itemMap.count = parseInt(result[keyMap] /compactArrays.length)  ;
        			itemMap.sum = result[keyMap] ;
        		});
 

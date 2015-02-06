@@ -337,42 +337,88 @@ function groupByMulti (obj, values, context) {
     },
     calculKPI: function(metrics, kpi) {
 
-        var calcul, calculMain, calculRef, filteredMetrics, filteredRefMetrics;
+        var calcul = null;
+        var calculMain, calculRef, filteredMetrics, filteredRefMetrics;
         var action = kpi.action.toLowerCase();
         var values = kpi.metricTaskValues && kpi.metricTaskValues.split(' + ');
         var refValues = kpi.refMetricTaskValues && kpi.refMetricTaskValues.split(' + ');
         var field = kpi.metricTaskField;
         var refField = kpi.refMetricTaskField;
+        var listValues = kpi.listValues;
+        var refListValues = kpi.refListValues;
 
-        if (kpi.whereField) {metrics = _.filter(metrics,function (metric) {return metric[kpi.whereField] === kpi.whereValues })}
 
-        filteredMetrics = _.filter(metrics,function (metric) {return (typeof values === 'undefined' ||  values.length === 0 || typeof metric[field] === 'undefined')? 1 : _.contains(values,metric[field]);});
-        filteredRefMetrics = (refField.toLowerCase() === 'constant') ?  refValues : _.filter(metrics,function (metric) {return  (typeof refValues === 'undefined' ||  refValues.length === 0 || typeof metric[refField] === 'undefined')? 1 : _.contains(refValues,metric[refField]);});
+        // filtrer par where
+        if (kpi.whereField) {
+            metrics = _.filter(metrics,function (metric) {return metric[kpi.whereField] === kpi.whereValues }
+        )}
 
-        // Réaliser des calculs
-        switch(action) {
-          case 'count':
-            calculMain = filteredMetrics.length;
-            calculRef =  (refField.toLowerCase() === 'constant') ? metrics.length : filteredRefMetrics.length;
-            break;                             
-          case 'mean':       
-            var arrayValues = _.compact(_.pluck(filteredMetrics,field).map(Number));
-            if (arrayValues.length) {calculMain = math.mean(_.compact(_.pluck(filteredMetrics,field).map(Number)))}
-            var arrayRefValues = _.compact(_.pluck(filteredRefMetrics,refField).map(Number));
 
-            if (arrayRefValues.length) {
-                calculRef = math.mean(_.compact(_.pluck(filteredMetrics,refField).map(Number)))
-            } else {
-                if (refField.toLowerCase() === 'constant') {calculRef = parseInt(refValues) }
+        if (metrics.length > 0) { // si metric existe
+            // filtrer par valeur
+            filteredMetrics = _.filter(metrics,function (metric) {return (typeof values === 'undefined' ||  values.length === 0 || typeof metric[field] === 'undefined') ? 1 : _.contains(values,metric[field]);});
+            filteredRefMetrics = (refField.toLowerCase() === 'constant') ?  refValues : _.filter(metrics,function (metric) {return  (typeof refValues === 'undefined' ||  refValues.length === 0 || typeof metric[refField] === 'undefined')? 1 : _.contains(refValues,metric[refField]);});
+        
+            // filtrer par Liste (first, last, all)
+            // console.log('filteredMetrics',filteredMetrics.length);
+            // console.log('listValues',listValues);
+            switch (listValues) {
+                case 'AllValues':
+                case 'UniqueValues':
+                case 'LastValue':
+                    filteredMetrics = [_.last(filteredMetrics)];
+                    break;
+                case 'FirstValue':
+                    filteredMetrics = [_.first(filteredMetrics)];
+                    break;
+                case 'ValuesLessThan':
+                case 'ValuesMoreThan':
             }
-            break;        
-        }
+            // console.log('filteredMetrics2',filteredMetrics.length);
 
-        switch (kpi.category) {
-            case 'Goal' : calcul = parseInt((calculMain / calculRef) *100);break;
-            case 'Alert' : calcul = parseInt(calculMain);break;
-        }
+            // filtrer reference par Liste (first, last, all)
+            // console.log('filteredRefMetrics',filteredRefMetrics.length);
+            // console.log('refListValues',refListValues);
+            switch (refListValues) {
+                case 'AllValues':
+                case 'UniqueValues':
+                case 'LastValue':
+                    filteredRefMetrics = [_.last(filteredRefMetrics)];
+                    break;
+                case 'FirstValue':
+                    filteredRefMetrics = [_.first(filteredRefMetrics)];
+                    break;
+                case 'ValuesLessThan':
+                case 'ValuesMoreThan':
+            }
+            // console.log('filteredRefMetrics2',filteredRefMetrics.length);
 
+            // Réaliser des calculs
+            switch(action) {
+              case 'count':
+                calculMain = filteredMetrics.length;
+                calculRef =  (refField.toLowerCase() === 'constant') ? metrics.length : filteredRefMetrics.length;
+                break;                             
+              case 'mean':       
+                var arrayValues = _.compact(_.pluck(filteredMetrics,field).map(Number));
+                if (arrayValues.length) {calculMain = math.mean(_.compact(_.pluck(filteredMetrics,field).map(Number)))}
+                var arrayRefValues = _.compact(_.pluck(filteredRefMetrics,refField).map(Number));
+
+                if (arrayRefValues.length) {
+                    calculRef = math.mean(_.compact(_.pluck(filteredMetrics,refField).map(Number)))
+                } else {
+                    if (refField.toLowerCase() === 'constant') {calculRef = parseInt(refValues) }
+                }
+                console.log('calculMain',calculMain);
+                console.log('calculRef',calculRef);
+                break;        
+            }
+
+            switch (kpi.category) {
+                case 'Goal' : calcul = parseInt((calculMain / calculRef) *100);break;
+                case 'Alert' : calcul = ((parseInt(calculMain) - parseInt(calculRef)) > 0 ) ? 1 : 0; break;
+            }
+        }
         return calcul;
 
     }

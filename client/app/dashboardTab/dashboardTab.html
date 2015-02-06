@@ -189,7 +189,7 @@
 	<div class="modal-footer">
 		<div style="float:left">
 			<button class="btn btn-alert" ng-click="debug=!debug">Debug Mode</button>
-			<button ng-show='formData._id' class="btn btn-danger" ng-click="DeleteData(formData._id)">Delete Mesure</button>
+			<button ng-show='formData._id' class="btn btn-danger" ng-click="deleteMetric(formData._id)">Delete Mesure</button>
 			<button ng-hide='formData._id' class="btn btn-warning" ng-click="reloadLast()">Reload Last Mesure</button>
 		</div>
 		<div style="float:right">
@@ -259,21 +259,35 @@
 	<table class="table table-striped table-bordered table-advance table-hover"  ng-if="dashboardType === 'tasks'">
 		<thead>
 			<tr>
-				<th>Name</th>
+				<th style="width:20%">Name <br/><small class="pull-right">(Last Metric value)</small></th>
+				<th>Status</th>
+				<th>Start</th>
+				<th>End</th>
+				<th>Progress<br/><small>( %)</small></th>
+				<th>Spent <br/><small>(days)</small></th>
 				<th ng-if="page === 'KPI'" >KPI Status</th>
+				<th ng-if="page === 'KPI'">Last Metric <br/><small>{{dashboardData.metricTaskField}}</small></th>
+				<th ng-if="page === 'KPI'">Reference<br/><small>{{dashboardData.refMetricTaskField}}</small></th>
 				<th ng-if="isManager"><a href="task/" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus" ></span></a></th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr ng-repeat="task in dataTable | filter:search | orderBy:'name' track by $index" ng-show="task._id">
 				<td> <div class="desc" popover-html-unsafe="Context : {{task.context}} </p>  Activity : {{task.activity}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="right" popover-delay ="1000"><a href="/task/{{task._id}}" >{{task.name}}</a></div></td>
+				<td>{{task.lastmetric.status}}</td>
+				<td>{{task.lastmetric.startDate| date:'shortDate'}}</td>
+				<td>{{task.lastmetric.endDate| date:'shortDate'}}</td>
+				<td>{{task.lastmetric.progress}}</td>
+				<td>{{task.lastmetric.timeSpent}}</td>
 				<td  ng-if="page === 'KPI'" ><nvd3 options="options" data="task.data"></nvd3></td>
+				<td ng-if="page === 'KPI'">{{task.lastmetric[dashboardData.metricTaskField]}}</td>
+				<td ng-if="page === 'KPI'">{{task.lastmetric[dashboardData.refMetricTaskField]}}</td>
 				<td style="width:25px" ng-if="isManager">
 					<a ng-href="task/{{task._id}}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 
 		<!-- table metrics (see ng-if)  -->  
 		<!--############-->  

@@ -87,7 +87,8 @@ module.exports = function (grunt) {
       livereload: {
         files: [
           '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.css',
-          '{.tmp,<%= yeoman.client %>}/app/*.html',
+          '{.tmp,<%= yeoman.client %>}/app/app.css',
+          '{.tmp,<%= yeoman.client %>}/app/app.html',
           '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.html',
           '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.js',
           '!{.tmp,<%= yeoman.client %>}{app,components}/**/*.spec.js',
@@ -395,6 +396,13 @@ module.exports = function (grunt) {
           branch: 'master'
         }
       }
+    },
+
+    // ouvre des commandes shell (exemple ouvrir l'éditeur)
+    shell: {
+        Sublime: {
+            command: '"C:\\Program Files (x86)\\Sublime Text 3\\sublime_text.exe"'
+        }
     },
 
     // Run some tasks in parallel to speed up the build process

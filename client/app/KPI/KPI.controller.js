@@ -59,12 +59,15 @@ $scope.save = function() {
   $scope.KPI.activity = ($scope.KPI.originalActivity === '') ? '' : $scope.KPI.activity;
   $scope.KPI.context = ($scope.KPI.originalContext === '') ? '' : $scope.KPI.context;
   delete $scope.KPI.__v;
+  delete $scope.KPI.actors;
   delete $scope.KPI.originalActivity;
   delete $scope.KPI.originalContext;
   delete $scope.KPI.dashboards;
   delete $scope.KPI.metrics;
   delete $scope.KPI.tasks;
   delete $scope.KPI.kpis;
+  delete $scope.KPI.graphs;
+  delete $scope.KPI.metricsGroupBy;
   delete $scope.KPI.categories;
   delete $scope.KPI.metricValues;
   delete $scope.KPI.metricValuesCal;

@@ -162,7 +162,7 @@ angular.module('boardOsApp')
       });
 } else {
  $scope.dashboard = {name:'',owner:$scope.currentUser._id};
- console.log('$scope.dashboard',$scope.dashboard);
+ 
 }
 
 

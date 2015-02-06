@@ -22,7 +22,7 @@ angular.module('boardOsApp')
 
     $scope.changeRole = function(user, role) {
        $http.put('/api/users/'+user._id+'/role', {userId:user._id, newRole:role.text}).success(function() {
-        console.log('sucess');
+        
         $scope.users = User.query();
      });
     };

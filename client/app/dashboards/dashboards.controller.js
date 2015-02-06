@@ -12,7 +12,7 @@ angular.module('boardOsApp')
     $http.get('/api/dashboards').success(function(dashboards) {
       $scope.alldashboards = dashboards.dashboards;
       $scope.dashboards = dashboards.dashboards;
-      console.log('$scope.dashboards',dashboards);
+      
     });
   };
 

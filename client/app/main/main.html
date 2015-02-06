@@ -1,20 +1,22 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 <div class="row">
     <!-- BEGIN OVERVIEW STATISTIC BARS-->
-    <div class="row stats-overview-cont">
+    <div class="row stats-overview-cont" >
 
-       <div class="col-md-2 col-sm-4">
+       <div class="col-md-2 col-sm-4 " >
         <div class="stats-overview stat-block">
-           <div class="details">
+            <div class="isloading" ng-if="!dataDashboards">Loading <br/><img src="assets/images/ajax-loader_blue.gif"></div>
+            <div class="details " ng-if="dataDashboards">
             <div class="title"><a href="/KPIs"><span style="font-weight:bold;color:#1f77b4">{{dataDashboards.kpis.length}}</span> KPIs</a></div>
-            <nvd3 options="options" data="dataKPIs"></nvd3>
+            <nvd3  options="options" data="dataKPIs" ></nvd3>
         </div>
     </div>
 </div>
 
 <div class="col-md-2 col-sm-4">
-    <div class="stats-overview stat-block" >
-       <div class="details">
+<div class="stats-overview stat-block" >
+                <div class="isloading" ng-if="!dataDashboards">Loading <br/><img src="assets/images/ajax-loader_blue.gif"></div>
+       <div class="details"  ng-if="dataDashboards">
         <div class="title"><a href="/tasks"><span style="font-weight:bold;color:#9467bd">{{dataDashboards.tasks.length}}</span> Tasks</a></div>
         <nvd3 options="optionsTasks" data="dataTasks"></nvd3>
     </div>
@@ -22,16 +24,18 @@
 </div>
 
 <div class="col-md-2 col-sm-4">
-    <div class="stats-overview stat-block">
-       <div class="details">
+<div class="stats-overview stat-block">
+                <div class="isloading" ng-if="!dataDashboards">Loading <br/><img src="assets/images/ajax-loader_blue.gif"></div>
+       <div class="details"  ng-if="dataDashboards">
         <div class="title"><a href="/metrics"><span style="font-weight:bold;color:#87CEEB">{{dataDashboards.metrics.length}}</span> Metrics</a></div>
         <nvd3 options="optionsMetrics" data="dataMetrics"></nvd3>
     </div>
 </div>
 </div>
   <div class="col-md-2 col-sm-4">
-    <div class="stats-overview stat-block">
-     <div class="details">
+ <div class="stats-overview stat-block">
+               <div class="isloading" ng-if="!dataDashboards">Loading <br/><img src="assets/images/ajax-loader_blue.gif"></div>
+     <div class="details"  ng-if="dataDashboards">
       <div class="title"><span style="font-weight:bold;color:#CB4B16">{{alertsNb}}</span> Alerts</div>
       <nvd3 options="optionsAlerts" data="dataAlerts"></nvd3>
     </div>
@@ -39,8 +43,9 @@
 </div>
 
 <div class="col-md-2 col-sm-4">
-  <div class="stats-overview stat-block">
-   <div class="details">
+<div class="stats-overview stat-block">
+              <div class="isloading" ng-if="!dataDashboards">Loading <br/><img src="assets/images/ajax-loader_blue.gif"></div>
+   <div class="details"  ng-if="dataDashboards">
     <div class="title"><span style="font-weight:bold;color:#2CA02C">{{goalsNb}}%</span> Goals</div>
     <nvd3 options="optionsGoals" data="dataGoals"></nvd3>
   </div>
@@ -49,7 +54,8 @@
 
 <div class="col-md-2 col-sm-4">
     <div class="stats-overview stat-block">
-       <div class="details">
+                  <div class="isloading" ng-if="!dataDashboards">Loading <br/><img src="assets/images/ajax-loader_blue.gif"></div>
+ <div class="details"  ng-if="dataDashboards">
         <div class="title"><span style="font-weight:bold;color:#bcbd22">{{confidence}}%</span> Confidence</div>
         <nvd3 options="optionsConfidence" data="dataConfidence"></nvd3>
     </div>
@@ -73,10 +79,10 @@
                 </div>
             </div>
             <div class="portlet-body">
-                <!--BEGIN TABS-->
+                 <div class="isloading" ng-if="!dataDashboards">Loading <br/><img src="assets/images/ajax-loader_blue.gif"></div><!--BEGIN TABS-->
                 <tabset>
                     <tab heading="Metrics">
-                        <div class="scroller" style="height: 300px;overflow:auto" data-always-visible="1" data-rail-visible="0">
+                        <div class="scroller" style="height:300px;overflow:auto" data-always-visible="1" data-rail-visible="0">
                             <ul class="feeds">
                                 <li ng-repeat="task in dataDashboards.tasks | filter:{$:'!Finished'} | orderBy:'timebetween'">
                                     <a ng-href="/task/{{task._id}}">
@@ -245,8 +251,9 @@
         </div>
         <div class="portlet-body">
 
+            <div class="isloading" ng-if="!dataDashboards">Loading <br/><img src="assets/images/ajax-loader_blue.gif"></div>
             <div class="table-scrollable" >
-                <table class="table table-striped  table-hover dataTable no-footer" role="grid">
+                <table class="table table-striped  table-hover dataTable no-footer " role="grid">
                     <thead>
                         <tr role="row">
                             <th style="width:60%">
@@ -262,8 +269,7 @@
                                 Last Info
                             </th>
                         </thead>
-                        <tbody>
-
+                        <tbody class="ajaxContent">
                             <tr role="row" ng-repeat="dashboard in dashboards | orderBy:'name' track by dashboard._id">
                                 <td class="sorting_1">
                                     <div popover-html-unsafe="Context : {{dashboard.context || 'All'}} </p>  Activity : {{dashboard.activity || 'All'}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="left" >

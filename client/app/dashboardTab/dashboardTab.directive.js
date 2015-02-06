@@ -1,46 +1,45 @@
 'use strict';
 
 angular.module('boardOsApp')
-    .directive('dashboardTab', function(ngDialog, $location, $rootScope, myLibrary, Auth, $http) {
-        return {
-            templateUrl: 'app/dashboardTab/dashboardTab.html',
-            restrict: 'EA',
-            scope: {
-                dashboardType: '@',
-                dashboardData: '='
-            },
-            link: function(scope, element, attrs) {
+.directive('dashboardTab', function(ngDialog, $location, $rootScope, myLibrary, Auth, $http) {
+    return {
+        templateUrl: 'app/dashboardTab/dashboardTab.html',
+        restrict: 'EA',
+        scope: {
+            dashboardType: '@',
+            dashboardData: '='
+        },
+        link: function(scope, element, attrs) {
 
-                 scope.helpCategory = 'General';
+           scope.helpCategory = 'General';
                 /**
                  * Display Table
                  */
-                
-  scope.$watch('dashboardData', function() {
-    console.log('data change', scope.dashboardData);
+
+                 scope.$watch('dashboardData', function() {
                     scope.dataTable = scope.dashboardData[scope.dashboardType];
-  });
+                });
 
-                scope.dataTable = scope.dashboardData[scope.dashboardType];
-                scope.page = $location.path().split('/')[1];
+                 scope.dataTable = scope.dashboardData[scope.dashboardType];
+                 scope.page = $location.path().split('/')[1];
 
-                Auth.isAdmin(function(data) {
+                 Auth.isAdmin(function(data) {
                     scope.isAdmin = data;
                 });
 
-                scope.isManager = false;
-                Auth.isManager(function(data) {
+                 scope.isManager = false;
+                 Auth.isManager(function(data) {
                     scope.isManager = data;
                 });
 
-                scope.giveMeMyColor = function(value, category) {
+                 scope.giveMeMyColor = function(value, category) {
                     return myLibrary.giveMeMyColor(value, category);
                 };
 
                 scope.loadHelp = function() {
                     $http.get('/api/helps').success(function(helps)  {
                       scope.helps = helps ; 
-                    });
+                  });
                 };
 
                 scope.createNewHelp = function() {
@@ -52,7 +51,6 @@ angular.module('boardOsApp')
 
                 if (scope.dashboardType === 'help') {
                     scope.loadHelp();
-
                 }
 
                 scope.changeTab = function(name) {
@@ -62,18 +60,23 @@ angular.module('boardOsApp')
                 /**
                  * Display DirectBar for Task
                  */
-                if (scope.page === 'KPI' && scope.dashboardType === 'tasks') {
-                    _.forEach(scope.dataTable, function(kpi, key2) {
-                        kpi.data = [{
+                 if (scope.page === 'KPI' && scope.dashboardType === 'tasks') {
+                    _.forEach(scope.dataTable, function(task, key2) {
+                        task.data = [{
                             values: []
                         }];
                         _.forEach(scope.dashboardData.calcul.taskTime, function(value, key) {
-                            if (value.task === kpi.name) {
-                                kpi.data[0].values = myLibrary.displayLastYear(value.time, 'month', 'valueKPI');
+                            if (value.task === task.name) {
+                                task.data[0].values = myLibrary.displayLastYear(value.time, 'month', 'valueKPI');
+                            }
+                        });
+                        _.forEach(scope.dashboardData.metricsGroupBy.Task, function(value, key) {
+                            if (key === task.name) {
+                              task.lastmetric =  _.last(_.sortBy(value, 'date'));
                             }
                         });
                     });
-
+                    console.log('scope.dataTable',scope.dataTable);
                     scope.options = {
                         chart: {
                             type: 'discreteBarChart',
@@ -90,18 +93,36 @@ angular.module('boardOsApp')
                             color: function(d) {
                                 switch (true) {
                                     case d.value === null:
-                                        return ['none'];
+                                    return ['none'];
+                                    break;
                                     case d.value > 66:
-                                        return ['#2ca02c'];
+                                    return ['#2ca02c'];
+                                    break;
+                                    case d.value === 0:
+                                    return ['#008B00'];
+                                    break;
                                     default:
-                                        return ['#CB4B16'];
+                                    return ['#CB4B16'];
                                 }
                             },
                             x: function(d) {
                                 return d.month;
                             },
                             y: function(d) {
-                                return 100;
+                                switch (true) {
+                                    case d.value === null:
+                                    return null;
+                                    break;
+                                    case d.value > 66:
+                                    return 100; 
+                                    break;
+                                     case d.value === 0:
+                                     console.log(d);
+                                    return 100;
+                                    break;
+                                    default:
+                                    return 100;
+                                }
                             },
                             showValues: false,
                             transitionDuration: 500
@@ -113,7 +134,7 @@ angular.module('boardOsApp')
                 /**
                  * Display DirectBar for KPI
                  */
-                if (scope.page === 'dashboard' && scope.dashboardType === 'kpis') {
+                 if (scope.page === 'dashboard' && scope.dashboardType === 'kpis') {
                     _.forEach(scope.dataTable, function(kpi, key) {
                         kpi.data = [{
                             values: []
@@ -137,11 +158,11 @@ angular.module('boardOsApp')
                             color: function(d) {
                                 switch (true) {
                                     case d.value === null:
-                                        return ['none'];
+                                    return ['none'];
                                     case d.value > 66:
-                                        return ['#2ca02c'];
+                                    return ['#2ca02c'];
                                     default:
-                                        return ['#CB4B16'];
+                                    return ['#CB4B16'];
                                 }
                             },
                             x: function(d) {
@@ -179,19 +200,19 @@ angular.module('boardOsApp')
                             }
                         }
                     });
-                };
+};
 
      /**
      * Modal
      */
-      scope.openMetric = function (task, mesure, newItem) {
-                        
-          ngDialog.open({ 
-            template: 'myMesureContent.html',
-            className: 'ngdialog-theme-plain',
-            closeByDocument: false,
-            controller: ['$scope', '$http', '$rootScope', function($scope, $http, $rootScope) {
-              
+     scope.openMetric = function (task, mesure, newItem) {
+
+      ngDialog.open({ 
+        template: 'myMesureContent.html',
+        className: 'ngdialog-theme-plain',
+        closeByDocument: false,
+        controller: ['$scope', '$http', '$rootScope', function($scope, $http, $rootScope) {
+
                 // controller logic
                 $scope.formData = mesure;
 
@@ -201,63 +222,63 @@ angular.module('boardOsApp')
                   $scope.formData.date = new Date();
                   $scope.formData.activity = scope.dashboardData.activity; 
                   $scope.formData.context = scope.dashboardData.context;
-                }
+              }
 
-                $scope.showWeeks = true;
+              $scope.showWeeks = true;
 
-                $scope.today = function() {
+              $scope.today = function() {
                   $scope.date = new Date();
-                };
-                $scope.today();
+              };
+              $scope.today();
 
-                $scope.toggleWeeks = function () {
+              $scope.toggleWeeks = function () {
                   $scope.showWeeks = ! $scope.showWeeks;
-                };
+              };
 
-                $scope.clear = function () {
+              $scope.clear = function () {
                   $scope.date = null;
-                };
+              };
 
                 // Disable weekend selection
                 $scope.disabled = function(date, mode) {
                   return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-                };
+              };
 
-                $scope.toggleMin = function() {
+              $scope.toggleMin = function() {
                   $scope.minDate = ( $scope.minDate ) ? null : new Date();
-                };
-                $scope.toggleMin();
+              };
+              $scope.toggleMin();
 
-                $scope.open1 = function($event) {
+              $scope.open1 = function($event) {
                   $event.preventDefault();
                   $event.stopPropagation();
 
                   $scope.opened1 = true;
-                };
+              };
 
-                $scope.open2 = function($event) {
+              $scope.open2 = function($event) {
                   $event.preventDefault();
                   $event.stopPropagation();
 
                   $scope.opened2 = true;
-                };
+              };
 
-                $scope.open3 = function($event) {
+              $scope.open3 = function($event) {
                   $event.preventDefault();
                   $event.stopPropagation();
 
                   $scope.opened3 = true;
-                };
+              };
 
-                $scope.dateOptions = {
+              $scope.dateOptions = {
                   'year-format': '"yyyy"',
                   'starting-day': 1
-                };
+              };
 
-                $scope.format = 'dd-MMMM-yyyy';
+              $scope.format = 'dd-MMMM-yyyy';
 
-                $scope.ok = function () {
-                  
+              $scope.ok = function () {
+
                   delete $scope.formData.___v;
                   if ($scope.formData._id) {
                     $http.put('/api/metrics/'+$scope.formData._id, $scope.formData).success(function(data) {
@@ -267,7 +288,7 @@ angular.module('boardOsApp')
                         $rootScope.$broadcast('reloadTask','data');
                         $scope.closeThisDialog();
                     });
-                  }else{
+                }else{
                     $http.post('/api/metrics', $scope.formData).success(function(data) {
                         var logInfo = 'A Metric for Task "' + scope.dashboardData.name + '" was created';
                         $http.post('/api/logs', {info:logInfo, actor:$scope.currentUser});
@@ -275,16 +296,31 @@ angular.module('boardOsApp')
                         $rootScope.$broadcast('reloadTask','data');
                         $scope.closeThisDialog();
                     });
-                  }
-                };
+                }
+            };
 
-                $scope.cancel = function () {
-                     $scope.closeThisDialog();
-                };
 
-            }]
-          });
-    };
-            }
-        };
-    });
+            $scope.deleteMetric = function(id) {
+              bootbox.confirm('Are you sure?', function(result) {
+                if (result) {
+                  $http.delete('/api/metrics/' + id).success(function () {
+                    var logInfo = 'A Metric for Task "' + scope.dashboardData.name + '" was deleted';
+                    $http.post('/api/logs', {info:logInfo, actor:$scope.currentUser});
+                    $.growl({  icon: 'fa fa-info-circle',  message:logInfo});
+                    $rootScope.$broadcast('reloadTask','data');
+                    $scope.closeThisDialog();
+                  });
+                }
+              }); 
+            }; 
+
+            $scope.cancel = function () {
+               $scope.closeThisDialog();
+           };
+
+       }]
+   });
+};
+}
+};
+});

@@ -6117,3 +6117,10 @@ Profile Page
   font-size:12px;
   margin-top:2px !important;
 }
+
+.isloading{
+  
+  position:relative;
+  text-align:center;
+  height: 70px
+} 
