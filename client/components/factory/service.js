@@ -53,7 +53,7 @@ angular.module('boardOsApp').factory('myLibrary', function() {
 			});
 
 	        map_result.reverse(); // par ordre croissant
-
+	        
 	        $.each(data, function (key,item) {
 	        	$.each(map_result, function (keyMap,itemMap) {
 	        		if (itemMap.month === item[fieldDate]) {
@@ -66,7 +66,6 @@ angular.module('boardOsApp').factory('myLibrary', function() {
 
 	    },
 	    getByMonth: function(data, fieldDate, field) {
-
 	    	var dateResult = [];
 	    	var i;
 	    	var yourDate = new Date();
@@ -87,12 +86,13 @@ angular.module('boardOsApp').factory('myLibrary', function() {
 	    		$.each(map_result, function (keyMap,itemMap) {
 	    			if (itemMap.label === moment(item[fieldDate]).format('YYYY.MM')) {
 	    				itemMap.count += 1;
-	    				itemMap.sum += parseInt(item[field],10);
+	    				itemMap.sum += parseInt(item[field],10) || 0; // gère le cas de NaN
 	    			}
 	    		});
 	    	});
 
 	    	$.each(map_result, function (keyMap,itemMap) {
+	    		itemMap.mean = null;
 	    		if (itemMap.count > 0) {
 	    			itemMap.mean = itemMap.sum / itemMap.count;
 	    		}
@@ -132,18 +132,16 @@ angular.module('boardOsApp').factory('myLibrary', function() {
 			return result;
 		},
 		getCalculByMonth : function(arrays, calculType){
-
 			// some de valerus de tableaux déjà par mois
 			//arrays = [[1,2,3,4,5,6], [1,1,1,1,1,1], [2,2,2,2,2,2]];
 			var result;
 			if (arrays.length > 1 ) {
 				result = _.map(_.zip.apply(_, arrays), function(pieces) {
-					return _.reduce(pieces, function(m, p) {return m+p;}, 0);
+					return _.reduce(pieces, function(m, p) {return (p === null) ? m:m+p;}, null);
 				});
 			} else {
 				result = arrays[0];
 			}
-
 			// mise par mois
 			var dateResult = [];
 			var i;

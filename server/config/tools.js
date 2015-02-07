@@ -347,21 +347,19 @@ function groupByMulti (obj, values, context) {
         var listValues = kpi.listValues;
         var refListValues = kpi.refListValues;
 
-
         // filtrer par where
         if (kpi.whereField) {
-            metrics = _.filter(metrics,function (metric) {return metric[kpi.whereField] === kpi.whereValues }
+            metrics = _.filter(metrics,function (metric) {return metric[kpi.whereField] === kpi.whereValues ;}
         )}
-
 
         if (metrics.length > 0) { // si metric existe
             // filtrer par valeur
             filteredMetrics = _.filter(metrics,function (metric) {return (typeof values === 'undefined' ||  values.length === 0 || typeof metric[field] === 'undefined') ? 1 : _.contains(values,metric[field]);});
             filteredRefMetrics = (refField.toLowerCase() === 'constant') ?  refValues : _.filter(metrics,function (metric) {return  (typeof refValues === 'undefined' ||  refValues.length === 0 || typeof metric[refField] === 'undefined')? 1 : _.contains(refValues,metric[refField]);});
+            
+            //filteredMetrics= _.sortBy(filteredMetrics, function(o) { return o.date; })
         
             // filtrer par Liste (first, last, all)
-            // console.log('filteredMetrics',filteredMetrics.length);
-            // console.log('listValues',listValues);
             switch (listValues) {
                 case 'AllValues':
                 case 'UniqueValues':
@@ -374,11 +372,7 @@ function groupByMulti (obj, values, context) {
                 case 'ValuesLessThan':
                 case 'ValuesMoreThan':
             }
-            // console.log('filteredMetrics2',filteredMetrics.length);
-
             // filtrer reference par Liste (first, last, all)
-            // console.log('filteredRefMetrics',filteredRefMetrics.length);
-            // console.log('refListValues',refListValues);
             switch (refListValues) {
                 case 'AllValues':
                 case 'UniqueValues':
@@ -391,7 +385,6 @@ function groupByMulti (obj, values, context) {
                 case 'ValuesLessThan':
                 case 'ValuesMoreThan':
             }
-            // console.log('filteredRefMetrics2',filteredRefMetrics.length);
 
             // Réaliser des calculs
             switch(action) {
@@ -409,11 +402,8 @@ function groupByMulti (obj, values, context) {
                 } else {
                     if (refField.toLowerCase() === 'constant') {calculRef = parseInt(refValues) }
                 }
-                console.log('calculMain',calculMain);
-                console.log('calculRef',calculRef);
                 break;        
             }
-
             switch (kpi.category) {
                 case 'Goal' : calcul = parseInt((calculMain / calculRef) *100);break;
                 case 'Alert' : calcul = ((parseInt(calculMain) - parseInt(calculRef)) > 0 ) ? 1 : 0; break;

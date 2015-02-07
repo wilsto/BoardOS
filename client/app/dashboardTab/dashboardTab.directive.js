@@ -76,7 +76,6 @@ angular.module('boardOsApp')
                             }
                         });
                     });
-                    console.log('scope.dataTable',scope.dataTable);
                     scope.options = {
                         chart: {
                             type: 'discreteBarChart',
@@ -94,13 +93,10 @@ angular.module('boardOsApp')
                                 switch (true) {
                                     case d.value === null:
                                     return ['none'];
-                                    break;
                                     case d.value > 66:
                                     return ['#2ca02c'];
-                                    break;
                                     case d.value === 0:
                                     return ['#008B00'];
-                                    break;
                                     default:
                                     return ['#CB4B16'];
                                 }
@@ -112,14 +108,11 @@ angular.module('boardOsApp')
                                 switch (true) {
                                     case d.value === null:
                                     return null;
-                                    break;
                                     case d.value > 66:
                                     return 100; 
-                                    break;
                                      case d.value === 0:
-                                     console.log(d);
+                                     
                                     return 100;
-                                    break;
                                     default:
                                     return 100;
                                 }

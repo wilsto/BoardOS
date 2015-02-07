@@ -33,6 +33,7 @@ angular.module('boardOsApp')
 
         var dataGoals = [];
         var dataGoalsTime = [];
+        var kpiAlerts= [];
         var dataAlerts= [];
         _.forEach($scope.dashboard.kpis, function(kpi) {
          if (kpi.category ==='Goal')  {
@@ -40,8 +41,18 @@ angular.module('boardOsApp')
           dataGoals.push(SeriesOfGoals);
           dataGoalsTime.push({name:kpi.constraint,value:_.last(SeriesOfGoals) });
         }
-        if (kpi.category ==='Alert')  {dataAlerts.push(_.pluck(myLibrary.displayLastYear(kpi.calcul.time,'month','valueKPI'),'value'));}
+        if (kpi.category ==='Alert')  {
+            _.forEach(kpi.calcul.taskTime, function(taskbytime) {
+              var alertsByMonth = _.pluck(myLibrary.getByMonth(taskbytime.time, 'month','valueKPI'),'mean');
+              kpiAlerts.push(alertsByMonth);
+              dataAlerts.push(alertsByMonth);
+              kpi.calcul.time = _.map(myLibrary.getCalculByMonth(kpiAlerts), function(data) {
+                return {month:data.label, valueKPI:data.sum};
+              });
+            });
+        }
       });
+
         $scope.dataKPIs[0].values = $scope.predataKPIs;
         $scope.dataTasks[0].values = $scope.predataTasks;
         $scope.dataMetrics[0].values = $scope.predataMetrics;     
