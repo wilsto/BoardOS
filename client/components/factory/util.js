@@ -1,5 +1,5 @@
 'use strict';
 
 function preventCache() {
-	return '?preventCache='+Math.random();
+    return '?preventCache=' + Math.random();
 }
