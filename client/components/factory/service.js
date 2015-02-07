@@ -86,18 +86,15 @@ angular.module('boardOsApp').factory('myLibrary', function() {
 	    		$.each(map_result, function (keyMap,itemMap) {
 	    			if (itemMap.label === moment(item[fieldDate]).format('YYYY.MM')) {
 	    				itemMap.count += 1;
-	    				itemMap.sum += parseInt(item[field],10) || 0; // gère le cas de NaN
+	    				itemMap.sum += parseInt(item[field],10) || null; // gère le cas de NaN
 	    			}
 	    		});
 	    	});
 
 	    	$.each(map_result, function (keyMap,itemMap) {
-	    		itemMap.mean = null;
-	    		if (itemMap.count > 0) {
-	    			itemMap.mean = itemMap.sum / itemMap.count;
-	    		}
+	    		itemMap.mean = parseInt(itemMap.sum / itemMap.count) || null ;
 	    	});
-
+			
 	    	return map_result.reverse();
 	    },
 	    getSumCumul : function(ref, value){
@@ -171,8 +168,9 @@ angular.module('boardOsApp').factory('myLibrary', function() {
   
        		// association des deux
        		$.each(map_result, function (keyMap,itemMap) {
-       			itemMap.count = parseInt(result[keyMap] /compactArrays.length)  ;
-       			itemMap.sum = result[keyMap] ;
+       			itemMap.count = parseInt(result[keyMap] /compactArrays.length) || null ;
+       			itemMap.mean = parseInt(result[keyMap] /compactArrays.length) || null ;
+       			itemMap.sum = result[keyMap]|| null ;
        		});
 
        		return map_result;
