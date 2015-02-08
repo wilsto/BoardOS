@@ -1,6 +1,6 @@
 {
     "name": "board-os",
-    "version": "0.8.6",
+    "version": "0.9.0",
     "main": "server/app.js",
     "dependencies": {
         "body-parser": "~1.5.0",
