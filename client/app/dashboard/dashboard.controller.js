@@ -48,18 +48,21 @@ angular.module('boardOsApp')
                     _.forEach($scope.dashboard.kpis, function(kpi) {
                         var kpiAlerts = [];
                         var kpiGoals = [];
+                        console.log(kpi.name);
                         if (kpi.category === 'Goal') {
                             _.forEach(kpi.calcul.taskTime, function(taskbytime) {
                                 var goalsByMonth = _.pluck(myLibrary.getByMonth(taskbytime.time, 'month', 'valueKPI'), 'mean');
-                                
+                                console.log(taskbytime.task);
+                                console.log('goalsByMonth', goalsByMonth);
+
                                 dataGoals.push(goalsByMonth);
                                 dataGoals4QCT.push({
                                     name: kpi.constraint,
                                     value: _.last(goalsByMonth)
                                 });
                                 kpiGoals.push(goalsByMonth);
-                                
-                                
+
+
                                 kpi.calcul.time = _.map(myLibrary.getCalculByMonth(kpiGoals), function(data) {
                                     return {
                                         month: data.label,
@@ -81,7 +84,7 @@ angular.module('boardOsApp')
                                 });
                             });
                         }
-                        
+
 
                     });
 
@@ -325,7 +328,10 @@ angular.module('boardOsApp')
 
         $scope.optionsGoals = angular.copy($scope.options);
         $scope.optionsGoals.chart.color = function(d) {
-            return myLibrary.giveMeMyColor(d.count);
+            return myLibrary.giveMeMyColor(d.mean);
+        };
+        $scope.optionsGoals.chart.y = function(d) {
+            return d.mean;
         };
 
         $scope.optionsConfidence = angular.copy($scope.options);

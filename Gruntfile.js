@@ -387,7 +387,7 @@ module.exports = function(grunt) {
             },
             github: {
                 options: {
-                    remote: 'https://github.com/wilsto/BoardOS.git',
+                    remote: 'git@github.com:wilsto/BoardOS.git',
                     branch: 'master'
                 }
             },

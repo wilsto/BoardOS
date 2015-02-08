@@ -75,8 +75,7 @@ angular.module('boardOsApp')
                     $scope.dataConfidence[0].values = $scope.predataConfidence;
                     $scope.dataGoals[0].values = myLibrary.getCalculByMonth(dataGoals);
                     $scope.dataAlerts[0].values = myLibrary.getCalculByMonth(dataAlerts);
-
-                    $scope.goalsNb = _.last($scope.dataGoals[0].values).count;
+                    $scope.goalsNb = _.last($scope.dataGoals[0].values).mean;
                     $scope.alertsNb = _.last($scope.dataAlerts[0].values).sum;
                     $scope.confidence = parseInt(_.last($scope.dataConfidence[0].values).mean);
 
@@ -120,11 +119,8 @@ angular.module('boardOsApp')
 
                             if (kpi.category === 'Goal' && kpi.calcul.time && kpi.calcul.time.length > 0) {
                                 dataGoals += _.last(kpi.calcul.time).valueKPI;
-                                
-                                
                                 if (_.last(kpi.calcul.time).valueKPI) {
                                     dashboard.nbGoals += 1;
-                                    
                                 }
                             }
 
@@ -205,9 +201,11 @@ angular.module('boardOsApp')
 
         $scope.optionsGoals = angular.copy($scope.options);
         $scope.optionsGoals.chart.color = function(d) {
-            return myLibrary.giveMeMyColor(d.count);
+            return myLibrary.giveMeMyColor(d.mean);
         };
-
+        $scope.optionsGoals.chart.y = function(d) {
+            return d.mean;
+        };
         $scope.optionsConfidence = angular.copy($scope.options);
         $scope.optionsConfidence.chart.color = ['#bcbd22'];
         $scope.optionsConfidence.chart.y = function(d) {
