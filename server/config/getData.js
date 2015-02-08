@@ -166,12 +166,12 @@ module.exports = {
         mKPI.metricsGroupBy.oldTime = tools.groupByTime(tools.groupMultiBy(mKPI.metrics, ['groupTimeByValue', 'taskname']), 'date', mKPI.metricTaskField);
 
         mKPI.calcul = {};
-        mKPI.calcul.time = _.map(mKPI.metricsGroupBy.Time, function(value, key) {
+        /*        mKPI.calcul.time = _.map(mKPI.metricsGroupBy.Time, function(value, key) {
             return {
                 month: key,
                 valueKPI: tools.calculKPI(value, mKPI)
             };
-        });
+        });*/
         mKPI.calcul.task = _.map(mKPI.metricsGroupBy.Task, function(value, key) {
             return {
                 task: key,

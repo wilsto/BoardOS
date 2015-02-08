@@ -37,16 +37,21 @@ angular.module('boardOsApp')
                     $scope.predataConfidence = myLibrary.getByMonth(dashboards.metrics, 'date', 'trust');
 
                     var dataGoals = [];
-                    var dataGoalsTime = [];
-                    var kpiAlerts = [];
                     var dataAlerts = [];
                     _.forEach(dashboards.kpis, function(kpi) {
+                        var kpiGoals = [];
+                        var kpiAlerts = [];
                         if (kpi.category === 'Goal') {
-                            var SeriesOfGoals = _.pluck(myLibrary.displayLastYear(kpi.calcul.time, 'month', 'valueKPI'), 'value');
-                            dataGoals.push(SeriesOfGoals);
-                            dataGoalsTime.push({
-                                name: kpi.constraint,
-                                value: _.last(SeriesOfGoals)
+                            _.forEach(kpi.calcul.taskTime, function(taskbytime) {
+                                var goalsByMonth = _.pluck(myLibrary.getByMonth(taskbytime.time, 'month', 'valueKPI'), 'mean');
+                                dataGoals.push(goalsByMonth);
+                                kpiGoals.push(goalsByMonth);
+                                kpi.calcul.time = _.map(myLibrary.getCalculByMonth(kpiGoals), function(data) {
+                                    return {
+                                        month: data.label,
+                                        valueKPI: data.mean
+                                    };
+                                });
                             });
                         }
                         if (kpi.category === 'Alert') {
@@ -82,9 +87,11 @@ angular.module('boardOsApp')
                         var dataGoals = 0;
                         var dataAlerts = 0;
 
+                        // pour chaque KPI du dashboard
                         _.forEach(dashboard.kpis, function(kpi, key) {
                             var kpiGoals = [];
                             var kpiAlerts = [];
+
                             if (kpi.category === 'Goal') {
                                 _.forEach(kpi.calcul.taskTime, function(taskbytime) {
                                     var goalsByMonth = _.pluck(myLibrary.getByMonth(taskbytime.time, 'month', 'valueKPI'), 'mean');
@@ -111,15 +118,17 @@ angular.module('boardOsApp')
                                 });
                             }
 
-                            if (kpi.category === 'Goal' && kpi.calcul.time.length > 0) {
-
+                            if (kpi.category === 'Goal' && kpi.calcul.time && kpi.calcul.time.length > 0) {
                                 dataGoals += _.last(kpi.calcul.time).valueKPI;
+                                
+                                
                                 if (_.last(kpi.calcul.time).valueKPI) {
                                     dashboard.nbGoals += 1;
+                                    
                                 }
                             }
 
-                            if (kpi.category === 'Alert' && kpi.calcul.time.length > 0) {
+                            if (kpi.category === 'Alert' && kpi.calcul.time && kpi.calcul.time.length > 0) {
                                 dashboard.nbAlerts += 1;
                                 dataAlerts += _.last(kpi.calcul.time).valueKPI;
                             }

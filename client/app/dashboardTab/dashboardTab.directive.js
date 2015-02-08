@@ -139,7 +139,8 @@ angular.module('boardOsApp')
                         kpi.data = [{
                             values: []
                         }];
-                        kpi.data[0].values = myLibrary.displayLastYear(kpi.calcul.time, 'month', 'valueKPI');
+                        //
+                        kpi.data[0].values = myLibrary.displayLastYear(kpi.calcul.time || [], 'month', 'valueKPI');
                     });
 
                     scope.options = {
@@ -230,6 +231,9 @@ angular.module('boardOsApp')
                                 if (typeof $scope.formData === 'undefined') {
                                     $scope.formData = (scope.dataTable.length === 0) ? {} : _.clone(_.last(_.sortBy(scope.dataTable, 'date')), true);
                                     delete $scope.formData._id;
+                                    Auth.getCurrentUser(function(data) {
+                                        $scope.formData.actor = data;
+                                    });
                                     $scope.formData.date = new Date();
                                     $scope.formData.activity = scope.dashboardData.activity;
                                     $scope.formData.context = scope.dashboardData.context;

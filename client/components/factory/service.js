@@ -145,16 +145,31 @@ angular.module('boardOsApp').factory('myLibrary', function() {
         getCalculByMonth: function(arrays, calculType) {
             // some de valerus de tableaux déjà par mois
             //arrays = [[1,2,3,4,5,6], [1,1,1,1,1,1], [2,2,2,2,2,2]];
-            var result;
+            var result, mergeArray;
             if (arrays.length > 1) {
-                result = _.map(_.zip.apply(_, arrays), function(pieces) {
-                    return _.reduce(pieces, function(m, p) {
-                        return (p === null) ? m : m + p;
-                    }, null);
+                mergeArray = _.zip.apply(_, arrays);
+                result = _.map(mergeArray, function(pieces) {
+                    return {
+                        sum: _.reduce(pieces, function(m, p) {
+                            return (p === null) ? m : m + p;
+                        }, null),
+                        count: _.reduce(pieces, function(m, p) {
+                            return (p === null) ? m : m + 1;
+                        }, 0)
+                    };
                 });
             } else {
-                result = arrays[0];
+                mergeArray = arrays[0];
+                result = _.map(mergeArray, function(pieces) {
+                    return {
+                        sum: pieces,
+                        count: (pieces) ? 1 : null
+                    };
+                });
             }
+
+            
+
             // mise par mois
             var dateResult = [];
             var i;
@@ -174,19 +189,11 @@ angular.module('boardOsApp').factory('myLibrary', function() {
 
             map_result.reverse(); // par ordre croissant
 
-            // On ne compte que les array avec des valeurs pour les moyennes
-            var compactArrays = [];
-            $.each(arrays, function(keyMap, anArray) {
-                if (_.compact(anArray).length > 0) {
-                    compactArrays.push(anArray);
-                }
-            });
-
             // association des deux
             $.each(map_result, function(keyMap, itemMap) {
-                itemMap.count = parseInt(result[keyMap] / compactArrays.length) || null;
-                itemMap.mean = parseInt(result[keyMap] / compactArrays.length) || null;
-                itemMap.sum = result[keyMap] || null;
+                itemMap.count = result[keyMap].count || null;
+                itemMap.mean = parseInt(result[keyMap].sum / result[keyMap].count) || null;
+                itemMap.sum = result[keyMap].sum || null;
             });
 
             return map_result;

@@ -43,16 +43,29 @@ angular.module('boardOsApp')
                     $scope.predataConfidence = myLibrary.getByMonth($scope.dashboard.metrics, 'date', 'trust');
 
                     var dataGoals = [];
-                    var dataGoalsTime = [];
-                    var kpiAlerts = [];
+                    var dataGoals4QCT = [];
                     var dataAlerts = [];
                     _.forEach($scope.dashboard.kpis, function(kpi) {
+                        var kpiAlerts = [];
+                        var kpiGoals = [];
                         if (kpi.category === 'Goal') {
-                            var SeriesOfGoals = _.pluck(myLibrary.displayLastYear(kpi.calcul.time, 'month', 'valueKPI'), 'value');
-                            dataGoals.push(SeriesOfGoals);
-                            dataGoalsTime.push({
-                                name: kpi.constraint,
-                                value: _.last(SeriesOfGoals)
+                            _.forEach(kpi.calcul.taskTime, function(taskbytime) {
+                                var goalsByMonth = _.pluck(myLibrary.getByMonth(taskbytime.time, 'month', 'valueKPI'), 'mean');
+                                
+                                dataGoals.push(goalsByMonth);
+                                dataGoals4QCT.push({
+                                    name: kpi.constraint,
+                                    value: _.last(goalsByMonth)
+                                });
+                                kpiGoals.push(goalsByMonth);
+                                
+                                
+                                kpi.calcul.time = _.map(myLibrary.getCalculByMonth(kpiGoals), function(data) {
+                                    return {
+                                        month: data.label,
+                                        valueKPI: data.mean
+                                    };
+                                });
                             });
                         }
                         if (kpi.category === 'Alert') {
@@ -68,6 +81,8 @@ angular.module('boardOsApp')
                                 });
                             });
                         }
+                        
+
                     });
 
                     $scope.dataKPIs[0].values = $scope.predataKPIs;
@@ -77,7 +92,7 @@ angular.module('boardOsApp')
                     $scope.dataGoals[0].values = myLibrary.getCalculByMonth(dataGoals);
                     $scope.dataAlerts[0].values = myLibrary.getCalculByMonth(dataAlerts);
 
-                    var scoreOnQCT = _.chain(dataGoalsTime)
+                    var scoreOnQCT = _.chain(dataGoals4QCT)
                         .flatten()
                         .groupBy(function(value) {
                             return value.name;
@@ -88,7 +103,7 @@ angular.module('boardOsApp')
                             }, 0);
                             return {
                                 name: key,
-                                value: sum / value.length
+                                value: parseInt(sum / value.length)
                             };
                         })
                         .value();
@@ -110,7 +125,7 @@ angular.module('boardOsApp')
                     };
 
 
-                    $scope.goalsNb = _.last($scope.dataGoals[0].values).count;
+                    $scope.goalsNb = _.last($scope.dataGoals[0].values).mean;
                     $scope.alertsNb = _.last($scope.dataAlerts[0].values).sum;
                     $scope.confidence = parseInt(_.last($scope.dataConfidence[0].values).mean);
 

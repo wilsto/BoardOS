@@ -151,39 +151,17 @@
 						<input type="text" class="pull-right form-control" datepicker-popup="{{format}}" ng-model="formData.date" is-open="opened1" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer" ng-click="open1($event)"/>
 					</div>
 					<div class="col-md-1">
-						<img alt="{{formData.actor}}" ng-src="assets/images/avatars/{{formData.actor}}.png" style="width:50px" class="img-circle" err-src="assets/images/avatars/avatar_small.png"/>
+						<img alt="{{formData.actor}}" ng-src="assets/images/avatars/{{formData.actor.name}}.png" style="width:50px" class="img-circle" err-src="assets/images/avatars/avatar_small.png"/>
 					</div>
 				</div>
 			</div>
 		</div>		
 
 		<div ng-show="debug==true">
-
 			SHOW DATA FROM INPUTS AS THEY ARE BEING TYPED 
 			<pre>
 				{{ formData }}
 			</pre>
-			<div class="col-md-4">  <h4 style="font-size:14px">Actor</h4>
-				<p class="input-group">
-					<input type="text" name="actor" class="form-control" ng-model="formData.actor">
-					<span class="help-block">
-					</span>
-
-				</p>
-			</div>
-			<div class="row">
-				<div class="col-md-4"><h4 style="font-size:14px">Entry Date</h4>
-					<p class="input-group">
-						<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.date" is-open="opened1" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer" />
-						<span class="input-group-btn">
-							<button class="btn btn-default" ng-click="open1($event)">
-								<span class="glyphicon glyphicon-chevron-down">
-								</span>
-							</button>
-						</span>
-					</p>
-				</div>
-			</div>
 		</div>
 	</div>
 	<div class="modal-footer">
