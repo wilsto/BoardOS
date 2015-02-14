@@ -80,7 +80,7 @@ module.exports = function(grunt) {
                     '<%= yeoman.client %>/{app,components}/**/*.spec.js',
                     '<%= yeoman.client %>/{app,components}/**/*.mock.js'
                 ],
-                tasks: ['newer:jshint:test', 'karma']
+                tasks: ['newer:jshint:all', 'karma']
             },
             gruntfile: {
                 files: ['Gruntfile.js']
@@ -412,6 +412,24 @@ module.exports = function(grunt) {
             }
         },
 
+        //Bump package version, create tag, commit, push ...
+        bump: {
+            options: {
+                files: ['package.json'],
+                updateConfigs: [],
+                commit: true,
+                commitMessage: 'Release v%VERSION%',
+                commitFiles: ['package.json'],
+                createTag: true,
+                tagName: 'v%VERSION%',
+                tagMessage: 'Version %VERSION%',
+                push: true,
+                pushTo: 'origin master',
+                gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d',
+                globalReplace: false
+            }
+        },
+
         // Run some tasks in parallel to speed up the build process
         concurrent: {
             server: [],
@@ -610,24 +628,45 @@ module.exports = function(grunt) {
         ]);
     });
 
-    grunt.registerTask('build', [
-        'clean:dist',
-        'concurrent:dist',
-        'removelogging',
-        'injector',
-        'wiredep',
-        'useminPrepare',
-        'autoprefixer',
-        'ngtemplates',
-        'concat',
-        'ngAnnotate',
-        'copy:dist',
-        'cdnify',
-        'cssmin',
-        'uglify',
-        'rev',
-        'usemin'
-    ]);
+    grunt.registerTask('build', function(target) {
+        grunt.task.run([
+            'clean:dist',
+            'concurrent:dist',
+            'removelogging',
+            'injector',
+            'wiredep',
+            'useminPrepare',
+            'autoprefixer',
+            'ngtemplates',
+            'concat',
+            'ngAnnotate',
+            'copy:dist',
+            'cdnify',
+            'cssmin',
+            'uglify',
+            'rev',
+            'usemin',
+            'buildcontrol:heroku'
+        ]);
+
+        if (typeof target === 'undefined') {
+            grunt.task.run([
+                'bump'
+            ]);
+        }
+
+        if (target === 'minor') {
+            grunt.task.run([
+                'bump:minor'
+            ]);
+        }
+
+        if (target === 'major') {
+            grunt.task.run([
+                'bump:major'
+            ]);
+        }
+    });
 
     grunt.registerTask('default', [
         'newer:jshint',

@@ -26,7 +26,8 @@
     "moment": "~2.9.0",
     "bootbox": "~4.3.0",
     "bootstrap-markdown": "https://github.com/toopay/bootstrap-markdown.git#~2.8.0",
-    "zingchart": "~0.0.1"
+    "zingchart": "~0.0.1",
+    "angular-confirm-field": "~0.1.2"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",

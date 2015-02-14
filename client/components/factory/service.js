@@ -51,8 +51,9 @@ angular.module('boardOsApp').factory('myLibrary', function() {
             }
 
             var map_result = _.map(dateResult, function(item) {
+                var itemdate = (item.length > 7) ? moment(item).format('YYYY.MM') : item;
                 return {
-                    'month': moment(item).format('YYYY.MM'),
+                    'month': moment(itemdate).format('YYYY.MM'),
                     'value': null
                 };
             });
@@ -79,8 +80,9 @@ angular.module('boardOsApp').factory('myLibrary', function() {
             }
 
             var map_result = _.map(dateResult, function(item) {
+                var itemdate = (item.length > 7) ? moment(item).format('YYYY.MM') : item;
                 return {
-                    'label': moment(item).format('YYYY.MM'),
+                    'label': moment(itemdate).format('YYYY.MM'),
                     'count': 0,
                     'sum': 0,
                     'mean': 0
@@ -89,7 +91,8 @@ angular.module('boardOsApp').factory('myLibrary', function() {
 
             $.each(data, function(key, item) {
                 $.each(map_result, function(keyMap, itemMap) {
-                    if (itemMap.label === moment(item[fieldDate]).format('YYYY.MM')) {
+                    var month = (item[fieldDate].length > 7) ? moment(item[fieldDate]).format('YYYY.MM') : item[fieldDate];
+                    if (itemMap.label === month) {
                         itemMap.count += 1;
                         itemMap.sum += parseInt(item[field], 10) || null; // gère le cas de NaN
                     }
@@ -168,7 +171,7 @@ angular.module('boardOsApp').factory('myLibrary', function() {
                 });
             }
 
-            
+
 
             // mise par mois
             var dateResult = [];
@@ -179,8 +182,9 @@ angular.module('boardOsApp').factory('myLibrary', function() {
             }
 
             var map_result = _.map(dateResult, function(item) {
+                var itemdate = (item.length > 7) ? moment(item).format('YYYY.MM') : item;
                 return {
-                    'label': moment(item).format('YYYY.MM'),
+                    'label': moment(itemdate).format('YYYY.MM'),
                     'count': 0,
                     'sum': 0,
                     'mean': 0
@@ -190,7 +194,7 @@ angular.module('boardOsApp').factory('myLibrary', function() {
             map_result.reverse(); // par ordre croissant
 
             // association des deux
-            $.each(map_result, function(keyMap, itemMap) {
+            angular.forEach(map_result, function(itemMap, keyMap) {
                 itemMap.count = result[keyMap].count || null;
                 itemMap.mean = parseInt(result[keyMap].sum / result[keyMap].count) || null;
                 itemMap.sum = result[keyMap].sum || null;

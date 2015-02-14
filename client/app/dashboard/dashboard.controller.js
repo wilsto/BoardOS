@@ -48,12 +48,12 @@ angular.module('boardOsApp')
                     _.forEach($scope.dashboard.kpis, function(kpi) {
                         var kpiAlerts = [];
                         var kpiGoals = [];
-                        console.log(kpi.name);
+
                         if (kpi.category === 'Goal') {
                             _.forEach(kpi.calcul.taskTime, function(taskbytime) {
                                 var goalsByMonth = _.pluck(myLibrary.getByMonth(taskbytime.time, 'month', 'valueKPI'), 'mean');
-                                console.log(taskbytime.task);
-                                console.log('goalsByMonth', goalsByMonth);
+
+
 
                                 dataGoals.push(goalsByMonth);
                                 dataGoals4QCT.push({
@@ -84,8 +84,6 @@ angular.module('boardOsApp')
                                 });
                             });
                         }
-
-
                     });
 
                     $scope.dataKPIs[0].values = $scope.predataKPIs;
@@ -106,7 +104,9 @@ angular.module('boardOsApp')
                             }, 0);
                             return {
                                 name: key,
-                                value: parseInt(sum / value.length)
+                                value: parseInt(sum / _.filter(value, function(data) {
+                                    return data.value;
+                                }).length)
                             };
                         })
                         .value();

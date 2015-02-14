@@ -9,7 +9,8 @@ angular.module('boardOsApp', [
     'btford.socket-io',
     'ngJsTree',
     'ngDialog',
-    'nvd3'
+    'nvd3',
+    'ng.confirmField'
 ])
     .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
         $urlRouterProvider.otherwise('/');
