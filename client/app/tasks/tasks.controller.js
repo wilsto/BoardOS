@@ -5,15 +5,18 @@ angular.module('boardOsApp')
     .controller('TasksCtrl', function($rootScope, $scope, $http, statusTask, progressStatusTask) {
         $scope.tasks = [];
         $scope.task = {};
-
-        $scope.debug = false;
+        $scope.filterStatus = 'Not Finished';
+        $scope.filterProgressStatus = 'All';
+        $scope.searchText = '';
 
         $rootScope.taskStatus = statusTask;
         $rootScope.progressStatus = progressStatusTask;
 
         $scope.Load = function() {
             $http.get('/api/tasks').success(function(data) {
+                $scope.alltasks = data.tasks;
                 $scope.tasks = data.tasks;
+                $scope.filterTasks();
             });
         };
 
@@ -62,4 +65,24 @@ angular.module('boardOsApp')
 
         $scope.Load();
 
+        $scope.$watch('searchText', function() {
+            $scope.filterTasks();
+        });
+
+        $scope.$watch('filterStatus', function() {
+            $scope.filterTasks();
+        });
+
+        $scope.$watch('filterProgressStatus', function() {
+            $scope.filterTasks();
+        });
+
+        $scope.filterTasks = function() {
+            $scope.tasks = _.filter($scope.alltasks, function(task) {
+                var blnSearchText = ($scope.searchText.length === 0) ? true : task.name.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0 || task.activity.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0 || task.context.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0;
+                var blnStatus = (typeof task.lastmetric === 'undefined') ? true : task.lastmetric.status.toLowerCase().indexOf($scope.filterStatus.replace('All', '').replace('Not Finished', 'o').toLowerCase()) >= 0;
+                var blnProgressStatus = (typeof task.lastmetric === 'undefined') ? true : task.lastmetric.progressStatus.toLowerCase().indexOf($scope.filterProgressStatus.replace('All', '').toLowerCase()) >= 0;
+                return blnSearchText && blnProgressStatus && blnStatus;
+            });
+        };
     });

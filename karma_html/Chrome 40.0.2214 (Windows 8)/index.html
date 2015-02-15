@@ -66,7 +66,7 @@ body { background-color: #eeeeee; padding: 0; margin: 5px; overflow-y: scroll; }
 
 
 	
-	<span class="passingAlert bar">Passing 11 specs</span>
+	<span class="passingAlert bar">Passing 19 specs</span>
 	
 
 
@@ -141,6 +141,43 @@ body { background-color: #eeeeee; padding: 0; margin: 5px; overflow-y: scroll; }
 		
 			<div class="specSummary passed">
 			<span class="description">should activate tab 1</span>
+			</div>
+		
+		</div>
+	
+		<div class="suite passed">
+			<span class="description">Controller: TasksCtrl Filters</span>
+		
+			<div class="specSummary passed">
+			<span class="description">should return all tasks not Finished at start</span>
+			</div>
+		
+			<div class="specSummary passed">
+			<span class="description">should return one task when searchText is a name</span>
+			</div>
+		
+			<div class="specSummary passed">
+			<span class="description">should return one task when searchText is a context</span>
+			</div>
+		
+			<div class="specSummary passed">
+			<span class="description">should return two tasks when searchText is an activity</span>
+			</div>
+		
+			<div class="specSummary passed">
+			<span class="description">should return filtered tasks when filterStatus is changed</span>
+			</div>
+		
+			<div class="specSummary passed">
+			<span class="description">should return filtered tasks when filterProgressStatus is changed</span>
+			</div>
+		
+			<div class="specSummary passed">
+			<span class="description">should combine filters when filterProgressStatus + filterStatus are changed</span>
+			</div>
+		
+			<div class="specSummary passed">
+			<span class="description">should combine filters when filterProgressStatus + filterStatus + searchText are changed</span>
 			</div>
 		
 		</div>

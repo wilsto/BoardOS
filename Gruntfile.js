@@ -92,7 +92,7 @@ module.exports = function(grunt) {
                     '{.tmp,<%= yeoman.client %>}/app/app.html',
                     '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.html',
                     '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.js',
-                    '!{.tmp,<%= yeoman.client %>}{app,components}/**/*.spec.js',
+                    '{.tmp,<%= yeoman.client %>}{app,components}/**/*.spec.js',
                     '!{.tmp,<%= yeoman.client %>}/{app,components}/**/*.mock.js',
                     '<%= yeoman.client %>/assets/images/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}'
                 ],
@@ -419,7 +419,7 @@ module.exports = function(grunt) {
                 updateConfigs: [],
                 commit: true,
                 commitMessage: 'Release v%VERSION%',
-                commitFiles: ['package.json'],
+                commitFiles: ['-a'], // all files
                 createTag: true,
                 tagName: 'v%VERSION%',
                 tagMessage: 'Version %VERSION%',
@@ -630,6 +630,8 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build', function(target) {
         grunt.task.run([
+            'newer:jshint',
+            'test',
             'clean:dist',
             'concurrent:dist',
             'removelogging',
@@ -645,8 +647,7 @@ module.exports = function(grunt) {
             'cssmin',
             'uglify',
             'rev',
-            'usemin',
-            'buildcontrol:heroku'
+            'usemin'
         ]);
 
         if (typeof target === 'undefined') {
@@ -669,8 +670,6 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('default', [
-        'newer:jshint',
-        'test',
         'build'
     ]);
 };

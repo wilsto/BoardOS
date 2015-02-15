@@ -1,78 +1,115 @@
 <div ng-include="'components/navbar/navbar.html'">
 </div>
 
+<div class="actions pull-right" style="padding-right:15px">
+  <div class="btn-group">
+    <a class="btn dropdown-toggle" ng-class="{'btn-default':filterStatus==='All','btn-warning':filterStatus==='In Progress' || filterStatus==='Not Finished','btn-success':filterStatus==='Finished','btn-danger':filterStatus==='Not Started'}" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">  Status : {{filterStatus}} <i class="fa fa-angle-down"></i></a>
+    <ul class="dropdown-menu pull-right">
+      <li>
+        <a href="#" ng-click="filterStatus='All'">All  <span class="badge badge-default"> 4 </span></a>
+      </li>
+      <li>
+        <a href="#" ng-click="filterStatus='Not Started'">Not Started <span class="badge badge-important"> 9 </span></a>
+      </li>
+      <li>
+        <a href="#" ng-click="filterStatus='In Progress'">In Progress  <span class="badge badge-warning"> 4 </span></a>
+      </li>
+      <li>
+        <a href="#" ng-click="filterStatus='Finished'">Finished <span class="badge badge-success"> 12 </span></a>
+      </li>
+      <li>
+        <a href="#" ng-click="filterStatus='Not Finished'">Not Finished <span class="badge badge-warning"> 12 </span></a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="actions pull-right" style="padding-right:15px">
+  <div class="btn-group" >
+    <a class="btn dropdown-toggle" ng-class="{'btn-default':filterProgressStatus==='All','btn-warning':filterProgressStatus==='At Risk','btn-success':filterProgressStatus==='On Time','btn-danger':filterProgressStatus==='Late'}" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">  Time Status : {{filterProgressStatus}} <i class="fa fa-angle-down"></i></a>
+    <ul class="dropdown-menu pull-right">
+      <li>
+        <a href="#" ng-click="filterProgressStatus='All'">All  <span class="badge badge-default"> 4 </span></a>
+      </li>
+      <li>
+        <a href="#" ng-click="filterProgressStatus='Late'">Late<span class="badge badge-important"> 9 </span></a>
+      </li>
+      <li>
+        <a href="#" ng-click="filterProgressStatus='At Risk'">At Risk <span class="badge badge-warning"> 4 </span></a>
+      </li>
+      <li>
+        <a href="#" ng-click="filterProgressStatus='On Time'">On Time <span class="badge badge-success"> 12 </span></a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div style="padding:15px;" >
+  Filter :  <input style="width:100%" ng-model="searchText">
+</div>
 
-<div class="stretch col-md-12" id="home">
-    <div class="portlet tasks-widget">
+<div class="row">
+      <div class="portlet">
         <div class="portlet-title">
-            <div class="caption">
-                <i class="fa fa-check"></i>Tasks
-            </div>
-            <div class="tools">
-                <a href="#portlet-config" data-toggle="modal" class="config"></a>
-                <a href="" class="reload"></a>
-            </div>
-            <div class="actions">
-                <div class="btn-group">
-                    <a class="btn btn-info btn-sm dropdown-toggle" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                       Filter <i class="fa fa-angle-down"></i>
-                   </a>
-                   <ul class="dropdown-menu pull-right">
-                    <li>
-                        <a href="#">Pending <span class="badge badge-warning">
-                          4 </span>
-                      </a>
-                  </li>
-                  <li>
-                    <a href="#">Completed <span class="badge badge-success">
-                      12 </span>
-                  </a>
-              </li>
-              <li>
-                <a href="#">Overdue <span class="badge badge-important">
-                  9 </span>
-              </a>
-          </li>
-      </ul>
-  </div>
-</div>
-</div>
-<div class="portlet-body">
-    <div class="task-content">
-        <div class="scroller" style="height: 100%;" data-always-visible="1" data-rail-visible1="1">
-            <!-- START TASK LIST -->
-            <ul class="task-list">
-                <li ng-repeat="task in tasks track by $index" on-finish-render>
-                    <div class="task-title">
+          <div class="caption">
+            <i class="fa fa-check"></i>Task List
+          </div>
+          <div class="pull-right">
+            <a class="btn btn-primary btn-xs" href="/task/">Create a new task</a>
+          </div>
+        </div>
+        <div class="portlet-body">
+          <table class="table table-striped table-bordered table-hover" id="sample_4">
+            <thead>
+              <tr>
+                <th  style="width:30%">
+                  Name
+                </th>
+                <th class="hidden-xs" >
+                  Start
+                </th>
+                <th class="hidden-xs" >
+                  End
+                </th>
+                <th class="hidden-xs" >
+                  Last Metric
+                </th>
+                <th>
+                  <i class="fa fa-bookmark"></i> Action
+                </th>
+                <th ng-if="isAdmin">
+                  
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="task in tasks | filter:filter()">
+               <td >
+                <a href="/task/{{task._id}}"><div class="desc" popover-html-unsafe="Context : {{task.context}} </p>  Activity : {{task.activity}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="right" popover-delay ="1000">{{task.name}}</div></a>
+               </td>
+               <td class="hidden-xs">
+                        {{task.lastmetric.startDate | date:'mediumDate'}}<br/>
+                       <span class="label label-sm" ng-class="{'label-warning':task.lastmetric.status =='In Progress','label-success':task.lastmetric.status =='Finished','label-danger':task.lastmetric.status =='Not Started'}">
+                         {{task.lastmetric.status}}
+                       </span>
+               </td>
+               <td class="hidden-xs">
+                       {{task.lastmetric.endDate | date:'mediumDate'}}<br/>
+                         <span class="label label-sm" ng-class="{'label-warning':task.lastmetric.progressStatus =='At Risk','label-success':task.lastmetric.progressStatus =='On time','label-danger':task.lastmetric.progressStatus =='Late'}">
+                         {{task.lastmetric.progressStatus}} 
+                       </span>
 
-                        <span class="task-title-sp"> 
-                          &nbsp;&nbsp;<a href="/task/{{task._id}}" >{{task.name}} </a>
-                      </span>&nbsp;&nbsp;
-                      <span class="label label-sm label-default">
-                          {{task.activity}} 
-                      </span>&nbsp;&nbsp;
-                      <span class="label label-sm label-default">
-                          {{task.context}}
-                      </span>
-                      <span class="pull-right leger">
-                        {{task.mesures[task.mesures.length-1].startDate | date:'shortDate'}}&nbsp;&nbsp;
-                        <span class="label label-sm" ng-class="{'label-warning':task.mesures[task.mesures.length-1].status =='In Progress','label-success':task.mesures[task.mesures.length-1].status =='Finished','label-danger':task.mesures[task.mesures.length-1].status =='Late'}">
-                          {{task.mesures[task.mesures.length-1].status}}
-                      </span>
-                      &nbsp;&nbsp;{{task.mesures[task.mesures.length-1].endDate | date:'shortDate'}}&nbsp;&nbsp;
-                      <span class="label label-sm" ng-class="{'label-warning':task.mesures[task.mesures.length-1].progress =='At Risk','label-success':task.mesures[task.mesures.length-1].progress =='On time','label-danger':task.mesures[task.mesures.length-1].progress =='Late'}">
-                          {{task.mesures[task.mesures.length-1].progress}} 
-                      </span>
-                  </span>
-              </div>
-          </li>
-      </ul>
-      <!-- END START TASK LIST -->
-  </div>
+               </td>
+                <td>
+                  <span style="color:grey">{{task.lastmetric.fromNow}}</span>
+               </td>
+               <td>
+                 <button class="btn" ng-click="watchTask(task)">Add on my watchlist</button>
+               </td>
+               <td ng-if="isAdmin">
+                 <button class="btn btn-danger" ng-click="delete(task,$index)">Delete</button>
+               </td>
+             </tr>
+           </tbody>
+         </table>
+       </div>
+     </div>
 </div>
-</div>
-</div>
-
-</div>
-</div>
-
