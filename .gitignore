@@ -4,4 +4,7 @@ public
 .idea
 client/bower_components
 dist
+karma_html
+coverage-results
+newrelic_agent.log
 /server/config/local.env.js
