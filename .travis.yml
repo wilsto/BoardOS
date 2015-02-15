@@ -4,8 +4,4 @@ node_js:
 before_script:
   - npm install -g bower grunt-cli
   - bower install
- script:  
-  - cat ./coverage-results/lcov.info | ./node_modules/.bin/coveralls --verbose
-after_script:
-  - npm run coveralls
 services: mongodb
