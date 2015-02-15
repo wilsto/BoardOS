@@ -18,7 +18,7 @@ mongoose.connect(config.mongo.uri, config.mongo.options);
 var __setOptions = mongoose.Query.prototype.setOptions;
 mongoose.Query.prototype.setOptions = function(options, overwrite) {
     __setOptions.apply(this, arguments);
-    if (this.options.lean == null) this.options.lean = true;
+    if (this.options.lean === null) this.options.lean = true;
     return this;
 };
 
