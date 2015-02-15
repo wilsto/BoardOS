@@ -1,6 +1,6 @@
 {
   "name": "board-os",
-  "version": "0.10.12",
+  "version": "0.10.13",
   "main": "server/app.js",
   "dependencies": {
     "body-parser": "~1.5.0",
@@ -22,6 +22,7 @@
     "moment": "^2.8.4",
     "mongoose": "~3.8.8",
     "morgan": "~1.0.0",
+    "newrelic": "^1.16.2",
     "passport": "~0.2.0",
     "passport-google-oauth": "latest",
     "passport-local": "~0.1.6",
