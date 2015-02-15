@@ -3,16 +3,20 @@
 angular.module('boardOsApp')
     .controller('NavbarCtrl', function($scope, $rootScope, $location, Auth, $http) {
 
-        $http.get('/api/tasks').success(function(tasks) {
-            $scope.navBarTasks = tasks.tasks;
-            $scope.navBarTasks = _.filter(tasks.tasks, function(task) {
-                return task.lastmetric && task.lastmetric.progress < 100;
-            });
-            $scope.navBarTasksAlerts = _.filter(tasks.tasks, function(task) {
-                return task.timebetween <= 0;
-            });
+        $scope.load = function() {
+            $http.get('/api/tasks').success(function(tasks) {
+                $scope.allNavBarTasks = tasks.tasks;
+                $scope.navBarTasks = _.filter(tasks.tasks, function(task) {
+                    return task.lastmetric && task.lastmetric.status !== 'Finished';
+                });
+                $scope.navBarTasksAlerts = _.filter(tasks.tasks, function(task) {
+                    return task.lastmetric && task.lastmetric.progressStatus === 'Late' && task.lastmetric.status !== 'Finished';
+                });
 
-        });
+            });
+        };
+
+        $scope.load();
 
         $scope.logout = function() {
             Auth.logout();

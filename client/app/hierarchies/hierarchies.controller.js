@@ -159,7 +159,9 @@ angular.module('boardOsApp')
                 var parentPath = _.compact(_.map(data.instance._model.data[obj.id].parents.reverse(), function(parent) {
                     return data.instance._model.data[parent].text;
                 })).join('.');
+                
                 $scope.hierarchies[key].longname = (parentPath.length > 0) ? parentPath + '.' + obj.text : obj.text;
+                
             });
         }
 

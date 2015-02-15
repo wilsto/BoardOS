@@ -33,8 +33,8 @@
                             <i class="fa fa-bell"></i>
                           </span>&nbsp;
                           {{taskAlert.name}}
-                          <span class="time pull-right" style="color:red" ng-show="taskAlert.timebetween <= 0 && taskAlert.timebetween !== null ">{{ Math.abs(taskAlert.timebetween) }} days ago</span>
-                          <span class="time pull-right" ng-show="taskAlert.timebetween > 0 && taskAlert.timebetween !== null" >in {{ Math.abs(taskAlert.timebetween) }} days </span>
+                          <span class="time pull-right" style="color:red" ng-show="taskAlert.timebetween <= 0 && taskAlert.timebetween !== null ">{{taskAlert.timebetween}} days ago</span>
+                          <span class="time pull-right" ng-show="taskAlert.timebetween > 0 && taskAlert.timebetween !== null" >in {{taskAlert.timebetween}} days </span>
                           <span class="time pull-right" style="color:orange" ng-show="taskAlert.timebetween === null" > no defined KPI </span>
                         </a>
                       </li>
