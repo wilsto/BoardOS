@@ -18,6 +18,8 @@ module.exports = function(grunt) {
         protractor: 'grunt-protractor-runner',
         injector: 'grunt-asset-injector',
         buildcontrol: 'grunt-build-control',
+        coveralls: 'grunt-coveralls',
+        karmacoveralls: 'grunt-karma-coveralls',
         removelogging: 'grunt-remove-logging'
     });
 
@@ -427,6 +429,20 @@ module.exports = function(grunt) {
                 pushTo: 'origin master',
                 gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d',
                 globalReplace: false
+            }
+        },
+
+        coveralls: {
+            options: {
+                coverageDir: 'coverage-results/',
+
+                // LCOV coverage file relevant to every target
+                src: 'coverage-results/lcov.info',
+
+                // When true, grunt-coveralls will only print a warning rather than
+                // an error, to prevent CI builds from failing unnecessarily (e.g. if
+                // coveralls.io is down). Optional, defaults to false.
+                force: true
             }
         },
 

@@ -9,7 +9,7 @@ module.exports = function(config) {
         // testing framework to use (jasmine/mocha/qunit/...)
         frameworks: ['jasmine'],
 
-        reporters: ['progress', 'growl', 'html'],
+        reporters: ['progress', 'growl', 'html', 'coverage'],
 
         // the default configuration
         htmlReporter: {
@@ -62,6 +62,12 @@ module.exports = function(config) {
             '**/*.jade': 'ng-jade2js',
             '**/*.html': 'html2js',
             '**/*.coffee': 'coffee',
+            'client/app/**/*.js': ['coverage']
+        },
+
+        coverageReporter: {
+            type: 'html',
+            dir: 'coverage-results/'
         },
 
         ngHtml2JsPreprocessor: {
