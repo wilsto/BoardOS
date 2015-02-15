@@ -1,6 +1,6 @@
 {
   "name": "board-os",
-  "version": "0.10.11",
+  "version": "0.10.12",
   "main": "server/app.js",
   "dependencies": {
     "body-parser": "~1.5.0",
@@ -91,6 +91,7 @@
     "karma-phantomjs-launcher": "~0.1.4",
     "karma-requirejs": "~0.2.1",
     "karma-script-launcher": "~0.1.0",
+    "newrelic": "^1.16.2",
     "open": "~0.0.4",
     "requirejs": "~2.1.11",
     "should": "~3.3.1",
