@@ -55,7 +55,7 @@
                </td>
                <td>
                  <button class="btn btn-success" ng-click="pinDashboard(dashboard)" ng-if="dashboard.owner._id !== currentUser._id">Add to myDashboards</button>
-                 <div>Already Yours</div>
+                 <div ng-if="dashboard.owner._id === currentUser._id">Already Yours</div>
                </td>
                <td ng-if="isAdmin">
                  <button class="btn btn-danger" ng-click="delete(dashboard,$index)">Delete</button>
