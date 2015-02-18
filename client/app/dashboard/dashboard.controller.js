@@ -222,7 +222,7 @@ angular.module('boardOsApp')
             } else {
                 $scope.dashboard = {
                     name: '',
-                    owner: $scope.currentUser._id
+                    owner: $scope.currentUser
                 };
 
             }
@@ -249,9 +249,10 @@ angular.module('boardOsApp')
             if (typeof $scope.dashboard._id === 'undefined') {
                 $http.post('/api/dashboards', $scope.dashboard).success(function(data) {
                     var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was created';
+                    
                     $http.post('/api/logs', {
                         info: logInfo,
-                        actor: $scope.currentUser.name
+                        actor: $scope.currentUser
                     });
                     $.growl({
                         icon: 'fa fa-info-circle',
@@ -264,7 +265,7 @@ angular.module('boardOsApp')
                     var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was updated';
                     $http.post('/api/logs', {
                         info: logInfo,
-                        actor: $scope.currentUser.name
+                        actor: $scope.currentUser
                     });
                     $.growl({
                         icon: 'fa fa-info-circle',

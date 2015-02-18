@@ -73,7 +73,7 @@ angular.module('boardOsApp')
                                 var logInfo = 'Task "' + $scope.task.name + '" was created';
                                 $http.post('/api/logs', {
                                     info: logInfo,
-                                    actor: $scope.currentUser.name
+                                    actor: $scope.currentUser
                                 });
                                 $.growl({
                                     icon: 'fa fa-info-circle',
@@ -91,7 +91,7 @@ angular.module('boardOsApp')
                         var logInfo = 'Task "' + $scope.task.name + '" was updated';
                         $http.post('/api/logs', {
                             info: logInfo,
-                            actor: $scope.currentUser.name
+                            actor: $scope.currentUser
                         });
                         $.growl({
                             icon: 'fa fa-info-circle',
@@ -103,12 +103,17 @@ angular.module('boardOsApp')
         };
 
         $scope.delete = function() {
-            bootbox.confirm('Are you sure?', function(result) {
+            bootbox.confirm('Are you sure to delete this task and all associated metrics ? It can NOT be undone.', function(result) {
                 if (result) {
                     $http.delete('/api/tasks/' + $scope.task._id).success(function() {
+                        var logInfo = 'Task "' + $scope.task.name + '" was deleted';
+                        $http.post('/api/logs', {
+                            info: logInfo,
+                            actor: $scope.currentUser
+                        });
                         $.growl({
                             icon: 'fa fa-info-circle',
-                            message: 'task "' + $scope.task.name + '" was deleted'
+                            message: logInfo
                         });
                         $location.path('/tasks');
                     });

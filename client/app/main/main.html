@@ -209,7 +209,9 @@
                         <div class="cont">
                             <div class="cont-col1">
                                 <div >
-                                    <img alt="{{log.actor}}" ng-src="assets/images/avatars/{{log.actor}}.png" style="width:25px" class="img-circle" err-src="assets/images/avatars/avatar_small.png"/>
+                                    <div popover-html-unsafe="{{log.actor.name}}" popover-trigger="mouseenter" popover-title="Name" popover-placement="right" >
+                                    <img ng-src="assets/images/avatars/{{log.actor._id}}.png" style="width:25px" class="img-circle" err-src="assets/images/avatars/avatar_small.png"/>
+                                    </div>
                                 </div>
                             </div>
                             <div class="cont-col2">
@@ -240,7 +242,7 @@
     <div class="portlet">
         <div class="portlet-title">
             <div class="caption">
-                <i class="fa fa-bookmark"></i>Bookmarked Dashboards
+                <i class="fa fa-bookmark"></i>myDashboards
             </div>
             <div class="tools">
                 <a href="" class="collapse"></a>

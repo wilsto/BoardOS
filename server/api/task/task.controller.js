@@ -107,7 +107,9 @@ exports.show = function(req, res) {
                         rowdata.activity = mTask.activity
                     }
                     if (typeof rowdata.context === 'undefined' || mTask.context.indexOf(rowdata.context) >= 0 && typeof rowdata.activity === 'undefined' || mTask.activity.indexOf(rowdata.activity) >= 0) {
-                        mTask.dashboards.push(rowdata.toObject());
+                        if (typeof mTask.dashboards !== 'undefined') {
+                            mTask.dashboards.push(rowdata.toObject());
+                        }
                     }
                 });
                 deferred.resolve(mTask);
@@ -133,7 +135,9 @@ exports.show = function(req, res) {
                         rowdata.activity = mTask.activity
                     }
                     if (rowdata.context.indexOf(mTask.context) >= 0 && rowdata.activity.indexOf(mTask.activity) >= 0) {
-                        mTask.kpis.push(rowdata.toObject());
+                        if (typeof mTask.metrics !== 'undefined') {
+                            mTask.kpis.push(rowdata.toObject());
+                        }
                     }
                 });
                 deferred.resolve(mTask);
@@ -148,7 +152,9 @@ exports.show = function(req, res) {
                 _.each(metric, function(rowdata, index) { // pour chaque enregistrement
                     if (rowdata.context.indexOf(mTask.context) >= 0 && rowdata.activity.indexOf(mTask.activity) >= 0) {
                         rowdata.fromNow = moment(rowdata.date).fromNow();
-                        mTask.metrics.push(rowdata);
+                        if (typeof mTask.metrics !== 'undefined') {
+                            mTask.metrics.push(rowdata);
+                        }
                         var listOfTasks = (typeof req.params.id === 'undefined') ? mTask.tasks : [mTask];
 
                         _.each(listOfTasks, function(taskdata, index) {
@@ -223,15 +229,28 @@ exports.destroy = function(req, res) {
         if (err) {
             return handleError(res, err);
         }
+
         if (!task) {
             return res.send(404);
         }
+
         task.remove(function(err) {
             if (err) {
                 return handleError(res, err);
             }
-            return res.send(204);
+            // supprimer les metrics correspondants
+            Metric.find({
+                'context': task.context,
+                'activity': task.activity
+            }).remove(function(err) {
+                if (err) {
+                    return handleError(res, err);
+                }
+                return res.send(204);
+            });
         });
+
+
     });
 };
 

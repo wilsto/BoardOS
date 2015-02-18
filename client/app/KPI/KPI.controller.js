@@ -90,7 +90,7 @@ angular.module('boardOsApp')
                     var logInfo = 'KPI "' + $scope.KPI.name + '" was created';
                     $http.post('/api/logs', {
                         info: logInfo,
-                        actor: $scope.currentUser.name
+                        actor: $scope.currentUser
                     });
                     $.growl({
                         icon: 'fa fa-info-circle',
@@ -104,7 +104,7 @@ angular.module('boardOsApp')
                     var logInfo = 'KPI "' + $scope.KPI.name + '" was updated';
                     $http.post('/api/logs', {
                         info: logInfo,
-                        actor: $scope.currentUser.name
+                        actor: $scope.currentUser
                     });
                     $.growl({
                         icon: 'fa fa-info-circle',

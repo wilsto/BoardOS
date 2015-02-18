@@ -42,7 +42,7 @@ exports.show = function(req, res) {
             var deferred = Q.defer();
             if (typeof req.params.id === 'undefined') {
                 var filterUser = (req.params.userId) ? {
-                    owner: req.params.userId
+                    'owner._id': req.params.userId
                 } : null;
                 Dashboard.find(filterUser).lean().exec(function(err, dashboard) {
                     if (err) {

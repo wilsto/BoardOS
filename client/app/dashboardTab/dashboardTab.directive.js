@@ -222,8 +222,12 @@ angular.module('boardOsApp')
                         template: 'myMesureContent.html',
                         className: 'ngdialog-theme-plain',
                         closeByDocument: false,
-                        controller: ['$scope', '$http', '$rootScope',
-                            function($scope, $http, $rootScope) {
+                        controller: ['$scope', '$http', '$rootScope', 'Auth',
+                            function($scope, $http, $rootScope, Auth) {
+
+                                Auth.getCurrentUser(function(data) {
+                                    $scope.currentUser = data;
+                                });
 
                                 // controller logic
                                 $scope.formData = mesure;
@@ -298,6 +302,7 @@ angular.module('boardOsApp')
                                     if ($scope.formData._id) {
                                         $http.put('/api/metrics/' + $scope.formData._id, $scope.formData).success(function(data) {
                                             var logInfo = 'A Metric for Task "' + scope.dashboardData.name + '" was updated';
+                                            
                                             $http.post('/api/logs', {
                                                 info: logInfo,
                                                 actor: $scope.currentUser
@@ -328,7 +333,7 @@ angular.module('boardOsApp')
 
 
                                 $scope.deleteMetric = function(id) {
-                                    bootbox.confirm('Are you sure?', function(result) {
+                                    bootbox.confirm('Are you sure to delete this metric ? It can NOT be undone.', function(result) {
                                         if (result) {
                                             $http.delete('/api/metrics/' + id).success(function() {
                                                 var logInfo = 'A Metric for Task "' + scope.dashboardData.name + '" was deleted';

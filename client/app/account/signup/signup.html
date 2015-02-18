@@ -11,7 +11,7 @@
    <a href="index.html">
     <img src="assets/images/logo.png" alt="" class="img-responsive"/>
   </a> <!-- BEGIN LOGIN FORM -->
-  <div class="alert alert-danger center" style="text-align:center" role="alert"> <h4 >Ask for a new account</h4>Will need an approbation from admin</div>
+  <div class="alert alert-danger center" style="text-align:center" role="alert"> <h4 >Ask for a new account</h4>May need an approbation from admin</div>
    <form class="form" name="form" ng-submit="register(form)" novalidate>
 
         <div class="form-group" ng-class="{ 'has-success': form.name.$valid && submitted,
@@ -78,11 +78,11 @@
         </div>
 
         <div>
-          <button class="btn btn-inverse btn-lg btn-login" type="submit">
+          <button class="btn btn-inverse btn-lg btn-primary pull-right" type="submit">
             Sign up
           </button>
           <a class="btn btn-default btn-lg btn-register" href="/login">
-            Login
+            Return to Login
           </a>
         </div>
 

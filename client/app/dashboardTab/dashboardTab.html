@@ -151,24 +151,15 @@
 						<input type="text" class="pull-right form-control" datepicker-popup="{{format}}" ng-model="formData.date" is-open="opened1" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer" ng-click="open1($event)"/>
 					</div>
 					<div class="col-md-1">
-						<img alt="{{formData.actor}}" ng-src="assets/images/avatars/{{formData.actor.name}}.png" style="width:50px" class="img-circle" err-src="assets/images/avatars/avatar_small.png"/>
+						<img alt="{{formData.actor}}" ng-src="assets/images/avatars/{{formData.actor._id}}.png" style="width:50px" class="img-circle" err-src="assets/images/avatars/avatar_small.png"/>
 					</div>
 				</div>
 			</div>
 		</div>		
-
-		<div ng-show="debug==true">
-			SHOW DATA FROM INPUTS AS THEY ARE BEING TYPED 
-			<pre>
-				{{ formData }}
-			</pre>
-		</div>
 	</div>
 	<div class="modal-footer">
 		<div style="float:left">
-			<button class="btn btn-alert" ng-click="debug=!debug">Debug Mode</button>
 			<button ng-show='formData._id' class="btn btn-danger" ng-click="deleteMetric(formData._id)">Delete Mesure</button>
-			<button ng-hide='formData._id' class="btn btn-warning" ng-click="reloadLast()">Reload Last Mesure</button>
 		</div>
 		<div style="float:right">
 			<button class="btn btn-default" ng-click="cancel()">Cancel</button>
@@ -185,6 +176,7 @@
 	<table class="table table-striped table-bordered table-advance table-hover"  ng-if="dashboardType === 'dashboards'">
 		<thead>
 			<tr>
+				<th style="width:25px">Owner</th>
 				<th>Name</th>
 				<th>Activity</th>
 				<th>Context</th>
@@ -192,6 +184,11 @@
 		</thead>
 		<tbody>
 			<tr ng-repeat="dashboard in dataTable | filter:search | orderBy:'name' track by $index" ng-show="dashboard._id">
+				<td style="width:25px">
+				                 <div popover-html-unsafe="Name : <b>{{dashboard.owner.name}}</b> </br> Role : <b>{{dashboard.owner.role}}</b> " popover-trigger="mouseenter" popover-title="Owner Identity" popover-placement="right" >
+				                 				<img alt="" ng-src="assets/images/avatars/{{dashboard.owner._id}}.png" style="width:25px" class="img-circle" err-src="assets/images/avatars/avatar_small.png"/>
+				                 				</div>
+				</td>
 				<td><a href="/dashboard/{{dashboard._id}}" >{{dashboard.name}}</a></td>
 				<td>{{dashboard.activity.replace(data.activity,"#")}}</td>
 				<td>{{dashboard.context.replace(data.context,"#")}}</td>
@@ -287,7 +284,11 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="metric in dataTable | filter:search | orderBy:'date' track by $index" ng-show="metric._id"  on-finish-render>
-					<td><img alt="{{metric.actor}}" ng-src="assets/images/avatars/{{metric.actor}}.png" style="width:25px" class="img-circle" err-src="assets/images/avatars/avatar_small.png"/></td>
+					<td>
+					                 <div popover-html-unsafe="Name : <b>{{metric.actor.name}}</b> </br> Role : <b>{{metric.actor.role}}</b> " popover-trigger="mouseenter" popover-title="Actor Identity" popover-placement="right" >
+					                 <img alt="{{metric.actor}}" ng-src="assets/images/avatars/{{metric.actor._id}}.png" style="width:25px" class="img-circle" err-src="assets/images/avatars/avatar_small.png"/>
+					                 </div>
+					                 </td>
 					<td>{{metric.date | date:'shortDate'}}</td>
 					<td><div class="desc" popover-html-unsafe="Context : {{metric.context}} </p>  Activity : {{metric.activity}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="right" popover-delay ="1000"><i class="fa fa-recycle"></i></div></td>
 					<td>{{metric.startDate | date:'shortDate'}}</td>
@@ -308,13 +309,13 @@
 		<!--############-->  
 		<div class="row"  ng-if="dashboardType === 'actors'">
 			<div class="col-md-12 user-info" ng-repeat="actor in dataTable">
-				<img alt="" ng-src="assets/images/avatars/{{actor.name}}.png" style="width:45px" class="img-circle" err-src="assets/images/avatars/avatar_small.png"/>
+				<img alt="" ng-src="assets/images/avatars/{{actor._id}}.png" style="width:45px" class="img-circle" err-src="assets/images/avatars/avatar_small.png"/>
 				<div class="details">
 					<div>
 						<a href="#">{{actor.name}}</a>
 					</div>
 					<div>
-						{{actor.value}} metrics
+						{{actor.count}} metrics
 					</div>
 				</div>
 			</div>
