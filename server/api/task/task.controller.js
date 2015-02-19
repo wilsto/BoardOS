@@ -44,6 +44,31 @@ exports.search = function(req, res) {
     });
 };
 
+// Get list of tasks
+exports.watch = function(req, res) {
+    Task.findById(req.params.id, function(err, task) {
+        if (err) {
+            return handleError(res, err);
+        }
+        if (typeof task.watchers === 'undefined') {
+            task.watchers = [];
+        }
+        if (_.contains(task.watchers, req.params.userId)) {
+            task.watchers = _.xor(task.watchers, [req.params.userId]);
+        } else {
+            task.watchers.push(req.params.userId);
+        }
+        task.markModified('watchers');
+        task.save(function(err) {
+            if (err) {
+                return handleError(res, err);
+            }
+            return res.json(200, task);
+        });
+    });
+};
+
+
 // Get a single task
 exports.show = function(req, res) {
 

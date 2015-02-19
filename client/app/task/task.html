@@ -35,8 +35,8 @@
                             <a href="#" ng-click="load()"> <i class="fa fa-refresh"></i> Reload Me</a>
                         </li>
                         <li>
-                            <a href="#"> <i class="fa fa-eye"></i> Watch this task <span>
-                                No </span>
+                            <a href="#" ng-click='watchThisTask()'> <i class="fa fa-eye"></i> Watch this task <span>
+                                {{taskIsWatched}}</span>
                             </a>
                         </li>
                     </ul>

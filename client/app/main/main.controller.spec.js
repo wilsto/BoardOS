@@ -1,7 +1,7 @@
 'use strict';
 
 describe('Controller: MainCtrl', function() {
-    var httpBackend, $rootScope, createController, httpResponse;
+    var httpBackend, $rootScope, createController, httpResponse, httpResponseHierarchy, httpResponseLog;
     var HierarchyOnStart, hierarchiesCtrl, scope;
 
     // load the controller's module
@@ -27,16 +27,38 @@ describe('Controller: MainCtrl', function() {
             kpis: [],
             metrics: [{
                 _id: '44525cb2eb285a7417068214',
-                activity: 'DCLIC.CBI.TREND.AD'
+                activity: 'DCLIC.CBI.TREND.AD',
+                actor: {
+                    _id: 'usermetric'
+                },
             }],
             tasks: [{
                 _id: '54786dbf1ff267c8166aeddb',
-                name: 'Define needs'
+                name: 'Define needs',
+                actor: {
+                    _id: 'usertask'
+                },
+                watchers: [{
+                    _id: 'userwatcher'
+                }, ]
             }]
         };
 
-        httpBackend.when('GET', '/api/dashboards/user/idOfUser').respond(httpResponse);
+        httpBackend.when('GET', '/api/dashboards/user/undefined').respond(httpResponse);
 
+
+        httpResponseLog = {
+
+        };
+
+        httpBackend.when('GET', '/api/logs').respond(httpResponseLog);
+
+        httpResponseHierarchy = {
+            list: ['hierarchyX']
+        };
+        httpBackend.when('GET', '/api/hierarchies/list/Context').respond(httpResponseHierarchy);
+        httpBackend.when('GET', '/api/hierarchies/list/Activity').respond(httpResponseHierarchy);
+        httpBackend.when('GET', '/api/hierarchies/list/Axis').respond(httpResponseHierarchy);
         // Get hold of a scope (i.e. the root scope)
         scope = $rootScope.$new();
         createController = function() {
@@ -68,6 +90,19 @@ describe('Controller: MainCtrl', function() {
     it('should define Math', function() {
         var controller = createController();
         expect(scope.Math).toBeDefined();
+    });
+
+
+    it('should define filter for Notification at first', function() {
+        var controller = createController();
+        expect(scope.filterNotification).toBe('Only For Me');
+    });
+
+
+
+    it('should load dashboards', function() {
+        var controller = createController();
+
     });
 
 });

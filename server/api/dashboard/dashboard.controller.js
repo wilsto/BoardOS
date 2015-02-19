@@ -184,9 +184,9 @@ exports.show = function(req, res) {
                 }
             }, function(err, metric) {
                 _.each(metric, function(rowdata, index) {
-                    rowdata = rowdata.toObject()
-                    rowdata.fromNow = moment(rowdata.date).fromNow();
                     if (rowdata.context.indexOf(mDashboard.context) >= 0 && rowdata.activity.indexOf(mDashboard.activity) >= 0) {
+                        rowdata = rowdata.toObject()
+                        rowdata.fromNow = moment(rowdata.date).fromNow();
                         // get last tasks metrics
                         _.each(mDashboard.tasks, function(taskdata, index) {
                             if (rowdata.context === taskdata.context && rowdata.activity === taskdata.activity) { // pour la tache
@@ -196,6 +196,11 @@ exports.show = function(req, res) {
                                 taskdata.timewaited = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / (oneDay)));
                                 taskdata.timebetween = taskdata.timetowait - taskdata.timewaited;
                                 taskdata.lastmetric = rowdata;
+                                if (typeof taskdata.metricActors === 'undefined') {
+                                    taskdata.metricActors = [];
+                                }
+                                taskdata.metricActors.push(rowdata.actor);
+
                             }
                         });
                         mDashboard.metrics.push(rowdata);

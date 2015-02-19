@@ -8,6 +8,7 @@ var TaskSchema = new Schema({
     activity: String,
     context: String,
     actor: Schema.Types.Mixed,
+    watchers: Schema.Types.Mixed,
     tags: String,
     load: String,
     budget: String,

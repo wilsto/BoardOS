@@ -29,8 +29,13 @@ angular.module('boardOsApp')
                         icon: 'fa fa-info-circle',
                         message: 'Task "' + $scope.task.name + '" loaded'
                     });
+                    $scope.updateWatch();
                 });
             }
+        };
+
+        $scope.updateWatch = function() {
+            $scope.taskIsWatched = (_.intersection([$scope.currentUser._id], $scope.task.watchers).length > 0) ? 'YES' : 'NO';
         };
 
         $scope.loadTask();
@@ -43,6 +48,24 @@ angular.module('boardOsApp')
             $('.ver-inline-menu li').removeClass('active');
             $(e.target).closest('li').addClass('active');
             $scope.activeTab = tabNb;
+        };
+
+
+        $scope.watchThisTask = function() {
+            $http.get('/api/tasks/watch/' + $scope.task._id + '/' + $scope.currentUser._id).success(function(data) {
+                $scope.task.watchers = data.watchers;
+                $scope.updateWatch();
+
+                var logInfo = 'Task watch "' + $scope.task.name + '" was updated by ' + $scope.currentUser.name;
+                $http.post('/api/logs', {
+                    info: logInfo,
+                    actor: $scope.currentUser
+                });
+                $.growl({
+                    icon: 'fa fa-info-circle',
+                    message: logInfo
+                });
+            });
         };
 
         $scope.save = function(form) {

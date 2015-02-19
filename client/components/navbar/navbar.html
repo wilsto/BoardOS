@@ -82,7 +82,7 @@
                           <li class="external">
                             <a class="pull-right" href="/tasks" style="color:rgb(31, 119, 180);height:45px">See all tasks <i class="fa fa-angle-right"></i></a>
                           </li>
-                          <li class="external">
+                          <li class="external" ng-if="currentUser.role !== 'user' ">
                             <a href="/task/" style="color:white;background:rgb(31, 119, 180);margin:15px">Create a new task<i class="fa fa-angle-right"></i></a>
                           </li>
                         </ul>

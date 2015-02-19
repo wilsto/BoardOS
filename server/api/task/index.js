@@ -8,6 +8,7 @@ var router = express.Router();
 router.get('/', controller.show);
 router.get('/search', controller.search);
 router.get('/:id', controller.show);
+router.get('/watch/:id/:userId', controller.watch);
 router.post('/', controller.create);
 router.put('/:id', controller.update);
 router.patch('/:id', controller.update);
