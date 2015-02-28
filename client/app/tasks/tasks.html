@@ -3,22 +3,22 @@
 
 <div class="actions pull-right" style="padding-right:15px">
   <div class="btn-group">
-    <a class="btn dropdown-toggle" ng-class="{'btn-default':filterStatus==='All','btn-warning':filterStatus==='In Progress' || filterStatus==='Not Finished','btn-success':filterStatus==='Finished','btn-danger':filterStatus==='Not Started'}" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">  Status : {{filterStatus}} <i class="fa fa-angle-down"></i></a>
+    <a class="btn dropdown-toggle" ng-class="{'btn-default':filterStatus==='All','btn-info':filterStatus==='In Progress' || filterStatus==='Not Finished','btn-success':filterStatus==='Finished','btn-warning':filterStatus==='Not Started'}" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">  Status : {{filterStatus}} <i class="fa fa-angle-down"></i></a>
     <ul class="dropdown-menu pull-right">
       <li>
         <a href="#" ng-click="filterStatus='All'">All  <span class="badge badge-default"> 4 </span></a>
       </li>
       <li>
-        <a href="#" ng-click="filterStatus='Not Started'">Not Started <span class="badge badge-important"> 9 </span></a>
+        <a href="#" ng-click="filterStatus='Not Started'">Not Started <span class="badge badge-warning"> 9 </span></a>
       </li>
       <li>
-        <a href="#" ng-click="filterStatus='In Progress'">In Progress  <span class="badge badge-warning"> 4 </span></a>
+        <a href="#" ng-click="filterStatus='In Progress'">In Progress  <span class="badge badge-info"> 4 </span></a>
       </li>
       <li>
         <a href="#" ng-click="filterStatus='Finished'">Finished <span class="badge badge-success"> 12 </span></a>
       </li>
       <li>
-        <a href="#" ng-click="filterStatus='Not Finished'">Not Finished <span class="badge badge-warning"> 12 </span></a>
+        <a href="#" ng-click="filterStatus='Not Finished'">Not Finished <span class="badge badge-info"> 12 </span></a>
       </li>
     </ul>
   </div>
@@ -87,7 +87,7 @@
                </td>
                <td class="hidden-xs">
                         {{task.lastmetric.startDate | date:'mediumDate'}}<br/>
-                       <span class="label label-sm" ng-class="{'label-warning':task.lastmetric.status =='In Progress','label-success':task.lastmetric.status =='Finished','label-danger':task.lastmetric.status =='Not Started'}">
+                       <span class="label label-sm" ng-class="{'label-info':task.lastmetric.status =='In Progress','label-success':task.lastmetric.status =='Finished','label-warning':task.lastmetric.status =='Not Started'}">
                          {{task.lastmetric.status}}
                        </span>
                </td>

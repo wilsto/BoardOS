@@ -216,7 +216,16 @@ angular.module('boardOsApp')
                             height: 200,
                             width: '100%'
                         });
+                        $scope.errors = null;
+                        $('#context').focusout(function() {
+                            $scope.contextErrorNotAll = ($scope.dashboard.context.toLowerCase() === 'all');
+                        });
+                        $('#activity').focusout(function() {
+                            $scope.activityErrorNotAll = ($scope.dashboard.activity.toLowerCase() === 'all');
+                        });
                     });
+
+
 
                 });
             } else {
@@ -249,7 +258,7 @@ angular.module('boardOsApp')
             if (typeof $scope.dashboard._id === 'undefined') {
                 $http.post('/api/dashboards', $scope.dashboard).success(function(data) {
                     var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was created';
-                    
+
                     $http.post('/api/logs', {
                         info: logInfo,
                         actor: $scope.currentUser

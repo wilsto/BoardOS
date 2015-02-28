@@ -42,7 +42,7 @@ angular.module('boardOsApp')
         };
 
         $scope.pinDashboard = function(dashboard) {
-            dashboard.owner = $scope.currentUser._id;
+            dashboard.owner = $scope.currentUser;
             delete dashboard._id;
             delete dashboard.__v;
             delete dashboard.kpis;

@@ -185,10 +185,10 @@
         </li>
       </ul>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-9" >
       <div class="tab-content">
-        <div id="tab1" class="tab" ng-show="activeTab === 1">
-          <form role="form" class="form-horizontal" action="#">
+        <div id="tab1" class="tab" ng-show="activeTab === 1" class="has-error">
+          <form name="form.myForm" role="form" class="form-horizontal" action="#">
             <div class="form-body">
               <div class="form-group">
                 <label  class="col-md-3 control-label">Name</label>
@@ -199,13 +199,15 @@
               <div class="form-group">
                 <label class="col-md-3 control-label">Context</label>
                 <div class="col-md-9">
-                  <input type="text" placeholder="" class="form-control" ng-model="dashboard.context" typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:8"/>
+                  <input id="context" name="context" type="text" placeholder="ALL" class="form-control" ng-model="dashboard.context" typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:8"/>
+                  <span class="text-danger" ng-show="contextErrorNotAll">Please leave blank if you don't want any filters on this field or choose a predefined context.</span>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-md-3 control-label">Activity</label>
                 <div class="col-md-9">
-                  <input type="text" placeholder="" class="form-control" ng-model="dashboard.activity" typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:8"/>
+                  <input id="activity" name="activity" type="text" placeholder="ALL" class="form-control" ng-model="dashboard.activity" typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:8"/>
+                  <span class="text-danger" ng-show="activityErrorNotAll">Please leave blank if you don't want any filters on this field or choose a predefined activity.</span>
                 </div>
               </div>
               <div class="form-group">

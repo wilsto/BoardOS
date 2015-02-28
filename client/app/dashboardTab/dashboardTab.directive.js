@@ -218,33 +218,33 @@ angular.module('boardOsApp')
                  */
                 scope.openMetric = function(task, mesure, newItem) {
 
+                    $rootScope.currentTask = task;
                     ngDialog.open({
                         template: 'myMesureContent.html',
                         className: 'ngdialog-theme-plain',
                         closeByDocument: false,
                         controller: ['$scope', '$http', '$rootScope', 'Auth',
                             function($scope, $http, $rootScope, Auth) {
-
+                                $scope.errors = {};
                                 Auth.getCurrentUser(function(data) {
                                     $scope.currentUser = data;
                                 });
 
                                 // controller logic
+                                $scope.currentTask = $rootScope.currentTask;
                                 $scope.formData = mesure;
-
                                 if (typeof $scope.formData === 'undefined') {
                                     $scope.formData = (scope.dataTable.length === 0) ? {} : _.clone(_.last(_.sortBy(scope.dataTable, 'date')), true);
                                     delete $scope.formData._id;
                                     Auth.getCurrentUser(function(data) {
                                         $scope.formData.actor = data;
                                     });
-                                    $scope.formData.date = new Date();
+                                    $scope.formData.date = new Date().toISOString();
                                     $scope.formData.activity = scope.dashboardData.activity;
                                     $scope.formData.context = scope.dashboardData.context;
                                 }
 
                                 $scope.showWeeks = true;
-
                                 $scope.today = function() {
                                     $scope.date = new Date();
                                 };
@@ -294,43 +294,57 @@ angular.module('boardOsApp')
                                     'starting-day': 1
                                 };
 
-                                $scope.format = 'dd-MMMM-yyyy';
+                                $scope.format = 'MMM d, y';
 
                                 $scope.ok = function() {
+                                    $scope.submitted = true;
+                                    if ($scope.form.$valid) {
+                                        delete $scope.formData.___v;
+                                        if ($scope.formData._id) {
+                                            $http.put('/api/metrics/' + $scope.formData._id, $scope.formData).success(function(data) {
+                                                var logInfo = 'A Metric for Task "' + scope.dashboardData.name + '" was updated';
 
-                                    delete $scope.formData.___v;
-                                    if ($scope.formData._id) {
-                                        $http.put('/api/metrics/' + $scope.formData._id, $scope.formData).success(function(data) {
-                                            var logInfo = 'A Metric for Task "' + scope.dashboardData.name + '" was updated';
-                                            
-                                            $http.post('/api/logs', {
-                                                info: logInfo,
-                                                actor: $scope.currentUser
+                                                $http.post('/api/logs', {
+                                                    info: logInfo,
+                                                    actor: $scope.currentUser
+                                                });
+                                                $.growl({
+                                                    icon: 'fa fa-info-circle',
+                                                    message: logInfo
+                                                });
+                                                $rootScope.$broadcast('reloadTask', 'data');
+                                                $scope.closeThisDialog();
                                             });
-                                            $.growl({
-                                                icon: 'fa fa-info-circle',
-                                                message: logInfo
+                                        } else {
+                                            $http.post('/api/metrics', $scope.formData).success(function(data) {
+                                                var logInfo = 'A Metric for Task "' + scope.dashboardData.name + '" was created';
+                                                $http.post('/api/logs', {
+                                                    info: logInfo,
+                                                    actor: $scope.currentUser
+                                                });
+                                                $.growl({
+                                                    icon: 'fa fa-info-circle',
+                                                    message: logInfo
+                                                });
+                                                $rootScope.$broadcast('reloadTask', 'data');
+                                                $scope.closeThisDialog();
                                             });
-                                            $rootScope.$broadcast('reloadTask', 'data');
-                                            $scope.closeThisDialog();
-                                        });
-                                    } else {
-                                        $http.post('/api/metrics', $scope.formData).success(function(data) {
-                                            var logInfo = 'A Metric for Task "' + scope.dashboardData.name + '" was created';
-                                            $http.post('/api/logs', {
-                                                info: logInfo,
-                                                actor: $scope.currentUser
-                                            });
-                                            $.growl({
-                                                icon: 'fa fa-info-circle',
-                                                message: logInfo
-                                            });
-                                            $rootScope.$broadcast('reloadTask', 'data');
-                                            $scope.closeThisDialog();
-                                        });
+                                        }
                                     }
                                 };
 
+                                $scope.$watch('formData.progress', function(newValue, oldValue) {
+                                    $scope.formData.status = 'Error';
+                                    if (parseInt(newValue) === 0) {
+                                        $scope.formData.status = 'Not Started';
+                                    }
+                                    if (parseInt(newValue) > 0 && parseInt(newValue) < 100) {
+                                        $scope.formData.status = 'In Progress';
+                                    }
+                                    if (parseInt(newValue) === 100) {
+                                        $scope.formData.status = 'Finished';
+                                    }
+                                });
 
                                 $scope.deleteMetric = function(id) {
                                     bootbox.confirm('Are you sure to delete this metric ? It can NOT be undone.', function(result) {

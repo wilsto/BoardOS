@@ -16,10 +16,12 @@ var moment = require('moment');
 var Task = require('./task.model');
 var Metric = require('../metric/metric.model');
 var KPI = require('../KPI/KPI.model');
+var User = require('../user/user.model');
 var Dashboard = require('../dashboard/dashboard.model');
 var Hierarchies = require('../hierarchy/hierarchy.model');
 var hierarchyValues = {};
 var mTask = {};
+var usersList = [];
 
 // Get list of tasks
 exports.index = function(req, res) {
@@ -103,6 +105,18 @@ exports.show = function(req, res) {
                     deferred.resolve(mTask);
                 })
             }
+            return deferred.promise;
+        })
+        .then(function() {
+            // Get a single user
+            var deferred = Q.defer();
+            User.find({}, '-salt -hashedPassword', function(err, user) {
+                if (err) {
+                    return handleError(res, err);
+                }
+                usersList = user;
+                deferred.resolve(mTask);
+            })
             return deferred.promise;
         })
         .then(function() {
@@ -206,11 +220,16 @@ exports.show = function(req, res) {
             return deferred.promise;
         })
         .then(function() {
-            var actorsObject = _.countBy(mTask.metrics, 'actor');
+            var actorsObject = _.countBy(mTask.metrics, function(metric) {
+                return metric.actor._id;
+            });
             mTask.actors = _.map(actorsObject, function(value, key) {
                 return {
-                    name: key,
-                    count: value
+                    _id: key,
+                    count: value,
+                    name: _.pluck(_.filter(usersList, function(user) {
+                        return (key === user._id.toString())
+                    }), 'name').toString()
                 };
             });
             return res.json(mTask);
@@ -219,10 +238,34 @@ exports.show = function(req, res) {
 
 // Creates a new task in the DB.
 exports.create = function(req, res) {
-    var newTask = new Task(req.body, false);
-    newTask.save(function(err, doc) {
-        res.send(200, doc);
+    var cleanTask = req.body;
+    delete cleanTask.activity_old;
+    delete cleanTask.context_old;
+    var newTask = new Task(cleanTask, false);
+    newTask.save(function(err, task) {
+        var date = new Date();
+        var cleanMetric = {
+            context: cleanTask.context,
+            activity: cleanTask.activity,
+            date: date.toISOString(),
+            actor: cleanTask.actor,
+            status: 'Not Started',
+            startDate: cleanTask.startDate,
+            endDate: cleanTask.endDate,
+            load: cleanTask.load,
+            timeSpent: 0,
+            progress: 0,
+            progressStatus: 'On time',
+            trust: 100
+        };
+
+        var mewMetric = new Metric(cleanMetric, false);
+        mewMetric.save(function(err, metric) {
+            res.send(200, task);
+        });
     });
+
+
 
 };
 
@@ -238,12 +281,33 @@ exports.update = function(req, res) {
         if (!task) {
             return res.send(404);
         }
+
+        // sauvegarder le précédent perimètre pour modifier les métriques
+        var context_old = req.body.context_old;
+        var activity_old = req.body.activity_old;
+        delete req.body.activity_old;
+        delete req.body.context_old;
         var updated = _.merge(task, req.body);
         updated.save(function(err) {
             if (err) {
                 return handleError(res, err);
             }
-            return res.json(200, task);
+            // modifier les metrics correspondants
+            Metric.update({
+                'context': context_old,
+                'activity': activity_old
+            }, {
+                'context': req.body.context,
+                'activity': req.body.activity
+            }, {
+                multi: true
+            }, function(err, metrics) {
+                if (err) return handleError(err);
+                console.log('The number of updated documents was %d', metrics);
+                return res.send(201);
+            });
+
+
         });
     });
 };

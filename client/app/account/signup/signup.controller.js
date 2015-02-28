@@ -7,6 +7,7 @@ angular.module('boardOsApp')
 
         $scope.register = function(form) {
             $scope.submitted = true;
+            
 
             if (form.$valid) {
                 Auth.createUser({

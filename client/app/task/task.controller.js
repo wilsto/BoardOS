@@ -25,6 +25,8 @@ angular.module('boardOsApp')
             if ($stateParams.id) {
                 $http.get('/api/tasks/' + $stateParams.id).success(function(data) {
                     $scope.task = data;
+                    $scope.task.activity_old = data.activity;
+                    $scope.task.context_old = data.context;
                     $.growl({
                         icon: 'fa fa-info-circle',
                         message: 'Task "' + $scope.task.name + '" loaded'
@@ -49,7 +51,6 @@ angular.module('boardOsApp')
             $(e.target).closest('li').addClass('active');
             $scope.activeTab = tabNb;
         };
-
 
         $scope.watchThisTask = function() {
             $http.get('/api/tasks/watch/' + $scope.task._id + '/' + $scope.currentUser._id).success(function(data) {
@@ -120,6 +121,7 @@ angular.module('boardOsApp')
                             icon: 'fa fa-info-circle',
                             message: logInfo
                         });
+                        $scope.loadTask();
                     });
                 }
             }

@@ -412,7 +412,10 @@ module.exports = function(grunt) {
         shell: {
             Sublime: {
                 command: '"C:\\Program Files (x86)\\Sublime Text 3\\sublime_text.exe"'
-            }
+            },
+            changeLog: {
+                command: 'github_changelog_generator -t 5236ed03ca051352289e84a55d551808c150ae98 -u wilsto -p boardos'
+            },
         },
 
         //Bump package version, create tag, commit, push ...
@@ -649,6 +652,7 @@ module.exports = function(grunt) {
         grunt.task.run([
             'newer:jshint',
             'test',
+            //'shell:changeLog',
             'clean:dist',
             'concurrent:dist',
             'removelogging',

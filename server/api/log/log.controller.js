@@ -32,7 +32,6 @@ exports.show = function(req, res) {
 
 // Creates a new log in the DB.
 exports.create = function(req, res) {
-    console.log('req.body', req.body);
     Log.create(req.body, function(err, log) {
         if (err) {
             return handleError(res, err);

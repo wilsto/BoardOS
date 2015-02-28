@@ -1,172 +1,212 @@
 
-
 <!--* Modal Part-->
 <script type="text/ng-template" id="myMesureContent.html">
-	<div class="modal-body">
-		<!-- FORM -->
+<form class="form" name="form" ng-submit="ok()" novalidate>
+    <div class="modal-body">
+        <!-- FORM -->
+        <div class="row" style="margin:-15px">
+            <div class="col-md-4" style='background:lightgrey'>
+                <h3 style="text-align:center; padding-bottom:25px">Task Information</h3>
 
-		<div class="row">
-			<div class="col-md-3" style='background:lightgrey'> 
-				<h3>Task Information</h3>
+                <div class="row" style="margin-top:-5px">
 
-				<div class="col-md-12">  <h4 style="font-size:14px">Context of task</h4>
-					<p class="input-group">
-						<input type="text" name="context" class="form-control"  ng-model="formData.context" >
-
-					</p>
-				</div>
-				<div class="col-md-12">  <h4 style="font-size:14px">Activity of task</h4>
-					<p class="input-group">
-						<input type="text" name="activity" class="form-control"  ng-model="formData.activity" >
-
-					</p>
-				</div>
-				<div class="col-md-12">  <h4 style="font-size:14px">Starting date of task</h4>
-					<p class="input-group">
-						<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.startDate" is-open="opened2" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer"  />
-						<span class="input-group-btn">
+                        <h4 style="padding-left:10px"> Start date</h4>
+                    <div class="col-md-6" style="text-align:center">
+                        <h4 style="font-size:14px"><span class="fa fa-dot-circle-o"></span> Target</h4>
+                        <small class="text-muted" style="text-align:center">{{currentTask.startDate | date:'mediumDate'}}</small>
+                    </div>
+                    <div class="col-md-6" ng-class="{'bg-danger':form.startDate.$invalid && submitted}">
+                        <h4 style="font-size:14px"><span class="fa fa-bolt"></span> Best or Real </h4>
+                        <p class="input-group"  >
+                            <input name="startDate" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.startDate" is-open="opened2" datepicker-options="dateOptions" ng-required="true" close-text="Fermer" />
+                            <span class="input-group-btn">
 							<button class="btn btn-default" ng-click="open2($event)">
 								<span class="glyphicon glyphicon-chevron-down">
 								</span>
-							</button>
-						</span>
-					</p>
-				</div>
-				<div class="col-md-12">  <h4 style="font-size:14px">Ending date of task</h4>
-					<p class="input-group">
-						<input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.endDate" is-open="opened3" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer"/>
-						<span class="input-group-btn">
-							<button class="btn btn-default" ng-click="open3($event)">
-								<span class="glyphicon glyphicon-chevron-down">
-								</span>
-							</button>
-						</span>
-					</p>
-				</div>
-				<div class="col-md-12">   <h4 style="font-size:14px">Global WorkLoad (days)</h4>
-					<p class="input-group">
-						<input type="text" name="load" class="form-control"  ng-model="formData.load" >
-						<span class="help-block">
-						</span>
-					</p>
-				<br/>
-				<br/>
-				<br/>
-				</div>
-			</div>
+                            </button>
+                            </span>
+                        </p>
+                        <small class="text-danger has-error" ng-show="form.startDate.$error.required && submitted">
+            				Required
+          				</small>
+                    </div>
+                </div>
+                <div class="row">
+                        <h4 style="padding-left:10px"> End date</h4>
+                    <div class="col-md-6" style="text-align:center">
+                        <h4 style="font-size:14px"><span class="fa fa-dot-circle-o"></span> Target</h4>
+                        <small class="text-muted" style="text-align:center">{{currentTask.endDate  | date:'mediumDate'}}</small>
+                    </div>
+                    <div class="col-md-6" ng-class="{'bg-danger':form.endDate.$invalid && submitted}">
+                        <h4 style="font-size:14px"><span class="fa fa-bolt"></span> Best or Real</h4>
+                        <p class="input-group" >
+                            <input name="endDate" type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.endDate" is-open="opened3" datepicker-options="dateOptions" ng-required="true" close-text="Fermer" />
+                            <span class="input-group-btn">
+								<button class="btn btn-default" ng-click="open3($event)">
+									<span class="glyphicon glyphicon-chevron-down"></span>
+                            	</button>
+                            </span>
+
+                        </p>
+                        <small class="text-danger has-error" ng-show="form.endDate.$error.required && submitted">
+            				Required
+          				</small>
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom:50px">
+                        <h4 style="padding-left:10px"> Global Workload  <small class="text-muted">(in days)</small></h4>
+                    <div class="col-md-6" style="text-align:center">
+                        <h4 style="font-size:14px"><span class="fa fa-dot-circle-o"></span> Target</h4>
+                        <small class="text-muted" style="text-align:center">{{currentTask.load }}</small>
+                    </div>
+                    <div class="col-md-6" ng-class="{'bg-danger':form.load.$invalid && submitted}">
+                        <h4 style="font-size:14px"><span class="fa fa-bolt"></span> Best or Real</h4>
+                        <p class="input-group" >
+                            <input type="text" name="load" class="form-control" ng-required="true" ng-model="formData.load">
+                        </p>
+                        <small class="text-danger has-error" ng-show="form.load.$error.required && submitted">
+                           Required 
+                        </small>
+                    </div>
+                </div>
+            </div>
 
 
-			<div class="col-md-9"> 
-				<h3>Enter Metric Information</h3>
-				<div class="row">
-					<div class="col-md-4"> 
-						<p class="input-group">
-							<label>Time already spent</label>
-							<input type="text" name="timeSpent" class="form-control"  ng-model="formData.timeSpent" >
-							<span class="help-block">
+            <div class="col-md-8">
+                <h3 style="text-align:center; padding-bottom:25px">Enter Metric Information</h3>
+                <div class="row">
+                    <div class="col-md-4" ng-class="{'bg-danger':form.timeSpent.$invalid && submitted}">
+                        <p class="input-group" >
+                            <label>Time already spent <small class="text-muted">(in days)</small>
+                            </label>
+                            <input type="text" name="timeSpent" class="form-control" ng-model="formData.timeSpent" ng-required="true">
+                            <span class="help-block">
 							</span>
-						</p>
-					</div>
-					<div class="col-md-4">  
-						<p class="input-group">
-							<label>% progress</label>
-							<input type="text" name="progress" class="form-control"  ng-model="formData.progress" >
-							<span class="help-block">
+                        </p>
+                        <small class="text-danger has-error" ng-show="form.timeSpent.$error.required && submitted">
+                            Required
+                        </small>
+                    </div>
+                    <div class="col-md-4"  ng-class="{'bg-danger':form.progress.$invalid && submitted}">
+                        <p class="input-group" >
+                            <label>Progress <small class="text-muted">(in %)</small>
+                            </label><span class="label pull-right" ng-class="{'label-info':formData.status =='In Progress','label-success':formData.status =='Finished','label-warning':formData.status =='Not Started','label-danger':formData.status =='Error' }">{{formData.status}}  </span>
+                            <input type="text" name="progress"  ng-required="true" class="form-control" ng-model="formData.progress" placeholder="min:0 - max:100 - unit:%">
+                            <span class="help-block">
 							</span>
-						</p>
-					</div>
-
-				</div>
-				<div class="row">
-					<div class="col-md-4">  
-						<p class="input-group">
-							<label>Progress Status</label>
-							<input type="text" name="progressStatus" class="form-control" ng-model="formData.progressStatus" typeahead-on-select="$item"  typeahead="statut.value for statut in constant.progressStatusTask  | limitTo:8" >
-							<span class="help-block">
+                        </p>
+                        <small class="text-danger has-error" ng-show="form.progress.$error.required && submitted">
+                            Required
+                        </small>
+                    </div>
+                    <div class="col-md-4" >
+                        <p class="input-group" >
+                            <label>Projected load <small class="text-muted">(in days)</small></label>
+                            <input type="text" disabled="disabled" class="form-control" ng-model="formData.projectedWorkload">
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6"  ng-class="{'bg-danger':form.progressStatus.$invalid && submitted}">
+                        <p  >
+                            <label>Timing Status </label>
+                            <input type="text" name="progressStatus" class="form-control" ng-model="formData.progressStatus" typeahead-on-select="$item" typeahead="statut.value for statut in constant.progressStatusTask  | limitTo:8">
+                            <span class="help-block">
 							</span>
-						</p>
-					</div>
-					<div class="col-md-4">  
-						<p class="input-group">
-							<label>% Confidence</label>
-							<input type="text" name="trust" class="form-control"  ng-model="formData.trust" >
-							<span class="help-block">
-							</span>
-
-						</p>
-					</div>
-					<div class="col-md-4">  
-						<p class="input-group">
-							<label>Status</label>
-							<input type="text" class="form-control" ng-model="formData.status" typeahead="statut.value for statut in constant.statusTask  | limitTo:8"/>
-							<span class="help-block">
-							</span>
-						</p>
-					</div>
-				</div>
-				<div class="row" ng-if="formData.status === 'Finished'">
-					<div class="col-md-4">  
-						<p class="input-group">
-							<label>Quality as defined</label>
-							<input type="text" name="deliverableStatus" class="form-control" ng-model="formData.deliverableStatus" >
-							<span class="help-block">
-							</span>
-						</p>
-					</div>
-					<div class="col-md-4">  
-						<p class="input-group">
-						<label>Reason for rework</label>
-						<input type="text" name="reworkReason" class="form-control" rows="2" ng-model="formData.reworkReason">
-						</p>
-					</div>
-				</div>
-				<div class="row" ng-if="formData.status === 'Finished'">
-					<div class="col-md-4">  
-						<p class="input-group">
-							<label>% User Satisfaction</label>
-							<input type="text" name="userSatisfaction" class="form-control"  ng-model="formData.userSatisfaction" >
-							<span class="help-block">
+                        </p>
+                        <small class="text-danger has-error" ng-show="form.progressStatus.$error.required && submitted">
+                            Required
+                        </small>
+                    </div>
+                    <div class="col-md-6"  ng-class="{'bg-danger':form.trust.$invalid && submitted}">
+                        <p class="input-group" >
+                            <label>Confidence to accomplish correctly this task <small class="text-muted">(in %)</small>
+                            </label>
+                            <input type="text" ng-required="true" name="trust" class="form-control" ng-model="formData.trust">
+                            <span class="help-block">
 							</span>
 
-						</p>
-					</div>
-					<div class="col-md-4">  
-						<p class="input-group">
-							<label>% Actors Satisfaction</label>
-							<input type="text" name="actorSatisfaction" class="form-control" ng-model="formData.actorSatisfaction"/>
-							<span class="help-block">
+                        </p>
+                        <small class="text-danger has-error" ng-show="form.trust.$error.required && submitted">
+                            Required
+                        </small>
+                    </div>
+                </div>
+                <div class="row" ng-if="formData.status === 'Finished'">
+                    <div class="col-md-6"   ng-class="{'bg-danger':form.deliverableStatus.$invalid && submitted}">
+                        <p class="input-group" >
+                            <label>Quality as defined <small class="text-muted">(in %)</small>
+                            </label>
+                            <input type="text" name="deliverableStatus" ng-required="formData.status === 'Finished'" class="form-control" ng-model="formData.deliverableStatus">
+                            <span class="help-block">
 							</span>
-						</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-12">  
-						<label>comments</label>
-						<textarea name="comments" class="form-control" rows="2" ng-model="formData.comments"></textarea>
-					</div>
-				</div>
-				<div class="row" style="padding-top:50px">
+                        </p>
+                        <small class="text-danger has-error" ng-show="form.deliverableStatus.$error.required && submitted">
+                            Required
+                        </small>
+                    </div>
+                    <div class="col-md-6"    ng-class="{'bg-danger':form.userSatisfaction.$invalid && submitted}">
+                        <p class="input-group" >
+                            <label>User Satisfaction <small class="text-muted">(in %)</small>
+                            </label>
+                            <input type="text" name="userSatisfaction"  ng-required="formData.status === 'Finished'" class="form-control" ng-model="formData.userSatisfaction">
+                            <span class="help-block">
+							</span>
 
-					<div class="col-md-offset-8 col-md-3">
-						<input type="text" class="pull-right form-control" datepicker-popup="{{format}}" ng-model="formData.date" is-open="opened1" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer" ng-click="open1($event)"/>
-					</div>
-					<div class="col-md-1">
-						<img alt="{{formData.actor}}" ng-src="assets/images/avatars/{{formData.actor._id}}.png" style="width:50px" class="img-circle" err-src="assets/images/avatars/avatar_small.png"/>
-					</div>
-				</div>
-			</div>
-		</div>		
-	</div>
-	<div class="modal-footer">
-		<div style="float:left">
-			<button ng-show='formData._id' class="btn btn-danger" ng-click="deleteMetric(formData._id)">Delete Mesure</button>
-		</div>
-		<div style="float:right">
-			<button class="btn btn-default" ng-click="cancel()">Cancel</button>
-			<button class="btn btn-success" ng-click="ok()">Update</button>
-		</div>
-	</div>
+                        </p>
+                                                <small class="text-danger has-error" ng-show="form.userSatisfaction.$error.required && submitted">
+                            Required
+                        </small>
+                    </div>
+                </div>
+                <div class="row" ng-if="formData.status === 'Finished'">
+                    <div class="col-md-6"    ng-class="{'bg-danger':form.reworkReason.$invalid && submitted}">
+                        <p class="input-group" >
+                            <label>Reason for rework</label>
+                            <input type="text" name="reworkReason" class="form-control" rows="2" ng-model="formData.reworkReason">
+                        </p>
+                    </div>
+                    <div class="col-md-6"    ng-class="{'bg-danger':form.actorSatisfaction.$invalid && submitted}">
+                        <p class="input-group" >
+                            <label>Actors Satisfaction <small class="text-muted">(in %)</small>
+                            </label>
+                            <input type="text" name="actorSatisfaction"  ng-required="formData.status === 'Finished'" class="form-control" ng-model="formData.actorSatisfaction" />
+                            <span class="help-block">
+							</span>
+                        </p>
+                                                <small class="text-danger has-error" ng-show="form.actorSatisfaction.$error.required && submitted">
+                            Required
+                        </small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>Comments <small class="text-muted">(free text)</small>
+                        </label>
+                        <textarea name="comments" class="form-control" rows="2" ng-model="formData.comments"></textarea>
+                    </div>
+                </div>
+                <div class="row" style="padding-top:20px;padding-bottom:20px">
+                    <div class="col-md-1">
+                        <img alt="{{formData.actor}}" ng-src="assets/images/avatars/{{formData.actor._id}}.png" style="width:50px" class="img-circle" err-src="assets/images/avatars/avatar_small.png" />
+                    </div>
+                    <div class="col-md-3">
+                        <small class="text-muted" style="padding-left:5px">{{formData.actor.name}}</small>
+                        <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.date" is-open="opened1" datepicker-options="dateOptions" ng-required="true" close-text="Fermer" ng-click="open1($event)" />
+                    </div>
+                    <div class="col-md-2">
+                        <button ng-show='formData._id' class="btn btn-danger" ng-click="deleteMetric(formData._id)">Delete</button>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-lg btn-primary pull-right" type="submit">Save the metric</button>
+                        <button class="btn  btn-default pull-right" style="margin-right:25px" ng-click="cancel()">Close without saving</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+</form>
 </script>
 
 <div class="portlet-body">
@@ -250,8 +290,8 @@
 			<tr ng-repeat="task in dataTable | filter:search | orderBy:'name' track by $index" ng-show="task._id">
 				<td> <div class="desc" popover-html-unsafe="Context : {{task.context}} </p>  Activity : {{task.activity}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="right" popover-delay ="1000"><a href="/task/{{task._id}}" >{{task.name}}</a></div></td>
 				<td>{{task.lastmetric.status}}</td>
-				<td>{{task.lastmetric.startDate| date:'shortDate'}}</td>
-				<td>{{task.lastmetric.endDate| date:'shortDate'}}</td>
+				<td>{{task.lastmetric.startDate| date:'mediumDate'}}</td>
+				<td>{{task.lastmetric.endDate| date:'mediumDate'}}</td>
 				<td>{{task.lastmetric.progress}}</td>
 				<td>{{task.lastmetric.timeSpent}}</td>
 				<td  ng-if="page === 'KPI'" ><nvd3 options="options" data="task.data"></nvd3></td>
@@ -276,10 +316,9 @@
 					<th>Time Spent</th>
 					<th>Progress</th>
 					<th>End</th>
-					<th>Status</th>
 					<th>Confidence</th>
 					<th>Comments</th>
-					<th ng-if="page === 'task'"><button ng-click='openMetric(data, data.metrics[task.metrics.length-1],true)' type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus"></span></button></th>
+					<th ng-if="page === 'task'"><button ng-click='openMetric(dashboardData, dataTable.metrics[task.metrics.length-1],true)' type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus"></span></button></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -289,17 +328,16 @@
 					                 <img alt="{{metric.actor}}" ng-src="assets/images/avatars/{{metric.actor._id}}.png" style="width:25px" class="img-circle" err-src="assets/images/avatars/avatar_small.png"/>
 					                 </div>
 					                 </td>
-					<td>{{metric.date | date:'shortDate'}}</td>
+					<td>{{metric.date | date:'mediumDate'}}</td>
 					<td><div class="desc" popover-html-unsafe="Context : {{metric.context}} </p>  Activity : {{metric.activity}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="right" popover-delay ="1000"><i class="fa fa-recycle"></i></div></td>
-					<td>{{metric.startDate | date:'shortDate'}}</td>
-					<td>{{metric.timeSpent}}</td>
-					<td>{{metric.progress}}% <span class="label pull-right" ng-class="{'label-danger':metric.progressStatus==='Late','label-success':metric.progressStatus==='On time','label-warning':metric.progressStatus==='At Risk' }">  {{metric.progressStatus}} </span></td>
-					<td>{{metric.endDate | date:'shortDate'}}</td>
-					<td>{{metric.status}} <span ng-if="metric.reworkReason" class="label" ng-class="{'label-danger':metric.reworkReason==='Internal','label-warning':metric.progressStatus==='External' }">  {{metric.reworkReason}} Rework </span></td>
+					<td>{{metric.startDate | date:'mediumDate'}}</td>
+					<td>{{metric.timeSpent}} <span ng-if="metric.reworkReason" class="label" ng-class="{'label-danger':metric.reworkReason==='Internal','label-warning':metric.progressStatus==='External' }">  {{metric.reworkReason}} Rework </span></td>
+					<td>{{metric.progress}}% <span ng-if="metric.status" class="label pull-right" ng-class="{'label-info':metric.status =='In Progress','label-success':metric.status =='Finished','label-warning':metric.status =='Not Started' }">  {{metric.status}} </span></td>
+					<td>{{metric.endDate | date:'mediumDate'}} <span class="label pull-right" ng-class="{'label-danger':metric.progressStatus==='Late','label-success':metric.progressStatus==='On time','label-warning':metric.progressStatus==='At Risk' }">  {{metric.progressStatus}} </span></td>
 					<td>{{metric.trust}}</td>
 					<td>{{metric.comments}}</td>
 					<td ng-if="page === 'task'" style="width:25px">
-						<button ng-click="openMetric(data, metric,false)" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></button>
+						<button ng-click="openMetric(dashboardData, metric,false)" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></button>
 					</td>
 				</tr>
 			</tbody>
