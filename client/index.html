@@ -25,6 +25,7 @@
 <link rel="stylesheet" href="bower_components/ngDialog/css/ngDialog.css" />
 <link rel="stylesheet" href="bower_components/ngDialog/css/ngDialog-theme-default.css" />
 <link rel="stylesheet" href="bower_components/bootstrap-markdown/css/bootstrap-markdown.min.css" />
+<link rel="stylesheet" href="bower_components/fullcalendar/fullcalendar.css" />
 <!-- endbower -->
 <!-- endbuild -->
 <!-- build:css({.tmp,client}) app/app.css -->
@@ -32,15 +33,20 @@
 <!-- injector:css -->
 <link rel="stylesheet" href="app/KPI/KPI.css">
 <link rel="stylesheet" href="app/KPIs/KPIs.css">
+<link rel="stylesheet" href="app/about/about.css">
 <link rel="stylesheet" href="app/account/login/login.css">
 <link rel="stylesheet" href="app/admin/admin.css">
 <link rel="stylesheet" href="app/app.css">
+<link rel="stylesheet" href="app/calendar/calendar.css">
 <link rel="stylesheet" href="app/dashboard/dashboard.css">
 <link rel="stylesheet" href="app/dashboardTab/dashboardTab.css">
 <link rel="stylesheet" href="app/dashboardWidget/dashboardWidget.css">
 <link rel="stylesheet" href="app/dashboards/dashboards.css">
+<link rel="stylesheet" href="app/dqm/dqm.css">
 <link rel="stylesheet" href="app/hierarchies/hierarchies.css">
+<link rel="stylesheet" href="app/journallog/journallog.css">
 <link rel="stylesheet" href="app/main/main.css">
+<link rel="stylesheet" href="app/process/process.css">
 <link rel="stylesheet" href="app/task/task.css">
 <link rel="stylesheet" href="app/tasks/tasks.css">
 <link rel="stylesheet" href="components/modal/modal.css">
@@ -99,7 +105,7 @@
               </ul>
             </li>   
             <li >
-              <a href="javascript:;">
+              <a href="/calendar">
                 <i class="fa fa-calendar"></i>
                 <span class="title">Information</span>
                 <span class="arrow "></span>
@@ -124,13 +130,13 @@
                   </a>
                 </li>
                 <li>
-                  <a href="/calendar">
+                  <a href="/process">
                     <i class="fa  fa-cogs"></i>
                     Process
                   </a>
                 </li>
                 <li>
-                  <a href="/calendar">
+                  <a href="/journallog">
                     <i class="fa fa-file-text-o"></i>
                     Journal Log
                   </a>
@@ -150,6 +156,12 @@
                     Metadata
                   </a>
                 </li>
+                <li>
+                  <a href="/dqm">
+                    <i class="fa fa-check"></i>
+                    Data Quality Mgmt
+                  </a>
+                </li>
                 <li ng-if="isAdmin">
                   <a href="/admin">
                     <i class="fa fa-user"></i>
@@ -158,6 +170,21 @@
                 </li>
               </ul>
             </li>
+            <li >
+              <a href="/about">
+                <i class="fa fa-rss-square"></i>
+                <span class="title">About</span>
+                <span class="arrow "></span>
+              </a>
+              <ul class="sub-menu">
+                <li>
+                  <a href="/about">
+                    <i class="fa fa-rss-square"></i>
+                    B.O.S.S
+                  </a>
+                </li>
+              </ul>
+            </li> 
           </ul>
           <!-- END SIDEBAR MENU -->
         </div>
@@ -165,7 +192,7 @@
       <!-- END SIDEBAR -->
       <!-- BEGIN CONTENT -->
       <div class="page-content-wrapper">
-        <div class="page-content">
+        <div class="page-content" style="padding-top:0">
           <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
           <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -219,8 +246,14 @@
                 <span style="color:lightgrey"><i class="icon-cursor"></i> Categories </span><a href="/dash/{{perimeter._id}}"> {{perimeter.category || 'All'}}</a>
               </li>
             </ul>
+            <ul class="page-breadcrumb pull-right" >
+              <li class="">
+                 <i class="fa fa-calendar-o"></i> Time Scope : <span style="font-size:16px">  {{getCurrentMonthName()}} </span>
+              </li>
+            </ul>
 
           </div>
+
           <!-- END PAGE HEADER-->
           <!-- Add your site or application content here -->
           <div class="container-fluid" style="margin:20px" ui-view=""></div>
@@ -278,6 +311,9 @@
     <script src="bower_components/bootstrap-markdown/js/bootstrap-markdown.js"></script>
     <script src="bower_components/zingchart/src/zingchart-html5-min.js"></script>
     <script src="bower_components/angular-confirm-field/app/package/js/angular-confirm-field.min.js"></script>
+    <script src="bower_components/jquery-ui/ui/jquery-ui.js"></script>
+    <script src="bower_components/fullcalendar/fullcalendar.js"></script>
+    <script src="bower_components/angular-ui-calendar/src/calendar.js"></script>
     <!-- endbower -->
     <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
@@ -289,25 +325,35 @@
     <script src="app/KPI/KPI.js"></script>
     <script src="app/KPIs/KPIs.controller.js"></script>
     <script src="app/KPIs/KPIs.js"></script>
+    <script src="app/about/about.controller.js"></script>
+    <script src="app/about/about.js"></script>
     <script src="app/account/account.js"></script>
     <script src="app/account/login/login.controller.js"></script>
     <script src="app/account/settings/settings.controller.js"></script>
     <script src="app/account/signup/signup.controller.js"></script>
     <script src="app/admin/admin.controller.js"></script>
     <script src="app/admin/admin.js"></script>
+    <script src="app/calendar/calendar.controller.js"></script>
+    <script src="app/calendar/calendar.js"></script>
     <script src="app/dashboard/dashboard.controller.js"></script>
     <script src="app/dashboard/dashboard.js"></script>
     <script src="app/dashboardTab/dashboardTab.directive.js"></script>
     <script src="app/dashboardWidget/dashboardWidget.directive.js"></script>
     <script src="app/dashboards/dashboards.controller.js"></script>
     <script src="app/dashboards/dashboards.js"></script>
+    <script src="app/dqm/dqm.controller.js"></script>
+    <script src="app/dqm/dqm.js"></script>
     <script src="app/errSrc/errSrc.directive.js"></script>
     <script src="app/global/global.controller.js"></script>
     <script src="app/hierarchies/hierarchies.controller.js"></script>
     <script src="app/hierarchies/hierarchies.js"></script>
+    <script src="app/journallog/journallog.controller.js"></script>
+    <script src="app/journallog/journallog.js"></script>
     <script src="app/main/main.controller.js"></script>
     <script src="app/main/main.js"></script>
     <script src="app/popoverHtmlUnsafePopup/popoverHtmlUnsafePopup.directive.js"></script>
+    <script src="app/process/process.controller.js"></script>
+    <script src="app/process/process.js"></script>
     <script src="app/task/task.controller.js"></script>
     <script src="app/task/task.js"></script>
     <script src="app/tasks/tasks.controller.js"></script>

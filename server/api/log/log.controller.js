@@ -6,14 +6,16 @@ var moment = require('moment');
 
 // Get list of logs
 exports.index = function(req, res) {
-    Log.find(function(err, logs) {
+    Log.find().sort({
+        date: 'desc'
+    }).lean().exec(function(err, logs) {
         if (err) {
             return handleError(res, err);
         }
         _.each(logs, function(rowdata, index) {
             rowdata.moment = moment(rowdata.date).fromNow();
         });
-        return res.json(200, _.first(logs.reverse(), 20));
+        return res.json(200, logs);
     });
 };
 

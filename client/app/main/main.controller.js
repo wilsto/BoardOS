@@ -261,4 +261,5 @@ angular.module('boardOsApp')
             return d.mean;
         };
 
+
     });

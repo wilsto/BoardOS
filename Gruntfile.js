@@ -414,7 +414,7 @@ module.exports = function(grunt) {
                 command: '"C:\\Program Files (x86)\\Sublime Text 3\\sublime_text.exe"'
             },
             changeLog: {
-                command: 'github_changelog_generator -t 5236ed03ca051352289e84a55d551808c150ae98 -u wilsto -p boardos'
+                command: 'github_changelog_generator -u wilsto -p boardos'
             },
         },
 

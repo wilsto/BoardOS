@@ -10,7 +10,8 @@ angular.module('boardOsApp', [
     'ngJsTree',
     'ngDialog',
     'nvd3',
-    'ng.confirmField'
+    'ng.confirmField',
+    'ui.calendar'
 ])
     .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
         $urlRouterProvider.otherwise('/');

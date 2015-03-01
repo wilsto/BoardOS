@@ -79,7 +79,9 @@ exports.show = function(req, res) {
             // Get a single task
             var deferred = Q.defer();
             if (typeof req.params.id === 'undefined') {
-                Task.find().lean().exec(function(err, task) {
+                Task.find().sort({
+                    date: 'desc'
+                }).lean().exec(function(err, task) {
                     if (err) {
                         return handleError(res, err);
                     }
@@ -187,7 +189,9 @@ exports.show = function(req, res) {
             // Get related metrics
             var deferred = Q.defer();
             mTask.metrics = [];
-            Metric.find().lean().exec(function(err, metric) {
+            Metric.find().sort({
+                date: 'asc'
+            }).lean().exec(function(err, metric) {
                 _.each(metric, function(rowdata, index) { // pour chaque enregistrement
                     if (rowdata.context.indexOf(mTask.context) >= 0 && rowdata.activity.indexOf(mTask.activity) >= 0) {
                         rowdata.fromNow = moment(rowdata.date).fromNow();

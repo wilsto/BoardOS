@@ -47,7 +47,7 @@
                     <br/><img src="assets/images/ajax-loader_blue.gif">
                 </div>
                 <div class="details" ng-if="dataDashboards">
-                    <div class="title"><span style="font-weight:bold;color:#CB4B16">{{alertsNb}}</span> Alerts</div>
+                    <div class="title"><span style="font-weight:bold;color:#CB4B16">{{alertsNb || 0 }}</span> Alerts</div>
                     <nvd3 options="optionsAlerts" data="dataAlerts"></nvd3>
                 </div>
             </div>
@@ -59,7 +59,7 @@
                     <br/><img src="assets/images/ajax-loader_blue.gif">
                 </div>
                 <div class="details" ng-if="dataDashboards">
-                    <div class="title"><span style="font-weight:bold;color:#2CA02C">{{goalsNb}}%</span> Goals</div>
+                    <div class="title"><span style="font-weight:bold;color:#2CA02C">{{goalsNb || '-'}}%</span> Goals</div>
                     <nvd3 options="optionsGoals" data="dataGoals"></nvd3>
                 </div>
             </div>
@@ -71,7 +71,7 @@
                     <br/><img src="assets/images/ajax-loader_blue.gif">
                 </div>
                 <div class="details" ng-if="dataDashboards">
-                    <div class="title"><span style="font-weight:bold;color:#bcbd22">{{confidence}}%</span> Confidence</div>
+                    <div class="title"><span style="font-weight:bold;color:#bcbd22">{{confidence || '-'}}%</span> Confidence</div>
                     <nvd3 options="optionsConfidence" data="dataConfidence"></nvd3>
                 </div>
             </div>
@@ -269,14 +269,14 @@
         <div class="portlet">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-bookmark"></i>myDashboards
+                    <i class="fa fa-bookmark"></i>myDashboards 
                 </div>
                 <div class="tools">
                     <a href="" class="collapse"></a>
                     <a href="#portlet-config" data-toggle="modal" class="config"></a>
-                    <a href="" class="reload"></a>
-                    <a href="" class="remove"></a>
+                    <a href="" class="reload" ng-click="loadDashBoard()"></a>
                 </div>
+
             </div>
             <div class="portlet-body">
 
