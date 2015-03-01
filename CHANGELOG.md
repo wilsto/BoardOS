@@ -1,14 +1,56 @@
 # Change Log
 
-## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD) (2015-02-28)
+## [v0.12.0](https://github.com/wilsto/boardos/tree/v0.12.0) (2015-03-01)
 
-[Full Changelog](https://github.com/wilsto/boardos/compare/v0.11.8...HEAD)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v0.11.9...v0.12.0)
+
+**Implemented enhancements:**
+
+- Ajouter une page "About" [\#87](https://github.com/wilsto/BoardOS/issues/87)
+
+- Ajouter une page de l'ensemble des logs [\#86](https://github.com/wilsto/BoardOS/issues/86)
+
+- Afficher un calendrier des taches [\#85](https://github.com/wilsto/BoardOS/issues/85)
+
+- Affichage du mois en cours pour indiquer les calculs sur la page principale [\#84](https://github.com/wilsto/BoardOS/issues/84)
+
+- Affichage de l'owner dans la page des taches [\#83](https://github.com/wilsto/BoardOS/issues/83)
+
+- Rendre obligatoire certains champs quand la tache est finie [\#76](https://github.com/wilsto/BoardOS/issues/76)
+
+**Fixed bugs:**
+
+- N'affiche pas forécement la dernière valeur d'une tache dans la page des taches [\#82](https://github.com/wilsto/BoardOS/issues/82)
+
+## [v0.11.9](https://github.com/wilsto/boardos/tree/v0.11.9) (2015-02-28)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v0.11.8...v0.11.9)
+
+**Implemented enhancements:**
+
+- Améliorer l'interface de saisie des métriques [\#81](https://github.com/wilsto/BoardOS/issues/81)
+
+- Amélioration de l'affichage des iinformations des métriques [\#79](https://github.com/wilsto/BoardOS/issues/79)
+
+- Affichage des dates plus friendly dans les tableaux [\#78](https://github.com/wilsto/BoardOS/issues/78)
+
+- Dashboard cedex ne voit pas les taches pourtant CEDEX [\#73](https://github.com/wilsto/BoardOS/issues/73)
+
+- Créer une tache, doit créer une première métrique "not started" [\#70](https://github.com/wilsto/BoardOS/issues/70)
+
+- Afficher la liste des taches personnels ou global [\#56](https://github.com/wilsto/BoardOS/issues/56)
+
+- Add task on watch list [\#54](https://github.com/wilsto/BoardOS/issues/54)
 
 **Fixed bugs:**
 
 - La page actor affiche {object Object\] [\#77](https://github.com/wilsto/BoardOS/issues/77)
 
+- Changer le contexte ou activity d'une tache doit le faire sur les métriques [\#75](https://github.com/wilsto/BoardOS/issues/75)
+
 - Add to mydashboard n'attribue pas le bon user [\#74](https://github.com/wilsto/BoardOS/issues/74)
+
+- Dashboard cedex ne voit pas les taches pourtant CEDEX [\#73](https://github.com/wilsto/BoardOS/issues/73)
 
 ## [v0.11.8](https://github.com/wilsto/boardos/tree/v0.11.8) (2015-02-19)
 

@@ -414,7 +414,12 @@ module.exports = function(grunt) {
                 command: '"C:\\Program Files (x86)\\Sublime Text 3\\sublime_text.exe"'
             },
             changeLog: {
-                command: 'github_changelog_generator -u wilsto -p boardos'
+                command: 'github_changelog_generator -u wilsto -p boardos',
+                options: {
+                    execOptions: {
+                        maxBuffer: Infinity
+                    }
+                }
             },
         },
 
@@ -652,7 +657,7 @@ module.exports = function(grunt) {
         grunt.task.run([
             'newer:jshint',
             'test',
-            //'shell:changeLog',
+            'shell:changeLog',
             'clean:dist',
             'concurrent:dist',
             'removelogging',
