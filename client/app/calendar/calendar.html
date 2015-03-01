@@ -1,0 +1,19 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+<!--* Modal Part-->
+<div class="col-md-12">
+<div class="actions" style="margin-left:auto;margin-right:auto;width:200px">
+                        <div class="btn-group">
+                            <a class="btn btn-default dropdown-toggle" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">  Show Events : {{filterNotification}} <i class="fa fa-angle-down"></i></a>
+                            <ul class="dropdown-menu pull-right">
+                                <li>
+                                    <a href="#" ng-click="filterNotification='All'">All  <span class="badge badge-default"> {{alltasksToNotify}} </span></a>
+                                </li>
+                                <li>
+                                    <a href="#" ng-click="filterNotification='Only For Me'">Only For Me<span class="badge badge-success"> {{mytasksToNotify}} </span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+<div ui-calendar="uiConfig.calendar" ng-model="eventSources" ></div>
+
+</div>

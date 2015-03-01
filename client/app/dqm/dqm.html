@@ -1,0 +1,114 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+<!--* Modal Part-->
+
+<div class="row">
+  <!-- Layout Part -->
+  <div class="row profile">
+    <div class="col-md-3">
+      <ul class="list-unstyled profile-nav">
+        <li>
+          <img src="assets/images/data-quality.jpg" class="img-responsive" alt=""/>
+        </li>
+
+      </ul>
+    </div>
+    <div class="col-md-9">
+      <div class="row">
+        <div class="col-md-12 profile-info">
+          <h1>Data Quality Management</h1><br/>
+          <ul class="list list-inline">
+            <li>
+              <i class="fa fa-map-marker"></i><span style="color:lightgrey"> Context </span> {{KPI.context}}
+            </li><br/><br/>
+            <li>
+              <i class="fa fa-calendar"></i><span style="color:lightgrey"> Activity </span>  {{KPI.activity}}
+            </li>
+          </ul>
+        </div>
+        <!--end col-md-8-->
+
+        <!--end row-->
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-2">
+    <ul class="ver-inline-menu tabbable margin-bottom-10">
+      <li class="active">
+        <a data-toggle="tab" ng-click="loadMe('Context')" href="#tab_1-1">
+          <i class="fa fa-recycle"></i>Contexts 
+        </a>
+        <span class="after"></span>
+      </li>
+      <li>
+        <a data-toggle="tab" ng-click="loadMe('Activity')" href="#tab_2-2"><i class="fa fa-cog"></i>Activities</a>
+      </li>
+      <li>
+        <a data-toggle="tab" ng-click="loadMe('Task')" href="#tab_3-3"><i class="fa fa-bar-chart-o"></i>Tasks</a>
+      </li>
+      <li>
+        <a data-toggle="tab" ng-click="loadMe('Metrics')" href="#tab_3-3"><i class="fa fa-bar-chart-o"></i>Metrics</a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="col-md-10">
+    <div class="row">
+      <div class="col-md-12">
+<div class="actions pull-right" style="padding-right:15px">
+  <div class="btn-group" >
+    <a class="btn dropdown-toggle" ng-class="{'btn-default':filterProgressStatus==='All','btn-warning':filterProgressStatus==='At Risk','btn-success':filterProgressStatus==='On Time','btn-danger':filterProgressStatus==='Late'}" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">  Status : {{filterProgressStatus}} <i class="fa fa-angle-down"></i></a>
+    <ul class="dropdown-menu pull-right">
+      <li>
+        <a href="#" ng-click="filterProgressStatus='All'">All  <span class="badge badge-default"> 4 </span></a>
+      </li>
+      <li>
+        <a href="#" ng-click="filterProgressStatus='Late'">Late<span class="badge badge-important"> 9 </span></a>
+      </li>
+      <li>
+        <a href="#" ng-click="filterProgressStatus='At Risk'">At Risk <span class="badge badge-warning"> 4 </span></a>
+      </li>
+      <li>
+        <a href="#" ng-click="filterProgressStatus='On Time'">On Time <span class="badge badge-success"> 12 </span></a>
+      </li>
+    </ul>
+  </div>
+</div>
+<table class="table table-striped table-bordered table-hover" id="sample_4">
+            <thead>
+              <tr>
+                <th >
+                  Path
+                </th>
+                <th >
+                  Used
+                </th>
+                <th style="text-align:middle">
+                  Valid    
+                </th>
+                <th>
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="path in paths track by $index">
+               <td style="width:80%">
+                 {{path.longname}}
+               </td>
+               <td>
+                 <span class="label" ng-class="{'label-default':!path.isUsedPath, 'label-success':path.isUsedPath}">{{path.isUsedPath}} </span>
+               </td>
+               <td>
+                <span class="label" ng-class="{'label-danger':!path.isValidPath, 'label-success':path.isValidPath}"> {{path.isValidPath}}</span>
+               </td>
+               <td>
+                 <button class="btn btn-xs btn-default" ng-click="actionPath(path,$index)">Action</button>
+               </td>
+             </tr>
+           </tbody>
+         </table>
+    </div>
+  </div>
+</div>
+</div>

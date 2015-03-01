@@ -1,0 +1,40 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+<div class="col-md-12">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>
+                    #
+                </th>
+                <th>
+                    Actor
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Timing
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="log in logs ">
+                <td>
+                    <div popover-html-unsafe="{{log.actor.name}}" popover-trigger="mouseenter" popover-title="Name" popover-placement="right">
+                                                        <img ng-src="assets/images/avatars/{{log.actor._id}}.png" style="width:25px" class="img-circle" err-src="assets/images/avatars/avatar_small.png" />
+                                                    </div>
+                </td>
+                <td>
+                	{{log.actor.name}}
+                </td>
+                <td>
+                    {{log.info}}
+                </td>
+				<td>
+                   {{log.moment}}
+                </td>
+            </tr>
+         
+        </tbody>
+    </table>
+</div>

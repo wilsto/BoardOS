@@ -1,0 +1,178 @@
+<form name="form" role="form" style="margin:-15px">
+    <div class="modal-body">
+        <!-- FORM -->
+        <div class="row" style="margin:-15px">
+            <div class="col-md-4" style='background:lightgrey;padding-left:30px'>
+                <h3 style="text-align:center; padding-bottom:25px">Task Information</h3>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 style="font-size:14px">Context</h4>
+                        <small class="text-muted">{{formData.context.toUpperCase().split(".").join(" > ") }}</small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 style="font-size:14px">Activity</h4>
+                        <small class="text-muted">{{formData.activity.toUpperCase().split(".").join(" > ") }}</small>
+                    </div>
+                </div>
+                <div class="row" style="margin-top:10px">
+                    <div class="col-md-4" style="text-align:center">
+                        <h4 style="font-size:14px"><span class="fa fa-crosshairs"></span> Target</h4>
+                        <small class="text-muted" style="text-align:center">{{currentTask.startDate | date:'mediumDate'}}</small>
+                    </div>
+                    <div class="col-md-8">
+                        <h4 style="font-size:14px">Best or Real start date </h4>
+                        <p class="input-group">
+                            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.startDate" is-open="opened2" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer" />
+                            <span class="input-group-btn">
+							<button class="btn btn-default" ng-click="open2($event)">
+								<span class="glyphicon glyphicon-chevron-down">
+								</span>
+                            </button>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4" style="text-align:center">
+                        <h4 style="font-size:14px"><span class="fa fa-crosshairs"></span> Target</h4>
+                        <small class="text-muted" style="text-align:center">{{currentTask.endDate  | date:'mediumDate'}}</small>
+                    </div>
+                    <div class="col-md-8">
+                        <h4 style="font-size:14px">Best or Real end date</h4>
+                        <p class="input-group">
+                            <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.endDate" is-open="opened3" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer" />
+                            <span class="input-group-btn">
+								<button class="btn btn-default" ng-click="open3($event)">
+									<span class="glyphicon glyphicon-chevron-down">
+									</span>
+                            </button>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4" style="text-align:center">
+                        <h4 style="font-size:14px"><span class="fa fa-crosshairs"></span> Target</h4>
+                        <small class="text-muted" style="text-align:center">{{currentTask.load }}</small>
+                    </div>
+                    <div class="col-md-8">
+                        <h4 style="font-size:14px">Best or Real WorkLoad (days)</h4>
+                        <input type="text" name="load" class="form-control" ng-model="formData.load">
+                        <br/>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-8">
+                <h3 style="text-align:center; padding-bottom:25px">Enter Metric Information</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="input-group">
+                            <label>Time already spent <small class="text-muted">(in days)</small>
+                            </label>
+                            <input type="text" name="timeSpent" class="form-control" ng-model="formData.timeSpent" ng-required>
+                            <span class="help-block">
+							</span>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="input-group">
+
+                            <label>Progress <small class="text-muted">(in %)</small>
+                            </label><span class="label pull-right" ng-class="{'label-info':formData.status =='In Progress','label-success':formData.status =='Finished','label-warning':formData.status =='Not Started','label-danger':formData.status =='Error' }">{{formData.status}}  </span>
+                            <input type="text" name="progress" ng-required class="form-control" ng-model="formData.progress" placeholder="min:0 - max:100 - unit:%">
+                            <span class="help-block">
+							</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="input-group">
+                            <label>Progress Status </label>
+                            <input type="text" name="progressStatus" class="form-control" ng-model="formData.progressStatus" typeahead-on-select="$item" typeahead="statut.value for statut in constant.progressStatusTask  | limitTo:8">
+                            <span class="help-block">
+							</span>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="input-group">
+                            <label>Confidence to accomplish correctly this task <small class="text-muted">(in %)</small>
+                            </label>
+                            <input type="text" ng-required name="trust" class="form-control" ng-model="formData.trust">
+                            <span class="help-block">
+							</span>
+
+                        </p>
+                    </div>
+                </div>
+                <div class="row" ng-if="formData.status === 'Finished'">
+                    <div class="col-md-6">
+                        <p class="input-group">
+                            <label>Quality as defined <small class="text-muted">(in %)</small>
+                            </label>
+                            <input type="text" name="deliverableStatus" class="form-control" ng-model="formData.deliverableStatus">
+                            <span class="help-block">
+							</span>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="input-group">
+                            <label>User Satisfaction <small class="text-muted">(in %)</small>
+                            </label>
+                            <input type="text" name="userSatisfaction" class="form-control" ng-model="formData.userSatisfaction">
+                            <span class="help-block">
+							</span>
+
+                        </p>
+                    </div>
+                </div>
+                <div class="row" ng-if="formData.status === 'Finished'">
+                    <div class="col-md-6">
+                        <p class="input-group">
+                            <label>Reason for rework</label>
+                            <input type="text" name="reworkReason" class="form-control" rows="2" ng-model="formData.reworkReason">
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="input-group">
+                            <label>Actors Satisfaction <small class="text-muted">(in %)</small>
+                            </label>
+                            <input type="text" name="actorSatisfaction" class="form-control" ng-model="formData.actorSatisfaction" />
+                            <span class="help-block">
+							</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>Comments <small class="text-muted">(free text)</small>
+                        </label>
+                        <textarea name="comments" class="form-control" rows="2" ng-model="formData.comments"></textarea>
+                    </div>
+                </div>
+                <div class="row" style="padding-top:20px;padding-bottom:20px">
+                    <div class="col-md-1">
+                        <img alt="{{formData.actor}}" ng-src="assets/images/avatars/{{formData.actor._id}}.png" style="width:50px" class="img-circle" err-src="assets/images/avatars/avatar_small.png" />
+                    </div>
+                    <div class="col-md-3">
+                        <small class="text-muted" style="padding-left:5px">{{formData.actor.name}}</small>
+                        <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.date" is-open="opened1" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer" ng-click="open1($event)" />
+                    </div>
+                    <div class="col-md-2">
+                        <button ng-show='formData._id' class="btn btn-danger" ng-click="deleteMetric(formData._id)">Delete this metric</button>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-lg btn-primary pull-right" ng-click="ok()">Save this metric</button>
+                        <button class="btn  btn-default pull-right" style="margin-right:25px" ng-click="cancel()">Cancel, do not save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
