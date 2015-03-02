@@ -1,5 +1,17 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD) (2015-03-02)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v0.12.3...HEAD)
+
+**Fixed bugs:**
+
+- "KPI this month" pour les goals ne fonctionne plus [\#89](https://github.com/wilsto/BoardOS/issues/89)
+
+## [v0.12.3](https://github.com/wilsto/boardos/tree/v0.12.3) (2015-03-01)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v0.12.2...v0.12.3)
+
 ## [v0.12.2](https://github.com/wilsto/boardos/tree/v0.12.2) (2015-03-01)
 
 [Full Changelog](https://github.com/wilsto/boardos/compare/v0.12.1...v0.12.2)

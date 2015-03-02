@@ -114,7 +114,7 @@ module.exports = {
                     metric.timeToEnd = moment(metric.endDate).diff(moment(), 'days');
 
                     // predictedCharge
-                    metric.projectedWorkload = parseInt(parseInt(metric.timeSpent) * 100 / parseInt(metric.progress));
+                    metric.projectedWorkload = (metric.progress > 0) ? parseInt(parseInt(metric.timeSpent) * 100 / parseInt(metric.progress)) : metric.load;
 
                     // ajouter information par mois 
                     metric.groupTimeByValue = moment(metric.date).format("YYYY.MM");
@@ -166,12 +166,12 @@ module.exports = {
         mKPI.metricsGroupBy.oldTime = tools.groupByTime(tools.groupMultiBy(mKPI.metrics, ['groupTimeByValue', 'taskname']), 'date', mKPI.metricTaskField);
 
         mKPI.calcul = {};
-        /*        mKPI.calcul.time = _.map(mKPI.metricsGroupBy.Time, function(value, key) {
+        mKPI.calcul.time = _.map(mKPI.metricsGroupBy.Time, function(value, key) {
             return {
                 month: key,
                 valueKPI: tools.calculKPI(value, mKPI)
             };
-        });*/
+        });
         mKPI.calcul.task = _.map(mKPI.metricsGroupBy.Task, function(value, key) {
             return {
                 task: key,
