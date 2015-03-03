@@ -188,7 +188,7 @@
                 </div>
                 <div class="row" style="padding-top:20px;padding-bottom:20px">
                     <div class="col-md-1">
-                        <img alt="{{formData.actor}}" ng-src="assets/images/avatars/{{formData.actor._id}}.png" style="width:50px" class="img-circle" err-src="assets/images/avatars/avatar_small.png" />
+                        <img alt="{{formData.actor}}" ng-src="assets/images/avatars/{{formData.actor._id}}.png" style="width:50px" class="img-circle" err-src="assets/images/avatars/avatar.png" />
                     </div>
                     <div class="col-md-3">
                         <small class="text-muted" style="padding-left:5px">{{formData.actor.name}}</small>
@@ -226,7 +226,7 @@
 			<tr ng-repeat="dashboard in dataTable | filter:search | orderBy:'name' track by $index" ng-show="dashboard._id">
 				<td style="width:25px">
 				                 <div popover-html-unsafe="Name : <b>{{dashboard.owner.name}}</b> </br> Role : <b>{{dashboard.owner.role}}</b> " popover-trigger="mouseenter" popover-title="Owner Identity" popover-placement="right" >
-				                 				<img alt="" ng-src="assets/images/avatars/{{dashboard.owner._id}}.png" style="width:25px" class="img-circle" err-src="assets/images/avatars/avatar_small.png"/>
+				                 				<img alt="" ng-src="assets/images/avatars/{{dashboard.owner._id}}.png" style="width:25px" class="img-circle" err-src="assets/images/avatars/avatar.png"/>
 				                 				</div>
 				</td>
 				<td><a href="/dashboard/{{dashboard._id}}" >{{dashboard.name}}</a></td>
@@ -325,7 +325,7 @@
 				<tr ng-repeat="metric in dataTable | filter:search | orderBy:'date' track by $index" ng-show="metric._id"  on-finish-render>
 					<td>
 					                 <div popover-html-unsafe="Name : <b>{{metric.actor.name}}</b> </br> Role : <b>{{metric.actor.role}}</b> " popover-trigger="mouseenter" popover-title="Actor Identity" popover-placement="right" >
-					                 <img alt="{{metric.actor}}" ng-src="assets/images/avatars/{{metric.actor._id}}.png" style="width:25px" class="img-circle" err-src="assets/images/avatars/avatar_small.png"/>
+					                 <img alt="{{metric.actor}}" ng-src="assets/images/avatars/{{metric.actor._id}}.png" style="width:25px" class="img-circle" err-src="assets/images/avatars/avatar.png"/>
 					                 </div>
 					                 </td>
 					<td>{{metric.date | date:'mediumDate'}}</td>
@@ -347,7 +347,7 @@
 		<!--############-->  
 		<div class="row"  ng-if="dashboardType === 'actors'">
 			<div class="col-md-12 user-info" ng-repeat="actor in dataTable">
-				<img alt="" ng-src="assets/images/avatars/{{actor._id}}.png" style="width:45px" class="img-circle" err-src="assets/images/avatars/avatar_small.png"/>
+				<img alt="" ng-src="assets/images/avatars/{{actor._id}}.png" style="width:45px" class="img-circle" err-src="assets/images/avatars/avatar.png"/>
 				<div class="details">
 					<div>
 						<a href="#">{{actor.name}}</a>

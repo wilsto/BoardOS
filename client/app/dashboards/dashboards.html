@@ -41,7 +41,7 @@
               <tr ng-repeat="dashboard in dashboards | filter:filter()">
                <td>
                  <div popover-html-unsafe="Name : <b>{{dashboard.owner.name}}</b> </br> Role : <b>{{dashboard.owner.role}}</b> " popover-trigger="mouseenter" popover-title="Owner Identity" popover-placement="right" >
-                 <img alt="" ng-src="assets/images/avatars/{{dashboard.owner._id}}_small.png"  class="img-circle" err-src="assets/images/avatars/avatar_small.png"/>
+                 <img alt="" ng-src="assets/images/avatars/{{dashboard.owner._id}}.png"  class="img-circle" err-src="assets/images/avatars/avatar.png"/>
                  </div>
                </td>
                <td >
