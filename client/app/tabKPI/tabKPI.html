@@ -1,0 +1,82 @@
+<!-- table KPI (see ng-if) -->  
+	<!--############-->  
+<div style="margin-left:40%;display:inline">
+    Group By :
+    <div class="btn-group" role="group" aria-label="  " ng-init="groupBy = 'Constraints'">
+        <button type="button" class="btn btn-default" ng-class="{'btn-primary':groupBy === 'Chronology'}" ng-click="groupBy = 'Chronology'">Chronology</button>
+        <button type="button" class="btn btn-default" ng-class="{'btn-primary':groupBy === 'Constraints'}" ng-click="groupBy = 'Constraints'">Constraints</button>
+        <button type="button" class="btn btn-default" ng-class="{'btn-primary':groupBy === 'Category'}" ng-click="groupBy = 'Category'">Category</button>
+    </div>
+</div>
+
+
+<div class="row" ng-if="groupBy === 'Chronology'">
+<h3>Chronology</h3>
+<table class="table table-striped table-bordered table-hover" style="margin-top:15px" >
+    <thead>
+        <tr>
+            <th style="text-align:center;">Category</th>
+            <th>KPI Name</th>
+            <th style="text-align:center;">Constraints</th>
+            <th ng-repeat="time in kpis[0].calcul.time" ng-class="{'hidden-xs':$index <= 8,'hidden-sm':$index <= 5}" style="text-align:center;font-size:12px">{{time.month}}</th>
+        </tr>
+    </thead>
+    <tbody style="text-align:center;">
+        <tr ng-repeat="KPI in kpis | orderBy:'category' track by $index" on-finish-render>
+            <td>{{KPI.category}}</td>
+            <td style="text-align:left;"><a href="/KPI/{{KPI._id}}">{{KPI.name}}</a></td>
+            <td>{{KPI.constraint}}</td>
+            <td ng-repeat="time in KPI.calcul.time" ng-class="{'hidden-xs':$index <= 8,'hidden-sm':$index <= 5}" style="text-align:center;font-size:12px"><span class="badge" ng-style="{'background-color':giveMeMyColor(time.value, KPI.category)}" style="height:25px;line-height:20px;width:100%">{{time.value}}</span></td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+
+
+<div class="row" ng-if="groupBy === 'Constraints'">
+    <div class="col-md-4 col-sm-12" ng-repeat="scopeFilter in ['Quality','Cost','Time']">
+        <h3>{{scopeFilter}}</h3>
+        <table class="table table-striped table-bordered table-hover" style="margin-top:15px">
+            <thead>
+                <tr>
+                    <th style="text-align:center;">Category</th>
+                    <th>KPI Name</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody style="text-align:center;">
+                <tr ng-repeat="KPI in kpis | filter:{constraint:scopeFilter} | orderBy:'category' track by $index" on-finish-render>
+                    <td>{{KPI.category}}</td>
+                    <td style="text-align:left;"><a href="/KPI/{{KPI._id}}">{{KPI.name}}</a></td>
+                    <td style="text-align:center;font-size:12px"><span class="badge" ng-style="{'background-color':giveMeMyColor(KPI.calcul.task, KPI.category)}" style="height:25px;line-height:20px;width:100%">{{KPI.calcul.task}}</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+<div class="row" ng-if="groupBy === 'Category'">
+    <div class="col-md-4 col-sm-12" ng-repeat="scopeFilter in ['Alert','Goal','Anticipation']">
+        <h3>{{scopeFilter}}</h3>
+        <table class="table table-striped table-bordered table-hover" style="margin-top:15px">
+            <thead>
+                <tr>
+                    <th style="text-align:center;">Constraints</th>
+                    <th>KPI Name</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody style="text-align:center;">
+                <tr ng-repeat="KPI in kpis | filter:{category:scopeFilter} | orderBy:'constraint' track by $index" on-finish-render>
+                    <td>{{KPI.constraint}}</td>
+                    <td style="text-align:left;"><a href="/KPI/{{KPI._id}}">{{KPI.name}}</a></td>
+                    <td style="text-align:center;font-size:12px"><span class="badge" ng-style="{'background-color':giveMeMyColor(KPI.calcul.task, KPI.category)}" style="height:25px;line-height:20px;width:100%">{{KPI.calcul.task}}</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
