@@ -63,7 +63,26 @@ angular.module('boardOsApp')
                 scope.changeTab = function(name) {
                     scope.helpCategory = name;
                 };
-
+                /**
+                 * Display DirectBar for Task
+                 */
+                if (scope.page === 'task' && scope.dashboardType === 'kpis') {
+                    _.forEach(scope.dataTable, function(task, key2) {
+                        task.data = [{
+                            values: []
+                        }];
+                        _.forEach(scope.dashboardData.calcul.taskTime, function(value, key) {
+                            if (value.task === task.name) {
+                                task.data[0].values = myLibrary.displayLastYear(value.time, 'month', 'valueKPI');
+                            }
+                        });
+                        _.forEach(scope.dashboardData.metricsGroupBy.Task, function(value, key) {
+                            if (key === task.name) {
+                                task.lastmetric = _.last(_.sortBy(value, 'date'));
+                            }
+                        });
+                    });
+                }
                 /**
                  * Display DirectBar for Task
                  */

@@ -1,5 +1,9 @@
 # Change Log
 
+## [v0.12.7](https://github.com/wilsto/boardos/tree/v0.12.7) (2015-03-03)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v0.12.6...v0.12.7)
+
 ## [v0.12.6](https://github.com/wilsto/boardos/tree/v0.12.6) (2015-03-03)
 
 [Full Changelog](https://github.com/wilsto/boardos/compare/v0.12.5...v0.12.6)

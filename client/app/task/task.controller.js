@@ -25,6 +25,7 @@ angular.module('boardOsApp')
             if ($stateParams.id) {
                 $http.get('/api/tasks/' + $stateParams.id).success(function(data) {
                     $scope.task = data;
+                    $scope.currentTask = data.tasks[0];
                     $scope.task.activity_old = data.activity;
                     $scope.task.context_old = data.context;
                     $.growl({
@@ -32,12 +33,39 @@ angular.module('boardOsApp')
                         message: 'Task "' + $scope.task.name + '" loaded'
                     });
                     $scope.updateWatch();
+
+                // calcul des Kpis
+                var kpis = data.kpis;
+
+                // calcul des alertes
+                var alertKPI = _.filter(kpis, function(kpi) { // filtre
+                    return kpi.category === 'Alert';
+                });
+                var alertValue = _.pluck(_.pick(_.pluck(alertKPI, function(kpi) { // valeurs existantes
+                    return kpi.calcul.task;
+                }), _.isNumber));
+                var alertSum = _.reduce(alertValue, function(alertSum, kpicalcul) { // sum
+                    return alertSum + kpicalcul;
+                });
+                $scope.alertsNb = alertSum;
+
+                // calcul des objectifs
+                var goalsKPI = _.filter(kpis, function(kpi) { // filtre
+                    return kpi.category === 'Goal';
+                });
+                var goalsValue = _.pluck(_.pick(_.pluck(goalsKPI, function(kpi) { // valeurs existantes
+                    return kpi.calcul.task;
+                }), _.isNumber));
+                var goalsSum = _.reduce(goalsValue, function(goalsSum, kpicalcul) { // sum
+                    return goalsSum + kpicalcul;
+                });
+                $scope.goalsNb = parseInt(goalsSum / goalsValue.length); // moyenne
                 });
             }
         };
 
         $scope.updateWatch = function() {
-            $scope.taskIsWatched = (_.intersection([$scope.currentUser._id], $scope.task.watchers).length > 0) ? 'YES' : 'NO';
+            $scope.taskIsWatched = (_.intersection([$scope.currentUser._id], _.pluck($scope.currentTask.watchers, '_id')).length > 0) ? 'YES' : 'NO';
         };
 
         $scope.loadTask();
@@ -55,7 +83,7 @@ angular.module('boardOsApp')
         $scope.watchThisTask = function() {
             $http.get('/api/tasks/watch/' + $scope.task._id + '/' + $scope.currentUser._id).success(function(data) {
                 $scope.task.watchers = data.watchers;
-                $scope.updateWatch();
+                $scope.loadTask();
 
                 var logInfo = 'Task watch "' + $scope.task.name + '" was updated by ' + $scope.currentUser.name;
                 $http.post('/api/logs', {
@@ -76,25 +104,25 @@ angular.module('boardOsApp')
             if (form.$valid) {
 
 
-                delete $scope.task.__v;
-                delete $scope.task.kpis;
-                delete $scope.task.metrics;
-                delete $scope.task.tasks;
+                delete $scope.currentTask.__v;
+                delete $scope.currentTask.kpis;
+                delete $scope.currentTask.metrics;
+                delete $scope.currentTask.tasks;
 
-                $scope.task.actor = $scope.currentUser;
-                $scope.task.date = Date.now();
+                $scope.currentTask.actor = $scope.currentUser;
+                $scope.currentTask.date = Date.now();
 
-                if (typeof $scope.task._id === 'undefined') {
+                if (typeof $scope.currentTask._id === 'undefined') {
                     $http.get('/api/tasks/search', {
                         params: {
-                            activity: $scope.task.activity,
-                            context: $scope.task.context
+                            activity: $scope.currentTask.activity,
+                            context: $scope.currentTask.context
                         }
                     }).success(function(alreadyExit) {
                         // si cela n'existe pas 
                         if (alreadyExit.length === 0) {
-                            $http.post('/api/tasks', $scope.task).success(function(data) {
-                                var logInfo = 'Task "' + $scope.task.name + '" was created';
+                            $http.post('/api/tasks', $scope.currentTask).success(function(data) {
+                                var logInfo = 'Task "' + $scope.currentTask.name + '" was created';
                                 $http.post('/api/logs', {
                                     info: logInfo,
                                     actor: $scope.currentUser
@@ -111,8 +139,8 @@ angular.module('boardOsApp')
                         }
                     });
                 } else {
-                    $http.put('/api/tasks/' + $scope.task._id, $scope.task).success(function(data) {
-                        var logInfo = 'Task "' + $scope.task.name + '" was updated';
+                    $http.put('/api/tasks/' + $scope.currentTask._id, $scope.currentTask).success(function(data) {
+                        var logInfo = 'Task "' + $scope.currentTask.name + '" was updated';
                         $http.post('/api/logs', {
                             info: logInfo,
                             actor: $scope.currentUser

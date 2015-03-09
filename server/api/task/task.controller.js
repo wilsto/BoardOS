@@ -23,6 +23,8 @@ var hierarchyValues = {};
 var mTask = {};
 var usersList = [];
 
+var getData = require('../../config/getData');
+
 // Get list of tasks
 exports.index = function(req, res) {
     Task.find(function(err, tasks) {
@@ -73,11 +75,23 @@ exports.watch = function(req, res) {
 
 // Get a single task
 exports.show = function(req, res) {
+    getData.fromTask(req, function(myTasks) {
+        getData.addCalculToKPI(myTasks.kpis, myTasks.tasks, function(kpis) {
+            myTasks.kpis = kpis;
+            return res.json(200, myTasks);
+        });
+
+    });
+};
+
+// Get a single task
+exports.show2 = function(req, res) {
 
     Q()
         .then(function() {
             // Get a single task
             var deferred = Q.defer();
+
             if (typeof req.params.id === 'undefined') {
                 Task.find().sort({
                     date: 'desc'
@@ -89,6 +103,8 @@ exports.show = function(req, res) {
                         return res.send(404);
                     }
                     mTask = {
+                        _id: null,
+                        name: null,
                         context: '',
                         activity: ''
                     };
@@ -103,7 +119,13 @@ exports.show = function(req, res) {
                     if (!task) {
                         return res.send(404);
                     }
-                    mTask = task;
+                    mTask = {
+                        _id: task._id,
+                        name: task.name,
+                        context: task.context,
+                        activity: task.activity
+                    };
+                    mTask.tasks = task;
                     deferred.resolve(mTask);
                 })
             }
@@ -136,7 +158,7 @@ exports.show = function(req, res) {
             return deferred.promise;
         })
         .then(function() {
-            // Get related dashboards
+            // Get related dashboards // A revoir car ne marche pas avec plusieurs taches
             var deferred = Q.defer();
             mTask.dashboards = [];
             Dashboard.find({}, function(err, dashboard) {
@@ -188,19 +210,19 @@ exports.show = function(req, res) {
         .then(function() {
             // Get related metrics
             var deferred = Q.defer();
-            mTask.metrics = [];
             Metric.find().sort({
                 date: 'asc'
             }).lean().exec(function(err, metric) {
-                _.each(metric, function(rowdata, index) { // pour chaque enregistrement
-                    if (rowdata.context.indexOf(mTask.context) >= 0 && rowdata.activity.indexOf(mTask.activity) >= 0) {
-                        rowdata.fromNow = moment(rowdata.date).fromNow();
-                        if (typeof mTask.metrics !== 'undefined') {
-                            mTask.metrics.push(rowdata);
-                        }
-                        var listOfTasks = (typeof req.params.id === 'undefined') ? mTask.tasks : [mTask];
+                _.each(metric, function(metricdata, index) { // pour chaque metric
 
-                        _.each(listOfTasks, function(taskdata, index) {
+                    _.each(mTask.tasks, function(taskdata, index) { // pour chaque tache
+                        taskdata.metrics = [];
+                        if (metricdata.context === mTask.context && metricdata.activity === mTask.activity) {
+                            metricdata.fromNow = moment(metricdata.date).fromNow();
+                            if (typeof taskdata.metrics !== 'undefined') {
+                                taskdata.metrics.push(metricdata);
+                            }
+
                             // get last kpis metrics
                             _.each(mTask.kpis, function(kpidata, index) {
                                 if (taskdata.context.indexOf(kpidata.context) >= 0 && taskdata.activity.indexOf(kpidata.activity) >= 0) {
@@ -208,16 +230,17 @@ exports.show = function(req, res) {
                                 }
                             });
 
-                            if (rowdata.context === taskdata.context && rowdata.activity === taskdata.activity) { // pour la tache
+                            if (metricdata.context === taskdata.context && metricdata.activity === taskdata.activity) { // pour la tache
                                 var oneDay = 24 * 60 * 60 * 1000;
-                                var firstDate = new Date(rowdata.date);
+                                var firstDate = new Date(metricdata.date);
                                 var secondDate = new Date();
                                 taskdata.timewaited = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / (oneDay)));
                                 taskdata.timebetween = taskdata.timetowait - taskdata.timewaited;
-                                taskdata.lastmetric = rowdata;
+                                taskdata.lastmetric = metricdata;
                             }
-                        });
-                    }
+
+                        }
+                    });
                 });
                 deferred.resolve(mTask);
             })
@@ -297,21 +320,20 @@ exports.update = function(req, res) {
                 return handleError(res, err);
             }
             // modifier les metrics correspondants
-            Metric.update({
-                'context': context_old,
-                'activity': activity_old
-            }, {
-                'context': req.body.context,
-                'activity': req.body.activity
-            }, {
-                multi: true
-            }, function(err, metrics) {
-                if (err) return handleError(err);
-                console.log('The number of updated documents was %d', metrics);
-                return res.send(201);
-            });
-
-
+            if (context_old !== req.body.context || activity_old !== req.body.activity) {
+                Metric.update({
+                    'context': context_old,
+                    'activity': activity_old
+                }, {
+                    'context': req.body.context,
+                    'activity': req.body.activity
+                }, {
+                    multi: true
+                }, function(err, metrics) {
+                    if (err) return handleError(err);
+                    return res.send(201);
+                });
+            }
         });
     });
 };

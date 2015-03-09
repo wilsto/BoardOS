@@ -23,6 +23,7 @@ var tools = require('../../config/tools');
 var getData = require('../../config/getData');
 var hierarchyValues = {};
 var mDashboard = {};
+var mkpis = {};
 
 // Get list of dashboards
 exports.index = function(req, res) {
@@ -67,157 +68,80 @@ exports.show = function(req, res) {
                         return res.send(404);
                     }
                     mDashboard = dashboard;
+
+                    if (typeof mDashboard.context === 'undefined') {
+                        mDashboard.context = ''
+                    }
+                    if (typeof mDashboard.activity === 'undefined') {
+                        mDashboard.activity = ''
+                    }
                     deferred.resolve(mDashboard);
                 })
             }
-
             return deferred.promise;
         })
         .then(function() {
             // Get related KPIs
             var deferred = Q.defer();
-
-
-            KPI.find({}, function(err, kpis) {
-
-                mDashboard.kpis = [];
-                var promises = [];
-
-                if (typeof mDashboard.context === 'undefined') {
-                    mDashboard.context = ''
-                }
-                if (typeof mDashboard.activity === 'undefined') {
-                    mDashboard.activity = ''
-                }
-
-                _.each(kpis, function(rowdata, index) {
-                    if ((typeof rowdata.context === 'undefined' || rowdata.context === '' || rowdata.context.indexOf(mDashboard.context) >= 0) && (typeof rowdata.activity === 'undefined' || rowdata.activity === '' || rowdata.activity.indexOf(mDashboard.activity) >= 0)) {
-                        var mKPI = rowdata.toObject();
-
-                        var KPIInfo = {
-                            params: {},
-                            query: {}
-                        };
-                        KPIInfo.params.id = mKPI._id;
-                        KPIInfo.query.context = mDashboard.context;
-                        KPIInfo.query.activity = mDashboard.activity;
-                        KPIInfo.query.url = 'Dashboard';
-                        // Get a single kpi
-                        promises.push(KPIInfo);
-                    }
-                });
-
-                var lastPromise = promises.reduce(function(promise, KPIToGet) {
-                    return promise.then(function() {
-                            getData.KPIById(KPIToGet, function(newKPI) {
-                                mDashboard.kpis.push(newKPI);
-                            })
-                            return Q.delay(50);
-                        }
-
-                    );
-                }, Q.resolve());
-
-                lastPromise
-                    .then(function() {
-
-                        // si multi dashboards, on recolle chaque KPIs dans chaque dashboard
-                        if (typeof req.params.id === 'undefined') {
-                            _.each(mDashboard.dashboards, function(thisDashboard, index) {
-                                if (typeof thisDashboard.context === 'undefined') {
-                                    thisDashboard.context = ''
-                                }
-                                if (typeof thisDashboard.activity === 'undefined') {
-                                    thisDashboard.activity = ''
-                                }
-
-                                var dashboardInfo = {};
-                                dashboardInfo.context = thisDashboard.context;
-                                dashboardInfo.activity = thisDashboard.activity;
-                                thisDashboard.kpis = [];
-
-                                _.each(mDashboard.kpis, function(rowdata, index) {
-                                    if ((typeof rowdata.context === 'undefined' || rowdata.context === '' || rowdata.context.indexOf(thisDashboard.context) >= 0) && (typeof rowdata.activity === 'undefined' || rowdata.activity === '' || rowdata.activity.indexOf(thisDashboard.activity) >= 0)) {
-                                        thisDashboard.kpis.push(getData.shrinkPerimeterOfKPI(_.clone(rowdata), dashboardInfo));
-                                    }
-                                });
-                            });
-                        }
-
-                        deferred.resolve(mDashboard);
-                    });
-
+            KPI.find({}).lean().exec(function(err, kpis) {
+                mkpis = kpis;
+                deferred.resolve(mDashboard);
             });
-
             return deferred.promise;
         })
         .then(function() {
             // Get related Tasks
             var deferred = Q.defer();
             mDashboard.tasks = [];
-            Task.find({}, function(err, task) {
-                _.each(task, function(rowdata, index) {
-                    rowdata = rowdata.toObject()
-                    if (rowdata.context.indexOf(mDashboard.context) >= 0 && rowdata.activity.indexOf(mDashboard.activity) >= 0) {
-
-                        // get last kpis metrics
-                        _.each(mDashboard.kpis, function(kpidata, index) {
-                            if (rowdata.context.indexOf(kpidata.context) >= 0 && rowdata.activity.indexOf(kpidata.activity) >= 0) {
-                                rowdata.timetowait = Math.min((typeof kpidata.refresh === 'undefined') ? Infinity : kpidata.refresh, (typeof rowdata.timetowait === 'undefined') ? Infinity : rowdata.timetowait);
-                            }
-                        });
-
-                        mDashboard.tasks.push(rowdata);
+            var cloneReq = _.clone(req);
+            delete cloneReq.params.id;
+            getData.fromTask(cloneReq, function(myTasks) {
+                mDashboard.tasks = _.filter(myTasks.tasks, function(task) {
+                    return (task.context.indexOf(mDashboard.context) >= 0 && task.activity.indexOf(mDashboard.activity) >= 0);
+                });
+                _.each(mDashboard.dashboards, function(dashboard) {
+                    if (typeof dashboard.context === 'undefined') {
+                        dashboard.context = ''
                     }
+                    if (typeof dashboard.activity === 'undefined') {
+                        dashboard.activity = ''
+                    }
+                    dashboard.tasks = _.filter(myTasks.tasks, function(task) {
+                        return (task.context.indexOf(dashboard.context) >= 0 && task.activity.indexOf(dashboard.activity) >= 0);
+                    });
                 });
                 deferred.resolve(mDashboard);
-            })
-            return deferred.promise;
-        })
-        .then(function() {
-            // Get related metrics
-            var deferred = Q.defer();
-            mDashboard.metrics = [];
-            Metric.find({}, {}, {
-                sort: {
-                    date: 1 //Sort by Date Added DESC
-                }
-            }, function(err, metric) {
-                _.each(metric, function(rowdata, index) {
-                    if (rowdata.context.indexOf(mDashboard.context) >= 0 && rowdata.activity.indexOf(mDashboard.activity) >= 0) {
-                        rowdata = rowdata.toObject()
-                        rowdata.fromNow = moment(rowdata.date).fromNow();
-                        // get last tasks metrics
-                        _.each(mDashboard.tasks, function(taskdata, index) {
-                            if (rowdata.context === taskdata.context && rowdata.activity === taskdata.activity) { // pour la tache
-                                var oneDay = 24 * 60 * 60 * 1000;
-                                var firstDate = new Date(rowdata.date);
-                                var secondDate = new Date();
-                                taskdata.timewaited = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / (oneDay)));
-                                taskdata.timebetween = taskdata.timetowait - taskdata.timewaited;
-                                taskdata.lastmetric = rowdata;
-                                if (typeof taskdata.metricActors === 'undefined') {
-                                    taskdata.metricActors = [];
-                                }
-                                taskdata.metricActors.push(rowdata.actor);
-
-                            }
-                        });
-                        mDashboard.metrics.push(rowdata);
-                    }
-                });
-                deferred.resolve(mDashboard);
-            })
-            return deferred.promise;
-        })
-        .then(function() {
-            var actorsObject = _.countBy(mDashboard.metrics, 'actor');
-            mDashboard.actors = _.map(actorsObject, function(value, key) {
-                return {
-                    name: key,
-                    count: value
-                };
             });
+            return deferred.promise;
+        })
+        .then(function() {
+            // Si plusieurs dashboards
+            var deferred = Q.defer();
+            if (typeof mDashboard.dashboards !== 'undefined') {
+                _.each(mDashboard.dashboards, function(dashboard, index) {
+                    getData.addCalculToKPI(mkpis, dashboard.tasks, function(kpis) {
+                        console.log('index', index);
+
+                        dashboard.kpis = kpis.slice(0);
+                        if (index === mDashboard.dashboards.length - 1) {
+                            deferred.resolve(mDashboard)
+                        }
+                    });
+                });
+            }
+            return deferred.promise;
+        })
+        .then(function() {
+            // Get related Tasks
+            var deferred = Q.defer();
+            getData.addCalculToKPI(mkpis, mDashboard.tasks, function(kpis) {
+                //console.log('kpis', kpis);
+                mDashboard.kpis = kpis;
+                deferred.resolve(mDashboard)
+            });
+            return deferred.promise;
+        })
+        .then(function() {
             return res.json(mDashboard);
         });
 };
@@ -225,7 +149,6 @@ exports.show = function(req, res) {
 // Creates a new dashboard in the DB.
 exports.create = function(req, res) {
     var newDashboard = new Dashboard(req.body, false);
-    console.log('newDashboard', newDashboard);
     newDashboard.save(function(err, doc) {
         res.send(200, doc);
     });

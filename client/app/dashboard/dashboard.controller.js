@@ -37,6 +37,14 @@ angular.module('boardOsApp')
                         values: []
                     }];
 
+                    // on rassemble les métriques
+                    $scope.dashboard.metrics = [];
+                    _.each($scope.dashboard.tasks, function(task) {
+                        _.each(task.metrics, function(metric) {
+                            $scope.dashboard.metrics.push(metric);
+                        });
+                    });
+
                     $scope.predataKPIs = myLibrary.getByMonth($scope.dashboard.kpis, 'date', 'value');
                     $scope.predataTasks = myLibrary.getByMonth($scope.dashboard.tasks, 'date', 'value');
                     $scope.predataMetrics = myLibrary.getByMonth($scope.dashboard.metrics, 'date', 'value');
@@ -45,48 +53,38 @@ angular.module('boardOsApp')
                     var dataGoals = [];
                     var dataGoals4QCT = [];
                     var dataAlerts = [];
+
                     _.forEach($scope.dashboard.kpis, function(kpi) {
                         var kpiAlerts = [];
                         var kpiGoals = [];
 
                         if (kpi.category === 'Goal') {
-                            _.forEach(kpi.calcul.taskTime, function(taskbytime) {
-                                var goalsByMonth = _.pluck(myLibrary.getByMonth(taskbytime.time, 'month', 'valueKPI'), 'mean');
 
+                            var goalsByMonth = _.pluck(myLibrary.getByMonth(kpi.calcul.taskTime, 'month', 'value'), 'mean');
+                            dataGoals.push(goalsByMonth);
+                            dataGoals4QCT.push({
+                                name: kpi.constraint,
+                                value: _.last(goalsByMonth)
+                            });
+                            kpiGoals.push(goalsByMonth);
 
-
-                                dataGoals.push(goalsByMonth);
-                                dataGoals4QCT.push({
-                                    name: kpi.constraint,
-                                    value: _.last(goalsByMonth)
-                                });
-                                kpiGoals.push(goalsByMonth);
-
-
-                                kpi.calcul.time = _.map(myLibrary.getCalculByMonth(kpiGoals), function(data) {
-                                    return {
-                                        month: data.label,
-                                        valueKPI: data.mean
-                                    };
-                                });
+                            kpi.calcul.time = _.map(myLibrary.getCalculByMonth(kpiGoals), function(data) {
+                                return {
+                                    month: data.label,
+                                    valueKPI: data.mean
+                                };
                             });
                         }
                         if (kpi.category === 'Alert') {
-                            _.forEach(kpi.calcul.taskTime, function(taskbytime) {
-                                var alertsByMonth = _.pluck(myLibrary.getByMonth(taskbytime.time, 'month', 'valueKPI'), 'mean');
-                                kpiAlerts.push(alertsByMonth);
-                                dataAlerts.push(alertsByMonth);
-                                kpi.calcul.time = _.map(myLibrary.getCalculByMonth(kpiAlerts), function(data) {
-                                    return {
-                                        month: data.label,
-                                        valueKPI: data.sum
-                                    };
-                                });
-                            });
+
+                            var alertsByMonth = _.pluck(myLibrary.getByMonth(kpi.calcul.taskTime, 'month', 'value'), 'mean');
+                            kpiAlerts.push(alertsByMonth);
+                            dataAlerts.push(alertsByMonth);
                         }
                     });
 
                     $scope.dataKPIs[0].values = $scope.predataKPIs;
+                    
                     $scope.dataTasks[0].values = $scope.predataTasks;
                     $scope.dataMetrics[0].values = $scope.predataMetrics;
                     $scope.dataConfidence[0].values = $scope.predataConfidence;

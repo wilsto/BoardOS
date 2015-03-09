@@ -238,7 +238,16 @@
 
 	<!-- table KPI (see ng-if) -->  
 	<!--############-->  
-	<table class="table table-striped table-bordered table-hover" id="sample_4" ng-if="dashboardType === 'kpis'">
+<div style="margin-left:40%;display:inline" ng-if="dashboardType === 'kpis'">
+   Group By :
+    <div class="btn-group" role="group" aria-label="  ">
+  <button type="button" class="btn btn-primary">Time</button>
+  <button type="button" class="btn btn-default">Scope</button>
+  <button type="button" class="btn btn-default">Type</button>
+</div>
+</div>
+
+	<table class="table table-striped table-bordered table-hover" style="margin-top:15px" ng-if="dashboardType === 'kpis'">
 		<thead>
 			<tr>
 				<th  style="text-align:center;">Type</th>
@@ -248,7 +257,7 @@
 			</tr>
 		</thead>
 		<tbody style="text-align:center;">
-			<tr ng-repeat="KPI in dataTable | orderBy : 'category' track by $index " on-finish-render>
+			<tr ng-repeat="KPI in dataTable track by $index " on-finish-render>
 				<td>{{KPI.category}}</td>
 				<td style="text-align:left;"><a href="/KPI/{{KPI._id}}">{{KPI.name}}</a></td>
 				<td>{{KPI.constraint}}</td>
@@ -263,7 +272,7 @@
 				<td class="hidden-xs"> <span class="badge" ng-style="{'background-color':giveMeMyColor(KPI.data[0].values[8].value, KPI.category)}"  style="height:25px;line-height:20px;width:100%">{{KPI.data[0].values[8].value}}</span><span style="color:lightgrey" class="glyphicon" ng-class="{'glyphicon-unchecked':KPI.data[0].values[8].value ===null}"></span></td>
 				<td> <span class="badge" ng-style="{'background-color':giveMeMyColor(KPI.data[0].values[9].value, KPI.category)}"  style="height:25px;line-height:20px;width:100%">{{KPI.data[0].values[9].value}}</span><span style="color:lightgrey" class="glyphicon" ng-class="{'glyphicon-unchecked':KPI.data[0].values[9].value ===null}"></span></td>
 				<td> <span class="badge" ng-style="{'background-color':giveMeMyColor(KPI.data[0].values[10].value, KPI.category)}"  style="height:25px;line-height:20px;width:100%">{{KPI.data[0].values[10].value}}</span><span style="color:lightgrey" class="glyphicon" ng-class="{'glyphicon-unchecked':KPI.data[0].values[10].value ===null}"></span></td>
-				<td> <span class="badge" ng-style="{'background-color':giveMeMyColor(KPI.data[0].values[11].value, KPI.category)}"  style="height:25px;line-height:20px;width:100%">{{KPI.data[0].values[11].value}}</span><span style="color:lightgrey" class="glyphicon" ng-class="{'glyphicon-unchecked':KPI.data[0].values[11].value ===null}"></span></td>
+				<td> <span class="badge" ng-style="{'background-color':giveMeMyColor(KPI.data[0].values[11].value, KPI.category)}"  style="height:25px;line-height:20px;width:100%">{{dashboardData.tasks[0].kpis[$index].calcul.task}}</span><span style="color:lightgrey" class="glyphicon" ng-class="{'glyphicon-unchecked':KPI.data[0].values[11].value ===null}"></span></td>
 				<td ng-if="page === 'dashboard2'" ><nvd3 options="options" data="KPI.data"></nvd3></td>
 			</tr>
 		</tbody>
@@ -335,7 +344,7 @@
 					<td>{{metric.progress}}% <span ng-if="metric.status" class="label pull-right" ng-class="{'label-info':metric.status =='In Progress','label-success':metric.status =='Finished','label-warning':metric.status =='Not Started' }">  {{metric.status}} </span></td>
 					<td>{{metric.endDate | date:'mediumDate'}} <span class="label pull-right" ng-class="{'label-danger':metric.progressStatus==='Late','label-success':metric.progressStatus==='On time','label-warning':metric.progressStatus==='At Risk' }">  {{metric.progressStatus}} </span></td>
 					<td>{{metric.trust}}</td>
-					<td>{{metric.comments}}</td>
+					<td style="max-width: 300px;">{{metric.comments}}</td>
 					<td ng-if="page === 'task'" style="width:25px">
 						<button ng-click="openMetric(dashboardData, metric,false)" type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></button>
 					</td>

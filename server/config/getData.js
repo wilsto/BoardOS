@@ -7,20 +7,307 @@
 var _ = require('lodash');
 var moment = require('moment');
 var math = require('mathjs');
+var Q = require('q');
 
 var KPI = require('../api/KPI/KPI.model');
-var Q = require('q');
 var Dashboard = require('../api/dashboard/dashboard.model');
 var Task = require('../api/task/task.model');
 var Metric = require('../api/metric/metric.model');
 var Hierarchies = require('../api/hierarchy/hierarchy.model');
-var hierarchyValues = {};
+var User = require('../api/user/user.model');
 
+var hierarchyValues = {};
+var mTask = {};
+var usersList = [];
+var dashboards = [];
 var mKPI = {};
+
 var tools = require('./tools');
 
-
 module.exports = {
+    fromTask: function(req, callback) {
+
+        Q()
+            .then(function() {
+                // Get a single task
+                var deferred = Q.defer();
+                if (typeof req.params.id === 'undefined') {
+                    Task.find().sort({
+                        date: 'desc'
+                    }).lean().exec(function(err, task) {
+                        mTask = {
+                            _id: null,
+                            name: null,
+                            context: '',
+                            activity: ''
+                        };
+                        mTask.tasks = task;
+                        deferred.resolve(mTask);
+                    })
+                } else {
+                    Task.findById(req.params.id).lean().exec(function(err, task) {
+                        mTask = {
+                            _id: task._id,
+                            name: task.name,
+                            context: task.context,
+                            activity: task.activity
+                        };
+                        mTask.tasks = [task];
+                        deferred.resolve(mTask);
+                    })
+                }
+                return deferred.promise;
+            })
+            .then(function() {
+                // Get a single user
+                var deferred = Q.defer();
+                User.find({}, '-salt -hashedPassword', function(err, user) {
+                    usersList = user;
+                    deferred.resolve(usersList);
+                })
+                return deferred.promise;
+            })
+            .then(function() {
+                // Get a single user
+                var deferred = Q.defer();
+                Dashboard.find({}, function(err, dashboard) {
+                    dashboards = dashboard;
+                    deferred.resolve(dashboards);
+                })
+                return deferred.promise;
+            })
+            .then(function() {
+                // Get a single hierarchy
+                var deferred = Q.defer();
+                Hierarchies.find({
+                    name: 'Task'
+                }, function(err, hierarchy) {
+                    hierarchyValues = hierarchy[0].list;
+                    deferred.resolve(hierarchy);
+                })
+                return deferred.promise;
+            })
+            .then(function() {
+                // Get all kpis
+                var deferred = Q.defer();
+                KPI.find({}).lean().exec(function(err, mKPI) {
+                    mTask.kpis = mKPI;
+                    deferred.resolve(mKPI);
+                })
+                return deferred.promise;
+            })
+            .then(function() {
+                // Get related metrics
+                var deferred = Q.defer();
+                Metric.find().sort({
+                    date: 'asc'
+                }).lean().exec(function(err, metric) {
+                    _.each(metric, function(metricdata, index) { // pour chaque metric
+
+                        _.each(mTask.tasks, function(taskdata, index) { // pour chaque tache
+
+                            // si c'est la première métric, on crèe l'objet
+                            if (typeof taskdata.metrics === 'undefined') {
+                                taskdata.metrics = []
+                            }
+
+                            // si la metrique est attaché à la tache
+                            if (metricdata.context === taskdata.context && metricdata.activity === taskdata.activity) {
+
+
+                                // ajouter calcul auto
+                                metricdata.taskname = taskdata.name;
+
+                                // nombre de jours séparant la date de début, fin, entre les deux
+                                metricdata.duration = moment(metricdata.endDate).diff(metricdata.startDate, 'days');
+                                metricdata.timeToBegin = moment(metricdata.startDate).diff(moment(), 'days');
+                                metricdata.timeToEnd = moment(metricdata.endDate).diff(moment(), 'days');
+
+                                // predictedCharge
+                                metricdata.projectedWorkload = (metricdata.progress > 0) ? parseInt(parseInt(metricdata.timeSpent) * 100 / parseInt(metricdata.progress)) : metricdata.load;
+
+                                // ajouter information par mois 
+                                metricdata.groupTimeByValue = moment(metricdata.date).format("YYYY.MM");
+
+                                // on calcule les temps d'écarts
+                                var oneDay = 24 * 60 * 60 * 1000;
+                                var firstDate = new Date(metricdata.date);
+                                var secondDate = new Date();
+                                taskdata.timewaited = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / (oneDay)));
+                                taskdata.timebetween = taskdata.timetowait - taskdata.timewaited;
+                                metricdata.fromNow = moment(metricdata.date).fromNow();
+                                taskdata.lastmetric = metricdata;
+
+                                //on l'ajoute à la liste
+                                taskdata.metrics.push(metricdata);
+
+                                // kpis 
+                                _.each(mTask.kpis, function(kpidata, index) {
+
+                                    // on calcule le time to wait par rapport aux KPIs
+                                    if (taskdata.context.indexOf(kpidata.context) >= 0 && taskdata.activity.indexOf(kpidata.activity) >= 0) {
+                                        taskdata.timetowait = Math.min((typeof kpidata.refresh === 'undefined') ? Infinity : kpidata.refresh, (typeof taskdata.timetowait === 'undefined') ? Infinity : taskdata.timetowait);
+                                    }
+
+                                    // ajout des couleurs
+                                    if (typeof metricdata[kpidata.metricTaskField] === 'string') {
+                                        var Value = _.filter(hierarchyValues, function(item) {
+                                            return kpidata.metricTaskField && item.text.toLowerCase() === metricdata[kpidata.metricTaskField].toLowerCase();
+                                        });
+                                        if (Value.length > 0) {
+                                            metricdata.color = Value[0].color;
+                                            metricdata.value = Value[0].value;
+                                            metricdata.description = Value[0].description;
+                                        }
+                                    }
+                                });
+
+                            }
+                        });
+                    });
+                    deferred.resolve(mTask);
+                })
+                return deferred.promise;
+            })
+            .then(function() {
+                // Calculer les KPI par taches
+                var deferred = Q.defer();
+
+                // pour chaque tache
+                _.each(mTask.tasks, function(taskdata, index) {
+                    taskdata.kpis = [];
+
+                    // kpis 
+                    _.each(mTask.kpis, function(kpidata, index) {
+                        taskdata.kpis[index] = {};
+                        var mKPI = taskdata.kpis[index];
+
+                        // on ajoute des caractéristiques aux KPI
+                        //##############################################
+                        mKPI.metricsGroupBy = {};
+                        mKPI.calcul = {};
+                        mKPI.metricsGroupBy.Time = tools.groupMultiBy(taskdata.metrics, ['groupTimeByValue']);
+                        var filteredMetrics = _.filter(taskdata.metrics, function(metric) {
+                            return metric.groupTimeByValue === moment(new Date()).format("YYYY.MM"); //filtrer par le mois en cours
+                        });
+                        mKPI.calcul.task = tools.calculKPI(filteredMetrics, kpidata);
+                        mKPI.calcul.taskTime = _.map(mKPI.metricsGroupBy.Time, function(value, key) {
+                            return {
+                                month: key,
+                                valueKPI: tools.calculKPI(value, kpidata)
+                            };
+                        });
+                    });
+
+                });
+                deferred.resolve(mTask);
+                return deferred.promise;
+            })
+            .then(function() {
+                // Calculer les KPI par taches
+                var deferred = Q.defer();
+
+                // pour chaque tache
+                _.each(mTask.tasks, function(taskdata, index) {
+                    var actorsObject = _.countBy(taskdata.metrics, function(metric) {
+                        return metric.actor._id;
+                    });
+                    taskdata.actors = _.map(actorsObject, function(value, key) {
+                        return {
+                            _id: key,
+                            count: value,
+                            name: _.pluck(_.filter(usersList, function(user) {
+                                return (key === user._id.toString())
+                            }), 'name').toString()
+                        };
+                    });
+                    taskdata.watchers = _.map(taskdata.watchers, function(value, key) {
+                        return {
+                            _id: value,
+                            count: 1,
+                            name: _.pluck(_.filter(usersList, function(user) {
+                                return (value === user._id.toString())
+                            }), 'name').toString()
+                        };
+                    });
+                });
+                deferred.resolve(mTask);
+                return deferred.promise;
+            })
+            .then(function() {
+                // Get related dashboards // A revoir car ne marche pas avec plusieurs taches
+                var deferred = Q.defer();
+                // pour chaque tache
+                _.each(mTask.tasks, function(taskdata, index) {
+                    taskdata.dashboards = [];
+                    _.each(dashboards, function(dashboarddata, index) {
+                        if (typeof dashboarddata.context === 'undefined' || dashboarddata.context === '') {
+                            dashboarddata.context = taskdata.context
+                        }
+                        if (typeof dashboarddata.activity === 'undefined' || dashboarddata.activity === '') {
+                            dashboarddata.activity = taskdata.activity
+                        }
+                        if (typeof dashboarddata.context === 'undefined' || taskdata.context.indexOf(dashboarddata.context) >= 0 && typeof dashboarddata.activity === 'undefined' || taskdata.activity.indexOf(dashboarddata.activity) >= 0) {
+                            if (typeof taskdata.dashboards !== 'undefined') {
+                                taskdata.dashboards.push(dashboarddata.toObject());
+                            }
+                        }
+                    });
+
+                });
+                deferred.resolve(mTask);
+                return deferred.promise;
+            })
+            .then(function() {
+                callback(mTask);
+            })
+            .then(null, console.error);
+    },
+    addCalculToKPI: function(kpis, tasks, callback) {
+        // on ajoute des caractéristiques aux KPI
+        //##############################################
+        _.each(kpis, function(kpi, index) {
+            kpi.calcul = {};
+            kpi.calcul.details = _.pluck(tasks, function(task) {
+                return task.kpis[index].calcul;
+            });
+
+            // calcul par tache
+            var kpicalculValues = _.filter(_.pluck(kpi.calcul.details, function(calcul) {
+                return calcul.task;
+            }), function(data) {
+                return !isNaN(parseInt(data));
+            });
+            var sum = _.reduce(kpicalculValues, function(sum, kpicalcul) { // sum
+                return sum + kpicalcul;
+            });
+            kpi.calcul.task = (kpi.category === 'Alert') ? sum : parseInt(sum / kpicalculValues.length);
+
+            // calcul par tache et temps
+            kpicalculValues = _.filter(_.pluck(kpi.calcul.details, function(calcul) {
+                return calcul.taskTime;
+            }), function(data) {
+                return !isNaN(parseInt(data[0].valueKPI));
+            });
+            var kpiValuesByMonth = _.groupBy(_.flatten(kpicalculValues), function(data) {
+                return data.month;
+            });
+            kpi.calcul.taskTime = _.map(kpiValuesByMonth, function(data) {
+                sum = _.reduce(_.pluck(data, 'valueKPI'), function(sum, kpicalcul) { // sum
+                    return sum + kpicalcul;
+                });
+                var number = _.pluck(_.pick(_.pluck(data, 'valueKPI'), _.isNumber)).length;
+                return {
+                    month: data[0].month,
+                    sum: sum,
+                    number: number,
+                    value: (kpi.category === 'Alert') ? sum : (number === 0) ? null : parseInt(sum / number)
+                };
+            });
+
+        });
+        callback(kpis);
+    },
     KPIById: function(req, callback) {
 
         Q()
@@ -151,7 +438,7 @@ module.exports = {
             })
             .then(null, console.error);
     },
-    addCalculToKPI: function(mKPI) {
+    addCalculToKPI2: function(mKPI) {
         // on ajoute des caractéristiques aux KPI
         //##############################################
         mKPI.metricsGroupBy = {};

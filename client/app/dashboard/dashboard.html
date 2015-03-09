@@ -8,9 +8,9 @@
         <li>
           <img src="assets/images/dashboard.jpg" class="img-responsive" alt=""/>
         </li>
-        <li>
-          <a href="#">Pinned <span>
-            3 </span>
+       <li>
+          <a href="#">Dashboard <span>
+           OK </span>
           </a>
         </li>
       </ul>
@@ -30,7 +30,7 @@
               <i class="fa fa-crosshairs"></i><span style="color:lightgrey"> Axis </span>  {{dashboard.axe  || 'All'}}
             </li><br/><br/>
             <li>
-              <i class="icon-cursor"></i><span style="color:lightgrey"> Category </span>  {{dashboard.category || 'All'}}
+              <i class="fa fa-sitemap"></i><span style="color:lightgrey"> Category </span>  {{dashboard.category || 'All'}}
             </li>
           </ul>
         </div>
@@ -123,7 +123,7 @@
     KPIs 
     <span class="badge badge-default"> {{dashboard.kpis.length || 0}}</span>
   </tab-heading>
-  <div dashboard-tab dashboard-type="kpis" dashboard-data="dashboard" ng-if="dashboard"></div>
+  <div tab-k-p-i data="dashboard" multitasks="true" ng-if="dashboard"></div>
 </tab>
 <!--tab Dashboard-->
 <tab ng-if="dashboard._id">

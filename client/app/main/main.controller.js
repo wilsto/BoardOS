@@ -34,41 +34,43 @@ angular.module('boardOsApp')
                         values: []
                     }];
 
-                    $scope.predataKPIs = myLibrary.getByMonth(dashboards.kpis, 'date', 'value');
-                    $scope.predataTasks = myLibrary.getByMonth(dashboards.tasks, 'date', 'value');
-                    $scope.predataMetrics = myLibrary.getByMonth(dashboards.metrics, 'date', 'value');
-                    $scope.predataConfidence = myLibrary.getByMonth(dashboards.metrics, 'date', 'trust');
+                    // on rassemble les métriques
+                    $scope.dataDashboards.metrics = [];
+                    _.each($scope.dataDashboards.tasks, function(task) {
+                        _.each(task.metrics, function(metric) {
+                            $scope.dataDashboards.metrics.push(metric);
+                        });
+                    });
+
+                    $scope.predataKPIs = myLibrary.getByMonth($scope.dataDashboards.kpis, 'date', 'value');
+                    $scope.predataTasks = myLibrary.getByMonth($scope.dataDashboards.tasks, 'date', 'value');
+                    $scope.predataMetrics = myLibrary.getByMonth($scope.dataDashboards.metrics, 'date', 'value');
+                    $scope.predataConfidence = myLibrary.getByMonth($scope.dataDashboards.metrics, 'date', 'trust');
 
                     var dataGoals = [];
                     var dataAlerts = [];
-                    _.forEach(dashboards.kpis, function(kpi) {
-                        var kpiGoals = [];
+                    _.forEach($scope.dataDashboards.kpis, function(kpi) {
                         var kpiAlerts = [];
+                        var kpiGoals = [];
+
                         if (kpi.category === 'Goal') {
-                            _.forEach(kpi.calcul.taskTime, function(taskbytime) {
-                                var goalsByMonth = _.pluck(myLibrary.getByMonth(taskbytime.time, 'month', 'valueKPI'), 'mean');
-                                dataGoals.push(goalsByMonth);
-                                kpiGoals.push(goalsByMonth);
-                                kpi.calcul.time = _.map(myLibrary.getCalculByMonth(kpiGoals), function(data) {
-                                    return {
-                                        month: data.label,
-                                        valueKPI: data.mean
-                                    };
-                                });
+
+                            var goalsByMonth = _.pluck(myLibrary.getByMonth(kpi.calcul.taskTime, 'month', 'value'), 'mean');
+                            dataGoals.push(goalsByMonth);
+                            kpiGoals.push(goalsByMonth);
+
+                            kpi.calcul.time = _.map(myLibrary.getCalculByMonth(kpiGoals), function(data) {
+                                return {
+                                    month: data.label,
+                                    valueKPI: data.mean
+                                };
                             });
                         }
                         if (kpi.category === 'Alert') {
-                            _.forEach(kpi.calcul.taskTime, function(taskbytime) {
-                                var alertsByMonth = _.pluck(myLibrary.getByMonth(taskbytime.time, 'month', 'valueKPI'), 'mean');
-                                kpiAlerts.push(alertsByMonth);
-                                dataAlerts.push(alertsByMonth);
-                                kpi.calcul.time = _.map(myLibrary.getCalculByMonth(kpiAlerts), function(data) {
-                                    return {
-                                        month: data.label,
-                                        valueKPI: data.sum
-                                    };
-                                });
-                            });
+
+                            var alertsByMonth = _.pluck(myLibrary.getByMonth(kpi.calcul.taskTime, 'month', 'value'), 'mean');
+                            kpiAlerts.push(alertsByMonth);
+                            dataAlerts.push(alertsByMonth);
                         }
                     });
 
@@ -86,56 +88,30 @@ angular.module('boardOsApp')
                     _.forEach(dashboards.dashboards, function(dashboard, key) {
                         dashboard.nbGoals = 0;
                         dashboard.nbAlerts = 0;
-                        var dataGoals = 0;
-                        var dataAlerts = 0;
+                        var dataGoals = [];
+                        var dataAlerts = [];
 
                         // pour chaque KPI du dashboard
                         _.forEach(dashboard.kpis, function(kpi, key) {
                             var kpiGoals = [];
                             var kpiAlerts = [];
-
                             if (kpi.category === 'Goal') {
-                                _.forEach(kpi.calcul.taskTime, function(taskbytime) {
-                                    var goalsByMonth = _.pluck(myLibrary.getByMonth(taskbytime.time, 'month', 'valueKPI'), 'mean');
-                                    kpiGoals.push(goalsByMonth);
-                                    kpi.calcul.time = _.map(myLibrary.getCalculByMonth(kpiGoals), function(data) {
-                                        return {
-                                            month: data.label,
-                                            valueKPI: data.mean
-                                        };
-                                    });
-                                });
+                                dataGoals.push(kpi.calcul.task);
                             }
 
                             if (kpi.category === 'Alert') {
-                                _.forEach(kpi.calcul.taskTime, function(taskbytime) {
-                                    var alertsByMonth = _.pluck(myLibrary.getByMonth(taskbytime.time, 'month', 'valueKPI'), 'mean');
-                                    kpiAlerts.push(alertsByMonth);
-                                    kpi.calcul.time = _.map(myLibrary.getCalculByMonth(kpiAlerts), function(data) {
-                                        return {
-                                            month: data.label,
-                                            valueKPI: data.sum
-                                        };
-                                    });
-                                });
-                            }
-
-                            if (kpi.category === 'Goal' && kpi.calcul.time && kpi.calcul.time.length > 0) {
-                                dataGoals += _.last(kpi.calcul.time).valueKPI;
-                                if (_.last(kpi.calcul.time).valueKPI) {
-                                    dashboard.nbGoals += 1;
-                                }
-                            }
-
-                            if (kpi.category === 'Alert' && kpi.calcul.time && kpi.calcul.time.length > 0) {
-                                dashboard.nbAlerts += 1;
-                                dataAlerts += _.last(kpi.calcul.time).valueKPI;
+                                dataAlerts.push(kpi.calcul.task);
                             }
 
                         });
-
-                        dashboard.dataGoals = (dashboard.nbGoals > 0) ? parseInt(dataGoals / dashboard.nbGoals) : '-';
-                        dashboard.dataAlerts = dataAlerts;
+                        var sumGoals = _.reduce(dataGoals, function(sumGoals, kpicalcul) { // sum
+                            return sumGoals + kpicalcul;
+                        });
+                        dashboard.dataGoals = (dataGoals.length > 0) ? parseInt(sumGoals / dataGoals.length) : '-';
+                        var sumAlerts = _.reduce(dataAlerts, function(sumAlerts, kpicalcul) { // sum
+                            return sumAlerts + kpicalcul;
+                        });
+                        dashboard.dataAlerts = sumAlerts;
                     });
                 });
 
