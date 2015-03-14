@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/wilsto/BoardOS.svg)](https://travis-ci.org/wilsto/BoardOS)
 [![Coverage Status](https://coveralls.io/repos/wilsto/BoardOS/badge.svg)](https://coveralls.io/r/wilsto/BoardOS)
-
+[![Issue Stats](http://issuestats.com/github/wilsto/boardos/badge/issue)](http://issuestats.com/github/wilsto/boardos)
 
 BoardOS
 ====
