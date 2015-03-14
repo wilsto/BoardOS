@@ -264,6 +264,7 @@ module.exports = {
             .then(null, console.error);
     },
     addCalculToKPI: function(kpis, tasks, callback) {
+
         // on ajoute des caractéristiques aux KPI
         //##############################################
         _.each(kpis, function(kpi, index) {

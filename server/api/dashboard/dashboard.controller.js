@@ -117,25 +117,26 @@ exports.show = function(req, res) {
         .then(function() {
             // Si plusieurs dashboards
             var deferred = Q.defer();
+            var clonemkpis = _.cloneDeep(mkpis);
             if (typeof mDashboard.dashboards !== 'undefined') {
                 _.each(mDashboard.dashboards, function(dashboard, index) {
-                    getData.addCalculToKPI(mkpis, dashboard.tasks, function(kpis) {
-                        console.log('index', index);
-
-                        dashboard.kpis = kpis.slice(0);
+                    getData.addCalculToKPI(clonemkpis, dashboard.tasks, function(kpis) {
+                        dashboard.kpis = _.cloneDeep(kpis);
                         if (index === mDashboard.dashboards.length - 1) {
                             deferred.resolve(mDashboard)
                         }
                     });
                 });
+            } else {
+                deferred.resolve(mDashboard);
             }
             return deferred.promise;
         })
         .then(function() {
             // Get related Tasks
             var deferred = Q.defer();
-            getData.addCalculToKPI(mkpis, mDashboard.tasks, function(kpis) {
-                //console.log('kpis', kpis);
+            var clonemkpis = mkpis;
+            getData.addCalculToKPI(clonemkpis, mDashboard.tasks, function(kpis) {
                 mDashboard.kpis = kpis;
                 deferred.resolve(mDashboard)
             });

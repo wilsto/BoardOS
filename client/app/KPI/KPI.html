@@ -87,7 +87,7 @@
         </div>
 
         <tabset>
-            <tab ng-if="KPI._id" active="true">
+            <tab ng-if="KPI._id === 'r'">
                 <tab-heading>
                     View
                 </tab-heading>
@@ -123,6 +123,14 @@
                     </div>
                 </div>
             </tab>
+            <!--tab Tasks-->
+            <tab ng-if="KPI._id"  active="true">
+                <tab-heading>
+                    Tasks
+                    <span class="badge badge-default"> {{KPI.tasks.length}}</span>
+                </tab-heading>
+                <div tab-task data="KPI" ng-if="KPI._id"></div>
+            </tab>
             <!--tab Dashboard-->
             <tab ng-if="KPI._id">
                 <tab-heading>
@@ -130,14 +138,6 @@
                     <span class="badge badge-default"> {{KPI.dashboards.length}}</span>
                 </tab-heading>
                 <div dashboard-tab dashboard-type="dashboards" dashboard-data="KPI" ng-if="KPI"></div>
-            </tab>
-            <!--tab Tasks-->
-            <tab ng-if="KPI._id">
-                <tab-heading>
-                    Tasks
-                    <span class="badge badge-default"> {{KPI.tasks.length}}</span>
-                </tab-heading>
-                <div dashboard-tab dashboard-type="tasks" dashboard-data="KPI" ng-if="KPI"></div>
             </tab>
             <!--tab Metrics
             <tab ng-if="KPI._id">

@@ -87,7 +87,7 @@
                 <div class="stats-overview stat-block">
                     <div class="details" style="height:45px;">
                         <div class="title"><span style="color:lightgrey">Load </span><span class="pull-right">{{currentTask.load}} <small>days</small></span></div>
-                        <div ng-if="currentTask.lastmetric.projectedWorkload !== currentTask.load" class="pull-right"><small class="bg-danger text-danger">{{currentTask.lastmetric.projectedWorkload}} days</small></div>
+                        <div ng-if="currentTask.lastmetric.projectedWorkload !== currentTask.load" class="pull-right"><small ng-class="{'bg-danger text-danger':currentTask.lastmetric.projectedWorkload > currentTask.load, 'bg-success text-success':currentTask.lastmetric.projectedWorkload < currentTask.load}">{{currentTask.lastmetric.projectedWorkload}} days</small></div>
                     </div>
                 </div>
             </div>

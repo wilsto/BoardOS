@@ -199,7 +199,7 @@
                     </div>
                     <div class="col-md-6">
                         <button class="btn btn-lg btn-primary pull-right" type="submit">Save the metric</button>
-                        <button class="btn  btn-default pull-right" style="margin-right:25px" ng-click="cancel()">Close without saving</button>
+                        <button class="btn  btn-default pull-right" style="margin-right:25px" type="button" ng-click="cancel()">Close without saving</button>
                     </div>
                 </div>
             </div>
@@ -289,7 +289,7 @@
 				<th>End</th>
 				<th>Progress<br/><small>( %)</small></th>
 				<th>Spent <br/><small>(days)</small></th>
-				<th ng-if="page === 'KPI'" >KPI Status</th>
+				<th ng-if="page === 'KPI'" >KPI </th>
 				<th ng-if="page === 'KPI'">Last Metric <br/><small>{{dashboardData.metricTaskField}}</small></th>
 				<th ng-if="page === 'KPI'">Reference<br/><small>{{dashboardData.refMetricTaskField}}</small></th>
 				<th ng-if="isManager"><a href="task/" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus" ></span></a></th>
@@ -303,7 +303,7 @@
 				<td>{{task.lastmetric.endDate| date:'mediumDate'}}</td>
 				<td>{{task.lastmetric.progress}}</td>
 				<td>{{task.lastmetric.timeSpent}}</td>
-				<td  ng-if="page === 'KPI'" ><nvd3 options="options" data="task.data"></nvd3></td>
+				<td  ng-if="page === 'KPI'" ><span class="badge" ng-style="{'background-color':giveMeMyColor(task.kpis[0].calcul.task, dashboardData.category)}" style="height:25px;line-height:20px;width:100%">{{task.kpis[0].calcul.task}}</span></nvd3></td>
 				<td ng-if="page === 'KPI'">{{task.lastmetric[dashboardData.metricTaskField]}}</td>
 				<td ng-if="page === 'KPI'">{{task.lastmetric[dashboardData.refMetricTaskField]}}</td>
 				<td style="width:25px" ng-if="isManager">
