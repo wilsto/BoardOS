@@ -73,7 +73,6 @@ exports.show = function(req, res) {
                     keepKPI = index;
                 }
             });
-            console.log('task.name', keepKPI);
             deferred.resolve(mKPI);
             return deferred.promise;
         })

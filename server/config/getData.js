@@ -176,7 +176,6 @@ module.exports = {
                 // pour chaque tache
                 _.each(mTask.tasks, function(taskdata, index) {
                     taskdata.kpis = [];
-
                     // kpis 
                     _.each(mTask.kpis, function(kpidata, index) {
                         taskdata.kpis[index] = {};
@@ -188,7 +187,7 @@ module.exports = {
                         mKPI.calcul = {};
                         mKPI.metricsGroupBy.Time = tools.groupMultiBy(taskdata.metrics, ['groupTimeByValue']);
                         var filteredMetrics = _.filter(taskdata.metrics, function(metric) {
-                            return metric.groupTimeByValue === moment(new Date()).format("YYYY.MM"); //filtrer par le mois en cours
+                            return (mKPI.category === 'Alert') ? metric.groupTimeByValue === moment(new Date()).format("YYYY.MM") : _.last(metric.groupTimeByValue); //filtrer par le mois en cours
                         });
                         mKPI.calcul.task = tools.calculKPI(filteredMetrics, kpidata);
                         mKPI.calcul.taskTime = _.map(mKPI.metricsGroupBy.Time, function(value, key) {
@@ -197,6 +196,7 @@ module.exports = {
                                 valueKPI: tools.calculKPI(value, kpidata)
                             };
                         });
+
                     });
 
                 });

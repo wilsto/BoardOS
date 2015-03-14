@@ -343,34 +343,23 @@ module.exports = {
         var refField = kpi.refMetricTaskField;
         var listValues = kpi.listValues;
         var refListValues = kpi.refListValues;
-
         // filtrer par where
         if (kpi.whereField) {
             metrics = _.filter(metrics, function(metric) {
                 return metric[kpi.whereField] === kpi.whereValues;
             })
         }
-
         if (metrics.length > 0) { // si metric existe
-            // filtrer par valeur
-            filteredMetrics = _.filter(metrics, function(metric) {
-                return (typeof values === 'undefined' || values.length === 0 || typeof metric[field] === 'undefined') ? 1 : _.contains(values, metric[field]);
-            });
-            filteredRefMetrics = (refField.toLowerCase() === 'constant') ? refValues : _.filter(metrics, function(metric) {
-                return (typeof refValues === 'undefined' || refValues.length === 0 || typeof metric[refField] === 'undefined') ? 1 : _.contains(refValues, metric[refField]);
-            });
-
-            //filteredMetrics= _.sortBy(filteredMetrics, function(o) { return o.date; })
 
             // filtrer par Liste (first, last, all)
             switch (listValues) {
                 case 'AllValues':
                 case 'UniqueValues':
                 case 'LastValue':
-                    filteredMetrics = [_.last(filteredMetrics)];
+                    filteredMetrics = [_.last(metrics)];
                     break;
                 case 'FirstValue':
-                    filteredMetrics = [_.first(filteredMetrics)];
+                    filteredMetrics = [_.first(metrics)];
                     break;
                 case 'ValuesLessThan':
                 case 'ValuesMoreThan':
@@ -380,14 +369,24 @@ module.exports = {
                 case 'AllValues':
                 case 'UniqueValues':
                 case 'LastValue':
-                    filteredRefMetrics = [_.last(filteredRefMetrics)];
+                    filteredRefMetrics = [_.last(metrics)];
                     break;
                 case 'FirstValue':
-                    filteredRefMetrics = [_.first(filteredRefMetrics)];
+                    filteredRefMetrics = [_.first(metrics)];
                     break;
                 case 'ValuesLessThan':
                 case 'ValuesMoreThan':
             }
+
+            // filtrer par valeur
+            filteredMetrics = _.filter(filteredMetrics, function(metric) {
+                var metricFieldValue = (typeof metric[field] === 'undefined' || metric[field].length === 0) ? 'null' : metric[field];
+                return (typeof values === 'undefined' || values.length === 0 || typeof metric[field] === 'undefined') ? 1 : _.contains(values, metricFieldValue);
+            });
+            filteredRefMetrics = (refField.toLowerCase() === 'constant') ? refValues : _.filter(filteredRefMetrics, function(metric) {
+                return (typeof refValues === 'undefined' || refValues.length === 0 || typeof metric[refField] === 'undefined') ? 1 : _.contains(refValues, metric[refField]);
+            });
+
 
             // Réaliser des calculs
             switch (action) {

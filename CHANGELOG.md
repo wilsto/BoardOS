@@ -1,5 +1,21 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD) (2015-03-14)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v0.13.0...HEAD)
+
+**Implemented enhancements:**
+
+- Ordre de tri des dashboards par nom [\#93](https://github.com/wilsto/BoardOS/issues/93)
+
+## [v0.13.0](https://github.com/wilsto/boardos/tree/v0.13.0) (2015-03-14)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v0.12.8...v0.13.0)
+
+**Implemented enhancements:**
+
+- Afficher les KPi par tache [\#80](https://github.com/wilsto/BoardOS/issues/80)
+
 ## [v0.12.8](https://github.com/wilsto/boardos/tree/v0.12.8) (2015-03-09)
 
 [Full Changelog](https://github.com/wilsto/boardos/compare/v0.12.7...v0.12.8)

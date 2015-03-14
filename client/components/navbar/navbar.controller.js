@@ -10,7 +10,7 @@ angular.module('boardOsApp')
                     return task.lastmetric && task.lastmetric.status !== 'Finished';
                 });
                 $scope.navBarTasksAlerts = _.filter(tasks.tasks, function(task) {
-                    return task.lastmetric && task.lastmetric.progressStatus === 'Late' && task.lastmetric.status !== 'Finished';
+                    return task.lastmetric && task.lastmetric.progressStatus !== 'On time' && task.lastmetric.status !== 'Finished';
                 });
 
             });
