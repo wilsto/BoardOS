@@ -34,33 +34,35 @@ angular.module('boardOsApp')
                     });
                     $scope.updateWatch();
 
-                // calcul des Kpis
-                var kpis = data.kpis;
+                    // calcul des Kpis
+                    var kpis = data.kpis;
 
-                // calcul des alertes
-                var alertKPI = _.filter(kpis, function(kpi) { // filtre
-                    return kpi.category === 'Alert';
-                });
-                var alertValue = _.pluck(_.pick(_.pluck(alertKPI, function(kpi) { // valeurs existantes
-                    return kpi.calcul.task;
-                }), _.isNumber));
-                var alertSum = _.reduce(alertValue, function(alertSum, kpicalcul) { // sum
-                    return alertSum + kpicalcul;
-                });
-                $scope.alertsNb = alertSum;
+                    // calcul des alertes
+                    var alertKPI = _.filter(kpis, function(kpi) { // filtre
+                        return kpi.category === 'Alert';
+                    });
+                    var alertValue = _.pluck(_.pick(_.pluck(alertKPI, function(kpi) { // valeurs existantes
+                        return kpi.calcul.task;
+                    }), _.isNumber));
+                    var alertSum = _.reduce(alertValue, function(alertSum, kpicalcul) { // sum
+                        return alertSum + kpicalcul;
+                    });
+                    $scope.alertsNb = alertSum;
 
-                // calcul des objectifs
-                var goalsKPI = _.filter(kpis, function(kpi) { // filtre
-                    return kpi.category === 'Goal';
+                    // calcul des objectifs
+                    var goalsKPI = _.filter(kpis, function(kpi) { // filtre
+                        return kpi.category === 'Goal';
+                    });
+                    var goalsValue = _.pluck(_.pick(_.pluck(goalsKPI, function(kpi) { // valeurs existantes
+                        return kpi.calcul.task;
+                    }), _.isNumber));
+                    var goalsSum = _.reduce(goalsValue, function(goalsSum, kpicalcul) { // sum
+                        return goalsSum + kpicalcul;
+                    });
+                    $scope.goalsNb = parseInt(goalsSum / goalsValue.length); // moyenne
                 });
-                var goalsValue = _.pluck(_.pick(_.pluck(goalsKPI, function(kpi) { // valeurs existantes
-                    return kpi.calcul.task;
-                }), _.isNumber));
-                var goalsSum = _.reduce(goalsValue, function(goalsSum, kpicalcul) { // sum
-                    return goalsSum + kpicalcul;
-                });
-                $scope.goalsNb = parseInt(goalsSum / goalsValue.length); // moyenne
-                });
+            } else {
+                $scope.currentTask = {};
             }
         };
 
@@ -103,7 +105,7 @@ angular.module('boardOsApp')
             // si la form est valide
             if (form.$valid) {
 
-
+                
                 delete $scope.currentTask.__v;
                 delete $scope.currentTask.kpis;
                 delete $scope.currentTask.metrics;
