@@ -1,5 +1,21 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD) (2015-03-22)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v0.14.2...HEAD)
+
+**Fixed bugs:**
+
+- Différencier les hierachies SASDEV et SASDEVStat  [\#96](https://github.com/wilsto/BoardOS/issues/96)
+
+- Affichage du main meme sans aucun dashboard [\#95](https://github.com/wilsto/BoardOS/issues/95)
+
+- Certains noms de domaines sont interdits alors qu'ils devraient pouvoir s'inscrire [\#94](https://github.com/wilsto/BoardOS/issues/94)
+
+## [v0.14.2](https://github.com/wilsto/boardos/tree/v0.14.2) (2015-03-17)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v0.14.1...v0.14.2)
+
 ## [v0.14.1](https://github.com/wilsto/boardos/tree/v0.14.1) (2015-03-14)
 
 [Full Changelog](https://github.com/wilsto/boardos/compare/v0.14.0...v0.14.1)

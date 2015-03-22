@@ -98,7 +98,7 @@ UserSchema
     .path('email')
     .validate(function(email) {
         if (authTypes.indexOf(this.provider) !== -1) return true;
-        return (email.indexOf('@fr.netgrs.com', '@keyrus.com', '@lincoln.com') !== -1);
+        return (email.match(/(@fr.netgrs.com|@keyrus.com|@lincoln.com)/gmi));
     }, 'The specified email address is not from a valid domain');
 
 var validatePresenceOf = function(value) {

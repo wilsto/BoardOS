@@ -97,7 +97,7 @@ exports.show = function(req, res) {
             delete cloneReq.params.id;
             getData.fromTask(cloneReq, function(myTasks) {
                 mDashboard.tasks = _.filter(myTasks.tasks, function(task) {
-                    return (task.context.indexOf(mDashboard.context) >= 0 && task.activity.indexOf(mDashboard.activity) >= 0);
+                    return (task.context.indexOf(mDashboard.context + '.') >= 0 && task.activity.indexOf(mDashboard.activity + '.') >= 0);
                 });
                 _.each(mDashboard.dashboards, function(dashboard) {
                     if (typeof dashboard.context === 'undefined') {
@@ -107,7 +107,7 @@ exports.show = function(req, res) {
                         dashboard.activity = ''
                     }
                     dashboard.tasks = _.filter(myTasks.tasks, function(task) {
-                        return (task.context.indexOf(dashboard.context) >= 0 && task.activity.indexOf(dashboard.activity) >= 0);
+                        return (task.context.indexOf(dashboard.context + '.') >= 0 && task.activity.indexOf(dashboard.activity + '.') >= 0);
                     });
                 });
                 deferred.resolve(mDashboard);
@@ -118,7 +118,7 @@ exports.show = function(req, res) {
             // Si plusieurs dashboards
             var deferred = Q.defer();
             var clonemkpis = _.cloneDeep(mkpis);
-            if (typeof mDashboard.dashboards !== 'undefined') {
+            if (typeof mDashboard.dashboards !== 'undefined' && mDashboard.dashboards.length !== 0) {
                 _.each(mDashboard.dashboards, function(dashboard, index) {
                     getData.addCalculToKPI(clonemkpis, dashboard.tasks, function(kpis) {
                         dashboard.kpis = _.cloneDeep(kpis);
