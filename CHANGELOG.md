@@ -1,5 +1,17 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD) (2015-03-24)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v0.15.1...HEAD)
+
+**Fixed bugs:**
+
+- Après création de tache sans métriques, BOSS boucle [\#97](https://github.com/wilsto/BoardOS/issues/97)
+
+## [v0.15.1](https://github.com/wilsto/boardos/tree/v0.15.1) (2015-03-22)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v0.15.0...v0.15.1)
+
 ## [v0.15.0](https://github.com/wilsto/boardos/tree/v0.15.0) (2015-03-22)
 
 [Full Changelog](https://github.com/wilsto/boardos/compare/v0.14.2...v0.15.0)

@@ -291,9 +291,6 @@ exports.create = function(req, res) {
             res.send(200, task);
         });
     });
-
-
-
 };
 
 // Updates an existing task in the DB.
@@ -364,8 +361,6 @@ exports.destroy = function(req, res) {
                 return res.send(204);
             });
         });
-
-
     });
 };
 

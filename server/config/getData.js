@@ -288,7 +288,7 @@ module.exports = {
             kpicalculValues = _.filter(_.pluck(kpi.calcul.details, function(calcul) {
                 return calcul.taskTime;
             }), function(data) {
-                return !isNaN(parseInt(data[0].valueKPI));
+                return (data[0]) ? !isNaN(parseInt(data[0].valueKPI)) : true;
             });
             var kpiValuesByMonth = _.groupBy(_.flatten(kpicalculValues), function(data) {
                 return data.month;
