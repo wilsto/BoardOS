@@ -1,8 +1,8 @@
 # Change Log
 
-## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD) (2015-04-21)
+## [v0.16.0](https://github.com/wilsto/boardos/tree/v0.16.0) (2015-04-21)
 
-[Full Changelog](https://github.com/wilsto/boardos/compare/v0.15.2...HEAD)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v0.15.2...v0.16.0)
 
 **Implemented enhancements:**
 
