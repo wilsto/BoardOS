@@ -25,6 +25,7 @@ angular.module('boardOsApp')
             if ($stateParams.id) {
                 $http.get('/api/tasks/' + $stateParams.id).success(function(data) {
                     $scope.task = data;
+                    
                     $scope.currentTask = data.tasks[0];
                     $scope.task.activity_old = data.activity;
                     $scope.task.context_old = data.context;
@@ -83,7 +84,7 @@ angular.module('boardOsApp')
         };
 
         $scope.watchThisTask = function() {
-            $http.get('/api/tasks/watch/' + $scope.task._id + '/' + $scope.currentUser._id).success(function(data) {
+            $http.post('/api/tasks/watch/' + $scope.task._id + '/' + $scope.currentUser._id).success(function(data) {
                 $scope.task.watchers = data.watchers;
                 $scope.loadTask();
 
@@ -105,7 +106,7 @@ angular.module('boardOsApp')
             // si la form est valide
             if (form.$valid) {
 
-                
+
                 delete $scope.currentTask.__v;
                 delete $scope.currentTask.kpis;
                 delete $scope.currentTask.metrics;

@@ -47,7 +47,7 @@
                             	</button>
                             </span>
 
-                        </p>
+                        </p><span class="label pull-right" ng-class="{'label-success':formData.progressStatus ==='On Time','label-danger':formData.progressStatus ==='Late' }">{{formData.progressStatus}}  </span>
                         <small class="text-danger has-error" ng-show="form.endDate.$error.required && submitted">
             				Required
           				</small>
@@ -107,17 +107,6 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6"  ng-class="{'bg-danger':form.progressStatus.$invalid && submitted}">
-                        <p  >
-                            <label>Timing Status </label>
-                            <input type="text" name="progressStatus" class="form-control" ng-model="formData.progressStatus" typeahead-on-select="$item" typeahead="statut.value for statut in constant.progressStatusTask  | limitTo:8">
-                            <span class="help-block">
-							</span>
-                        </p>
-                        <small class="text-danger has-error" ng-show="form.progressStatus.$error.required && submitted">
-                            Required
-                        </small>
-                    </div>
                     <div class="col-md-6"  ng-class="{'bg-danger':form.trust.$invalid && submitted}">
                         <p class="input-group" >
                             <label>Confidence to accomplish correctly this task <small class="text-muted">(in %)</small>
@@ -154,7 +143,7 @@
 							</span>
 
                         </p>
-                                                <small class="text-danger has-error" ng-show="form.userSatisfaction.$error.required && submitted">
+                        <small class="text-danger has-error" ng-show="form.userSatisfaction.$error.required && submitted">
                             Required
                         </small>
                     </div>
@@ -342,7 +331,7 @@
 					<td>{{metric.startDate | date:'mediumDate'}}</td>
 					<td>{{metric.timeSpent}} <span ng-if="metric.reworkReason" class="label" ng-class="{'label-danger':metric.reworkReason==='Internal','label-warning':metric.progressStatus==='External' }">  {{metric.reworkReason}} Rework </span></td>
 					<td>{{metric.progress}}% <span ng-if="metric.status" class="label pull-right" ng-class="{'label-info':metric.status =='In Progress','label-success':metric.status =='Finished','label-warning':metric.status =='Not Started' }">  {{metric.status}} </span></td>
-					<td>{{metric.endDate | date:'mediumDate'}} <span class="label pull-right" ng-class="{'label-danger':metric.progressStatus==='Late','label-success':metric.progressStatus==='On time','label-warning':metric.progressStatus==='At Risk' }">  {{metric.progressStatus}} </span></td>
+					<td>{{metric.endDate | date:'mediumDate'}} <span class="label pull-right" ng-class="{'label-danger':metric.progressStatus==='Late','label-success':metric.progressStatus==='On Time','label-warning':metric.progressStatus==='At Risk' }">  {{metric.progressStatus}} </span></td>
 					<td>{{metric.trust}}</td>
 					<td style="max-width: 300px;">{{metric.comments}}</td>
 					<td ng-if="page === 'task'" style="width:25px">

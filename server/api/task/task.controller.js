@@ -282,7 +282,7 @@ exports.create = function(req, res) {
             load: cleanTask.load,
             timeSpent: 0,
             progress: 0,
-            progressStatus: 'On time',
+            progressStatus: 'On Time',
             trust: 100
         };
 

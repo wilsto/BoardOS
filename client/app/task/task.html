@@ -21,7 +21,7 @@
             <div class="col-md-9">
                 <div class="row">
                     <div class="col-md-8 profile-info">
-                        <h1>{{task.name}}</h1>
+                        <h1>{{task.name}} <span class="label label-sm label-danger" ng-show="task.tasks[0].timebetween <= 0 && task.tasks[0].timebetween !== null "> Need Metric</span></h1>
                         <br/>
                         <ul class="list list-inline">
                             <li>

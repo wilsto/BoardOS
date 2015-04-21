@@ -451,7 +451,7 @@ describe('Controller: NavbarCtrl', function() {
             var controller = createController();
             scope.load();
             httpBackend.flush();
-            expect(scope.navBarTasks.length).toBe(6);
+            expect(scope.navBarTasks.length).toBe(3);
         });
 
         it('should load filter task with notification on start', function() {

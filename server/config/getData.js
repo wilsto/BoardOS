@@ -124,19 +124,29 @@ module.exports = {
                                 metricdata.timeToEnd = moment(metricdata.endDate).diff(moment(), 'days');
 
                                 // predictedCharge
-                                metricdata.projectedWorkload = (metricdata.progress > 0) ? parseInt(parseInt(metricdata.timeSpent) * 100 / parseInt(metricdata.progress)) : metricdata.load;
+                                metricdata.projectedWorkload = (metricdata.progress > 0) ? Math.round(parseFloat(metricdata.timeSpent.replace(',', '.')) * 100 / parseFloat(metricdata.progress)) : metricdata.load;
 
+                                // progressStatus
+                                if (metricdata.endDate > taskdata.endDate) {
+                                    switch (metricdata.status) {
+                                        case 'Withdrawn':
+                                        case 'Finished':
+                                            metricdata.progressStatus = 'Late';
+                                            break;
+                                        default:
+                                            var d2 = new Date();
+                                            var dateNow = d2.toISOString();
+                                            if (dateNow < metricdata.endDate) {
+                                                metricdata.progressStatus = 'At Risk';
+                                            } else {
+                                                metricdata.progressStatus = 'Late';
+                                            }
+                                    }
+                                } else {
+                                    metricdata.progressStatus = 'On Time';
+                                }
                                 // ajouter information par mois 
                                 metricdata.groupTimeByValue = moment(metricdata.date).format("YYYY.MM");
-
-                                // on calcule les temps d'écarts
-                                var oneDay = 24 * 60 * 60 * 1000;
-                                var firstDate = new Date(metricdata.date);
-                                var secondDate = new Date();
-                                taskdata.timewaited = Math.round(Math.abs((firstDate.getTime() - secondDate.getTime()) / (oneDay)));
-                                taskdata.timebetween = taskdata.timetowait - taskdata.timewaited;
-                                metricdata.fromNow = moment(metricdata.date).fromNow();
-                                taskdata.lastmetric = metricdata;
 
                                 //on l'ajoute à la liste
                                 taskdata.metrics.push(metricdata);
@@ -161,6 +171,19 @@ module.exports = {
                                         }
                                     }
                                 });
+
+                                // on calcule les temps d'écarts
+                                var oneDay = 24 * 60 * 60 * 1000;
+                                var d = new Date(taskdata.startDate);
+                                var dateStart = d.setDate(d.getDate() - taskdata.timetowait);
+                                var firstDate = (metricdata.date > taskdata.startDate) ? new Date(metricdata.date) : new Date(dateStart);
+                                var secondDate = new Date();
+                                taskdata.secondDate = secondDate;
+                                taskdata.timewaited = Math.round((firstDate.getTime() - secondDate.getTime()) / (oneDay));
+                                taskdata.timebetween = (metricdata.status === 'In Progress' || metricdata.status === 'Not Started') ? taskdata.timetowait + taskdata.timewaited : null;
+                                metricdata.fromNow = moment(metricdata.date).fromNow();
+                                taskdata.lastmetric = metricdata;
+
 
                             }
                         });

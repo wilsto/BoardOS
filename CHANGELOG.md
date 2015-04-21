@@ -1,8 +1,32 @@
 # Change Log
 
-## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD) (2015-03-24)
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD) (2015-04-21)
 
-[Full Changelog](https://github.com/wilsto/boardos/compare/v0.15.1...HEAD)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v0.15.2...HEAD)
+
+**Implemented enhancements:**
+
+- Affichage d'un icone si la tache nécessite une action [\#103](https://github.com/wilsto/BoardOS/issues/103)
+
+- La liste des taches sur main ne doit pas demander des métriques pour les taches non commencés [\#99](https://github.com/wilsto/BoardOS/issues/99)
+
+**Fixed bugs:**
+
+- "Add to myWatchList" ne marche pas [\#102](https://github.com/wilsto/BoardOS/issues/102)
+
+- La liste des taches "watchers" ne fonctionne pas [\#100](https://github.com/wilsto/BoardOS/issues/100)
+
+- La liste des taches affiche "no defined KPI" sometimes [\#98](https://github.com/wilsto/BoardOS/issues/98)
+
+- Calcul KPI On Time renvoit 100% meme avec des Lates [\#91](https://github.com/wilsto/BoardOS/issues/91)
+
+**Closed issues:**
+
+- Le statut "Late/On Time" passe en automatique [\#101](https://github.com/wilsto/BoardOS/issues/101)
+
+## [v0.15.2](https://github.com/wilsto/boardos/tree/v0.15.2) (2015-03-24)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v0.15.1...v0.15.2)
 
 **Fixed bugs:**
 

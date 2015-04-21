@@ -73,8 +73,8 @@ angular.module('boardOsApp', [
 })
 
 .constant('progressStatusTask', [{
-    value: 'On time',
-    text: 'On time'
+    value: 'On Time',
+    text: 'On Time'
 }, {
     value: 'At Risk',
     text: 'At Risk'

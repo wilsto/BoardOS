@@ -238,6 +238,19 @@ angular.module('boardOsApp')
                 scope.openMetric = function(task, mesure, newItem) {
 
                     $rootScope.currentTask = task;
+                    if (!newItem) {
+                        bootbox.confirm('Are you sure you want to modify the metric ? 99% of the time, the right process is to add a new metric with the above "plus" button ', function(result) {
+                            if (result) {
+                                scope.openMetricDialog(mesure, newItem);
+                            }
+
+                        });
+                    } else {
+                        scope.openMetricDialog(mesure, newItem);
+                    }
+                };
+
+                scope.openMetricDialog = function(mesure, newItem) {
                     ngDialog.open({
                         template: 'myMesureContent.html',
                         className: 'ngdialog-theme-plain',
@@ -363,7 +376,17 @@ angular.module('boardOsApp')
                                     if (parseInt(newValue) === 100) {
                                         $scope.formData.status = 'Finished';
                                     }
+                                    $scope.calculProjectedWorkload();
                                 });
+
+                                $scope.$watch('formData.timeSpent', function(newValue, oldValue) {
+                                    $scope.calculProjectedWorkload();
+                                });
+
+                                $scope.calculProjectedWorkload = function() {
+                                    
+                                    $scope.formData.projectedWorkload = ($scope.formData.progress > 0) ? Math.round(parseFloat($scope.formData.timeSpent.replace(',', '.')) * 100 / parseFloat($scope.formData.progress)) : $scope.formData.load;
+                                };
 
                                 $scope.deleteMetric = function(id) {
                                     bootbox.confirm('Are you sure to delete this metric ? It can NOT be undone.', function(result) {
@@ -393,6 +416,7 @@ angular.module('boardOsApp')
                         ]
                     });
                 };
+
             }
         };
     });

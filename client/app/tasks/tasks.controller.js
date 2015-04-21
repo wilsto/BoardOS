@@ -77,6 +77,26 @@ angular.module('boardOsApp')
             $scope.filterTasks();
         });
 
+        $scope.watchTask = function(task) {
+            bootbox.confirm('Are you sure to watch this task?', function(result) {
+                if (result) {
+                    $http.post('/api/tasks/watch/' + task._id + '/' + $scope.currentUser._id).success(function(data) {
+                        $scope.Load();
+
+                        var logInfo = 'Task watch "' + task.name + '" was updated by ' + $scope.currentUser.name;
+                        $http.post('/api/logs', {
+                            info: logInfo,
+                            actor: $scope.currentUser
+                        });
+                        $.growl({
+                            icon: 'fa fa-info-circle',
+                            message: logInfo
+                        });
+                    });
+                }
+            });
+        };
+
         $scope.filterTasks = function() {
             $scope.tasks = _.filter($scope.alltasks, function(task) {
                 var blnSearchText = ($scope.searchText.length === 0) ? true : task.name.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0 || task.activity.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0 || task.context.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0;

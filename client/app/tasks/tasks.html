@@ -91,17 +91,17 @@
                  </div>
                 </td>
                <td >
-                <a href="/task/{{task._id}}"><div class="desc" popover-html-unsafe="Context : {{task.context}} </p>  Activity : {{task.activity}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="right" popover-delay ="1000">{{task.name}}</div></a>
+                <a href="/task/{{task._id}}"><div class="desc" popover-html-unsafe="Context : {{task.context}} </p>  Activity : {{task.activity}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="right" popover-delay ="1000">{{task.name}} <span class="label label-sm label-danger " ng-show="task.timebetween <= 0 && task.timebetween !== null "> Need Metric</span></div></a>
                </td>
                <td class="hidden-xs">
                         {{task.lastmetric.startDate | date:'mediumDate'}}<br/>
-                       <span class="label label-sm" ng-class="{'label-info':task.lastmetric.status =='In Progress','label-success':task.lastmetric.status =='Finished','label-warning':task.lastmetric.status =='Not Started'}">
+                       <span class="label label-sm" ng-class="{'label-info':task.lastmetric.status ==='In Progress','label-success':task.lastmetric.status ==='Finished','label-warning':task.lastmetric.status ==='Not Started'}">
                          {{task.lastmetric.status}}
                        </span>
                </td>
                <td class="hidden-xs">
                        {{task.lastmetric.endDate | date:'mediumDate'}}<br/>
-                         <span class="label label-sm" ng-class="{'label-warning':task.lastmetric.progressStatus =='At Risk','label-success':task.lastmetric.progressStatus =='On time','label-danger':task.lastmetric.progressStatus =='Late'}">
+                         <span class="label label-sm" ng-class="{'label-warning':task.lastmetric.progressStatus ==='At Risk','label-success':task.lastmetric.progressStatus ==='On Time','label-danger':task.lastmetric.progressStatus ==='Late'}">
                          {{task.lastmetric.progressStatus}} 
                        </span>
 

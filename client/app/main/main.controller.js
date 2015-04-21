@@ -128,7 +128,7 @@ angular.module('boardOsApp')
         $scope.loadTaskToNotify = function() {
             if (typeof $scope.dataDashboards !== 'undefined') {
                 var openTasks = _.filter($scope.dataDashboards.tasks, function(task) {
-                    if (typeof task.lastmetric === 'undefined' || task.lastmetric.status !== 'Finished') {
+                    if (typeof task.lastmetric === 'undefined' || task.lastmetric.status === 'In Progress' || task.lastmetric.status === 'Not Started') {
                         return true;
                     }
                 });
@@ -163,7 +163,7 @@ angular.module('boardOsApp')
                     return true;
                 }
                 // si watcher
-                if (_.intersection([$scope.currentUser._id], task.watchers).length > 0) {
+                if (_.intersection([$scope.currentUser._id], _.pluck(task.watchers, '_id')).length > 0) {
                     return true;
                 }
 
