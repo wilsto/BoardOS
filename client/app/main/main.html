@@ -5,10 +5,10 @@
 
         <div class="col-md-2 col-sm-4 ">
             <div class="stats-overview stat-block">
-                <div class="isloading" ng-if="!dataDashboards">Loading
+                <div class="isloading" ng-if="!dataKPIs">Loading
                     <br/><img src="assets/images/ajax-loader_blue.gif">
                 </div>
-                <div class="details " ng-if="dataDashboards">
+                <div class="details " ng-if="dataKPIs">
                     <div class="title"><a href="/KPIs"><span style="font-weight:bold;color:#1f77b4">{{dataDashboards.kpis.length}}</span> KPIs</a>
                     </div>
                     <nvd3 options="options" data="dataKPIs"></nvd3>
@@ -18,10 +18,10 @@
 
         <div class="col-md-2 col-sm-4">
             <div class="stats-overview stat-block">
-                <div class="isloading" ng-if="!dataDashboards">Loading
+                <div class="isloading" ng-if="!dataTasks">Loading
                     <br/><img src="assets/images/ajax-loader_blue.gif">
                 </div>
-                <div class="details" ng-if="dataDashboards">
+                <div class="details" ng-if="dataTasks">
                     <div class="title"><a href="/tasks"><span style="font-weight:bold;color:#9467bd">{{dataDashboards.tasks.length}}</span> Tasks</a>
                     </div>
                     <nvd3 options="optionsTasks" data="dataTasks"></nvd3>
@@ -31,10 +31,10 @@
 
         <div class="col-md-2 col-sm-4">
             <div class="stats-overview stat-block">
-                <div class="isloading" ng-if="!dataDashboards">Loading
+                <div class="isloading" ng-if="!dataMetrics">Loading
                     <br/><img src="assets/images/ajax-loader_blue.gif">
                 </div>
-                <div class="details" ng-if="dataDashboards">
+                <div class="details" ng-if="dataMetrics">
                     <div class="title"><a href="/metrics"><span style="font-weight:bold;color:#87CEEB">{{dataDashboards.metrics.length}}</span> Metrics</a>
                     </div>
                     <nvd3 options="optionsMetrics" data="dataMetrics"></nvd3>
@@ -43,10 +43,10 @@
         </div>
         <div class="col-md-2 col-sm-4">
             <div class="stats-overview stat-block">
-                <div class="isloading" ng-if="!dataDashboards">Loading
+                <div class="isloading" ng-if="!dataAlerts">Loading
                     <br/><img src="assets/images/ajax-loader_blue.gif">
                 </div>
-                <div class="details" ng-if="dataDashboards">
+                <div class="details" ng-if="dataAlerts">
                     <div class="title"><span style="font-weight:bold;color:#CB4B16">{{alertsNb || 0 }}</span> Alerts</div>
                     <nvd3 options="optionsAlerts" data="dataAlerts"></nvd3>
                 </div>
@@ -55,10 +55,10 @@
 
         <div class="col-md-2 col-sm-4">
             <div class="stats-overview stat-block">
-                <div class="isloading" ng-if="!dataDashboards">Loading
+                <div class="isloading" ng-if="!dataGoals">Loading
                     <br/><img src="assets/images/ajax-loader_blue.gif">
                 </div>
-                <div class="details" ng-if="dataDashboards">
+                <div class="details" ng-if="dataGoals">
                     <div class="title"><span style="font-weight:bold;color:#2CA02C">{{goalsNb || '-'}}%</span> Goals</div>
                     <nvd3 options="optionsGoals" data="dataGoals"></nvd3>
                 </div>
@@ -67,10 +67,10 @@
 
         <div class="col-md-2 col-sm-4">
             <div class="stats-overview stat-block">
-                <div class="isloading" ng-if="!dataDashboards">Loading
+                <div class="isloading" ng-if="!dataConfidence">Loading
                     <br/><img src="assets/images/ajax-loader_blue.gif">
                 </div>
-                <div class="details" ng-if="dataDashboards">
+                <div class="details" ng-if="dataConfidence">
                     <div class="title"><span style="font-weight:bold;color:#bcbd22">{{confidence || '-'}}%</span> Confidence</div>
                     <nvd3 options="optionsConfidence" data="dataConfidence"></nvd3>
                 </div>
