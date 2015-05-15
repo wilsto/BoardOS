@@ -45,6 +45,7 @@
 <link rel="stylesheet" href="app/dqm/dqm.css">
 <link rel="stylesheet" href="app/hierarchies/hierarchies.css">
 <link rel="stylesheet" href="app/journallog/journallog.css">
+<link rel="stylesheet" href="app/mail/mail.css">
 <link rel="stylesheet" href="app/main/main.css">
 <link rel="stylesheet" href="app/process/process.css">
 <link rel="stylesheet" href="app/tabActor/tabActor.css">
@@ -172,6 +173,12 @@
                     Users
                   </a>
                 </li>
+                <li ng-if="isAdmin">
+                  <a href="/mail">
+                    <i class="fa fa-envelope-o"></i>
+                    Mails
+                  </a>
+                </li>
               </ul>
             </li>
             <li >
@@ -182,9 +189,15 @@
               </a>
               <ul class="sub-menu">
                 <li>
+                  <a href="https://github.com/wilsto/BoardOS/blob/master/CHANGELOG.md">
+                    <i class="fa fa-github"></i>
+                    Change Log
+                  </a>
+                </li>
+                <li>
                   <a href="/about">
                     <i class="fa fa-rss-square"></i>
-                    B.O.S.S
+                    About B.O.S.S
                   </a>
                 </li>
               </ul>
@@ -353,8 +366,11 @@
     <script src="app/hierarchies/hierarchies.js"></script>
     <script src="app/journallog/journallog.controller.js"></script>
     <script src="app/journallog/journallog.js"></script>
+    <script src="app/mail/mail.controller.js"></script>
+    <script src="app/mail/mail.js"></script>
     <script src="app/main/main.controller.js"></script>
     <script src="app/main/main.js"></script>
+    <script src="app/myregex/myregex.filter.js"></script>
     <script src="app/popoverHtmlUnsafePopup/popoverHtmlUnsafePopup.directive.js"></script>
     <script src="app/process/process.controller.js"></script>
     <script src="app/process/process.js"></script>

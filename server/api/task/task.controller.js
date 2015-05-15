@@ -335,6 +335,62 @@ exports.update = function(req, res) {
     });
 };
 
+// Updates an existing task in the DB.
+exports.globalChange = function(req, res) {
+    console.log('req.query', req.query);
+    var query = {};
+    var HierarchyType = req.query.HierarchyType
+    var regex = req.query.textFilter;
+    var patt;
+    var pattOption;
+    if (regex && regex.indexOf('/') >= 0) {
+        var regexMatch = regex.match(/^\/(.*)\/([^\/]*)$/);
+        patt = new RegExp(regexMatch[1], regexMatch[2]);
+    } else {
+        patt = new RegExp(regex);
+    }
+    query[HierarchyType] = patt;
+
+    Task.find(
+        query, function(err, tasks) {
+            if (err) {
+                return handleError(res, err);
+            }
+            if (!tasks) {
+                return res.send(404);
+            }
+
+            // sauvegarder le précédent perimètre pour modifier les métriques
+            var newValue = {};
+            var updated;
+            var updatedMetric;
+            _.each(tasks, function(task) {
+                newValue[HierarchyType] = task[HierarchyType].replace(patt, req.query.textReplace);
+                updated = _.merge(task, newValue);
+                updated.save(function(err) {
+                    if (err) {
+                        return handleError(res, err);
+                    }
+
+                    Metric.find(
+                        query, function(err, metrics) {
+                            _.each(metrics, function(metric) {
+                                updatedMetric = _.merge(metric, newValue);
+                                updatedMetric.save(function(err) {
+                                    if (err) {
+                                        return handleError(res, err);
+                                    }
+                                });
+                            });
+                        }
+                    );
+
+                    return res.send(201);
+                });
+            });
+        });
+};
+
 // Deletes a task from the DB.
 exports.destroy = function(req, res) {
     Task.findById(req.params.id, function(err, task) {

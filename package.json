@@ -28,6 +28,7 @@
     "passport-local": "~0.1.6",
     "postmark": "^0.2.6",
     "q": "^1.1.2",
+    "sendgrid": "^1.8.0",
     "serve-favicon": "~2.0.1",
     "socket.io": "^1.0.6",
     "socket.io-client": "^1.0.6",
