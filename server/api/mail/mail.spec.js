@@ -14,7 +14,7 @@ describe('GET /api/mails', function() {
       .end(function(err, res) {
         if (err) return done(err);
         res.body.should.be.instanceof(Array);
-        done();
       });*/
+        done();
   });
 });
