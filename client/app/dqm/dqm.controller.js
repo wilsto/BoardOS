@@ -34,7 +34,7 @@ angular.module('boardOsApp')
                         }
                     });
                     paths = _.sortBy(paths, 'longname');
-                    console.log('paths', paths.length);
+                    
                     $scope.paths = _.uniq(paths, true, function(x) {
                         return x.longname;
                     });

@@ -1,5 +1,23 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD) (2015-10-10)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v0.16.1...HEAD)
+
+**Implemented enhancements:**
+
+- Affichage lent de la liste des dashboards [\#105](https://github.com/wilsto/BoardOS/issues/105)
+
+- Calcul en temps réel du temps projeté [\#104](https://github.com/wilsto/BoardOS/issues/104)
+
+**Fixed bugs:**
+
+- Arrondi du calcul projeté doit prendre en compte 2 décimales [\#106](https://github.com/wilsto/BoardOS/issues/106)
+
+## [v0.16.1](https://github.com/wilsto/boardos/tree/v0.16.1) (2015-04-21)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v0.16.0...v0.16.1)
+
 ## [v0.16.0](https://github.com/wilsto/boardos/tree/v0.16.0) (2015-04-21)
 
 [Full Changelog](https://github.com/wilsto/boardos/compare/v0.15.2...v0.16.0)
