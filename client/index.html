@@ -15,17 +15,18 @@
 <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 <!-- build:css(client) app/vendor.css -->
 <!-- bower:css -->
+<link rel="stylesheet" href="bower_components/Sebobo/jquery.smallipop/css/jquery.smallipop.min.css" />
+<link rel="stylesheet" href="bower_components/nvd3/src/nv.d3.css" />
 <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
 <link rel="stylesheet" href="bower_components/angular-motion/dist/angular-motion.css" />
-<link rel="stylesheet" href="bower_components/nvd3/src/nv.d3.css" />
+<link rel="stylesheet" href="bower_components/fullcalendar/fullcalendar.css" />
+<link rel="stylesheet" href="bower_components/bootstrap-markdown/css/bootstrap-markdown.min.css" />
 <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
-<link rel="stylesheet" href="bower_components/ng-table/ng-table.css" />
 <link rel="stylesheet" href="bower_components/jstree/dist/themes/default/style.css" />
-<link rel="stylesheet" href="bower_components/select2/select2.css" />
+<link rel="stylesheet" href="bower_components/ng-table/ng-table.css" />
 <link rel="stylesheet" href="bower_components/ngDialog/css/ngDialog.css" />
 <link rel="stylesheet" href="bower_components/ngDialog/css/ngDialog-theme-default.css" />
-<link rel="stylesheet" href="bower_components/bootstrap-markdown/css/bootstrap-markdown.min.css" />
-<link rel="stylesheet" href="bower_components/fullcalendar/fullcalendar.css" />
+<link rel="stylesheet" href="bower_components/select2/select2.css" />
 <!-- endbower -->
 <!-- endbuild -->
 <!-- build:css({.tmp,client}) app/app.css -->
@@ -302,35 +303,36 @@
     <!-- build:js({client,node_modules}) app/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/Sebobo/jquery.smallipop/lib/jquery.smallipop.min.js"></script>
     <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="bower_components/bootstrap.growl/bootstrap-growl.js"></script>
-    <script src="bower_components/angular-resource/angular-resource.js"></script>
-    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
-    <script src="bower_components/angular-strap/dist/angular-strap.js"></script>
-    <script src="bower_components/angular-strap/dist/angular-strap.tpl.js"></script>
-    <script src="bower_components/angular-socket-io/socket.js"></script>
-    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/lodash/dist/lodash.compat.js"></script>
+    <script src="bower_components/angular-confirm-field/app/package/js/angular-confirm-field.min.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script src="bower_components/d3/d3.js"></script>
     <script src="bower_components/nvd3/nv.d3.js"></script>
     <script src="bower_components/angular-nvd3/dist/angular-nvd3.min.js"></script>
-    <script src="bower_components/ng-table/ng-table.js"></script>
-    <script src="bower_components/jstree/dist/jstree.js"></script>
-    <script src="bower_components/ng-js-tree/dist/ngJsTree.js"></script>
-    <script src="bower_components/select2/select2.js"></script>
-    <script src="bower_components/ngDialog/js/ngDialog.js"></script>
-    <script src="bower_components/lodash/dist/lodash.compat.js"></script>
-    <script src="bower_components/moment/moment.js"></script>
-    <script src="bower_components/bootbox/bootbox.js"></script>
-    <script src="bower_components/bootstrap-markdown/js/bootstrap-markdown.js"></script>
-    <script src="bower_components/zingchart/src/zingchart-html5-min.js"></script>
-    <script src="bower_components/angular-confirm-field/app/package/js/angular-confirm-field.min.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-socket-io/socket.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/angular-strap/dist/angular-strap.js"></script>
+    <script src="bower_components/angular-strap/dist/angular-strap.tpl.js"></script>
     <script src="bower_components/jquery-ui/ui/jquery-ui.js"></script>
     <script src="bower_components/fullcalendar/fullcalendar.js"></script>
     <script src="bower_components/angular-ui-calendar/src/calendar.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/bootbox/bootbox.js"></script>
+    <script src="bower_components/bootstrap-markdown/js/bootstrap-markdown.js"></script>
+    <script src="bower_components/bootstrap.growl/bootstrap-growl.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
+    <script src="bower_components/jstree/dist/jstree.js"></script>
+    <script src="bower_components/ng-js-tree/dist/ngJsTree.js"></script>
+    <script src="bower_components/ng-table/ng-table.js"></script>
+    <script src="bower_components/ngDialog/js/ngDialog.js"></script>
+    <script src="bower_components/select2/select2.js"></script>
+    <script src="bower_components/zingchart/src/zingchart-html5-min.js"></script>
     <!-- endbower -->
     <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->

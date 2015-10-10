@@ -16,14 +16,19 @@ var Q = require('q');
 var Dashboard = require('../dashboard/dashboard.model');
 var KPI = require('./KPI.model');
 var Task = require('../task/task.model');
+var Metric = require('../metric/metric.model');
 var Hierarchies = require('../hierarchy/hierarchy.model');
 var getData = require('../../config/getData');
+var tools = require('../../config/tools');
 var hierarchyValues = {};
 
 var mKPIs = {};
+var mTasks = [];
+var mMetrics = [];
 var mKPI = {};
 var myGroup = [];
 var keepKPI;
+
 // Get list of KPIs
 exports.index = function(req, res) {
     KPI.find(function(err, KPIs) {
@@ -36,6 +41,138 @@ exports.index = function(req, res) {
 
 // Get a single kpi
 exports.show = function(req, res) {
+    Q()
+        .then(function() {
+            // Get a single kpi
+            var deferred = Q.defer();
+            mKPIs = {};
+            KPI.findById(req.params.id, function(err, kpi) {
+                mKPI = kpi.toObject();
+                if (typeof mKPI.context === 'undefined' || mKPI.context === '') {
+                    mKPI.context = (typeof req.query.context === 'undefined') ? '' : req.query.context;
+                    mKPI.originalContext = ''
+                }
+                if (typeof mKPI.activity === 'undefined' || mKPI.activity === '') {
+                    mKPI.activity = (typeof req.query.activity === 'undefined') ? '' : req.query.activity;
+                    mKPI.originalActivity = ''
+                }
+                deferred.resolve(mKPI);
+            })
+            return deferred.promise;
+        })
+        .then(function() {
+            return res.json(mKPI);
+        });
+};
+
+
+// Get a single kpi
+exports.tasksList = function(req, res) {
+    Q()
+        .then(function() {
+            // Get a single kpi
+            var deferred = Q.defer();
+            mKPIs = {};
+            KPI.findById(req.params.id, function(err, kpi) {
+                mKPI = kpi.toObject();
+                if (typeof mKPI.context === 'undefined' || mKPI.context === '') {
+                    mKPI.context = (typeof req.query.context === 'undefined') ? '' : req.query.context;
+                    mKPI.originalContext = ''
+                }
+                if (typeof mKPI.activity === 'undefined' || mKPI.activity === '') {
+                    mKPI.activity = (typeof req.query.activity === 'undefined') ? '' : req.query.activity;
+                    mKPI.originalActivity = ''
+                }
+                deferred.resolve(mKPI);
+            })
+            return deferred.promise;
+        })
+        .then(function() {
+            // Get related tasks
+            var deferred = Q.defer();
+            Task.find({}).lean().exec(function(err, tasks) {
+                mTasks = [];
+                _.each(tasks, function(rowdata, index) {
+                    if (rowdata.context.indexOf(req.query.context + '.') >= 0 && rowdata.activity.indexOf(req.query.activity + '.') >= 0) {
+                        mTasks.push(rowdata);
+                    }
+                });
+                deferred.resolve(mTasks);
+            });
+            return deferred.promise;
+        })
+        .then(function() {
+            // Get related metrics
+            var deferred = Q.defer();
+            Metric.find({}).sort({
+                date: 'asc'
+            }).lean().exec(function(err, Metrics) {
+                mMetrics = [];
+                _.each(Metrics, function(rowdata, index) {
+                    if (rowdata.context.indexOf(req.query.context + '.') >= 0 && rowdata.activity.indexOf(req.query.activity + '.') >= 0) {
+                        mMetrics.push(rowdata);
+                    }
+                });
+                deferred.resolve(mMetrics);
+            });
+            return deferred.promise;
+        })
+        .then(function() {
+            // Get related metrics
+            var deferred = Q.defer();
+            _.each(mTasks, function(rowTask, index) {
+                rowTask.metrics = [];
+                _.each(mMetrics, function(rowMetric, index) {
+                    if (rowTask.context === rowMetric.context && rowTask.activity === rowMetric.activity) {
+
+                        // ajouter calcul auto
+                        rowMetric.taskname = rowTask.name;
+
+                        // nombre de jours séparant la date de début, fin, entre les deux
+                        rowMetric.duration = moment(rowMetric.endDate).diff(rowMetric.startDate, 'days');
+                        rowMetric.timeToBegin = moment(rowMetric.startDate).diff(moment(), 'days');
+                        rowMetric.timeToEnd = moment(rowMetric.endDate).diff(moment(), 'days');
+                        rowMetric.fromNow = moment(rowMetric.date).fromNow();
+
+                        // predictedCharge
+                        rowMetric.projectedWorkload = (rowMetric.progress > 0) ? Math.round(1000 * parseFloat(rowMetric.timeSpent.replace(',', '.')) * 100 / parseFloat(rowMetric.progress)) / 1000 : rowMetric.load;
+
+                        // progressStatus
+                        if (rowMetric.endDate > rowTask.endDate) {
+                            switch (rowMetric.status) {
+                                case 'Withdrawn':
+                                case 'Finished':
+                                    rowMetric.progressStatus = 'Late';
+                                    break;
+                                default:
+                                    var d2 = new Date();
+                                    var dateNow = d2.toISOString();
+                                    if (dateNow < rowMetric.endDate) {
+                                        rowMetric.progressStatus = 'At Risk';
+                                    } else {
+                                        rowMetric.progressStatus = 'Late';
+                                    }
+                            }
+                        } else {
+                            rowMetric.progressStatus = 'On Time';
+                        }
+
+                        rowTask.metrics.push(rowMetric);
+                        rowTask.lastmetric = rowMetric;
+                    }
+                });
+                rowTask.KPI = tools.calculKPI(rowTask.metrics, mKPI);
+            });
+            deferred.resolve(mTasks);
+            return deferred.promise;
+        })
+        .then(function() {
+            return res.json(mTasks);
+        });
+};
+
+// Get a single kpi
+exports.show33 = function(req, res) {
     Q()
         .then(function() {
             // Get a single kpi

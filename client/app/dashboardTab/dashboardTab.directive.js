@@ -255,8 +255,8 @@ angular.module('boardOsApp')
                         template: 'myMesureContent.html',
                         className: 'ngdialog-theme-plain',
                         closeByDocument: false,
-                        controller: ['$scope', '$http', '$rootScope', 'Auth',
-                            function($scope, $http, $rootScope, Auth) {
+                        controller: ['$scope', '$http', '$rootScope', 'Auth', '$filter',
+                            function($scope, $http, $rootScope, Auth, $filter) {
                                 $scope.errors = {};
                                 Auth.getCurrentUser(function(data) {
                                     $scope.currentUser = data;
@@ -375,8 +375,28 @@ angular.module('boardOsApp')
                                     }
                                     if (parseInt(newValue) === 100) {
                                         $scope.formData.status = 'Finished';
+                                        if (parseInt(oldValue) >= 0 && parseInt(oldValue) < 100) {
+                                            $scope.formData.endDate = $filter('date')(new Date(), 'mediumDate');
+                                            jQuery.growl({
+                                                icon: 'fa fa-info-circle',
+                                                message: ' Automatic Status & end date when you finish the task (100%)'
+                                            });
+                                        }
                                     }
                                     $scope.calculProjectedWorkload();
+                                });
+
+                                $scope.$watch('formData.endDate', function(newValue, oldValue) {
+                                    $scope.formData.progressStatus = 'Error';
+                                    if (new Date($scope.formData.endDate) - new Date($scope.currentTask.endDate) > 0) {
+                                        $scope.formData.progressStatus = 'Late';
+                                    } else {
+                                        if (new Date() - new Date($scope.currentTask.endDate) > 0 && $scope.formData.progress < 100) {
+                                            $scope.formData.progressStatus = 'Delayed';
+                                        } else {
+                                            $scope.formData.progressStatus = 'On Time';
+                                        }
+                                    }
                                 });
 
                                 $scope.$watch('formData.timeSpent', function(newValue, oldValue) {
@@ -384,8 +404,7 @@ angular.module('boardOsApp')
                                 });
 
                                 $scope.calculProjectedWorkload = function() {
-                                    
-                                    $scope.formData.projectedWorkload = ($scope.formData.progress > 0) ? Math.round(parseFloat($scope.formData.timeSpent.replace(',', '.')) * 100 / parseFloat($scope.formData.progress)) : $scope.formData.load;
+                                    $scope.formData.projectedWorkload = ($scope.formData.progress > 0) ? Math.round(1000 * parseFloat($scope.formData.timeSpent.replace(',', '.')) * 100 / parseFloat($scope.formData.progress)) / 1000 : $scope.formData.load;
                                 };
 
                                 $scope.deleteMetric = function(id) {

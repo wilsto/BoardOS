@@ -184,7 +184,7 @@ angular.module('boardOsApp')
         };
 
         $scope.loadDashBoard();
-        $scope.loadLog();
+        //$scope.loadLog();
 
 
         $scope.options = {

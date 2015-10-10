@@ -16,12 +16,10 @@ angular.module('boardOsApp')
                 $scope.navBarTasksAlerts = _.filter($scope.myTasks, function(task) {
                     return task.lastmetric && task.lastmetric.status !== 'Finished' && (task.lastmetric.progressStatus !== 'On Time' || task.timebetween < 0);
                 });
-                
-
             });
         };
 
-        $scope.load();
+        //$scope.load();
 
         $scope.logout = function() {
             Auth.logout();

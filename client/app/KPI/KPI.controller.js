@@ -24,7 +24,17 @@ angular.module('boardOsApp')
                 }).success(function(KPI) {
                     $scope.KPI = KPI;
                 });
+                $http.get('/api/KPIs/tasksList/' + $stateParams.id, {
+                    params: {
+                        activity: $rootScope.perimeter.activity,
+                        context: $rootScope.perimeter.context
+                    }
+                }).success(function(tasksList) {
+                    $scope.tasksList = tasksList;
+                });
+
             } else {
+                $scope.tasksList = [];
                 $scope.KPI = {
                     name: ''
                 };

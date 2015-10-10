@@ -62,8 +62,8 @@
                   Last Metric
                 </th>
 				<th ng-if="page === 'KPI'" >KPI </th>
-				<th ng-if="page === 'KPI'">Last Metric <br/><small>{{data.metricTaskField}}</small></th>
-				<th ng-if="page === 'KPI'">Reference<br/><small>{{data.refMetricTaskField}}</small></th>
+				<th ng-if="page === 'KPI'">Last Metric <br/><small>{{kpi.metricTaskField}}</small></th>
+				<th ng-if="page === 'KPI'">Reference<br/><small>{{kpi.refMetricTaskField}}</small></th>
 				<!-- <th ng-if="page === 'dashboard'" >Goals </th>
 				<th ng-if="page === 'dashboard'" >Alerts </th> --> 
               </tr>
@@ -94,9 +94,9 @@
                 <td>
                   <span style="color:grey">{{task.lastmetric.fromNow}}</span>
                </td>
-				<td  ng-if="page === 'KPI'" ><span class="badge" ng-style="{'background-color':giveMeMyColor(task.kpis[0].calcul.task, data.category)}" style="height:25px;line-height:20px;width:100%">{{task.kpis[0].calcul.task}}</span></nvd3></td>
-				<td ng-if="page === 'KPI'">{{task.lastmetric[data.metricTaskField]}}</td>
-				<td ng-if="page === 'KPI'">{{task.lastmetric[data.refMetricTaskField]}}</td>
+				<td  ng-if="page === 'KPI'" ><span class="badge" ng-style="{'background-color':giveMeMyColor(task.KPI, kpi.category)}" style="height:25px;line-height:20px;width:100%">{{task.KPI}}</span></nvd3></td>
+				<td ng-if="page === 'KPI'">{{task.lastmetric[kpi.metricTaskField]}}</td>
+				<td ng-if="page === 'KPI'">{{task.lastmetric[kpi.refMetricTaskField]}}</td>
 				<!-- <td ng-if="page === 'dashboard'" >Goals </td>
 				<td ng-if="page === 'dashboard'" >Alerts </td> -->
              </tr>

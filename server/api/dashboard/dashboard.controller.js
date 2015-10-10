@@ -12,6 +12,9 @@
 var _ = require('lodash');
 var Q = require('q');
 var moment = require('moment');
+var log4js = require('log4js');
+var logger = log4js.getLogger();
+logger.setLevel('TRACE');
 
 var Dashboard = require('./dashboard.model');
 var KPI = require('../KPI/KPI.model');
@@ -35,12 +38,24 @@ exports.index = function(req, res) {
     });
 };
 
+// Get list of dashboards
+exports.list = function(req, res) {
+    Dashboard.find(function(err, dashboards) {
+        if (err) {
+            return handleError(res, err);
+        }
+        return res.json(200, dashboards);
+    });
+};
+
 // Get a single dashboard
 exports.show = function(req, res) {
+    //logger.trace("Start response");
     Q()
         .then(function() {
             // Get a single dashboard
             var deferred = Q.defer();
+            //logger.trace("Loading dashboards");
             if (typeof req.params.id === 'undefined') {
                 var filterUser = (req.params.userId) ? {
                     'owner._id': req.params.userId
@@ -83,6 +98,7 @@ exports.show = function(req, res) {
         .then(function() {
             // Get related KPIs
             var deferred = Q.defer();
+            //logger.trace("Loading Kpis");
             KPI.find({}).lean().exec(function(err, kpis) {
                 mkpis = kpis;
                 deferred.resolve(mDashboard);
@@ -92,13 +108,17 @@ exports.show = function(req, res) {
         .then(function() {
             // Get related Tasks
             var deferred = Q.defer();
+            //logger.trace("Loading tasks");
             mDashboard.tasks = [];
             var cloneReq = _.clone(req);
             delete cloneReq.params.id;
+            //logger.trace("End clone");
             getData.fromTask(cloneReq, function(myTasks) {
+                //logger.trace("start filter task");
                 mDashboard.tasks = _.filter(myTasks.tasks, function(task) {
                     return (task.context.indexOf(mDashboard.context + '.') >= 0 && task.activity.indexOf(mDashboard.activity + '.') >= 0);
                 });
+                //logger.trace("End filter task");
                 _.each(mDashboard.dashboards, function(dashboard) {
                     if (typeof dashboard.context === 'undefined') {
                         dashboard.context = ''
@@ -109,6 +129,7 @@ exports.show = function(req, res) {
                     dashboard.tasks = _.filter(myTasks.tasks, function(task) {
                         return (task.context.indexOf(dashboard.context + '.') >= 0 && task.activity.indexOf(dashboard.activity + '.') >= 0);
                     });
+                    //logger.trace("End filter dashboard");
                 });
                 deferred.resolve(mDashboard);
             });
@@ -117,6 +138,7 @@ exports.show = function(req, res) {
         .then(function() {
             // Si plusieurs dashboards
             var deferred = Q.defer();
+            //logger.trace("Merge tasks");
             var clonemkpis = _.cloneDeep(mkpis);
             if (typeof mDashboard.dashboards !== 'undefined' && mDashboard.dashboards.length !== 0) {
                 _.each(mDashboard.dashboards, function(dashboard, index) {
@@ -135,6 +157,7 @@ exports.show = function(req, res) {
         .then(function() {
             // Get related Tasks
             var deferred = Q.defer();
+            //logger.trace("Add calculs");
             var clonemkpis = mkpis;
             getData.addCalculToKPI(clonemkpis, mDashboard.tasks, function(kpis) {
                 mDashboard.kpis = kpis;
@@ -143,6 +166,7 @@ exports.show = function(req, res) {
             return deferred.promise;
         })
         .then(function() {
+            //logger.trace("End reponse");
             return res.json(mDashboard);
         });
 };

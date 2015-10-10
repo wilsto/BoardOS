@@ -12,9 +12,9 @@ angular.module('boardOsApp')
         };
 
         $scope.load = function() {
-            $http.get('/api/dashboards').success(function(dashboards) {
-                $scope.alldashboards = dashboards.dashboards;
-                $scope.dashboards = dashboards.dashboards;
+            $http.get('/api/dashboards/list').success(function(dashboards) {
+                $scope.alldashboards = dashboards;
+                $scope.dashboards = dashboards;
 
             });
         };
@@ -56,6 +56,9 @@ angular.module('boardOsApp')
 
         $scope.$watch('searchText', function() {
             $scope.dashboards = ($scope.searchText.length === 0) ? $scope.alldashboards : _.filter($scope.alldashboards, function(dashboard) {
+                dashboard.name = dashboard.name || '';
+                dashboard.activity = dashboard.activity || '';
+                dashboard.context = dashboard.context || '';
                 return dashboard.name.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0 || dashboard.activity.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0 || dashboard.context.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0;
             });
         });

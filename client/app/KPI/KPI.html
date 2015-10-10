@@ -60,7 +60,7 @@
                                             TASKS COUNT <i class="fa fa-img-up"></i>
                                         </span>
                                         <span class="sale-num">
-                                            {{KPI.tasks.length}} </span>
+                                            {{tasksList.length}} </span>
                                     </li>
                                     <li>
                                         <span class="sale-info">
@@ -127,9 +127,9 @@
             <tab ng-if="KPI._id"  active="true">
                 <tab-heading>
                     Tasks
-                    <span class="badge badge-default"> {{KPI.tasks.length}}</span>
+                    <span class="badge badge-default"> {{tasksList.length}}</span>
                 </tab-heading>
-                <div tab-task data="KPI" ng-if="KPI._id"></div>
+                <div tab-task data="tasksList" kpi="KPI" ng-if="tasksList"></div>
             </tab>
             <!--tab Dashboard-->
             <tab ng-if="KPI._id">

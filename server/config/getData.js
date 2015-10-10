@@ -8,6 +8,9 @@ var _ = require('lodash');
 var moment = require('moment');
 var math = require('mathjs');
 var Q = require('q');
+var log4js = require('log4js');
+var logger = log4js.getLogger();
+logger.setLevel('TRACE');
 
 var KPI = require('../api/KPI/KPI.model');
 var Dashboard = require('../api/dashboard/dashboard.model');
@@ -26,7 +29,7 @@ var tools = require('./tools');
 
 module.exports = {
     fromTask: function(req, callback) {
-
+        //logger.trace("Start getdata.fromTask");
         Q()
             .then(function() {
                 // Get a single task
@@ -97,13 +100,13 @@ module.exports = {
                 return deferred.promise;
             })
             .then(function() {
+                //logger.trace("Start metrics");
                 // Get related metrics
                 var deferred = Q.defer();
                 Metric.find().sort({
                     date: 'asc'
                 }).lean().exec(function(err, metric) {
                     _.each(metric, function(metricdata, index) { // pour chaque metric
-
                         _.each(mTask.tasks, function(taskdata, index) { // pour chaque tache
 
                             // si c'est la première métric, on crèe l'objet
@@ -114,7 +117,6 @@ module.exports = {
                             // si la metrique est attaché à la tache
                             if (metricdata.context === taskdata.context && metricdata.activity === taskdata.activity) {
 
-
                                 // ajouter calcul auto
                                 metricdata.taskname = taskdata.name;
 
@@ -124,7 +126,7 @@ module.exports = {
                                 metricdata.timeToEnd = moment(metricdata.endDate).diff(moment(), 'days');
 
                                 // predictedCharge
-                                metricdata.projectedWorkload = (metricdata.progress > 0) ? Math.round(parseFloat(metricdata.timeSpent.replace(',', '.')) * 100 / parseFloat(metricdata.progress)) : metricdata.load;
+                                metricdata.projectedWorkload = (metricdata.progress > 0) ? Math.round(1000 * parseFloat(metricdata.timeSpent.replace(',', '.')) * 100 / parseFloat(metricdata.progress)) / 1000 : metricdata.load;
 
                                 // progressStatus
                                 if (metricdata.endDate > taskdata.endDate) {
@@ -193,6 +195,7 @@ module.exports = {
                 return deferred.promise;
             })
             .then(function() {
+                //logger.trace("Start Calculer les KPI par taches");
                 // Calculer les KPI par taches
                 var deferred = Q.defer();
 

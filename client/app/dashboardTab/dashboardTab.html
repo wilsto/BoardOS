@@ -47,7 +47,7 @@
                             	</button>
                             </span>
 
-                        </p><span class="label pull-right" ng-class="{'label-success':formData.progressStatus ==='On Time','label-danger':formData.progressStatus ==='Late' }">{{formData.progressStatus}}  </span>
+                        </p><span class="label pull-right" ng-class="{'label-success':formData.progressStatus ==='On Time','label-warning':formData.progressStatus ==='Delayed','label-danger':formData.progressStatus ==='Late' }">{{formData.progressStatus}}  </span>
                         <small class="text-danger has-error" ng-show="form.endDate.$error.required && submitted">
             				Required
           				</small>
@@ -151,8 +151,9 @@
                 <div class="row" ng-if="formData.status === 'Finished'">
                     <div class="col-md-6"    ng-class="{'bg-danger':form.reworkReason.$invalid && submitted}">
                         <p class="input-group" >
-                            <label>Reason for rework</label>
-                            <input type="text" name="reworkReason" class="form-control" rows="2" ng-model="formData.reworkReason">
+                            <label>Reason for rework</label><br/>
+                            <input type="radio" name="radio2" id="radioI" value="Internal" ng-model='formData.reworkReason' ng-checked="formData.reworkReason==='Internal'" ng-change='formData.reworkReason="Internal"'><small> Internal  (Bug,...)</small><br/>
+                            <input type="radio" name="radio2" id="radioE" value="External" ng-model='formData.reworkReason' ng-checked="formData.reworkReason==='External'" ng-change='nformData.reworkReason="External"'><small> External  (Evolutions,...)</small>
                         </p>
                     </div>
                     <div class="col-md-6"    ng-class="{'bg-danger':form.actorSatisfaction.$invalid && submitted}">
@@ -163,7 +164,7 @@
                             <span class="help-block">
 							</span>
                         </p>
-                                                <small class="text-danger has-error" ng-show="form.actorSatisfaction.$error.required && submitted">
+                            <small class="text-danger has-error" ng-show="form.actorSatisfaction.$error.required && submitted">
                             Required
                         </small>
                     </div>
