@@ -9,7 +9,7 @@
                     <br/><img src="assets/images/ajax-loader_blue.gif">
                 </div>
                 <div class="details " ng-if="dataKPIs">
-                    <div class="title"><a href="/KPIs"><span style="font-weight:bold;color:#1f77b4">{{dataDashboards.kpis.length}}</span> KPIs</a>
+                    <div class="title"><a href="/KPIs"><span style="font-weight:bold;color:#1f77b4">{{KPIs.length}}</span> KPIs</a>
                     </div>
                     <nvd3 options="options" data="dataKPIs"></nvd3>
                 </div>
@@ -22,7 +22,7 @@
                     <br/><img src="assets/images/ajax-loader_blue.gif">
                 </div>
                 <div class="details" ng-if="dataTasks">
-                    <div class="title"><a href="/tasks"><span style="font-weight:bold;color:#9467bd">{{dataDashboards.tasks.length}}</span> Tasks</a>
+                    <div class="title"><a href="/tasks"><span style="font-weight:bold;color:#9467bd">{{tasks.length}}</span> Tasks</a>
                     </div>
                     <nvd3 options="optionsTasks" data="dataTasks"></nvd3>
                 </div>
@@ -35,7 +35,7 @@
                     <br/><img src="assets/images/ajax-loader_blue.gif">
                 </div>
                 <div class="details" ng-if="dataMetrics">
-                    <div class="title"><a href="/metrics"><span style="font-weight:bold;color:#87CEEB">{{dataDashboards.metrics.length}}</span> Metrics</a>
+                    <div class="title"><a href="/metrics"><span style="font-weight:bold;color:#87CEEB">{{metrics.length}}</span> Metrics</a>
                     </div>
                     <nvd3 options="optionsMetrics" data="dataMetrics"></nvd3>
                 </div>
@@ -103,7 +103,7 @@
                 </div>
             </div>
             <div class="portlet-body">
-                <div class="isloading" ng-if="!dataDashboards">Loading
+                <div class="isloading" ng-if="!alltasksToNotify">Loading
                     <br/><img src="assets/images/ajax-loader_blue.gif">
                 </div>
                 <!--BEGIN TABS-->

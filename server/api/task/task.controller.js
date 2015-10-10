@@ -35,6 +35,17 @@ exports.index = function(req, res) {
     });
 };
 
+
+// Get list of tasks
+exports.list = function(req, res) {
+    Task.find(function(err, tasks) {
+        if (err) {
+            return handleError(res, err);
+        }
+        return res.json(200, tasks);
+    });
+};
+
 // Get list of tasks
 exports.search = function(req, res) {
     Task.find({

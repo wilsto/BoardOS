@@ -5,6 +5,54 @@ angular.module('boardOsApp')
 
         $scope.Math = window.Math;
         $scope.filterNotification = 'Only For Me';
+
+        $scope.loadKPIs = function() {
+            $http.get('/api/KPIs/list').success(function(KPIs) {
+                $scope.KPIs = KPIs;
+                $scope.dataKPIs = [{
+                    values: []
+                }];
+                $scope.predataKPIs = myLibrary.getByMonth(KPIs, 'date', 'value');
+                $scope.dataKPIs[0].values = $scope.predataKPIs;
+            });
+        };
+
+        $scope.loadTasks = function() {
+            $http.get('/api/tasks/list').success(function(tasks) {
+                $scope.tasks = tasks;
+
+                $scope.loadTaskToNotify();
+
+                $scope.dataTasks = [{
+                    values: []
+                }];
+                $scope.predataTasks = myLibrary.getByMonth(tasks, 'date', 'value');
+                $scope.dataTasks[0].values = $scope.predataTasks;
+            });
+        };
+
+        $scope.loadMetrics = function() {
+            $http.get('/api/metrics/list').success(function(metrics) {
+                $scope.metrics = metrics;
+
+                // calcul nombre de metrics
+                $scope.dataMetrics = [{
+                    values: []
+                }];
+                $scope.predataMetrics = myLibrary.getByMonth(metrics, 'date', 'value');
+                $scope.dataMetrics[0].values = $scope.predataMetrics;
+
+
+                // calcul confidence
+                $scope.dataConfidence = [{
+                    values: []
+                }];
+                $scope.predataConfidence = myLibrary.getByMonth(metrics, 'date', 'trust');
+                $scope.dataConfidence[0].values = $scope.predataConfidence;
+                $scope.confidence = parseInt(_.last($scope.dataConfidence[0].values).mean);
+            });
+        };
+
         $scope.loadDashBoard = function() {
             Auth.getCurrentUser(function(data) {
                 $scope.currentUser = data;
@@ -13,26 +61,13 @@ angular.module('boardOsApp')
                     $scope.dashboards = dashboards.dashboards;
                     $scope.dataDashboards = dashboards;
 
-                    $scope.loadTaskToNotify();
-
-                    $scope.dataKPIs = [{
-                        values: []
-                    }];
-                    $scope.dataTasks = [{
-                        values: []
-                    }];
-                    $scope.dataMetrics = [{
-                        values: []
-                    }];
                     $scope.dataGoals = [{
                         values: []
                     }];
                     $scope.dataAlerts = [{
                         values: []
                     }];
-                    $scope.dataConfidence = [{
-                        values: []
-                    }];
+
 
                     // on rassemble les métriques
                     $scope.dataDashboards.metrics = [];
@@ -41,11 +76,6 @@ angular.module('boardOsApp')
                             $scope.dataDashboards.metrics.push(metric);
                         });
                     });
-
-                    $scope.predataKPIs = myLibrary.getByMonth($scope.dataDashboards.kpis, 'date', 'value');
-                    $scope.predataTasks = myLibrary.getByMonth($scope.dataDashboards.tasks, 'date', 'value');
-                    $scope.predataMetrics = myLibrary.getByMonth($scope.dataDashboards.metrics, 'date', 'value');
-                    $scope.predataConfidence = myLibrary.getByMonth($scope.dataDashboards.metrics, 'date', 'trust');
 
                     var dataGoals = [];
                     var dataAlerts = [];
@@ -74,15 +104,11 @@ angular.module('boardOsApp')
                         }
                     });
 
-                    $scope.dataKPIs[0].values = $scope.predataKPIs;
-                    $scope.dataTasks[0].values = $scope.predataTasks;
-                    $scope.dataMetrics[0].values = $scope.predataMetrics;
-                    $scope.dataConfidence[0].values = $scope.predataConfidence;
                     $scope.dataGoals[0].values = myLibrary.getCalculByMonth(dataGoals);
                     $scope.dataAlerts[0].values = myLibrary.getCalculByMonth(dataAlerts);
                     $scope.goalsNb = _.last($scope.dataGoals[0].values).mean;
                     $scope.alertsNb = _.last($scope.dataAlerts[0].values).sum;
-                    $scope.confidence = parseInt(_.last($scope.dataConfidence[0].values).mean);
+
 
                     //calcul goals and alerts per dashboard
                     _.forEach(dashboards.dashboards, function(dashboard, key) {
@@ -126,8 +152,8 @@ angular.module('boardOsApp')
         };
 
         $scope.loadTaskToNotify = function() {
-            if (typeof $scope.dataDashboards !== 'undefined') {
-                var openTasks = _.filter($scope.dataDashboards.tasks, function(task) {
+            if (typeof $scope.tasks !== 'undefined') {
+                var openTasks = _.filter($scope.tasks, function(task) {
                     if (typeof task.lastmetric === 'undefined' || task.lastmetric.status === 'In Progress' || task.lastmetric.status === 'Not Started') {
                         return true;
                     }
@@ -184,8 +210,10 @@ angular.module('boardOsApp')
         };
 
         $scope.loadDashBoard();
-        //$scope.loadLog();
-
+        $scope.loadKPIs();
+        $scope.loadTasks();
+        $scope.loadMetrics();
+        $scope.loadLog();
 
         $scope.options = {
             chart: {

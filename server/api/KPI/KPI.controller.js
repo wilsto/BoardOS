@@ -39,6 +39,17 @@ exports.index = function(req, res) {
     });
 };
 
+// Get list of KPIs
+exports.list = function(req, res) {
+    KPI.find(function(err, KPIs) {
+        if (err) {
+            return handleError(res, err);
+        }
+        return res.json(200, KPIs);
+    });
+};
+
+
 // Get a single kpi
 exports.show = function(req, res) {
     Q()

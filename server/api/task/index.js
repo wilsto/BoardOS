@@ -6,6 +6,7 @@ var controller = require('./task.controller');
 var router = express.Router();
 
 router.get('/', controller.show);
+router.get('/list', controller.list);
 router.get('/search', controller.search);
 router.get('/globalChange', controller.globalChange);
 router.get('/:id', controller.show);
