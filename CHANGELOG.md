@@ -1,6 +1,6 @@
 # Change Log
 
-## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD) (2015-10-10)
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD) (2015-10-11)
 
 [Full Changelog](https://github.com/wilsto/boardos/compare/v0.16.1...HEAD)
 

@@ -8,9 +8,10 @@
         <li>
           <img src="assets/images/dashboard.jpg" class="img-responsive" alt=""/>
         </li>
-       <li>
-          <a href="#">Dashboard <span>
-           OK </span>
+       <li style="margin-top:10px;">
+          <a href="#">Need Metrics  
+          <span ng-if="OutofDateTasks.length ==0"> 0 </span>
+          <span ng-if="OutofDateTasks.length > 0" style="background:red"> {{OutofDateTasks.length}} </span>
           </a>
         </li>
       </ul>
@@ -18,19 +19,19 @@
     <div class="col-md-10">
       <div class="row">
         <div class="col-md-8 profile-info">
-          <h1>{{dashboard.name}}</h1><br/>
+          <h1>{{dashboardLight.name}}</h1><br/>
           <ul class="list list-inline">
             <li>
-              <i class="fa fa-map-marker"></i><span style="color:lightgrey"> Context </span> {{dashboard.context || 'All'}}
+              <i class="fa fa-map-marker"></i><span style="color:lightgrey"> Context </span> {{dashboardLight.context || 'All'}}
             </li><br/><br/>
             <li>
-              <i class="fa fa-calendar"></i><span style="color:lightgrey"> Activity </span>  {{dashboard.activity || 'All'}}
+              <i class="fa fa-calendar"></i><span style="color:lightgrey"> Activity </span>  {{dashboardLight.activity || 'All'}}
             </li><br/><br/>
             <li>
-              <i class="fa fa-crosshairs"></i><span style="color:lightgrey"> Axis </span>  {{dashboard.axe  || 'All'}}
+              <i class="fa fa-crosshairs"></i><span style="color:lightgrey"> Axis </span>  {{dashboardLight.axe  || 'All'}}
             </li><br/><br/>
             <li>
-              <i class="fa fa-sitemap"></i><span style="color:lightgrey"> Category </span>  {{dashboard.category || 'All'}}
+              <i class="fa fa-sitemap"></i><span style="color:lightgrey"> Category </span>  {{dashboardLight.category || 'All'}}
             </li>
           </ul>
         </div>
@@ -62,7 +63,7 @@
          <div class="col-md-2 col-sm-4">
           <div class="stats-overview stat-block">
            <div class="details">
-            <div class="title"><a href="/KPIs"><span style="font-weight:bold;color:#1f77b4">{{dashboard.kpis.length}}</span> KPIs</a></div>
+            <div class="title"><a href="/KPIs"><span style="font-weight:bold;color:#1f77b4">{{kpis.length}}</span> KPIs</a></div>
             <nvd3 options="options" data="dataKPIs"></nvd3>
           </div>
         </div>
@@ -71,7 +72,7 @@
       <div class="col-md-2 col-sm-4">
         <div class="stats-overview stat-block">
          <div class="details">
-          <div class="title"><a href="/tasks"><span style="font-weight:bold;color:#9467bd">{{dashboard.tasks.length}}</span> Tasks</a></div>
+          <div class="title"><a href="/tasks"><span style="font-weight:bold;color:#9467bd">{{tasks.length}}</span> Tasks</a></div>
           <nvd3 options="optionsTasks" data="dataTasks"></nvd3>
         </div>
       </div>
@@ -80,7 +81,7 @@
     <div class="col-md-2 col-sm-4">
       <div class="stats-overview stat-block">
        <div class="details">
-         <div class="title"><a href="/metrics"><span style="font-weight:bold;color:#87CEEB">{{dashboard.metrics.length}}</span> Metrics</a></div>
+         <div class="title"><a href="/metrics"><span style="font-weight:bold;color:#87CEEB">{{metrics.length}}</span> Metrics</a></div>
          <nvd3 options="optionsMetrics" data="dataMetrics"></nvd3>
        </div>
      </div>
@@ -134,12 +135,12 @@
 <div dashboard-tab dashboard-type="dashboard" dashboard-data="dashboard" ng-if="dashboard"></div>
 </tab>
 <!--tab Tasks-->
-<tab ng-if="dashboard._id">
+<tab ng-if="tasks">
   <tab-heading>
   Tasks 
-  <span class="badge badge-default"> {{dashboard.tasks.length || 0}}</span>
+  <span class="badge " ng-class="OutofDateTasks.length > 0 ? 'badge-danger':'badge-default'"> {{tasks.length || 0}}</span>
 </tab-heading>
-<div tab-task data="dashboard" ng-if="dashboard"></div>
+<div tab-task data="dashboard.tasks" kpi="dashboard.KPIs" ng-if="dashboard"></div>
 </tab>
 <!--tab Metrics
 <tab ng-if="dashboard._id">

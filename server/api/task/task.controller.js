@@ -20,6 +20,7 @@ var User = require('../user/user.model');
 var Dashboard = require('../dashboard/dashboard.model');
 var Hierarchies = require('../hierarchy/hierarchy.model');
 var hierarchyValues = {};
+var mTasks = [];
 var mTask = {};
 var usersList = [];
 
@@ -38,12 +39,28 @@ exports.index = function(req, res) {
 
 // Get list of tasks
 exports.list = function(req, res) {
-    Task.find(function(err, tasks) {
-        if (err) {
-            return handleError(res, err);
-        }
-        return res.json(200, tasks);
-    });
+    Q()
+        .then(function() {
+            // Get related tasks
+            var deferred = Q.defer();
+            Task.find({}).lean().exec(function(err, tasks) {
+                mTasks = [];
+                _.each(tasks, function(rowdata, index) {
+                    if (typeof req.query.context !== 'undefined' || typeof req.query.activity !== 'undefined') {
+                        if (rowdata.context.indexOf(req.query.context + '.') >= 0 && rowdata.activity.indexOf(req.query.activity + '.') >= 0) {
+                            mTasks.push(rowdata);
+                        }
+                    } else {
+                        mTasks.push(rowdata);
+                    }
+                });
+                deferred.resolve(mTasks);
+            });
+            return deferred.promise;
+        })
+        .then(function() {
+            return res.json(200, mTasks);
+        });
 };
 
 // Get list of tasks

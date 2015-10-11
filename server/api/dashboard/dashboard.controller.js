@@ -48,6 +48,17 @@ exports.list = function(req, res) {
     });
 };
 
+// Get list of dashboards
+exports.quick = function(req, res) {
+    Dashboard.findById(req.params.id).lean().exec(function(err, dashboard) {
+        if (err) {
+            return handleError(res, err);
+        }
+        return res.json(200, dashboard);
+    });
+};
+
+
 // Get a single dashboard
 exports.show = function(req, res) {
     //logger.trace("Start response");

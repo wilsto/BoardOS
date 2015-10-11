@@ -9,8 +9,13 @@
 
 'use strict';
 
+
 var _ = require('lodash');
+var Q = require('q');
+var moment = require('moment');
+
 var Metric = require('./metric.model');
+var metrics = [];
 
 // Get list of metrics
 exports.index = function(req, res) {
@@ -24,12 +29,28 @@ exports.index = function(req, res) {
 
 // Get list of metrics
 exports.list = function(req, res) {
-    Metric.find(function(err, metrics) {
-        if (err) {
-            return handleError(res, err);
-        }
-        return res.json(200, metrics);
-    });
+    Q()
+        .then(function() {
+            // Get related rowtask
+            var deferred = Q.defer();
+            Metric.find({}).lean().exec(function(err, rowtask) {
+                metrics = [];
+                _.each(rowtask, function(rowdata, index) {
+                    if (typeof req.query.context !== 'undefined' || typeof req.query.activity !== 'undefined') {
+                        if (rowdata.context.indexOf(req.query.context + '.') >= 0 && rowdata.activity.indexOf(req.query.activity + '.') >= 0) {
+                            metrics.push(rowdata);
+                        }
+                    } else {
+                        metrics.push(rowdata);
+                    }
+                });
+                deferred.resolve(metrics);
+            });
+            return deferred.promise;
+        })
+        .then(function() {
+            return res.json(200, metrics);
+        });
 };
 
 // Get a single metric

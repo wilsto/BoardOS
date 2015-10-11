@@ -21,8 +21,6 @@ angular.module('boardOsApp')
             $http.get('/api/tasks/list').success(function(tasks) {
                 $scope.tasks = tasks;
 
-                $scope.loadTaskToNotify();
-
                 $scope.dataTasks = [{
                     values: []
                 }];
@@ -61,13 +59,27 @@ angular.module('boardOsApp')
                     $scope.dashboards = dashboards.dashboards;
                     $scope.dataDashboards = dashboards;
 
+                    $scope.loadTaskToNotify();
+
+                    _.each(dashboards.dashboards, function(dashboard) {
+                        dashboard.openTasks = _.filter(dashboard.tasks, function(task) {
+                            if (typeof task.lastmetric === 'undefined' || task.lastmetric.status === 'In Progress' || task.lastmetric.status === 'Not Started') {
+                                return true;
+                            }
+                        });
+                        dashboard.tasksNeedMetrics = _.filter(dashboard.tasks, function(task) {
+                            if (typeof task.lastmetric === 'undefined' || task.timebetween <= 0 && task.timebetween !== null) {
+                                return true;
+                            }
+                        });
+                    });
+
                     $scope.dataGoals = [{
                         values: []
                     }];
                     $scope.dataAlerts = [{
                         values: []
                     }];
-
 
                     // on rassemble les métriques
                     $scope.dataDashboards.metrics = [];
@@ -152,8 +164,8 @@ angular.module('boardOsApp')
         };
 
         $scope.loadTaskToNotify = function() {
-            if (typeof $scope.tasks !== 'undefined') {
-                var openTasks = _.filter($scope.tasks, function(task) {
+            if (typeof $scope.dataDashboards !== 'undefined') {
+                var openTasks = _.filter($scope.dataDashboards.tasks, function(task) {
                     if (typeof task.lastmetric === 'undefined' || task.lastmetric.status === 'In Progress' || task.lastmetric.status === 'Not Started') {
                         return true;
                     }

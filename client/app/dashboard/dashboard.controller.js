@@ -5,10 +5,66 @@ angular.module('boardOsApp')
 
         $scope.activeTab = 1;
 
-        $scope.load = function() {
+
+        $scope.loadKPIs = function() {
+            $http.get('/api/KPIs/list').success(function(KPIs) {
+                $scope.KPIs = KPIs;
+                $scope.dataKPIs = [{
+                    values: []
+                }];
+                $scope.predataKPIs = myLibrary.getByMonth(KPIs, 'date', 'value');
+                $scope.dataKPIs[0].values = $scope.predataKPIs;
+            });
+        };
+
+        $scope.loadTasks = function() {
+            $http.get('/api/tasks/list', {
+                params: {
+                    activity: $rootScope.perimeter.activity,
+                    context: $rootScope.perimeter.context
+                }
+            }).success(function(tasks) {
+                $scope.tasks = tasks;
+
+                $scope.dataTasks = [{
+                    values: []
+                }];
+                $scope.predataTasks = myLibrary.getByMonth(tasks, 'date', 'value');
+                $scope.dataTasks[0].values = $scope.predataTasks;
+            });
+        };
+
+        $scope.loadMetrics = function() {
+            $http.get('/api/metrics/list', {
+                params: {
+                    activity: $rootScope.perimeter.activity,
+                    context: $rootScope.perimeter.context
+                }
+            }).success(function(metrics) {
+                $scope.metrics = metrics;
+
+                // calcul nombre de metrics
+                $scope.dataMetrics = [{
+                    values: []
+                }];
+                $scope.predataMetrics = myLibrary.getByMonth(metrics, 'date', 'value');
+                $scope.dataMetrics[0].values = $scope.predataMetrics;
+
+
+                // calcul confidence
+                $scope.dataConfidence = [{
+                    values: []
+                }];
+                $scope.predataConfidence = myLibrary.getByMonth(metrics, 'date', 'trust');
+                $scope.dataConfidence[0].values = $scope.predataConfidence;
+                $scope.confidence = parseInt(_.last($scope.dataConfidence[0].values).mean);
+            });
+        };
+
+        $scope.loadDashboard = function() {
             if ($stateParams.id) {
-                $http.get('/api/dashboards/' + $stateParams.id).success(function(dashboard) {
-                    $scope.dashboard = dashboard;
+                $http.get('/api/dashboards/quick/' + $stateParams.id).success(function(dashboard) {
+                $scope.dashboardLight = dashboard;
 
                     $rootScope.perimeter.name = dashboard.name;
                     $rootScope.perimeter.id = dashboard._id;
@@ -18,22 +74,27 @@ angular.module('boardOsApp')
                     $rootScope.perimeter.category = dashboard.category;
                     $cookieStore.put('perimeter', $rootScope.perimeter);
 
-                    $scope.dataKPIs = [{
-                        values: []
-                    }];
-                    $scope.dataTasks = [{
-                        values: []
-                    }];
-                    $scope.dataMetrics = [{
-                        values: []
-                    }];
+                    $scope.load();
+                    $scope.loadKPIs();
+                    $scope.loadTasks();
+                    $scope.loadMetrics();
+                });
+            }
+        };
+
+        $scope.load = function() {
+            if ($stateParams.id) {
+                $http.get('/api/dashboards/' + $stateParams.id).success(function(dashboard) {
+
+                    $scope.dashboard = dashboard;
+                    $scope.OutofDateTasks = _.filter($scope.dashboard.tasks, function(task) {
+                        return task.timebetween <= 0 && task.timebetween !== null;
+                    });
+
                     $scope.dataGoals = [{
                         values: []
                     }];
                     $scope.dataAlerts = [{
-                        values: []
-                    }];
-                    $scope.dataConfidence = [{
                         values: []
                     }];
 
@@ -44,11 +105,6 @@ angular.module('boardOsApp')
                             $scope.dashboard.metrics.push(metric);
                         });
                     });
-
-                    $scope.predataKPIs = myLibrary.getByMonth($scope.dashboard.kpis, 'date', 'value');
-                    $scope.predataTasks = myLibrary.getByMonth($scope.dashboard.tasks, 'date', 'value');
-                    $scope.predataMetrics = myLibrary.getByMonth($scope.dashboard.metrics, 'date', 'value');
-                    $scope.predataConfidence = myLibrary.getByMonth($scope.dashboard.metrics, 'date', 'trust');
 
                     var dataGoals = [];
                     var dataGoals4QCT = [];
@@ -82,12 +138,6 @@ angular.module('boardOsApp')
                             dataAlerts.push(alertsByMonth);
                         }
                     });
-
-                    $scope.dataKPIs[0].values = $scope.predataKPIs;
-                    
-                    $scope.dataTasks[0].values = $scope.predataTasks;
-                    $scope.dataMetrics[0].values = $scope.predataMetrics;
-                    $scope.dataConfidence[0].values = $scope.predataConfidence;
                     $scope.dataGoals[0].values = myLibrary.getCalculByMonth(dataGoals);
                     $scope.dataAlerts[0].values = myLibrary.getCalculByMonth(dataAlerts);
 
@@ -125,10 +175,8 @@ angular.module('boardOsApp')
                         value: 0
                     };
 
-
                     $scope.goalsNb = _.last($scope.dataGoals[0].values).mean;
                     $scope.alertsNb = _.last($scope.dataAlerts[0].values).sum;
-                    $scope.confidence = parseInt(_.last($scope.dataConfidence[0].values).mean);
 
                     var mydata = {
                         'graphset': [{
@@ -233,11 +281,9 @@ angular.module('boardOsApp')
                 };
 
             }
-
-
         };
 
-        $scope.load();
+        $scope.loadDashboard();
 
         $scope.changeTab = function(e, tabNb) {
             $('.ver-inline-menu li').removeClass('active');
