@@ -58,7 +58,9 @@ angular.module('boardOsApp')
                 $http.get('/api/dashboards/user/' + $scope.currentUser._id).success(function(dashboards) {
                     $scope.dashboards = dashboards.dashboards;
                     $scope.dataDashboards = dashboards;
-                    console.log('dashboards', dashboards);
+
+                    
+
                     $scope.loadTaskToNotify();
 
                     _.each(dashboards.dashboards, function(dashboard) {
@@ -80,14 +82,6 @@ angular.module('boardOsApp')
                     $scope.dataAlerts = [{
                         values: []
                     }];
-
-                    // on rassemble les métriques
-                    $scope.dataDashboards.metrics = [];
-                    _.each($scope.dataDashboards.tasks, function(task) {
-                        _.each(task.metrics, function(metric) {
-                            $scope.dataDashboards.metrics.push(metric);
-                        });
-                    });
 
                     var dataGoals = [];
                     var dataAlerts = [];

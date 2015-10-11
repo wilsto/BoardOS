@@ -121,6 +121,7 @@ exports.show = function(req, res) {
             var deferred = Q.defer();
             //logger.trace("Loading tasks");
             mDashboard.tasks = [];
+
             var cloneReq = _.clone(req);
             delete cloneReq.params.id;
             //logger.trace("End clone");
@@ -178,6 +179,17 @@ exports.show = function(req, res) {
         })
         .then(function() {
             //logger.trace("End reponse");
+            _.each(mDashboard.dashboards, function(dashboard, index) {
+                _.each(dashboard.tasks, function(task, index) {
+                    delete task.dashboards;
+                    delete task.metrics;
+                });
+            });
+            _.each(mDashboard.tasks, function(task, index) {
+                delete task.dashboards;
+                delete task.metrics;
+                delete task.kpis;
+            });
             return res.status(200).json(mDashboard);
         });
 };
