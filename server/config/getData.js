@@ -35,7 +35,7 @@ module.exports = {
                 // Get a single task
                 var deferred = Q.defer();
                 if (typeof req.params.id === 'undefined') {
-                    Task.find({}, '-_id -__v').sort({
+                    Task.find({}, '-__v').sort({
                         date: 'desc'
                     }).lean().exec(function(err, task) {
                         mTask = {
@@ -48,7 +48,7 @@ module.exports = {
                         deferred.resolve(mTask);
                     })
                 } else {
-                    Task.findById(req.params.id, '-_id -__v').lean().exec(function(err, task) {
+                    Task.findById(req.params.id, '-__v').lean().exec(function(err, task) {
                         mTask = {
                             _id: task._id,
                             name: task.name,
@@ -73,7 +73,7 @@ module.exports = {
             .then(function() {
                 // Get a single user
                 var deferred = Q.defer();
-                Dashboard.find({}, '-_id -__v', function(err, dashboard) {
+                Dashboard.find({}, '-__v', function(err, dashboard) {
                     dashboards = dashboard;
                     deferred.resolve(dashboards);
                 })
@@ -84,7 +84,7 @@ module.exports = {
                 var deferred = Q.defer();
                 Hierarchies.find({
                     name: 'Task'
-                }, '-_id -__v', function(err, hierarchy) {
+                }, '-__v', function(err, hierarchy) {
                     hierarchyValues = hierarchy[0].list;
                     deferred.resolve(hierarchy);
                 })
@@ -93,7 +93,7 @@ module.exports = {
             .then(function() {
                 // Get all kpis
                 var deferred = Q.defer();
-                KPI.find({}, '-_id -__v').lean().exec(function(err, mKPI) {
+                KPI.find({}, '-__v').lean().exec(function(err, mKPI) {
                     mTask.kpis = mKPI;
                     deferred.resolve(mKPI);
                 })
@@ -103,7 +103,7 @@ module.exports = {
                 //logger.trace("Start metrics");
                 // Get related metrics
                 var deferred = Q.defer();
-                Metric.find({}, '-_id -__v').sort({
+                Metric.find({}, '-__v').sort({
                     date: 'asc'
                 }).lean().exec(function(err, metric) {
                     _.each(metric, function(metricdata, index) { // pour chaque metric

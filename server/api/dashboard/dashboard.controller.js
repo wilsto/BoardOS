@@ -71,7 +71,7 @@ exports.show = function(req, res) {
                 var filterUser = (req.params.userId) ? {
                     'owner._id': req.params.userId
                 } : null;
-                Dashboard.find(filterUser).lean().exec(function(err, dashboard) {
+                Dashboard.find(filterUser, '-__v').lean().exec(function(err, dashboard) {
                     if (err) {
                         return handleError(res, err);
                     }
@@ -86,7 +86,7 @@ exports.show = function(req, res) {
                     deferred.resolve(mDashboard);
                 })
             } else {
-                Dashboard.findById(req.params.id).lean().exec(function(err, dashboard) {
+                Dashboard.findById(req.params.id, '-__v').lean().exec(function(err, dashboard) {
                     if (err) {
                         return handleError(res, err);
                     }
