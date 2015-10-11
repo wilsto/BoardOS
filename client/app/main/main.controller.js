@@ -58,7 +58,7 @@ angular.module('boardOsApp')
                 $http.get('/api/dashboards/user/' + $scope.currentUser._id).success(function(dashboards) {
                     $scope.dashboards = dashboards.dashboards;
                     $scope.dataDashboards = dashboards;
-
+                    console.log('dashboards', dashboards);
                     $scope.loadTaskToNotify();
 
                     _.each(dashboards.dashboards, function(dashboard) {
