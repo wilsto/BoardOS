@@ -5,7 +5,6 @@ angular.module('boardOsApp')
 
         $scope.sendMail = function() {
             $http.get('/api/mails').success(function(response) {
-                
                 $scope.message = response;
             });
         };

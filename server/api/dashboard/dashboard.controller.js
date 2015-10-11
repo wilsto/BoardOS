@@ -34,7 +34,7 @@ exports.index = function(req, res) {
         if (err) {
             return handleError(res, err);
         }
-        return res.json(200, dashboards);
+        return res.status(200).json(dashboards);
     });
 };
 
@@ -44,7 +44,7 @@ exports.list = function(req, res) {
         if (err) {
             return handleError(res, err);
         }
-        return res.json(200, dashboards);
+        return res.status(200).json(dashboards);
     });
 };
 
@@ -54,7 +54,7 @@ exports.quick = function(req, res) {
         if (err) {
             return handleError(res, err);
         }
-        return res.json(200, dashboard);
+        return res.status(200).json(dashboard);
     });
 };
 
@@ -178,7 +178,7 @@ exports.show = function(req, res) {
         })
         .then(function() {
             //logger.trace("End reponse");
-            return res.json(mDashboard);
+            return res.status(200).json(mDashboard);
         });
 };
 
@@ -208,7 +208,7 @@ exports.update = function(req, res) {
             if (err) {
                 return handleError(res, err);
             }
-            return res.json(200, dashboard);
+            return res.status(200).json(dashboard);
         });
     });
 };

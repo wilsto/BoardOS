@@ -35,7 +35,7 @@ exports.index = function(req, res) {
         if (err) {
             return handleError(res, err);
         }
-        return res.json(200, KPIs);
+        return res.status(200).json(KPIs);
     });
 };
 
@@ -45,7 +45,7 @@ exports.list = function(req, res) {
         if (err) {
             return handleError(res, err);
         }
-        return res.json(200, KPIs);
+        return res.status(200).json(KPIs);
     });
 };
 
@@ -72,7 +72,7 @@ exports.show = function(req, res) {
             return deferred.promise;
         })
         .then(function() {
-            return res.json(mKPI);
+            return res.status(200).json(mKPI);
         });
 };
 
@@ -178,7 +178,7 @@ exports.tasksList = function(req, res) {
             return deferred.promise;
         })
         .then(function() {
-            return res.json(mTasks);
+            return res.status(200).json(mTasks);
         });
 };
 
@@ -293,7 +293,7 @@ exports.show33 = function(req, res) {
             return deferred.promise;
         })
         .then(function() {
-            return res.json(mKPI);
+            return res.status(200).json(mKPI);
         });
 };
 
@@ -322,7 +322,7 @@ exports.update = function(req, res) {
             if (err) {
                 return handleError(res, err);
             }
-            return res.json(200, kpi);
+            return res.status(200).json(kpi);
         });
     });
 };

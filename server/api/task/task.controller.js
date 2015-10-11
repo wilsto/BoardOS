@@ -46,7 +46,7 @@ exports.list = function(req, res) {
             Task.find({}).lean().exec(function(err, tasks) {
                 mTasks = [];
                 _.each(tasks, function(rowdata, index) {
-                    if (typeof req.query.context !== 'undefined' || typeof req.query.activity !== 'undefined') {
+                    if (typeof req.query.context !== 'undefined' && typeof req.query.activity !== 'undefined') {
                         if (rowdata.context.indexOf(req.query.context + '.') >= 0 && rowdata.activity.indexOf(req.query.activity + '.') >= 0) {
                             mTasks.push(rowdata);
                         }

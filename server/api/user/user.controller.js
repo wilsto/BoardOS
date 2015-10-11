@@ -37,17 +37,16 @@ exports.create = function(req, res, next) {
         });
 
         postmark.send({
-            'From': 'willy' + '@' + 'stophe' + '.' + 'fr',
+            'From': 'donotreply' + '@' + 'boardos' + '.' + 'com',
             'To': user.email,
             'Subject': 'Registration to BOSS',
             'TextBody': 'Hello ' + user.name + ', Thanks to your registration to BOSS.',
             'HtmlBody': 'Hello ' + user.name + ', <br/> Thanks to your registration to BOSS.'
         });
 
-
         postmark.send({
-            'From': 'willy' + '@' + 'stophe' + '.' + 'fr',
-            'To': 'willy' + '.' + 'stophe' + '.' + 'pro' + '@' + 'gmail' + '.' + 'com',
+            'From': 'donotreply' + '@' + 'boardos' + '.' + 'com',
+            'To': 'willy' + '.' + 'stophe' + '@' + 'fr' + '.' + 'netgrs' + 'com',
             'Subject': 'New Registration to BOSS',
             'TextBody': 'A new user [' + user.name + '] (' + user.email + ') has registered to BOSS',
             'HtmlBody': 'A new user [' + user.name + '] (' + user.email + ') has registered to BOSS'
