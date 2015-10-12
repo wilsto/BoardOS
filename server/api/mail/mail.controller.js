@@ -21,9 +21,7 @@ exports.index = function(req, res) {
         .then(function() {
             // Get a single user
             var deferred = Q.defer();
-            User.find({
-                'name': 'Maud STOPHE'
-            }, '-salt -hashedPassword', function(err, user) {
+            User.find({}, '-salt -hashedPassword', function(err, user) {
                 usersList = user;
                 deferred.resolve(usersList);
             })
