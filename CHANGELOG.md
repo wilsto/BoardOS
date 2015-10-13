@@ -1,16 +1,22 @@
 # Change Log
 
-## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD) (2015-10-12)
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD) (2015-10-13)
 
 [Full Changelog](https://github.com/wilsto/boardos/compare/v0.16.1...HEAD)
 
 **Implemented enhancements:**
+
+- Ajouter une description et une suggestion d'action pour les KPI [\#109](https://github.com/wilsto/BoardOS/issues/109)
+
+- Changer acceptation mail [\#107](https://github.com/wilsto/BoardOS/issues/107)
 
 - Affichage lent de la liste des dashboards [\#105](https://github.com/wilsto/BoardOS/issues/105)
 
 - Calcul en temps réel du temps projeté [\#104](https://github.com/wilsto/BoardOS/issues/104)
 
 **Fixed bugs:**
+
+- Impossible de créer un nouveau dashboard [\#108](https://github.com/wilsto/BoardOS/issues/108)
 
 - Arrondi du calcul projeté doit prendre en compte 2 décimales [\#106](https://github.com/wilsto/BoardOS/issues/106)
 

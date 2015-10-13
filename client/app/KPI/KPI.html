@@ -7,38 +7,30 @@
             <div class="col-md-3">
                 <ul class="list-unstyled profile-nav">
                     <li>
-                        <img src="assets/images/kpi.jpg" class="img-responsive" alt="" />
+          <a href="#"> 
+                         <h4>{{KPI.name}}</h4>
+          </a>
                     </li>
                     <li>
-                        <a href="#">Dashboards Used<span>
-                            {{KPI.dashboards.length}}  </span>
-                        </a>
+                        <img src="assets/images/kpi.jpg" class="img-responsive" alt="" />
                     </li>
                 </ul>
             </div>
             <div class="col-md-9">
                 <div class="row">
                     <div class="col-md-8 profile-info">
-                        <h1>{{KPI.name}}</h1>
-                        <br/>
+                       
                         <ul class="list list-inline">
                             <li>
-                                <i class="fa fa-map-marker"></i><span style="color:lightgrey"> Context </span> {{KPI.context}}
-                            </li>
-                            <br/>
-                            <br/>
+                                <i class="fa fa-comment"></i><span style="color:lightgrey">Description</span><br/>  <span ng-bind-html="KPI.description"></span>
+                            </li><br/>
                             <li>
-                                <i class="fa fa-calendar"></i><span style="color:lightgrey"> Activity </span> {{KPI.activity}}
-                            </li>
-                            <br/>
-                            <br/>
+                                <i class="fa fa-calculator"></i><span style="color:lightgrey">Calculation explanation</span> <br/> 
+                                <b class="text-primary">KPI = </b><span ng-bind-html="calculation"></span><br/>
+                                <b class="text-warning" ng-if='where'> only for </b><span ng-bind-html="where"></span>
+                            </li><br/>
                             <li>
-                                <i class="fa fa-crosshairs"></i><span style="color:lightgrey"> Axis</span> {{KPI.axe || 'All'}}
-                            </li>
-                            <br/>
-                            <br/>
-                            <li>
-                                <i class="icon-cursor"></i><span style="color:lightgrey"> Category </span> {{KPI.category || 'All'}}
+                                <i class="fa fa-gavel"></i><span style="color:lightgrey">Action Suggestion</span> <br/> <span ng-bind-html="KPI.suggestion"></span>
                             </li>
                         </ul>
                     </div>
@@ -53,28 +45,28 @@
                                     <a class="reload" href="javascript:;"></a>
                                 </div>
                             </div>
-                            <div class="portlet-body">
-                                <ul class="list-unstyled">
-                                    <li>
+                            <div class="portlet-body" style="padding-bottom:0">
+                                <ul class="list-unstyled" style="padding-bottom:0">
+                                    <li style="padding-top:10px;padding-bottom:0">
                                         <span class="sale-info">
                                             TASKS COUNT <i class="fa fa-img-up"></i>
                                         </span>
                                         <span class="sale-num">
                                             {{tasksList.length}} </span>
-                                    </li>
-                                    <li>
+                                    </li >
+                                    <li style="padding-top:10px;padding-bottom:0">
                                         <span class="sale-info">
                                                 METRICS COUNT <i class="fa fa-img-up"></i>
                                             </span>
                                         <span class="sale-num">
-                                                {{KPI.metrics.length}} </span>
+                                                {{metricsNb}} </span>
                                     </li>
-                                    <li>
+                                    <li style="padding-top:10px;padding-bottom:0">
                                         <span class="sale-info">
                                                     LAST ENTRY <i class="fa fa-img-down"></i>
                                                 </span>
                                         <span class="sale-num">
-                                                    {{KPI.metrics[KPI.metrics.length-1].date  | date:'mediumDate'}} </span>
+                                                    {{lastmetricDate  | date:'mediumDate'}} </span>
                                     </li>
                                 </ul>
                             </div>
@@ -131,7 +123,7 @@
                 </tab-heading>
                 <div tab-task data="tasksList" kpi="KPI" ng-if="tasksList"></div>
             </tab>
-            <!--tab Dashboard-->
+            <!--tab Dashboard
             <tab ng-if="KPI._id">
                 <tab-heading>
                     Dashboards
@@ -139,15 +131,15 @@
                 </tab-heading>
                 <div dashboard-tab dashboard-type="dashboards" dashboard-data="KPI" ng-if="KPI"></div>
             </tab>
-            <!--tab Metrics
+            tab Metrics
             <tab ng-if="KPI._id">
                 <tab-heading>
                     Metrics
                     <span class="badge badge-default"> {{KPI.metrics.length}}</span>
                 </tab-heading>
                 <div dashboard-tab dashboard-type="metrics" dashboard-data="KPI" ng-if="KPI"></div>
-            </tab>-->
-            <!--tab Actors-->
+            </tab>
+            tab Actors
             <tab ng-if="KPI._id">
                 <tab-heading>
                     Actors
@@ -155,7 +147,7 @@
                 </tab-heading>
                 <div dashboard-tab dashboard-type="actors" dashboard-data="KPI" ng-if="KPI"></div>
             </tab>
-            <!--tab Help-->
+            tab Help-->
             <tab ng-if="KPI._id">
                 <tab-heading>
                     Help
@@ -178,6 +170,9 @@
                             </li>
                             <li>
                                 <a data-toggle="tab" ng-click="changeTab($event, 2)"><i class="fa fa-cog"></i>Change calculation</a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" ng-click="changeTab($event, 5)"><i class="fa fa-cog"></i>Change description</a>
                             </li>
                             <li>
                                 <a data-toggle="tab" ng-click="changeTab($event, 3)"><i class="fa fa-bar-chart-o"></i>Change graphics</a>
@@ -339,6 +334,21 @@
                                     </div>
                                 </form>
                             </div>
+
+                            <div id="tab5" class="tab" ng-show="activeTab === 5">
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Description</label>
+                                    <div class="col-md-9">
+                                        <textarea placeholder="" class="form-control" ng-model="KPI.description"></textarea>
+                                    </div>
+                                 <div class="form-group">
+                                    <label class="col-md-3 control-label">Suggestion</label>
+                                    <div class="col-md-9">
+                                       <textarea placeholder="" class="form-control" ng-model="KPI.suggestion"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div id="tab3" class="tab" ng-show="activeTab === 3">
                                 <p>
                                     Not yet implemented

@@ -119,47 +119,47 @@
 </div>
 <!-- Layout Part -->
 <tabset>
-  <tab ng-if="dashboard.name" active="true">
+  <tab ng-if="dashboard._id" active="true">
     <tab-heading>
     KPIs 
     <span class="badge badge-default"> {{dashboard.kpis.length || 0}}</span>
   </tab-heading>
   <div tab-k-p-i data="dashboard" multitasks="true" ng-if="dashboard"></div>
 </tab>
-<!--tab Dashboard-->
-<tab ng-if="dashboard.name">
+<!--tab Dashboard
+<tab ng-if="dashboard._id">
   <tab-heading>
   Dashboards 
   <span class="badge badge-default"> {{dashboard.dashboards.length || 0}}</span>
 </tab-heading>
 <div dashboard-tab dashboard-type="dashboard" dashboard-data="dashboard" ng-if="dashboard"></div>
 </tab>
-<!--tab Tasks-->
-<tab ng-if="tasks">
+tab Tasks-->
+<tab ng-if="dashboard._id">
   <tab-heading>
   Tasks 
   <span class="badge " ng-class="OutofDateTasks.length > 0 ? 'badge-danger':'badge-default'"> {{tasks.length || 0}}</span>
 </tab-heading>
-<div tab-task data="dashboard.tasks" kpi="dashboard.KPIs" ng-if="dashboard"></div>
+<div tab-task data="dashboard.tasks" kpi="dashboard.KPIs" ng-if="dashboard._id"></div>
 </tab>
 <!--tab Metrics
-<tab ng-if="dashboard.name">
+<tab ng-if="dashboard._id">
   <tab-heading>
   Metrics 
   <span class="badge badge-default"> {{dashboard.metrics.length || 0}}</span>
 </tab-heading>
 <div dashboard-tab dashboard-type="metrics" dashboard-data="dashboard" ng-if="dashboard"></div>
 </tab>-->
-<!--tab Actors-->
-<tab ng-if="dashboard.name">
+<!--tab Actors
+<tab ng-if="dashboard._id">
   <tab-heading>
   Actors 
   <span class="badge badge-default">{{dashboard.actors.length || 0}}</span>
 </tab-heading>
 <div dashboard-tab dashboard-type="actors" dashboard-data="dashboard" ng-if="dashboard"></div>
 </tab>
-<!--tab Help-->
-<tab ng-if="dashboard.name">
+tab Help-->
+<tab ng-if="dashboard._id">
     <tab-heading>
         Help
     </tab-heading>
@@ -179,7 +179,7 @@
           </span>
         </li>
         <li >
-          <a data-toggle="tab" ng-click="changeTab($event, 2)" style="background:#FF6666;color:white" ng-show="dashboard.name">
+          <a data-toggle="tab" ng-click="changeTab($event, 2)" style="background:#FF6666;color:white" ng-show="dashboard._id">
             <i class="fa fa-bomb"></i>Danger Zone
           </a>
           <span class="after">            </span>

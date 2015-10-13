@@ -23,6 +23,10 @@ angular.module('boardOsApp')
                     }
                 }).success(function(KPI) {
                     $scope.KPI = KPI;
+                    var metricTaskValues = KPI.metricTaskValues || 'All';
+                    var refMetricTaskValues = KPI.refMetricTaskValues || 'All';
+                    $scope.calculation = '# ' + KPI.metricTaskField + '[' + metricTaskValues + '] <b class="text-primary">/ </b> # ' + KPI.refMetricTaskField + '[' + refMetricTaskValues + ']';
+                    $scope.where = (KPI.whereField.length > 0) ? KPI.whereField + ' ' + KPI.whereOperator + ' ' + KPI.whereValues : '';
                 });
                 $http.get('/api/KPIs/tasksList/' + $stateParams.id, {
                     params: {
@@ -31,6 +35,12 @@ angular.module('boardOsApp')
                     }
                 }).success(function(tasksList) {
                     $scope.tasksList = tasksList;
+                    $scope.metricsNb = 0;
+                    $scope.lastmetricDate = '';
+                    _.forEach($scope.tasksList, function(task) {
+                        $scope.metricsNb += task.metrics.length;
+                        $scope.lastmetricDate = (task.lastmetric.date > $scope.lastmetricDate) ? task.lastmetric.date : $scope.lastmetricDate;
+                    });
                 });
 
             } else {

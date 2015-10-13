@@ -9,6 +9,8 @@ var KPISchema = new Schema({
     context: String,
     axe: String,
     tags: String,
+    description: String,
+    suggestion: String,
     category: String,
     constraint: String,
     refresh: Number,

@@ -5,7 +5,10 @@ angular.module('boardOsApp')
 
         $scope.activeTab = 1;
 
-
+        $scope.dashboard = {
+            name: '',
+            owner: $scope.currentUser
+        };
         $scope.loadKPIs = function() {
             $http.get('/api/KPIs/list').success(function(KPIs) {
                 $scope.KPIs = KPIs;
@@ -64,7 +67,7 @@ angular.module('boardOsApp')
         $scope.loadDashboard = function() {
             if ($stateParams.id) {
                 $http.get('/api/dashboards/quick/' + $stateParams.id).success(function(dashboard) {
-                $scope.dashboardLight = dashboard;
+                    $scope.dashboardLight = dashboard;
 
                     $rootScope.perimeter.name = dashboard.name;
                     $rootScope.perimeter.id = dashboard._id;
@@ -97,7 +100,6 @@ angular.module('boardOsApp')
                     $scope.dataAlerts = [{
                         values: []
                     }];
-
                     // on rassemble les métriques
                     $scope.dashboard.metrics = [];
                     _.each($scope.dashboard.tasks, function(task) {
@@ -292,14 +294,14 @@ angular.module('boardOsApp')
         };
 
         $scope.save = function() {
-
-            delete $scope.dashboard.__v;
-            delete $scope.dashboard.kpis;
-            delete $scope.dashboard.fullKPIs;
-            delete $scope.dashboard.metrics;
-            delete $scope.dashboard.tasks;
-
             if (typeof $scope.dashboard._id === 'undefined') {
+
+                delete $scope.dashboard.kpis;
+                delete $scope.dashboard.fullKPIs;
+                delete $scope.dashboard.metrics;
+                delete $scope.dashboard.tasks;
+
+
                 $http.post('/api/dashboards', $scope.dashboard).success(function(data) {
                     var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was created';
 
@@ -324,6 +326,7 @@ angular.module('boardOsApp')
                         icon: 'fa fa-info-circle',
                         message: logInfo
                     });
+                    $scope.loadDashboard();
                 });
             }
 
