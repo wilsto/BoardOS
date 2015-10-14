@@ -16,6 +16,7 @@ angular.module('boardOsApp')
 
         $scope.load = function() {
             if ($stateParams.id) {
+
                 $http.get('/api/KPIs/' + $stateParams.id, {
                     params: {
                         activity: $rootScope.perimeter.activity,
@@ -26,20 +27,24 @@ angular.module('boardOsApp')
                     var metricTaskValues = KPI.metricTaskValues || 'All';
                     var refMetricTaskValues = KPI.refMetricTaskValues || 'All';
                     $scope.calculation = '# ' + KPI.metricTaskField + '[' + metricTaskValues + '] <b class="text-primary">/ </b> # ' + KPI.refMetricTaskField + '[' + refMetricTaskValues + ']';
-                    $scope.where = (KPI.whereField.length > 0) ? KPI.whereField + ' ' + KPI.whereOperator + ' ' + KPI.whereValues : '';
+                    $scope.where = (KPI.whereField.length > 0) ? ' ' + KPI.whereField + ' ' + KPI.whereOperator + ' ' + KPI.whereValues : '';
                 });
+
                 $http.get('/api/KPIs/tasksList/' + $stateParams.id, {
                     params: {
                         activity: $rootScope.perimeter.activity,
                         context: $rootScope.perimeter.context
                     }
                 }).success(function(tasksList) {
+                    
                     $scope.tasksList = tasksList;
                     $scope.metricsNb = 0;
                     $scope.lastmetricDate = '';
                     _.forEach($scope.tasksList, function(task) {
                         $scope.metricsNb += task.metrics.length;
-                        $scope.lastmetricDate = (task.lastmetric.date > $scope.lastmetricDate) ? task.lastmetric.date : $scope.lastmetricDate;
+                        if (typeof task.lastmetric !== 'undefined') {
+                            $scope.lastmetricDate = (task.lastmetric.date > $scope.lastmetricDate) ? task.lastmetric.date : $scope.lastmetricDate;
+                        }
                     });
                 });
 

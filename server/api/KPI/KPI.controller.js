@@ -104,7 +104,9 @@ exports.tasksList = function(req, res) {
             Task.find({}).lean().exec(function(err, tasks) {
                 mTasks = [];
                 _.each(tasks, function(rowdata, index) {
-                    if (rowdata.context.indexOf(req.query.context + '.') >= 0 && rowdata.activity.indexOf(req.query.activity + '.') >= 0) {
+                    console.log(' req.query.context', mKPI.context);
+                    console.log(' rowdata.context', rowdata.context);
+                    if (rowdata.context.indexOf(mKPI.context + '.') >= 0 && rowdata.activity.indexOf(mKPI.activity + '.') >= 0) {
                         mTasks.push(rowdata);
                     }
                 });
@@ -120,7 +122,7 @@ exports.tasksList = function(req, res) {
             }).lean().exec(function(err, Metrics) {
                 mMetrics = [];
                 _.each(Metrics, function(rowdata, index) {
-                    if (rowdata.context.indexOf(req.query.context + '.') >= 0 && rowdata.activity.indexOf(req.query.activity + '.') >= 0) {
+                    if (rowdata.context.indexOf(mKPI.context + '.') >= 0 && rowdata.activity.indexOf(mKPI.activity + '.') >= 0) {
                         mMetrics.push(rowdata);
                     }
                 });
