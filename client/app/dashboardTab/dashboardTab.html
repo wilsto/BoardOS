@@ -395,13 +395,13 @@
 									<div class="panel-heading">
 										<h4 class="panel-title">
 										{{$index+1}}. <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#accordion1_{{$index}}" id="help_title_{{help._id}}">
-										{{help.title}} </a>
+										<span ng-bind-html="help.title"></span> </a>
 										<button ng-click="markdownMe('help_title_'+help._id)"  type="button" class="btn btn-default btn-xs pull-right" ng-if="isAdmin">Edit</button>
 										</h4>
 									</div>
 									<div id="accordion1_{{$index}}" class="panel-collapse collapse in">
 										<div id="help_{{help._id}}" class="panel-body">
-											 {{help.info}}
+											<span ng-bind-html="help.info"></span> 
 										</div>
 										<button ng-click="markdownMe('help_'+help._id)" style="margin-top:-30px;margin-right:15px" type="button" class="btn btn-default btn-xs  pull-right"  ng-if="isAdmin">Edit</button>
 									</div>

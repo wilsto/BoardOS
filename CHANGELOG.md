@@ -1,10 +1,14 @@
 # Change Log
 
-## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD) (2015-10-14)
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD) (2015-10-17)
 
 [Full Changelog](https://github.com/wilsto/boardos/compare/v0.16.1...HEAD)
 
 **Implemented enhancements:**
+
+- Expliciter les KPIs [\#112](https://github.com/wilsto/BoardOS/issues/112)
+
+- File d'Ariane [\#111](https://github.com/wilsto/BoardOS/issues/111)
 
 - Ajouter une description et une suggestion d'action pour les KPI [\#109](https://github.com/wilsto/BoardOS/issues/109)
 
@@ -15,6 +19,10 @@
 - Calcul en temps réel du temps projeté [\#104](https://github.com/wilsto/BoardOS/issues/104)
 
 **Fixed bugs:**
+
+- Mauvais affichage de la liste des taches en cours sur le main [\#113](https://github.com/wilsto/BoardOS/issues/113)
+
+- Liste des taches pour une KPI incomplète [\#110](https://github.com/wilsto/BoardOS/issues/110)
 
 - Impossible de créer un nouveau dashboard [\#108](https://github.com/wilsto/BoardOS/issues/108)
 

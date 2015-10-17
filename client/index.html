@@ -241,31 +241,31 @@
                 <i class="fa fa-home"></i>
                 <a href="/">Home</a>
               </li>
-              <li ng-show="perimeter.name">
+              <li ng-show="perimeter.name && !isHome">
                 <i class="fa fa-angle-right"></i>
                 <i class="fa fa-dashboard"></i> <span style="color:lightgrey"> Dashboard  </span><a href="/dashboard/{{perimeter.id}}">  {{perimeter.name}}</a>
                 <button type="button" class="btn btn-xs btn-warning" ng-show="perimeter.name !==perimeter.name">Restore</button>
               </li>
-              <li ng-show="perimeter.name">
+              <li ng-show="perimeter.name && !isHome">
                 <i class="fa fa-angle-right"></i>
                 <span style="color:lightgrey"><i class="fa fa-calendar"></i> Activity </span><a href="/dashboard/{{perimeter._id}}"> {{perimeter.activity || 'All'}}</a>
               </li>
-              <li ng-show="perimeter.name">
+              <li ng-show="perimeter.name && !isHome">
                 <i class="fa fa-angle-right"></i>
                 <span style="color:lightgrey"><i class="fa fa-map-marker"></i> Context </span><a href="/dash/{{perimeter._id}}"> {{perimeter.context || 'All'}}</a>
               </li>
-              <li ng-show="perimeter.name === '#hide'">
+              <li ng-show="perimeter.name === '#hide' && !isHome">
                 <i class="fa fa-angle-right"></i>
                 <span style="color:lightgrey"><i class="fa fa-crosshairs"></i> Axis </span><a href="/dash/{{perimeter._id}}"> {{perimeter.axe || 'All'}}</a>
               </li>
-              <li ng-show="perimeter.name === '#hide'">
+              <li ng-show="perimeter.name === '#hide' && !isHome">
                 <i class="fa fa-angle-right"></i>
                 <span style="color:lightgrey"><i class="icon-cursor"></i> Categories </span><a href="/dash/{{perimeter._id}}"> {{perimeter.category || 'All'}}</a>
               </li>
             </ul>
             <ul class="page-breadcrumb pull-right" >
               <li class="">
-                 <i class="fa fa-calendar-o"></i> Time Scope : <span style="font-size:16px">  {{getCurrentMonthName()}} </span>
+                 <i class="fa fa-calendar-o"></i> Time Scope : <span style="font-size:16px">  {{'Everything' ||getCurrentMonthName()}} </span>
               </li>
             </ul>
 

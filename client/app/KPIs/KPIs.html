@@ -23,14 +23,14 @@
                   <i class="fa fa-question-sign"></i> Category
                 </th>
                 <th class="hidden-xs">
-                  <i class="fa fa-question-sign"></i> Activity
-                </th>
-                <th class="hidden-xs">
-                  <i class="fa fa-question-sign"></i> Context
-                </th>
-                <th class="hidden-xs">
-                  <i class="fa fa-question-sign"></i> Axis
+                  <i class="fa fa-question-sign"></i> Description
                 </th> 
+<!--                 <th class="hidden-xs">
+  <i class="fa fa-question-sign"></i> Activity
+</th>
+<th class="hidden-xs">
+  <i class="fa fa-question-sign"></i> Context
+</th> -->
               </tr>
             </thead>
            <tbody>
@@ -39,17 +39,17 @@
                <a href="/KPI/{{KPI._id}}">{{KPI.name}}</a>
              </td>
              <td>
-               {{KPI.category}}
+                <span ng-class="{'text-danger':KPI.category==='Alert','text-success':KPI.category==='Goal'}">{{KPI.category}}</span> 
              </td>
              <td>
-               {{KPI.activity}}
+                <span ng-bind-html="KPI.description"></span>
              </td>
-             <td>
-               {{KPI.context}}
-             </td>
-             <td>
-               {{KPI.axe}}
-             </td>
+<!--              <td>
+  {{KPI.activity}}
+</td>
+<td>
+  {{KPI.context}}
+</td> -->
            </tr>
          </tbody>
        </table>

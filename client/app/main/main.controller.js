@@ -59,8 +59,6 @@ angular.module('boardOsApp')
                     $scope.dashboards = dashboards.dashboards;
                     $scope.dataDashboards = dashboards;
 
-                    
-
                     $scope.loadTaskToNotify();
 
                     _.each(dashboards.dashboards, function(dashboard) {
@@ -159,6 +157,7 @@ angular.module('boardOsApp')
 
         $scope.loadTaskToNotify = function() {
             if (typeof $scope.dataDashboards !== 'undefined') {
+                
                 var openTasks = _.filter($scope.dataDashboards.tasks, function(task) {
                     if (typeof task.lastmetric === 'undefined' || task.lastmetric.status === 'In Progress' || task.lastmetric.status === 'Not Started') {
                         return true;
@@ -166,6 +165,7 @@ angular.module('boardOsApp')
                 });
                 $scope.alltasksToNotify = openTasks.length;
                 $scope.myTasks = $scope.filterTask(openTasks, $scope.filterNotification);
+                
                 if ($scope.filterNotification === 'Only For Me') {
                     $scope.tasksToNotify = $scope.myTasks;
                 } else {
@@ -191,8 +191,10 @@ angular.module('boardOsApp')
                     return true;
                 }
                 // si actor (metrics)
-                if (_.intersection([$scope.currentUser._id], _.pluck(task.metricActors, '_id')).length > 0) {
-                    return true;
+                if (typeof task.lastmetric !== 'undefined') {
+                    if ($scope.currentUser._id === task.lastmetric.actor._id) {
+                        return true;
+                    }
                 }
                 // si watcher
                 if (_.intersection([$scope.currentUser._id], _.pluck(task.watchers, '_id')).length > 0) {

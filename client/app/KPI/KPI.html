@@ -339,14 +339,20 @@
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">Description</label>
                                     <div class="col-md-9">
-                                        <textarea placeholder="" class="form-control" ng-model="KPI.description"></textarea>
+                                        <textarea rows="6" placeholder="" class="form-control" ng-model="KPI.description"></textarea>
                                     </div>
                                  <div class="form-group">
                                     <label class="col-md-3 control-label">Suggestion</label>
                                     <div class="col-md-9">
-                                       <textarea placeholder="" class="form-control" ng-model="KPI.suggestion"></textarea>
+                                       <textarea rows="10" placeholder="" class="form-control" ng-model="KPI.suggestion"></textarea>
                                     </div>
                                 </div>
+                                 <div class="form-actions">
+                                        <div class="pull-right">
+                                            <a href="#" class="btn btn-success" ng-click="save()">Save Changes</a>
+                                            <a href="#" class="btn btn-default" ng-click="reset()">Cancel</a>
+                                        </div>
+                                    </div>
                             </div>
 
                             <div id="tab3" class="tab" ng-show="activeTab === 3">

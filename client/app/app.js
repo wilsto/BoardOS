@@ -230,6 +230,7 @@ angular.module('boardOsApp', [
         $rootScope.perimeter.category = '';
     }
 
+
     $rootScope.constant = {};
     $rootScope.constant.progressStatusTask = progressStatusTask;
     $rootScope.constant.statusTask = statusTask;
@@ -254,6 +255,7 @@ angular.module('boardOsApp', [
 
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$stateChangeStart', function(event, next) {
+        $rootScope.isHome = ($location.path() === '/');
         Auth.isLoggedIn(function(loggedIn) {
             if (next.authenticate && !loggedIn) {
                 $location.path('/login');
