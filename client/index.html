@@ -59,7 +59,7 @@
 <!-- endbuild -->
 </head>
 <body ng-app="boardOsApp" class="page-header-fixed page-sidebar-closed">
-  <div ng-controller='GlobalCtrl'  ng-cloak>
+  <div ng-controller='GlobalCtrl' ng-cloak >
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
       <![endif]-->
@@ -68,7 +68,7 @@
       <div class="page-container" >
         <!-- BEGIN SIDEBAR -->
         <div class="page-sidebar-wrapper">
-          <div class="page-sidebar navbar-collapse collapse" >
+          <div class="page-sidebar navbar-collapse collapse" style="position:fixed;z-index:999999">
             <!-- BEGIN SIDEBAR MENU -->
             <!-- DOC: for circle icon style menu apply page-sidebar-menu-circle-icons class right after sidebar-toggler-wrapper -->
             <ul class="page-sidebar-menu" >
@@ -183,6 +183,21 @@
             </li>
             <li >
               <a href="/about">
+                <i class="fa fa-life-saver"></i>
+                <span class="title">Help</span>
+                <span class="arrow "></span>
+              </a>
+              <ul class="sub-menu">
+                <li>
+                  <a href="/help">
+                    <i class="fa fa-life-saver"></i>
+                    Help me
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li >
+              <a href="/about">
                 <i class="fa fa-rss-square"></i>
                 <span class="title">About</span>
                 <span class="arrow "></span>
@@ -209,33 +224,10 @@
       <!-- END SIDEBAR -->
       <!-- BEGIN CONTENT -->
       <div class="page-content-wrapper">
-        <div class="page-content" style="padding-top:0">
-          <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-          <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                  <h4 class="modal-title">Modal title</h4>
-                </div>
-                <div class="modal-body">
-                  Widget settings form goes here
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-success">Save changes</button>
-                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-              </div>
-              <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-          </div>
-          <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-          <!-- BEGIN STYLE CUSTOMIZER -->
-
+        <div class="page-content" style="padding-top:0;">
           <!-- END BEGIN STYLE CUSTOMIZER -->
           <!-- BEGIN PAGE HEADER-->
-          <div class="page-bar" ng-cloak ng-if="currentUser.name">
+          <div class="page-bar" ng-cloak ng-if="currentUser.name" style="top:45px;position:fixed;width:98%;z-index:9999">
             <ul class="page-breadcrumb" >
               <li>
                 <i class="fa fa-home"></i>
@@ -273,7 +265,7 @@
 
           <!-- END PAGE HEADER-->
           <!-- Add your site or application content here -->
-          <div class="container-fluid" style="margin:20px" ui-view=""></div>
+          <div class="container-fluid" style="margin:20px;padding-top:30px" ui-view=""></div>
         </div>
       </div>
 

@@ -29,7 +29,7 @@ angular.module('boardOsApp')
                     $scope.tasksToNotify = $scope.allTasks;
                 }
                 $scope.mytasksToNotify = $scope.myTasks.length;
-                
+
                 $scope.events = _.map($scope.tasksToNotify, function(task) {
                     return {
                         allDay: true,
@@ -56,17 +56,20 @@ angular.module('boardOsApp')
             if (typeof filter === 'undefined') {
                 return tasks;
             }
+            
             filtertasks = _.filter(tasks, function(task) {
                 // si owner
                 if (task.actor._id === $scope.currentUser._id) {
                     return true;
                 }
                 // si actor (metrics)
-                if (_.intersection([$scope.currentUser._id], _.pluck(task.metricActors, '_id')).length > 0) {
-                    return true;
+                if (typeof task.lastmetric !== 'undefined') {
+                    if ($scope.currentUser._id === task.lastmetric.actor._id) {
+                        return true;
+                    }
                 }
                 // si watcher
-                if (_.intersection([$scope.currentUser._id], task.watchers).length > 0) {
+                if (_.intersection([$scope.currentUser._id], _.pluck(task.watchers, '_id')).length > 0) {
                     return true;
                 }
 

@@ -6,6 +6,10 @@
 
 **Implemented enhancements:**
 
+- Le fil d'ariane n'est pas fixe [\#116](https://github.com/wilsto/BoardOS/issues/116)
+
+- La sidebar n'est pas fixe [\#115](https://github.com/wilsto/BoardOS/issues/115)
+
 - Expliciter les KPIs [\#112](https://github.com/wilsto/BoardOS/issues/112)
 
 - File d'Ariane [\#111](https://github.com/wilsto/BoardOS/issues/111)
@@ -19,6 +23,8 @@
 - Calcul en temps réel du temps projeté [\#104](https://github.com/wilsto/BoardOS/issues/104)
 
 **Fixed bugs:**
+
+- Mauvais affichage au niveau du calendrier [\#114](https://github.com/wilsto/BoardOS/issues/114)
 
 - Mauvais affichage de la liste des taches en cours sur le main [\#113](https://github.com/wilsto/BoardOS/issues/113)
 
