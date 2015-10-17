@@ -10,7 +10,7 @@ angular.module('boardOsApp')
                 kpi: '='
             },
             link: function(scope, element, attrs) {
-
+                
                 scope.filterStatus = 'Not Finished';
                 scope.filterProgressStatus = 'All';
                 scope.searchText = '';
@@ -38,6 +38,9 @@ angular.module('boardOsApp')
                     //on fait la somme des calculs de kpi pour chaque tache
                     scope.alltasks = scope.data;
                     scope.filterTasks();
+                    if (scope.page === 'KPI') {
+                        scope.filterStatus = (typeof scope.kpi !== 'undefined' || typeof scope.kpi.whereField !== 'undefined' || scope.kpi.whereField === 'status') ? scope.kpi.whereValues : 'Not Finished';
+                    }
                 }
 
                 scope.$watch('searchText', function() {

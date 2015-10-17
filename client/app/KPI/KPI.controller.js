@@ -27,7 +27,7 @@ angular.module('boardOsApp')
                     var metricTaskValues = KPI.metricTaskValues || 'All';
                     var refMetricTaskValues = KPI.refMetricTaskValues || 'All';
                     $scope.calculation = '# ' + KPI.metricTaskField + '[' + metricTaskValues + '] <b class="text-primary">/ </b> # ' + KPI.refMetricTaskField + '[' + refMetricTaskValues + ']';
-                    $scope.where = (KPI.whereField.length > 0) ? ' ' + KPI.whereField + ' ' + KPI.whereOperator + ' ' + KPI.whereValues : '';
+                    $scope.where = (typeof $scope.KPI.whereField !== 'undefined' && KPI.whereField.length > 0) ? ' ' + KPI.whereField + ' ' + KPI.whereOperator + ' ' + KPI.whereValues : '';
                 });
 
                 $http.get('/api/KPIs/tasksList/' + $stateParams.id, {
@@ -36,16 +36,30 @@ angular.module('boardOsApp')
                         context: $rootScope.perimeter.context
                     }
                 }).success(function(tasksList) {
-                    
                     $scope.tasksList = tasksList;
                     $scope.metricsNb = 0;
+                    $scope.sumValue = 0;
+                    $scope.sumRefValue = 0;
+                    $scope.sumKPI = 0;
+                    $scope.nbKPI = 0;
                     $scope.lastmetricDate = '';
                     _.forEach($scope.tasksList, function(task) {
                         $scope.metricsNb += task.metrics.length;
                         if (typeof task.lastmetric !== 'undefined') {
                             $scope.lastmetricDate = (task.lastmetric.date > $scope.lastmetricDate) ? task.lastmetric.date : $scope.lastmetricDate;
+                            if (typeof $scope.KPI.whereField === 'undefined' || task.lastmetric[$scope.KPI.whereField] === $scope.KPI.whereValues) {
+                                // ##TODO plus tard 
+                                // $scope.sumValue += parseFloat(task.lastmetric[$scope.KPI.metricTaskField]);
+                                // $scope.sumRefValue += parseFloat(task.lastmetric[$scope.KPI.refMetricTaskField]);
+                                $scope.sumKPI += (!task.KPI || isNaN(task.KPI)) ? 0 : parseFloat(task.KPI);
+                                $scope.nbKPI += (!task.KPI || isNaN(task.KPI)) ? 0 : 1;
+                            }
                         }
                     });
+                    // ##TODO plus tard 
+                    //$scope.globalKPI = parseInt($scope.sumValue / $scope.sumRefValue * 100);
+                    //$scope.globalKPI = (isNaN($scope.globalKPI)) ? parseInt($scope.sumKPI / $scope.nbKPI) : $scope.globalKPI;
+                    $scope.globalKPI = ($scope.KPI.category === 'Goal') ? parseInt($scope.sumKPI / $scope.nbKPI) : parseInt($scope.sumKPI);
                 });
 
             } else {
@@ -143,7 +157,9 @@ angular.module('boardOsApp')
                 }
             });
         };
-
+        $scope.giveMeMyColor = function(value, category) {
+            return myLibrary.giveMeMyColor(value, category);
+        };
         $scope.load();
 
     });

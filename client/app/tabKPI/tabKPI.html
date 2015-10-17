@@ -15,18 +15,18 @@
 <table class="table table-striped table-bordered table-hover" style="margin-top:15px" >
     <thead>
         <tr>
-            <th style="text-align:center;">Category</th>
-            <th>KPI Name</th>
             <th style="text-align:center;">Constraints</th>
+            <th>KPI Name</th>
             <th ng-repeat="time in kpis[0].calcul.time" ng-class="{'hidden-xs':$index <= 8,'hidden-sm':$index <= 5}" style="text-align:center;font-size:12px">{{time.month}}</th>
+            <th style="text-align:center;">Category</th>
         </tr>
     </thead>
     <tbody style="text-align:center;">
-        <tr ng-repeat="KPI in kpis | orderBy:'category' track by $index" on-finish-render>
-            <td>{{KPI.category}}</td>
-            <td style="text-align:left;"><a href="/KPI/{{KPI._id}}">{{KPI.name}}</a></td>
+        <tr ng-repeat="KPI in kpis | orderBy:'constraint' track by $index" on-finish-render>
             <td>{{KPI.constraint}}</td>
-            <td ng-repeat="time in KPI.calcul.time" ng-class="{'hidden-xs':$index <= 8,'hidden-sm':$index <= 5}" style="text-align:center;font-size:12px"><span class="badge" ng-style="{'background-color':giveMeMyColor(time.value, KPI.category)}" style="height:25px;line-height:20px;width:100%">{{time.value}}</span></td>
+            <td style="text-align:left;"><a href="/KPI/{{KPI._id}}">{{KPI.name}}</a></td>
+            <td ng-repeat="time in KPI.calcul.time" ng-class="{'hidden-xs':$index <= 8,'hidden-sm':$index <= 5}" style="text-align:center;font-size:12px"><span class="badge" ng-style="{'background-color':giveMeMyColor(time.value, KPI.category)}" style="height:25px;line-height:20px;width:100%">{{time.value}}<span ng-if="KPI.category === 'Goal' && time.value > 0"> %</span></span></td>
+            <td>{{KPI.category}}</td>
         </tr>
     </tbody>
 </table>
@@ -40,16 +40,16 @@
         <table class="table table-striped table-bordered table-hover" style="margin-top:15px">
             <thead>
                 <tr>
-                    <th style="text-align:center;">Category</th>
                     <th>KPI Name</th>
                     <th>Value</th>
+                    <th style="text-align:center;">Category</th>
                 </tr>
             </thead>
             <tbody style="text-align:center;">
                 <tr ng-repeat="KPI in kpis | filter:{constraint:scopeFilter} | orderBy:'category' track by $index" on-finish-render>
-                    <td>{{KPI.category}}</td>
                     <td style="text-align:left;"><a href="/KPI/{{KPI._id}}">{{KPI.name}}</a></td>
-                    <td style="text-align:center;font-size:12px"><span class="badge" ng-style="{'background-color':giveMeMyColor(KPI.calcul.task, KPI.category)}" style="height:25px;line-height:20px;width:100%">{{KPI.calcul.task}}</span></td>
+                    <td style="text-align:center;font-size:12px"><span class="badge" ng-style="{'background-color':giveMeMyColor(KPI.calcul.task, KPI.category)}" style="height:25px;line-height:20px;width:100%">{{KPI.calcul.task}}<span ng-if="KPI.category === 'Goal' && KPI.calcul.task > 0"> %</span></span></td>
+                    <td>{{KPI.category}}</td>
                 </tr>
             </tbody>
         </table>
@@ -74,7 +74,7 @@
                 <tr ng-repeat="KPI in kpis | filter:{category:scopeFilter} | orderBy:'constraint' track by $index" on-finish-render>
                     <td>{{KPI.constraint}}</td>
                     <td style="text-align:left;"><a href="/KPI/{{KPI._id}}">{{KPI.name}}</a></td>
-                    <td style="text-align:center;font-size:12px"><span class="badge" ng-style="{'background-color':giveMeMyColor(KPI.calcul.task, KPI.category)}" style="height:25px;line-height:20px;width:100%">{{KPI.calcul.task}}</span></td>
+                    <td style="text-align:center;font-size:12px"><span class="badge" ng-style="{'background-color':giveMeMyColor(KPI.calcul.task, KPI.category)}" style="height:25px;line-height:20px;width:100%">{{KPI.calcul.task}}<span ng-if="KPI.category === 'Goal'"> %</span></span></td>
                 </tr>
             </tbody>
         </table>

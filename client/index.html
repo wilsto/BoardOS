@@ -43,6 +43,7 @@
 <link rel="stylesheet" href="app/dashboardWidget/dashboardWidget.css">
 <link rel="stylesheet" href="app/dashboards/dashboards.css">
 <link rel="stylesheet" href="app/dqm/dqm.css">
+<link rel="stylesheet" href="app/help/help.css">
 <link rel="stylesheet" href="app/hierarchies/hierarchies.css">
 <link rel="stylesheet" href="app/journallog/journallog.css">
 <link rel="stylesheet" href="app/mail/mail.css">
@@ -182,14 +183,14 @@
               </ul>
             </li>
             <li >
-              <a href="/about">
+              <a href="/help/">
                 <i class="fa fa-life-saver"></i>
                 <span class="title">Help</span>
                 <span class="arrow "></span>
               </a>
               <ul class="sub-menu">
                 <li>
-                  <a href="/help">
+                  <a href="/help/">
                     <i class="fa fa-life-saver"></i>
                     Help me
                   </a>
@@ -233,24 +234,24 @@
                 <i class="fa fa-home"></i>
                 <a href="/">Home</a>
               </li>
-              <li ng-show="perimeter.name && !isHome">
+              <li ng-show="perimeter.name && showAriane">
                 <i class="fa fa-angle-right"></i>
                 <i class="fa fa-dashboard"></i> <span style="color:lightgrey"> Dashboard  </span><a href="/dashboard/{{perimeter.id}}">  {{perimeter.name}}</a>
                 <button type="button" class="btn btn-xs btn-warning" ng-show="perimeter.name !==perimeter.name">Restore</button>
               </li>
-              <li ng-show="perimeter.name && !isHome">
+              <li ng-show="perimeter.name && showAriane">
                 <i class="fa fa-angle-right"></i>
                 <span style="color:lightgrey"><i class="fa fa-calendar"></i> Activity </span><a href="/dashboard/{{perimeter._id}}"> {{perimeter.activity || 'All'}}</a>
               </li>
-              <li ng-show="perimeter.name && !isHome">
+              <li ng-show="perimeter.name && showAriane">
                 <i class="fa fa-angle-right"></i>
                 <span style="color:lightgrey"><i class="fa fa-map-marker"></i> Context </span><a href="/dash/{{perimeter._id}}"> {{perimeter.context || 'All'}}</a>
               </li>
-              <li ng-show="perimeter.name === '#hide' && !isHome">
+              <li ng-show="perimeter.name === '#hide' && showAriane">
                 <i class="fa fa-angle-right"></i>
                 <span style="color:lightgrey"><i class="fa fa-crosshairs"></i> Axis </span><a href="/dash/{{perimeter._id}}"> {{perimeter.axe || 'All'}}</a>
               </li>
-              <li ng-show="perimeter.name === '#hide' && !isHome">
+              <li ng-show="perimeter.name === '#hide' && showAriane">
                 <i class="fa fa-angle-right"></i>
                 <span style="color:lightgrey"><i class="icon-cursor"></i> Categories </span><a href="/dash/{{perimeter._id}}"> {{perimeter.category || 'All'}}</a>
               </li>
@@ -354,6 +355,8 @@
     <script src="app/dqm/dqm.js"></script>
     <script src="app/errSrc/errSrc.directive.js"></script>
     <script src="app/global/global.controller.js"></script>
+    <script src="app/help/help.controller.js"></script>
+    <script src="app/help/help.js"></script>
     <script src="app/hierarchies/hierarchies.controller.js"></script>
     <script src="app/hierarchies/hierarchies.js"></script>
     <script src="app/journallog/journallog.controller.js"></script>

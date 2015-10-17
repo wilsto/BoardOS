@@ -104,8 +104,6 @@ exports.tasksList = function(req, res) {
             Task.find({}).lean().exec(function(err, tasks) {
                 mTasks = [];
                 _.each(tasks, function(rowdata, index) {
-                    console.log(' req.query.context', mKPI.context);
-                    console.log(' rowdata.context', rowdata.context);
                     if (rowdata.context.indexOf(mKPI.context + '.') >= 0 && rowdata.activity.indexOf(mKPI.activity + '.') >= 0) {
                         mTasks.push(rowdata);
                     }
@@ -142,7 +140,7 @@ exports.tasksList = function(req, res) {
                         rowMetric.taskname = rowTask.name;
 
                         // nombre de jours séparant la date de début, fin, entre les deux
-                        rowMetric.duration = moment(rowMetric.endDate).diff(rowMetric.startDate, 'days');
+                        rowMetric.duration = moment(rowMetric.endDate).diff(rowMetric.startDate, 'days') + 1;
                         rowMetric.timeToBegin = moment(rowMetric.startDate).diff(moment(), 'days');
                         rowMetric.timeToEnd = moment(rowMetric.endDate).diff(moment(), 'days');
                         rowMetric.fromNow = moment(rowMetric.date).fromNow();

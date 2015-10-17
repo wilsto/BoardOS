@@ -52,22 +52,53 @@
                                             TASKS COUNT <i class="fa fa-img-up"></i>
                                         </span>
                                         <span class="sale-num">
-                                            {{tasksList.length}} </span>
+                                            {{tasksList.length}}
+                                        </span>
                                     </li >
                                     <li style="padding-top:10px;padding-bottom:0">
                                         <span class="sale-info">
-                                                METRICS COUNT <i class="fa fa-img-up"></i>
-                                            </span>
+                                            METRICS COUNT <i class="fa fa-img-up"></i>
+                                        </span>
                                         <span class="sale-num">
-                                                {{metricsNb}} </span>
+                                            {{metricsNb}}
+                                        </span>
                                     </li>
                                     <li style="padding-top:10px;padding-bottom:0">
                                         <span class="sale-info">
-                                                    LAST ENTRY <i class="fa fa-img-down"></i>
-                                                </span>
+                                            LAST ENTRY <i class="fa fa-img-down"></i>
+                                        </span>
                                         <span class="sale-num">
-                                                    {{lastmetricDate  | date:'mediumDate'}} </span>
+                                            {{lastmetricDate  | date:'mediumDate'}}
+                                        </span>
                                     </li>
+                                    <br/>
+                                    <li style="padding-top:5px;padding-bottom:0;background:#EEEEEE;height:30px">
+                                        <span class="sale-info">
+                                            {{KPI.category}}S<i class="fa fa-img-down"></i>
+                                        </span>
+                                        <span class="sale-num" style="margin-top:-8px">
+                                            <span class="badge" ng-style="{'background-color':giveMeMyColor(globalKPI, KPI.category)}" style="height:25px;width:50px;line-height:20px;">
+                                                {{globalKPI}}
+                                                <span ng-if="KPI.category === 'Goal'">%</span>
+                                            </span>
+                                        </span>
+                                    </li>
+<!--                                      <li style="padding-top:5px;padding-bottom:0">
+   <span class="sale-info">
+       Values <small>(Aggregated)</small><i class="fa fa-img-down"></i>
+   </span>
+   <span class="sale-num"  style="margin-top:-8px">
+       {{sumValue}} 
+   </span>
+                                    </li>
+                                    <li style="padding-top:5px;padding-bottom:0">
+   <span class="sale-info">
+       References <small>(Aggregated)</small><i class="fa fa-img-down"></i>
+   </span>
+   <span class="sale-num"  style="margin-top:-8px">
+       {{sumRefValue}} 
+   </span>
+                                    </li> -->
                                 </ul>
                             </div>
                         </div>

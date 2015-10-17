@@ -6,6 +6,8 @@
 
 **Implemented enhancements:**
 
+- Filtre des taches est automatique suivant la clause de restriction de KPI [\#117](https://github.com/wilsto/BoardOS/issues/117)
+
 - Le fil d'ariane n'est pas fixe [\#116](https://github.com/wilsto/BoardOS/issues/116)
 
 - La sidebar n'est pas fixe [\#115](https://github.com/wilsto/BoardOS/issues/115)

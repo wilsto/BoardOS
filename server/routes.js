@@ -21,7 +21,6 @@ module.exports = function(app) {
     app.use('/api/tasks', require('./api/task'));
     app.use('/api/metrics', require('./api/metric'));
     app.use('/api/logs', require('./api/log'));
-    app.use('/api/helps', require('./api/help'));
 
     app.use('/auth', require('./auth'));
 
