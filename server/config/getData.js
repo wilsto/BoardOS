@@ -110,7 +110,7 @@ module.exports = {
                     date: 'asc'
                 }).lean().exec(function(err, metric) {
                     _.each(metric, function(metricdata, index) { // pour chaque metric
-                        _.each(mTask.tasks, function(taskdata, index) { // pour chaque tache
+                        _.each(mTask.tasks, function(taskdata) { // pour chaque tache
 
                             // si c'est la première métric, on crèe l'objet
                             if (typeof taskdata.metrics === 'undefined') {
@@ -142,16 +142,18 @@ module.exports = {
                                             metricdata.progressStatus = 'Late';
                                             break;
                                         default:
-
-                                            if (dateNow < metricdata.endDate) {
-                                                metricdata.progressStatus = 'At Risk';
-                                            } else {
+                                            if (dateNow > metricdata.endDate && metricdata.date > metricdata.endDate && (metricdata.status === 'In Progress' || metricdata.status === 'Not Started')) {
                                                 metricdata.progressStatus = 'Late';
+                                            } else {
+                                                metricdata.progressStatus = 'At Risk';
                                             }
                                     }
                                 } else {
                                     metricdata.progressStatus = 'On Time';
                                 }
+
+
+
                                 // ajouter information par mois 
                                 metricdata.groupTimeByValue = moment(metricdata.date).format("YYYY.MM");
 
@@ -191,9 +193,7 @@ module.exports = {
                                 metricdata.fromNow = moment(metricdata.date).fromNow();
                                 taskdata.lastmetric = metricdata;
 
-                                if (dateNow > taskdata.lastmetric.endDate && (taskdata.lastmetric.status === 'In Progress' || taskdata.lastmetric.status === 'Not Started')) {
-                                    taskdata.lastmetric.progressStatus = 'Late';
-                                }
+
 
 
                             }

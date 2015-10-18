@@ -174,7 +174,7 @@ exports.tasksList = function(req, res) {
 
                         rowTask.metrics.push(rowMetric);
                         rowTask.lastmetric = rowMetric;
-                    if (rowTask.lastmetric && dateNow > rowTask.lastmetric.endDate && (rowTask.lastmetric.status === 'In Progress' || rowTask.lastmetric.status === 'Not Started')) {
+                        if (rowTask.lastmetric && dateNow > rowTask.lastmetric.endDate && (rowTask.lastmetric.status === 'In Progress' || rowTask.lastmetric.status === 'Not Started')) {
                             rowTask.lastmetric.progressStatus = 'Late';
                         }
                     }

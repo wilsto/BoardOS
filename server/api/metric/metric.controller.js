@@ -37,7 +37,7 @@ exports.list = function(req, res) {
                 metrics = [];
                 _.each(rowtask, function(rowdata, index) {
                     if (typeof req.query.context !== 'undefined' && typeof req.query.activity !== 'undefined') {
-                        if (rowdata.context.indexOf(req.query.context + '.') >= 0 && rowdata.activity.indexOf(req.query.activity + '.') >= 0) {
+                        if (rowdata.context.indexOf(req.query.context) >= 0 && rowdata.activity.indexOf(req.query.activity) >= 0) {
                             metrics.push(rowdata);
                         }
                     } else {

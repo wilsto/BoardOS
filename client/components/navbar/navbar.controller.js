@@ -14,12 +14,12 @@ angular.module('boardOsApp')
                     return task.lastmetric && task.lastmetric.status !== 'Finished';
                 });
                 $scope.navBarTasksAlerts = _.filter($scope.myTasks, function(task) {
-                    return task.lastmetric && task.lastmetric.status !== 'Finished' && (task.lastmetric.progressStatus !== 'On Time' || task.timebetween < 0);
+                    return task.lastmetric && task.lastmetric.status !== 'Finished' && (task.lastmetric.progressStatus !== 'On Time' || task.timebetween <= 0);
                 });
             });
         };
 
-        //$scope.load();
+        $scope.load();
 
         $scope.logout = function() {
             Auth.logout();
@@ -30,7 +30,6 @@ angular.module('boardOsApp')
         $scope.isActive = function(route) {
             return route === $location.path();
         };
-
 
         $scope.filterTask = function(tasks, filter) {
             var filtertasks;
@@ -44,8 +43,10 @@ angular.module('boardOsApp')
                     return true;
                 }
                 // si actor (metrics)
-                if (_.intersection([$scope.currentUser._id], _.pluck(task.metricActors, '_id')).length > 0) {
-                    return true;
+                if (typeof task.lastmetric !== 'undefined') {
+                    if ($scope.currentUser._id === task.lastmetric.actor._id) {
+                        return true;
+                    }
                 }
                 // si watcher
                 if (_.intersection([$scope.currentUser._id], _.pluck(task.watchers, '_id')).length > 0) {
@@ -55,4 +56,13 @@ angular.module('boardOsApp')
             });
             return filtertasks;
         };
+    /*        jQuery(document).ready(function($) {
+            $('#header_notification_bar').on('show.bs.dropdown', function() {
+                
+            });
+
+            $('.dropdown').on('show.bs.dropdown', function() {
+                
+            });
+        });*/
     });
