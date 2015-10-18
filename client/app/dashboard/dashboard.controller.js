@@ -122,7 +122,7 @@ angular.module('boardOsApp')
                             dataGoals.push(goalsByMonth);
                             dataGoals4QCT.push({
                                 name: kpi.constraint,
-                                value: _.last(goalsByMonth)
+                                value: kpi.calcul.task
                             });
                             kpiGoals.push(goalsByMonth);
 
@@ -160,7 +160,6 @@ angular.module('boardOsApp')
                             };
                         })
                         .value();
-
                     var scoreQualityOnQCT = _.filter(scoreOnQCT, function(data) {
                         return data.name === 'Quality';
                     })[0] || {

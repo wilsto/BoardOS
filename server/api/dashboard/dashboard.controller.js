@@ -128,7 +128,7 @@ exports.show = function(req, res) {
             getData.fromTask(cloneReq, function(myTasks) {
                 //logger.trace("start filter task");
                 mDashboard.tasks = _.filter(myTasks.tasks, function(task) {
-                    return (task.context.indexOf(mDashboard.context + '.') >= 0 && task.activity.indexOf(mDashboard.activity + '.') >= 0);
+                    return (task.context.indexOf(mDashboard.context) >= 0 && task.activity.indexOf(mDashboard.activity) >= 0);
                 });
                 //logger.trace("End filter task");
                 _.each(mDashboard.dashboards, function(dashboard) {
@@ -139,7 +139,7 @@ exports.show = function(req, res) {
                         dashboard.activity = ''
                     }
                     dashboard.tasks = _.filter(myTasks.tasks, function(task) {
-                        return (task.context.indexOf(dashboard.context + '.') >= 0 && task.activity.indexOf(dashboard.activity + '.') >= 0);
+                        return (task.context.indexOf(dashboard.context) >= 0 && task.activity.indexOf(dashboard.activity) >= 0);
                     });
                     //logger.trace("End filter dashboard");
                 });

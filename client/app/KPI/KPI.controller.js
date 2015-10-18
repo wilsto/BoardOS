@@ -47,12 +47,15 @@ angular.module('boardOsApp')
                         $scope.metricsNb += task.metrics.length;
                         if (typeof task.lastmetric !== 'undefined') {
                             $scope.lastmetricDate = (task.lastmetric.date > $scope.lastmetricDate) ? task.lastmetric.date : $scope.lastmetricDate;
-                            if (typeof $scope.KPI.whereField === 'undefined' || task.lastmetric[$scope.KPI.whereField] === $scope.KPI.whereValues) {
+                            if (typeof $scope.KPI.whereField === 'undefined' || $scope.KPI.whereField.length === 0 || task.lastmetric[$scope.KPI.whereField] === $scope.KPI.whereValues) {
                                 // ##TODO plus tard 
                                 // $scope.sumValue += parseFloat(task.lastmetric[$scope.KPI.metricTaskField]);
                                 // $scope.sumRefValue += parseFloat(task.lastmetric[$scope.KPI.refMetricTaskField]);
-                                $scope.sumKPI += (!task.KPI || isNaN(task.KPI)) ? 0 : parseFloat(task.KPI);
-                                $scope.nbKPI += (!task.KPI || isNaN(task.KPI)) ? 0 : 1;
+                                $scope.sumKPI += (!task.KPI && isNaN(parseFloat(task.KPI))) ? 0 : parseFloat(task.KPI);
+                                $scope.nbKPI += (!task.KPI && isNaN(parseFloat(task.KPI))) ? 0 : 1;
+                                
+                                
+                                
                             }
                         }
                     });

@@ -104,7 +104,7 @@ exports.tasksList = function(req, res) {
             Task.find({}).lean().exec(function(err, tasks) {
                 mTasks = [];
                 _.each(tasks, function(rowdata, index) {
-                    if (rowdata.context.indexOf(mKPI.context + '.') >= 0 && rowdata.activity.indexOf(mKPI.activity + '.') >= 0) {
+                    if (rowdata.context.indexOf(mKPI.context) >= 0 && rowdata.activity.indexOf(mKPI.activity) >= 0) {
                         mTasks.push(rowdata);
                     }
                 });
@@ -120,7 +120,7 @@ exports.tasksList = function(req, res) {
             }).lean().exec(function(err, Metrics) {
                 mMetrics = [];
                 _.each(Metrics, function(rowdata, index) {
-                    if (rowdata.context.indexOf(mKPI.context + '.') >= 0 && rowdata.activity.indexOf(mKPI.activity + '.') >= 0) {
+                    if (rowdata.context.indexOf(mKPI.context) >= 0 && rowdata.activity.indexOf(mKPI.activity) >= 0) {
                         mMetrics.push(rowdata);
                     }
                 });
@@ -130,6 +130,8 @@ exports.tasksList = function(req, res) {
         })
         .then(function() {
             // Get related metrics
+            var d2 = new Date();
+            var dateNow = d2.toISOString();
             var deferred = Q.defer();
             _.each(mTasks, function(rowTask, index) {
                 rowTask.metrics = [];
@@ -145,9 +147,12 @@ exports.tasksList = function(req, res) {
                         rowMetric.timeToEnd = moment(rowMetric.endDate).diff(moment(), 'days');
                         rowMetric.fromNow = moment(rowMetric.date).fromNow();
 
-                        // predictedCharge
-                        rowMetric.projectedWorkload = (rowMetric.progress > 0) ? Math.round(1000 * parseFloat(rowMetric.timeSpent.replace(',', '.')) * 100 / parseFloat(rowMetric.progress)) / 1000 : rowMetric.load;
+                        // convert to numeric
+                        rowMetric.timeSpent = parseFloat(rowMetric.timeSpent.replace(',', '.'));
 
+                        // predictedCharge
+                        rowMetric.projectedWorkload = (rowMetric.progress > 0) ? Math.round(1000 * rowMetric.timeSpent * 100 / parseFloat(rowMetric.progress)) / 1000 : rowMetric.load;
+                        delete rowMetric.progressStatus;
                         // progressStatus
                         if (rowMetric.endDate > rowTask.endDate) {
                             switch (rowMetric.status) {
@@ -156,8 +161,7 @@ exports.tasksList = function(req, res) {
                                     rowMetric.progressStatus = 'Late';
                                     break;
                                 default:
-                                    var d2 = new Date();
-                                    var dateNow = d2.toISOString();
+
                                     if (dateNow < rowMetric.endDate) {
                                         rowMetric.progressStatus = 'At Risk';
                                     } else {
@@ -170,6 +174,9 @@ exports.tasksList = function(req, res) {
 
                         rowTask.metrics.push(rowMetric);
                         rowTask.lastmetric = rowMetric;
+                    if (rowTask.lastmetric && dateNow > rowTask.lastmetric.endDate && (rowTask.lastmetric.status === 'In Progress' || rowTask.lastmetric.status === 'Not Started')) {
+                            rowTask.lastmetric.progressStatus = 'Late';
+                        }
                     }
                 });
                 rowTask.KPI = tools.calculKPI(rowTask.metrics, mKPI);

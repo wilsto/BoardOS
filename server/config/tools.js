@@ -343,12 +343,7 @@ module.exports = {
         var refField = kpi.refMetricTaskField;
         var listValues = kpi.listValues;
         var refListValues = kpi.refListValues;
-        // filtrer par where
-        if (kpi.whereField) {
-            metrics = _.filter(metrics, function(metric) {
-                return metric[kpi.whereField] === kpi.whereValues;
-            })
-        }
+
         if (metrics.length > 0) { // si metric existe
 
             // filtrer par Liste (first, last, all)
@@ -377,6 +372,12 @@ module.exports = {
                 case 'ValuesLessThan':
                 case 'ValuesMoreThan':
             }
+            // filtrer par where
+            if (kpi.whereField) {
+                filteredMetrics = _.filter(filteredMetrics, function(metric) {
+                    return metric[kpi.whereField] === kpi.whereValues;
+                })
+            }
 
             // filtrer par valeur
             filteredMetrics = _.filter(filteredMetrics, function(metric) {
@@ -397,12 +398,12 @@ module.exports = {
                 case 'mean':
                     var arrayValues = _.compact(_.pluck(filteredMetrics, field).map(Number));
                     if (arrayValues.length) {
-                        calculMain = math.mean(_.compact(_.pluck(filteredMetrics, field).map(Number)))
+                        calculMain = math.mean(arrayValues)
                     }
                     var arrayRefValues = _.compact(_.pluck(filteredRefMetrics, refField).map(Number));
 
                     if (arrayRefValues.length) {
-                        calculRef = math.mean(_.compact(_.pluck(filteredMetrics, refField).map(Number)))
+                        calculRef = math.mean(arrayRefValues)
                     } else {
                         if (refField.toLowerCase() === 'constant') {
                             calculRef = parseInt(refValues)

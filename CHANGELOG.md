@@ -1,10 +1,12 @@
 # Change Log
 
-## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD) (2015-10-17)
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD) (2015-10-18)
 
 [Full Changelog](https://github.com/wilsto/boardos/compare/v0.16.1...HEAD)
 
 **Implemented enhancements:**
+
+- Statut des taches passent en delayed si en cours et dépassé [\#120](https://github.com/wilsto/BoardOS/issues/120)
 
 - Filtre des taches est automatique suivant la clause de restriction de KPI [\#117](https://github.com/wilsto/BoardOS/issues/117)
 
@@ -25,6 +27,12 @@
 - Calcul en temps réel du temps projeté [\#104](https://github.com/wilsto/BoardOS/issues/104)
 
 **Fixed bugs:**
+
+- Mauvais chiffres au niveau du triangle QCD par dashboard [\#121](https://github.com/wilsto/BoardOS/issues/121)
+
+- Le nombre d'alerte doit prendre en compte la restriction du KPI [\#119](https://github.com/wilsto/BoardOS/issues/119)
+
+- Gestion des chiffres avec des virgules ou des . [\#118](https://github.com/wilsto/BoardOS/issues/118)
 
 - Mauvais affichage au niveau du calendrier [\#114](https://github.com/wilsto/BoardOS/issues/114)
 

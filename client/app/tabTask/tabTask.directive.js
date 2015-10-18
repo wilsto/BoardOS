@@ -10,7 +10,7 @@ angular.module('boardOsApp')
                 kpi: '='
             },
             link: function(scope, element, attrs) {
-                
+
                 scope.filterStatus = 'Not Finished';
                 scope.filterProgressStatus = 'All';
                 scope.searchText = '';

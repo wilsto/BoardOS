@@ -101,6 +101,9 @@ module.exports = {
             })
             .then(function() {
                 //logger.trace("Start metrics");
+                //
+                var d2 = new Date();
+                var dateNow = d2.toISOString();
                 // Get related metrics
                 var deferred = Q.defer();
                 Metric.find({}, '-__v').sort({
@@ -125,9 +128,12 @@ module.exports = {
                                 metricdata.timeToBegin = moment(metricdata.startDate).diff(moment(), 'days');
                                 metricdata.timeToEnd = moment(metricdata.endDate).diff(moment(), 'days');
 
-                                // predictedCharge
-                                metricdata.projectedWorkload = (metricdata.progress > 0) ? Math.round(1000 * parseFloat(metricdata.timeSpent.replace(',', '.')) * 100 / parseFloat(metricdata.progress)) / 1000 : metricdata.load;
+                                // convert to numeric
+                                metricdata.timeSpent = parseFloat(metricdata.timeSpent.replace(',', '.'));
 
+                                // predictedCharge
+                                metricdata.projectedWorkload = (metricdata.progress > 0) ? Math.round(1000 * metricdata.timeSpent * 100 / parseFloat(metricdata.progress)) / 1000 : metricdata.load;
+                                delete metricdata.progressStatus;
                                 // progressStatus
                                 if (metricdata.endDate > taskdata.endDate) {
                                     switch (metricdata.status) {
@@ -136,8 +142,7 @@ module.exports = {
                                             metricdata.progressStatus = 'Late';
                                             break;
                                         default:
-                                            var d2 = new Date();
-                                            var dateNow = d2.toISOString();
+
                                             if (dateNow < metricdata.endDate) {
                                                 metricdata.progressStatus = 'At Risk';
                                             } else {
@@ -186,6 +191,10 @@ module.exports = {
                                 metricdata.fromNow = moment(metricdata.date).fromNow();
                                 taskdata.lastmetric = metricdata;
 
+                                if (dateNow > taskdata.lastmetric.endDate && (taskdata.lastmetric.status === 'In Progress' || taskdata.lastmetric.status === 'Not Started')) {
+                                    taskdata.lastmetric.progressStatus = 'Late';
+                                }
+
 
                             }
                         });
@@ -213,7 +222,7 @@ module.exports = {
                         mKPI.calcul = {};
                         mKPI.metricsGroupBy.Time = tools.groupMultiBy(taskdata.metrics, ['groupTimeByValue']);
                         var filteredMetrics = _.filter(taskdata.metrics, function(metric) {
-                            return (mKPI.category === 'Alert') ? metric.groupTimeByValue === moment(new Date()).format("YYYY.MM") : _.last(metric.groupTimeByValue); //filtrer par le mois en cours
+                            return (taskdata.category === 'Alert') ? metric.groupTimeByValue === moment(new Date()).format("YYYY.MM") : _.last(metric.groupTimeByValue); //filtrer par le mois en cours
                         });
                         mKPI.calcul.task = tools.calculKPI(filteredMetrics, kpidata);
                         mKPI.calcul.taskTime = _.map(mKPI.metricsGroupBy.Time, function(value, key) {
