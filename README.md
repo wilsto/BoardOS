@@ -1,6 +1,8 @@
 [![Build Status](https://travis-ci.org/wilsto/BoardOS.svg)](https://travis-ci.org/wilsto/BoardOS)
 [![Coverage Status](https://coveralls.io/repos/wilsto/BoardOS/badge.svg)](https://coveralls.io/r/wilsto/BoardOS)
 [![Issue Stats](http://issuestats.com/github/wilsto/boardos/badge/issue)](http://issuestats.com/github/wilsto/boardos)
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/wilsto/boardos-issues.svg)](http://isitmaintained.com/project/wilsto/boardos-issues "Average time to resolve an issue")
+[![Percentage of issues still open](http://isitmaintained.com/badge/open/wilsto/boardos-issues.svg)](http://isitmaintained.com/project/wilsto/boardos-issues "Percentage of issues still open")
 
 BoardOS
 ====
