@@ -63,7 +63,7 @@
          <div class="col-md-2 col-sm-4">
           <div class="stats-overview stat-block">
            <div class="details">
-            <div class="title"><a href="/KPIs"><span style="font-weight:bold;color:#1f77b4">{{kpis.length}}</span> KPIs</a></div>
+            <div class="title"><a href="/KPIs"><span style="font-weight:bold;color:#1f77b4">{{KPIs.length}}</span> KPIs</a></div>
             <nvd3 options="options" data="dataKPIs"></nvd3>
           </div>
         </div>
@@ -72,7 +72,7 @@
       <div class="col-md-2 col-sm-4">
         <div class="stats-overview stat-block">
          <div class="details">
-          <div class="title"><a href="/tasks"><span style="font-weight:bold;color:#9467bd">{{tasks.length}}</span> Tasks</a></div>
+          <div class="title"><a href="/tasks"><span style="font-weight:bold;color:#9467bd">{{tasksNb}}</span> Tasks</a></div>
           <nvd3 options="optionsTasks" data="dataTasks"></nvd3>
         </div>
       </div>
@@ -122,7 +122,7 @@
   <tab ng-if="dashboard._id" active="true">
     <tab-heading>
     KPIs 
-    <span class="badge badge-default"> {{dashboard.kpis.length || 0}}</span>
+    <span class="badge badge-default"> {{KPIs.length || 0}}</span>
   </tab-heading>
   <div tab-k-p-i data="dashboard" multitasks="true" ng-if="dashboard"></div>
 </tab>
@@ -138,7 +138,7 @@ tab Tasks-->
 <tab ng-if="dashboard._id">
   <tab-heading>
   Tasks 
-  <span class="badge " ng-class="OutofDateTasks.length > 0 ? 'badge-danger':'badge-default'"> {{tasks.length || 0}}</span>
+  <span class="badge " ng-class="OutofDateTasks.length > 0 ? 'badge-danger':'badge-default'"> {{tasksNb || 0}}</span>
 </tab-heading>
 <div tab-task data="dashboard.tasks" kpi="dashboard.KPIs" ng-if="dashboard._id"></div>
 </tab>

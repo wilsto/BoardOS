@@ -19,7 +19,7 @@ angular.module('boardOsApp')
             });
         };
 
-        $scope.load();
+        //$scope.load();
 
         $scope.logout = function() {
             Auth.logout();
@@ -56,7 +56,7 @@ angular.module('boardOsApp')
             });
             return filtertasks;
         };
-    /*        jQuery(document).ready(function($) {
+        /*        jQuery(document).ready(function($) {
             $('#header_notification_bar').on('show.bs.dropdown', function() {
                 
             });

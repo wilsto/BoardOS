@@ -59,8 +59,30 @@ exports.list = function(req, res) {
             return deferred.promise;
         })
         .then(function() {
-            return res.json(200, mTasks);
+            return res.status(200).json(mTasks);
         });
+};
+
+
+// Get count of tasks which start
+exports.countByMonth = function(req, res) {
+    var o = {};
+    o.map = function() {
+        emit((new Date(this.date)).getFullYear() + '.' + ((new Date(this.date)).getMonth() + 1), 1);
+    };
+    o.reduce = function(k, val) {
+        return Array.sum(val)
+    };
+    o.query = {
+        activity: new RegExp(req.query.activity),
+        context: new RegExp(req.query.context)
+    };
+    Task.mapReduce(o, function(err, results) {
+        if (err) {
+            return handleError(res, err);
+        }
+        return res.status(200).json(results);
+    });
 };
 
 // Get list of tasks

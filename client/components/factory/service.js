@@ -41,7 +41,7 @@ angular.module('boardOsApp').factory('myLibrary', function() {
                 }
             }
         },
-        displayLastYear: function(data, fieldDate, field) {
+        displayLastYear: function(data, fieldDate, field, rework) {
 
             var dateResult = [];
             var i;
@@ -54,6 +54,7 @@ angular.module('boardOsApp').factory('myLibrary', function() {
                 var itemdate = (item.length > 7) ? moment(item).format('YYYY.MM') : item;
                 return {
                     'month': moment(itemdate).format('YYYY.MM'),
+                    'month2': moment(itemdate).format('YYYY.M'),
                     'value': null
                 };
             });
@@ -62,8 +63,15 @@ angular.module('boardOsApp').factory('myLibrary', function() {
 
             $.each(data, function(key, item) {
                 $.each(map_result, function(keyMap, itemMap) {
-                    if (itemMap.month === item[fieldDate]) {
+                    if (itemMap.month === item[fieldDate] || itemMap.month2 === item[fieldDate]) {
                         itemMap.value = item[field];
+                    }
+                    if (rework) {
+                        itemMap.count = itemMap.value || 0;
+                        itemMap.label = itemMap.month;
+                        itemMap.mean = null;
+                        itemMap.series = null;
+                        itemMap.sum = null;
                     }
                 });
             });

@@ -21,20 +21,23 @@ angular.module('boardOsApp')
         };
 
         $scope.loadTasks = function() {
-            $http.get('/api/tasks/list', {
+
+            $http.get('/api/tasks/countByMonth', {
                 params: {
                     activity: $rootScope.perimeter.activity,
                     context: $rootScope.perimeter.context
                 }
             }).success(function(tasks) {
-                $scope.tasks = tasks;
-
                 $scope.dataTasks = [{
                     values: []
                 }];
-                $scope.predataTasks = myLibrary.getByMonth(tasks, 'date', 'value');
-                $scope.dataTasks[0].values = $scope.predataTasks;
+                $scope.tasksNb = tasks.reduce(function(pv, cv) {
+                    return pv + cv.value;
+                }, 0);
+                $scope.dataTasks[0].values = myLibrary.displayLastYear(tasks, '_id', 'value', true);
             });
+
+
         };
 
         $scope.loadMetrics = function() {

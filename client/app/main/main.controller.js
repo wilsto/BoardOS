@@ -18,36 +18,38 @@ angular.module('boardOsApp')
         };
 
         $scope.loadTasks = function() {
-            $http.get('/api/tasks/list').success(function(tasks) {
-                $scope.tasks = tasks;
+            $scope.dataTasks = [{
+                values: []
+            }];
+            $http.get('/api/tasks/countByMonth').success(function(tasks) {
 
-                $scope.dataTasks = [{
-                    values: []
-                }];
-                $scope.predataTasks = myLibrary.getByMonth(tasks, 'date', 'value');
-                $scope.dataTasks[0].values = $scope.predataTasks;
+                $scope.tasksNb = tasks.reduce(function(pv, cv) {
+                    return pv + cv.value;
+                }, 0);
+                $scope.dataTasks[0].values = myLibrary.displayLastYear(tasks, '_id', 'value', true);
             });
         };
 
         $scope.loadMetrics = function() {
-            $http.get('/api/metrics/list').success(function(metrics) {
-                $scope.metrics = metrics;
+            $scope.dataMetrics = [{
+                values: []
+            }];
+            $scope.dataConfidence = [{
+                values: []
+            }];
+            $http.get('/api/metrics/countByMonth').success(function(metrics) {
+                
+                $scope.metricsNb = metrics.reduce(function(pv, cv) {
+                    return pv + cv.value.count;
+                }, 0);
 
-                // calcul nombre de metrics
-                $scope.dataMetrics = [{
-                    values: []
-                }];
-                $scope.predataMetrics = myLibrary.getByMonth(metrics, 'date', 'value');
-                $scope.dataMetrics[0].values = $scope.predataMetrics;
-
-
-                // calcul confidence
-                $scope.dataConfidence = [{
-                    values: []
-                }];
-                $scope.predataConfidence = myLibrary.getByMonth(metrics, 'date', 'trust');
-                $scope.dataConfidence[0].values = $scope.predataConfidence;
-                $scope.confidence = parseInt(_.last($scope.dataConfidence[0].values).mean);
+                _.each(metrics, function(metric) {
+                    metric.count = metric.value.count;
+                    metric.trust = parseInt(metric.value.trust / metric.value.count);
+                });
+                $scope.dataMetrics[0].values = myLibrary.displayLastYear(metrics, '_id', 'count', true);
+                $scope.dataConfidence[0].values = myLibrary.displayLastYear(metrics, '_id', 'trust', true);
+                $scope.confidenceMean = _.last($scope.dataConfidence[0].values).count;
             });
         };
 
@@ -157,7 +159,7 @@ angular.module('boardOsApp')
 
         $scope.loadTaskToNotify = function() {
             if (typeof $scope.dataDashboards !== 'undefined') {
-                
+
                 var openTasks = _.filter($scope.dataDashboards.tasks, function(task) {
                     if (typeof task.lastmetric === 'undefined' || task.lastmetric.status === 'In Progress' || task.lastmetric.status === 'Not Started') {
                         return true;
@@ -165,7 +167,7 @@ angular.module('boardOsApp')
                 });
                 $scope.alltasksToNotify = openTasks.length;
                 $scope.myTasks = $scope.filterTask(openTasks, $scope.filterNotification);
-                
+
                 if ($scope.filterNotification === 'Only For Me') {
                     $scope.tasksToNotify = $scope.myTasks;
                 } else {
@@ -221,7 +223,7 @@ angular.module('boardOsApp')
         $scope.loadKPIs();
         $scope.loadTasks();
         $scope.loadMetrics();
-        $scope.loadLog();
+        //$scope.loadLog();
 
         $scope.options = {
             chart: {
@@ -269,9 +271,4 @@ angular.module('boardOsApp')
         };
         $scope.optionsConfidence = angular.copy($scope.options);
         $scope.optionsConfidence.chart.color = ['#bcbd22'];
-        $scope.optionsConfidence.chart.y = function(d) {
-            return d.mean;
-        };
-
-
     });

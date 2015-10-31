@@ -9,6 +9,7 @@ router.get('/', controller.show);
 router.get('/list', controller.list);
 router.get('/search', controller.search);
 router.get('/globalChange', controller.globalChange);
+router.get('/countByMonth', controller.countByMonth);
 router.get('/:id', controller.show);
 router.post('/watch/:id/:userId', controller.watch);
 router.post('/', controller.create);

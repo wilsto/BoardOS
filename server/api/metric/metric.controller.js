@@ -27,6 +27,40 @@ exports.index = function(req, res) {
     });
 };
 
+
+// Get count of metrics which start 
+// + confidence
+exports.countByMonth = function(req, res) {
+    var o = {};
+    o.map = function() {
+        emit((new Date(this.date)).getFullYear() + '.' + ((new Date(this.date)).getMonth() + 1), {
+            count: 1,
+            trust: this.trust
+        });
+    };
+    o.reduce = function(k, val) {
+        var reducedVal = {
+            count: 0,
+            trust: 0
+        };
+        for (var i = 0; i < val.length; i++) {
+            reducedVal.count += val[i].count;
+            reducedVal.trust += parseInt(val[i].trust);
+        }
+        return reducedVal;
+    };
+    o.query = {
+        activity: new RegExp(req.query.activity),
+        context: new RegExp(req.query.context)
+    };
+    Metric.mapReduce(o, function(err, results) {
+        if (err) {
+            return handleError(res, err);
+        }
+        return res.status(200).json(results);
+    });
+};
+
 // Get list of metrics
 exports.list = function(req, res) {
     Q()

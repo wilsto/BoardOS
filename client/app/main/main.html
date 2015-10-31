@@ -22,7 +22,7 @@
                     <br/><img src="assets/images/ajax-loader_blue.gif">
                 </div>
                 <div class="details" ng-if="dataTasks">
-                    <div class="title"><a href="/tasks"><span style="font-weight:bold;color:#9467bd">{{tasks.length}}</span> Tasks</a>
+                    <div class="title"><a href="/tasks"><span style="font-weight:bold;color:#9467bd">{{tasksNb|| 0 }}</span> Tasks</a>
                     </div>
                     <nvd3 options="optionsTasks" data="dataTasks"></nvd3>
                 </div>
@@ -35,7 +35,7 @@
                     <br/><img src="assets/images/ajax-loader_blue.gif">
                 </div>
                 <div class="details" ng-if="dataMetrics">
-                    <div class="title"><a href="/metrics"><span style="font-weight:bold;color:#87CEEB">{{metrics.length}}</span> Metrics</a>
+                    <div class="title"><a href="/metrics"><span style="font-weight:bold;color:#87CEEB">{{metricsNb|| 0 }}</span> Metrics</a>
                     </div>
                     <nvd3 options="optionsMetrics" data="dataMetrics"></nvd3>
                 </div>
@@ -71,7 +71,7 @@
                     <br/><img src="assets/images/ajax-loader_blue.gif">
                 </div>
                 <div class="details" ng-if="dataConfidence">
-                    <div class="title"><span style="font-weight:bold;color:#bcbd22">{{confidence || '-'}}%</span> Confidence</div>
+                    <div class="title"><span style="font-weight:bold;color:#bcbd22">{{confidenceMean || '-'}}%</span> Confidence</div>
                     <nvd3 options="optionsConfidence" data="dataConfidence"></nvd3>
                 </div>
             </div>
@@ -227,7 +227,7 @@
                                 </li>
                             </ul>
                         </div>
-                    </tab> -->
+                    </tab> 
                     <tab heading="Journal Log">
                         <div class="scroller" style="height: 300px;overflow:auto" data-always-visible="1" data-rail-visible1="1">
                             <ul class="feeds">
@@ -257,7 +257,7 @@
                             </ul>
                         </div>
                     </tab>
-                </tabset>
+                </tabset>-->
                 <div class="tab-content">
                 </div>
                 <!--END TABS-->
