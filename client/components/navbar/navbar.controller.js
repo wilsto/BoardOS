@@ -4,22 +4,23 @@ angular.module('boardOsApp')
     .controller('NavbarCtrl', function($scope, $rootScope, $location, Auth, $http) {
         Auth.getCurrentUser(function(data) {
             $scope.currentUser = data;
+            $scope.load();
         });
 
         $scope.load = function() {
-            $http.get('/api/tasks').success(function(tasks) {
-                $scope.allNavBarTasks = tasks.tasks;
-                $scope.myTasks = $scope.filterTask($scope.allNavBarTasks, 'Me');
-                $scope.navBarTasks = _.filter($scope.myTasks, function(task) {
-                    return task.lastmetric && task.lastmetric.status !== 'Finished';
-                });
-                $scope.navBarTasksAlerts = _.filter($scope.myTasks, function(task) {
-                    return task.lastmetric && task.lastmetric.status !== 'Finished' && (task.lastmetric.progressStatus !== 'On Time' || task.timebetween <= 0);
+            $http.get('/api/tasks/list', {
+                params: {
+                    userId: $scope.currentUser._id,
+                    status: 'Open'
+                }
+            }).success(function(tasks) {
+                $scope.navBarTasks = tasks;
+                $scope.navBarTasksAlerts = _.filter($scope.navBarTasks, function(task) {
+                    return task.lastmetric && (task.lastmetric.progressStatus !== 'On Time' || task.timebetween <= 0);
                 });
             });
         };
 
-        //$scope.load();
 
         $scope.logout = function() {
             Auth.logout();

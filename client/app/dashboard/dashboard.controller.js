@@ -7,6 +7,7 @@ angular.module('boardOsApp')
 
         $scope.dashboard = {
             name: '',
+            paramId: $stateParams.id,
             owner: $scope.currentUser
         };
         $scope.loadKPIs = function() {
@@ -21,7 +22,6 @@ angular.module('boardOsApp')
         };
 
         $scope.loadTasks = function() {
-
             $http.get('/api/tasks/countByMonth', {
                 params: {
                     activity: $rootScope.perimeter.activity,
@@ -36,34 +36,33 @@ angular.module('boardOsApp')
                 }, 0);
                 $scope.dataTasks[0].values = myLibrary.displayLastYear(tasks, '_id', 'value', true);
             });
-
-
         };
 
         $scope.loadMetrics = function() {
-            $http.get('/api/metrics/list', {
+
+            $http.get('/api/metrics/countByMonth', {
                 params: {
                     activity: $rootScope.perimeter.activity,
                     context: $rootScope.perimeter.context
                 }
             }).success(function(metrics) {
-                $scope.metrics = metrics;
-
-                // calcul nombre de metrics
                 $scope.dataMetrics = [{
                     values: []
                 }];
-                $scope.predataMetrics = myLibrary.getByMonth(metrics, 'date', 'value');
-                $scope.dataMetrics[0].values = $scope.predataMetrics;
-
-
-                // calcul confidence
                 $scope.dataConfidence = [{
                     values: []
                 }];
-                $scope.predataConfidence = myLibrary.getByMonth(metrics, 'date', 'trust');
-                $scope.dataConfidence[0].values = $scope.predataConfidence;
-                $scope.confidence = parseInt(_.last($scope.dataConfidence[0].values).mean);
+                $scope.metricsNb = metrics.reduce(function(pv, cv) {
+                    return pv + cv.value.count;
+                }, 0);
+
+                _.each(metrics, function(metric) {
+                    metric.count = metric.value.count;
+                    metric.trust = parseInt(metric.value.trust / metric.value.count);
+                });
+                $scope.dataMetrics[0].values = myLibrary.displayLastYear(metrics, '_id', 'count', true);
+                $scope.dataConfidence[0].values = myLibrary.displayLastYear(metrics, '_id', 'trust', true);
+                $scope.confidenceMean = _.last($scope.dataConfidence[0].values).count;
             });
         };
 
@@ -395,11 +394,4 @@ angular.module('boardOsApp')
 
         $scope.optionsConfidence = angular.copy($scope.options);
         $scope.optionsConfidence.chart.color = ['#bcbd22'];
-        $scope.optionsConfidence.chart.y = function(d) {
-            return d.mean;
-        };
-
-
-
-
     });

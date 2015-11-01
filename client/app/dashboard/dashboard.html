@@ -81,7 +81,7 @@
     <div class="col-md-2 col-sm-4">
       <div class="stats-overview stat-block">
        <div class="details">
-         <div class="title"><a href="/metrics"><span style="font-weight:bold;color:#87CEEB">{{metrics.length}}</span> Metrics</a></div>
+         <div class="title"><a href="/metrics"><span style="font-weight:bold;color:#87CEEB">{{metricsNb}}</span> Metrics</a></div>
          <nvd3 options="optionsMetrics" data="dataMetrics"></nvd3>
        </div>
      </div>
@@ -108,7 +108,7 @@
 <div class="col-md-2 col-sm-4">
   <div class="stats-overview stat-block">
    <div class="details">
-        <div class="title"><span style="font-weight:bold;color:#bcbd22">{{confidence}}%</span> Confidence</div>
+        <div class="title"><span style="font-weight:bold;color:#bcbd22">{{confidenceMean}}%</span> Confidence</div>
         <nvd3 options="optionsConfidence" data="dataConfidence"></nvd3>
   </div>
 </div>
@@ -118,7 +118,13 @@
 <!-- END OVERVIEW STATISTIC BARS-->
 </div>
 <!-- Layout Part -->
+
 <tabset>
+  <tab ng-if="!(dashboard._id || (!dashboard.paramId && !dashboard._id))">
+                <div class="isloading" >Loading
+                    <br/><img src="assets/images/ajax-loader_blue.gif">
+                </div>
+                </tab>
   <tab ng-if="dashboard._id" active="true">
     <tab-heading>
     KPIs 
@@ -165,7 +171,7 @@ tab Help-->
     </tab-heading>
     <div dashboard-tab dashboard-type="help" dashboard-data="dashboard" ng-if="dashboard"></div>
 </tab>
-<tab>
+<tab ng-if="dashboard._id || (!dashboard.paramId && !dashboard._id)">
   <tab-heading>
   Edit 
 </tab-heading>

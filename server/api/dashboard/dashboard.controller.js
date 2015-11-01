@@ -40,7 +40,10 @@ exports.index = function(req, res) {
 
 // Get list of dashboards
 exports.list = function(req, res) {
-    Dashboard.find(function(err, dashboards) {
+    var filterUser = (req.query.userId) ? {
+        'owner._id': req.query.userId
+    } : null;
+    Dashboard.find(filterUser, '-__v').lean().exec(function(err, dashboards) {
         if (err) {
             return handleError(res, err);
         }
@@ -50,14 +53,63 @@ exports.list = function(req, res) {
 
 // Get list of dashboards
 exports.quick = function(req, res) {
-    Dashboard.findById(req.params.id).lean().exec(function(err, dashboard) {
-        if (err) {
-            return handleError(res, err);
-        }
-        return res.status(200).json(dashboard);
-    });
-};
+    Q()
+        .then(function() {
+            // Get a single dashboard
+            var deferred = Q.defer();
+            Dashboard.findById(req.params.id).lean().exec(function(err, dashboards) {
+                mDashboard = dashboards;
+                deferred.resolve(mDashboard);
+            });
+            return deferred.promise;
+        })
+        .then(function() {
+            // Get related KPIs
+            var deferred = Q.defer();
+            //logger.trace("Loading Kpis");
+            KPI.find({}).lean().exec(function(err, kpis) {
+                mkpis = kpis;
+                deferred.resolve(mDashboard);
+            });
+            return deferred.promise;
+        })
+        .then(function() {
+            // Get related tasks
+            var deferred = Q.defer();
+            Task.find({}, '-__v').sort({
+                date: 'asc'
+            }).lean().exec(function(err, tasks) {
 
+                if (typeof mDashboard.context === 'undefined') {
+                    mDashboard.context = ''
+                }
+                if (typeof mDashboard.activity === 'undefined') {
+                    mDashboard.activity = ''
+                }
+                if (mDashboard.activity === 'DCLIC.CBI.DRIVE.SASDEV') {
+                    mDashboard.activity = 'DCLIC.CBI.DRIVE.SASDEV.'
+                }
+                mDashboard.tasks = _.filter(tasks, function(task) {
+                    return (task.context.indexOf(mDashboard.context) >= 0 && task.activity.indexOf(mDashboard.activity) >= 0);
+                });
+
+                deferred.resolve(tasks);
+            });
+            return deferred.promise;
+        })
+        .then(function() {
+            var deferred = Q.defer();
+            // aller chercher la last métrique
+            getData.addLastMetric(mDashboard.tasks, function(tasks) {
+                mDashboard.tasks = tasks;
+                deferred.resolve(tasks);
+            })
+            return deferred.promise;
+        })
+        .then(function() {
+            return res.status(200).json(mDashboard);
+        })
+};
 
 // Get a single dashboard
 exports.show = function(req, res) {

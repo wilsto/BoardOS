@@ -192,10 +192,6 @@ module.exports = {
                                 taskdata.timebetween = (metricdata.status === 'In Progress' || metricdata.status === 'Not Started') ? taskdata.timetowait + taskdata.timewaited : null;
                                 metricdata.fromNow = moment(metricdata.date).fromNow();
                                 taskdata.lastmetric = metricdata;
-
-
-
-
                             }
                         });
                     });
@@ -250,7 +246,6 @@ module.exports = {
                     taskdata.actors = _.map(actorsObject, function(value, key) {
                         return {
                             _id: key,
-                            count: value,
                             name: _.pluck(_.filter(usersList, function(user) {
                                 return (key === user._id.toString())
                             }), 'name').toString()
@@ -295,6 +290,479 @@ module.exports = {
             })
             .then(function() {
                 callback(mTask);
+            })
+            .then(null, console.error);
+    },
+    fromTasks: function(tasks, callback) {
+        //logger.trace("Start getdata.fromTask");
+        Q()
+            .then(function() {
+                // Get a single task
+                var deferred = Q.defer();
+                if (tasks.length > 1) {
+                    mTask = {
+                        _id: null,
+                        name: null,
+                        context: '',
+                        activity: ''
+                    };
+                    mTask.tasks = tasks;
+                    deferred.resolve(mTask);
+                } else {
+
+                    mTask = {
+                        _id: tasks._id,
+                        name: tasks.name,
+                        context: tasks.context,
+                        activity: tasks.activity
+                    };
+                    mTask.tasks = [tasks];
+                    deferred.resolve(mTask);
+                }
+                return deferred.promise;
+            })
+            .then(function() {
+                // Get a single user
+                var deferred = Q.defer();
+                User.find({}, '-salt -hashedPassword', function(err, user) {
+                    usersList = user;
+                    deferred.resolve(usersList);
+                })
+                return deferred.promise;
+            })
+            .then(function() {
+                // Get a single user
+                var deferred = Q.defer();
+                Dashboard.find({}, '-__v', function(err, dashboard) {
+                    dashboards = dashboard;
+                    deferred.resolve(dashboards);
+                })
+                return deferred.promise;
+            })
+            .then(function() {
+                // Get a single hierarchy
+                var deferred = Q.defer();
+                Hierarchies.find({
+                    name: 'Task'
+                }, '-__v', function(err, hierarchy) {
+                    hierarchyValues = hierarchy[0].list;
+                    deferred.resolve(hierarchy);
+                })
+                return deferred.promise;
+            })
+            .then(function() {
+                // Get all kpis
+                var deferred = Q.defer();
+                KPI.find({}, '-__v').lean().exec(function(err, mKPI) {
+                    mTask.kpis = mKPI;
+                    deferred.resolve(mKPI);
+                })
+                return deferred.promise;
+            })
+            .then(function() {
+                //logger.trace("Start metrics");
+                //
+                var d2 = new Date();
+                var dateNow = d2.toISOString();
+                // Get related metrics
+                var deferred = Q.defer();
+                Metric.find({}, '-__v').sort({
+                    date: 'asc'
+                }).lean().exec(function(err, metric) {
+                    _.each(metric, function(metricdata, index) { // pour chaque metric
+                        _.each(mTask.tasks, function(taskdata) { // pour chaque tache
+
+                            // si c'est la première métric, on crèe l'objet
+                            if (typeof taskdata.metrics === 'undefined') {
+                                taskdata.metrics = []
+                            }
+
+                            // si la metrique est attaché à la tache
+                            if (metricdata.context === taskdata.context && metricdata.activity === taskdata.activity) {
+
+                                // ajouter calcul auto
+                                metricdata.taskname = taskdata.name;
+
+                                // nombre de jours séparant la date de début, fin, entre les deux
+                                metricdata.duration = moment(metricdata.endDate).diff(metricdata.startDate, 'days');
+                                metricdata.timeToBegin = moment(metricdata.startDate).diff(moment(), 'days');
+                                metricdata.timeToEnd = moment(metricdata.endDate).diff(moment(), 'days');
+
+                                // convert to numeric
+                                metricdata.timeSpent = parseFloat(metricdata.timeSpent.replace(',', '.'));
+
+                                // predictedCharge
+                                metricdata.projectedWorkload = (metricdata.progress > 0) ? Math.round(1000 * metricdata.timeSpent * 100 / parseFloat(metricdata.progress)) / 1000 : metricdata.load;
+                                delete metricdata.progressStatus;
+                                // progressStatus
+                                if (metricdata.endDate > taskdata.endDate) {
+                                    switch (metricdata.status) {
+                                        case 'Withdrawn':
+                                        case 'Finished':
+                                            metricdata.progressStatus = 'Late';
+                                            break;
+                                        default:
+                                            if (dateNow > metricdata.endDate && metricdata.date > metricdata.endDate && (metricdata.status === 'In Progress' || metricdata.status === 'Not Started')) {
+                                                metricdata.progressStatus = 'Late';
+                                            } else {
+                                                metricdata.progressStatus = 'At Risk';
+                                            }
+                                    }
+                                } else {
+                                    metricdata.progressStatus = 'On Time';
+                                }
+
+
+
+                                // ajouter information par mois 
+                                metricdata.groupTimeByValue = moment(metricdata.date).format("YYYY.MM");
+
+                                //on l'ajoute à la liste
+                                taskdata.metrics.push(metricdata);
+
+                                // kpis 
+                                _.each(mTask.kpis, function(kpidata, index) {
+
+                                    // on calcule le time to wait par rapport aux KPIs
+                                    if (taskdata.context.indexOf(kpidata.context) >= 0 && taskdata.activity.indexOf(kpidata.activity) >= 0) {
+                                        taskdata.timetowait = Math.min((typeof kpidata.refresh === 'undefined') ? Infinity : kpidata.refresh, (typeof taskdata.timetowait === 'undefined') ? Infinity : taskdata.timetowait);
+                                    }
+
+                                    // ajout des couleurs
+                                    if (typeof metricdata[kpidata.metricTaskField] === 'string') {
+                                        var Value = _.filter(hierarchyValues, function(item) {
+                                            return kpidata.metricTaskField && item.text.toLowerCase() === metricdata[kpidata.metricTaskField].toLowerCase();
+                                        });
+                                        if (Value.length > 0) {
+                                            metricdata.color = Value[0].color;
+                                            metricdata.value = Value[0].value;
+                                            metricdata.description = Value[0].description;
+                                        }
+                                    }
+                                });
+
+                                // on calcule les temps d'écarts
+                                var oneDay = 24 * 60 * 60 * 1000;
+                                var d = new Date(taskdata.startDate);
+                                var dateStart = d.setDate(d.getDate() - taskdata.timetowait);
+                                var firstDate = (metricdata.date > taskdata.startDate) ? new Date(metricdata.date) : new Date(dateStart);
+                                var secondDate = new Date();
+                                taskdata.secondDate = secondDate;
+                                taskdata.timewaited = Math.round((firstDate.getTime() - secondDate.getTime()) / (oneDay));
+                                taskdata.timebetween = (metricdata.status === 'In Progress' || metricdata.status === 'Not Started') ? taskdata.timetowait + taskdata.timewaited : null;
+                                metricdata.fromNow = moment(metricdata.date).fromNow();
+                                taskdata.lastmetric = metricdata;
+                            }
+                        });
+                    });
+                    deferred.resolve(mTask);
+                })
+                return deferred.promise;
+            })
+            .then(function() {
+                //logger.trace("Start Calculer les KPI par taches");
+                // Calculer les KPI par taches
+                var deferred = Q.defer();
+
+                // pour chaque tache
+                _.each(mTask.tasks, function(taskdata, index) {
+                    taskdata.kpis = [];
+                    // kpis 
+                    _.each(mTask.kpis, function(kpidata, index) {
+                        taskdata.kpis[index] = {};
+                        var mKPI = taskdata.kpis[index];
+
+                        // on ajoute des caractéristiques aux KPI
+                        //##############################################
+                        mKPI.metricsGroupBy = {};
+                        mKPI.calcul = {};
+                        mKPI.metricsGroupBy.Time = tools.groupMultiBy(taskdata.metrics, ['groupTimeByValue']);
+                        var filteredMetrics = _.filter(taskdata.metrics, function(metric) {
+                            return (taskdata.category === 'Alert') ? metric.groupTimeByValue === moment(new Date()).format("YYYY.MM") : _.last(metric.groupTimeByValue); //filtrer par le mois en cours
+                        });
+                        mKPI.calcul.task = tools.calculKPI(filteredMetrics, kpidata);
+                        mKPI.calcul.taskTime = _.map(mKPI.metricsGroupBy.Time, function(value, key) {
+                            return {
+                                month: key,
+                                valueKPI: tools.calculKPI(value, kpidata)
+                            };
+                        });
+
+                    });
+
+                });
+                deferred.resolve(mTask);
+                return deferred.promise;
+            })
+            .then(function() {
+                // Calculer les KPI par taches
+                var deferred = Q.defer();
+
+                // pour chaque tache
+                _.each(mTask.tasks, function(taskdata, index) {
+                    var actorsObject = _.countBy(taskdata.metrics, function(metric) {
+                        return metric.actor._id;
+                    });
+                    taskdata.actors = _.map(actorsObject, function(value, key) {
+                        return {
+                            _id: key,
+                            name: _.pluck(_.filter(usersList, function(user) {
+                                return (key === user._id.toString())
+                            }), 'name').toString()
+                        };
+                    });
+                    taskdata.watchers = _.map(taskdata.watchers, function(value, key) {
+                        return {
+                            _id: value,
+                            count: 1,
+                            name: _.pluck(_.filter(usersList, function(user) {
+                                return (value === user._id.toString())
+                            }), 'name').toString()
+                        };
+                    });
+                });
+                deferred.resolve(mTask);
+                return deferred.promise;
+            })
+            .then(function() {
+                // Get related dashboards // A revoir car ne marche pas avec plusieurs taches
+                var deferred = Q.defer();
+                // pour chaque tache
+                _.each(mTask.tasks, function(taskdata, index) {
+                    taskdata.dashboards = [];
+                    _.each(dashboards, function(dashboarddata, index) {
+                        if (typeof dashboarddata.context === 'undefined' || dashboarddata.context === '') {
+                            dashboarddata.context = taskdata.context
+                        }
+                        if (typeof dashboarddata.activity === 'undefined' || dashboarddata.activity === '') {
+                            dashboarddata.activity = taskdata.activity
+                        }
+                        if (typeof dashboarddata.context === 'undefined' || taskdata.context.indexOf(dashboarddata.context) >= 0 && typeof dashboarddata.activity === 'undefined' || taskdata.activity.indexOf(dashboarddata.activity) >= 0) {
+                            if (typeof taskdata.dashboards !== 'undefined') {
+                                taskdata.dashboards.push(dashboarddata.toObject());
+                            }
+                        }
+                    });
+
+                });
+                deferred.resolve(mTask);
+                return deferred.promise;
+            })
+            .then(function() {
+                callback(mTask);
+            })
+            .then(null, console.error);
+    },
+    addLastMetric: function(tasks, callback) {
+        Q()
+            .then(function() {
+                var d2 = new Date();
+                var dateNow = d2.toISOString();
+                // Get related metrics
+                var deferred = Q.defer();
+                Metric.find({}, '-__v').sort({
+                    date: 'asc'
+                }).lean().exec(function(err, metric) {
+                    _.each(metric, function(metricdata, index) { // pour chaque metric
+                        _.each(tasks, function(taskdata) { // pour chaque tache
+
+                            // si c'est la première métric, on crèe l'objet
+                            if (typeof taskdata.actors === 'undefined') {
+                                taskdata.actors = []
+                            }
+
+                            // si la metrique est attaché à la tache
+                            if (metricdata.context === taskdata.context && metricdata.activity === taskdata.activity) {
+
+                                // nombre de jours séparant la date de début, fin, entre les deux
+                                metricdata.duration = moment(metricdata.endDate).diff(metricdata.startDate, 'days');
+                                metricdata.timeToBegin = moment(metricdata.startDate).diff(moment(), 'days');
+                                metricdata.timeToEnd = moment(metricdata.endDate).diff(moment(), 'days');
+
+                                // convert to numeric
+                                metricdata.timeSpent = parseFloat(metricdata.timeSpent.replace(',', '.'));
+
+                                // predictedCharge
+                                metricdata.projectedWorkload = (metricdata.progress > 0) ? Math.round(1000 * metricdata.timeSpent * 100 / parseFloat(metricdata.progress)) / 1000 : metricdata.load;
+                                delete metricdata.progressStatus;
+                                // progressStatus
+                                if (metricdata.endDate > taskdata.endDate) {
+                                    switch (metricdata.status) {
+                                        case 'Withdrawn':
+                                        case 'Finished':
+                                            metricdata.progressStatus = 'Late';
+                                            break;
+                                        default:
+                                            if (dateNow > metricdata.endDate && metricdata.date > metricdata.endDate && (metricdata.status === 'In Progress' || metricdata.status === 'Not Started')) {
+                                                metricdata.progressStatus = 'Late';
+                                            } else {
+                                                metricdata.progressStatus = 'At Risk';
+                                            }
+                                    }
+                                } else {
+                                    metricdata.progressStatus = 'On Time';
+                                }
+
+                                // ajouter information par mois 
+                                metricdata.groupTimeByValue = moment(metricdata.date).format("YYYY.MM");
+
+                                //on l'ajoute à la liste
+                                delete metricdata.actor.__v;
+                                delete metricdata.actor.provider;
+                                delete metricdata.actor.email;
+                                delete metricdata.actor.role;
+                                taskdata.actors.push(metricdata.actor);
+                                delete metricdata.actor;
+                                delete taskdata.actor;
+
+                                taskdata.timetowait = 7;
+
+                                // on calcule les temps d'écarts
+                                var oneDay = 24 * 60 * 60 * 1000;
+                                var d = new Date(taskdata.startDate);
+                                var dateStart = d.setDate(d.getDate() - taskdata.timetowait);
+                                var firstDate = (metricdata.date > taskdata.startDate) ? new Date(metricdata.date) : new Date(dateStart);
+                                var secondDate = new Date();
+                                taskdata.timewaited = Math.round((firstDate.getTime() - secondDate.getTime()) / (oneDay));
+                                taskdata.timebetween = (metricdata.status === 'In Progress' || metricdata.status === 'Not Started') ? taskdata.timetowait + taskdata.timewaited : null;
+                                metricdata.fromNow = moment(metricdata.date).fromNow();
+                                taskdata.lastmetric = metricdata;
+
+                                delete taskdata.lastmetric._id;
+                                delete taskdata.lastmetric.context;
+                                delete taskdata.lastmetric.activity;
+                                delete taskdata.lastmetric.taskname;
+                                delete taskdata.lastmetric.color;
+                            }
+                        });
+                    });
+                    deferred.resolve(tasks);
+                })
+                return deferred.promise;
+            })
+            .then(function() {
+                callback(tasks);
+            })
+            .then(null, console.error);
+    },
+    addMetrics: function(tasks, callback) {
+        Q()
+            .then(function() {
+                var d2 = new Date();
+                var dateNow = d2.toISOString();
+                // Get related metrics
+                var deferred = Q.defer();
+                Metric.find({}, '-__v').sort({
+                    date: 'asc'
+                }).lean().exec(function(err, metric) {
+                    _.each(metric, function(metricdata, index) { // pour chaque metric
+                        _.each(tasks, function(taskdata) { // pour chaque tache
+
+                            // si c'est la première métric, on crèe l'objet
+                            if (typeof taskdata.actors === 'undefined') {
+                                taskdata.actors = []
+                            }
+                            // si c'est la première métric, on crèe l'objet
+                            if (typeof taskdata.metrics === 'undefined') {
+                                taskdata.metrics = []
+                            }
+
+                            // si la metrique est attaché à la tache
+                            if (metricdata.context === taskdata.context && metricdata.activity === taskdata.activity) {
+
+                                // nombre de jours séparant la date de début, fin, entre les deux
+                                metricdata.duration = moment(metricdata.endDate).diff(metricdata.startDate, 'days');
+                                metricdata.timeToBegin = moment(metricdata.startDate).diff(moment(), 'days');
+                                metricdata.timeToEnd = moment(metricdata.endDate).diff(moment(), 'days');
+
+                                // convert to numeric
+                                metricdata.timeSpent = parseFloat(metricdata.timeSpent.replace(',', '.'));
+
+                                // predictedCharge
+                                metricdata.projectedWorkload = (metricdata.progress > 0) ? Math.round(1000 * metricdata.timeSpent * 100 / parseFloat(metricdata.progress)) / 1000 : metricdata.load;
+                                delete metricdata.progressStatus;
+                                // progressStatus
+                                if (metricdata.endDate > taskdata.endDate) {
+                                    switch (metricdata.status) {
+                                        case 'Withdrawn':
+                                        case 'Finished':
+                                            metricdata.progressStatus = 'Late';
+                                            break;
+                                        default:
+                                            if (dateNow > metricdata.endDate && metricdata.date > metricdata.endDate && (metricdata.status === 'In Progress' || metricdata.status === 'Not Started')) {
+                                                metricdata.progressStatus = 'Late';
+                                            } else {
+                                                metricdata.progressStatus = 'At Risk';
+                                            }
+                                    }
+                                } else {
+                                    metricdata.progressStatus = 'On Time';
+                                }
+
+                                // ajouter information par mois 
+                                metricdata.groupTimeByValue = moment(metricdata.date).format("YYYY.MM");
+
+                                //on l'ajoute à la liste
+                                taskdata.metrics.push(metricdata);
+
+                                //on l'ajoute à la liste
+                                delete metricdata.actor.__v;
+                                delete metricdata.actor.provider;
+                                delete metricdata.actor.email;
+                                delete metricdata.actor.role;
+                                taskdata.actors.push(metricdata.actor);
+                                delete metricdata.actor;
+                                delete taskdata.actor;
+
+                                taskdata.timetowait = 7;
+
+                                // on calcule les temps d'écarts
+                                var oneDay = 24 * 60 * 60 * 1000;
+                                var d = new Date(taskdata.startDate);
+                                var dateStart = d.setDate(d.getDate() - taskdata.timetowait);
+                                var firstDate = (metricdata.date > taskdata.startDate) ? new Date(metricdata.date) : new Date(dateStart);
+                                var secondDate = new Date();
+                                taskdata.timewaited = Math.round((firstDate.getTime() - secondDate.getTime()) / (oneDay));
+                                taskdata.timebetween = (metricdata.status === 'In Progress' || metricdata.status === 'Not Started') ? taskdata.timetowait + taskdata.timewaited : null;
+                                metricdata.fromNow = moment(metricdata.date).fromNow();
+                                taskdata.lastmetric = metricdata;
+
+                                delete taskdata.lastmetric._id;
+                                delete taskdata.lastmetric.context;
+                                delete taskdata.lastmetric.activity;
+                                delete taskdata.lastmetric.taskname;
+                                delete taskdata.lastmetric.color;
+                            }
+                        });
+                    });
+                    deferred.resolve(tasks);
+                })
+                return deferred.promise;
+            })
+            .then(function() {
+                callback(tasks);
+            })
+            .then(null, console.error);
+    },
+    filterTasks: function(tasks, req, callback) {
+        var filteredTasks = [];
+        Q()
+            .then(function() {
+                var deferred = Q.defer();
+                _.each(tasks, function(taskdata) { // pour chaque tache
+                    if (typeof req.query.status !== 'undefined' && typeof taskdata.lastmetric !== 'undefined') {
+                        if (taskdata.lastmetric.status === 'In Progress' || taskdata.lastmetric.status === 'Not Started') {
+                            filteredTasks.push(taskdata);
+                        }
+                    } else {
+                        filteredTasks.push(taskdata);
+                    }
+                });
+                deferred.resolve(filteredTasks);
+                return deferred.promise;
+            })
+            .then(function() {
+                callback(filteredTasks);
             })
             .then(null, console.error);
     },

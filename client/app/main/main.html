@@ -84,18 +84,25 @@
         <div class="portlet">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-bell-o"></i>Notifications
+                    <i class="fa fa-bell-o"></i>myTasks
                 </div>
                 <div class="tools">
                     <div class="actions pull-right" style="margin-top:-10px;padding-right:15px">
                         <div class="btn-group" style="background:#FFFFFF">
-                            <a class="btn dropdown-toggle" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">  Show : {{filterNotification}} <i class="fa fa-angle-down"></i></a>
-                            <ul class="dropdown-menu pull-right">
+                            <a class="btn dropdown-toggle" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">  Filter : {{filterNotification}} <i class="fa fa-angle-down"></i></a>
+                            <ul class="dropdown-menu pull-right" style="width:300px">
                                 <li>
-                                    <a href="#" ng-click="filterNotification='All'">All  <span class="badge badge-default"> {{alltasksToNotify}} </span></a>
+                                    <a href="#" ng-click="filterNotification='Actor view'"><b>Actor view</b> <small class="text-muted">(My active tasks)</small></a>
                                 </li>
                                 <li>
-                                    <a href="#" ng-click="filterNotification='Only For Me'">Only For Me<span class="badge badge-success"> {{mytasksToNotify}} </span></a>
+<!--                                 <a class="trigger right-caret"><b>Manager View </b><small class="text-muted">(Tasks from your dashboards)</small> </a>
+                                    <ul class="dropdown-menu sub-menu">
+                                    <li ng-if="dashboards" ng-repeat="dashboard in dashboards | orderBy:'name' track by dashboard._id">
+                                        <li><a href="#" ng-click="filterNotification='Manager view';filterDashboard=dashboard._id">{{dashboard.name}}</a></li>
+                                    </ul>
+                                </li> -->
+                                <li>
+                                    <a href="#" ng-click="filterNotification='God view'"><b>God View </b><small class="text-muted">(All tasks)</small></a>
                                 </li>
                             </ul>
                         </div>
@@ -103,12 +110,16 @@
                 </div>
             </div>
             <div class="portlet-body">
-                <div class="isloading" ng-if="!alltasksToNotify">Loading
+                <div class="isloading" ng-if="!tasksToNotify">Loading
                     <br/><img src="assets/images/ajax-loader_blue.gif">
                 </div>
                 <!--BEGIN TABS-->
                 <tabset>
-                    <tab heading="Metrics">
+                    <tab>
+                        <tab-heading>
+                            Tasks 
+                            <span class="badge badge-default" > {{tasksToNotify.length}}</span>
+                        </tab-heading>
                         <div class="scroller" style="height:300px;overflow:auto" data-always-visible="1" data-rail-visible="0">
                             <ul class="feeds">
                                 <li ng-repeat="task in tasksToNotify | orderBy:'timebetween'">
@@ -135,7 +146,7 @@
                                             <div class="date">
                                                 <span style="color:red" ng-show="task.timebetween <= 0 && task.timebetween !== null ">{{ Math.abs(task.timebetween) }} days ago</span>
                                                 <span ng-show="task.timebetween > 0 && task.timebetween !== null">in {{ Math.abs(task.timebetween) }} days </span>
-                                                <span style="color:orange" ng-show="task.timebetween === null"> no defined KPI </span>
+                                                <span style="color:orange" ng-show=" task.lastmetric === 'undefined'"> No metrics </span>
                                             </div>
                                         </div>
                                     </a>
@@ -145,7 +156,7 @@
                     </tab>
                     <tab>
                         <tab-heading>
-                            Close Supervising
+                            Need Supervising
                             <span class="badge badge-danger"> {{taskToSupervise.length}}</span>
                         </tab-heading>
                         <div class="scroller" style="height: 300px;overflow:auto" data-always-visible="1" data-rail-visible="0">

@@ -29,8 +29,7 @@
                           </span>&nbsp;
                           {{taskAlert.name}}
                           <span class="time pull-right" style="color:red" ng-show="taskAlert.timebetween <= 0 && taskAlert.timebetween !== null ">{{taskAlert.timebetween}} days ago</span>
-                          <span class="time pull-right" ng-show="taskAlert.timebetween > 0 && taskAlert.timebetween !== null" >in {{taskAlert.timebetween}} days </span>
-                          <span class="time pull-right" style="color:orange" ng-show="taskAlert.timebetween === null" > no defined KPI </span>
+                          <span class="time pull-right" style="color:red" ng-show="taskAlert.lastmetric.progressStatus !== 'On Time'" > {{taskAlert.lastmetric.progressStatus}}  </span>
                         </a>
                       </li>
                     </ul>

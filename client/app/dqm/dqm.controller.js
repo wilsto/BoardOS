@@ -34,7 +34,7 @@ angular.module('boardOsApp')
                         }
                     });
                     paths = _.sortBy(paths, 'longname');
-                    
+
                     $scope.paths = _.uniq(paths, true, function(x) {
                         return x.longname;
                     });
@@ -82,6 +82,9 @@ angular.module('boardOsApp')
             $http.get('/api/hierarchies/merge/' + $scope.HierarchyType).success(function() {
                 $scope.load();
             });
+        };
+
+        $scope.ValidPath = function() {
 
         };
 

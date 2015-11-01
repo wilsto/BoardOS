@@ -1,10 +1,14 @@
 # Change Log
 
-## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD) (2015-10-31)
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD) (2015-11-01)
 
 [Full Changelog](https://github.com/wilsto/boardos/compare/v0.16.1...HEAD)
 
 **Implemented enhancements:**
+
+- Améliorer performance dashboards [\#123](https://github.com/wilsto/BoardOS/issues/123)
+
+- Améliorer performance page d'accueil [\#122](https://github.com/wilsto/BoardOS/issues/122)
 
 - Statut des taches passent en delayed si en cours et dépassé [\#120](https://github.com/wilsto/BoardOS/issues/120)
 

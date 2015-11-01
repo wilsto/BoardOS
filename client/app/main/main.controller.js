@@ -4,7 +4,24 @@ angular.module('boardOsApp')
     .controller('MainCtrl', function($scope, $http, myLibrary, Auth) {
 
         $scope.Math = window.Math;
-        $scope.filterNotification = 'Only For Me';
+        Auth.getCurrentUser(function(data) {
+            $scope.currentUser = data;
+            /*            if ($scope.currentUser.role === 'user') {
+                $scope.filterNotification = 'Actor view';
+            } else {
+                $scope.filterNotification = 'Manager view';
+            }*/
+
+            $scope.filterNotification = 'Actor view';
+            $scope.loadKPIs();
+            $scope.loadTasks();
+            $scope.loadMetrics();
+            $scope.loadTaskToNotify();
+            $scope.loadDashBoard();
+            //$scope.loadDashBoards();
+        });
+
+        //$scope.loadLog();
 
         $scope.loadKPIs = function() {
             $http.get('/api/KPIs/list').success(function(KPIs) {
@@ -18,11 +35,11 @@ angular.module('boardOsApp')
         };
 
         $scope.loadTasks = function() {
-            $scope.dataTasks = [{
-                values: []
-            }];
-            $http.get('/api/tasks/countByMonth').success(function(tasks) {
 
+            $http.get('/api/tasks/countByMonth').success(function(tasks) {
+                $scope.dataTasks = [{
+                    values: []
+                }];
                 $scope.tasksNb = tasks.reduce(function(pv, cv) {
                     return pv + cv.value;
                 }, 0);
@@ -31,14 +48,14 @@ angular.module('boardOsApp')
         };
 
         $scope.loadMetrics = function() {
-            $scope.dataMetrics = [{
-                values: []
-            }];
-            $scope.dataConfidence = [{
-                values: []
-            }];
+
             $http.get('/api/metrics/countByMonth').success(function(metrics) {
-                
+                $scope.dataMetrics = [{
+                    values: []
+                }];
+                $scope.dataConfidence = [{
+                    values: []
+                }];
                 $scope.metricsNb = metrics.reduce(function(pv, cv) {
                     return pv + cv.value.count;
                 }, 0);
@@ -53,102 +70,115 @@ angular.module('boardOsApp')
             });
         };
 
-        $scope.loadDashBoard = function() {
-            Auth.getCurrentUser(function(data) {
-                $scope.currentUser = data;
 
-                $http.get('/api/dashboards/user/' + $scope.currentUser._id).success(function(dashboards) {
-                    $scope.dashboards = dashboards.dashboards;
+
+        $scope.loadDashBoards = function() {
+            var myparams = {
+                params: {
+                    userId: $scope.currentUser._id,
+                }
+            };
+            $http.get('/api/dashboards/list/', myparams).success(function(dashboards) {
+                _.each(dashboards, function(dashboard) {
+                    $scope.dashboards = dashboards;
                     $scope.dataDashboards = dashboards;
-
-                    $scope.loadTaskToNotify();
-
-                    _.each(dashboards.dashboards, function(dashboard) {
-                        dashboard.openTasks = _.filter(dashboard.tasks, function(task) {
-                            if (typeof task.lastmetric === 'undefined' || task.lastmetric.status === 'In Progress' || task.lastmetric.status === 'Not Started') {
-                                return true;
-                            }
-                        });
-                        dashboard.tasksNeedMetrics = _.filter(dashboard.tasks, function(task) {
-                            if (typeof task.lastmetric === 'undefined' || task.timebetween <= 0 && task.timebetween !== null) {
-                                return true;
-                            }
-                        });
+                    $http.get('/api/dashboards/quick/' + dashboard._id).success(function(dashboard) {
+                        
                     });
+                });
+            });
+        };
 
-                    $scope.dataGoals = [{
-                        values: []
-                    }];
-                    $scope.dataAlerts = [{
-                        values: []
-                    }];
+        $scope.loadDashBoard = function() {
 
-                    var dataGoals = [];
-                    var dataAlerts = [];
-                    _.forEach($scope.dataDashboards.kpis, function(kpi) {
-                        var kpiAlerts = [];
-                        var kpiGoals = [];
 
-                        if (kpi.category === 'Goal') {
+            $http.get('/api/dashboards/user/' + $scope.currentUser._id).success(function(dashboards) {
+                $scope.dashboards = dashboards.dashboards;
+                $scope.dataDashboards = dashboards;
 
-                            var goalsByMonth = _.pluck(myLibrary.getByMonth(kpi.calcul.taskTime, 'month', 'value'), 'mean');
-                            dataGoals.push(goalsByMonth);
-                            kpiGoals.push(goalsByMonth);
-
-                            kpi.calcul.time = _.map(myLibrary.getCalculByMonth(kpiGoals), function(data) {
-                                return {
-                                    month: data.label,
-                                    valueKPI: data.mean
-                                };
-                            });
-                        }
-                        if (kpi.category === 'Alert') {
-
-                            var alertsByMonth = _.pluck(myLibrary.getByMonth(kpi.calcul.taskTime, 'month', 'value'), 'mean');
-                            kpiAlerts.push(alertsByMonth);
-                            dataAlerts.push(alertsByMonth);
+                _.each(dashboards.dashboards, function(dashboard) {
+                    dashboard.openTasks = _.filter(dashboard.tasks, function(task) {
+                        if (typeof task.lastmetric === 'undefined' || task.lastmetric.status === 'In Progress' || task.lastmetric.status === 'Not Started') {
+                            return true;
                         }
                     });
-
-                    $scope.dataGoals[0].values = myLibrary.getCalculByMonth(dataGoals);
-                    $scope.dataAlerts[0].values = myLibrary.getCalculByMonth(dataAlerts);
-                    $scope.goalsNb = _.last($scope.dataGoals[0].values).mean;
-                    $scope.alertsNb = _.last($scope.dataAlerts[0].values).sum;
-
-
-                    //calcul goals and alerts per dashboard
-                    _.forEach(dashboards.dashboards, function(dashboard, key) {
-                        dashboard.nbGoals = 0;
-                        dashboard.nbAlerts = 0;
-                        var dataGoals = [];
-                        var dataAlerts = [];
-
-                        // pour chaque KPI du dashboard
-                        _.forEach(dashboard.kpis, function(kpi, key) {
-                            var kpiGoals = [];
-                            var kpiAlerts = [];
-                            if (kpi.category === 'Goal') {
-                                dataGoals.push(kpi.calcul.task);
-                            }
-
-                            if (kpi.category === 'Alert') {
-                                dataAlerts.push(kpi.calcul.task);
-                            }
-
-                        });
-                        var sumGoals = _.reduce(dataGoals, function(sumGoals, kpicalcul) { // sum
-                            return sumGoals + kpicalcul;
-                        });
-                        dashboard.dataGoals = (dataGoals.length > 0) ? parseInt(sumGoals / dataGoals.length) : '-';
-                        var sumAlerts = _.reduce(dataAlerts, function(sumAlerts, kpicalcul) { // sum
-                            return sumAlerts + kpicalcul;
-                        });
-                        dashboard.dataAlerts = sumAlerts;
+                    dashboard.tasksNeedMetrics = _.filter(dashboard.tasks, function(task) {
+                        if (typeof task.lastmetric === 'undefined' || task.timebetween <= 0 && task.timebetween !== null) {
+                            return true;
+                        }
                     });
                 });
 
-            });
+                $scope.dataGoals = [{
+                    values: []
+                }];
+                $scope.dataAlerts = [{
+                    values: []
+                }];
 
+                var dataGoals = [];
+                var dataAlerts = [];
+                _.forEach($scope.dataDashboards.kpis, function(kpi) {
+                    var kpiAlerts = [];
+                    var kpiGoals = [];
+
+                    if (kpi.category === 'Goal') {
+
+                        var goalsByMonth = _.pluck(myLibrary.getByMonth(kpi.calcul.taskTime, 'month', 'value'), 'mean');
+                        dataGoals.push(goalsByMonth);
+                        kpiGoals.push(goalsByMonth);
+
+                        kpi.calcul.time = _.map(myLibrary.getCalculByMonth(kpiGoals), function(data) {
+                            return {
+                                month: data.label,
+                                valueKPI: data.mean
+                            };
+                        });
+                    }
+                    if (kpi.category === 'Alert') {
+
+                        var alertsByMonth = _.pluck(myLibrary.getByMonth(kpi.calcul.taskTime, 'month', 'value'), 'mean');
+                        kpiAlerts.push(alertsByMonth);
+                        dataAlerts.push(alertsByMonth);
+                    }
+                });
+
+                $scope.dataGoals[0].values = myLibrary.getCalculByMonth(dataGoals);
+                $scope.dataAlerts[0].values = myLibrary.getCalculByMonth(dataAlerts);
+                $scope.goalsNb = _.last($scope.dataGoals[0].values).mean;
+                $scope.alertsNb = _.last($scope.dataAlerts[0].values).sum;
+
+
+                //calcul goals and alerts per dashboard
+                _.forEach(dashboards.dashboards, function(dashboard, key) {
+                    dashboard.nbGoals = 0;
+                    dashboard.nbAlerts = 0;
+                    var dataGoals = [];
+                    var dataAlerts = [];
+
+                    // pour chaque KPI du dashboard
+                    _.forEach(dashboard.kpis, function(kpi, key) {
+                        var kpiGoals = [];
+                        var kpiAlerts = [];
+                        if (kpi.category === 'Goal') {
+                            dataGoals.push(kpi.calcul.task);
+                        }
+
+                        if (kpi.category === 'Alert') {
+                            dataAlerts.push(kpi.calcul.task);
+                        }
+
+                    });
+                    var sumGoals = _.reduce(dataGoals, function(sumGoals, kpicalcul) { // sum
+                        return sumGoals + kpicalcul;
+                    });
+                    dashboard.dataGoals = (dataGoals.length > 0) ? parseInt(sumGoals / dataGoals.length) : '-';
+                    var sumAlerts = _.reduce(dataAlerts, function(sumAlerts, kpicalcul) { // sum
+                        return sumAlerts + kpicalcul;
+                    });
+                    dashboard.dataAlerts = sumAlerts;
+                });
+            });
         };
 
         $scope.loadLog = function() {
@@ -157,7 +187,41 @@ angular.module('boardOsApp')
             });
         };
 
+
         $scope.loadTaskToNotify = function() {
+            var myparams;
+            if ($scope.filterNotification === 'Actor view') {
+                myparams = {
+                    params: {
+                        userId: $scope.currentUser._id,
+                        status: 'Open',
+                    }
+                };
+            } else {
+                if ($scope.filterNotification === 'Manager view') {
+                    myparams = {
+                        params: {
+                            userId: $scope.currentUser._id,
+                            dashboardFilter: true,
+                            status: 'Open',
+                        }
+                    };
+                } else {
+
+                    myparams = {
+                        params: {
+                            status: 'Open',
+                        }
+                    };
+                }
+            }
+
+            $http.get('/api/tasks/list', myparams).success(function(tasks) {
+                $scope.tasksToNotify = tasks;
+            });
+        };
+
+        $scope.loadTaskToNotify2 = function() {
             if (typeof $scope.dataDashboards !== 'undefined') {
 
                 var openTasks = _.filter($scope.dataDashboards.tasks, function(task) {
@@ -219,11 +283,6 @@ angular.module('boardOsApp')
             };
         };
 
-        $scope.loadDashBoard();
-        $scope.loadKPIs();
-        $scope.loadTasks();
-        $scope.loadMetrics();
-        //$scope.loadLog();
 
         $scope.options = {
             chart: {
@@ -271,4 +330,23 @@ angular.module('boardOsApp')
         };
         $scope.optionsConfidence = angular.copy($scope.options);
         $scope.optionsConfidence.chart.color = ['#bcbd22'];
+
+    /*        $(function() {
+            $('.dropdown-menu > li > a.trigger').on('click', function(e) {
+                var current = $(this).next();
+                var grandparent = $(this).parent().parent();
+                if ($(this).hasClass('left-caret') || $(this).hasClass('right-caret'))
+                    $(this).toggleClass('right-caret left-caret');
+                grandparent.find('.left-caret').not(this).toggleClass('right-caret left-caret');
+                grandparent.find('.sub-menu:visible').not(current).hide();
+                current.toggle();
+                e.stopPropagation();
+            });
+            $('.dropdown-menu > li > a:not(.trigger)').on('click', function() {
+                var root = $(this).closest('.dropdown');
+                root.find('.left-caret').toggleClass('right-caret left-caret');
+                root.find('.sub-menu:visible').hide();
+            });
+        });*/
+
     });

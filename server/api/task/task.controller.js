@@ -42,25 +42,56 @@ exports.list = function(req, res) {
     Q()
         .then(function() {
             // Get related tasks
+
+            var perimeterFilter = true
+            var userFilter = true;
+
             var deferred = Q.defer();
-            Task.find({}).lean().exec(function(err, tasks) {
+            Task.find({}, '-__v').sort({
+                date: 'asc'
+            }).lean().exec(function(err, tasks) {
                 mTasks = [];
                 _.each(tasks, function(rowdata, index) {
+
+                    // Si la query restreint le périmètre
                     if (typeof req.query.context !== 'undefined' && typeof req.query.activity !== 'undefined') {
+                        // activation du filtre
+                        perimeterFilter = false;
                         if (rowdata.context.indexOf(req.query.context) >= 0 && rowdata.activity.indexOf(req.query.activity) >= 0) {
-                            mTasks.push(rowdata);
+                            perimeterFilter = true;
                         }
-                    } else {
+                    }
+
+                    // Si la query restreint le user
+                    //console.log('req.query.userId', req.query.userId);
+                    if (typeof req.query.userId !== 'undefined') {
+                        userFilter = false;
+                        if (rowdata.actor._id === req.query.userId) {
+                            userFilter = true;
+                        }
+                    }
+
+                    if (perimeterFilter && userFilter) {
                         mTasks.push(rowdata);
                     }
                 });
+
+
+
                 deferred.resolve(mTasks);
             });
             return deferred.promise;
         })
-        .then(function() {
-            return res.status(200).json(mTasks);
-        });
+
+    // aller chercher la last métrique
+    .then(function() {
+        getData.addLastMetric(mTasks, function(mTasks) {
+            getData.filterTasks(mTasks, req, function(mTasks) {
+                return res.status(200).json(mTasks);
+            })
+        })
+    })
+
 };
 
 
@@ -133,6 +164,31 @@ exports.show = function(req, res) {
 
     });
 };
+
+// Get a single task
+exports.showList = function(req, res) {
+    getData.fromTask(req, function(myTasks) {
+        _.each(myTasks.tasks, function(rowtask, index) {
+            delete rowtask.dashboards;
+            delete rowtask.kpis;
+            delete rowtask.metrics;
+            delete rowtask.secondDate;
+            delete rowtask.actor;
+            if (rowtask.watchers.length < 1) {
+                delete rowtask.watchers;
+            }
+            if (rowtask.lastmetric) {
+                delete rowtask.lastmetric._id;
+                delete rowtask.lastmetric.context;
+                delete rowtask.lastmetric.activity;
+                delete rowtask.lastmetric.actor;
+                delete rowtask.lastmetric.taskname;
+            }
+        });
+        return res.json(200, myTasks.tasks);
+    });
+};
+
 
 // Get a single task
 exports.show2 = function(req, res) {
@@ -434,10 +490,9 @@ exports.globalChange = function(req, res) {
                             });
                         }
                     );
-
-                    return res.send(201);
                 });
             });
+            return res.send(201);
         });
 };
 

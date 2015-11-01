@@ -95,7 +95,7 @@ describe('Controller: MainCtrl', function() {
 
     it('should define filter for Notification at first', function() {
         var controller = createController();
-        expect(scope.filterNotification).toBe('Only For Me');
+        expect(scope.filterNotification).toBeDefined();
     });
 
 

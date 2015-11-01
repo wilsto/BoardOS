@@ -86,8 +86,8 @@
             <tbody>
               <tr ng-repeat="task in tasks | filter:filter()">
                 <td style="text-align: center">
-                   <div popover-html-unsafe="Name : <b>{{task.actor.name}}</b> </br> Role : <b>{{task.actor.role}}</b> " popover-trigger="mouseenter" popover-title="Owner Identity" popover-placement="right" >
-                 <img alt="" ng-src="assets/images/avatars/{{task.actor._id}}.png"  class="img-circle" style="width:30px;" err-src="assets/images/avatars/avatar.png"/>
+                   <div popover-html-unsafe="<b>{{task.actors[0].name}}</b>" popover-trigger="mouseenter" popover-title="Owner Identity" popover-placement="right" >
+                 <img alt="" ng-src="assets/images/avatars/{{task.actors[0]._id}}.png"  class="img-circle" style="width:30px;" err-src="assets/images/avatars/avatar.png"/>
                  </div>
                 </td>
                <td >
