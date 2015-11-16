@@ -129,7 +129,7 @@ module.exports = {
                                 metricdata.timeToEnd = moment(metricdata.endDate).diff(moment(), 'days');
 
                                 // convert to numeric
-                                metricdata.timeSpent = parseFloat(metricdata.timeSpent.replace(',', '.'));
+                                metricdata.timeSpent = parseFloat(String(metricdata.timeSpent).replace(',', '.'));
 
                                 // predictedCharge
                                 metricdata.projectedWorkload = (metricdata.progress > 0) ? Math.round(1000 * metricdata.timeSpent * 100 / parseFloat(metricdata.progress)) / 1000 : metricdata.load;
