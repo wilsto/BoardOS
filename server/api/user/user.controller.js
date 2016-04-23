@@ -46,7 +46,7 @@ exports.create = function(req, res, next) {
 
         postmark.send({
             'From': 'donotreply' + '@' + 'boardos' + '.' + 'com',
-            'To': 'willy' + '.' + 'stophe' + '@' + 'fr' + '.' + 'netgrs' + 'com',
+            'To': 'willy' + '.' + 'stophe' + '@' + 'fr' + '.' + 'netgrs' + '.' + 'com',
             'Subject': 'New Registration to BOSS',
             'TextBody': 'A new user [' + user.name + '] (' + user.email + ') has registered to BOSS',
             'HtmlBody': 'A new user [' + user.name + '] (' + user.email + ') has registered to BOSS'

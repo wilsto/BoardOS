@@ -19,7 +19,15 @@ var UserSchema = new Schema({
     provider: String,
     salt: String,
     google: {},
-    github: {}
+    github: {},
+    create_date: {
+        type: Date,
+        default: Date.now
+    },
+    last_connection_date: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 /**
@@ -98,7 +106,7 @@ UserSchema
     .path('email')
     .validate(function(email) {
         if (authTypes.indexOf(this.provider) !== -1) return true;
-        return (email.match(/(@fr.netgrs.com|@keyrus.com|@lincoln.com|@servier.com)/gmi));
+        return (email.match(/(@fr.netgrs.com|@keyrus.com|@lincoln.com|@servier.com|.pro@gmail.com)/gmi));
     }, 'The specified email address is not from a valid domain');
 
 var validatePresenceOf = function(value) {

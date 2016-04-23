@@ -1,4 +1,5 @@
 // Generated on 2015-01-16 using generator-angular-fullstack 2.0.13
+/* jshint node: true */
 'use strict';
 
 module.exports = function(grunt) {

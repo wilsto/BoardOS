@@ -94,7 +94,11 @@
 				{{user._id}}
 			</td>
 			<td class="action-links">
-				<a href="" class="delete" ng-click="delete(user)">
+				<a href="" class="btn btn-warning" ng-click="reset(user)">
+					<i class="linecons-trash"></i>
+					Reset
+				</a>
+				<a href="" class="btn btn-danger" ng-click="delete(user)">
 					<i class="linecons-trash"></i>
 					Delete
 				</a>

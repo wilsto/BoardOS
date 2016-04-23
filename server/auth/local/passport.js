@@ -18,6 +18,10 @@ exports.setup = function (User, config) {
         if (!user.authenticate(password)) {
           return done(null, false, { message: 'This password is not correct.' });
         }
+        user.last_connection_date = Date.now();
+        user.save(function(err) {
+            if (err) console.log(err);  
+        });
         return done(null, user);
       });
     }
