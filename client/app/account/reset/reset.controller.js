@@ -5,7 +5,7 @@ angular.module('boardOsApp')
         $scope.user = {};
         $scope.reset = function(form) {
             var token = $stateParams.token;
-            console.log('token',token);
+            
 
             if ($scope.user.password && $scope.user.confirm) {
                 $http.get('/auth/reset', {
