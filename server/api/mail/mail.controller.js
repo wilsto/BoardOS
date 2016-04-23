@@ -123,7 +123,7 @@ exports.index = function(req, res) {
 
                 var email = new sendgrid.Email({
                     to: user.email,
-                    from: 'donotreply' + '@' + 'boardos' + '.' + 'com',
+                    from: 'willy' + '@' + 'stophe' + '.' + 'fr',
                     subject: moment().format('DD MMMM YYYY'),
                     text: 'BOSS Reminder',
                     html: textUser,
