@@ -6,7 +6,10 @@
 
 **Implemented enhancements:**
 
+- Revue design dashboard [\#127](https://github.com/wilsto/BoardOS/issues/127)
+- Revue Design Main [\#126](https://github.com/wilsto/BoardOS/issues/126)
 - Ajouter la date de dernière connection [\#125](https://github.com/wilsto/BoardOS/issues/125)
+- Créer un lien pour récupérer le password [\#124](https://github.com/wilsto/BoardOS/issues/124)
 - Améliorer performance dashboards [\#123](https://github.com/wilsto/BoardOS/issues/123)
 - Améliorer performance page d'accueil [\#122](https://github.com/wilsto/BoardOS/issues/122)
 - Statut des taches passent en delayed si en cours et dépassé [\#120](https://github.com/wilsto/BoardOS/issues/120)

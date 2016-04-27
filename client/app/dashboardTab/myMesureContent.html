@@ -4,7 +4,6 @@
         <div class="row" style="margin:-15px">
             <div class="col-md-4" style='background:lightgrey;padding-left:30px'>
                 <h3 style="text-align:center; padding-bottom:25px">Task Information</h3>
-
                 <div class="row">
                     <div class="col-md-12">
                         <h4 style="font-size:14px">Context</h4>
@@ -27,9 +26,9 @@
                         <p class="input-group">
                             <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.startDate" is-open="opened2" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer" />
                             <span class="input-group-btn">
-							<button class="btn btn-default" ng-click="open2($event)">
-								<span class="glyphicon glyphicon-chevron-down">
-								</span>
+                            <button class="btn btn-default" ng-click="open2($event)">
+                                <span class="glyphicon glyphicon-chevron-down">
+                                </span>
                             </button>
                             </span>
                         </p>
@@ -45,9 +44,9 @@
                         <p class="input-group">
                             <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.endDate" is-open="opened3" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer" />
                             <span class="input-group-btn">
-								<button class="btn btn-default" ng-click="open3($event)">
-									<span class="glyphicon glyphicon-chevron-down">
-									</span>
+                                <button class="btn btn-default" ng-click="open3($event)">
+                                    <span class="glyphicon glyphicon-chevron-down">
+                                    </span>
                             </button>
                             </span>
                         </p>
@@ -65,8 +64,6 @@
                     </div>
                 </div>
             </div>
-
-
             <div class="col-md-8">
                 <h3 style="text-align:center; padding-bottom:25px">Enter Metric Information</h3>
                 <div class="row">
@@ -76,17 +73,16 @@
                             </label>
                             <input type="text" name="timeSpent" class="form-control" ng-model="formData.timeSpent" ng-required>
                             <span class="help-block">
-							</span>
+                            </span>
                         </p>
                     </div>
                     <div class="col-md-6">
                         <p class="input-group">
-
                             <label>Progress <small class="text-muted">(in %)</small>
                             </label><span class="label pull-right" ng-class="{'label-info':formData.status =='In Progress','label-success':formData.status =='Finished','label-warning':formData.status =='Not Started','label-danger':formData.status =='Error' }">{{formData.status}}  </span>
                             <input type="text" name="progress" ng-required class="form-control" ng-model="formData.progress" placeholder="min:0 - max:100 - unit:%">
                             <span class="help-block">
-							</span>
+                            </span>
                         </p>
                     </div>
                 </div>
@@ -96,7 +92,7 @@
                             <label>Progress Status </label>
                             <input type="text" name="progressStatus" class="form-control" ng-model="formData.progressStatus" typeahead-on-select="$item" typeahead="statut.value for statut in constant.progressStatusTask  | limitTo:8">
                             <span class="help-block">
-							</span>
+                            </span>
                         </p>
                     </div>
                     <div class="col-md-6">
@@ -105,8 +101,7 @@
                             </label>
                             <input type="text" ng-required name="trust" class="form-control" ng-model="formData.trust">
                             <span class="help-block">
-							</span>
-
+                            </span>
                         </p>
                     </div>
                 </div>
@@ -117,7 +112,7 @@
                             </label>
                             <input type="text" name="deliverableStatus" class="form-control" ng-model="formData.deliverableStatus">
                             <span class="help-block">
-							</span>
+                            </span>
                         </p>
                     </div>
                     <div class="col-md-6">
@@ -126,8 +121,7 @@
                             </label>
                             <input type="text" name="userSatisfaction" class="form-control" ng-model="formData.userSatisfaction">
                             <span class="help-block">
-							</span>
-
+                            </span>
                         </p>
                     </div>
                 </div>
@@ -144,7 +138,7 @@
                             </label>
                             <input type="text" name="actorSatisfaction" class="form-control" ng-model="formData.actorSatisfaction" />
                             <span class="help-block">
-							</span>
+                            </span>
                         </p>
                     </div>
                 </div>
@@ -174,5 +168,4 @@
             </div>
         </div>
     </div>
-
 </form>

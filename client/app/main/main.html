@@ -298,35 +298,33 @@
                     <table class="table table-striped  table-hover dataTable no-footer " role="grid">
                         <thead>
                                    <tr >
-                                   <th style="width:50%">
+                                   <th colspan="2" style="width:60%">
                                     Name
                                 </th>
                                 <th colspan="3" style="width:30%;text-align: center;">
                                    Tasks 
                                 </th>
-                                <th colspan="2" style="width:20%;text-align: center; ">
-                                   KPIs 
+                                <th  style="width:10%;text-align: center; ">
                                 </th>
 
                                    </tr>
                             <tr role="row" style="height:10px">
-                                <th style="width:50%;padding:0">
+                                <th style="width:55%;padding:0">
                                 </th>
-                                <th style="width:10%;text-align: center;">
-                                  <small class="text-muted"> On Going </small>
-                                </th>
-                                <th style="width:10%;text-align: center;">
-                                  <small class="text-muted"> To feed</small>
-                                </th>
-                                <th style="width:10%;text-align: center;">
-                                  <small class="text-muted"> All</small>
-                                </th>
-
-                                <th style="background:#eee;width:10%;text-align: center; ">
+                                <th style="background:#eee;width:15%;text-align: center; ">
                                    <small class="text-muted">Goals</small>
                                 </th>
-                                <th style="background:#eee;width:10%;text-align: center; ">
-                                   <small class="text-muted"> Alerts</small>
+                                <th style="width:8%;text-align: right;">
+                                  <small class="text-muted"> On Going </small>
+                                </th>
+                                <th style="font-size:11px;width:5%;text-align: left;">
+                                  <small style="color:#EE6A50" > To feed</small>
+                                </th>
+                                <th style="width:8%;text-align: left;">
+                                  <small class="text-muted"> All</small>
+                                </th>
+                                <th style="background:#eee;width:8%;text-align: center; ">
+                                   <small class="text-muted" > Alerts</small>
                                 </th>
                             </tr>
                         </thead>
@@ -337,18 +335,20 @@
                                         <span style="font-size:15px"><a href="/dashboard/{{dashboard._id}}" >{{dashboard.name}} </a></span>
                                     </div>
                                 </td>
-                                <td style="font-size:18px;text-align: center;">
-                                    <span style="color:lightblue">{{dashboard.openTasks.length}}</span> 
-                                </td>
-                                <td style="font-size:18px;text-align: center;">
-                                    <span style="color:#EE6A50">{{dashboard.tasksNeedMetrics.length}}</span>
-                                </td>                                
-                                <td style="font-size:18px;text-align: center;">
-                                    <span style="color:lightgrey">{{dashboard.tasks.length}}</span>
-                                </td>
                                 <td style="background:#eee;text-align: center;   ">
+                                    <span class="badge" ng-style="goalBgColor(dashboard.dataGoals)" style="height:15px;line-height:10px;width:15px;margin-right: 15px">&nbsp;&nbsp;</span>
                                     <span ng-style="goalColor(dashboard.dataGoals)" style="font-size:22px">{{dashboard.dataGoals}}<span style="font-size:15px" ng-if="dashboard.dataGoals !== '-'">% </span></span> <span class="badge" style="background:green;width:25px;font-size:15px" ng-if="dashboard.dataGoals === '####'">{{dashboard.nbGoals}}</span>
                                 </td>
+                                <td style="font-size:18px;text-align: right;">
+                                    <span style="color:#316BCD">{{dashboard.openTasks.length}}</span> 
+                                </td>
+                                <td style="font-size:11px;text-align: left;padding-top:10px">
+                                    <span style="color:#EE6A50">{{dashboard.tasksNeedMetrics.length}}</span>
+                                </td>                                
+                                <td style="font-size:18px;text-align: left;">
+                                    <span style="color:lightgrey">{{dashboard.tasks.length}}</span>
+                                </td>
+
                                 <td style="background:#eee;text-align: center;   ">
                                     <span ng-style="alertColor(dashboard.dataAlerts)" style="font-size:22px">{{dashboard.dataAlerts}}</span><span style="color:lightgrey;font-size:15px" ng-if="dashboard.dataGoals === '####'"> /{{dashboard.nbAlerts}}</span>
                                 </td>

@@ -83,7 +83,7 @@ angular.module('boardOsApp')
                     $scope.dashboards = dashboards;
                     $scope.dataDashboards = dashboards;
                     $http.get('/api/dashboards/quick/' + dashboard._id).success(function(dashboard) {
-                        
+
                     });
                 });
             });
@@ -276,7 +276,11 @@ angular.module('boardOsApp')
                 color: myLibrary.giveMeMyColor(value)
             };
         };
-
+        $scope.goalBgColor = function(value) {
+            return {
+                background: myLibrary.giveMeMyColor(value)
+            };
+        };
         $scope.alertColor = function(value) {
             return {
                 color: myLibrary.giveMeMyColor(value, 'Alert')
@@ -331,22 +335,22 @@ angular.module('boardOsApp')
         $scope.optionsConfidence = angular.copy($scope.options);
         $scope.optionsConfidence.chart.color = ['#bcbd22'];
 
-    /*        $(function() {
-            $('.dropdown-menu > li > a.trigger').on('click', function(e) {
-                var current = $(this).next();
-                var grandparent = $(this).parent().parent();
-                if ($(this).hasClass('left-caret') || $(this).hasClass('right-caret'))
-                    $(this).toggleClass('right-caret left-caret');
-                grandparent.find('.left-caret').not(this).toggleClass('right-caret left-caret');
-                grandparent.find('.sub-menu:visible').not(current).hide();
-                current.toggle();
-                e.stopPropagation();
-            });
-            $('.dropdown-menu > li > a:not(.trigger)').on('click', function() {
-                var root = $(this).closest('.dropdown');
-                root.find('.left-caret').toggleClass('right-caret left-caret');
-                root.find('.sub-menu:visible').hide();
-            });
-        });*/
+        /*        $(function() {
+                $('.dropdown-menu > li > a.trigger').on('click', function(e) {
+                    var current = $(this).next();
+                    var grandparent = $(this).parent().parent();
+                    if ($(this).hasClass('left-caret') || $(this).hasClass('right-caret'))
+                        $(this).toggleClass('right-caret left-caret');
+                    grandparent.find('.left-caret').not(this).toggleClass('right-caret left-caret');
+                    grandparent.find('.sub-menu:visible').not(current).hide();
+                    current.toggle();
+                    e.stopPropagation();
+                });
+                $('.dropdown-menu > li > a:not(.trigger)').on('click', function() {
+                    var root = $(this).closest('.dropdown');
+                    root.find('.left-caret').toggleClass('right-caret left-caret');
+                    root.find('.sub-menu:visible').hide();
+                });
+            });*/
 
     });
