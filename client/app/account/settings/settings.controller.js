@@ -6,16 +6,23 @@ angular.module('boardOsApp')
         $scope.currentUser = Auth.getCurrentUser();
 
         $scope.dashboards = [];
+        $scope.locations = [
+            { value: 'Suresnes', text: 'Suresnes' },
+            { value: 'Hongrie', text: 'Hongrie' },
+            { value: 'RepThech', text: 'RepThech' },
+            { value: 'Nantes', text: 'Nantes' },
+            { value: 'Levallois', text: 'Levallois' },
+            { value: 'Boulogne', text: 'Boulogne' },
+        ];
+        $scope.editInProgress = false;
 
         $scope.load = function() {
-            $http.get('/api/dashboards/user/' + $scope.currentUser._id).success(function(dashboards) {
-                $scope.dashboards = dashboards.dashboards;
-                $scope.tasks = dashboards.tasks;
+            $http.get('/api/dashboards/list/' + $scope.currentUser._id).success(function(dashboards) {
+                $scope.dashboards = dashboards;
             });
         };
 
         $scope.load();
-
         $scope.changePassword = function(form) {
             $scope.submitted = true;
             if (form.$valid) {
@@ -43,6 +50,23 @@ angular.module('boardOsApp')
                     });
                 }
             });
+        };
+
+        $scope.saveAvatar = function() {
+            console.log('$scope.editInProgress', $scope.editInProgress);
+            $scope.editInProgress = false;
+            $http({
+                method: 'PUT',
+                data: $scope.currentUser,
+                url: '/api/users/' + $scope.currentUser._id + '/avatar'
+            }).
+            success(function() {
+                console.log('$scope.editInProgress', $scope.editInProgress);
+            });
+        };
+
+        $scope.editMode = function(value) {
+            $scope.editInProgress = true;
         };
 
     });

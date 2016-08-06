@@ -40,10 +40,11 @@ exports.index = function(req, res) {
 
 // Get list of dashboards
 exports.list = function(req, res) {
-    var filterUser = (req.query.userId) ? {
-        'owner._id': req.query.userId
-    } : null;
-    Dashboard.find(filterUser, '-__v').lean().exec(function(err, dashboards) {
+    console.log('req.query.userId', req.query.userId);
+    var filterUser = (req.params.userId) ? {
+        'owner._id': req.params.userId
+    } : {};
+    Dashboard.find(filterUser, '-__v').sort({ name: 1 }).lean().exec(function(err, dashboards) {
         if (err) {
             return handleError(res, err);
         }

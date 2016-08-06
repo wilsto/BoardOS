@@ -1,153 +1,106 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
-
 <div class="container">
-
     <!-- BEGIN PAGE CONTENT-->
     <div class="row profile">
         <div class="col-md-12">
             <!--BEGIN TABS-->
-
             <tabset>
                 <tab active="true">
                     <tab-heading>
-                    Overview
-                </tab-heading>
-                <div class="row">
-                    <div class="col-md-3">
-                        <ul class="list-unstyled profile-nav">
-                            <li>
-                                <img ng-src="assets/images/avatars/{{currentUser._id}}.png" class="img-responsive" style="width:100%" alt="" err-src="assets/images/avatars/avatar.jpg"/>
-                                <a href="#" class="profile-edit">edit</a>
-                            </li>
-                            <li>
-                                <a href="#">Settings</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-md-9">
-                        <div class="row">
-                            <div class="col-md-8 profile-info">
-                                <h1>{{currentUser.name}}</h1>
-                                <ul class="list-inline">
-                                    <li>
-                                        <i class="fa fa-map-marker"></i> Surval
+                        <i class="fa fa-user"></i> My Profil
+                    </tab-heading>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <ul class="list-unstyled profile-nav">
+                                <li>
+                                    <img src="{{currentUser.avatar || 'assets/images/avatars/' + currentUser._id+ '.png'}} " class="img-responsive" style="width:100%" alt="" err-src="assets/images/avatars/avatar.jpg" />
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="row">
+                                <button class="btn btn-default pull-right" ng-click="editMode(true)" ng-show="editInProgress === false"><i class="glyphicon glyphicon-pencil"></i> Edit my profile</button>
+                                <button class="btn btn-primary pull-right" ng-click="saveAvatar()" ng-show="editInProgress === true"><i class="glyphicon glyphicon-save"></i> Save my profile</button>
+                                <h1>{{currentUser.name}} </h1>
+                                <ul class="list-group" style="padding-top:15px;">
+                                    <li class="list-group-item">
+                                        <label ng-class="{'bg-info':editInProgress}" for="avatar" class="list-user-property text-muted "><i class="fa fa-2x fa-map-marker"></i> Place</label>
+                                        <span ng-show="editInProgress === false"> {{currentUser.location}} </span>
+                                        <div class="form-group" ng-show="editInProgress === true">
+                                            <div ng-repeat="location in locations">
+                                                <input type="radio" name="location" ng-model="$parent.currentUser.location" ng-value="location.value"> {{location.text}}
+                                                <br>
+                                            </div>
+                                        </div>&nbsp;
                                     </li>
-                                    <li>
-                                        <i class="fa fa-group"></i> {{currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1) }}
+                                </ul>
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <label ng-class="{'bg-info':editInProgress}" for="avatar" class="list-user-property text-muted "><i class="fa fa-2x fa-user"></i> Avatar</label>
+                                        <span id="avatar" ng-class="{'bg-info':editInProgress}" ng-show="editInProgress === false"> {{currentUser.avatar || 'Please enter an URL for your avatar'}} </span>
+                                        <input ng-show="editInProgress === true" id="editAvatar" type="text" name="editAvatar" placeholder="Enter avatar URL (http://)" ng-model="currentUser.avatar" class="form-control" />
                                     </li>
-                                    <li>
-                                        <i class="fa fa-briefcase"></i> {Role in CBI}
-                                    </li>
-                                    <li>
-                                        <i class="fa fa-star"></i> DCLIC.CBI
-                                    </li>
-                                    <li>
-                                        <i class="fa fa-heart"></i> 
+                                </ul>
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <label for="avatar" class="list-user-property text-muted "><i class="fa fa-2x fa-group "></i> Role</label>
+                                        <span class=""> {{currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1) }} </span>
                                     </li>
                                 </ul>
                             </div>
-                            <!--end col-md-8-->
-                        </div>
-                        <!--end row-->
-                        <tabset>
-                            <tab active="true">
-                                <tab-heading>
-                                Personal Dashboards
-                            </tab-heading>
-                            <div class="portlet-body">
-                                <table class="table table-striped table-bordered table-advance table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th  style="width:60%">
-                                              <i class="fa fa-briefcase"></i> Dashboard Name
-                                          </th>
-                                          <th class="hidden-xs" style="width:20%">
-                                              <i class="fa fa-question-sign"></i> Activity
-                                          </th>
-                                          <th class="hidden-xs"  style="width:20%">
-                                              <i class="fa fa-question-sign"></i> Context
-                                          </th>
-                                          <th>
-                                            <i class="fa fa-delete"></i> 
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="dashboard in dashboards | orderBy : 'name' track by $index ">
-                                        <td >
-                                            <a href="/dashboard/{{dashboard._id}}">{{dashboard.name}}</a>
-                                        </td>
-                                        <td  class="hidden-xs" >
-                                           {{dashboard.activity || 'ALL'}}
-                                       </td>
-                                       <td class="hidden-xs">
-                                           {{dashboard.context || 'ALL'}}
-                                       </td>
-                                       <td>
-                                       <button class="btn btn-danger" ng-click="deleteDashboard(dashboard,$index)">Delete</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="pull-right">
-                            <a class="btn btn-primary" href="/dashboards">Add one</a>
+                            <!--end row-->
+                            <tabset>
+                            </tabset>
                         </div>
                     </div>
                 </tab>
                 <tab>
                     <tab-heading>
-                    Tasks
-                </tab-heading>
-                <div class="scroller" data-height="290px" data-always-visible="1" data-rail-visible1="1">
-                    <ul class="feeds">
-                        <li  ng-repeat="task in tasks | orderBy : 'lastmetric.endDate' track by $index ">
-                            <div class="col1">
-                                <div class="cont">
-                                    <div class="cont-col1">
-                                        <div class="label label-success">
-                                            <i class="fa fa-clock-o"></i>
-                                        </div>
-                                    </div>
-                                    <div class="cont-col2">
-                                        <div class="desc">
-                                            <a href="/task/{{task._id}}">{{task.name}}</a>
-                                            <span class="label label-danger label-sm" ng-if="task.timebetween <= 0">    Need Metric <i class="fa fa-share-alt"></i>                 </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col2">
-                                <div class="date">
-                                    {{task.lastmetric.endDate.substring(0,10)}}
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </tab>
-
-        </tabset>
-
-
+                        <i class="fa fa-dashboard"></i> My Personal Dashboards
+                    </tab-heading>
+                    <div class="portlet-body">
+                        <div class="pull-right">
+                            <a class="btn btn-primary" href="/dashboards">Add one</a>
+                        </div>
+                        <table class="table table-striped table-bordered table-advance table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width:60%">
+                                        Dashboard Name
+                                    </th>
+                                    <th class="hidden-xs" style="width:20%">
+                                        <i class="fa fa-question-sign"></i> Activity
+                                    </th>
+                                    <th class="hidden-xs" style="width:20%">
+                                        <i class="fa fa-question-sign"></i> Context
+                                    </th>
+                                    <th>
+                                        <i class="fa fa-delete"></i>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="dashboard in dashboards track by $index ">
+                                    <td>
+                                        <a href="/dashboard/{{dashboard._id}}">{{dashboard.name}}</a>
+                                    </td>
+                                    <td class="hidden-xs">
+                                        {{dashboard.activity || 'ALL'}}
+                                    </td>
+                                    <td class="hidden-xs">
+                                        {{dashboard.context || 'ALL'}}
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger" ng-click="deleteDashboard(dashboard,$index)">Delete</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </tab>
+            </tabset>
+            <!--END TABS-->
+        </div>
     </div>
-</div>
-</tab>
-<tab>
-    <tab-heading>
-    Account
-</tab-heading>
-To do
-</tab>
-<tab>
-    <tab-heading>
-    Help
-</tab-heading>
-
-</tab>
-</tabset>
-
-<!--END TABS-->
-</div>
-</div>
-<!-- END PAGE CONTENT-->
+    <!-- END PAGE CONTENT-->
 </div>

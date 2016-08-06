@@ -6,7 +6,8 @@ angular.module('boardOsApp')
         // Use the User $resource to fetch all users
         $scope.users = User.query();
         $scope.formData = {};
-
+        $scope.sortHeader = 'name';
+        $scope.onlyactive = true;
         $http.get('/api/users/roles').success(function(roles) {
             $scope.roles = _.map(roles, function(role) {
                 return {
@@ -32,8 +33,24 @@ angular.module('boardOsApp')
                 userId: user._id,
                 newRole: role.text
             }).success(function() {
-
                 $scope.users = User.query();
+            });
+        };
+
+        $scope.dispUpdate = function(user) {
+            $scope.editUser = user;
+        };
+
+        $scope.update = function() {
+            console.log('$scope.editUser', $scope.editUser);
+            $http({
+                method: 'PUT',
+                data: $scope.editUser,
+                url: '/api/users/' + $scope.editUser._id + '/fullupdate'
+            }).
+            success(function() {
+                $scope.users = User.query();
+                $('#modUser').modal('hide');
             });
         };
 
