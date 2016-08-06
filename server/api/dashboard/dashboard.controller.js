@@ -61,7 +61,6 @@ exports.quick = function(req, res) {
                 mDashboard = dashboards;
                 deferred.resolve(mDashboard);
             });
-            return deferred.promise;
         })
         .then(function() {
             // Get related KPIs
