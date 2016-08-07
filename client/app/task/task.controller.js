@@ -22,17 +22,16 @@ angular.module('boardOsApp')
         });
 
         $scope.loadTask = function() {
+            $scope.currentTask = {};
             if ($stateParams.id) {
                 $http.get('/api/tasks/' + $stateParams.id).success(function(data) {
                     $scope.task = data;
-                    
+
                     $scope.currentTask = data.tasks[0];
+                    console.log('$scope.currentTask', $scope.currentTask);
+                    _.sortBy($scope.currentTask.metrics, 'date');
                     $scope.task.activity_old = data.activity;
                     $scope.task.context_old = data.context;
-                    $.growl({
-                        icon: 'fa fa-info-circle',
-                        message: 'Task "' + $scope.task.name + '" loaded'
-                    });
                     $scope.updateWatch();
 
                     // calcul des Kpis
@@ -62,8 +61,6 @@ angular.module('boardOsApp')
                     });
                     $scope.goalsNb = parseInt(goalsSum / goalsValue.length); // moyenne
                 });
-            } else {
-                $scope.currentTask = {};
             }
         };
 

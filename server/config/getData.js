@@ -27,6 +27,31 @@ var mKPI = {};
 
 var tools = require('./tools');
 
+function calcBusinessDays(dDate1, dDate2) { // input given as Date objects
+    var iWeeks, iDateDiff, iAdjust = 0;
+    if (dDate2 < dDate1) return -1; // error code if dates transposed
+    var iWeekday1 = dDate1.getDay(); // day of week
+    var iWeekday2 = dDate2.getDay();
+    iWeekday1 = (iWeekday1 === 0) ? 7 : iWeekday1; // change Sunday from 0 to 7
+    iWeekday2 = (iWeekday2 === 0) ? 7 : iWeekday2;
+    if ((iWeekday1 > 5) && (iWeekday2 > 5)) iAdjust = 1; // adjustment if both days on weekend
+    iWeekday1 = (iWeekday1 > 5) ? 5 : iWeekday1; // only count weekdays
+    iWeekday2 = (iWeekday2 > 5) ? 5 : iWeekday2;
+
+    // calculate differnece in weeks (1000mS * 60sec * 60min * 24hrs * 7 days = 604800000)
+    iWeeks = Math.floor((dDate2.getTime() - dDate1.getTime()) / 604800000)
+
+    if (iWeekday1 <= iWeekday2) {
+        iDateDiff = (iWeeks * 5) + (iWeekday2 - iWeekday1)
+    } else {
+        iDateDiff = ((iWeeks + 1) * 5) - (iWeekday1 - iWeekday2)
+    }
+
+    iDateDiff -= iAdjust // take into account both days on weekend
+
+    return (iDateDiff + 1); // add 1 because dates are inclusive
+}
+
 module.exports = {
     fromTask: function(req, callback) {
         //logger.trace("Start getdata.fromTask");
@@ -102,8 +127,8 @@ module.exports = {
             .then(function() {
                 //logger.trace("Start metrics");
                 //
-                var d2 = new Date();
-                var dateNow = d2.toISOString();
+                var dateNow = new Date();
+                //var dateNow = d2.toISOString();
                 // Get related metrics
                 var deferred = Q.defer();
                 Metric.find({}, '-__v').sort({
@@ -122,9 +147,13 @@ module.exports = {
 
                                 // ajouter calcul auto
                                 metricdata.taskname = taskdata.name;
+                                metricdata.startDate = new Date(metricdata.startDate);
+                                metricdata.endDate = new Date(metricdata.endDate);
+                                metricdata.date = new Date(metricdata.date);
+                                taskdata.endDate = new Date(taskdata.endDate);
 
                                 // nombre de jours séparant la date de début, fin, entre les deux
-                                metricdata.duration = moment(metricdata.endDate).diff(metricdata.startDate, 'days');
+                                metricdata.duration = calcBusinessDays(metricdata.startDate, metricdata.endDate);
                                 metricdata.timeToBegin = moment(metricdata.startDate).diff(moment(), 'days');
                                 metricdata.timeToEnd = moment(metricdata.endDate).diff(moment(), 'days');
 
@@ -142,7 +171,7 @@ module.exports = {
                                             metricdata.progressStatus = 'Late';
                                             break;
                                         default:
-                                            if (dateNow > metricdata.endDate && metricdata.date > metricdata.endDate && (metricdata.status === 'In Progress' || metricdata.status === 'Not Started')) {
+                                            if (dateNow > taskdata.endDate && metricdata.date > metricdata.endDate && (metricdata.status === 'In Progress' || metricdata.status === 'Not Started')) {
                                                 metricdata.progressStatus = 'Late';
                                             } else {
                                                 metricdata.progressStatus = 'At Risk';
@@ -152,14 +181,15 @@ module.exports = {
                                     metricdata.progressStatus = 'On Time';
                                 }
 
-
-
                                 // ajouter information par mois 
                                 metricdata.groupTimeByValue = moment(metricdata.date).format("YYYY.MM");
 
                                 //on l'ajoute à la liste
                                 taskdata.metrics.push(metricdata);
-
+                                taskdata.lastmetric = metricdata;
+                                if (taskdata.lastmetric && dateNow > taskdata.lastmetric.endDate && (taskdata.lastmetric.status === 'In Progress' || taskdata.lastmetric.status === 'Not Started')) {
+                                    taskdata.lastmetric.progressStatus = 'Late';
+                                }
                                 // kpis 
                                 _.each(mTask.kpis, function(kpidata, index) {
 

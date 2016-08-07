@@ -14,15 +14,23 @@ angular.module('boardOsApp')
         $scope.metricTaskFields = metricTaskFields;
         $scope.listValuesKPI = listValuesKPI;
 
+        $scope.type = $stateParams.type;
+        $scope.typeid = $stateParams.typeid;
+
         $scope.load = function() {
             if ($stateParams.id) {
 
-                $http.get('/api/KPIs/' + $stateParams.id, {
+                var query = ($stateParams.type === 'task') ? {
+                    params: {
+                        taskFilter: $stateParams.typeid,
+                    }
+                } : {
                     params: {
                         activity: $rootScope.perimeter.activity,
                         context: $rootScope.perimeter.context
                     }
-                }).success(function(KPI) {
+                };
+                $http.get('/api/KPIs/' + $stateParams.id).success(function(KPI) {
                     $scope.KPI = KPI;
                     var metricTaskValues = KPI.metricTaskValues || 'All';
                     var refMetricTaskValues = KPI.refMetricTaskValues || 'All';
@@ -30,13 +38,9 @@ angular.module('boardOsApp')
                     $scope.where = (typeof $scope.KPI.whereField !== 'undefined' && KPI.whereField.length > 0) ? ' ' + KPI.whereField + ' ' + KPI.whereOperator + ' ' + KPI.whereValues : '';
                 });
 
-                $http.get('/api/KPIs/tasksList/' + $stateParams.id, {
-                    params: {
-                        activity: $rootScope.perimeter.activity,
-                        context: $rootScope.perimeter.context
-                    }
-                }).success(function(tasksList) {
+                $http.get('/api/KPIs/tasksList/' + $stateParams.id, query).success(function(tasksList) {
                     $scope.tasksList = tasksList;
+                    console.log('$scope.tasksList', $scope.tasksList);
                     $scope.metricsNb = 0;
                     $scope.sumValue = 0;
                     $scope.sumRefValue = 0;
@@ -53,9 +57,9 @@ angular.module('boardOsApp')
                                 // $scope.sumRefValue += parseFloat(task.lastmetric[$scope.KPI.refMetricTaskField]);
                                 $scope.sumKPI += (!task.KPI && isNaN(parseFloat(task.KPI))) ? 0 : parseFloat(task.KPI);
                                 $scope.nbKPI += (!task.KPI && isNaN(parseFloat(task.KPI))) ? 0 : 1;
-                                
-                                
-                                
+
+
+
                             }
                         }
                     });

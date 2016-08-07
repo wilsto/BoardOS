@@ -16,8 +16,8 @@ var TaskSchema = new Schema({
     impact: String,
     deliverables: String,
     risks: String,
-    startDate: String,
-    endDate: String,
+    startDate: Date,
+    endDate: Date,
     previous: String,
     date: {
         type: Date,

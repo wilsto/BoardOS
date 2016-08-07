@@ -5,6 +5,7 @@ angular.module('boardOsApp')
         Auth.getCurrentUser(function(data) {
             $scope.currentUser = data;
             $scope.load();
+            $scope.loadDashBoards();
         });
 
         $scope.load = function() {
@@ -21,6 +22,16 @@ angular.module('boardOsApp')
             });
         };
 
+        $scope.loadDashBoards = function() {
+            var myparams = {
+                params: {
+                    userId: $scope.currentUser._id,
+                }
+            };
+            $http.get('/api/dashboards/list/', myparams).success(function(dashboards) {
+                $scope.dashboards = dashboards;
+            });
+        };
 
         $scope.logout = function() {
             Auth.logout();

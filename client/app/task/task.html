@@ -1,36 +1,23 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
-
 <!-- BEGIN PAGE CONTENT-->
 <div class="row profile">
     <div class="col-md-12">
         <!--BEGIN TABS-->
         <div class="row">
-            <div class="col-md-3">
-                <ul class="list-unstyled profile-nav">
-                    <li>
-                        <img src="assets/images/Tasks.png" class="img-responsive" alt="" />
-                    </li>
-
-                    <li>
-                        <a href="#" ng-click='watchThisTask()'> <i class="fa fa-eye"></i> Watch this task <span>
-                                {{taskIsWatched}}</span>
-                        </a>
-                    </li>
-                </ul>
+            <div class="col-md-2">
+                <img src="assets/images/todo.png" class="img-responsive" alt="" />
             </div>
-            <div class="col-md-9">
+            <div class="col-md-10">
                 <div class="row">
                     <div class="col-md-8 profile-info">
-                        <h1>{{task.name}} <span class="label label-sm label-danger" ng-show="task.tasks[0].timebetween <= 0 && task.tasks[0].timebetween !== null "> Need Metric</span></h1>
-                        <br/>
+                        <h1 style="padding-top:15px"> {{task.name}} </h1>
                         <ul class="list list-inline">
                             <li>
-                                <i class="fa fa-map-marker"></i><span style="color:lightgrey"> Context </span> {{task.context}}
+                                <i class="fa fa-map-marker"></i><span class="text-muted"> Context </span> {{task.context}}
                             </li>
                             <br/>
-                            <br/>
-                            <li>
-                                <i class="fa fa-calendar"></i><span style="color:lightgrey"> Activity </span> {{task.activity}}
+                            <li style="margin-top:10px">
+                                <i class="fa fa-calendar"></i><span class="text-muted"> Activity </span> {{task.activity}}
                             </li>
                         </ul>
                     </div>
@@ -55,58 +42,75 @@
                 <!--end row-->
             </div>
         </div>
-
         <!-- BEGIN OVERVIEW STATISTIC BARS-->
-        <div class="row stats-overview-cont" style="margin:25px;">
+        <div class="row">
+            <div class="col-md-2 col-sm-12 ">
+                &nbsp;
+            </div>
+            <div class="col-md-6 col-sm-12 text-center">
+                <span class="text-muted">Metrics</span>
+                <br>
+                <div class="headerMetric"> &nbsp;</div>
+            </div>
+            <div class="col-md-4 col-sm-12 text-center">
+                <span class="text-muted">KPIs</span>
+                <br>
+                <div class="headerKPIs"> &nbsp;</div>
+            </div>
+        </div>
+        <!-- BEGIN OVERVIEW STATISTIC BARS-->
+        <div class="row stats-overview-cont" style="margin-left:25px;">
             <div class="col-md-2 col-sm-4 ">
                 <div class="">
                     <div class="details">
-                        <div class="title pull-right"><span style="text-align:right;font-size:20px;font-weight:bold;color:#1f77b4">Target <i class="fa fa-crosshairs"></i> </span></div>
+                        <div class="title pull-right"><span style="text-align:right;font-size:20px;font-weight:bold;color:#1f77b4">Target <i class="fa fa-crosshairs"></i> </span>
+                            <span class="label label-sm label-danger" ng-show="task.tasks[0].timebetween <= 0 && task.tasks[0].timebetween !== null "><br>Need Metric for {{-task.tasks[0].timebetween}} days</span></div>
                     </div>
                 </div>
             </div>
-
             <div class="col-md-2 col-sm-4 ">
-                <div class="bg-danger stats-overview stat-block">
+                <div class="stats-overview stat-block">
                     <div class="details" style="height:45px;">
-                        <div class="title"><span style="color:lightgrey">Start </span><span class="pull-right">{{currentTask.startDate | date:'mediumDate'}}</span> </div>
+                        <div class="title"><span class="text-muted">Start </span><span class="pull-right text-info">{{currentTask.startDate | date:'mediumDate'}}</span> </div>
                     </div>
                 </div>
             </div>
-
             <div class="col-md-2 col-sm-4">
-                <div class="stats-overview bg-danger stat-block ">
+                <div class="stats-overview stat-block ">
                     <div class="details " style="height:45px;">
-                        <div class="title"><span style="color:lightgrey">End </span><span class="pull-right">{{currentTask.endDate | date:'mediumDate'}}</span></div>
-                        <div ng-if="currentTask.lastmetric.endDate !== currentTask.endDate " class="pull-right"><small class="bg-danger text-danger">{{currentTask.lastmetric.endDate | date:'mediumDate'}}</small></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-2 col-sm-4">
-                <div class="stats-overview stat-block">
-                    <div class="details" style="height:45px;">
-                        <div class="title"><span style="color:lightgrey">Load </span><span class="pull-right">{{currentTask.load}} <small>days</small></span></div>
-                        <div ng-if="currentTask.lastmetric.projectedWorkload !== currentTask.load" class="pull-right"><small ng-class="{'bg-danger text-danger':currentTask.lastmetric.projectedWorkload > currentTask.load, 'bg-success text-success':currentTask.lastmetric.projectedWorkload < currentTask.load}">{{currentTask.lastmetric.projectedWorkload}} days</small></div>
+                        <div class="title"><span class="text-muted">End </span><span class="pull-right  text-info">{{currentTask.endDate | date:'mediumDate'}}</span></div>
+                        <div ng-if="currentTask.lastmetric.endDate !== currentTask.endDate " class="">
+                            <small style="font-size:9px">Reestimated: </small>
+                            <small class="pull-right" ng-class="(currentTask.lastmetric.endDate > currentTask.endDate)?'bg-danger text-danger':'bg-success text-success'">{{currentTask.lastmetric.endDate | date:'mediumDate'}}</small>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-2 col-sm-4">
                 <div class="stats-overview stat-block">
                     <div class="details" style="height:45px;">
-                        <div class="title"><span style="font-weight:bold" ng-class="{'text-success':alertsNb===0,'text-danger':alertsNb>0, }">{{alertsNb}}</span> Alerts</div>
+                        <div class="title"><span class="text-muted">Load </span><span class="pull-right  text-info">{{currentTask.load}} <small>days</small></span></div>
+                        <div ng-if="currentTask.lastmetric.projectedWorkload !== currentTask.load">
+                            <small style="font-size:9px">Reestimated: </small>
+                            <small class="pull-right" ng-class="(currentTask.lastmetric.projectedWorkload > currentTask.load)?'bg-danger text-danger':'bg-success text-success'"> {{currentTask.lastmetric.projectedWorkload}} days</small>
+                        </div>
                     </div>
                 </div>
             </div>
-
             <div class="col-md-2 col-sm-4">
-                <div class="stats-overview stat-block">
+                <div class="stats-overview stat-block" ng-class="(alertsNb !==null && alertsNb>0)?'bg-danger':'bg-success'">
                     <div class="details" style="height:45px;">
-                        <div class="title"><span style="font-weight:bold;color:#2CA02C">{{goalsNb}}%</span> Goals</div>
+                        <div class="title"><span style="font-weight:bold" ng-class="{'text-success':alertsNb===0,'text-danger':alertsNb>0, }">{{alertsNb}}</span> Alerts <small>(nb)</small></div>
                     </div>
                 </div>
             </div>
-
+            <div class="col-md-2 col-sm-4">
+                <div class="stats-overview stat-block" ng-class="(goalsNb !==null && goalsNb<75)?'bg-danger':'bg-success'">
+                    <div class="details" style="height:45px;">
+                        <div class="title"><span style="font-weight:bold;" ng-class="(goalsNb !==null &&  goalsNb<75)?'text-danger':'text-success'">{{goalsNb}}%</span> Goals <small>(mean)</small></div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="row">
             <tabset>
@@ -295,7 +299,6 @@
                                         <small class="text-danger" ng-show="taskAlreadyExist.id !== null && submitted">
                         A task with same context and activity already exist, please <a href="/task/{{taskAlreadyExist.id}}" target="_blank">click here to see this task named {{taskAlreadyExist.name}}</a> or change perimeter of metrics.
                     </small>
-
                                         <small class="text-danger">{{ errors.other }}</small>
                                     </div>
                                     <div class="form-actions">

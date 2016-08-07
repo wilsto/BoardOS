@@ -5,110 +5,73 @@
         <!--BEGIN TABS-->
         <div class="row">
             <div class="col-md-3">
-                <ul class="list-unstyled profile-nav">
-                    <li>
-          <a href="#"> 
-                         <h4>{{KPI.name}}</h4>
-          </a>
-                    </li>
-                    <li>
-                        <img src="assets/images/kpi.jpg" class="img-responsive" alt="" />
-                    </li>
-                </ul>
+                <img src="assets/images/kpi.jpg" class="img-responsive" alt="" />
+                <div class="portlet sale-summary">
+                    <div class="portlet-body" style="padding-bottom:0">
+                        <ul class="list-unstyled" style="padding-bottom:0">
+                            <li style="padding-top:10px;padding-bottom:0">
+                                <span class="sale-info">
+                                            TASKS COUNT <i class="fa fa-img-up"></i>
+                                        </span>
+                                <span class="sale-num">
+                                            {{tasksList.length}}
+                                        </span>
+                            </li>
+                            <li style="padding-top:10px;padding-bottom:0">
+                                <span class="sale-info">
+                                            METRICS COUNT <i class="fa fa-img-up"></i>
+                                        </span>
+                                <span class="sale-num">
+                                            {{metricsNb}}
+                                        </span>
+                            </li>
+                            <li style="margin-top:5px;padding-top:5px;padding-bottom:0;background:#EEEEEE;height:30px">
+                                <span class="sale-info">
+                                            {{KPI.category}}S<i class="fa fa-img-down"></i>
+                                            <span class="text-muted" ng-if="KPI.category === 'Alert'"> (Nb)</span>
+                                <span class="text-muted" ng-if="KPI.category === 'Goal'"> (Mean)</span>
+                                </span>
+                                <span class="sale-num" style="margin-top:-8px">
+                                            <span class="badge" ng-style="{'background-color':giveMeMyColor(globalKPI, KPI.category)}" style="height:25px;width:50px;line-height:20px;">
+                                                {{globalKPI}}
+                                                <span ng-if="KPI.category === 'Goal'">%</span>
+                                </span>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
             <div class="col-md-9">
+                <h1 style="margin-top:-2px;margin-bottom:15px">{{KPI.name}} <a href="/{{type}}/{{typeid}}"><small class="text-primary" style="padding-left:35px;font-size:13px"> Go Back to your {{type}}</small></a></h1>
                 <div class="row">
                     <div class="col-md-8 profile-info">
-                       
                         <ul class="list list-inline">
                             <li>
-                                <i class="fa fa-comment"></i><span style="color:lightgrey">Description</span><br/>  <span ng-bind-html="KPI.description"></span>
-                            </li><br/>
+                                <i class="fa fa-comment"></i><span class="text-info kpiTitle"> Description</span>
+                                <br/> <span ng-bind-html="KPI.description"></span>
+                            </li>
+                            <br/>
+                            <br/>
                             <li>
-                                <i class="fa fa-calculator"></i><span style="color:lightgrey">Calculation explanation</span> <br/> 
-                                <b class="text-primary">KPI = </b><span ng-bind-html="calculation"></span><br/>
+                                <i class="fa fa-calculator"></i><span class="text-info kpiTitle"> Calculation explanation</span>
+                                <br/>
+                                <b class="text-primary">KPI = </b><span ng-bind-html="calculation"></span>
+                                <br/>
                                 <b class="text-warning" ng-if='where'> only for </b><span ng-bind-html="where"></span>
-                            </li><br/>
-                            <li>
-                                <i class="fa fa-gavel"></i><span style="color:lightgrey">Action Suggestion</span> <br/> <span ng-bind-html="KPI.suggestion"></span>
                             </li>
                         </ul>
                     </div>
                     <!--end col-md-8-->
-                    <div class="col-md-4">
-                        <div class="portlet sale-summary">
-                            <div class="portlet-title">
-                                <div class="caption">
-                                    Summary
-                                </div>
-                                <div class="tools">
-                                    <a class="reload" href="javascript:;"></a>
-                                </div>
-                            </div>
-                            <div class="portlet-body" style="padding-bottom:0">
-                                <ul class="list-unstyled" style="padding-bottom:0">
-                                    <li style="padding-top:10px;padding-bottom:0">
-                                        <span class="sale-info">
-                                            TASKS COUNT <i class="fa fa-img-up"></i>
-                                        </span>
-                                        <span class="sale-num">
-                                            {{tasksList.length}}
-                                        </span>
-                                    </li >
-                                    <li style="padding-top:10px;padding-bottom:0">
-                                        <span class="sale-info">
-                                            METRICS COUNT <i class="fa fa-img-up"></i>
-                                        </span>
-                                        <span class="sale-num">
-                                            {{metricsNb}}
-                                        </span>
-                                    </li>
-                                    <li style="padding-top:10px;padding-bottom:0">
-                                        <span class="sale-info">
-                                            LAST ENTRY <i class="fa fa-img-down"></i>
-                                        </span>
-                                        <span class="sale-num">
-                                            {{lastmetricDate  | date:'mediumDate'}}
-                                        </span>
-                                    </li>
-                                    <br/>
-                                    <li style="padding-top:5px;padding-bottom:0;background:#EEEEEE;height:30px">
-                                        <span class="sale-info">
-                                            {{KPI.category}}S<i class="fa fa-img-down"></i>
-                                        </span>
-                                        <span class="sale-num" style="margin-top:-8px">
-                                            <span class="badge" ng-style="{'background-color':giveMeMyColor(globalKPI, KPI.category)}" style="height:25px;width:50px;line-height:20px;">
-                                                {{globalKPI}}
-                                                <span ng-if="KPI.category === 'Goal'">%</span>
-                                            </span>
-                                        </span>
-                                    </li>
-<!--                                      <li style="padding-top:5px;padding-bottom:0">
-   <span class="sale-info">
-       Values <small>(Aggregated)</small><i class="fa fa-img-down"></i>
-   </span>
-   <span class="sale-num"  style="margin-top:-8px">
-       {{sumValue}} 
-   </span>
-                                    </li>
-                                    <li style="padding-top:5px;padding-bottom:0">
-   <span class="sale-info">
-       References <small>(Aggregated)</small><i class="fa fa-img-down"></i>
-   </span>
-   <span class="sale-num"  style="margin-top:-8px">
-       {{sumRefValue}} 
-   </span>
-                                    </li> -->
-                                </ul>
-                            </div>
-                        </div>
+                    <div class="col-md-4 profile-info">
+                        <span class="text-info kpiTitle"> <i class="fa fa-gavel"></i> Action Suggestion</span>
+                        <br/> <span ng-bind-html="KPI.suggestion"></span>
                     </div>
                     <!--end col-md-4-->
                 </div>
                 <!--end row-->
             </div>
         </div>
-
         <tabset>
             <tab ng-if="KPI._id === 'r'">
                 <tab-heading>
@@ -125,7 +88,6 @@
                             <div class="portlet-body">
                                 <div id="myChartDiv1"></div>
                                 <div id="myChartDiv0"></div>
-
                             </div>
                         </div>
                         <!-- END PORTLET-->
@@ -147,7 +109,7 @@
                 </div>
             </tab>
             <!--tab Tasks-->
-            <tab ng-if="KPI._id"  active="true">
+            <tab ng-if="KPI._id" active="true">
                 <tab-heading>
                     Tasks
                     <span class="badge badge-default"> {{tasksList.length}}</span>
@@ -267,7 +229,6 @@
                                                 <br/>
                                                 <input type="radio" ng-model="KPI.constraint" value="Time"> Time
                                                 <br/>
-
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -308,7 +269,6 @@
                                             <div class="col-md-3">
                                                 <input type="text" placeholder="Field" class="form-control" ng-model="KPI.metricTaskField" typeahead="field.value for field in metricTaskFields | filter:$viewValue | limitTo:8" />
                                             </div>
-
                                             <div class="col-md-3">
                                                 <input type="text" placeholder="Restrict Values" class="form-control" ng-model="KPI.metricTaskValues" />
                                             </div>
@@ -365,48 +325,46 @@
                                     </div>
                                 </form>
                             </div>
-
                             <div id="tab5" class="tab" ng-show="activeTab === 5">
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">Description</label>
                                     <div class="col-md-9">
                                         <textarea rows="6" placeholder="" class="form-control" ng-model="KPI.description"></textarea>
                                     </div>
-                                 <div class="form-group">
-                                    <label class="col-md-3 control-label">Suggestion</label>
-                                    <div class="col-md-9">
-                                       <textarea rows="10" placeholder="" class="form-control" ng-model="KPI.suggestion"></textarea>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">Suggestion</label>
+                                        <div class="col-md-9">
+                                            <textarea rows="10" placeholder="" class="form-control" ng-model="KPI.suggestion"></textarea>
+                                        </div>
                                     </div>
-                                </div>
-                                 <div class="form-actions">
+                                    <div class="form-actions">
                                         <div class="pull-right">
                                             <a href="#" class="btn btn-success" ng-click="save()">Save Changes</a>
                                             <a href="#" class="btn btn-default" ng-click="reset()">Cancel</a>
                                         </div>
                                     </div>
-                            </div>
-
-                            <div id="tab3" class="tab" ng-show="activeTab === 3">
-                                <p>
-                                    Not yet implemented
-                                </p>
-                            </div>
-                            <div id="tab2" class="tab" ng-show="activeTab === 4">
-                                <div class="form-body">
-                                    <div class="form-group">
-                                        <label class="col-md-3 control-label">Once you delete your KPI, there is no going back. Please be certain.</label>
-                                        <div class="col-md-9">
-                                            <button class="btn btn-danger" ng-click="delete()">Delete this KPI</button>
+                                </div>
+                                <div id="tab3" class="tab" ng-show="activeTab === 3">
+                                    <p>
+                                        Not yet implemented
+                                    </p>
+                                </div>
+                                <div id="tab2" class="tab" ng-show="activeTab === 4">
+                                    <div class="form-body">
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">Once you delete your KPI, there is no going back. Please be certain.</label>
+                                            <div class="col-md-9">
+                                                <button class="btn btn-danger" ng-click="delete()">Delete this KPI</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <!-- END CONTENT -->
                             </div>
-                            <!-- END CONTENT -->
                         </div>
                     </div>
-                </div>
             </tab>
         </tabset>
+        </div>
     </div>
-</div>
-<!-- END CONTAINER -->
+    <!-- END CONTAINER -->

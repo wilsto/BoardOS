@@ -53,7 +53,6 @@ angular.module('boardOsApp')
         };
 
         $scope.saveAvatar = function() {
-            console.log('$scope.editInProgress', $scope.editInProgress);
             $scope.editInProgress = false;
             $http({
                 method: 'PUT',

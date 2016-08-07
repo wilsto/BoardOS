@@ -39,7 +39,8 @@ angular.module('boardOsApp')
                     scope.alltasks = scope.data;
                     scope.filterTasks();
                     if (scope.page === 'KPI') {
-                        scope.filterStatus = (typeof scope.kpi !== 'undefined' || typeof scope.kpi.whereField !== 'undefined' || scope.kpi.whereField === 'status') ? scope.kpi.whereValues : 'Not Finished';
+                        console.log('scope.kpi', scope.kpi);
+                        scope.filterStatus = (typeof scope.kpi !== 'undefined' && ((typeof scope.kpi.whereField !== 'undefined' && scope.kpi.whereField !== '') || scope.kpi.whereField === 'status')) ? scope.kpi.whereValues : 'Not Finished';
                     }
                 }
 

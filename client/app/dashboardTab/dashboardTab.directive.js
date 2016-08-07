@@ -340,10 +340,7 @@ angular.module('boardOsApp')
                                                     info: logInfo,
                                                     actor: $scope.currentUser
                                                 });
-                                                $.growl({
-                                                    icon: 'fa fa-info-circle',
-                                                    message: logInfo
-                                                });
+
                                                 $rootScope.$broadcast('reloadTask', 'data');
                                                 $scope.closeThisDialog();
                                             });
@@ -353,10 +350,6 @@ angular.module('boardOsApp')
                                                 $http.post('/api/logs', {
                                                     info: logInfo,
                                                     actor: $scope.currentUser
-                                                });
-                                                $.growl({
-                                                    icon: 'fa fa-info-circle',
-                                                    message: logInfo
                                                 });
                                                 $rootScope.$broadcast('reloadTask', 'data');
                                                 $scope.closeThisDialog();

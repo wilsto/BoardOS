@@ -92,6 +92,7 @@ angular.module('boardOsApp')
                 $http.get('/api/dashboards/' + $stateParams.id).success(function(dashboard) {
 
                     $scope.dashboard = dashboard;
+                    console.log('$scope.dashboard', $scope.dashboard);
                     $scope.OutofDateTasks = _.filter($scope.dashboard.tasks, function(task) {
                         return task.timebetween <= 0 && task.timebetween !== null;
                     });
@@ -111,8 +112,10 @@ angular.module('boardOsApp')
                     });
 
                     var dataGoals = [];
+                    var dataAllGoals = [];
                     var dataGoals4QCT = [];
                     var dataAlerts = [];
+                    $scope.alertsNb = 0;
 
                     _.forEach($scope.dashboard.kpis, function(kpi) {
                         var kpiAlerts = [];
@@ -134,12 +137,16 @@ angular.module('boardOsApp')
                                     valueKPI: data.mean
                                 };
                             });
+
+                            dataAllGoals.push(kpi.calcul.task);
                         }
                         if (kpi.category === 'Alert') {
 
                             var alertsByMonth = _.pluck(myLibrary.getByMonth(kpi.calcul.taskTime, 'month', 'value'), 'mean');
                             kpiAlerts.push(alertsByMonth);
                             dataAlerts.push(alertsByMonth);
+                            $scope.alertsNb += kpi.calcul.task;
+
                         }
                     });
                     $scope.dataGoals[0].values = myLibrary.getCalculByMonth(dataGoals);
@@ -177,9 +184,9 @@ angular.module('boardOsApp')
                     })[0] || {
                         value: 0
                     };
-
-                    $scope.goalsNb = _.last($scope.dataGoals[0].values).mean;
-                    $scope.alertsNb = _.last($scope.dataAlerts[0].values).sum;
+                    $scope.goalsNb = parseInt(average(_.compact(dataAllGoals)));
+                    $scope.lastgoalsNb = _.last($scope.dataGoals[0].values).mean;
+                    $scope.lastalertsNb = _.last($scope.dataAlerts[0].values).sum;
 
                     var mydata = {
                         'graphset': [{
@@ -285,6 +292,12 @@ angular.module('boardOsApp')
 
             }
         };
+
+        function average(arr) {
+            return _.reduce(arr, function(memo, num) {
+                return memo + num;
+            }, 0) / arr.length;
+        }
 
         $scope.loadDashboard();
 

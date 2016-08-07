@@ -1,18 +1,18 @@
 'use strict';
 
 angular.module('boardOsApp', [
-    'ngCookies',
-    'ngResource',
-    'ngSanitize',
-    'ui.router',
-    'ui.bootstrap',
-    'btford.socket-io',
-    'ngJsTree',
-    'ngDialog',
-    'nvd3',
-    'ng.confirmField',
-    'ui.calendar'
-])
+        'ngCookies',
+        'ngResource',
+        'ngSanitize',
+        'ui.router',
+        'ui.bootstrap',
+        'btford.socket-io',
+        'ngJsTree',
+        'ngDialog',
+        'nvd3',
+        'ng.confirmField',
+        'ui.calendar'
+    ])
     .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
         $urlRouterProvider.otherwise('/');
         $locationProvider.html5Mode(true);
@@ -255,7 +255,7 @@ angular.module('boardOsApp', [
 
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$stateChangeStart', function(event, next) {
-        $rootScope.showAriane = ($location.path().indexOf('dashboard/') > 0 || $location.path().indexOf('task/') > 0 || $location.path().indexOf('KPI/') > 0);
+        $rootScope.showAriane = ($location.path().indexOf('dashboard/') > 0 || $location.path().indexOf('KPI/') > 0);
 
         Auth.isLoggedIn(function(loggedIn) {
             if (next.authenticate && !loggedIn) {

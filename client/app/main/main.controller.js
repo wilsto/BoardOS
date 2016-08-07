@@ -70,8 +70,6 @@ angular.module('boardOsApp')
             });
         };
 
-
-
         $scope.loadDashBoards = function() {
             var myparams = {
                 params: {
@@ -80,18 +78,17 @@ angular.module('boardOsApp')
             };
             $http.get('/api/dashboards/list/', myparams).success(function(dashboards) {
                 _.each(dashboards, function(dashboard) {
-                    $scope.dashboards = dashboards;
-                    $scope.dataDashboards = dashboards;
-                    $http.get('/api/dashboards/quick/' + dashboard._id).success(function(dashboard) {
-
+                    //scope.dashboards = dashboards;
+                    //$scope.dataDashboards = dashboards;
+                    console.log('dashboards', dashboards);
+                    $http.get('/api/dashboards/' + dashboard._id).success(function(dashboard) {
+                        console.log('dashboard', dashboard);
                     });
                 });
             });
         };
 
         $scope.loadDashBoard = function() {
-
-
             $http.get('/api/dashboards/user/' + $scope.currentUser._id).success(function(dashboards) {
                 $scope.dashboards = dashboards.dashboards;
                 $scope.dataDashboards = dashboards;
@@ -169,9 +166,11 @@ angular.module('boardOsApp')
                         }
 
                     });
+                    dataGoals = _.compact(dataGoals);
                     var sumGoals = _.reduce(dataGoals, function(sumGoals, kpicalcul) { // sum
                         return sumGoals + kpicalcul;
                     });
+                    console.log('dataGoals', dataGoals);
                     dashboard.dataGoals = (dataGoals.length > 0) ? parseInt(sumGoals / dataGoals.length) : '-';
                     var sumAlerts = _.reduce(dataAlerts, function(sumAlerts, kpicalcul) { // sum
                         return sumAlerts + kpicalcul;

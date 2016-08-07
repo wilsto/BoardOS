@@ -29,6 +29,31 @@ var mKPI = {};
 var myGroup = [];
 var keepKPI;
 
+function calcBusinessDays(dDate1, dDate2) { // input given as Date objects
+    var iWeeks, iDateDiff, iAdjust = 0;
+    if (dDate2 < dDate1) return -1; // error code if dates transposed
+    var iWeekday1 = dDate1.getDay(); // day of week
+    var iWeekday2 = dDate2.getDay();
+    iWeekday1 = (iWeekday1 === 0) ? 7 : iWeekday1; // change Sunday from 0 to 7
+    iWeekday2 = (iWeekday2 === 0) ? 7 : iWeekday2;
+    if ((iWeekday1 > 5) && (iWeekday2 > 5)) iAdjust = 1; // adjustment if both days on weekend
+    iWeekday1 = (iWeekday1 > 5) ? 5 : iWeekday1; // only count weekdays
+    iWeekday2 = (iWeekday2 > 5) ? 5 : iWeekday2;
+
+    // calculate differnece in weeks (1000mS * 60sec * 60min * 24hrs * 7 days = 604800000)
+    iWeeks = Math.floor((dDate2.getTime() - dDate1.getTime()) / 604800000)
+
+    if (iWeekday1 <= iWeekday2) {
+        iDateDiff = (iWeeks * 5) + (iWeekday2 - iWeekday1)
+    } else {
+        iDateDiff = ((iWeeks + 1) * 5) - (iWeekday1 - iWeekday2)
+    }
+
+    iDateDiff -= iAdjust // take into account both days on weekend
+
+    return (iDateDiff + 1); // add 1 because dates are inclusive
+}
+
 // Get list of KPIs
 exports.index = function(req, res) {
     KPI.find(function(err, KPIs) {
@@ -59,14 +84,6 @@ exports.show = function(req, res) {
             mKPIs = {};
             KPI.findById(req.params.id, function(err, kpi) {
                 mKPI = kpi.toObject();
-                if (typeof mKPI.context === 'undefined' || mKPI.context === '') {
-                    mKPI.context = (typeof req.query.context === 'undefined') ? '' : req.query.context;
-                    mKPI.originalContext = ''
-                }
-                if (typeof mKPI.activity === 'undefined' || mKPI.activity === '') {
-                    mKPI.activity = (typeof req.query.activity === 'undefined') ? '' : req.query.activity;
-                    mKPI.originalActivity = ''
-                }
                 deferred.resolve(mKPI);
             })
             return deferred.promise;
@@ -101,9 +118,11 @@ exports.tasksList = function(req, res) {
         .then(function() {
             // Get related tasks
             var deferred = Q.defer();
-            Task.find({}).lean().exec(function(err, tasks) {
+            var taskFilter = (typeof req.query.taskFilter === 'undefined') ? {} : { _id: req.query.taskFilter };
+            Task.find(taskFilter).lean().exec(function(err, tasks) {
                 mTasks = [];
                 _.each(tasks, function(rowdata, index) {
+
                     if (rowdata.context.indexOf(mKPI.context) >= 0 && rowdata.activity.indexOf(mKPI.activity) >= 0) {
                         mTasks.push(rowdata);
                     }
@@ -130,8 +149,8 @@ exports.tasksList = function(req, res) {
         })
         .then(function() {
             // Get related metrics
-            var d2 = new Date();
-            var dateNow = d2.toISOString();
+            var dateNow = new Date();
+
             var deferred = Q.defer();
             _.each(mTasks, function(rowTask, index) {
                 rowTask.metrics = [];
@@ -141,8 +160,13 @@ exports.tasksList = function(req, res) {
                         // ajouter calcul auto
                         rowMetric.taskname = rowTask.name;
 
+                        rowMetric.startDate = new Date(rowMetric.startDate);
+                        rowMetric.endDate = new Date(rowMetric.endDate);
+                        rowMetric.date = new Date(rowMetric.date);
+                        rowTask.endDate = new Date(rowTask.endDate);
+
                         // nombre de jours séparant la date de début, fin, entre les deux
-                        rowMetric.duration = moment(rowMetric.endDate).diff(rowMetric.startDate, 'days') + 1;
+                        rowMetric.duration = calcBusinessDays(rowMetric.startDate, rowMetric.endDate);
                         rowMetric.timeToBegin = moment(rowMetric.startDate).diff(moment(), 'days');
                         rowMetric.timeToEnd = moment(rowMetric.endDate).diff(moment(), 'days');
                         rowMetric.fromNow = moment(rowMetric.date).fromNow();
@@ -161,11 +185,10 @@ exports.tasksList = function(req, res) {
                                     rowMetric.progressStatus = 'Late';
                                     break;
                                 default:
-
-                                    if (dateNow < rowMetric.endDate) {
-                                        rowMetric.progressStatus = 'At Risk';
-                                    } else {
+                                    if (dateNow > rowTask.endDate && rowMetric.date > rowMetric.endDate && (rowMetric.status === 'In Progress' || rowMetric.status === 'Not Started')) {
                                         rowMetric.progressStatus = 'Late';
+                                    } else {
+                                        rowMetric.progressStatus = 'At Risk';
                                     }
                             }
                         } else {
@@ -188,6 +211,17 @@ exports.tasksList = function(req, res) {
             return res.status(200).json(mTasks);
         });
 };
+
+function workday_count(start, end) {
+    var first = start.clone().endOf('week'); // end of first week
+    var last = end.clone().startOf('week'); // start of last week
+    var days = last.diff(first, 'days') * 5 / 7; // this will always multiply of 7
+    var wfirst = first.day() - start.day(); // check first week
+    if (start.day() === 0) --wfirst; // -1 if start with sunday 
+    var wlast = end.day() - last.day(); // check last week
+    if (end.day() === 6) --wlast; // -1 if end with saturday
+    return wfirst + days + wlast; // get the total
+}
 
 // Get a single kpi
 exports.show33 = function(req, res) {

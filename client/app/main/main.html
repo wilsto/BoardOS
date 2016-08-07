@@ -326,8 +326,8 @@
                                     </div>
                                 </td>
                                 <td style="background:#eee;text-align: center;   ">
-                                    <span class="badge" ng-style="goalBgColor(dashboard.dataGoals)" style="height:15px;line-height:10px;width:15px;margin-right: 15px">&nbsp;&nbsp;</span>
-                                    <span ng-style="goalColor(dashboard.dataGoals)" style="font-size:22px">{{dashboard.dataGoals}}<span style="font-size:15px" ng-if="dashboard.dataGoals !== '-'">% </span></span> <span class="badge" style="background:green;width:25px;font-size:15px" ng-if="dashboard.dataGoals === '####'">{{dashboard.nbGoals}}</span>
+                                    <span ng-if="dataDashboards" class="badge" ng-style="goalBgColor(dashboard.dataGoals)" style="height:15px;line-height:10px;width:15px;margin-right: 15px">&nbsp;&nbsp;</span>
+                                    <span ng-style="goalColor(dashboard.dataGoals)" style="font-size:22px">{{dashboard.dataGoals}}<span style="font-size:15px" ng-if="dataDashboards">% </span></span> <span class="badge" style="background:green;width:25px;font-size:15px" ng-if="dashboard.dataGoals === '####'">{{dashboard.nbGoals}}</span>
                                 </td>
                                 <td style="font-size:18px;text-align: right;">
                                     <span style="color:#316BCD">{{dashboard.openTasks.length}}</span>
@@ -343,7 +343,8 @@
                                 </td>
                             </tr>
                             <tr style="background:#eee;text-align:right">
-                                <td colspan="6"><a href="/settings#dashboards"><i class="fa fa-reorder"></i> Manage/remove dashboards</a>
+                                <td colspan="6">
+                                    <a href="/settings#dashboards" ng-if="dashboards.length > 0"><i class="fa fa-reorder"></i> Manage/remove dashboards</a>
                                 </td>
                             </tr>
                         </tbody>

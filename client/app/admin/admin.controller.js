@@ -42,7 +42,6 @@ angular.module('boardOsApp')
         };
 
         $scope.update = function() {
-            console.log('$scope.editUser', $scope.editUser);
             $http({
                 method: 'PUT',
                 data: $scope.editUser,
