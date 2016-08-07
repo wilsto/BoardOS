@@ -92,7 +92,7 @@ angular.module('boardOsApp')
                 $http.get('/api/dashboards/' + $stateParams.id).success(function(dashboard) {
 
                     $scope.dashboard = dashboard;
-                    console.log('$scope.dashboard', $scope.dashboard);
+                    
                     $scope.OutofDateTasks = _.filter($scope.dashboard.tasks, function(task) {
                         return task.timebetween <= 0 && task.timebetween !== null;
                     });

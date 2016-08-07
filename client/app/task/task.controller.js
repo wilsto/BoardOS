@@ -28,7 +28,7 @@ angular.module('boardOsApp')
                     $scope.task = data;
 
                     $scope.currentTask = data.tasks[0];
-                    console.log('$scope.currentTask', $scope.currentTask);
+                    
                     _.sortBy($scope.currentTask.metrics, 'date');
                     $scope.task.activity_old = data.activity;
                     $scope.task.context_old = data.context;

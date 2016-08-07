@@ -6,6 +6,8 @@
 
 **Implemented enhancements:**
 
+- Amélioration du profil de l'utilisateur [\#131](https://github.com/wilsto/BoardOS/issues/131)
+- Améliorations de la gestion des users [\#130](https://github.com/wilsto/BoardOS/issues/130)
 - Revue design dashboard [\#127](https://github.com/wilsto/BoardOS/issues/127)
 - Revue Design Main [\#126](https://github.com/wilsto/BoardOS/issues/126)
 - Ajouter la date de dernière connection [\#125](https://github.com/wilsto/BoardOS/issues/125)
@@ -25,6 +27,7 @@
 
 **Fixed bugs:**
 
+- Améliorations de la gestion des users [\#130](https://github.com/wilsto/BoardOS/issues/130)
 - Mauvais chiffres au niveau du triangle QCD par dashboard [\#121](https://github.com/wilsto/BoardOS/issues/121)
 - Le nombre d'alerte doit prendre en compte la restriction du KPI [\#119](https://github.com/wilsto/BoardOS/issues/119)
 - Gestion des chiffres avec des virgules ou des . [\#118](https://github.com/wilsto/BoardOS/issues/118)

@@ -80,9 +80,9 @@ angular.module('boardOsApp')
                 _.each(dashboards, function(dashboard) {
                     //scope.dashboards = dashboards;
                     //$scope.dataDashboards = dashboards;
-                    console.log('dashboards', dashboards);
+                    
                     $http.get('/api/dashboards/' + dashboard._id).success(function(dashboard) {
-                        console.log('dashboard', dashboard);
+                        
                     });
                 });
             });
@@ -170,7 +170,7 @@ angular.module('boardOsApp')
                     var sumGoals = _.reduce(dataGoals, function(sumGoals, kpicalcul) { // sum
                         return sumGoals + kpicalcul;
                     });
-                    console.log('dataGoals', dataGoals);
+                    
                     dashboard.dataGoals = (dataGoals.length > 0) ? parseInt(sumGoals / dataGoals.length) : '-';
                     var sumAlerts = _.reduce(dataAlerts, function(sumAlerts, kpicalcul) { // sum
                         return sumAlerts + kpicalcul;

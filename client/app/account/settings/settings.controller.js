@@ -60,7 +60,7 @@ angular.module('boardOsApp')
                 url: '/api/users/' + $scope.currentUser._id + '/avatar'
             }).
             success(function() {
-                console.log('$scope.editInProgress', $scope.editInProgress);
+                
             });
         };
 

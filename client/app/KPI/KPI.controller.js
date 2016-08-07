@@ -40,7 +40,7 @@ angular.module('boardOsApp')
 
                 $http.get('/api/KPIs/tasksList/' + $stateParams.id, query).success(function(tasksList) {
                     $scope.tasksList = tasksList;
-                    console.log('$scope.tasksList', $scope.tasksList);
+                    
                     $scope.metricsNb = 0;
                     $scope.sumValue = 0;
                     $scope.sumRefValue = 0;
