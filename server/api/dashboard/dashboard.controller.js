@@ -57,7 +57,7 @@ exports.quick = function(req, res) {
         .then(function() {
             // Get a single dashboard
             var deferred = Q.defer();
-            Dashboard.findById(req.params.id).lean().exec(function(err, dashboards) {
+            Dashboard.findById(req.params.id).sort({ name: 1 }).lean().exec(function(err, dashboards) {
                 mDashboard = dashboards;
                 deferred.resolve(mDashboard);
             });

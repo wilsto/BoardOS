@@ -171,7 +171,7 @@ module.exports = {
                                             metricdata.progressStatus = 'Late';
                                             break;
                                         default:
-                                            if (dateNow > taskdata.endDate && metricdata.date > metricdata.endDate && (metricdata.status === 'In Progress' || metricdata.status === 'Not Started')) {
+                                            if (dateNow > metricdata.endDate && metricdata.date > metricdata.endDate && (metricdata.status === 'In Progress' || metricdata.status === 'Not Started')) {
                                                 metricdata.progressStatus = 'Late';
                                             } else {
                                                 metricdata.progressStatus = 'At Risk';
@@ -187,7 +187,7 @@ module.exports = {
                                 //on l'ajoute à la liste
                                 taskdata.metrics.push(metricdata);
                                 taskdata.lastmetric = metricdata;
-                                if (taskdata.lastmetric && dateNow > taskdata.lastmetric.endDate && (taskdata.lastmetric.status === 'In Progress' || taskdata.lastmetric.status === 'Not Started')) {
+                                if (taskdata.lastmetric && dateNow > taskdata.lastmetric.endDate && taskdata.endDate < taskdata.lastmetric.endDate && (taskdata.lastmetric.status === 'In Progress' || taskdata.lastmetric.status === 'Not Started')) {
                                     taskdata.lastmetric.progressStatus = 'Late';
                                 }
                                 // kpis 

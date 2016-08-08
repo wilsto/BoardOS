@@ -152,14 +152,14 @@ exports.tasksList = function(req, res) {
             var dateNow = new Date();
 
             var deferred = Q.defer();
+            console.log('mTasks', mTasks.length);
             _.each(mTasks, function(rowTask, index) {
                 rowTask.metrics = [];
-                _.each(mMetrics, function(rowMetric, index) {
+                _.each(mMetrics, function(rowMetric, index2) {
                     if (rowTask.context === rowMetric.context && rowTask.activity === rowMetric.activity) {
 
                         // ajouter calcul auto
                         rowMetric.taskname = rowTask.name;
-
                         rowMetric.startDate = new Date(rowMetric.startDate);
                         rowMetric.endDate = new Date(rowMetric.endDate);
                         rowMetric.date = new Date(rowMetric.date);
@@ -185,7 +185,7 @@ exports.tasksList = function(req, res) {
                                     rowMetric.progressStatus = 'Late';
                                     break;
                                 default:
-                                    if (dateNow > rowTask.endDate && rowMetric.date > rowMetric.endDate && (rowMetric.status === 'In Progress' || rowMetric.status === 'Not Started')) {
+                                    if (dateNow > rowMetric.endDate && rowMetric.date > rowMetric.endDate && (rowMetric.status === 'In Progress' || rowMetric.status === 'Not Started')) {
                                         rowMetric.progressStatus = 'Late';
                                     } else {
                                         rowMetric.progressStatus = 'At Risk';
@@ -197,7 +197,7 @@ exports.tasksList = function(req, res) {
 
                         rowTask.metrics.push(rowMetric);
                         rowTask.lastmetric = rowMetric;
-                        if (rowTask.lastmetric && dateNow > rowTask.lastmetric.endDate && (rowTask.lastmetric.status === 'In Progress' || rowTask.lastmetric.status === 'Not Started')) {
+                        if (rowTask.lastmetric && dateNow > rowTask.lastmetric.endDate && rowTask.endDate < rowTask.lastmetric.endDate && (rowTask.lastmetric.status === 'In Progress' || rowTask.lastmetric.status === 'Not Started')) {
                             rowTask.lastmetric.progressStatus = 'Late';
                         }
                     }
@@ -208,6 +208,7 @@ exports.tasksList = function(req, res) {
             return deferred.promise;
         })
         .then(function() {
+
             return res.status(200).json(mTasks);
         });
 };
