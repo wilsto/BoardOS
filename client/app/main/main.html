@@ -122,7 +122,7 @@
                                         <div class="col1">
                                             <div class="cont">
                                                 <div class="cont-col1">
-                                                    <div class="label label-sm label-danger" ng-show="task.timebetween <= 0 && task.timebetween !== null ">
+                                                    <div class="label label-sm label-danger" ng-show="task.timebetween < 0 && task.timebetween !== null ">
                                                         <i class="fa fa-bell"></i>
                                                     </div>
                                                     <div class="label label-sm label-default" ng-show="task.timebetween > 0 && task.timebetween !== null ">
@@ -132,14 +132,14 @@
                                                 <div class="cont-col2 qs">
                                                     <div class="desc" popover-html-unsafe="Context : {{task.context}} </p>  Activity : {{task.activity}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="right" popover-delay="1000">
                                                         {{task.name}}
-                                                        <span class="label label-sm label-danger " ng-show="task.timebetween <= 0 && task.timebetween !== null "> Need Metric</span>
+                                                        <span class="label label-sm label-danger " ng-show="task.timebetween < 0 && task.timebetween !== null "> Need Metric</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col2">
                                             <div class="date">
-                                                <span style="color:red" ng-show="task.timebetween <= 0 && task.timebetween !== null ">{{ Math.abs(task.timebetween) }} days ago</span>
+                                                <span style="color:red" ng-show="task.timebetween < 0 && task.timebetween !== null ">{{ Math.abs(task.timebetween) }} days ago</span>
                                                 <span ng-show="task.timebetween > 0 && task.timebetween !== null">in {{ Math.abs(task.timebetween) }} days </span>
                                                 <span style="color:orange" ng-show=" task.lastmetric === 'undefined'"> No metrics </span>
                                             </div>

@@ -94,7 +94,7 @@ angular.module('boardOsApp')
                     $scope.dashboard = dashboard;
                     
                     $scope.OutofDateTasks = _.filter($scope.dashboard.tasks, function(task) {
-                        return task.timebetween <= 0 && task.timebetween !== null;
+                        return task.timebetween < 0 && task.timebetween !== null;
                     });
 
                     $scope.dataGoals = [{

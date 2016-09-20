@@ -64,7 +64,7 @@
                 <div class="">
                     <div class="details">
                         <div class="title pull-right"><span style="text-align:right;font-size:20px;font-weight:bold;color:#1f77b4">Target <i class="fa fa-crosshairs"></i> </span>
-                            <span class="label label-sm label-danger" ng-show="task.tasks[0].timebetween <= 0 && task.tasks[0].timebetween !== null "><br>Need Metric for {{-task.tasks[0].timebetween}} days</span></div>
+                            <span class="label label-sm label-danger" ng-show="task.tasks[0].timebetween < 0 && task.tasks[0].timebetween !== null "><br>Need Metric for {{-task.tasks[0].timebetween}} days</span></div>
                     </div>
                 </div>
             </div>

@@ -100,7 +100,7 @@ angular.module('boardOsApp')
                         }
                     });
                     dashboard.tasksNeedMetrics = _.filter(dashboard.tasks, function(task) {
-                        if (typeof task.lastmetric === 'undefined' || task.timebetween <= 0 && task.timebetween !== null) {
+                        if (typeof task.lastmetric === 'undefined' || task.timebetween < 0 && task.timebetween !== null) {
                             return true;
                         }
                     });
