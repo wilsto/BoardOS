@@ -28,7 +28,7 @@ angular.module('boardOsApp')
                     $scope.task = data;
 
                     $scope.currentTask = data.tasks[0];
-                    
+
                     _.sortBy($scope.currentTask.metrics, 'date');
                     $scope.task.activity_old = data.activity;
                     $scope.task.context_old = data.context;
@@ -81,11 +81,11 @@ angular.module('boardOsApp')
         };
 
         $scope.watchThisTask = function() {
-            $http.post('/api/tasks/watch/' + $scope.task._id + '/' + $scope.currentUser._id).success(function(data) {
-                $scope.task.watchers = data.watchers;
+            $http.post('/api/tasks/watch/' + $scope.currentTask._id + '/' + $scope.currentUser._id).success(function(data) {
+                $scope.currentTask.watchers = data.watchers;
                 $scope.loadTask();
 
-                var logInfo = 'Task watch "' + $scope.task.name + '" was updated by ' + $scope.currentUser.name;
+                var logInfo = 'Task watch "' + $scope.currentTask.name + '" was updated by ' + $scope.currentUser.name;
                 $http.post('/api/logs', {
                     info: logInfo,
                     actor: $scope.currentUser
@@ -113,13 +113,14 @@ angular.module('boardOsApp')
                 $scope.currentTask.date = Date.now();
 
                 if (typeof $scope.currentTask._id === 'undefined') {
+                    // Nouvelle tache
                     $http.get('/api/tasks/search', {
                         params: {
                             activity: $scope.currentTask.activity,
                             context: $scope.currentTask.context
                         }
                     }).success(function(alreadyExit) {
-                        // si cela n'existe pas 
+                        // si cela n'existe pas
                         if (alreadyExit.length === 0) {
                             $http.post('/api/tasks', $scope.currentTask).success(function(data) {
                                 var logInfo = 'Task "' + $scope.currentTask.name + '" was created';
@@ -139,6 +140,9 @@ angular.module('boardOsApp')
                         }
                     });
                 } else {
+                    // tache déjà existante en cours de modification
+                    $scope.currentTask.activity_old = $scope.task.activity_old;
+                    $scope.currentTask.context_old = $scope.task.context_old;
                     $http.put('/api/tasks/' + $scope.currentTask._id, $scope.currentTask).success(function(data) {
                         var logInfo = 'Task "' + $scope.currentTask.name + '" was updated';
                         $http.post('/api/logs', {
