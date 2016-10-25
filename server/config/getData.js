@@ -132,6 +132,8 @@ module.exports = {
                 // Get related metrics
                 var deferred = Q.defer();
                 Metric.find({}, '-__v').sort({
+                    activity: 'asc',
+                    context: 'asc',
                     date: 'asc'
                 }).lean().exec(function(err, metric) {
                     _.each(metric, function(metricdata, index) { // pour chaque metric
@@ -164,21 +166,18 @@ module.exports = {
                                 metricdata.projectedWorkload = (metricdata.progress > 0) ? Math.round(1000 * metricdata.timeSpent * 100 / parseFloat(metricdata.progress)) / 1000 : metricdata.load;
                                 delete metricdata.progressStatus;
                                 // progressStatus
-                                if (metricdata.endDate > taskdata.endDate) {
-                                    switch (metricdata.status) {
-                                        case 'Withdrawn':
-                                        case 'Finished':
-                                            metricdata.progressStatus = 'Late';
-                                            break;
-                                        default:
-                                            if (dateNow > metricdata.endDate && metricdata.date > metricdata.endDate && (metricdata.status === 'In Progress' || metricdata.status === 'Not Started')) {
-                                                metricdata.progressStatus = 'Late';
-                                            } else {
-                                                metricdata.progressStatus = 'At Risk';
-                                            }
+                                if (moment(dateNow).isAfter(taskdata.endDate,'day')) {
+                                    if ((moment(metricdata.endDate).isAfter(taskdata.endDate,'day') || (moment(dateNow).isAfter(metricdata.endDate,'day') && moment(metricdata.date).isAfter(metricdata.endDate,'day'))) && (metricdata.status === 'In Progress' || metricdata.status === 'Not Started')) {
+                                        metricdata.progressStatus = 'Late';
+                                    } else {
+                                        metricdata.progressStatus = 'On Time';
                                     }
                                 } else {
-                                    metricdata.progressStatus = 'On Time';
+                                    if (moment(metricdata.endDate).isAfter(taskdata.endDate,'day')) {
+                                        metricdata.progressStatus = 'At Risk';
+                                    } else {
+                                        metricdata.progressStatus = 'On Time';
+                                    }
                                 }
 
                                 // ajouter information par mois 
@@ -187,9 +186,7 @@ module.exports = {
                                 //on l'ajoute à la liste
                                 taskdata.metrics.push(metricdata);
                                 taskdata.lastmetric = metricdata;
-                                if (taskdata.lastmetric && dateNow > taskdata.lastmetric.endDate && taskdata.endDate < taskdata.lastmetric.endDate && (taskdata.lastmetric.status === 'In Progress' || taskdata.lastmetric.status === 'Not Started')) {
-                                    taskdata.lastmetric.progressStatus = 'Late';
-                                }
+
                                 // kpis 
                                 _.each(mTask.kpis, function(kpidata, index) {
 
@@ -425,24 +422,19 @@ module.exports = {
                                 metricdata.projectedWorkload = (metricdata.progress > 0) ? Math.round(1000 * metricdata.timeSpent * 100 / parseFloat(metricdata.progress)) / 1000 : metricdata.load;
                                 delete metricdata.progressStatus;
                                 // progressStatus
-                                if (metricdata.endDate > taskdata.endDate) {
-                                    switch (metricdata.status) {
-                                        case 'Withdrawn':
-                                        case 'Finished':
-                                            metricdata.progressStatus = 'Late';
-                                            break;
-                                        default:
-                                            if (dateNow > metricdata.endDate && metricdata.date > metricdata.endDate && (metricdata.status === 'In Progress' || metricdata.status === 'Not Started')) {
-                                                metricdata.progressStatus = 'Late';
-                                            } else {
-                                                metricdata.progressStatus = 'At Risk';
-                                            }
+                                if (moment(dateNow).isAfter(taskdata.endDate,'day')) {
+                                    if ((moment(metricdata.endDate).isAfter(taskdata.endDate,'day') || (moment(dateNow).isAfter(metricdata.endDate,'day') && moment(metricdata.date).isAfter(metricdata.endDate,'day'))) && (metricdata.status === 'In Progress' || metricdata.status === 'Not Started')) {
+                                        metricdata.progressStatus = 'Late';
+                                    } else {
+                                        metricdata.progressStatus = 'On Time';
                                     }
                                 } else {
-                                    metricdata.progressStatus = 'On Time';
+                                    if (moment(metricdata.endDate).isAfter(taskdata.endDate,'day')) {
+                                        metricdata.progressStatus = 'At Risk';
+                                    } else {
+                                        metricdata.progressStatus = 'On Time';
+                                    }
                                 }
-
-
 
                                 // ajouter information par mois 
                                 metricdata.groupTimeByValue = moment(metricdata.date).format("YYYY.MM");
@@ -616,21 +608,18 @@ module.exports = {
                                 metricdata.projectedWorkload = (metricdata.progress > 0) ? Math.round(1000 * metricdata.timeSpent * 100 / parseFloat(metricdata.progress)) / 1000 : metricdata.load;
                                 delete metricdata.progressStatus;
                                 // progressStatus
-                                if (metricdata.endDate > taskdata.endDate) {
-                                    switch (metricdata.status) {
-                                        case 'Withdrawn':
-                                        case 'Finished':
-                                            metricdata.progressStatus = 'Late';
-                                            break;
-                                        default:
-                                            if (dateNow > metricdata.endDate && metricdata.date > metricdata.endDate && (metricdata.status === 'In Progress' || metricdata.status === 'Not Started')) {
-                                                metricdata.progressStatus = 'Late';
-                                            } else {
-                                                metricdata.progressStatus = 'At Risk';
-                                            }
+                                if (moment(dateNow).isAfter(taskdata.endDate,'day')) {
+                                    if ((moment(metricdata.endDate).isAfter(taskdata.endDate,'day') || (moment(dateNow).isAfter(metricdata.endDate,'day') && moment(metricdata.date).isAfter(metricdata.endDate,'day'))) && (metricdata.status === 'In Progress' || metricdata.status === 'Not Started')) {
+                                        metricdata.progressStatus = 'Late';
+                                    } else {
+                                        metricdata.progressStatus = 'On Time';
                                     }
                                 } else {
-                                    metricdata.progressStatus = 'On Time';
+                                    if (moment(metricdata.endDate).isAfter(taskdata.endDate,'day')) {
+                                        metricdata.progressStatus = 'At Risk';
+                                    } else {
+                                        metricdata.progressStatus = 'On Time';
+                                    }
                                 }
 
                                 // ajouter information par mois 
@@ -712,21 +701,18 @@ module.exports = {
                                 metricdata.projectedWorkload = (metricdata.progress > 0) ? Math.round(1000 * metricdata.timeSpent * 100 / parseFloat(metricdata.progress)) / 1000 : metricdata.load;
                                 delete metricdata.progressStatus;
                                 // progressStatus
-                                if (metricdata.endDate > taskdata.endDate) {
-                                    switch (metricdata.status) {
-                                        case 'Withdrawn':
-                                        case 'Finished':
-                                            metricdata.progressStatus = 'Late';
-                                            break;
-                                        default:
-                                            if (dateNow > metricdata.endDate && metricdata.date > metricdata.endDate && (metricdata.status === 'In Progress' || metricdata.status === 'Not Started')) {
-                                                metricdata.progressStatus = 'Late';
-                                            } else {
-                                                metricdata.progressStatus = 'At Risk';
-                                            }
+                                if (moment(dateNow).isAfter(taskdata.endDate,'day')) {
+                                    if ((moment(metricdata.endDate).isAfter(taskdata.endDate,'day') || (moment(dateNow).isAfter(metricdata.endDate,'day') && moment(metricdata.date).isAfter(metricdata.endDate,'day'))) && (metricdata.status === 'In Progress' || metricdata.status === 'Not Started')) {
+                                        metricdata.progressStatus = 'Late';
+                                    } else {
+                                        metricdata.progressStatus = 'On Time';
                                     }
                                 } else {
-                                    metricdata.progressStatus = 'On Time';
+                                    if (moment(metricdata.endDate).isAfter(taskdata.endDate,'day')) {
+                                        metricdata.progressStatus = 'At Risk';
+                                    } else {
+                                        metricdata.progressStatus = 'On Time';
+                                    }
                                 }
 
                                 // ajouter information par mois 

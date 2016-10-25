@@ -178,28 +178,25 @@ exports.tasksList = function(req, res) {
                         rowMetric.projectedWorkload = (rowMetric.progress > 0) ? Math.round(1000 * rowMetric.timeSpent * 100 / parseFloat(rowMetric.progress)) / 1000 : rowMetric.load;
                         delete rowMetric.progressStatus;
                         // progressStatus
-                        if (rowMetric.endDate > rowTask.endDate) {
-                            switch (rowMetric.status) {
-                                case 'Withdrawn':
-                                case 'Finished':
-                                    rowMetric.progressStatus = 'Late';
-                                    break;
-                                default:
-                                    if (dateNow > rowMetric.endDate && rowMetric.date > rowMetric.endDate && (rowMetric.status === 'In Progress' || rowMetric.status === 'Not Started')) {
-                                        rowMetric.progressStatus = 'Late';
-                                    } else {
-                                        rowMetric.progressStatus = 'At Risk';
-                                    }
+                        if (moment(dateNow).isAfter(rowTask.endDate,'day')) {
+                            if ((moment(rowMetric.endDate).isAfter(rowTask.endDate,'day') || (moment(dateNow).isAfter(rowMetric.endDate,'day') && moment(rowMetric.date).isAfter(rowMetric.endDate,'day'))) && (rowMetric.status === 'In Progress' || rowMetric.status === 'Not Started')) {
+                                rowMetric.progressStatus = 'Late';
+                            } else {
+                                rowMetric.progressStatus = 'On Time';
                             }
                         } else {
-                            rowMetric.progressStatus = 'On Time';
+                            if (moment(rowMetric.endDate).isAfter(rowTask.endDate,'day')) {
+                                rowMetric.progressStatus = 'At Risk';
+                            } else {
+                                rowMetric.progressStatus = 'On Time';
+                            }
                         }
 
                         rowTask.metrics.push(rowMetric);
                         rowTask.lastmetric = rowMetric;
-                        if (rowTask.lastmetric && dateNow > rowTask.lastmetric.endDate && rowTask.endDate < rowTask.lastmetric.endDate && (rowTask.lastmetric.status === 'In Progress' || rowTask.lastmetric.status === 'Not Started')) {
-                            rowTask.lastmetric.progressStatus = 'Late';
-                        }
+                        if (moment(dateNow).isAfter(rowTask.lastmetric.endDate,'day') && moment(dateNow).isAfter(rowTask.endDate,'day') && (rowTask.lastmetric.status === 'In Progress' || rowTask.lastmetric.status === 'Not Started')) {
+                                rowTask.lastmetric.progressStatus = 'Late';
+                        } 
                     }
                 });
                 rowTask.KPI = tools.calculKPI(rowTask.metrics, mKPI);

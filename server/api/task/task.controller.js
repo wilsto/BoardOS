@@ -26,6 +26,29 @@ var usersList = [];
 
 var getData = require('../../config/getData');
 
+var kpis = [];
+KPI.find({}, function(err, kpi) {
+    _.each(kpi, function(rowdata, index) {
+        if (typeof mTask.context === 'undefined') {
+            mTask.context = ''
+        }
+        if (typeof mTask.activity === 'undefined') {
+            mTask.activity = ''
+        }
+        if (typeof rowdata.context === 'undefined' || rowdata.context === '') {
+            rowdata.context = mTask.context
+        }
+        if (typeof rowdata.activity === 'undefined' || rowdata.activity === '') {
+            rowdata.activity = mTask.activity
+        }
+        if (rowdata.context.indexOf(mTask.context) >= 0 && rowdata.activity.indexOf(mTask.activity) >= 0) {
+            if (typeof mTask.metrics !== 'undefined') {
+                kpis.push(rowdata.toObject());
+            }
+        }
+    });
+});
+
 // Get list of tasks
 exports.index = function(req, res) {
     Task.find(function(err, tasks) {
@@ -374,29 +397,29 @@ exports.create = function(req, res) {
     var cleanTask = req.body;
     delete cleanTask.activity_old;
     delete cleanTask.context_old;
-    var newTask = new Task(cleanTask, false);
-    newTask.save(function(err, task) {
-        var date = new Date();
-        var cleanMetric = {
-            context: cleanTask.context,
-            activity: cleanTask.activity,
-            date: date.toISOString(),
-            actor: cleanTask.actor,
-            status: 'Not Started',
-            startDate: cleanTask.startDate,
-            endDate: cleanTask.endDate,
-            load: cleanTask.load,
-            timeSpent: 0,
-            progress: 0,
-            progressStatus: 'On Time',
-            trust: 100
-        };
-
-        var mewMetric = new Metric(cleanMetric, false);
-        mewMetric.save(function(err, metric) {
-            res.send(200, task);
+    cleanTask.metrics=[];
+    var date = new Date();
+    var cleanMetric = {
+        date: date.toISOString(),
+        actor: cleanTask.actor,
+        status: 'Not Started',
+        startDate: cleanTask.startDate,
+        endDate: cleanTask.endDate,
+        load: cleanTask.load,
+        timeSpent: 0,
+        progress: 0,
+        progressStatus: 'On Time',
+        trust: 100
+    };
+    cleanTask.metrics.push(cleanMetric);
+    getData.addCalculToKPI(kpis, cleanTask, function(kpis) {
+        cleanTask.kpis = kpis;
+        var newTask = new Task(cleanTask, false);
+        newTask.save(function(err, task) {
+            return res.json(task);
         });
     });
+
 };
 
 // Updates an existing task in the DB.
