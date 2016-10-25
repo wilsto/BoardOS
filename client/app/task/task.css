@@ -1,1 +1,23 @@
+.underImage {
+  margin-left: 15px;
+  color: #557386;
+  display: block;
+  font-size: 14px;
+  padding: 8px 10px;
+  margin-bottom: 1px;
+  background: #f0f6fa;
+  border-left: solid 2px #c4d5df;
+  position: relative;
+  margin-top: -12px;
+  margin-right: 20px;
+}
 
+.underImage span {
+  top: 0;
+  right: 0;
+  color: #fff;
+  font-size: 14px;
+  padding: 7px 13px;
+  position: absolute;
+  background: #169ef4;
+}

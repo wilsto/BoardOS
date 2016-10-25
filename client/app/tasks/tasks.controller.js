@@ -2,108 +2,97 @@
 'use strict';
 
 angular.module('boardOsApp')
-    .controller('TasksCtrl', function($rootScope, $scope, $http, statusTask, progressStatusTask) {
-        $scope.tasks = [];
-        $scope.task = {};
-        $scope.filterStatus = 'Not Finished';
-        $scope.filterProgressStatus = 'All';
-        $scope.searchText = '';
+  .controller('TasksCtrl', function($rootScope, $scope, $http, statusTask, progressStatusTask, Notification) {
+    $scope.tasks = [];
+    $scope.task = {};
+    $scope.filterStatus = 'Not Finished';
+    $scope.filterProgressStatus = 'All';
+    $scope.searchText = '';
 
-        $rootScope.taskStatus = statusTask;
-        $rootScope.progressStatus = progressStatusTask;
+    $rootScope.taskStatus = statusTask;
+    $rootScope.progressStatus = progressStatusTask;
 
-        $scope.Load = function() {
-            $http.get('/api/tasks/showList').success(function(data) {
-                
-                $scope.alltasks = data;
-                $scope.tasks = data;
-                $scope.filterTasks();
-            });
-        };
+    $scope.Load = function() {
+      $http.get('/api/tasks/showList').success(function(data) {
 
-        $scope.save = function() {
-            delete $scope.task.__v;
+        $scope.alltasks = data;
+        $scope.tasks = data;
+        $scope.filterTasks();
+      });
+    };
+
+    $scope.save = function() {
+      delete $scope.task.__v;
 
 
-            if (typeof $scope.task._id === 'undefined') {
-                $http.post('/api/tasks', $scope.task);
-                $.growl({
-                    icon: 'fa fa-info-circle',
-                    message: 'Task "' + $scope.task.name + '" was created'
-                });
-            } else {
-                $http.put('/api/tasks/' + $scope.task._id, $scope.task);
-                $.growl({
-                    icon: 'fa fa-info-circle',
-                    message: 'Task "' + $scope.task.name + '" was updated'
-                });
-            }
-            $scope.load();
-        };
+      if (typeof $scope.task._id === 'undefined') {
+        $http.post('/api/tasks', $scope.task);
+        Notification.success('Task "' + $scope.task.name + '" was created');
+      } else {
+        $http.put('/api/tasks/' + $scope.task._id, $scope.task);
+        Notification.success('Task "' + $scope.task.name + '" was updated');
 
-        $scope.edit = function(task) {
-            $scope.task = {};
-            $scope.task = task;
-        };
+      }
+      $scope.load();
+    };
 
-        $scope.reset = function() {
-            $scope.task = {};
-        };
+    $scope.edit = function(task) {
+      $scope.task = {};
+      $scope.task = task;
+    };
 
-        $scope.delete = function(task, index) {
-            bootbox.confirm('Are you sure?', function(result) {
-                if (result) {
-                    $http.delete('/api/tasks/' + task._id).success(function() {
-                        $scope.tasks.splice(index, 1);
-                        $.growl({
-                            icon: 'fa fa-info-circle',
-                            message: 'task "' + task.name + '" was deleted'
-                        });
-                    });
-                }
-            });
-        };
+    $scope.reset = function() {
+      $scope.task = {};
+    };
 
-        $scope.Load();
+    $scope.delete = function(task, index) {
+      bootbox.confirm('Are you sure?', function(result) {
+        if (result) {
+          $http.delete('/api/tasks/' + task._id).success(function() {
+            $scope.tasks.splice(index, 1);
+            Notification.success('Task "' + $scope.task.name + '" was deleted');
+          });
+        }
+      });
+    };
 
-        $scope.$watch('searchText', function() {
-            $scope.filterTasks();
-        });
+    $scope.Load();
 
-        $scope.$watch('filterStatus', function() {
-            $scope.filterTasks();
-        });
-
-        $scope.$watch('filterProgressStatus', function() {
-            $scope.filterTasks();
-        });
-
-        $scope.watchTask = function(task) {
-            bootbox.confirm('Are you sure to watch this task?', function(result) {
-                if (result) {
-                    $http.post('/api/tasks/watch/' + task._id + '/' + $scope.currentUser._id).success(function(data) {
-                        $scope.Load();
-
-                        var logInfo = 'Task watch "' + task.name + '" was updated by ' + $scope.currentUser.name;
-                        $http.post('/api/logs', {
-                            info: logInfo,
-                            actor: $scope.currentUser
-                        });
-                        $.growl({
-                            icon: 'fa fa-info-circle',
-                            message: logInfo
-                        });
-                    });
-                }
-            });
-        };
-
-        $scope.filterTasks = function() {
-            $scope.tasks = _.filter($scope.alltasks, function(task) {
-                var blnSearchText = ($scope.searchText.length === 0) ? true : task.name.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0 || task.activity.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0 || task.context.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0;
-                var blnStatus = (typeof task.lastmetric === 'undefined') ? true : task.lastmetric.status.toLowerCase().indexOf($scope.filterStatus.replace('All', '').replace('Not Finished', 'o').toLowerCase()) >= 0;
-                var blnProgressStatus = (typeof task.lastmetric === 'undefined') ? true : task.lastmetric.progressStatus.toLowerCase().indexOf($scope.filterProgressStatus.replace('All', '').toLowerCase()) >= 0;
-                return blnSearchText && blnProgressStatus && blnStatus;
-            });
-        };
+    $scope.$watch('searchText', function() {
+      $scope.filterTasks();
     });
+
+    $scope.$watch('filterStatus', function() {
+      $scope.filterTasks();
+    });
+
+    $scope.$watch('filterProgressStatus', function() {
+      $scope.filterTasks();
+    });
+
+    $scope.watchTask = function(task) {
+      bootbox.confirm('Are you sure to watch this task?', function(result) {
+        if (result) {
+          $http.post('/api/tasks/watch/' + task._id + '/' + $scope.currentUser._id).success(function(data) {
+            $scope.Load();
+
+            var logInfo = 'Task watch "' + task.name + '" was updated by ' + $scope.currentUser.name;
+            $http.post('/api/logs', {
+              info: logInfo,
+              actor: $scope.currentUser
+            });
+            Notification.success(logInfo);
+          });
+        }
+      });
+    };
+
+    $scope.filterTasks = function() {
+      $scope.tasks = _.filter($scope.alltasks, function(task) {
+        var blnSearchText = ($scope.searchText.length === 0) ? true : task.name.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0 || task.activity.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0 || task.context.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0;
+        var blnStatus = (typeof task.lastmetric === 'undefined') ? true : task.lastmetric.status.toLowerCase().indexOf($scope.filterStatus.replace('All', '').replace('Not Finished', 'o').toLowerCase()) >= 0;
+        var blnProgressStatus = (typeof task.lastmetric === 'undefined') ? true : task.lastmetric.progressStatus.toLowerCase().indexOf($scope.filterProgressStatus.replace('All', '').toLowerCase()) >= 0;
+        return blnSearchText && blnProgressStatus && blnStatus;
+      });
+    };
+  });
