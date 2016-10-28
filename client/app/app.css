@@ -33,6 +33,7 @@ a, a:focus, a:hover, a:active {
   height: 30px;
 }
 
+
 /***
 Font Awesome Icons
 ***/
@@ -6364,4 +6365,22 @@ Profile Page
   width: 97%;
   height: 8px;
   margin-left: 10px;
+}
+
+.label-lightdanger {
+  background-color: rgba(148, 58, 46, 0.25);
+}
+
+.label-lightwarning {
+  background-color: rgba(190, 166, 95, 0.5);
+  color: darkorange;
+}
+
+.label-lightgrey {
+  background-color: rgba(141, 146, 147, 0.25)!important;
+  color: grey;
+}
+
+.bg-lightgrey {
+  background-color: rgba(141, 146, 147, 0.25)!important
 }

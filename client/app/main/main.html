@@ -90,12 +90,6 @@
                                     <a href="#" ng-click="filterNotification='Actor view'"><b>Actor view</b> <small class="text-muted">(My active tasks)</small></a>
                                 </li>
                                 <li>
-                                    <!--                                 <a class="trigger right-caret"><b>Manager View </b><small class="text-muted">(Tasks from your dashboards)</small> </a>
-                                    <ul class="dropdown-menu sub-menu">
-                                    <li ng-if="dashboards" ng-repeat="dashboard in dashboards | orderBy:'name' track by dashboard._id">
-                                        <li><a href="#" ng-click="filterNotification='Manager view';filterDashboard=dashboard._id">{{dashboard.name}}</a></li>
-                                    </ul>
-                                </li> -->
                                     <li>
                                         <a href="#" ng-click="filterNotification='God view'"><b>God View </b><small class="text-muted">(All tasks)</small></a>
                                     </li>
@@ -108,164 +102,89 @@
                 <div class="isloading" ng-if="!tasksToNotify">Loading
                     <br/><img src="assets/images/ajax-loader_blue.gif">
                 </div>
-                <!--BEGIN TABS-->
-                <tabset>
-                    <tab>
-                        <tab-heading>
-                            Tasks
-                            <span class="badge badge-default"> {{tasksToNotify.length}}</span>
-                        </tab-heading>
-                        <div class="scroller" style="height:300px;overflow:auto" data-always-visible="1" data-rail-visible="0">
+                        <div class="scroller"  data-always-visible="1" data-rail-visible="0">
                             <ul class="feeds">
-                                <li ng-repeat="task in tasksToNotify | orderBy:'timebetween'">
+                              <li class="bg-lightgrey">
+                                  <a>
+                                      <div class="col1">
+                                          <div class="cont">
+                                              <div class="cont-col1">
+                                                  <div class="label label-sm label-default">
+                                                      <i class="fa fa-info-circle"></i>
+                                                  </div>
+                                              </div>
+                                              <div class="cont-col2 qs">
+                                                  <div class="desc">
+                                                      <small>
+                                                      Task name <br>
+                                                    <span style="color:grey"> In Grey, Targeted task infos.</span>
+                                                    <span class="text-danger"> In red, Last reestimated infos which need focus</span>
+                                                <br>
+                                                    <span style="color:grey">  <i class="fa fa-crosshairs"></i> Start Date --[ Workload  <span class="text-danger label-lightdanger">+ Overcharge </span><span class="label-lightwarning">/ Undercharge </span> ]--> End Date </span>
+                                                    <span class="label label-sm label-lightdanger">  <span class="text-danger">Delayed delivery date </span></span>
+                                                    <br><span style="color:orange"> In Orange, task with old infos, which need new metrics.</span>
+                                                     </small>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="col2">
+                                          <div class="date">
+                                              <span style="color:orange" ng-show="task.timebetween < 0 && task.timebetween !== null ">{{ Math.abs(task.timebetween) }} days ago</span>
+                                              <span ng-show="task.timebetween > 0 && task.timebetween !== null">in {{ Math.abs(task.timebetween) }} days </span>
+                                              <span style="color:orange" ng-show=" task.lastmetric === 'undefined'"> No metrics </span>
+                                              <span class="label label-sm label-warning " ng-show="task.timebetween < 0 && task.timebetween !== null "> Need Metric</span>
+                                          </div>
+                                      </div>
+                                  </a>
+                              </li>
+                                <li ng-repeat="task in tasksToNotify | orderBy:'endDate'">
                                     <a ng-href="/task/{{task._id}}">
                                         <div class="col1">
                                             <div class="cont">
                                                 <div class="cont-col1">
-                                                    <div class="label label-sm label-danger" ng-show="task.timebetween < 0 && task.timebetween !== null ">
+                                                    <div class="label label-sm label-danger" ng-show="task.lastmetric.progressStatus =='Late' ">
                                                         <i class="fa fa-bell"></i>
                                                     </div>
-                                                    <div class="label label-sm label-default" ng-show="task.timebetween > 0 && task.timebetween !== null ">
+                                                    <div class="label label-sm label-warning" ng-show="(task.timebetween < 0 && task.timebetween !== null && task.lastmetric.progressStatus !=='Late' ) || task.lastmetric.progressStatus =='At Risk' ">
+                                                        <i class="fa fa-clock-o"></i>
+                                                    </div>
+                                                    <div class="label label-sm label-success" ng-show="(task.timebetween > 0 && task.timebetween !== null && task.lastmetric.progressStatus !=='Late' )">
                                                         <i class="fa fa-clock-o"></i>
                                                     </div>
                                                 </div>
                                                 <div class="cont-col2 qs">
                                                     <div class="desc" popover-html-unsafe="Context : {{task.context}} </p>  Activity : {{task.activity}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="right" popover-delay="1000">
-                                                        {{task.name}}
-                                                        <span class="label label-sm label-danger " ng-show="task.timebetween < 0 && task.timebetween !== null "> Need Metric</span>
+                                                        {{task.name}} <br>
+                                                      <span style="color:grey">
+                                                         <i class="fa fa-crosshairs"></i> {{task.startDate | date:'dd/MM/yyyy'}} --[ {{task.load}}
+                                                         <span class="text-danger label-lightdanger" ng-if="task.lastmetric.projectedWorkload - task.load > 0">+ {{Math.round((task.lastmetric.projectedWorkload - task.load)*10)/10}}</span>
+                                                         <span class="label-lightwarning" ng-if="task.lastmetric.projectedWorkload - task.load < 0">- {{Math.round((task.lastmetric.projectedWorkload - task.load)*10*-1)/10}}</span>
+                                                          ]--> {{task.endDate | date:'dd/MM/yyyy'}}
+                                                      </span>
+                                                      <span class="label label-sm label-lightdanger" ng-if="task.lastmetric.progressStatus =='Late' || task.lastmetric.progressStatus =='At Risk'">
+                                                        <span class="text-danger"> {{task.lastmetric.progressStatus || 'No metrics'}}
+                                                          <span ng-if="task.lastmetric.endDate !== task.endDate"> --> {{task.lastmetric.endDate | date:'dd/MM/yyyy'}} </span>
+                                                        </span>
+                                                      </span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col2">
                                             <div class="date">
-                                                <span style="color:red" ng-show="task.timebetween < 0 && task.timebetween !== null ">{{ Math.abs(task.timebetween) }} days ago</span>
+                                                <span style="color:orange" ng-show="task.timebetween < 0 && task.timebetween !== null ">{{ Math.abs(task.timebetween) }} days ago</span>
                                                 <span ng-show="task.timebetween > 0 && task.timebetween !== null">in {{ Math.abs(task.timebetween) }} days </span>
                                                 <span style="color:orange" ng-show=" task.lastmetric === 'undefined'"> No metrics </span>
+                                                <span class="label label-sm label-warning " ng-show="task.timebetween < 0 && task.timebetween !== null "> Need Metric</span>
                                             </div>
                                         </div>
                                     </a>
                                 </li>
                             </ul>
                         </div>
-                    </tab>
-                    <tab>
-                        <tab-heading>
-                            Need Supervising
-                            <span class="badge badge-danger"> {{taskToSupervise.length}}</span>
-                        </tab-heading>
-                        <div class="scroller" style="height: 300px;overflow:auto" data-always-visible="1" data-rail-visible="0">
-                            <ul class="feeds">
-                                <li ng-repeat="task in taskToSupervise = (tasksToNotify | filter:{$:'!On Time'} | orderBy:'timebetween')">
-                                    <a ng-href="/task/{{task._id}}">
-                                        <div class="col1">
-                                            <div class="cont">
-                                                <div class="cont-col1">
-                                                    <div class="label label-sm label-danger">
-                                                        <i class="fa fa-eye"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="cont-col2">
-                                                    <div class="desc">
-                                                        {{task.name}} <span class="label label-sm label-danger ">   {{task.lastmetric.progressStatus || 'No metrics'}} </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col2">
-                                            <div class="date" ng-show="task.lastmetric">
-                                                {{task.timewaited}} days ago
-                                            </div>
-                                        </div>
-                                </li>
-                                </a>
-                            </ul>
-                        </div>
-                    </tab>
-                    <!-- <tab heading="Calendar">
-                        <div class="scroller" style="height: 300px;overflow:auto" data-always-visible="1" data-rail-visible1="1">
-                            <ul class="feeds">
-                                <li>
-                                    <a href="#">
-                                        <div class="col1">
-                                            <div class="cont">
-                                                <div class="cont-col1">
-                                                    <div class="label label-sm label-success">
-                                                        <i class="fa fa-calendar"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="cont-col2">
-                                                    <div class="desc">
-                                                        CL3-78989-012 FVFP
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col2">
-                                            <div class="date">
-                                                Today
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <div class="col1">
-                                            <div class="cont">
-                                                <div class="cont-col1">
-                                                    <div class="label label-sm label-success">
-                                                        <i class="fa fa-calendar"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="cont-col2">
-                                                    <div class="desc">
-                                                        TD CL3-20098-074 End
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col2">
-                                            <div class="date">
-                                                In 10 days
-                                            </div>
-                                        </div>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </tab> 
-                    <tab heading="Journal Log">
-                        <div class="scroller" style="height: 300px;overflow:auto" data-always-visible="1" data-rail-visible1="1">
-                            <ul class="feeds">
-                                <li ng-repeat="log in logs | limitTo:50 ">
-                                    <div class="col1">
-                                        <div class="cont">
-                                            <div class="cont-col1">
-                                                <div>
-                                                    <div popover-html-unsafe="{{log.actor.name}}" popover-trigger="mouseenter" popover-title="Name" popover-placement="right">
-                                                        <img ng-src="assets/images/avatars/{{log.actor._id}}.png" style="width:25px" class="img-circle" err-src="assets/images/avatars/avatar.png" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="cont-col2">
-                                                <div class="desc">
-                                                    {{log.info}}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col2">
-                                        <div class="date">
-                                            {{log.moment}}
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </tab>
-                </tabset>-->
-                    <div class="tab-content">
-                    </div>
+
+
                     <!--END TABS-->
             </div>
         </div>

@@ -220,12 +220,12 @@
                     <i class="fa fa-bookmark"></i>Qualification</a>
                   <span class="after"></span>
                 </li>
-                <li ng-if="1===2">
+                <li ng-if="1===1">
                   <a data-toggle="tab" ng-click="changeTab($event, 3)">
-                    <i class="fa fa-eye"></i>Forecast</a>
+                    <i class="fa fa-bolt"></i>Actions on task</a>
                   <span class="after"></span>
                 </li>
-                <li ng-if="currentTask._id">
+                <li ng-if="currentTask._id && 1===2">
                   <a data-toggle="tab" ng-click="changeTab($event, 2)" style="background:#FF6666;color:white">
                     <i class="fa fa-bomb"></i>Danger Zone
                   </a>
@@ -320,6 +320,22 @@
                         <label class="col-md-3 control-label">Risks</label>
                         <div class="col-md-9">
                           <input type="text" placeholder="" class="form-control" ng-model="currentTask.risks"/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="tab3" class="tab" ng-show="activeTab === 3">
+                    <div class="form-body">
+                      <div class="form-group">
+                        <label class="col-md-3 control-label">Change status of task to "Withdrawn", leave current metrics & kpis but close the task.</label>
+                        <div class="col-md-9">
+                          <button class="btn btn-warning" ng-click="withdraw()">Withdraw this currentTask</button>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-3 control-label">Delete this task and associated Metrics & KPis, there is no going back. Please be certain.</label>
+                        <div class="col-md-9">
+                          <button class="btn btn-danger" ng-click="delete()">Delete this currentTask</button>
                         </div>
                       </div>
                     </div>

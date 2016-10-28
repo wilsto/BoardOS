@@ -61,7 +61,7 @@
                                 <input type="text" name="load" class="form-control" ng-required="true" ng-model="formData.load">
                             </p>
                             <small class="text-danger has-error" ng-show="form.load.$error.required && submitted">
-                           Required 
+                           Required
                         </small>
                         </div>
                     </div>
@@ -301,8 +301,8 @@
         </tbody>
     </table>
 
-        <!-- table metrics (see ng-if)  -->  
-        <!--############-->  
+        <!-- table metrics (see ng-if)  -->
+        <!--############-->
         <table class="table table-striped table-bordered table-advance table-hover"  ng-if="dashboardType === 'metrics'">
             <thead>
                 <tr>
@@ -315,7 +315,7 @@
                     <th>End</th>
                     <th colspan="2">Comments
                     <button ng-click='openMetric(dashboardData, dataTable.metrics[task.metrics.length-1],true)' type="button" class="btn btn-primary btn-xs pull-right"><i class="glyphicon glyphicon-plus"></i> Add a metric</button>
-                    </th> 
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -327,10 +327,10 @@
                      </div>
                      </td>
                     <td class="text-left">{{metric.trust}}%</td>
-                    <td >{{metric.progress}}% <span style="margin-right:10px;" ng-if="metric.status" class="label pull-left" ng-class="{'label-info':metric.status =='In Progress','label-success':metric.status =='Finished','label-warning':metric.status =='Not Started' }">  {{metric.status}} </span></td>
+                    <td >{{metric.progress}}% <span style="margin-right:10px;" ng-if="metric.status" class="label pull-left" ng-class="{'label-info':metric.status =='In Progress','label-success':metric.status =='Finished','label-warning':metric.status =='Not Started','label-lightgrey':metric.status =='Withdrawn' }">  {{metric.status}} </span></td>
                     <td>{{metric.startDate | date:'mediumDate'}}</td>
                     <td class="text-center">{{metric.timeSpent}} <small class="text-muted">days</small><span ng-if="metric.reworkReason" class="label" ng-class="{'label-danger':metric.reworkReason==='Internal','label-warning':metric.progressStatus==='External' }">  {{metric.reworkReason}} Rework </span></td>
-                    <td ><span style="margin-right:10px;" class="label pull-right" ng-class="{'label-danger':metric.progressStatus==='Late','label-success':metric.progressStatus==='On Time','label-warning':metric.progressStatus==='At Risk' }">  {{metric.progressStatus}} </span>{{metric.endDate | date:'mediumDate'}} 
+                    <td ><span style="margin-right:10px;" class="label pull-right" ng-class="{'label-danger':metric.progressStatus==='Late','label-success':metric.progressStatus==='On Time','label-warning':metric.progressStatus==='At Risk' }">  {{metric.progressStatus}} </span>{{metric.endDate | date:'mediumDate'}}
                     </td>
                     <td style="max-width: 300px;min-width: 100px;">{{metric.comments}}</td>
                     <td ng-if="page === 'task'" style="width:25px">
@@ -340,8 +340,8 @@
             </tbody>
         </table>
 
-        <!-- table actor (see ng-if)  -->  
-        <!--############-->  
+        <!-- table actor (see ng-if)  -->
+        <!--############-->
         <div class="row"  ng-if="dashboardType === 'actors'">
             <div class="col-md-12 user-info" ng-repeat="actor in dataTable">
                 <img alt="" ng-src="assets/images/avatars/{{actor._id}}.png" style="width:45px" class="img-circle" err-src="assets/images/avatars/avatar.png"/>

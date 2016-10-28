@@ -767,6 +767,7 @@ module.exports = {
         var deferred = Q.defer();
         _.each(tasks, function(taskdata) { // pour chaque tache
           var oktopush = false;
+          //  console.log('REQ.QUERY.STATUS', req.query.status);
           if (typeof req.query.status !== 'undefined' && typeof taskdata.lastmetric !== 'undefined') {
             if (taskdata.lastmetric.status === 'In Progress' || taskdata.lastmetric.status === 'Not Started') {
               oktopush = true;

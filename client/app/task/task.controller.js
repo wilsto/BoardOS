@@ -170,6 +170,36 @@ angular.module('boardOsApp')
       });
     };
 
+    $scope.withdraw = function() {
+
+      var withdrawnmetric = _.clone($scope.currentTask.lastmetric);
+
+      Auth.getCurrentUser(function(data) {
+        delete withdrawnmetric._id;
+        withdrawnmetric.status = 'Withdrawn';
+        withdrawnmetric.comments = 'Finally Withdrawn';
+        withdrawnmetric.actor = data;
+        withdrawnmetric.date = new Date();
+        console.log('WITHDRAWNMETRIC', withdrawnmetric);
+
+        bootbox.confirm('Are you sure to withdraw and close this task ?', function(result) {
+          if (result) {
+            $http.post('/api/metrics', withdrawnmetric).success(function(data) {
+              var logInfo = 'The Task "' + $scope.currentTask.name + '" was withdrawn';
+
+              $http.post('/api/logs', {
+                info: logInfo,
+                actor: $scope.currentUser
+              });
+
+              Notification.success(logInfo);
+
+              $scope.loadTask();
+            });
+          }
+        });
+      });
+    }
 
     $scope.showWeeks = true;
 

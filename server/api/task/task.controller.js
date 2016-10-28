@@ -62,9 +62,6 @@ exports.index = function(req, res) {
 
 // Get list of tasks
 exports.list = function(req, res) {
-  var perimeterFilter = true
-  var userFilter = true;
-  var opentask = false;
   var allTasks;
   var mTasks = [];
 
@@ -86,16 +83,17 @@ exports.list = function(req, res) {
     var deferred = Q.defer();
 
     getData.addMetrics(allTasks, function(tasks) {
-      console.log('TASKS', tasks.length);
+      var perimeterFilter = true;
+      var userFilter = true;
+      var opentask = true;
       _.each(tasks, function(rowdata, index) {
         //console.log('ROWDATA', rowdata);
-
+        //  console.log('REQ.QUERY', req.query);
         if (typeof req.query.status !== 'undefined' && typeof rowdata.lastmetric !== 'undefined') {
+          opentask = false;
           if (rowdata.lastmetric.status === 'In Progress' || rowdata.lastmetric.status === 'Not Started') {
             opentask = true;
           }
-        } else {
-          opentask = true;
         }
 
         // Si la query restreint le périmètre
@@ -123,10 +121,7 @@ exports.list = function(req, res) {
           mTasks.push(rowdata);
         }
 
-        console.log('INDEX', index);
-        console.log('tasks.LENGTH', tasks.length);
         if (index === tasks.length - 1) {
-          console.log('CONDITION PASSED');
           return res.status(200).json(mTasks);
         }
       });

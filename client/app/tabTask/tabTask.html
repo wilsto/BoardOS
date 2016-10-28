@@ -83,7 +83,7 @@
             <td class="hidden-xs">
                 {{task.lastmetric.startDate | date:'mediumDate'}}
                 <br/>
-                <span class="label label-sm" ng-class="{'label-info':task.lastmetric.status =='In Progress','label-success':task.lastmetric.status =='Finished','label-warning':task.lastmetric.status =='Not Started'}">
+                <span class="label label-sm" ng-class="{'label-info':task.lastmetric.status =='In Progress','label-success':task.lastmetric.status =='Finished','label-warning':task.lastmetric.status =='Not Started','label-lightgrey':task.lastmetric.status =='Withdrawn'}">
                          {{task.lastmetric.status}}
                        </span>
             </td>
@@ -91,7 +91,7 @@
                 {{task.lastmetric.endDate | date:'mediumDate'}}
                 <br/>
                 <span class="label label-sm" ng-class="{'label-warning':task.lastmetric.progressStatus =='At Risk','label-success':task.lastmetric.progressStatus =='On Time','label-danger':task.lastmetric.progressStatus =='Late'}">
-                         {{task.lastmetric.progressStatus}} 
+                         {{task.lastmetric.progressStatus}}
                        </span>
             </td>
             <td>
