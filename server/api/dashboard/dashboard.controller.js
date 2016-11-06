@@ -196,6 +196,10 @@ exports.show = function(req, res) {
           if (typeof dashboard.activity === 'undefined') {
             dashboard.activity = ''
           }
+          if (dashboard.activity === 'DCLIC.CBI.DRIVE.SASDEV') {
+            dashboard.activity = 'DCLIC.CBI.DRIVE.SASDEV.'
+          }
+
           dashboard.tasks = _.filter(myTasks.tasks, function(task) {
             return (task.context.indexOf(dashboard.context) >= 0 && task.activity.indexOf(dashboard.activity) >= 0);
           });
