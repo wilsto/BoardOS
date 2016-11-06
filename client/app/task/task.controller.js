@@ -81,8 +81,8 @@ angular.module('boardOsApp')
     };
 
     $scope.watchThisTask = function() {
-      console.log('$SCOPE.CURRENTTASK', $scope.currentTask);
-      console.log('$SCOPE.task', $scope.task);
+      
+      
       $http.post('/api/tasks/watch/' + $scope.currentTask._id + '/' + $scope.currentUser._id).success(function(data) {
         $scope.currentTask.watchers = data.watchers;
         var logInfo = 'Task watch "' + $scope.currentTask.name + '" was updated by ' + $scope.currentUser.name;
@@ -180,7 +180,7 @@ angular.module('boardOsApp')
         withdrawnmetric.comments = 'Finally Withdrawn';
         withdrawnmetric.actor = data;
         withdrawnmetric.date = new Date();
-        console.log('WITHDRAWNMETRIC', withdrawnmetric);
+        
 
         bootbox.confirm('Are you sure to withdraw and close this task ?', function(result) {
           if (result) {

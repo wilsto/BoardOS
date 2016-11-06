@@ -6,6 +6,11 @@
 
 **Implemented enhancements:**
 
+- Notifications plus intégré [\#143](https://github.com/wilsto/BoardOS/issues/143)
+- Créer un statut abandonné [\#141](https://github.com/wilsto/BoardOS/issues/141)
+- avatar non disponible [\#138](https://github.com/wilsto/BoardOS/issues/138)
+- Améliorer la page Tache [\#133](https://github.com/wilsto/BoardOS/issues/133)
+- Amélioration de la Homepage [\#132](https://github.com/wilsto/BoardOS/issues/132)
 - Amélioration du profil de l'utilisateur [\#131](https://github.com/wilsto/BoardOS/issues/131)
 - Améliorations de la gestion des users [\#130](https://github.com/wilsto/BoardOS/issues/130)
 - Revue design dashboard [\#127](https://github.com/wilsto/BoardOS/issues/127)
@@ -27,6 +32,13 @@
 
 **Fixed bugs:**
 
+- Nouvelle tache se crèe sans metrics [\#145](https://github.com/wilsto/BoardOS/issues/145)
+- Wtacher not visible at home [\#144](https://github.com/wilsto/BoardOS/issues/144)
+- Retour du bouton : watch [\#142](https://github.com/wilsto/BoardOS/issues/142)
+- Global change incluant les metrics [\#140](https://github.com/wilsto/BoardOS/issues/140)
+- Need Metrics à tort [\#137](https://github.com/wilsto/BoardOS/issues/137)
+- Améliorer la page Tache [\#133](https://github.com/wilsto/BoardOS/issues/133)
+- Amélioration de la Homepage [\#132](https://github.com/wilsto/BoardOS/issues/132)
 - Améliorations de la gestion des users [\#130](https://github.com/wilsto/BoardOS/issues/130)
 - Mauvais chiffres au niveau du triangle QCD par dashboard [\#121](https://github.com/wilsto/BoardOS/issues/121)
 - Le nombre d'alerte doit prendre en compte la restriction du KPI [\#119](https://github.com/wilsto/BoardOS/issues/119)
