@@ -143,13 +143,13 @@
                                         <div class="col1">
                                             <div class="cont">
                                                 <div class="cont-col1">
-                                                    <div class="label label-sm label-danger" ng-show="task.lastmetric.progressStatus =='Late' ">
+                                                    <div class="label label-sm label-danger" ng-show="task.lastmetric.progressStatus ==='Late' ">
                                                         <i class="fa fa-bell"></i>
                                                     </div>
-                                                    <div class="label label-sm label-warning" ng-show="(task.timebetween < 0 && task.timebetween !== null && task.lastmetric.progressStatus !=='Late' ) || task.lastmetric.progressStatus =='At Risk' ">
+                                                    <div class="label label-sm label-warning" ng-show="(task.timebetween < 0 && task.timebetween !== null && task.lastmetric.progressStatus !=='Late' ) || task.lastmetric.progressStatus ==='At Risk' ">
                                                         <i class="fa fa-clock-o"></i>
                                                     </div>
-                                                    <div class="label label-sm label-success" ng-show="(task.timebetween > 0 && task.timebetween !== null && task.lastmetric.progressStatus !=='Late' )">
+                                                    <div class="label label-sm label-success" ng-show="(task.timebetween > 0 && task.timebetween !== null && task.lastmetric.progressStatus !=='Late' && task.lastmetric.progressStatus !=='At Risk')">
                                                         <i class="fa fa-clock-o"></i>
                                                     </div>
                                                 </div>

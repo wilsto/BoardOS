@@ -94,11 +94,11 @@
                  </div>
                 </td>
                <td >
-                <a href="/task/{{task._id}}"><div class="desc" popover-html-unsafe="Context : {{task.context}} </p>  Activity : {{task.activity}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="right" popover-delay ="1000">{{task.name}} <span class="label label-sm label-danger " ng-show="task.timebetween < 0 && task.timebetween !== null "> Need Metric</span></div></a>
+                <a href="/task/{{task._id}}"><div class="desc" popover-html-unsafe="Context : {{task.context}} </p>  Activity : {{task.activity}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="right" popover-delay ="1000">{{task.name}} <span class="label label-sm label-warning " ng-show="task.timebetween < 0 && task.timebetween !== null "> Need Metric</span></div></a>
                </td>
                <td class="hidden-xs">
                         {{task.lastmetric.startDate | date:'mediumDate'}}<br/>
-                       <span class="label label-sm" ng-class="{'label-info':task.lastmetric.status ==='In Progress','label-success':task.lastmetric.status ==='Finished','label-warning':task.lastmetric.status ==='Not Started','label-lightgrey':task.lastmetric.status =='Withdrawn'}">
+                       <span class="label label-sm" ng-class="{'label-info':task.lastmetric.status ==='In Progress','label-success':task.lastmetric.status ==='Finished','label-default':task.lastmetric.status ==='Not Started','label-lightgrey':task.lastmetric.status =='Withdrawn'}">
                          {{task.lastmetric.status}}
                        </span>
                </td>

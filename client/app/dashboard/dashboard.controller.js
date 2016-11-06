@@ -3,6 +3,12 @@
 angular.module('boardOsApp')
   .controller('DashboardCtrl', function($scope, $rootScope, $http, $stateParams, myLibrary, $cookieStore, $location, Notification) {
 
+    function average(arr) {
+      return _.reduce(arr, function(memo, num) {
+        return memo + num;
+      }, 0) / arr.length;
+    }
+
     $scope.activeTab = 1;
 
     $scope.dashboard = {
@@ -31,9 +37,7 @@ angular.module('boardOsApp')
         $scope.dataTasks = [{
           values: []
         }];
-        $scope.tasksNb = tasks.reduce(function(pv, cv) {
-          return pv + cv.value;
-        }, 0);
+
         $scope.dataTasks[0].values = myLibrary.displayLastYear(tasks, '_id', 'value', true);
       });
     };
@@ -52,6 +56,7 @@ angular.module('boardOsApp')
         $scope.dataConfidence = [{
           values: []
         }];
+        //TODO vérifier le calcul des nombres de metrics
         $scope.metricsNb = metrics.reduce(function(pv, cv) {
           return pv + cv.value.count;
         }, 0);
@@ -83,6 +88,8 @@ angular.module('boardOsApp')
           $scope.loadKPIs();
           $scope.loadTasks();
           $scope.loadMetrics();
+
+          $scope.tasksNb = dashboard.tasks.length;
         });
       }
     };
@@ -292,12 +299,6 @@ angular.module('boardOsApp')
 
       }
     };
-
-    function average(arr) {
-      return _.reduce(arr, function(memo, num) {
-        return memo + num;
-      }, 0) / arr.length;
-    }
 
     $scope.loadDashboard();
 
