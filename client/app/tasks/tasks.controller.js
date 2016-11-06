@@ -13,7 +13,7 @@ angular.module('boardOsApp')
     $rootScope.progressStatus = progressStatusTask;
 
     $scope.Load = function() {
-      $http.get('/api/tasks/showList').success(function(data) {
+      $http.get('/api/tasks/showList?simple=true&status=' + $scope.filterStatus + '&progressStatus=' + $scope.filterProgressStatus).success(function(data) {
 
         $scope.alltasks = data;
         $scope.tasks = data;

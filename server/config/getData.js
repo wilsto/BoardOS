@@ -54,6 +54,23 @@ function calcBusinessDays(dDate1, dDate2) { // input given as Date objects
 
 module.exports = {
   fromTask: function(req, callback) {
+    console.log('REQ.QUERY', req.query);
+    var taskquery = (req.query.length > 0) ? req.query : {
+      status: 'All',
+      progressStatus: 'All'
+    };
+
+    console.log('REQ.QUERY ', req.query);
+    if (req.query.simple === 'true') {
+      taskquery.simple = true;
+    }
+    if (taskquery.status === 'Not Finished') {
+      taskquery.status = ['Not Started', 'In Progress']
+    }
+    if (taskquery.status === 'All') {
+      taskquery.status = ['Not Started', 'In Progress', 'Finished', 'Withdrawn']
+    }
+    console.log('TASKQUERY', taskquery);
     //logger.trace("Start getdata.fromTask");
     Q()
       .then(function() {
@@ -185,6 +202,7 @@ module.exports = {
 
                 //on l'ajoute à la liste
                 taskdata.metrics.push(metricdata);
+
                 taskdata.lastmetric = metricdata;
 
                 // kpis
@@ -227,42 +245,54 @@ module.exports = {
         return deferred.promise;
       })
       .then(function() {
-        //logger.trace("Start Calculer les KPI par taches");
-        // Calculer les KPI par taches
+        //logger.trace("Filtrer les taches");
         var deferred = Q.defer();
-
         // pour chaque tache
-        _.each(mTask.tasks, function(taskdata, index) {
-          taskdata.kpis = [];
-          // kpis
-          _.each(mTask.kpis, function(kpidata, index) {
-            taskdata.kpis[index] = {};
-            var mKPI = taskdata.kpis[index];
-
-            // on ajoute des caractéristiques aux KPI
-            //##############################################
-            mKPI.metricsGroupBy = {};
-            mKPI.calcul = {};
-            mKPI.metricsGroupBy.Time = tools.groupMultiBy(taskdata.metrics, ['groupTimeByValue']);
-            var filteredMetrics = _.filter(taskdata.metrics, function(metric) {
-              return (taskdata.category === 'Alert') ? metric.groupTimeByValue === moment(new Date()).format("YYYY.MM") : _.last(metric.groupTimeByValue); //filtrer par le mois en cours
-            });
-            mKPI.calcul.task = tools.calculKPI(filteredMetrics, kpidata);
-            mKPI.calcul.taskTime = _.map(mKPI.metricsGroupBy.Time, function(value, key) {
-              return {
-                month: key,
-                valueKPI: tools.calculKPI(value, kpidata)
-              };
-            });
-
-          });
-
+        console.log('MTASK.TASKS', mTask.tasks.length);
+        mTask.tasks = _.filter(mTask.tasks, function(taskdata) {
+          return (!taskdata.lastmetric || taskquery.status.indexOf(taskdata.lastmetric.status) >= 0);
         });
+        console.log('MTASK.TASKS', mTask.tasks.length);
         deferred.resolve(mTask);
         return deferred.promise;
       })
       .then(function() {
+        //logger.trace("Start Calculer les KPI par taches");
         // Calculer les KPI par taches
+        var deferred = Q.defer();
+        if (taskquery.simple !== true) {
+          // pour chaque tache
+          _.each(mTask.tasks, function(taskdata, index) {
+            taskdata.kpis = [];
+            // kpis
+            _.each(mTask.kpis, function(kpidata, index) {
+              taskdata.kpis[index] = {};
+              var mKPI = taskdata.kpis[index];
+
+              // on ajoute des caractéristiques aux KPI
+              //##############################################
+              mKPI.metricsGroupBy = {};
+              mKPI.calcul = {};
+              mKPI.metricsGroupBy.Time = tools.groupMultiBy(taskdata.metrics, ['groupTimeByValue']);
+              var filteredMetrics = _.filter(taskdata.metrics, function(metric) {
+                return (taskdata.category === 'Alert') ? metric.groupTimeByValue === moment(new Date()).format("YYYY.MM") : _.last(metric.groupTimeByValue); //filtrer par le mois en cours
+              });
+              mKPI.calcul.task = tools.calculKPI(filteredMetrics, kpidata);
+              mKPI.calcul.taskTime = _.map(mKPI.metricsGroupBy.Time, function(value, key) {
+                return {
+                  month: key,
+                  valueKPI: tools.calculKPI(value, kpidata)
+                };
+              });
+
+            });
+
+          });
+        }
+        deferred.resolve(mTask);
+        return deferred.promise;
+      })
+      .then(function() {
         var deferred = Q.defer();
 
         // pour chaque tache
@@ -294,28 +324,33 @@ module.exports = {
       .then(function() {
         // Get related dashboards // A revoir car ne marche pas avec plusieurs taches
         var deferred = Q.defer();
-        // pour chaque tache
-        _.each(mTask.tasks, function(taskdata, index) {
-          taskdata.dashboards = [];
-          _.each(dashboards, function(dashboarddata, index) {
-            if (typeof dashboarddata.context === 'undefined' || dashboarddata.context === '') {
-              dashboarddata.context = taskdata.context
-            }
-            if (typeof dashboarddata.activity === 'undefined' || dashboarddata.activity === '') {
-              dashboarddata.activity = taskdata.activity
-            }
-            if (typeof dashboarddata.context === 'undefined' || taskdata.context.indexOf(dashboarddata.context) >= 0 && typeof dashboarddata.activity === 'undefined' || taskdata.activity.indexOf(dashboarddata.activity) >= 0) {
-              if (typeof taskdata.dashboards !== 'undefined') {
-                taskdata.dashboards.push(dashboarddata.toObject());
-              }
-            }
-          });
+        if (taskquery.simple !== true) {
 
-        });
+          // pour chaque tache
+          _.each(mTask.tasks, function(taskdata, index) {
+            taskdata.dashboards = [];
+            _.each(dashboards, function(dashboarddata, index) {
+              if (typeof dashboarddata.context === 'undefined' || dashboarddata.context === '') {
+                dashboarddata.context = taskdata.context
+              }
+              if (typeof dashboarddata.activity === 'undefined' || dashboarddata.activity === '') {
+                dashboarddata.activity = taskdata.activity
+              }
+              if (typeof dashboarddata.context === 'undefined' || taskdata.context.indexOf(dashboarddata.context) >= 0 && typeof dashboarddata.activity === 'undefined' || taskdata.activity.indexOf(dashboarddata.activity) >= 0) {
+                if (typeof taskdata.dashboards !== 'undefined') {
+                  taskdata.dashboards.push(dashboarddata.toObject());
+                }
+              }
+            });
+
+          });
+        }
+
         deferred.resolve(mTask);
         return deferred.promise;
       })
       .then(function() {
+        console.log('test');
         callback(mTask);
       })
       .then(null, console.error);

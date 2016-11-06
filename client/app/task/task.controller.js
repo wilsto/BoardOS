@@ -199,7 +199,7 @@ angular.module('boardOsApp')
           }
         });
       });
-    }
+    };
 
     $scope.showWeeks = true;
 
