@@ -112,7 +112,7 @@
             <div ng-if="currentTask.lastmetric.endDate !== currentTask.endDate " class="">
               <small style="font-size:9px">Reestimated:
               </small>
-              <small class="pull-right" ng-class="(currentTask.lastmetric.endDate > currentTask.endDate)?'bg-danger text-danger':'bg-success text-success'">{{currentTask.lastmetric.endDate | date:'mediumDate'}}</small>
+              <small class="pull-right" ng-class="(currentTask.lastmetric.endDate.setHours(0,0,0,0) > currentTask.endDate.setHours(0,0,0,0))?'bg-danger text-danger':'bg-success text-success'">{{currentTask.lastmetric.endDate | date:'mediumDate'}}</small>
             </div>
           </div>
         </div>
@@ -383,14 +383,13 @@
                     <a href="#" class="btn btn-default" ng-click="reset()">Cancel</a>
                   </div>
                 </div>
+                </div>
               </form>
               <!-- END CONTENT -->
             </div>
+          </tab>
+        </tabset>
           </div>
         </div>
-      </tab>
-    </tabset>
-  </div>
-</div>
 <!-- END PAGE CONTENT-->
 </div>

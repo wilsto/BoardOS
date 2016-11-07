@@ -369,11 +369,11 @@ angular.module('boardOsApp')
 
                 $scope.$watch('formData.endDate', function(newValue, oldValue) {
                   $scope.formData.progressStatus = 'Error';
-                  if (new Date($scope.formData.endDate) - new Date($scope.currentTask.endDate) > 0) {
+                  if (new Date($scope.formData.endDate).setHours(0, 0, 0, 0) - new Date($scope.currentTask.endDate).setHours(0, 0, 0, 0) > 0) {
                     $scope.formData.progressStatus = 'Late';
                   } else {
-                    if (new Date() - new Date($scope.currentTask.endDate) > 0 && $scope.formData.progress < 100) {
-                      $scope.formData.progressStatus = 'Delayed';
+                    if (new Date().setHours(0, 0, 0, 0) - new Date($scope.currentTask.endDate).setHours(0, 0, 0, 0) > 0 && $scope.formData.progress < 100) {
+                      $scope.formData.progressStatus = 'At Risk';
                     } else {
                       $scope.formData.progressStatus = 'On Time';
                     }
@@ -385,7 +385,7 @@ angular.module('boardOsApp')
                 });
 
                 $scope.calculProjectedWorkload = function() {
-                  $scope.formData.projectedWorkload = ($scope.formData.progress > 0) ? Math.round(1000 * parseFloat($scope.formData.timeSpent.replace(',', '.')) * 100 / parseFloat($scope.formData.progress)) / 1000 : $scope.formData.load;
+                  $scope.formData.projectedWorkload = ($scope.formData.progress > 0) ? Math.round(1000 * parseFloat($scope.formData.timeSpent.toString().replace(',', '.')) * 100 / parseFloat($scope.formData.progress)) / 1000 : $scope.formData.load;
                 };
 
                 $scope.deleteMetric = function(id) {

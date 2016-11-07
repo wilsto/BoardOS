@@ -54,13 +54,11 @@ function calcBusinessDays(dDate1, dDate2) { // input given as Date objects
 
 module.exports = {
   fromTask: function(req, callback) {
-    console.log('REQ.QUERY', req.query);
     var taskquery = (req.query.length > 0) ? req.query : {
       status: 'All',
       progressStatus: 'All'
     };
 
-    console.log('REQ.QUERY ', req.query);
     if (req.query.simple === 'true') {
       taskquery.simple = true;
     }
@@ -70,7 +68,6 @@ module.exports = {
     if (taskquery.status === 'All') {
       taskquery.status = ['Not Started', 'In Progress', 'Finished', 'Withdrawn']
     }
-    console.log('TASKQUERY', taskquery);
     //logger.trace("Start getdata.fromTask");
     Q()
       .then(function() {
@@ -248,11 +245,9 @@ module.exports = {
         //logger.trace("Filtrer les taches");
         var deferred = Q.defer();
         // pour chaque tache
-        console.log('MTASK.TASKS', mTask.tasks.length);
         mTask.tasks = _.filter(mTask.tasks, function(taskdata) {
           return (!taskdata.lastmetric || taskquery.status.indexOf(taskdata.lastmetric.status) >= 0);
         });
-        console.log('MTASK.TASKS', mTask.tasks.length);
         deferred.resolve(mTask);
         return deferred.promise;
       })
@@ -350,7 +345,6 @@ module.exports = {
         return deferred.promise;
       })
       .then(function() {
-        console.log('test');
         callback(mTask);
       })
       .then(null, console.error);
@@ -802,7 +796,6 @@ module.exports = {
         var deferred = Q.defer();
         _.each(tasks, function(taskdata) { // pour chaque tache
           var oktopush = false;
-          //  console.log('REQ.QUERY.STATUS', req.query.status);
           if (typeof req.query.status !== 'undefined' && typeof taskdata.lastmetric !== 'undefined') {
             if (taskdata.lastmetric.status === 'In Progress' || taskdata.lastmetric.status === 'Not Started') {
               oktopush = true;

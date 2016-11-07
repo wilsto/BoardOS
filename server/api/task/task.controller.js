@@ -87,8 +87,6 @@ exports.list = function(req, res) {
       var userFilter = true;
       var opentask = true;
       _.each(tasks, function(rowdata, index) {
-        //console.log('ROWDATA', rowdata);
-        //  console.log('REQ.QUERY', req.query);
         if (typeof req.query.status !== 'undefined' && typeof rowdata.lastmetric !== 'undefined') {
           opentask = false;
           if (rowdata.lastmetric.status === 'In Progress' || rowdata.lastmetric.status === 'Not Started') {
@@ -479,7 +477,6 @@ exports.update = function(req, res) {
 
 // Updates an existing task in the DB.
 exports.globalChange = function(req, res) {
-  console.log('req.query', req.query);
   var query = {};
   var HierarchyType = req.query.HierarchyType
   var regex = req.query.textFilter;
