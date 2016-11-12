@@ -21,6 +21,7 @@ var KPI = require('../KPI/KPI.model');
 var Task = require('../task/task.model');
 var Metric = require('../metric/metric.model');
 var Hierarchies = require('../hierarchy/hierarchy.model');
+var DashboardComplete = require('../dashboardComplete/dashboardComplete.model');
 
 var tools = require('../../config/tools');
 var getData = require('../../config/getData');
@@ -242,6 +243,37 @@ exports.show = function(req, res) {
     .then(function() {
       //logger.trace("End reponse");
       _.each(mDashboard.dashboards, function(dashboard, index) {
+
+
+        DashboardComplete.findById(dashboard._id, function(err, dashboardComplete) {
+          if (err) {
+            return handleError(res, err);
+          }
+
+          // si non existant
+          if (!dashboardComplete) {
+            DashboardComplete.create(dashboard, function(err, CreateddashboardComplete) {
+              if (err) {
+                return handleError(res, err);
+              }
+              console.log('CreateddashboardComplete ok ');
+              return true;
+            });
+          } else {
+            //si existant
+            var updated = _.merge(dashboardComplete, dashboard);
+            updated.save(function(err) {
+              if (err) {
+                return handleError(res, err);
+              }
+              console.log('UpdateddashboardComplete ok ');
+              return true;
+            });
+          }
+        });
+
+
+
         _.each(dashboard.tasks, function(task, index) {
           delete task.dashboards;
           delete task.metrics;

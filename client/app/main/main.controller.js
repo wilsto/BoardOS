@@ -17,8 +17,8 @@ angular.module('boardOsApp')
       $scope.loadTasks();
       $scope.loadMetrics();
       $scope.loadTaskToNotify();
-      $scope.loadDashBoard();
-      //$scope.loadDashBoards();
+      $scope.loadDashBoards();
+      //$scope.loadDashBoard();
     });
 
     //$scope.loadLog();
@@ -71,27 +71,28 @@ angular.module('boardOsApp')
     };
 
     $scope.loadDashBoards = function() {
+      console.time('loadDashBoards');
       var myparams = {
         params: {
           userId: $scope.currentUser._id,
         }
       };
-      $http.get('/api/dashboards/list/', myparams).success(function(dashboards) {
-        _.each(dashboards, function(dashboard) {
-          //scope.dashboards = dashboards;
-          //$scope.dataDashboards = dashboards;
+      $http.get('/api/dashboardCompletes/', myparams).success(function(dashboards) {
+        console.log('dashboards opt', dashboards);
+        console.timeEnd('loadDashBoards');
 
-          $http.get('/api/dashboards/' + dashboard._id).success(function(dashboard) {
-
-          });
-        });
+      });
+      $http.get('/api/taskCompletes/', myparams).success(function(tasks) {
+        console.log('tasks opt', tasks);
       });
     };
 
     $scope.loadDashBoard = function() {
+      console.time('loadDashBoard');
       $http.get('/api/dashboards/user/' + $scope.currentUser._id).success(function(dashboards) {
         $scope.dashboards = dashboards.dashboards;
         $scope.dataDashboards = dashboards;
+        console.log('dashboards 1', dashboards);
 
         _.each(dashboards.dashboards, function(dashboard) {
           dashboard.openTasks = _.filter(dashboard.tasks, function(task) {
@@ -177,7 +178,9 @@ angular.module('boardOsApp')
           });
           dashboard.dataAlerts = sumAlerts;
         });
+        console.timeEnd('loadDashBoard');
       });
+
     };
 
     $scope.loadLog = function() {
