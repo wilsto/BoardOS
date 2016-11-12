@@ -16,6 +16,7 @@ var tools = require('../../config/tools');
 
 var hierarchyValues = {};
 var kpis = {};
+var timetowait = 7;
 
 // permanent
 Hierarchies.find({
@@ -55,12 +56,14 @@ function calcBusinessDays(dDate1, dDate2) { // input given as Date objects
 
 function createAllCompleteTask() {
   Task.find({}, '-__v').lean().exec(function(err, tasks) {
+    console.log('# tasks updated', tasks.length);
     _.each(tasks, function(task, index) { // pour chaque tache
       createCompleteTask(task._id);
     });
   });
 }
 createAllCompleteTask();
+//createCompleteTask('580e10d13ed65b1100365088');
 
 function createCompleteTask(taskId) {
   Q()
@@ -73,6 +76,13 @@ function createCompleteTask(taskId) {
         Task.findById(taskId, {
           __v: false
         }).lean().exec(function(err, task) {
+          task.actors = [];
+          task.actors.push(task.actor._id);
+          _.each(task.watchers, function(watcher) {
+            if (watcher) {
+              task.actors.push(watcher._id);
+            }
+          });
           deferred.resolve(task);
         })
       }
@@ -149,11 +159,6 @@ function createCompleteTask(taskId) {
         // kpis
         _.each(kpis, function(kpi, index) {
 
-          // on calcule le time to wait par rapport aux KPIs
-          if (task.context.indexOf(kpi.context) >= 0 && task.activity.indexOf(kpi.activity) >= 0) {
-            task.timetowait = Math.min((typeof kpi.refresh === 'undefined') ? Infinity : kpi.refresh, (typeof task.timetowait === 'undefined') ? Infinity : task.timetowait);
-          }
-
           // ajout des couleurs
           if (typeof metric[kpi.metricTaskField] === 'string') {
             var Value = _.filter(hierarchyValues, function(item) {
@@ -170,17 +175,24 @@ function createCompleteTask(taskId) {
         // on calcule les temps d'écarts
         var oneDay = 24 * 60 * 60 * 1000;
         var d = new Date(task.startDate);
-        var dateStart = d.setDate(d.getDate() - task.timetowait);
+        var dateStart = d.setDate(d.getDate() - timetowait);
         var firstDate = (new Date(metric.date) > new Date(task.startDate)) ? new Date(metric.date) : new Date(dateStart);
         var currentDate = new Date();
-        task.timewaited = Math.round((firstDate.getTime() - currentDate.getTime()) / (oneDay));
-        task.timebetween = (metric.status === 'In Progress' || metric.status === 'Not Started') ? task.timetowait + task.timewaited : null;
+        task.timewaited = Math.round((currentDate.getTime() - firstDate.getTime()) / (oneDay));
+        task.needToFeed = (metric.status === 'In Progress' || metric.status === 'Not Started') && task.timewaited > timetowait;
+        delete task.timewaited;
         metric.fromNow = moment(metric.date).fromNow();
 
+        //on ajoute l'acteur ou les watchers
+        if (metric.actor) {
+          task.actors.push(metric.actor._id);
+        }
         //on l'ajoute à la liste
         task.metrics.push(metric);
         task.lastmetric = metric;
+
       });
+      task.actors = _.uniq(_.compact(task.actors));
       deferred.resolve(task);
     })
     return deferred.promise;
@@ -202,6 +214,7 @@ function createCompleteTask(taskId) {
       //##############################################
       mKPI.metricsGroupBy = {};
       mKPI.calcul = {};
+      mKPI._id = kpi._id;
       mKPI.metricsGroupBy.Time = tools.groupMultiBy(task.metrics, ['groupTimeByValue']);
       var filteredMetrics = _.filter(task.metrics, function(metric) {
         return (task.category === 'Alert') ? metric.groupTimeByValue === moment(new Date()).format("YYYY-MM") : _.last(metric.groupTimeByValue); //filtrer par le mois en cours
@@ -239,13 +252,13 @@ function createCompleteTask(taskId) {
           if (err) {
             console.log('error :', err);
           }
-          console.log('CreatedtaskComplete ', task.name);
           return true;
         });
       } else {
         //si existant
         var updated = _.merge(taskComplete, task);
         updated.markModified('actor');
+        updated.markModified('actors');
         updated.markModified('metrics');
         updated.markModified('lastmetric');
         updated.markModified('kpis');
@@ -254,7 +267,6 @@ function createCompleteTask(taskId) {
           if (err) {
             console.log('error :', err);
           }
-          console.log('UpdatedtaskComplete ', task.name);
           return true;
         });
       }
@@ -266,7 +278,11 @@ function createCompleteTask(taskId) {
 
 // Get list of taskCompletes
 exports.index = function(req, res) {
-  TaskComplete.find({}, {
+  var filterUser = (req.query.userId) ? {
+    actors: req.query.userId
+  } : {};
+
+  TaskComplete.find(filterUser, {
     __v: false,
     metrics: false,
     alerts: false,
@@ -279,7 +295,10 @@ exports.index = function(req, res) {
     "actor.active": false,
     "actor.location": false
   }, function(err, taskCompletes) {
+    console.log('taskCompletes', taskCompletes.length);
     if (err) {
+      console.log('CONDITION PASSED');
+      console.log('err', err);
       return handleError(res, err);
     }
     return res.status(200).json(taskCompletes);

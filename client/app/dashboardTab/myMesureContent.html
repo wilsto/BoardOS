@@ -79,7 +79,7 @@
                     <div class="col-md-6">
                         <p class="input-group">
                             <label>Progress <small class="text-muted">(in %)</small>
-                            </label><span class="label pull-right" ng-class="{'label-info':formData.status =='In Progress','label-success':formData.status =='Finished','label-warning':formData.status =='Not Started','label-danger':formData.status =='Error' }">{{formData.status}}  </span>
+                            </label><span class="label pull-right" ng-class="{'label-info':formData.status =='In Progress','label-success':formData.status =='Finished','label-default':formData.status =='Not Started','label-danger':formData.status =='Error' }">{{formData.status}}  </span>
                             <input type="text" name="progress" ng-required class="form-control" ng-model="formData.progress" placeholder="min:0 - max:100 - unit:%">
                             <span class="help-block">
                             </span>

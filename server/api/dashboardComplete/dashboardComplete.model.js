@@ -10,10 +10,17 @@ var DashboardCompleteSchema = new Schema({
   axis: String,
   categories: Schema.Types.Mixed,
   kpis: Schema.Types.Mixed,
+  kpisValue: Number,
+  alerts: Schema.Types.Mixed,
+  alertsValue: Number,
   tasks: Schema.Types.Mixed,
+  tasksNb: Number,
+  openTasksNb: Number,
+  toFeedTasksNb: Number,
   category: String,
   tags: String,
   owner: Schema.Types.Mixed,
+  actors: Schema.Types.Mixed,
   date: {
     type: Date,
     default: Date.now

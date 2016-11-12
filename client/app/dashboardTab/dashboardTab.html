@@ -84,7 +84,7 @@
                         <div class="col-md-4" ng-class="{'bg-danger':form.progress.$invalid && submitted}">
                             <p class="input-group">
                                 <label>Progress <small class="text-muted">(in %)</small>
-                                </label><span class="label pull-right" ng-class="{'label-info':formData.status =='In Progress','label-success':formData.status =='Finished','label-warning':formData.status =='Not Started','label-danger':formData.status =='Error' }">{{formData.status}}  </span>
+                                </label><span class="label pull-right" ng-class="{'label-info':formData.status =='In Progress','label-success':formData.status =='Finished','label-default':formData.status =='Not Started','label-danger':formData.status =='Error' }">{{formData.status}}  </span>
                                 <input type="text" name="progress" ng-required="true" class="form-control" ng-model="formData.progress" placeholder="min:0 - max:100 - unit:%">
                                 <span class="help-block">
                             </span>
@@ -295,7 +295,7 @@
                 <td ng-if="page === 'KPI'">{{task.lastmetric[dashboardData.metricTaskField]}}</td>
                 <td ng-if="page === 'KPI'">{{task.lastmetric[dashboardData.refMetricTaskField]}}</td>
                 <td style="width:25px" ng-if="isManager">
-                    <a ng-href="task/{{task._id}}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></button>
+                    <a ng-href="task/{{task._id}}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></a>
                 </td>
             </tr>
         </tbody>
@@ -327,7 +327,7 @@
                      </div>
                      </td>
                     <td class="text-left">{{metric.trust}}%</td>
-                    <td >{{metric.progress}}% <span style="margin-right:10px;" ng-if="metric.status" class="label pull-left" ng-class="{'label-info':metric.status =='In Progress','label-success':metric.status =='Finished','label-warning':metric.status =='Not Started','label-lightgrey':metric.status =='Withdrawn' }">  {{metric.status}} </span></td>
+                    <td >{{metric.progress}}% <span style="margin-right:10px;" ng-if="metric.status" class="label pull-left" ng-class="{'label-info':metric.status =='In Progress','label-success':metric.status =='Finished','label-default':metric.status =='Not Started','label-lightgrey':metric.status =='Withdrawn' }">  {{metric.status}} </span></td>
                     <td>{{metric.startDate | date:'mediumDate'}}</td>
                     <td class="text-center">{{metric.timeSpent}} <small class="text-muted">days</small><span ng-if="metric.reworkReason" class="label" ng-class="{'label-danger':metric.reworkReason==='Internal','label-warning':metric.reworkReason==='External' }">  {{metric.reworkReason}} Rework </span></td>
                     <td ><span style="margin-right:10px;" class="label pull-right" ng-class="{'label-danger':metric.progressStatus==='Late','label-success':metric.progressStatus==='On Time','label-warning':metric.progressStatus==='At Risk' }">  {{metric.progressStatus}} </span>{{metric.endDate | date:'mediumDate'}}

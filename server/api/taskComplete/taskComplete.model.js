@@ -12,6 +12,7 @@ var TaskCompleteSchema = new Schema({
     default: 1
   },
   actor: Schema.Types.Mixed,
+  actors: Schema.Types.Mixed,
   watchers: Schema.Types.Mixed,
   metrics: Schema.Types.Mixed,
   lastmetric: Schema.Types.Mixed,
@@ -30,8 +31,7 @@ var TaskCompleteSchema = new Schema({
     type: Date,
     default: Date.now
   },
-  timewaited: Number,
-  timebetween: Number
+  needToFeed: Boolean
 }, {
   strict: false
 });

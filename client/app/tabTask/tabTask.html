@@ -1,6 +1,6 @@
 <div class="actions pull-right" style="padding-right:15px">
     <div class="btn-group">
-        <a class="btn dropdown-toggle" ng-class="{'btn-default':filterStatus==='All','btn-info':filterStatus==='In Progress' || filterStatus==='Not Finished','btn-success':filterStatus==='Finished','btn-warning':filterStatus==='Not Started'}" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">  Status : {{filterStatus}} <i class="fa fa-angle-down"></i></a>
+        <a class="btn dropdown-toggle" ng-class="{'btn-default':filterStatus==='All','btn-info':filterStatus==='In Progress' || filterStatus==='Not Finished','btn-success':filterStatus==='Finished','btn-default':filterStatus==='Not Started'}" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">  Status : {{filterStatus}} <i class="fa fa-angle-down"></i></a>
         <ul class="dropdown-menu pull-right">
             <li>
                 <a href="#" ng-click="filterStatus='All'">All</a>
