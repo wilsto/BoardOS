@@ -19,6 +19,8 @@ var KPI = require('../KPI/KPI.model');
 var User = require('../user/user.model');
 var Dashboard = require('../dashboard/dashboard.model');
 var Hierarchies = require('../hierarchy/hierarchy.model');
+var TaskComplete = require('../taskComplete/taskComplete.model');
+
 var hierarchyValues = {};
 var mTasks = [];
 var mTask = {};
@@ -428,6 +430,7 @@ exports.create = function(req, res) {
 
     var mewMetric = new Metric(cleanMetric, false);
     mewMetric.save(function(err, metric) {
+      process.emit('metricChanged', task._id);
       res.send(200, task);
     });
   });
@@ -468,8 +471,12 @@ exports.update = function(req, res) {
           multi: true
         }, function(err, metrics) {
           if (err) return handleError(err);
-          return res.send(201);
+          process.emit('metricChanged', updated._id);
+          return res.status(200).send(updated);
         });
+      } else {
+        process.emit('metricChanged', updated._id);
+        res.status(200).send(updated);
       }
     });
   });
@@ -518,6 +525,7 @@ exports.globalChange = function(req, res) {
               _.each(metrics, function(metric) {
                 updatedMetric = _.merge(metric, newValue);
                 updatedMetric.save(function(err) {
+                  process.emit('metricChanged', task._id);
                   if (err) {
                     return handleError(res, err);
                   }
@@ -556,6 +564,20 @@ exports.destroy = function(req, res) {
         }
         return res.send(204);
       });
+    });
+  });
+
+  TaskComplete.findById(req.params.id, function(err, task) {
+    if (err) {
+      return handleError(res, err);
+    }
+    if (!task) {
+      return res.send(404);
+    }
+    task.remove(function(err) {
+      if (err) {
+        return handleError(res, err);
+      }
     });
   });
 };

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('TaskCtrl', function($rootScope, $scope, $http, $stateParams, $location, Auth, Notification) {
+  .controller('TaskCtrl', function($rootScope, $scope, $http, $stateParams, $location, Auth, Notification, socket) {
 
     $scope.activeTab = 1;
     $scope.errors = {};
@@ -21,27 +21,25 @@ angular.module('boardOsApp')
       $scope.isManager = data;
     });
 
+    socket.on('taskComplete:save', function(data) {
+      console.log('data', data);
+      $scope.loadTask();
+    });
+
     $scope.loadTask = function() {
       $scope.currentTask = {};
       if ($stateParams.id) {
-        $http.get('/api/tasks/' + $stateParams.id).success(function(data) {
-          $scope.task = data;
+        $http.get('/api/taskCompletes/' + $stateParams.id).success(function(task) {
+          $scope.task = task;
 
-          $scope.currentTask = data.tasks[0];
+          $scope.currentTask = task;
+          $scope.task.activity_old = task.activity;
+          $scope.task.context_old = task.context;
 
-          _.sortBy($scope.currentTask.metrics, 'date');
-          $scope.task.activity_old = data.activity;
-          $scope.task.context_old = data.context;
           $scope.updateWatch();
 
-          // calcul des Kpis
-          var kpis = data.kpis;
-
           // calcul des alertes
-          var alertKPI = _.filter(kpis, function(kpi) { // filtre
-            return kpi.category === 'Alert';
-          });
-          var alertValue = _.pluck(_.pick(_.pluck(alertKPI, function(kpi) { // valeurs existantes
+          var alertValue = _.pluck(_.pick(_.pluck(task.alerts, function(kpi) { // valeurs existantes
             return kpi.calcul.task;
           }), _.isNumber));
           var alertSum = _.reduce(alertValue, function(alertSum, kpicalcul) { // sum
@@ -49,11 +47,8 @@ angular.module('boardOsApp')
           });
           $scope.alertsNb = alertSum;
 
-          // calcul des objectifs
-          var goalsKPI = _.filter(kpis, function(kpi) { // filtre
-            return kpi.category === 'Goal';
-          });
-          var goalsValue = _.pluck(_.pick(_.pluck(goalsKPI, function(kpi) { // valeurs existantes
+          // calcul des kpis
+          var goalsValue = _.pluck(_.pick(_.pluck(task.kpis, function(kpi) { // valeurs existantes
             return kpi.calcul.task;
           }), _.isNumber));
           var goalsSum = _.reduce(goalsValue, function(goalsSum, kpicalcul) { // sum
@@ -70,10 +65,6 @@ angular.module('boardOsApp')
 
     $scope.loadTask();
 
-    $rootScope.$on('reloadTask', function(data) {
-      $scope.loadTask();
-    });
-
     $scope.changeTab = function(e, tabNb) {
       $('.ver-inline-menu li').removeClass('active');
       $(e.target).closest('li').addClass('active');
@@ -81,8 +72,6 @@ angular.module('boardOsApp')
     };
 
     $scope.watchThisTask = function() {
-      
-      
       $http.post('/api/tasks/watch/' + $scope.currentTask._id + '/' + $scope.currentUser._id).success(function(data) {
         $scope.currentTask.watchers = data.watchers;
         var logInfo = 'Task watch "' + $scope.currentTask.name + '" was updated by ' + $scope.currentUser.name;
@@ -100,28 +89,26 @@ angular.module('boardOsApp')
 
       // si la form est valide
       if (form.$valid) {
+        delete $scope.task.__v;
+        delete $scope.task.kpis;
+        delete $scope.task.metrics;
+        delete $scope.task.tasks;
 
+        $scope.task.actor = $scope.currentUser;
+        $scope.task.date = Date.now();
 
-        delete $scope.currentTask.__v;
-        delete $scope.currentTask.kpis;
-        delete $scope.currentTask.metrics;
-        delete $scope.currentTask.tasks;
-
-        $scope.currentTask.actor = $scope.currentUser;
-        $scope.currentTask.date = Date.now();
-
-        if (typeof $scope.currentTask._id === 'undefined') {
+        if (typeof $scope.task._id === 'undefined') {
           // Nouvelle tache
           $http.get('/api/tasks/search', {
             params: {
-              activity: $scope.currentTask.activity,
-              context: $scope.currentTask.context
+              activity: $scope.task.activity,
+              context: $scope.task.context
             }
           }).success(function(alreadyExit) {
             // si cela n'existe pas
             if (alreadyExit.length === 0) {
-              $http.post('/api/tasks', $scope.currentTask).success(function(data) {
-                var logInfo = 'Task "' + $scope.currentTask.name + '" was created';
+              $http.post('/api/tasks', $scope.task).success(function(data) {
+                var logInfo = 'Task "' + $scope.task.name + '" was created';
                 $http.post('/api/logs', {
                   info: logInfo,
                   actor: $scope.currentUser
@@ -137,10 +124,10 @@ angular.module('boardOsApp')
           });
         } else {
           // tache déjà existante en cours de modification
-          $scope.currentTask.activity_old = $scope.task.activity_old;
-          $scope.currentTask.context_old = $scope.task.context_old;
-          $http.put('/api/tasks/' + $scope.currentTask._id, $scope.currentTask).success(function(data) {
-            var logInfo = 'Task "' + $scope.currentTask.name + '" was updated';
+          $scope.task.activity_old = $scope.task.activity_old;
+          $scope.task.context_old = $scope.task.context_old;
+          $http.put('/api/tasks/' + $scope.task._id, $scope.task).success(function(data) {
+            var logInfo = 'Task "' + $scope.task.name + '" was updated';
             $http.post('/api/logs', {
               info: logInfo,
               actor: $scope.currentUser
@@ -171,16 +158,13 @@ angular.module('boardOsApp')
     };
 
     $scope.withdraw = function() {
-
       var withdrawnmetric = _.clone($scope.currentTask.lastmetric);
-
       Auth.getCurrentUser(function(data) {
         delete withdrawnmetric._id;
         withdrawnmetric.status = 'Withdrawn';
         withdrawnmetric.comments = 'Finally Withdrawn';
         withdrawnmetric.actor = data;
         withdrawnmetric.date = new Date();
-        
 
         bootbox.confirm('Are you sure to withdraw and close this task ?', function(result) {
           if (result) {
@@ -193,7 +177,6 @@ angular.module('boardOsApp')
               });
 
               Notification.success(logInfo);
-
               $scope.loadTask();
             });
           }

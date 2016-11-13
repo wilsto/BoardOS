@@ -158,11 +158,11 @@
                         <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="formData.date" is-open="opened1" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Fermer" ng-click="open1($event)" />
                     </div>
                     <div class="col-md-2">
-                        <button ng-show='formData._id' class="btn btn-danger" ng-click="deleteMetric(formData._id)">Delete this metric</button>
+                        <a class="btn btn-danger" ng-click="deleteMetric()" ng-show='formData._id' >Delete this metric</a>
                     </div>
                     <div class="col-md-6">
                         <button class="btn btn-lg btn-primary pull-right" ng-click="ok()">Save this metric</button>
-                        <button class="btn  btn-default pull-right" style="margin-right:25px" ng-click="cancel()">Cancel, do not save</button>
+                        <button type="button" class="btn  btn-default pull-right" style="margin-right:25px" ng-click="cancel()">Cancel, do not save</button>
                     </div>
                 </div>
             </div>

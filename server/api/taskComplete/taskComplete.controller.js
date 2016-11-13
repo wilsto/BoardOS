@@ -10,6 +10,7 @@ var Task = require('../task/task.model');
 var Metric = require('../metric/metric.model');
 var Hierarchies = require('../hierarchy/hierarchy.model');
 var KPI = require('../KPI/KPI.model');
+var Dashboard = require('../dashboard/dashboard.model');
 
 var getData = require('../../config/getData');
 var tools = require('../../config/tools');
@@ -63,7 +64,12 @@ function createAllCompleteTask() {
   });
 }
 createAllCompleteTask();
-//createCompleteTask('580e10d13ed65b1100365088');
+//createCompleteTask('582850668c177230596d601b');
+
+process.on('metricChanged', function(req) {
+  console.log('metricChanged req', req);
+  createCompleteTask(req);
+});
 
 function createCompleteTask(taskId) {
   Q()
@@ -89,6 +95,17 @@ function createCompleteTask(taskId) {
       return deferred.promise;
     })
 
+  // Start dashboards
+  .then(function(task) {
+    // Get a single user
+    var deferred = Q.defer();
+    Dashboard.find({}, '-__v', function(err, dashboard) {
+      var dashboards = dashboard;
+      deferred.resolve(task);
+    })
+    return deferred.promise;
+  })
+
   // Start metrics
   .then(function(task) {
     //
@@ -106,7 +123,6 @@ function createCompleteTask(taskId) {
 
         delete metric.__v;
         delete metric.taskname;
-        delete metric._id;
         delete metric.activity;
         delete metric.context;
         delete metric.actor.email;
@@ -115,6 +131,7 @@ function createCompleteTask(taskId) {
         delete metric.actor.create_date;
         delete metric.actor.role;
 
+        metric.taskId = task._id;
         // si c'est la première métric, on crèe l'objet
         if (typeof task.metrics === 'undefined') {
           task.metrics = []
@@ -215,6 +232,9 @@ function createCompleteTask(taskId) {
       mKPI.metricsGroupBy = {};
       mKPI.calcul = {};
       mKPI._id = kpi._id;
+      mKPI.name = kpi.name;
+      mKPI.category = kpi.category;
+      mKPI.constraint = kpi.constraint;
       mKPI.metricsGroupBy.Time = tools.groupMultiBy(task.metrics, ['groupTimeByValue']);
       var filteredMetrics = _.filter(task.metrics, function(metric) {
         return (task.category === 'Alert') ? metric.groupTimeByValue === moment(new Date()).format("YYYY-MM") : _.last(metric.groupTimeByValue); //filtrer par le mois en cours
@@ -223,7 +243,7 @@ function createCompleteTask(taskId) {
       mKPI.calcul.taskTime = _.map(mKPI.metricsGroupBy.Time, function(value, key) {
         return {
           month: key,
-          valueKPI: tools.calculKPI(value, kpi)
+          value: tools.calculKPI(value, kpi)
         };
       });
 
@@ -256,6 +276,13 @@ function createCompleteTask(taskId) {
         });
       } else {
         //si existant
+        taskComplete.actor = task.actor;
+        taskComplete.actors = task.actors;
+        taskComplete.metrics = task.metrics;
+        taskComplete.lastmetric = task.lastmetric;
+        taskComplete.kpis = task.kpis;
+        taskComplete.kpis = task.kpis;
+        taskComplete.alerts = task.alerts;
         var updated = _.merge(taskComplete, task);
         updated.markModified('actor');
         updated.markModified('actors');

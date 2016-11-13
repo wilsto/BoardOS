@@ -87,7 +87,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="task in tasks | filter:filter()">
+              <tr ng-repeat="task in tasks | orderBy:'endDate'| filter:filter()">
                 <td style="text-align: center">
                    <div popover-html-unsafe="<b>{{task.actors[0].name}}</b>" popover-trigger="mouseenter" popover-title="Owner Identity" popover-placement="right" >
                    <img alt="" ng-src="{{ task.actors[0].avatar || 'assets/images/avatars/' + task.actors[0]._id + '.png'}} " class="img-circle" err-src="assets/images/avatars/avatar.png"/>

@@ -96,7 +96,7 @@
             <div class="title">
               <span class="text-muted">Start
               </span>
-              <span class="pull-right text-info">{{currentTask.startDate | date:'mediumDate'}}</span>
+              <span class="pull-right text-info">{{task.startDate | date:'mediumDate'}}</span>
             </div>
           </div>
         </div>
@@ -107,12 +107,12 @@
             <div class="title">
               <span class="text-muted">End
               </span>
-              <span class="pull-right  text-info">{{currentTask.endDate | date:'mediumDate'}}</span>
+              <span class="pull-right  text-info">{{task.endDate | date:'mediumDate'}}</span>
             </div>
-            <div ng-if="currentTask.lastmetric.endDate !== currentTask.endDate " class="">
+            <div ng-if="task.lastmetric.endDate !== task.endDate " class="">
               <small style="font-size:9px">Reestimated:
               </small>
-              <small class="pull-right" ng-class="(currentTask.lastmetric.endDate.setHours(0,0,0,0) > currentTask.endDate.setHours(0,0,0,0))?'bg-danger text-danger':'bg-success text-success'">{{currentTask.lastmetric.endDate | date:'mediumDate'}}</small>
+              <small class="pull-right" ng-class="(task.lastmetric.endDate> task.endDate)?'bg-danger text-danger':'bg-success text-success'">{{task.lastmetric.endDate | date:'mediumDate'}}</small>
             </div>
           </div>
         </div>
@@ -123,15 +123,15 @@
             <div class="title">
               <span class="text-muted">Load
               </span>
-              <span class="pull-right  text-info">{{currentTask.load}}
+              <span class="pull-right  text-info">{{task.load}}
                 <small>days</small>
               </span>
             </div>
-            <div ng-if="currentTask.lastmetric.projectedWorkload !== currentTask.load">
+            <div ng-if="task.lastmetric.projectedWorkload !== task.load">
               <small style="font-size:9px">Reestimated:
               </small>
-              <small class="pull-right" ng-class="(currentTask.lastmetric.projectedWorkload > currentTask.load)?'bg-danger text-danger':'bg-success text-success'">
-                {{currentTask.lastmetric.projectedWorkload}}
+              <small class="pull-right" ng-class="(task.lastmetric.projectedWorkload > task.load)?'bg-danger text-danger':'bg-success text-success'">
+                {{task.lastmetric.projectedWorkload}}
                 days</small>
             </div>
           </div>
@@ -163,15 +163,15 @@
     <div class="row">
       <tabset>
         <!--tab Metrics-->
-        <tab ng-if="task._id" active="true">
+        <tab ng-if="task" active="true">
           <tab-heading>
             Metrics
             <span class="badge badge-default">
-              {{currentTask.metrics.length}}</span>
+              {{task.metrics.length}}</span>
           </tab-heading>
-          <div dashboard-tab dashboard-type="metrics" dashboard-data="currentTask" ng-if="task"></div>
+          <div dashboard-tab dashboard-type="metrics" dashboard-data="task" ng-if="task"></div>
         </tab>
-        <tab ng-if="task._id">
+        <tab ng-if="task">
           <tab-heading>
             KPIs
             <span class="badge badge-default">
@@ -196,12 +196,12 @@
           </tab-heading>
           <div tab-actor data="task" ng-if="task"></div>
         </tab>
-        <tab ng-if="task._id">
+        <!-- <tab ng-if="task._id">
           <tab-heading>
             Help
           </tab-heading>
           <div dashboard-tab dashboard-type="help" dashboard-data="task" ng-if="task"></div>
-        </tab>
+        </tab> -->
         <tab ng-if="isManager">
           <tab-heading>
             Edit
@@ -225,7 +225,7 @@
                     <i class="fa fa-bolt"></i>Actions on task</a>
                   <span class="after"></span>
                 </li>
-                <li ng-if="currentTask._id && 1===2">
+                <li ng-if="task._id && 1===2">
                   <a data-toggle="tab" ng-click="changeTab($event, 2)" style="background:#FF6666;color:white">
                     <i class="fa fa-bomb"></i>Danger Zone
                   </a>
@@ -241,28 +241,28 @@
                       <div class="form-group" ng-class="{'bg-danger':form.name.$invalid && submitted}">
                         <label class="col-md-3 control-label">Name</label>
                         <div class="col-md-9">
-                          <input type="text" name="name" placeholder="" class="form-control" ng-model="currentTask.name" ng-required="true"/>
+                          <input type="text" name="name" placeholder="" class="form-control" ng-model="task.name" ng-required="true"/>
                           <small class="text-danger" ng-show="form.name.$error.required && submitted">Please enter a name.</small>
                         </div>
                       </div>
                       <div class="form-group" ng-class="{'bg-danger':form.context.$invalid && submitted}">
                         <label class="col-md-3 control-label">Context</label>
                         <div class="col-md-9">
-                          <input type="text" name="context" placeholder="" class="form-control" ng-model="currentTask.context" ng-required="true" typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:8"/>
+                          <input type="text" name="context" placeholder="" class="form-control" ng-model="task.context" ng-required="true" typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:8"/>
                           <small class="text-danger" ng-show="form.context.$error.required && submitted">Please enter a context.</small>
                         </div>
                       </div>
                       <div class="form-group" ng-class="{'bg-danger':form.activity.$invalid && submitted}">
                         <label class="col-md-3 control-label">Activity</label>
                         <div class="col-md-9">
-                          <input type="text" name="activity" placeholder="" class="form-control" ng-model="currentTask.activity" ng-required="true" typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:8"/>
+                          <input type="text" name="activity" placeholder="" class="form-control" ng-model="task.activity" ng-required="true" typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:8"/>
                           <small class="text-danger" ng-show="form.activity.$error.required && submitted">Please enter an activity.</small>
                         </div>
                       </div>
                       <div class="form-group" ng-if="1===2">
                         <label class="col-md-3 control-label">Tags</label>
                         <div class="col-md-9">
-                          <input type="text" placeholder="" class="form-control" ng-model="currentTask.tags"/>
+                          <input type="text" placeholder="" class="form-control" ng-model="task.tags"/>
                         </div>
                       </div>
                     </div>
@@ -273,7 +273,7 @@
                         <label class="col-md-3 control-label">Target Start Date</label>
                         <div class="col-md-9">
                           <p class="input-group">
-                            <input name="startDate" type="text" placeholder="" ng-required="true" class="form-control" ng-model="currentTask.startDate" datepicker-popup="{{format}}" is-open="opened1" datepicker-options="dateOptions" close-text="Fermer"/>
+                            <input name="startDate" type="text" placeholder="" ng-required="true" class="form-control" ng-model="task.startDate" datepicker-popup="{{format}}" is-open="opened1" datepicker-options="dateOptions" close-text="Fermer"/>
                             <span class="input-group-btn">
                               <button class="btn btn-default" ng-click="open1($event)">
                                 <span class="fa fa-calendar"></span>
@@ -287,7 +287,7 @@
                         <label class="col-md-3 control-label">Target End Date</label>
                         <div class="col-md-9">
                           <p class="input-group">
-                            <input name="endDate" type="text" ng-required="true" class="form-control" ng-model="currentTask.endDate" datepicker-popup="{{format}}" is-open="opened2" datepicker-options="dateOptions" close-text="Fermer"/>
+                            <input name="endDate" type="text" ng-required="true" class="form-control" ng-model="task.endDate" datepicker-popup="{{format}}" is-open="opened2" datepicker-options="dateOptions" close-text="Fermer"/>
                             <span class="input-group-btn">
                               <button class="btn btn-default" ng-click="open2($event)">
                                 <span class="fa fa-calendar"></span>
@@ -300,26 +300,26 @@
                       <div class="form-group" ng-class="{'bg-danger':form.load.$invalid && submitted}">
                         <label class="col-md-3 control-label">Target Work Load</label>
                         <div class="col-md-9">
-                          <input name="load" type="text" placeholder="" ng-required="true" class="form-control" ng-model="currentTask.load"/>
+                          <input name="load" type="text" placeholder="" ng-required="true" class="form-control" ng-model="task.load"/>
                           <small class="text-danger" ng-show="form.load.$error.required && submitted">Please enter a target workload of the task.</small>
                         </div>
                       </div>
                       <div class="form-group" ng-if="1===2">
                         <label class="col-md-3 control-label">Target Budget (k€)</label>
                         <div class="col-md-9">
-                          <input type="text" placeholder="" class="form-control" ng-model="currentTask.budget"/>
+                          <input type="text" placeholder="" class="form-control" ng-model="task.budget"/>
                         </div>
                       </div>
                       <div class="form-group" ng-if="1===2">
                         <label class="col-md-3 control-label">Deliverables</label>
                         <div class="col-md-9">
-                          <input type="text" placeholder="" class="form-control" ng-model="currentTask.deliverables"/>
+                          <input type="text" placeholder="" class="form-control" ng-model="task.deliverables"/>
                         </div>
                       </div>
                       <div class="form-group" ng-if="1===2">
                         <label class="col-md-3 control-label">Risks</label>
                         <div class="col-md-9">
-                          <input type="text" placeholder="" class="form-control" ng-model="currentTask.risks"/>
+                          <input type="text" placeholder="" class="form-control" ng-model="task.risks"/>
                         </div>
                       </div>
                     </div>
@@ -329,13 +329,13 @@
                       <div class="form-group">
                         <label class="col-md-3 control-label">Change status of task to "Withdrawn", leave current metrics & kpis but close the task.</label>
                         <div class="col-md-9">
-                          <button class="btn btn-warning" ng-click="withdraw()">Withdraw this currentTask</button>
+                          <button class="btn btn-warning" ng-click="withdraw()">Withdraw this task</button>
                         </div>
                       </div>
                       <div class="form-group">
                         <label class="col-md-3 control-label">Delete this task and associated Metrics & KPis, there is no going back. Please be certain.</label>
                         <div class="col-md-9">
-                          <button class="btn btn-danger" ng-click="delete()">Delete this currentTask</button>
+                          <button class="btn btn-danger" ng-click="delete()">Delete this task</button>
                         </div>
                       </div>
                     </div>
@@ -345,13 +345,13 @@
                       <div class="form-group">
                         <label class="col-md-3 control-label">Overall Impact</label>
                         <div class="col-md-9">
-                          <input type="text" placeholder="" class="form-control" ng-model="currentTask.impact"/>
+                          <input type="text" placeholder="" class="form-control" ng-model="task.impact"/>
                         </div>
                       </div>
                       <div class="form-group">
                         <label class="col-md-3 control-label">Previous task</label>
                         <div class="col-md-9">
-                          <input type="text" placeholder="" class="form-control" ng-model="currentTask.previous"/>
+                          <input type="text" placeholder="" class="form-control" ng-model="task.previous"/>
                         </div>
                       </div>
                     </div>
@@ -361,7 +361,7 @@
                       <div class="form-group">
                         <label class="col-md-3 control-label">Once you delete your task, there is no going back. Please be certain.</label>
                         <div class="col-md-9">
-                          <button class="btn btn-danger" ng-click="delete()">Delete this currentTask</button>
+                          <button class="btn btn-danger" ng-click="delete()">Delete this task</button>
                         </div>
                       </div>
                     </div>

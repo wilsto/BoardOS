@@ -13,8 +13,7 @@ angular.module('boardOsApp')
     $rootScope.progressStatus = progressStatusTask;
 
     $scope.Load = function() {
-      $http.get('/api/tasks/showList?simple=true&status=' + $scope.filterStatus + '&progressStatus=' + $scope.filterProgressStatus).success(function(data) {
-
+      $http.get('/api/taskCompletes').success(function(data) {
         $scope.alltasks = data;
         $scope.tasks = data;
         $scope.filterTasks();
@@ -90,8 +89,8 @@ angular.module('boardOsApp')
     $scope.filterTasks = function() {
       $scope.tasks = _.filter($scope.alltasks, function(task) {
         var blnSearchText = ($scope.searchText.length === 0) ? true : task.name.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0 || task.activity.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0 || task.context.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0;
-        var blnStatus = (typeof task.lastmetric === 'undefined') ? true : task.lastmetric.status.toLowerCase().indexOf($scope.filterStatus.replace('All', '').replace('Not Finished', 'o').toLowerCase()) >= 0;
-        var blnProgressStatus = (typeof task.lastmetric === 'undefined') ? true : task.lastmetric.progressStatus.toLowerCase().indexOf($scope.filterProgressStatus.replace('All', '').toLowerCase()) >= 0;
+        var blnStatus = (typeof task.lastmetric === 'undefined') ? false : task.lastmetric.status.toLowerCase().indexOf($scope.filterStatus.replace('All', '').replace('Not Finished', 'o').toLowerCase()) >= 0;
+        var blnProgressStatus = (typeof task.lastmetric === 'undefined') ? false : task.lastmetric.progressStatus.toLowerCase().indexOf($scope.filterProgressStatus.replace('All', '').toLowerCase()) >= 0;
         return blnSearchText && blnProgressStatus && blnStatus;
       });
     };

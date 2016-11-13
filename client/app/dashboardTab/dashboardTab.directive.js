@@ -326,23 +326,24 @@ angular.module('boardOsApp')
                     if ($scope.formData._id) {
                       $http.put('/api/metrics/' + $scope.formData._id, $scope.formData).success(function(data) {
                         var logInfo = 'A Metric for Task "' + scope.dashboardData.name + '" was updated';
+                        Notification.success(logInfo);
 
                         $http.post('/api/logs', {
                           info: logInfo,
                           actor: $scope.currentUser
                         });
 
-                        $rootScope.$broadcast('reloadTask', 'data');
                         $scope.closeThisDialog();
                       });
                     } else {
                       $http.post('/api/metrics', $scope.formData).success(function(data) {
                         var logInfo = 'A Metric for Task "' + scope.dashboardData.name + '" was created';
+                        Notification.success(logInfo);
+
                         $http.post('/api/logs', {
                           info: logInfo,
                           actor: $scope.currentUser
                         });
-                        $rootScope.$broadcast('reloadTask', 'data');
                         $scope.closeThisDialog();
                       });
                     }
@@ -388,19 +389,19 @@ angular.module('boardOsApp')
                   $scope.formData.projectedWorkload = ($scope.formData.progress > 0) ? Math.round(1000 * parseFloat($scope.formData.timeSpent.toString().replace(',', '.')) * 100 / parseFloat($scope.formData.progress)) / 1000 : $scope.formData.load;
                 };
 
-                $scope.deleteMetric = function(id) {
+                $scope.deleteMetric = function() {
+                  event.preventDefault();
                   bootbox.confirm('Are you sure to delete this metric ? It can NOT be undone.', function(result) {
                     if (result) {
-                      $http.delete('/api/metrics/' + id).success(function() {
+                      $http.delete('/api/metrics/' + $scope.formData._id + '/' + $scope.formData.taskId).success(function() {
                         var logInfo = 'A Metric for Task "' + scope.dashboardData.name + '" was deleted';
                         $http.post('/api/logs', {
                           info: logInfo,
                           actor: $scope.currentUser
                         });
                         Notification.success(logInfo);
-                        $rootScope.$broadcast('reloadTask', 'data');
-                        $scope.closeThisDialog();
                       });
+                      $scope.closeThisDialog();
                     }
                   });
                 };

@@ -12,7 +12,13 @@ angular.module('boardOsApp')
     };
 
     $scope.load = function() {
-      $http.get('/api/dashboards/list').success(function(dashboards) {
+      var myparams = {
+        params: {
+          quick: true
+        }
+      };
+
+      $http.get('/api/dashboardCompletes/', myparams).success(function(dashboards) {
         $scope.alldashboards = dashboards;
         $scope.dashboards = dashboards;
 

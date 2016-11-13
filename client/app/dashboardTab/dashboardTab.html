@@ -319,11 +319,11 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="metric in dataTable | filter:search | orderBy:'date' track by $index" ng-show="metric._id"  on-finish-render>
+                <tr ng-repeat="metric in dataTable track by $index" on-finish-render>
                     <td class="text-muted">{{metric.date | date:'mediumDate'}}</td><td>
 
                      <div popover-html-unsafe="Name : <b>{{metric.actor.name}}</b> </br> Role : <b>{{metric.actor.role}}</b> " popover-trigger="mouseenter" popover-title="Actor Identity" popover-placement="right" >
-                     <img alt="{{metric.actor}}" ng-src="assets/images/avatars/{{metric.actor._id}}.png" style="width:25px" class="img-circle" err-src="assets/images/avatars/avatar.png"/>
+                     <img alt="{{metric.actor}}" ng-src="assets/images/avatars/{{metric.actor._id}}.png"  class="img-circle" err-src="assets/images/avatars/avatar.png"/>
                      </div>
                      </td>
                     <td class="text-left">{{metric.trust}}%</td>
