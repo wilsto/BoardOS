@@ -24,11 +24,10 @@ angular.module('boardOsApp')
           if (typeof scope.data !== 'undefined') {
             //on fait la somme des calculs de kpi pour chaque tache
             scope.kpis = _.union(scope.data.kpis, scope.data.alerts);
-            console.log('scope.kpis', scope.kpis);
             _.each(scope.kpis, function(kpi, index) {
-              kpi.calcul.time = myLibrary.displayLastYear(kpi.calcul.taskTime, 'month', 'value');
-              console.log('kpi.calcul.taskTime', kpi.calcul.taskTime);
-              console.log('  kpi.calcul.time ', kpi.calcul.time);
+              if (kpi.calcul.taskTime) {
+                kpi.calcul.time = myLibrary.displayLastYear(kpi.calcul.taskTime, 'month', 'value');
+              }
               //TODO Calcul par trimestre
 
             });

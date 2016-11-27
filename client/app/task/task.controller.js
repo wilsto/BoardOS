@@ -22,7 +22,6 @@ angular.module('boardOsApp')
     });
 
     socket.on('taskComplete:save', function(data) {
-      console.log('data', data);
       $scope.loadTask();
     });
 

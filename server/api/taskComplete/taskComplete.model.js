@@ -18,6 +18,7 @@ var TaskCompleteSchema = new Schema({
   lastmetric: Schema.Types.Mixed,
   kpis: Schema.Types.Mixed,
   alerts: Schema.Types.Mixed,
+  dashboards: Schema.Types.Mixed,
   tags: String,
   load: String,
   budget: String,

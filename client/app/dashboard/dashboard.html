@@ -8,14 +8,14 @@
         <div class="col-md-10">
             <div class="row">
                 <div class="col-md-8 profile-info">
-                    <h1>{{dashboardLight.name}}</h1>
+                    <h1>{{dashboard.name}}</h1>
                     <ul class="list list-inline">
                         <li>
-                            <i class="fa fa-map-marker"></i><span class="text-info"> Context </span> {{dashboardLight.context || 'All'}}
+                            <i class="fa fa-map-marker"></i><span class="text-info"> Context </span> {{dashboard.context || 'All'}}
                         </li>
                         <br>
                         <li>
-                            <i class="fa fa-calendar"></i><span class="text-info"> Activity </span> {{dashboardLight.activity || 'All'}}
+                            <i class="fa fa-calendar"></i><span class="text-info"> Activity </span> {{dashboard.activity || 'All'}}
                         </li>
                     </ul>
                 </div>
@@ -79,7 +79,7 @@
         <div class="col-md-2 col-sm-4">
             <div class="stats-overview stat-block">
                 <div class="details">
-                    <div class="title pull-right"><span style="font-weight:bold;color:#CB4B16">{{alertsNb}}</span> Alerts</div>
+                    <div class="title pull-right"><span style="font-weight:bold;color:#CB4B16">{{dashboard.alertsValue}}</span> Alerts</div>
                     <nvd3 options="optionsAlerts" data="dataAlerts"></nvd3>
                 </div>
             </div>
@@ -87,7 +87,7 @@
         <div class="col-md-2 col-sm-4">
             <div class="stats-overview stat-block">
                 <div class="details">
-                    <div class="title pull-left"><span style="font-weight:bold;color:#2CA02C">{{goalsNb}}%</span> Goals</div>
+                    <div class="title pull-left"><span style="font-weight:bold;color:#2CA02C">{{dashboard.kpisValue}}%</span> Goals</div>
                     <div class="title pull-right"><small class="text-muted"><i>This Month:</i>{{lastgoalsNb}}%</small></div>
                     <nvd3 options="optionsGoals" data="dataGoals"></nvd3>
                 </div>
@@ -106,17 +106,18 @@
     <tab ng-if="dashboard._id" active="true">
         <tab-heading>
             KPIs
-            <span class="badge badge-info"> {{KPIs.length || 0}}</span>
+            <span class="badge badge-success"> {{dashboard.kpis.length + dashboard.alerts.length }}</span>
         </tab-heading>
         <div tab-k-p-i data="dashboard" multitasks="true" ng-if="dashboard"></div>
     </tab>
     <tab ng-if="dashboard._id">
         <tab-heading>
             Tasks
-            <span class="badge badge-info"> {{tasksNb || 0}}</span>
+            <span class="badge badge-info"> {{dashboard.openTasksNb || 0}}</span> /
+            <span class="badge badge-default"> {{tasksNb || 0}}</span>
             <span ng-if="OutofDateTasks.length > 0" class="badge badge-danger"> {{OutofDateTasks.length}} </span>
         </tab-heading>
-        <div tab-task data="dashboard.tasks" kpi="dashboard.KPIs" ng-if="dashboard._id"></div>
+        <div tab-task data="dashboard.tasks" kpi="dashboard.kpis" ng-if="dashboard._id"></div>
     </tab>
     <tab ng-if="dashboard._id">
         <tab-heading>
@@ -253,7 +254,7 @@
     </tab>
 </tabset>
 <!-- <script>
-  jQuery(document).ready(function() {    
+  jQuery(document).ready(function() {
    Index.initMiniCharts();
    Index.initDashboardDaterange();
  });

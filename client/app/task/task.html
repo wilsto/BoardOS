@@ -83,8 +83,8 @@
               <span style="text-align:right;font-size:20px;font-weight:bold;color:#1f77b4">Target
                 <i class="fa fa-crosshairs"></i>
               </span>
-              <span class="label label-sm label-danger" ng-show="task.tasks[0].timebetween < 0 && task.tasks[0].timebetween !== null "><br>Need Metric for
-                {{-task.tasks[0].timebetween}}
+              <span class="label label-sm label-danger" ng-show="task.timebetween < 0 && task.timebetween !== null "><br>Need Metric for
+                {{-task.timebetween}}
                 days</span>
             </div>
           </div>
@@ -184,7 +184,7 @@
           <tab-heading>
             Dashboards
             <span class="badge badge-default">
-              {{task.tasks[0].dashboards.length}}</span>
+              {{task.dashboards.length}}</span>
           </tab-heading>
           <div tab-dashboard data="task" ng-if="task"></div>
         </tab>
@@ -192,7 +192,7 @@
         <tab ng-if="task._id">
           <tab-heading>
             Actors
-            <span class="badge badge-default">{{task.tasks[0].actors.length + task.tasks[0].watchers.length}}</span>
+            <span class="badge badge-default">{{task.actors.length + task.watchers.length}}</span>
           </tab-heading>
           <div tab-actor data="task" ng-if="task"></div>
         </tab>

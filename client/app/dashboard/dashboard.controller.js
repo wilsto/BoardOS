@@ -16,6 +16,7 @@ angular.module('boardOsApp')
       paramId: $stateParams.id,
       owner: $scope.currentUser
     };
+
     $scope.loadKPIs = function() {
       $http.get('/api/KPIs/list').success(function(KPIs) {
         $scope.KPIs = KPIs;
@@ -71,11 +72,10 @@ angular.module('boardOsApp')
       });
     };
 
-    $scope.loadDashboard = function() {
+    $scope.loadCompleteDashboard = function() {
       if ($stateParams.id) {
-        $http.get('/api/dashboards/quick/' + $stateParams.id).success(function(dashboard) {
-          $scope.dashboardLight = dashboard;
-
+        $http.get('/api/dashboardCompletes/' + $stateParams.id).success(function(dashboard) {
+          $scope.dashboard = dashboard;
           $rootScope.perimeter.name = dashboard.name;
           $rootScope.perimeter.id = dashboard._id;
           $rootScope.perimeter.activity = dashboard.activity;
@@ -84,39 +84,7 @@ angular.module('boardOsApp')
           $rootScope.perimeter.category = dashboard.category;
           $cookieStore.put('perimeter', $rootScope.perimeter);
 
-          $scope.load();
-          $scope.loadKPIs();
-          $scope.loadTasks();
-          $scope.loadMetrics();
-
           $scope.tasksNb = dashboard.tasks.length;
-        });
-      }
-    };
-
-    $scope.load = function() {
-      if ($stateParams.id) {
-        $http.get('/api/dashboards/' + $stateParams.id).success(function(dashboard) {
-
-          $scope.dashboard = dashboard;
-
-          $scope.OutofDateTasks = _.filter($scope.dashboard.tasks, function(task) {
-            return task.timebetween < 0 && task.timebetween !== null;
-          });
-
-          $scope.dataGoals = [{
-            values: []
-          }];
-          $scope.dataAlerts = [{
-            values: []
-          }];
-          // on rassemble les métriques
-          $scope.dashboard.metrics = [];
-          _.each($scope.dashboard.tasks, function(task) {
-            _.each(task.metrics, function(metric) {
-              $scope.dashboard.metrics.push(metric);
-            });
-          });
 
           var dataGoals = [];
           var dataAllGoals = [];
@@ -130,34 +98,34 @@ angular.module('boardOsApp')
 
             if (kpi.category === 'Goal') {
 
-              var goalsByMonth = _.pluck(myLibrary.getByMonth(kpi.calcul.taskTime, 'month', 'value'), 'mean');
-              dataGoals.push(goalsByMonth);
+              //  var goalsByMonth = _.pluck(myLibrary.getByMonth(kpi.calcul.taskTime, 'month', 'value'), 'mean');
+              // dataGoals.push(goalsByMonth);
               dataGoals4QCT.push({
                 name: kpi.constraint,
                 value: kpi.calcul.task
               });
-              kpiGoals.push(goalsByMonth);
+              // kpiGoals.push(goalsByMonth);
 
-              kpi.calcul.time = _.map(myLibrary.getCalculByMonth(kpiGoals), function(data) {
-                return {
-                  month: data.label,
-                  valueKPI: data.mean
-                };
-              });
+              // kpi.calcul.time = _.map(myLibrary.getCalculByMonth(kpiGoals), function(data) {
+              //   return {
+              //     month: data.label,
+              //     valueKPI: data.mean
+              //   };
+              // });
 
               dataAllGoals.push(kpi.calcul.task);
             }
-            if (kpi.category === 'Alert') {
-
-              var alertsByMonth = _.pluck(myLibrary.getByMonth(kpi.calcul.taskTime, 'month', 'value'), 'mean');
-              kpiAlerts.push(alertsByMonth);
-              dataAlerts.push(alertsByMonth);
-              $scope.alertsNb += kpi.calcul.task;
-
-            }
+            // if (kpi.category === 'Alert') {
+            //
+            //   var alertsByMonth = _.pluck(myLibrary.getByMonth(kpi.calcul.taskTime, 'month', 'value'), 'mean');
+            //   kpiAlerts.push(alertsByMonth);
+            //   dataAlerts.push(alertsByMonth);
+            //   $scope.alertsNb += kpi.calcul.task;
+            //
+            // }
           });
-          $scope.dataGoals[0].values = myLibrary.getCalculByMonth(dataGoals);
-          $scope.dataAlerts[0].values = myLibrary.getCalculByMonth(dataAlerts);
+          // $scope.dataGoals[0].values = myLibrary.getCalculByMonth(dataGoals);
+          // $scope.dataAlerts[0].values = myLibrary.getCalculByMonth(dataAlerts);
 
           var scoreOnQCT = _.chain(dataGoals4QCT)
             .flatten()
@@ -192,8 +160,8 @@ angular.module('boardOsApp')
             value: 0
           };
           $scope.goalsNb = parseInt(average(_.compact(dataAllGoals)));
-          $scope.lastgoalsNb = _.last($scope.dataGoals[0].values).mean;
-          $scope.lastalertsNb = _.last($scope.dataAlerts[0].values).sum;
+          // $scope.lastgoalsNb = _.last($scope.dataGoals[0].values).mean;
+          // $scope.lastalertsNb = _.last($scope.dataAlerts[0].values).sum;
 
           var mydata = {
             'graphset': [{
@@ -288,6 +256,39 @@ angular.module('boardOsApp')
             });
           });
 
+        });
+        $scope.loadTasks();
+        $scope.loadMetrics();
+
+      }
+    };
+    $scope.loadCompleteDashboard();
+
+    $scope.load = function() {
+      if ($stateParams.id) {
+        $http.get('/api/dashboards/' + $stateParams.id).success(function(dashboard) {
+
+          $scope.dashboard = dashboard;
+
+          $scope.OutofDateTasks = _.filter($scope.dashboard.tasks, function(task) {
+            return task.timebetween < 0 && task.timebetween !== null;
+          });
+
+          $scope.dataGoals = [{
+            values: []
+          }];
+          $scope.dataAlerts = [{
+            values: []
+          }];
+          // on rassemble les métriques
+          $scope.dashboard.metrics = [];
+          _.each($scope.dashboard.tasks, function(task) {
+            _.each(task.metrics, function(metric) {
+              $scope.dashboard.metrics.push(metric);
+            });
+          });
+
+
 
 
         });
@@ -300,7 +301,7 @@ angular.module('boardOsApp')
       }
     };
 
-    $scope.loadDashboard();
+    //$scope.loadDashboard();
 
     $scope.changeTab = function(e, tabNb) {
       $('.ver-inline-menu li').removeClass('active');

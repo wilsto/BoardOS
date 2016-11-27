@@ -34,6 +34,17 @@ KPI.find({}, '-__v').lean().exec(function(err, mKPI) {
   });
 })
 
+process.on('taskChanged', function(task) {
+  console.log('taskChanged ', task.name + '-' + task.context + '-' + task.activity);
+  Dashboard.find({}, '-__v', function(err, dashboards) {
+    _.each(dashboards, function(dashboard, index) {
+      if ((dashboard.context === undefined || task.context.indexOf(dashboard.context) >= 0) && (dashboard.activity === undefined || task.activity.indexOf(dashboard.activity) >= 0)) {
+        console.log('impactedDashboard ', dashboard.name + '-' + dashboard.context + '-' + dashboard.activity);
+        createCompleteDashboard(dashboard._id);
+      }
+    });
+  })
+});
 
 function createAllCompleteDashboard() {
   Dashboard.find({}, '-__v').lean().exec(function(err, dashboards) {
@@ -43,8 +54,8 @@ function createAllCompleteDashboard() {
     });
   });
 }
-// createAllCompleteDashboard();
-// createCompleteDashboard("54e3db715ef9d41100cb44ed");
+//createAllCompleteDashboard();
+//createCompleteDashboard("54e3db715ef9d41100cb44ed");
 // createCompleteDashboard('5623d6c4b292ab1100acc9e7');
 // createCompleteDashboard("5506b222b7228311003ef67a");
 // createCompleteDashboard("5506b30eb7228311003ef67e");
@@ -89,18 +100,21 @@ function createCompleteDashboard(dashboardId) {
       date: 'asc'
     }).lean().exec(function(err, findtasks) {
       tasks = findtasks;
+      _.each(findtasks, function(task) {
+        var mTask = _.clone(task);
+        delete mTask.metrics;
+        delete mTask.kpis;
+        delete mTask.alerts;
+        delete mTask.dashboards;
+        delete mTask.watchers;
+        dashboard.tasks.push(mTask);
+      })
       dashboard.openTasksNb = _.where(findtasks, function(task) {
         return task.lastmetric && (task.lastmetric.status === 'In Progress' || task.lastmetric.status === 'Not Started');
       }).length;
       dashboard.toFeedTasksNb = _.where(findtasks, function(task) {
         return task.needToFeed;
       }).length;
-
-      _.each(findtasks, function(task) {
-        dashboard.tasks.push({
-          taskId: task._id
-        });
-      })
       dashboard.tasksNb = dashboard.tasks.length;
       deferred.resolve(dashboard);
     });
@@ -115,23 +129,58 @@ function createCompleteDashboard(dashboardId) {
     dashboard.kpisValue = null;
     dashboard.alerts = [];
     dashboard.alertsValue = 0;
+    var alertsSumBy = {};
+    var kpisSumBy = {};
+    var kpisNbBy = {};
     var kpisSum = 0;
     var kpisNb = 0;
     _.each(tasks, function(task, index) {
       _.each(task.kpis, function(kpi, index2) { // list kpi
-        dashboard.kpis.push({
-          kpiId: kpi._id,
-          value: parseInt(kpi.calcul.task || 0)
-        });
+        if (!kpisSumBy[kpi._id]) {
+          kpisSumBy[kpi._id] = 0;
+        }
+        if (!kpisNbBy[kpi._id]) {
+          kpisNbBy[kpi._id] = 0;
+        }
+        kpisSumBy[kpi._id] += parseInt(kpi.calcul.task || 0);
+        kpisNbBy[kpi._id] += (parseInt(kpi.calcul.task) > 0) ? 1 : 0;
         kpisSum += parseInt(kpi.calcul.task || 0);
         kpisNb += (parseInt(kpi.calcul.task) > 0) ? 1 : 0;
       })
       _.each(task.alerts, function(alert, index2) { // list alert
-        dashboard.alerts.push({
-          kpiId: alert._id,
-          value: parseInt(alert.calcul.task || 0)
-        });
+        if (!alertsSumBy[alert._id]) {
+          alertsSumBy[alert._id] = 0;
+        }
+        alertsSumBy[alert._id] += parseInt(alert.calcul.task || 0);
         dashboard.alertsValue += parseInt(alert.calcul.task || 0);
+      });
+    });
+    _.each(kpisSumBy, function(value, key) {
+      var mKPI = _.filter(kpis, function(kpi) {
+        return kpi._id.toString() === key;
+      })[0];
+      dashboard.kpis.push({
+        kpiId: key,
+        name: mKPI.name,
+        constraint: mKPI.constraint,
+        category: mKPI.category,
+        calcul: {
+          task: parseInt(value / kpisNbBy[key])
+        }
+      });
+    });
+    _.each(alertsSumBy, function(value, key) {
+      var mKPI = _.filter(alerts, function(alert) {
+        return alert._id.toString() === key;
+      })[0];
+      dashboard.alerts.push({
+        alertId: key,
+        name: mKPI.name,
+        constraint: mKPI.constraint,
+        category: mKPI.category,
+        calcul: {
+          task: value
+        }
       });
     });
     dashboard.kpisValue = parseInt(kpisSum / kpisNb);
@@ -158,9 +207,12 @@ function createCompleteDashboard(dashboardId) {
         });
       } else {
         //si existant
-        delete dashboardComplete.tasks;
-        delete dashboardComplete.kpis;
-        delete dashboardComplete.alerts;
+        dashboardComplete.tasks = dashboard.tasks;
+        dashboardComplete.kpis = dashboard.kpis;
+        dashboardComplete.alerts = dashboard.alerts;
+        dashboardComplete.owner = dashboard.owner;
+        dashboardComplete.categories = dashboard.categories;
+        dashboardComplete.actors = dashboard.actors;
         var updated = _.merge(dashboardComplete, dashboard);
         updated.markModified('owner');
         updated.markModified('categories');

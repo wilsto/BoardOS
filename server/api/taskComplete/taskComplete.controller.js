@@ -11,12 +11,14 @@ var Metric = require('../metric/metric.model');
 var Hierarchies = require('../hierarchy/hierarchy.model');
 var KPI = require('../KPI/KPI.model');
 var Dashboard = require('../dashboard/dashboard.model');
+var User = require('../user/user.model');
 
 var getData = require('../../config/getData');
 var tools = require('../../config/tools');
 
 var hierarchyValues = {};
 var kpis = {};
+var usersList = {};
 var timetowait = 7;
 
 // permanent
@@ -64,7 +66,7 @@ function createAllCompleteTask() {
   });
 }
 createAllCompleteTask();
-//createCompleteTask('582850668c177230596d601b');
+//createCompleteTask('58285153192b7fb4a392a13f');
 
 process.on('metricChanged', function(req) {
   console.log('metricChanged req', req);
@@ -73,34 +75,69 @@ process.on('metricChanged', function(req) {
 
 function createCompleteTask(taskId) {
   Q()
-    // Get a single task
-    .then(function() {
-      var deferred = Q.defer();
-      if (typeof taskId === 'undefined') {
-        console.log('Error');
-      } else {
-        Task.findById(taskId, {
-          __v: false
-        }).lean().exec(function(err, task) {
-          task.actors = [];
-          task.actors.push(task.actor._id);
-          _.each(task.watchers, function(watcher) {
-            if (watcher) {
-              task.actors.push(watcher._id);
-            }
-          });
-          deferred.resolve(task);
-        })
-      }
-      return deferred.promise;
+
+  .then(function() {
+    // Get a single user
+    var deferred = Q.defer();
+    User.find({}, '-salt -hashedPassword', function(err, user) {
+      usersList = user;
+      deferred.resolve();
     })
+    return deferred.promise;
+  })
+
+  // Get a single task
+  .then(function() {
+    var deferred = Q.defer();
+    if (typeof taskId === 'undefined') {
+      console.log('Error');
+    } else {
+      Task.findById(taskId, {
+        __v: false
+      }).lean().exec(function(err, task) {
+        task.watchersId = task.watchers;
+        task.actors = [];
+        task.watchers = [];
+        // ajout du owner
+        task.actors.push({
+          name: task.actor.name,
+          __v: 0,
+          _id: task.actor._id
+        });
+        _.each(task.watchersId, function(watcher) {
+          var name = _.pluck(_.filter(usersList, function(user) {
+              return (watcher === user._id.toString())
+            }), 'name').toString()
+            // ajout des metrics
+          task.actors.push({
+            name: name,
+            __v: 0,
+            _id: watcher
+          });
+          // ajout des watchers
+          task.watchers.push({
+            name: name,
+            __v: 0,
+            _id: watcher
+          });
+        });
+        deferred.resolve(task);
+      })
+    }
+    return deferred.promise;
+  })
 
   // Start dashboards
   .then(function(task) {
     // Get a single user
     var deferred = Q.defer();
-    Dashboard.find({}, '-__v', function(err, dashboard) {
-      var dashboards = dashboard;
+    Dashboard.find({}, '-__v', function(err, dashboards) {
+      task.dashboards = [];
+      _.each(dashboards, function(dashboard, index) {
+        if ((dashboard.context === undefined || task.context.indexOf(dashboard.context) >= 0) && (dashboard.activity === undefined || task.activity.indexOf(dashboard.activity) >= 0)) {
+          task.dashboards.push(dashboard.toObject());
+        }
+      });
       deferred.resolve(task);
     })
     return deferred.promise;
@@ -127,6 +164,8 @@ function createCompleteTask(taskId) {
         delete metric.context;
         delete metric.actor.email;
         delete metric.actor.provider;
+        delete metric.actor.location;
+        delete metric.actor.active;
         delete metric.actor.last_connection_date;
         delete metric.actor.create_date;
         delete metric.actor.role;
@@ -202,14 +241,18 @@ function createCompleteTask(taskId) {
 
         //on ajoute l'acteur ou les watchers
         if (metric.actor) {
-          task.actors.push(metric.actor._id);
+          task.actors.push(metric.actor);
         }
         //on l'ajoute à la liste
         task.metrics.push(metric);
         task.lastmetric = metric;
 
       });
-      task.actors = _.uniq(_.compact(task.actors));
+      task.actors = _.map(_.groupBy(task.actors, function(doc) {
+        return doc._id;
+      }), function(grouped) {
+        return grouped[0];
+      });
       deferred.resolve(task);
     })
     return deferred.promise;
@@ -272,28 +315,35 @@ function createCompleteTask(taskId) {
           if (err) {
             console.log('error :', err);
           }
+          process.emit('taskChanged', task);
+
           return true;
         });
       } else {
         //si existant
         taskComplete.actor = task.actor;
         taskComplete.actors = task.actors;
+        taskComplete.watchers = task.watchers;
         taskComplete.metrics = task.metrics;
         taskComplete.lastmetric = task.lastmetric;
         taskComplete.kpis = task.kpis;
         taskComplete.kpis = task.kpis;
         taskComplete.alerts = task.alerts;
+        taskComplete.dashboards = task.dashboards;
         var updated = _.merge(taskComplete, task);
         updated.markModified('actor');
         updated.markModified('actors');
+        updated.markModified('watchers');
         updated.markModified('metrics');
         updated.markModified('lastmetric');
         updated.markModified('kpis');
         updated.markModified('alerts');
+        updated.markModified('dashboards');
         updated.save(function(err) {
           if (err) {
             console.log('error :', err);
           }
+          process.emit('taskChanged', updated);
           return true;
         });
       }
@@ -306,7 +356,7 @@ function createCompleteTask(taskId) {
 // Get list of taskCompletes
 exports.index = function(req, res) {
   var filterUser = (req.query.userId) ? {
-    actors: req.query.userId
+    "actors._id": req.query.userId
   } : {};
 
   TaskComplete.find(filterUser, {
