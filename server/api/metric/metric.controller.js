@@ -138,7 +138,7 @@ exports.update = function(req, res) {
 // Deletes a metric from the DB.
 exports.destroy = function(req, res) {
   process.emit('metricChanged', req.params.taskId);
-  console.log('req.params.taskId', req.params.taskId);
+  
   Metric.findById(req.params.id, function(err, metric) {
     if (err) {
       return handleError(res, err);

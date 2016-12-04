@@ -43,7 +43,7 @@ User.find({}).remove(function() {
     email: 'willy.stophe.pro@gmail.com',
     password: 'Will'
   }, function() {
-      console.log('finished populating users');
+      
     }
   );
 });

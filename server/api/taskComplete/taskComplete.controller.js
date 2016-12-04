@@ -62,13 +62,13 @@ function calcBusinessDays(dDate1, dDate2) { // input given as Date objects
 
 function createAllCompleteTask() {
   TaskComplete.remove({}, function(err, numberRemoved) {
-    console.log(" remove all completeTasks" + numberRemoved);
+    
 
     Task.find({}, '-__v').lean().exec(function(err, tasks) {
       _.each(tasks, function(task, index) { // pour chaque tache
         createCompleteTask(task._id, false, function(data) {});
       });
-      console.log('# tasks updated', tasks.length);
+      
     });
   });
 
@@ -78,7 +78,7 @@ var j = schedule.scheduleJob({
   hour: 0,
   minute: 30
 }, function() {
-  console.log('Time to calculate tasks');
+  
   createAllCompleteTask()
 });
 
@@ -88,16 +88,16 @@ process.on('metricChanged', function(taskId, refreshDashboard) {
 });
 
 process.on('taskRemoved', function(task) {
-  console.log('taskRemoved ', task.name + '-' + task.context + '-' + task.activity);
+  
   TaskComplete.remove({
     _id: task._id
   }, function(err, numberRemoved) {
-    console.log(" remove 1 completeTask : " + task._id + ' : ' + numberRemoved);
+    
   });
 });
 
 function createCompleteTask(taskId, refreshDashboard, callback) {
-  console.log('Recalculate Task : ', refreshDashboard + ' : ' + taskId);
+  
   Q()
     .then(function() {
       // Get a single user
@@ -113,9 +113,9 @@ function createCompleteTask(taskId, refreshDashboard, callback) {
   .then(function() {
     var deferred = Q.defer();
     if (typeof taskId === 'undefined') {
-      console.log('Error');
+      
     } else {
-      console.log('taskId', taskId);
+      
       Task.findById(taskId, {
         __v: false
       }).lean().exec(function(err, task) {
@@ -330,14 +330,14 @@ function createCompleteTask(taskId, refreshDashboard, callback) {
 
     TaskComplete.findById(taskId, function(err, taskComplete) {
       if (err) {
-        console.log('error :', err);
+        
       }
 
       // si non existant
       if (!taskComplete) {
         TaskComplete.create(task, function(err, CreatedtaskComplete) {
           if (err) {
-            console.log('error :', err);
+            
           }
           if (refreshDashboard) {
             process.emit('taskChanged', task);
@@ -367,7 +367,7 @@ function createCompleteTask(taskId, refreshDashboard, callback) {
         updated.markModified('dashboards');
         updated.save(function(err) {
           if (err) {
-            console.log('error :', err);
+            
           }
           if (refreshDashboard) {
             process.emit('taskChanged', task);
@@ -413,8 +413,8 @@ exports.index = function(req, res) {
     "actor.location": false
   }, function(err, taskCompletes) {
     if (err) {
-      console.log('CONDITION PASSED');
-      console.log('err', err);
+      
+      
       return handleError(res, err);
     }
     return res.status(200).json(taskCompletes);

@@ -131,7 +131,7 @@ exports.desactivate = function(req, res, next) {
   var userId = String(req.body.userId);
   User.findById(userId, function(err, user) {
     user.active = false;
-    console.log('user', user);
+    
     user.save(function(err) {
       if (err) return validationError(res, err);
 
@@ -142,10 +142,7 @@ exports.desactivate = function(req, res, next) {
           return handleError(res, err);
         }
         if (!dashboards || dashboards.length === 0) {
-          console.log('no Dashboard to remove for desactivated user')
-        }
-        _.each(dashboards, function(dashboard) {
-          console.log('dashboard remove : ', dashboard._id);
+          
           dashboard.remove(function(err) {
             if (err) {
               return handleError(res, err);

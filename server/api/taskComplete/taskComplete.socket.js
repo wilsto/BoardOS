@@ -16,7 +16,7 @@ exports.register = function(socket) {
 }
 
 function onSave(socket, doc, cb) {
-  console.log('SOCKET ### taskComplete:save', doc.length);
+  
   socket.emit('taskComplete:save', doc);
 }
 

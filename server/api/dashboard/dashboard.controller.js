@@ -256,7 +256,7 @@ exports.show = function(req, res) {
               if (err) {
                 return handleError(res, err);
               }
-              console.log('CreateddashboardComplete ok ');
+              
               return true;
             });
           } else {
@@ -266,7 +266,7 @@ exports.show = function(req, res) {
               if (err) {
                 return handleError(res, err);
               }
-              console.log('UpdateddashboardComplete ok ');
+              
               return true;
             });
           }

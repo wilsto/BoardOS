@@ -23,7 +23,7 @@ exports.setup = function(User, config) {
                 }
                 user.last_connection_date = Date.now();
                 user.save(function(err) {
-                    if (err) console.log(err);
+                    if (err) 
                 });
                 return done(null, user);
             });
