@@ -49,6 +49,20 @@ process.on('taskChanged', function(task) {
   }, 1000);
 });
 
+process.on('dashboardChanged', function(dashboard) {
+  console.log('dashboardChanged ', dashboard.name + '-' + dashboard.context + '-' + dashboard.activity);
+  createCompleteDashboard(dashboard._id, function(data) {});
+});
+
+process.on('dashboardRemoved', function(dashboard) {
+  console.log('dashboardRemoved ', dashboard.name + '-' + dashboard.context + '-' + dashboard.activity);
+  DashboardComplete.remove({
+    _id: dashboard._id
+  }, function(err, numberRemoved) {
+    console.log(" remove 1 completeDashboard : " + dashboard._id + ' : ' + numberRemoved);
+  });
+});
+
 var j = schedule.scheduleJob({
   hour: 1,
   minute: 0
@@ -59,11 +73,11 @@ var j = schedule.scheduleJob({
 
 function createAllCompleteDashboard() {
   DashboardComplete.remove({}, function(err, numberRemoved) {
-    console.log(" remove all completeDashboards" + numberRemoved);
+    console.log(" remove all completeDashboards : " + numberRemoved);
 
     Dashboard.find({}, '-__v').lean().exec(function(err, dashboards) {
       _.each(dashboards, function(dashboard, index) { // pour chaque tache
-        createCompleteDashboard(dashboard._id);
+        createCompleteDashboard(dashboard._id, function(data) {});
       });
       console.log('# dashboards updated', dashboards.length);
     });

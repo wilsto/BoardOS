@@ -85,6 +85,15 @@ process.on('metricChanged', function(taskId, refreshDashboard) {
   createCompleteTask(taskId, refreshDashboard, function(data) {});
 });
 
+process.on('taskRemoved', function(task) {
+  console.log('taskRemoved ', task.name + '-' + task.context + '-' + task.activity);
+  TaskComplete.remove({
+    _id: task._id
+  }, function(err, numberRemoved) {
+    console.log(" remove 1 completeTask : " + task._id + ' : ' + numberRemoved);
+  });
+});
+
 function createCompleteTask(taskId, refreshDashboard, callback) {
   console.log('Recalculate Task : ', refreshDashboard + ' : ' + taskId);
   Q()

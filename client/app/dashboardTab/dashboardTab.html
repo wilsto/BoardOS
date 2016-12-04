@@ -277,7 +277,7 @@
                     <br/><small>{{dashboardData.metricTaskField}}</small></th>
                 <th ng-if="page === 'KPI'">Reference
                     <br/><small>{{dashboardData.refMetricTaskField}}</small></th>
-                <th ng-if="isManager"><a href="task/" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus" ></span></a></th>
+                <th><a href="task/" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus" ></span></a></th>
             </tr>
         </thead>
         <tbody>
@@ -294,7 +294,7 @@
                 </td>
                 <td ng-if="page === 'KPI'">{{task.lastmetric[dashboardData.metricTaskField]}}</td>
                 <td ng-if="page === 'KPI'">{{task.lastmetric[dashboardData.refMetricTaskField]}}</td>
-                <td style="width:25px" ng-if="isManager">
+                <td style="width:25px">
                     <a ng-href="task/{{task._id}}" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil"></span></a>
                 </td>
             </tr>
@@ -305,6 +305,17 @@
         <!--############-->
         <table class="table table-striped table-bordered table-advance table-hover"  ng-if="dashboardType === 'metrics'">
             <thead>
+              <tr>
+                <a class="anim-btn pull-right" href="#" ng-click='openMetric(dashboardData, dataTable.metrics[task.metrics.length-1],true)'>
+                  <span class="anim-btn-text">Metric&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                  <span class="anim-btn-slide-text">Add a new one</span>
+                  <span class="anim-btn-icon-right">
+                    <span>
+                      <i class="fa fa-2x fa-cog fa-spin fa-fw" aria-hidden="true"></i>
+                    </span>
+                  </span>
+                </a>
+              </tr>
                 <tr>
                     <th>Entered</th>
                     <th style="width:18px">Actor</th>
@@ -314,7 +325,6 @@
                     <th>Time Spent</th>
                     <th>End</th>
                     <th colspan="2">Comments
-                    <button ng-click='openMetric(dashboardData, dataTable.metrics[task.metrics.length-1],true)' type="button" class="btn btn-primary btn-xs pull-right"><i class="glyphicon glyphicon-plus"></i> Add a metric</button>
                     </th>
                 </tr>
             </thead>

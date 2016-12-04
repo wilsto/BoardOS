@@ -291,8 +291,9 @@ exports.show = function(req, res) {
 // Creates a new dashboard in the DB.
 exports.create = function(req, res) {
   var newDashboard = new Dashboard(req.body, false);
-  newDashboard.save(function(err, doc) {
-    res.send(200, doc);
+  newDashboard.save(function(err, dashboard) {
+    process.emit('dashboardChanged', dashboard);
+    res.send(200, dashboard);
   });
 
 };
@@ -314,6 +315,7 @@ exports.update = function(req, res) {
       if (err) {
         return handleError(res, err);
       }
+      process.emit('dashboardChanged', dashboard);
       return res.status(200).json(dashboard);
     });
   });
@@ -332,6 +334,7 @@ exports.destroy = function(req, res) {
       if (err) {
         return handleError(res, err);
       }
+      process.emit('dashboardRemoved', dashboard);
       return res.send(204);
     });
   });
