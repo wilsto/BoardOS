@@ -261,12 +261,11 @@ angular.module('boardOsApp')
             $('#activity').focusout(function() {
               $scope.activityErrorNotAll = ($scope.dashboard.activity.toLowerCase() === 'all');
             });
+
+            $scope.loadTasks();
+            $scope.loadMetrics();
           });
-
         });
-        $scope.loadTasks();
-        $scope.loadMetrics();
-
       }
     };
     $scope.loadCompleteDashboard();
@@ -308,7 +307,6 @@ angular.module('boardOsApp')
       }
     };
 
-    //$scope.loadDashboard();
 
     $scope.changeTab = function(e, tabNb) {
       $('.ver-inline-menu li').removeClass('active');
@@ -343,7 +341,7 @@ angular.module('boardOsApp')
             actor: $scope.currentUser
           });
           Notification.success(logInfo);
-          $scope.loadDashboard();
+          $scope.loadCompleteDashboard();
         });
       }
 

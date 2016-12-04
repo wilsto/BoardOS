@@ -25,6 +25,7 @@ angular.module('boardOsApp')
             //on fait la somme des calculs de kpi pour chaque tache
             scope.kpis = _.union(scope.data.kpis, scope.data.alerts);
             _.each(scope.kpis, function(kpi, index) {
+              kpi._id = (kpi._id === undefined) ? kpi.kpiId : kpi._id;
               if (kpi.calcul.taskTime) {
                 kpi.calcul.time = myLibrary.displayLastYear(kpi.calcul.taskTime, 'month', 'value');
               }

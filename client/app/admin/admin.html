@@ -78,7 +78,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="user in users | filter:searchFilter | filter:{active:onlyactive} | orderBy:sortHeader track by user._id ">
+        <tr ng-repeat="user in users | filter:searchFilter | orderBy:sortHeader track by user._id ">
             <td class="user-cb">
                 <div class="cbr-replaced cbr-checked">
                     <div class="cbr-input">
@@ -115,15 +115,14 @@
                 {{user.last_connection_date | date:fullDate}}
             </td>
             <td class="action-links">
-                <a href="" class="btn btn-warning" ng-click="dispUpdate(user)" data-toggle="modal" data-target="#modUser">
+                <a href="" class="btn btn-sm btn-primary" ng-click="dispUpdate(user)" data-toggle="modal" data-target="#modUser">
                     <i class="glyphicon glyphicon-pencil"></i> Edit
                 </a>
-                <a href="" class="btn btn-danger" ng-click="delete(user)">
-                    <i class="glyphicon glyphicon-trash"></i> Delete
+                <a href="" class="btn btn-sm btn-warning" ng-click="desactivate(user)">
+                    <i class="glyphicon glyphicon-pause"></i> Desactivate
                 </a>
             </td>
         </tr>
     </tbody>
 </table>
-</div>
 <!-- end ngRepeat: tab in tabs -->
