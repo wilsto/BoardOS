@@ -64,7 +64,9 @@ function createAllCompleteTask() {
 
     Task.find({}, '-__v').lean().exec(function(err, tasks) {
       _.each(tasks, function(task, index) { // pour chaque tache
-        createCompleteTask(task._id, false);
+        createCompleteTask(task._id, false, function(data) {
+          console.log('createCompleteTask', data);
+        });
       });
       console.log('# tasks updated', tasks.length);
     });
@@ -82,7 +84,9 @@ var j = schedule.scheduleJob({
 
 process.on('metricChanged', function(req) {
   console.log('metricChanged req', req);
-  createCompleteTask(req, true);
+  createCompleteTask(req, true, function(data) {
+    console.log('createCompleteTask', data);
+  });
 });
 
 function createCompleteTask(taskId, refreshDashboard, callback) {

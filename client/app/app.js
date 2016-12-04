@@ -12,7 +12,8 @@ angular.module('boardOsApp', [
     'nvd3',
     'ng.confirmField',
     'ui.calendar',
-    'ui-notification'
+    'ui-notification',
+    'cgBusy'
   ])
   .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, NotificationProvider) {
     $urlRouterProvider.otherwise('/');

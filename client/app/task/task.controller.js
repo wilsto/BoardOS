@@ -26,7 +26,7 @@ angular.module('boardOsApp')
     });
 
     $scope.refreshTask = function() {
-      $http.get('/api/taskCompletes/executeId/' + $scope.currentTask._id).success(function(response) {
+      $scope.myPromise = $http.get('/api/taskCompletes/executeId/' + $scope.currentTask._id).success(function(response) {
         console.log('refresh task : ' + $scope.currentTask._id + ' ' + response);
       });
     };
@@ -34,7 +34,7 @@ angular.module('boardOsApp')
     $scope.loadTask = function() {
       $scope.currentTask = {};
       if ($stateParams.id) {
-        $http.get('/api/taskCompletes/' + $stateParams.id).success(function(task) {
+        $scope.myPromise = $http.get('/api/taskCompletes/' + $stateParams.id).success(function(task) {
           $scope.task = task;
 
           $scope.currentTask = task;
@@ -77,15 +77,15 @@ angular.module('boardOsApp')
     };
 
     $scope.watchThisTask = function() {
-      $http.post('/api/tasks/watch/' + $scope.currentTask._id + '/' + $scope.currentUser._id).success(function(data) {
+      $scope.myPromise = $http.post('/api/tasks/watch/' + $scope.currentTask._id + '/' + $scope.currentUser._id).success(function(data) {
         $scope.currentTask.watchers = data.watchers;
         var logInfo = 'Task watch "' + $scope.currentTask.name + '" was updated by ' + $scope.currentUser.name;
         $http.post('/api/logs', {
           info: logInfo,
           actor: $scope.currentUser
         });
-        Notification.success(logInfo);
         $scope.loadTask();
+        Notification.success(logInfo);
       });
     };
 
