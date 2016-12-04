@@ -17,7 +17,6 @@ var getData = require('../../config/getData');
 var hierarchyValues = {};
 var kpis = {};
 var alerts = {};
-var tasks = {};
 
 // permanent
 Hierarchies.find({
@@ -39,15 +38,31 @@ KPI.find({}, '-__v').lean().exec(function(err, mKPI) {
 
 process.on('taskChanged', function(task) {
   console.log('taskChanged ', task.name + '-' + task.context + '-' + task.activity);
+  var alldashboards;
   setTimeout(function() {
-    Dashboard.find({}, '-__v', function(err, dashboards) {
-      _.each(dashboards, function(dashboard, index) {
-        if ((dashboard.context === undefined || task.context.indexOf(dashboard.context) >= 0) && (dashboard.activity === undefined || task.activity.indexOf(dashboard.activity) >= 0)) {
-          console.log('impactedDashboard ', dashboard._id + ' : ' + dashboard.name + '-' + dashboard.context + '-' + dashboard.activity);
-          createCompleteDashboard(dashboard._id, function(data) {});
-        }
+    Q()
+      // Get a single task
+      .then(function() {
+        var deferred = Q.defer();
+
+        Dashboard.find({}, '-__v').lean().exec(function(err, dashboards) {
+          alldashboards = dashboards;
+          deferred.resolve(alldashboards);
+        });
+        return deferred.promise;
+
+      })
+      .then(function() {
+        var deferred = Q.defer();
+        _.each(alldashboards, function(dashboard, index) {
+          if ((dashboard.context === undefined || task.context.indexOf(dashboard.context) >= 0) && (dashboard.activity === undefined || task.activity.indexOf(dashboard.activity) >= 0)) {
+            console.log('impactedDashboard ', dashboard._id + ' : ' + dashboard.name + '-' + dashboard.context + '-' + dashboard.activity);
+            createCompleteDashboard(dashboard._id, function(data) {});
+          }
+          deferred.resolve(dashboard);
+        });
+        return deferred.promise;
       });
-    })
   }, 1000);
 });
 
@@ -74,20 +89,41 @@ var j = schedule.scheduleJob({
 
 
 function createAllCompleteDashboard() {
-  DashboardComplete.remove({}, function(err, numberRemoved) {
-    console.log(" remove all completeDashboards : " + numberRemoved);
+  var alldashboards;
 
-    Dashboard.find({}, '-__v').lean().exec(function(err, dashboards) {
-      _.each(dashboards, function(dashboard, index) { // pour chaque tache
-        createCompleteDashboard(dashboard._id, function(data) {});
+  Q()
+    // Get a single task
+    .then(function() {
+      var deferred = Q.defer();
+      DashboardComplete.remove({}, function(err, numberRemoved) {
+        console.log(" remove all completeDashboards : " + numberRemoved);
+        deferred.resolve(numberRemoved);
       });
-      console.log('# dashboards updated', dashboards.length);
+      return deferred.promise;
+    })
+    .then(function() {
+      var deferred = Q.defer();
+      Dashboard.find({}, '-__v').lean().exec(function(err, dashboards) {
+        console.log(" find dashboards : " + dashboards.length);
+        alldashboards = dashboards;
+        deferred.resolve(alldashboards);
+      });
+      return deferred.promise;
+    })
+    .then(function() {
+      var deferred = Q.defer();
+      _.each(alldashboards, function(dashboard, index) { // pour chaque tache
+        createCompleteDashboard(dashboard._id, function(data) {});
+        deferred.resolve(alldashboards);
+      });
+      return deferred.promise;
     });
-  });
 }
 
 function createCompleteDashboard(dashboardId, callback) {
-  console.time('createCompleteDashboardStart - ' + dashboardId);
+  var tasks = {};
+
+  console.time('Start - ' + dashboardId);
   Q()
     // Get a single task
     .then(function() {
@@ -222,6 +258,7 @@ function createCompleteDashboard(dashboardId, callback) {
           if (err) {
             console.log('error :', err);
           }
+          console.timeEnd('Start - ' + dashboardId);
           callback(CreateddashboardComplete);
           return true;
         });
@@ -244,8 +281,8 @@ function createCompleteDashboard(dashboardId, callback) {
           if (err) {
             console.log('error :', err);
           }
-          console.timeEnd('createCompleteDashboardStart - ' + dashboardId);
-          callback(updated);
+          console.timeEnd('Start - ' + dashboardId);
+          callback(dashboardComplete);
           return true;
         });
       }

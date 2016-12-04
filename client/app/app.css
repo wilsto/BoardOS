@@ -6384,3 +6384,108 @@ Profile Page
 .bg-lightgrey {
   background-color: rgba(186, 187, 187, 0.44)!important
 }
+
+.anim-btn {
+  background: #febb4a!important;
+  border-color: #f5b74e #e5a73e #d6982f;
+  box-shadow: 0 1px 1px #d3d3d3, inset 0 1px 0 #fee395;
+  padding: 0px 80px 0px 10px;
+  height: 38px;
+  display: inline-block;
+  text-decoration: none;
+  position: relative;
+  border-radius: 4px;
+  float: left;
+  margin: 10px;
+  overflow: hidden;
+  transition: all 0.3s linear;
+}
+
+.anim-btn-text {
+  padding-top: 5px;
+  display: block;
+  font-size: 18px;
+  white-space: nowrap;
+  color: #996633;
+  text-shadow: 0 1px 0 #fedd9b;
+  transition: all 0.3s linear;
+}
+
+.anim-btn-slide-text {
+  position: absolute;
+  top: 35px;
+  left: 0px;
+  width: auto;
+  right: 52px;
+  height: 0px;
+  background: #fff;
+  color: #996633;
+  font-size: 13px;
+  white-space: nowrap;
+  font-family: Georgia, serif;
+  font-style: italic;
+  text-indent: 15px;
+  overflow: hidden;
+  line-height: 30px;
+  box-shadow: -1px 0px 1px rgba(255, 255, 255, 0.4), 1px 1px 1px rgba(0, 0, 0, 0.5) inset;
+  transition: height 0.3s linear;
+}
+
+.anim-btn-icon-right {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  height: 100%;
+  width: 52px;
+  border-left: 1px solid #f5b74e;
+  box-shadow: 1px 0px 1px rgba(255, 255, 255, 0.4) inset;
+}
+
+.anim-btn-icon-right span {
+  width: 38px;
+  height: 38px;
+  opacity: 0.7;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: -20px 0px 0px -20px;
+  transition: all 0.3s linear;
+}
+
+.anim-btn-icon-right span i {
+  color: white;
+  position: relative;
+  left: 10%;
+  top: 30%;
+}
+
+.anim-btn:hover {
+  height: 65px;
+  text-decoration: none;
+  box-shadow: 0px 1px 1px rgba(255, 255, 255, 0.8) inset, 1px 1px 5px rgba(0, 0, 0, 0.4);
+}
+
+.anim-btn:hover .anim-btn-text {
+  color: #fff;
+  text-decoration: none;
+}
+
+.anim-btn:hover .anim-btn-slide-text {
+  height: 30px;
+  text-decoration: none;
+}
+
+.anim-btn:hover .anim-btn-icon-right span {
+  opacity: 1;
+  transform: rotate(-45deg);
+}
+
+.anim-btn:active {
+  position: relative;
+  top: 1px;
+  background: linear-gradient(top, #fec354 0%, #fecd61 100%);
+  /* W3C */
+  border-color: #d29a3a #cc9436 #c89133;
+  text-shadow: 0 1px 0 #fee1a0;
+  box-shadow: 0 1px 1px #d4d4d4, inset 0 1px 0 #fed17e;
+}

@@ -84,6 +84,7 @@ angular.module('boardOsApp')
       if ($stateParams.id) {
         $scope.myPromise = $http.get('/api/dashboardCompletes/' + $stateParams.id).success(function(dashboard) {
           $scope.dashboard = dashboard;
+          
           $rootScope.perimeter.name = dashboard.name;
           $rootScope.perimeter.id = dashboard._id;
           $rootScope.perimeter.activity = dashboard.activity;
