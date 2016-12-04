@@ -210,8 +210,8 @@
               </div>
               <div class="form-actions">
                 <div class="pull-right">
-                  <a href="#" class="btn btn-primary" ng-click="save()">Save Changes</a>
-                  <a href="#" class="btn btn-default" ng-click="reset()">Cancel</a>
+                  <a href="#" class="btn btn-primary" ng-class="{'btndisabled':btndisabled}" ng-click="save()">Save Changes</a>
+                  <a href="#" class="btn btn-default" ng-click="cancel()" ng-if="!dashboard._id">Cancel</a>
                 </div>
               </div>
             </form>

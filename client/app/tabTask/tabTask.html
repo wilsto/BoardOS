@@ -71,7 +71,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="task in tasks | orderBy:sortByDate:'reverse' | filter:filter()">
+        <tr ng-repeat="task in tasks | orderBy:'lastmetric.endDate' | filter:filter()">
             <td style="text-align: center">
                 <div popover-html-unsafe="Name : <b>{{task.actor.name}}</b> </br> Role : <b>{{task.actor.role}}</b> " popover-trigger="mouseenter" popover-title="Owner Identity" popover-placement="right">
                     <img alt="" ng-src="assets/images/avatars/{{task.actor._id}}.png" class="img-circle" style="width:30px;height:30px;" err-src="assets/images/avatars/avatar.png" />

@@ -30,7 +30,7 @@ angular.module('boardOsApp')
 
     $scope.refreshDashboard = function() {
       $scope.myPromise = $http.get('/api/dashboardCompletes/executeId/' + $stateParams.id).success(function(response) {
-        console.log('refresh dashboard : ' + $stateParams.id + ' ' + response);
+        $scope.loadCompleteDashboard();
       });
     };
 
@@ -80,6 +80,7 @@ angular.module('boardOsApp')
     };
 
     $scope.loadCompleteDashboard = function() {
+      $scope.btndisabled = false;
       if ($stateParams.id) {
         $scope.myPromise = $http.get('/api/dashboardCompletes/' + $stateParams.id).success(function(dashboard) {
           $scope.dashboard = dashboard;
@@ -307,6 +308,12 @@ angular.module('boardOsApp')
       }
     };
 
+    $scope.cancel = function() {
+      if (!$stateParams.id) {
+        $location.path('/dashboards');
+      }
+    };
+
 
     $scope.changeTab = function(e, tabNb) {
       $('.ver-inline-menu li').removeClass('active');
@@ -316,12 +323,11 @@ angular.module('boardOsApp')
 
     $scope.save = function() {
       if (typeof $scope.dashboard._id === 'undefined') {
-
+        $scope.btndisabled = true;
         delete $scope.dashboard.kpis;
         delete $scope.dashboard.fullKPIs;
         delete $scope.dashboard.metrics;
         delete $scope.dashboard.tasks;
-
 
         $http.post('/api/dashboards', $scope.dashboard).success(function(data) {
           var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was created';
@@ -330,8 +336,12 @@ angular.module('boardOsApp')
             info: logInfo,
             actor: $scope.currentUser
           });
-          Notification.success(logInfo);
-          $location.path('/dashboard/' + data._id);
+
+          setTimeout(function() {
+            Notification.success(logInfo);
+            $location.path('/dashboard/' + data._id);
+          }, 1000);
+
         });
       } else {
         $http.put('/api/dashboards/' + $scope.dashboard._id, $scope.dashboard).success(function() {
