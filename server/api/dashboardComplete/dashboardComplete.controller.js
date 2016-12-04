@@ -3,6 +3,7 @@ var _ = require('lodash');
 var moment = require('moment');
 var math = require('mathjs');
 var Q = require('q');
+var schedule = require('node-schedule');
 
 var DashboardComplete = require('./dashboardComplete.model');
 var Dashboard = require('../dashboard/dashboard.model');
@@ -46,6 +47,14 @@ process.on('taskChanged', function(task) {
   })
 });
 
+var j = schedule.scheduleJob({
+  hour: 1,
+  minute: 0
+}, function() {
+  console.log('Time to calculate');
+});
+
+
 function createAllCompleteDashboard() {
   Dashboard.find({}, '-__v').lean().exec(function(err, dashboards) {
     console.log('# dashboards updated', dashboards.length);
@@ -54,13 +63,6 @@ function createAllCompleteDashboard() {
     });
   });
 }
-//createAllCompleteDashboard();
-//createCompleteDashboard("54e3db715ef9d41100cb44ed");
-// createCompleteDashboard('5623d6c4b292ab1100acc9e7');
-// createCompleteDashboard("5506b222b7228311003ef67a");
-// createCompleteDashboard("5506b30eb7228311003ef67e");
-// createCompleteDashboard('5506b234b7228311003ef67c');
-// createCompleteDashboard("58274b9898876e1c61a5dd60");
 
 function createCompleteDashboard(dashboardId) {
   console.log('createCompleteDashboard: ' + dashboardId);
@@ -101,14 +103,8 @@ function createCompleteDashboard(dashboardId) {
     }).lean().exec(function(err, findtasks) {
       tasks = findtasks;
       _.each(findtasks, function(task) {
-        var mTask = _.clone(task);
-        delete mTask.metrics;
-        delete mTask.kpis;
-        delete mTask.alerts;
-        delete mTask.dashboards;
-        delete mTask.watchers;
-        dashboard.tasks.push(mTask);
-      })
+        dashboard.tasks.push(task._id);
+      });
       dashboard.openTasksNb = _.where(findtasks, function(task) {
         return task.lastmetric && (task.lastmetric.status === 'In Progress' || task.lastmetric.status === 'Not Started');
       }).length;
@@ -235,6 +231,16 @@ function createCompleteDashboard(dashboardId) {
 }
 
 // Get list of dashboardCompletes
+exports.execute = function(req, res) {
+  createAllCompleteDashboard();
+};
+
+// Get list of dashboardCompletes
+exports.executeId = function(req, res) {
+  createAllCompleteDashboard(req.params.dashboardId);
+};
+
+// Get list of dashboardCompletes
 exports.index = function(req, res) {
   var filterUser = (req.params.userId || req.query.userId) ? {
     'owner._id': req.params.userId || req.query.userId
@@ -250,7 +256,7 @@ exports.index = function(req, res) {
 
 // Get a single dashboardComplete
 exports.show = function(req, res) {
-  DashboardComplete.findById(req.params.id, function(err, dashboardComplete) {
+  DashboardComplete.findById(req.params.id).populate('tasks').lean().exec(function(err, dashboardComplete) {
     if (err) {
       return handleError(res, err);
     }

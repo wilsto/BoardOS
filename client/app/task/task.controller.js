@@ -25,6 +25,12 @@ angular.module('boardOsApp')
       $scope.loadTask();
     });
 
+    $scope.refreshTask = function() {
+      $http.get('/api/taskCompletes/executeId/' + $scope.currentTask._id).success(function(response) {
+        console.log('refresh task : ' + $scope.currentTask._id + ' ' + response);
+      });
+    };
+
     $scope.loadTask = function() {
       $scope.currentTask = {};
       if ($stateParams.id) {

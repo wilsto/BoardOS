@@ -4,6 +4,7 @@ var _ = require('lodash');
 var moment = require('moment');
 var math = require('mathjs');
 var Q = require('q');
+var schedule = require('node-schedule');
 
 var TaskComplete = require('./taskComplete.model');
 var Task = require('../task/task.model');
@@ -58,33 +59,44 @@ function calcBusinessDays(dDate1, dDate2) { // input given as Date objects
 }
 
 function createAllCompleteTask() {
-  Task.find({}, '-__v').lean().exec(function(err, tasks) {
-    console.log('# tasks updated', tasks.length);
-    _.each(tasks, function(task, index) { // pour chaque tache
-      createCompleteTask(task._id);
+  TaskComplete.remove({}, function(err, numberRemoved) {
+    console.log(" remove all completeTasks" + numberRemoved);
+
+    Task.find({}, '-__v').lean().exec(function(err, tasks) {
+      _.each(tasks, function(task, index) { // pour chaque tache
+        createCompleteTask(task._id, false);
+      });
+      console.log('# tasks updated', tasks.length);
     });
   });
+
 }
-createAllCompleteTask();
-//createCompleteTask('58285153192b7fb4a392a13f');
+
+var j = schedule.scheduleJob({
+  hour: 0,
+  minute: 30
+}, function() {
+  console.log('Time to calculate tasks');
+  createAllCompleteTask()
+});
 
 process.on('metricChanged', function(req) {
   console.log('metricChanged req', req);
-  createCompleteTask(req);
+  createCompleteTask(req, true);
 });
 
-function createCompleteTask(taskId) {
+function createCompleteTask(taskId, refreshDashboard, callback) {
+  console.log('Recalculate Task : ', refreshDashboard + ' : ' + taskId);
   Q()
-
-  .then(function() {
-    // Get a single user
-    var deferred = Q.defer();
-    User.find({}, '-salt -hashedPassword', function(err, user) {
-      usersList = user;
-      deferred.resolve();
+    .then(function() {
+      // Get a single user
+      var deferred = Q.defer();
+      User.find({}, '-salt -hashedPassword', function(err, user) {
+        usersList = user;
+        deferred.resolve();
+      })
+      return deferred.promise;
     })
-    return deferred.promise;
-  })
 
   // Get a single task
   .then(function() {
@@ -92,9 +104,11 @@ function createCompleteTask(taskId) {
     if (typeof taskId === 'undefined') {
       console.log('Error');
     } else {
+      console.log('taskId', taskId);
       Task.findById(taskId, {
         __v: false
       }).lean().exec(function(err, task) {
+        console.log('task', task);
         task.watchersId = task.watchers;
         task.actors = [];
         task.watchers = [];
@@ -315,8 +329,10 @@ function createCompleteTask(taskId) {
           if (err) {
             console.log('error :', err);
           }
-          process.emit('taskChanged', task);
-
+          if (refreshDashboard) {
+            process.emit('taskChanged', task);
+          }
+          callback(task);
           return true;
         });
       } else {
@@ -343,7 +359,10 @@ function createCompleteTask(taskId) {
           if (err) {
             console.log('error :', err);
           }
-          process.emit('taskChanged', updated);
+          if (refreshDashboard) {
+            process.emit('taskChanged', task);
+          }
+          callback(task);
           return true;
         });
       }
@@ -351,6 +370,17 @@ function createCompleteTask(taskId) {
 
   })
 }
+// Get list of dashboardCompletes
+exports.execute = function(req, res) {
+  createAllCompleteTask();
+};
+
+// Get list of dashboardCompletes
+exports.executeId = function(req, res) {
+  createCompleteTask(req.params.taskId, true, function(callbackTask) {
+    return res.status(200).json(callbackTask);
+  });
+};
 
 
 // Get list of taskCompletes

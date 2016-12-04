@@ -13,7 +13,10 @@ var DashboardCompleteSchema = new Schema({
   kpisValue: Number,
   alerts: Schema.Types.Mixed,
   alertsValue: Number,
-  tasks: Schema.Types.Mixed,
+  tasks: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'TaskComplete'
+  }],
   tasksNb: Number,
   openTasksNb: Number,
   toFeedTasksNb: Number,

@@ -1,7 +1,33 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 <!-- BEGIN PAGE CONTENT-->
-<div class="col-md-12">
-<button class="btn" ng-click="sendMail()">Send mail	</button>
+<div class="row">
+<div class="col-md-1">
+  <button class="btn" ng-click="sendMail()">Run</button>
+</div>
+<div class="col-md-11 vcenter">
+  Send a mail to everyone with current open tasks.
+</div>
+</div>
+<br>
+<div class="row">
+<div class="col-md-1">
+  <button class="btn" ng-click="calculateTasks()">Run	</button>
+</div>
+<div class="col-md-11 vcenter">
+Calculate every tasks .
+</div>
+</div>
+
+<br>
+
+<div class="row">
+<div class="col-md-1">
+  <button class="btn" ng-click="calculateDashboards()">Run	</button>
+</div>
+<div class="col-md-11 vcenter">
+Calculate every dashboards .
+</div>
+</div>
+
 {{message}}
 <div ng-bind-html="message"></div>
-</div>
