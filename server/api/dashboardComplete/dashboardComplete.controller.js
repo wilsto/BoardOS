@@ -37,14 +37,16 @@ KPI.find({}, '-__v').lean().exec(function(err, mKPI) {
 
 process.on('taskChanged', function(task) {
   console.log('taskChanged ', task.name + '-' + task.context + '-' + task.activity);
-  Dashboard.find({}, '-__v', function(err, dashboards) {
-    _.each(dashboards, function(dashboard, index) {
-      if ((dashboard.context === undefined || task.context.indexOf(dashboard.context) >= 0) && (dashboard.activity === undefined || task.activity.indexOf(dashboard.activity) >= 0)) {
-        console.log('impactedDashboard ', dashboard.name + '-' + dashboard.context + '-' + dashboard.activity);
-        createCompleteDashboard(dashboard._id);
-      }
-    });
-  })
+  setTimeout(function() {
+    Dashboard.find({}, '-__v', function(err, dashboards) {
+      _.each(dashboards, function(dashboard, index) {
+        if ((dashboard.context === undefined || task.context.indexOf(dashboard.context) >= 0) && (dashboard.activity === undefined || task.activity.indexOf(dashboard.activity) >= 0)) {
+          console.log('impactedDashboard ', dashboard._id + ' : ' + dashboard.name + '-' + dashboard.context + '-' + dashboard.activity);
+          createCompleteDashboard(dashboard._id, function(data) {});
+        }
+      });
+    })
+  }, 1000);
 });
 
 var j = schedule.scheduleJob({
@@ -56,17 +58,20 @@ var j = schedule.scheduleJob({
 
 
 function createAllCompleteDashboard() {
-  Dashboard.find({}, '-__v').lean().exec(function(err, dashboards) {
-    console.log('# dashboards updated', dashboards.length);
-    _.each(dashboards, function(dashboard, index) { // pour chaque tache
-      createCompleteDashboard(dashboard._id);
+  DashboardComplete.remove({}, function(err, numberRemoved) {
+    console.log(" remove all completeDashboards" + numberRemoved);
+
+    Dashboard.find({}, '-__v').lean().exec(function(err, dashboards) {
+      _.each(dashboards, function(dashboard, index) { // pour chaque tache
+        createCompleteDashboard(dashboard._id);
+      });
+      console.log('# dashboards updated', dashboards.length);
     });
   });
 }
 
-function createCompleteDashboard(dashboardId) {
-  console.log('createCompleteDashboard: ' + dashboardId);
-  console.time('Start - ' + dashboardId);
+function createCompleteDashboard(dashboardId, callback) {
+  console.time('createCompleteDashboardStart - ' + dashboardId);
   Q()
     // Get a single task
     .then(function() {
@@ -179,7 +184,9 @@ function createCompleteDashboard(dashboardId) {
         }
       });
     });
-    dashboard.kpisValue = parseInt(kpisSum / kpisNb);
+    if (kpisNb > 0) {
+      dashboard.kpisValue = parseInt(kpisSum / kpisNb);
+    }
 
     deferred.resolve(dashboard);
     return deferred.promise;
@@ -199,6 +206,7 @@ function createCompleteDashboard(dashboardId) {
           if (err) {
             console.log('error :', err);
           }
+          callback(CreateddashboardComplete);
           return true;
         });
       } else {
@@ -220,7 +228,8 @@ function createCompleteDashboard(dashboardId) {
           if (err) {
             console.log('error :', err);
           }
-          console.timeEnd('Start - ' + dashboardId);
+          console.timeEnd('createCompleteDashboardStart - ' + dashboardId);
+          callback(updated);
           return true;
         });
       }
@@ -237,7 +246,9 @@ exports.execute = function(req, res) {
 
 // Get list of dashboardCompletes
 exports.executeId = function(req, res) {
-  createAllCompleteDashboard(req.params.dashboardId);
+  createCompleteDashboard(req.params.dashboardId, function(callbackDashboard) {
+    return res.status(200).json(callbackDashboard);
+  });
 };
 
 // Get list of dashboardCompletes

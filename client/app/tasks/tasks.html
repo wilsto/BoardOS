@@ -1,37 +1,83 @@
-<div ng-include="'components/navbar/navbar.html'">
+<div ng-include="'components/navbar/navbar.html'"></div>
+<div class="row">
+  <div class="col-md-2 col-sm-4"></div>
+  <div class="col-md-10 col-sm-8">
+    <a class="anim-btn" href="/task/">
+      <span class="anim-btn-text">Create a new Task&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      <span class="anim-btn-slide-text">with new context and activity</span>
+      <span class="anim-btn-icon-right">
+        <span>
+          <i class="fa fa-2x fa-cog fa-spin fa-fw" aria-hidden="true"></i>
+        </span>
+      </span>
+    </a>
+    <span class="bottom-align-text">
+      or add an existing one below
+      <small class="text-muted" style="margin-left:15px;">(you can use filter on your right to find more easily)</small>
+    </span>
+  </div>
 </div>
+<div style="padding:10px;">
 
+</div>
 <div class="actions pull-right" style="padding-right:15px">
   <div class="btn-group">
-    <a class="btn dropdown-toggle" ng-class="{'btn-default':filterStatus==='All','btn-info':filterStatus==='In Progress' || filterStatus==='Not Finished','btn-success':filterStatus==='Finished','btn-default':filterStatus==='Not Started'}" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">  Status : {{filterStatus}} <i class="fa fa-angle-down"></i></a>
+    <a
+      class="btn dropdown-toggle"
+      ng-class="{'btn-default':filterStatus==='All','btn-info':filterStatus==='In Progress' || filterStatus==='Not Finished','btn-success':filterStatus==='Finished','btn-default':filterStatus==='Not Started'}"
+      href="#"
+      data-toggle="dropdown"
+      data-hover="dropdown"
+      data-close-others="true">
+      Status :
+      {{filterStatus}}
+      <i class="fa fa-angle-down"></i>
+    </a>
     <ul class="dropdown-menu pull-right">
       <li>
-        <a href="#" ng-click="filterStatus='All'">All  </a>
+        <a href="#" ng-click="filterStatus='All'">All
+        </a>
       </li>
       <li>
-        <a href="#" ng-click="filterStatus='Not Started'">Not Started </a>
+        <a href="#" ng-click="filterStatus='Not Started'">Not Started
+        </a>
       </li>
       <li>
-        <a href="#" ng-click="filterStatus='In Progress'">In Progress </a>
+        <a href="#" ng-click="filterStatus='In Progress'">In Progress
+        </a>
       </li>
       <li>
-        <a href="#" ng-click="filterStatus='Finished'">Finished </a>
+        <a href="#" ng-click="filterStatus='Finished'">Finished
+        </a>
       </li>
       <li>
-        <a href="#" ng-click="filterStatus='Withdrawn'">Withdrawn </a>
+        <a href="#" ng-click="filterStatus='Withdrawn'">Withdrawn
+        </a>
       </li>
       <li>
-        <a href="#" ng-click="filterStatus='Not Finished'">Not Finished </a>
+        <a href="#" ng-click="filterStatus='Not Finished'">Not Finished
+        </a>
       </li>
     </ul>
   </div>
 </div>
 <div class="actions pull-right" style="padding-right:15px">
-  <div class="btn-group" >
-    <a class="btn dropdown-toggle" ng-class="{'btn-default':filterProgressStatus==='All','btn-warning':filterProgressStatus==='At Risk','btn-success':filterProgressStatus==='On Time','btn-danger':filterProgressStatus==='Late'}" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">  Time Status : {{filterProgressStatus}} <i class="fa fa-angle-down"></i></a>
+  <div class="btn-group">
+    <a
+      class="btn dropdown-toggle"
+      ng-class="{'btn-default':filterProgressStatus==='All','btn-warning':filterProgressStatus==='At Risk','btn-success':filterProgressStatus==='On Time','btn-danger':filterProgressStatus==='Late'}"
+      href="#"
+      data-toggle="dropdown"
+      data-hover="dropdown"
+      data-close-others="true">
+      Time Status :
+      {{filterProgressStatus}}
+      <i class="fa fa-angle-down"></i>
+    </a>
     <ul class="dropdown-menu pull-right">
       <li>
-        <a href="#" ng-click="filterProgressStatus='All'">All  </a>
+        <a href="#" ng-click="filterProgressStatus='All'">All
+        </a>
       </li>
       <li>
         <a href="#" ng-click="filterProgressStatus='Late'">Late</a>
@@ -40,87 +86,93 @@
         <a href="#" ng-click="filterProgressStatus='At Risk'">At Risk</a>
       </li>
       <li>
-        <a href="#" ng-click="filterProgressStatus='On Time'">On Time </a>
+        <a href="#" ng-click="filterProgressStatus='On Time'">On Time
+        </a>
       </li>
     </ul>
   </div>
 </div>
-<div style="padding:15px;" >
-  Filter :  <input style="width:100%" ng-model="searchText">
+<div style="padding:15px;">
+  Filter :
+  <input style="width:100%" ng-model="searchText">
 </div>
 
 <div class="row">
-      <div class="portlet">
-        <div class="portlet-title">
-          <div class="caption">
-            <i class="fa fa-check"></i>Task List
-          </div>
-          <div class="pull-right">
-            <a class="btn btn-primary btn-xs" href="/task/">Create a new task</a>
-          </div>
-        </div>
-        <div class="portlet-body">
-          <table class="table table-striped table-bordered table-hover" id="sample_4">
-            <thead>
-              <tr>
-                <th class="hidden-xs" >
-                  Owner
-                </th>
-                <th  style="width:30%">
-                  Name
-                </th>
-                <th>
-                  Start
-                </th>
-                <th>
-                  End
-                </th>
-                <th >
-                  Last Metric
-                </th>
-                <th class="hidden-xs">
-                  <i class="fa fa-bookmark"></i> Action
-                </th>
-                <th ng-if="isAdmin">
+  <div class="portlet">
+    <div class="portlet-title">
+      <div class="caption">
+        <i class="fa fa-check"></i>Task List
+      </div>
+      
+    </div>
+    <div class="portlet-body">
+      <table class="table table-striped table-bordered table-hover" id="sample_4">
+        <thead>
+          <tr>
+            <th class="hidden-xs">
+              Owner
+            </th>
+            <th style="width:30%">
+              Name
+            </th>
+            <th>
+              Start
+            </th>
+            <th>
+              End
+            </th>
+            <th >
+              Last Metric
+            </th>
+            <th class="hidden-xs">
+              <i class="fa fa-bookmark"></i>
+              Action
+            </th>
+            <th ng-if="isAdmin"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="task in tasks | orderBy:'endDate'| filter:filter()">
+            <td style="text-align: center">
+              <div popover-html-unsafe="<b>{{task.actors[0].name}}</b>" popover-trigger="mouseenter" popover-title="Owner Identity" popover-placement="right">
+                <img alt="" ng-src="{{ task.actors[0].avatar || 'assets/images/avatars/' + task.actors[0]._id + '.png'}} " class="img-circle" err-src="assets/images/avatars/avatar.png"/>
+              </div>
+            </td>
+            <td >
+              <a href="/task/{{task._id}}">
+                <div class="desc" popover-html-unsafe="Context : {{task.context}} </p>  Activity : {{task.activity}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="right" popover-delay="1000">{{task.name}}
+                  <span class="label label-sm label-warning " ng-show="task.timebetween < 0 && task.timebetween !== null ">
+                    Need Metric</span>
+                </div>
+              </a>
+            </td>
+            <td class="hidden-xs">
+              {{task.lastmetric.startDate | date:'mediumDate'}}<br/>
+              <span
+                class="label label-sm"
+                ng-class="{'label-info':task.lastmetric.status ==='In Progress','label-success':task.lastmetric.status ==='Finished','label-default':task.lastmetric.status ==='Not Started','label-lightgrey':task.lastmetric.status =='Withdrawn'}">
+                {{task.lastmetric.status}}
+              </span>
+            </td>
+            <td class="hidden-xs">
+              {{task.lastmetric.endDate | date:'mediumDate'}}<br/>
+              <span class="label label-sm" ng-class="{'label-warning':task.lastmetric.progressStatus ==='At Risk','label-success':task.lastmetric.progressStatus ==='On Time','label-danger':task.lastmetric.progressStatus ==='Late'}">
+                {{task.lastmetric.progressStatus}}
+              </span>
 
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="task in tasks | orderBy:'endDate'| filter:filter()">
-                <td style="text-align: center">
-                   <div popover-html-unsafe="<b>{{task.actors[0].name}}</b>" popover-trigger="mouseenter" popover-title="Owner Identity" popover-placement="right" >
-                   <img alt="" ng-src="{{ task.actors[0].avatar || 'assets/images/avatars/' + task.actors[0]._id + '.png'}} " class="img-circle" err-src="assets/images/avatars/avatar.png"/>
-                 </div>
-                </td>
-               <td >
-                <a href="/task/{{task._id}}"><div class="desc" popover-html-unsafe="Context : {{task.context}} </p>  Activity : {{task.activity}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="right" popover-delay ="1000">{{task.name}} <span class="label label-sm label-warning " ng-show="task.timebetween < 0 && task.timebetween !== null "> Need Metric</span></div></a>
-               </td>
-               <td class="hidden-xs">
-                        {{task.lastmetric.startDate | date:'mediumDate'}}<br/>
-                       <span class="label label-sm" ng-class="{'label-info':task.lastmetric.status ==='In Progress','label-success':task.lastmetric.status ==='Finished','label-default':task.lastmetric.status ==='Not Started','label-lightgrey':task.lastmetric.status =='Withdrawn'}">
-                         {{task.lastmetric.status}}
-                       </span>
-               </td>
-               <td class="hidden-xs">
-                       {{task.lastmetric.endDate | date:'mediumDate'}}<br/>
-                         <span class="label label-sm" ng-class="{'label-warning':task.lastmetric.progressStatus ==='At Risk','label-success':task.lastmetric.progressStatus ==='On Time','label-danger':task.lastmetric.progressStatus ==='Late'}">
-                         {{task.lastmetric.progressStatus}}
-                       </span>
-
-               </td>
-                <td>
-                  <span style="color:grey">{{task.lastmetric.fromNow}}</span>
-               </td>
-               <td>
-                 <button class="btn" ng-click="watchTask(task)">Add on my watchlist</button>
-               </td>
-               <td ng-if="isAdmin">
-                 <button class="btn btn-danger" ng-click="delete(task,$index)">Delete</button>
-               </td>
-             </tr>
-           </tbody>
-         </table>
-       </div>
-     </div>
+            </td>
+            <td>
+              <span style="color:grey">{{task.lastmetric.fromNow}}</span>
+            </td>
+            <td>
+              <button class="btn" ng-click="watchTask(task)">Add on my watchlist</button>
+            </td>
+            <td ng-if="isAdmin">
+              <button class="btn btn-danger" ng-click="delete(task,$index)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

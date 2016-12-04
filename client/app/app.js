@@ -80,6 +80,10 @@ angular.module('boardOsApp', [
   };
 })
 
+.value('cgBusyDefaults', {
+  message: 'Please wait, Processing calculation...'
+})
+
 .constant('progressStatusTask', [{
   value: 'On Time',
   text: 'On Time'

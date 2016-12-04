@@ -1,258 +1,238 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 <!--* Modal Part-->
+<div class="row"  cg-busy="myPromise">
 <div class="row">
-    <div class="row ">
-        <div class="col-md-2">
-            <img src="assets/images/dashboard.png" class="img-responsive" style="max-height:200px;" alt="" />
-        </div>
-        <div class="col-md-10">
-            <div class="row">
-                <div class="col-md-8 profile-info">
-                    <h1>{{dashboard.name}}</h1>
-                    <ul class="list list-inline">
-                        <li>
-                            <i class="fa fa-map-marker"></i><span class="text-info"> Context </span> {{dashboard.context || 'All'}}
-                        </li>
-                        <br>
-                        <li>
-                            <i class="fa fa-calendar"></i><span class="text-info"> Activity </span> {{dashboard.activity || 'All'}}
-                        </li>
-                    </ul>
-                </div>
-                <!--end col-md-8-->
-                <div class="col-md-4">
-                    <div class="portlet sale-summary">
-                        <div class="portlet-body" style="padding:0!important">
-                            <div id="myChartQCT"></div>
-                        </div>
-                    </div>
-                </div>
-                <!--end col-md-4-->
-            </div>
-            <!--end row-->
-        </div>
+  <div class="row ">
+    <div class="col-md-2">
+      <img src="assets/images/dashboard.png" class="img-responsive" style="max-height:200px;" alt=""/>
     </div>
-    <!-- BEGIN OVERVIEW STATISTIC BARS-->
-    <div class="row">
-        <div class="col-md-6 col-sm-12 text-center">
-            <span class="text-muted">Metrics</span>
+    <div class="col-md-10">
+      <div class="row">
+        <div class="col-md-8 profile-info">
+          <h1>{{dashboard.name}}</h1>
+          <ul class="list list-inline">
+            <li>
+              <i class="fa fa-map-marker"></i>
+              <span class="text-info">
+                Context
+              </span>
+              {{dashboard.context || 'All'}}
+            </li>
             <br>
-            <div class="headerMetric"> &nbsp;</div>
+            <li>
+              <i class="fa fa-calendar"></i>
+              <span class="text-info">
+                Activity
+              </span>
+              {{dashboard.activity || 'All'}}
+            </li>
+          </ul>
         </div>
-        <div class="col-md-2 col-sm-12 ">
-            &nbsp;
+        <!--end col-md-8-->
+        <div class="col-md-4">
+          <div class="portlet sale-summary">
+            <div class="portlet-title">
+              <div class="caption">
+                Refresh Dashboard
+              </div>
+              <div class="tools">
+                <a class="reload" href="javascript:;" ng-click="refreshDashboard()"></a>
+              </div>
+            </div>
+            <div class="portlet-body" style="padding:0!important">
+              <div id="myChartQCT"></div>
+            </div>
+          </div>
         </div>
-        <div class="col-md-4 col-sm-12 text-center">
-            <span class="text-muted">KPIs</span>
-            <br>
-            <div class="headerKPIs"> &nbsp;</div>
-        </div>
+        <!--end col-md-4-->
+      </div>
+      <!--end row-->
     </div>
-    <!-- BEGIN OVERVIEW STATISTIC BARS-->
-    <div class="row stats-overview-cont">
-        <div class="col-md-2 col-sm-4">
-            <div class="stats-overview stat-block">
-                <div class="details">
-                    <div class="title"><a href="/tasks"><span style="font-weight:bold;color:#9467bd">{{tasksNb}}</span> Tasks</a></div>
-                    <nvd3 options="optionsTasks" data="dataTasks"></nvd3>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2 col-sm-4">
-            <div class="stats-overview stat-block">
-                <div class="details">
-                    <div class="title"><a href="/metrics"><span style="font-weight:bold;color:#87CEEB">{{metricsNb}}</span> Metrics</a></div>
-                    <nvd3 options="optionsMetrics" data="dataMetrics"></nvd3>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2 col-sm-4">
-            <div class="stats-overview stat-block">
-                <div class="details">
-                    <div class="title"><span style="font-weight:bold;color:#bcbd22">{{confidenceMean}}%</span> Confidence</div>
-                    <nvd3 options="optionsConfidence" data="dataConfidence"></nvd3>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2 col-sm-4">
-        </div>
-        <div class="col-md-2 col-sm-4">
-            <div class="stats-overview stat-block">
-                <div class="details">
-                    <div class="title pull-right"><span style="font-weight:bold;color:#CB4B16">{{dashboard.alertsValue}}</span> Alerts</div>
-                    <nvd3 options="optionsAlerts" data="dataAlerts"></nvd3>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2 col-sm-4">
-            <div class="stats-overview stat-block">
-                <div class="details">
-                    <div class="title pull-left"><span style="font-weight:bold;color:#2CA02C">{{dashboard.kpisValue}}%</span> Goals</div>
-                    <div class="title pull-right"><small class="text-muted"><i>This Month:</i>{{lastgoalsNb}}%</small></div>
-                    <nvd3 options="optionsGoals" data="dataGoals"></nvd3>
-                </div>
-            </div>
-        </div>
+  </div>
+  <!-- BEGIN OVERVIEW STATISTIC BARS-->
+  <div class="row" ng-if="dashboard._id">
+    <div class="col-md-6 col-sm-12 text-center">
+      <span class="text-muted">Metrics</span>
+      <br>
+      <div class="headerMetric">
+        &nbsp;</div>
     </div>
-    <!-- END OVERVIEW STATISTIC BARS-->
+    <div class="col-md-2 col-sm-12 ">
+      &nbsp;
+    </div>
+    <div class="col-md-4 col-sm-12 text-center">
+      <span class="text-muted">KPIs</span>
+      <br>
+      <div class="headerKPIs">
+        &nbsp;</div>
+    </div>
+  </div>
+  <!-- BEGIN OVERVIEW STATISTIC BARS-->
+  <div class="row stats-overview-cont" ng-if="dashboard._id">
+    <div class="col-md-2 col-sm-4">
+      <div class="stats-overview stat-block">
+        <div class="details">
+          <div class="title">
+            <a href="/tasks">
+              <span style="font-weight:bold;color:#9467bd">{{tasksNb}}</span>
+              Tasks</a>
+          </div>
+          <nvd3 options="optionsTasks" data="dataTasks"></nvd3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 col-sm-4">
+      <div class="stats-overview stat-block">
+        <div class="details">
+          <div class="title">
+            <a href="/metrics">
+              <span style="font-weight:bold;color:#87CEEB">{{metricsNb}}</span>
+              Metrics</a>
+          </div>
+          <nvd3 options="optionsMetrics" data="dataMetrics"></nvd3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 col-sm-4">
+      <div class="stats-overview stat-block">
+        <div class="details">
+          <div class="title">
+            <span style="font-weight:bold;color:#bcbd22">{{confidenceMean}}%</span>
+            Confidence</div>
+          <nvd3 options="optionsConfidence" data="dataConfidence"></nvd3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 col-sm-4"></div>
+    <div class="col-md-2 col-sm-4">
+      <div class="stats-overview stat-block">
+        <div class="details">
+          <div class="title pull-right">
+            <span style="font-weight:bold;color:#CB4B16">{{dashboard.alertsValue}}</span>
+            Alerts</div>
+          <nvd3 options="optionsAlerts" data="dataAlerts"></nvd3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 col-sm-4">
+      <div class="stats-overview stat-block">
+        <div class="details">
+          <div class="title pull-left">
+            <span style="font-weight:bold;color:#2CA02C">{{dashboard.kpisValue}}%</span>
+            Goals</div>
+          <div class="title pull-right">
+            <small class="text-muted">
+              <i>This Month:</i>{{lastgoalsNb}}%</small>
+          </div>
+          <nvd3 options="optionsGoals" data="dataGoals"></nvd3>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- END OVERVIEW STATISTIC BARS-->
 </div>
 <!-- Layout Part -->
 <tabset>
-    <tab ng-if="!(dashboard._id || (!dashboard.paramId && !dashboard._id))">
-        <div class="isloading">Loading
-            <br/><img src="assets/images/ajax-loader_blue.gif">
-        </div>
-    </tab>
-    <tab ng-if="dashboard._id" active="true">
-        <tab-heading>
-            KPIs
-            <span class="badge badge-success"> {{dashboard.kpis.length + dashboard.alerts.length }}</span>
-        </tab-heading>
-        <div tab-k-p-i data="dashboard" multitasks="true" ng-if="dashboard"></div>
-    </tab>
-    <tab ng-if="dashboard._id">
-        <tab-heading>
-            Tasks
-            <span class="badge badge-info"> {{dashboard.openTasksNb || 0}}</span> /
-            <span class="badge badge-default"> {{tasksNb || 0}}</span>
-            <span ng-if="OutofDateTasks.length > 0" class="badge badge-danger"> {{OutofDateTasks.length}} </span>
-        </tab-heading>
-        <div tab-task data="dashboard.tasks" kpi="dashboard.kpis" ng-if="dashboard._id"></div>
-    </tab>
-    <tab ng-if="dashboard._id">
-        <tab-heading>
-            Help
-        </tab-heading>
-        <div dashboard-tab dashboard-type="help" dashboard-data="dashboard" ng-if="dashboard"></div>
-    </tab>
-    <tab ng-if="dashboard._id || (!dashboard.paramId && !dashboard._id)">
-        <tab-heading>
-            Edit
-        </tab-heading>
-        <div class="row profile-account">
-            <div class="col-md-3">
-                <ul class="ver-inline-menu  margin-bottom-10">
-                    <li class="active">
-                        <a data-toggle="tab" ng-click="changeTab($event, 1)">
-                            <i class="fa fa-recycle"></i>Change Perimeter </a>
-                        <span class="after">
-          </span>
-                    </li>
-                    <li>
-                        <a data-toggle="tab" ng-click="changeTab($event, 2)" style="background:#FF6666;color:white" ng-show="dashboard._id">
-                            <i class="fa fa-bomb"></i>Danger Zone
-                        </a>
-                        <span class="after">            </span>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-md-9">
-                <div class="tab-content">
-                    <div id="tab1" class="tab" ng-show="activeTab === 1" class="has-error">
-                        <form name="form.myForm" role="form" class="form-horizontal" action="#">
-                            <div class="form-body">
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label">Name</label>
-                                    <div class="col-md-9">
-                                        <input type="text" placeholder="" class="form-control" ng-model="dashboard.name" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label">Context</label>
-                                    <div class="col-md-9">
-                                        <input id="context" name="context" type="text" placeholder="ALL" class="form-control" ng-model="dashboard.context" typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:8" />
-                                        <span class="text-danger" ng-show="contextErrorNotAll">Please leave blank if you don't want any filters on this field or choose a predefined context.</span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label">Activity</label>
-                                    <div class="col-md-9">
-                                        <input id="activity" name="activity" type="text" placeholder="ALL" class="form-control" ng-model="dashboard.activity" typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:8" />
-                                        <span class="text-danger" ng-show="activityErrorNotAll">Please leave blank if you don't want any filters on this field or choose a predefined activity.</span>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label">Axis</label>
-                                    <div class="col-md-9">
-                                        <input type="text" placeholder="Communication,  etc." class="form-control" ng-model="dashboard.axe" typeahead="axe.longname for axe in axes | filter:$viewValue | limitTo:8" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label">Categories</label>
-                                    <div class="col-md-9">
-                                        <div class="col-md-offset-1 checkbox-list">
-                                            <label class="checkbox">
-                                                <div class="checker">
-                                                    <span>
-                          <input type="checkbox"  ng-model="dashboard.categories[0]" >
-                        </span>
-                                                </div>
-                                                Goal
-                                            </label>
-                                            <label class="checkbox">
-                                                <div class="checker">
-                                                    <span>
-                          <input type="checkbox" ng-model="dashboard.categories[1]" >
-                        </span>
-                                                </div>
-                                                Alert
-                                            </label>
-                                            <label class="checkbox">
-                                                <div class="checker">
-                                                    <span>
-                          <input type="checkbox" ng-model="dashboard.categories[2]"  >
-                        </span>
-                                                </div>
-                                                Anticipation
-                                            </label>
-                                            <label class="checkbox">
-                                                <div class="checker">
-                                                    <span>
-                          <input type="checkbox" ng-model="dashboard.categories[3]" >
-                        </span>
-                                                </div>
-                                                Information*
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label">TimeFrame</label>
-                                    <div class="col-md-9">
-                                        <input type="text" placeholder="" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label">Tags</label>
-                                    <div class="col-md-9">
-                                        <input type="text" placeholder="" class="form-control" ng-model="dashboard.tags" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-actions">
-                                <div class="pull-right">
-                                    <a href="#" class="btn btn-success" ng-click="save()">Save Changes</a>
-                                    <a href="#" class="btn btn-default" ng-click="reset()">Cancel</a>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div id="tab2" class="tab" ng-show="activeTab === 2">
-                        <div class="form-body">
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Once you delete your dashboard, there is no going back. Please be certain.</label>
-                                <div class="col-md-9">
-                                    <button class="btn btn-danger" ng-click="delete()">Delete this dashboard</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- END CONTENT -->
+  <tab ng-if="dashboard._id" active="true">
+    <tab-heading>
+      KPIs
+      <span class="badge badge-success">
+        {{dashboard.kpis.length + dashboard.alerts.length }}</span>
+    </tab-heading>
+    <div tab-k-p-i data="dashboard" multitasks="true" ng-if="dashboard"></div>
+  </tab>
+  <tab ng-if="dashboard._id">
+    <tab-heading>
+      Tasks
+      <span class="badge badge-info">
+        {{dashboard.openTasksNb || 0}}</span>
+      /
+      <span class="badge badge-default">
+        {{tasksNb || 0}}</span>
+      <span ng-if="OutofDateTasks.length > 0" class="badge badge-danger">
+        {{OutofDateTasks.length}}
+      </span>
+    </tab-heading>
+    <div tab-task data="dashboard.tasks" kpi="dashboard.kpis" ng-if="dashboard._id"></div>
+  </tab>
+  <tab ng-if="dashboard._id">
+    <tab-heading>
+      Help
+    </tab-heading>
+    <div dashboard-tab dashboard-type="help" dashboard-data="dashboard" ng-if="dashboard"></div>
+  </tab>
+  <tab ng-if="dashboard._id || (!dashboard.paramId && !dashboard._id)">
+    <tab-heading>
+      Edit
+    </tab-heading>
+    <div class="row profile-account">
+      <div class="col-md-3">
+        <ul class="ver-inline-menu  margin-bottom-10">
+          <li class="active">
+            <a data-toggle="tab" ng-click="changeTab($event, 1)">
+              <i class="fa fa-recycle"></i>Change Perimeter
+            </a>
+            <span class="after"></span>
+          </li>
+          <li>
+            <a data-toggle="tab" ng-click="changeTab($event, 2)" style="background:#FF6666;color:white" ng-show="dashboard._id">
+              <i class="fa fa-bomb"></i>Danger Zone
+            </a>
+            <span class="after"></span>
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-9">
+        <div class="tab-content">
+          <div id="tab1" ng-show="activeTab === 1" class="tab has-error">
+            <form name="form.myForm" role="form" class="form-horizontal" action="#">
+              <div class="form-body">
+                <div class="form-group">
+                  <label class="col-md-3 control-label">Name</label>
+                  <div class="col-md-9">
+                    <input type="text" placeholder="" class="form-control" ng-model="dashboard.name"/>
+                  </div>
                 </div>
+                <div class="form-group">
+                  <label class="col-md-3 control-label">Context</label>
+                  <div class="col-md-9">
+                    <input id="context" name="context" type="text" placeholder="ALL" class="form-control" ng-model="dashboard.context" typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:8"/>
+                    <span class="text-danger" ng-show="contextErrorNotAll">Please leave blank if you don't want any filters on this field or choose a predefined context.</span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-3 control-label">Activity</label>
+                  <div class="col-md-9">
+                    <input id="activity" name="activity" type="text" placeholder="ALL" class="form-control" ng-model="dashboard.activity" typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:8"/>
+                    <span class="text-danger" ng-show="activityErrorNotAll">Please leave blank if you don't want any filters on this field or choose a predefined activity.</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-actions">
+                <div class="pull-right">
+                  <a href="#" class="btn btn-primary" ng-click="save()">Save Changes</a>
+                  <a href="#" class="btn btn-default" ng-click="reset()">Cancel</a>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div id="tab2" class="tab" ng-show="activeTab === 2">
+            <div class="form-body">
+              <div class="form-group">
+                <label class="col-md-3 control-label">Once you delete your dashboard, there is no going back. Please be certain.</label>
+                <div class="col-md-9">
+                  <button class="btn btn-danger" ng-click="delete()">Delete this dashboard</button>
+                </div>
+              </div>
             </div>
+          </div>
+          <!-- END CONTENT -->
         </div>
-    </tab>
+      </div>
+    </div>
+  </tab>
 </tabset>
+</div>
 <!-- <script>
   jQuery(document).ready(function() {
    Index.initMiniCharts();

@@ -184,7 +184,7 @@ exports.watch = function(req, res) {
       if (err) {
         return handleError(res, err);
       }
-      process.emit('metricChanged', task._id);
+      process.emit('metricChanged', task._id, false);
       return res.json(200, task);
     });
   });

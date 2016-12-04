@@ -64,9 +64,7 @@ function createAllCompleteTask() {
 
     Task.find({}, '-__v').lean().exec(function(err, tasks) {
       _.each(tasks, function(task, index) { // pour chaque tache
-        createCompleteTask(task._id, false, function(data) {
-          console.log('createCompleteTask', data);
-        });
+        createCompleteTask(task._id, false, function(data) {});
       });
       console.log('# tasks updated', tasks.length);
     });
@@ -82,11 +80,9 @@ var j = schedule.scheduleJob({
   createAllCompleteTask()
 });
 
-process.on('metricChanged', function(req) {
-  console.log('metricChanged req', req);
-  createCompleteTask(req, true, function(data) {
-    console.log('createCompleteTask', data);
-  });
+process.on('metricChanged', function(taskId, refreshDashboard) {
+  refreshDashboard = (refreshDashboard === undefined) ? true : refreshDashboard;
+  createCompleteTask(taskId, refreshDashboard, function(data) {});
 });
 
 function createCompleteTask(taskId, refreshDashboard, callback) {
@@ -112,7 +108,6 @@ function createCompleteTask(taskId, refreshDashboard, callback) {
       Task.findById(taskId, {
         __v: false
       }).lean().exec(function(err, task) {
-        console.log('task', task);
         task.watchersId = task.watchers;
         task.actors = [];
         task.watchers = [];
@@ -336,7 +331,7 @@ function createCompleteTask(taskId, refreshDashboard, callback) {
           if (refreshDashboard) {
             process.emit('taskChanged', task);
           }
-          callback(task);
+          callback(CreatedtaskComplete);
           return true;
         });
       } else {
@@ -366,7 +361,7 @@ function createCompleteTask(taskId, refreshDashboard, callback) {
           if (refreshDashboard) {
             process.emit('taskChanged', task);
           }
-          callback(task);
+          callback(updated);
           return true;
         });
       }
@@ -406,7 +401,6 @@ exports.index = function(req, res) {
     "actor.active": false,
     "actor.location": false
   }, function(err, taskCompletes) {
-    console.log('taskCompletes', taskCompletes.length);
     if (err) {
       console.log('CONDITION PASSED');
       console.log('err', err);

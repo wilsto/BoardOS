@@ -28,6 +28,13 @@ angular.module('boardOsApp')
       });
     };
 
+    $scope.refreshDashboard = function() {
+      $scope.myPromise = $http.get('/api/dashboardCompletes/executeId/' + $stateParams.id).success(function(response) {
+        console.log('refresh dashboard : ' + $stateParams.id + ' ' + response);
+      });
+    };
+
+
     $scope.loadTasks = function() {
       $http.get('/api/tasks/countByMonth', {
         params: {
@@ -74,7 +81,7 @@ angular.module('boardOsApp')
 
     $scope.loadCompleteDashboard = function() {
       if ($stateParams.id) {
-        $http.get('/api/dashboardCompletes/' + $stateParams.id).success(function(dashboard) {
+        $scope.myPromise = $http.get('/api/dashboardCompletes/' + $stateParams.id).success(function(dashboard) {
           $scope.dashboard = dashboard;
           $rootScope.perimeter.name = dashboard.name;
           $rootScope.perimeter.id = dashboard._id;
