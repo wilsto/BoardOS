@@ -139,7 +139,7 @@ exports.index = function(req, res) {
         });
         sendgrid.send(email, function(err, json) {
           if (err) {
-            return 
+            return err;
           }
           deferred.resolve(json);
         });

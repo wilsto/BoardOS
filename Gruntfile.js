@@ -281,7 +281,7 @@ module.exports = function(grunt) {
     },
     removelogging: {
       dist: {
-        src: ['<%= yeoman.client %>/{app,components}/**/*.js', 'server/**/*.js'] // Each file will be overwritten with the output!
+        src: ['<%= yeoman.client %>/{app,components}/**/*.js', '<%= yeoman.dist %>/server/**/*.js'] // Each file will be overwritten with the output!
       }
     },
     svgmin: {

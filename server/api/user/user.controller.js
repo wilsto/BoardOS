@@ -131,7 +131,7 @@ exports.desactivate = function(req, res, next) {
   var userId = String(req.body.userId);
   User.findById(userId, function(err, user) {
     user.active = false;
-    
+
     user.save(function(err) {
       if (err) return validationError(res, err);
 
@@ -141,15 +141,14 @@ exports.desactivate = function(req, res, next) {
         if (err) {
           return handleError(res, err);
         }
-        if (!dashboards || dashboards.length === 0) {
-          
+        _.each(dashboards, function(dashboard) {
           dashboard.remove(function(err) {
             if (err) {
               return handleError(res, err);
             }
             process.emit('dashboardRemoved', dashboard);
           });
-        })
+        });
       });
       res.send(200);
     });
