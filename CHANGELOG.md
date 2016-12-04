@@ -37,6 +37,7 @@
 - Retour du bouton : watch [\#142](https://github.com/wilsto/BoardOS/issues/142)
 - Global change incluant les metrics [\#140](https://github.com/wilsto/BoardOS/issues/140)
 - Need Metrics à tort [\#137](https://github.com/wilsto/BoardOS/issues/137)
+- Statut Late à tort ? [\#136](https://github.com/wilsto/BoardOS/issues/136)
 - Améliorer la page Tache [\#133](https://github.com/wilsto/BoardOS/issues/133)
 - Amélioration de la Homepage [\#132](https://github.com/wilsto/BoardOS/issues/132)
 - Améliorations de la gestion des users [\#130](https://github.com/wilsto/BoardOS/issues/130)
@@ -48,6 +49,10 @@
 - Liste des taches pour une KPI incomplète [\#110](https://github.com/wilsto/BoardOS/issues/110)
 - Impossible de créer un nouveau dashboard [\#108](https://github.com/wilsto/BoardOS/issues/108)
 - Arrondi du calcul projeté doit prendre en compte 2 décimales [\#106](https://github.com/wilsto/BoardOS/issues/106)
+
+**Closed issues:**
+
+- Impossibilité de créer une tâche sous Google Chrome [\#146](https://github.com/wilsto/BoardOS/issues/146)
 
 ## [v0.16.1](https://github.com/wilsto/boardos/tree/v0.16.1) (2015-04-21)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v0.16.0...v0.16.1)

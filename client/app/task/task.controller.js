@@ -27,7 +27,7 @@ angular.module('boardOsApp')
 
     $scope.refreshTask = function() {
       $scope.myPromise = $http.get('/api/taskCompletes/executeId/' + $scope.currentTask._id).success(function(response) {
-        console.log('refresh task : ' + $scope.currentTask._id + ' ' + response);
+        
       });
     };
 

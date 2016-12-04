@@ -26,7 +26,9 @@ var timetowait = 7;
 Hierarchies.find({
   name: 'Task'
 }, '-__v', function(err, hierarchy) {
-  hierarchyValues = hierarchy[0].list;
+  if (hierarchy[0]) {
+    hierarchyValues = hierarchy[0].list;
+  }
 });
 
 KPI.find({}, '-__v').lean().exec(function(err, mKPI) {

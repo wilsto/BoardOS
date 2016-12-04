@@ -22,7 +22,7 @@ angular.module('boardOsApp')
         };
 
         scope.sortByDate = function(task) {
-          console.log('task.lastmetric.date', task.lastmetric.endDate);
+          
           return (task.lastmetric) ? task.lastmetric.endDate : -1;
         };
 
