@@ -1,5 +1,6 @@
 'use strict';
 var _ = require('lodash');
+var async = require('async');
 var moment = require('moment');
 var math = require('mathjs');
 var Q = require('q');
@@ -17,6 +18,7 @@ var getData = require('../../config/getData');
 var hierarchyValues = {};
 var kpis = {};
 var alerts = {};
+var tasks = {};
 
 // permanent
 Hierarchies.find({
@@ -37,7 +39,7 @@ KPI.find({}, '-__v').lean().exec(function(err, mKPI) {
 })
 
 process.on('taskChanged', function(task) {
-  
+
   var alldashboards;
   setTimeout(function() {
     Q()
@@ -56,7 +58,7 @@ process.on('taskChanged', function(task) {
         var deferred = Q.defer();
         _.each(alldashboards, function(dashboard, index) {
           if ((dashboard.context === undefined || task.context.indexOf(dashboard.context) >= 0) && (dashboard.activity === undefined || task.activity.indexOf(dashboard.activity) >= 0)) {
-            
+
             createCompleteDashboard(dashboard._id, function(data) {});
           }
           deferred.resolve(dashboard);
@@ -67,16 +69,15 @@ process.on('taskChanged', function(task) {
 });
 
 process.on('dashboardChanged', function(dashboard) {
-  
   createCompleteDashboard(dashboard._id, function(data) {});
 });
 
 process.on('dashboardRemoved', function(dashboard) {
-  
+
   DashboardComplete.remove({
     _id: dashboard._id
   }, function(err, numberRemoved) {
-    
+
   });
 });
 
@@ -84,7 +85,7 @@ var j = schedule.scheduleJob({
   hour: 1,
   minute: 0
 }, function() {
-  
+
 });
 
 
@@ -96,7 +97,7 @@ function createAllCompleteDashboard() {
     .then(function() {
       var deferred = Q.defer();
       DashboardComplete.remove({}, function(err, numberRemoved) {
-        
+        console.log('numberRemoved', numberRemoved);
         deferred.resolve(numberRemoved);
       });
       return deferred.promise;
@@ -104,7 +105,7 @@ function createAllCompleteDashboard() {
     .then(function() {
       var deferred = Q.defer();
       Dashboard.find({}, '-__v').lean().exec(function(err, dashboards) {
-        
+        console.log('dashboards', dashboards.length);
         alldashboards = dashboards;
         deferred.resolve(alldashboards);
       });
@@ -112,24 +113,34 @@ function createAllCompleteDashboard() {
     })
     .then(function() {
       var deferred = Q.defer();
-      _.each(alldashboards, function(dashboard, index) { // pour chaque tache
-        createCompleteDashboard(dashboard._id, function(data) {});
-        deferred.resolve(alldashboards);
+      // assuming openFiles is an array of file names
+      async.each(alldashboards, function(dashboard, callback) {
+        // Perform operation on file here.
+        createCompleteDashboard(dashboard._id, function(data) {
+          callback();
+        });
+      }, function(err) {
+        // if any of the file processing produced an error, err would equal that error
+        if (err) {
+          // One of the iterations produced an error.
+          // All processing will now stop.
+          console.log('A file failed to process');
+        } else {
+          console.log('All files have been processed successfully');
+        }
       });
+      deferred.resolve(alldashboards);
       return deferred.promise;
     });
 }
 
 function createCompleteDashboard(dashboardId, callback) {
-  var tasks = {};
-
-  
   Q()
     // Get a single task
     .then(function() {
       var deferred = Q.defer();
       if (typeof dashboardId === 'undefined') {
-        
+
       } else {
         Dashboard.findById(dashboardId, {
           __v: false
@@ -142,10 +153,9 @@ function createCompleteDashboard(dashboardId, callback) {
 
   // Start tasks
   .then(function(dashboard) {
-    var dateNow = new Date();
-    dashboard.tasks = [];
     // Get related tasks
     var deferred = Q.defer();
+    dashboard.tasks = [];
     TaskComplete.find({
       activity: {
         '$regex': dashboard.activity || '',
@@ -155,10 +165,9 @@ function createCompleteDashboard(dashboardId, callback) {
         '$regex': dashboard.context || '',
         $options: '-i'
       }
-    }, '-__v').sort({
+    }, 'lastmetric needToFeed kpis alerts').sort({
       date: 'asc'
     }).lean().exec(function(err, findtasks) {
-      tasks = findtasks;
       _.each(findtasks, function(task) {
         dashboard.tasks.push(task._id);
       });
@@ -169,96 +178,82 @@ function createCompleteDashboard(dashboardId, callback) {
         return task.needToFeed;
       }).length;
       dashboard.tasksNb = dashboard.tasks.length;
+
+      dashboard.kpis = [];
+      dashboard.kpisValue = null;
+      dashboard.alerts = [];
+      dashboard.alertsValue = 0;
+      var alertsSumBy = {};
+      var kpisSumBy = {};
+      var kpisNbBy = {};
+      var kpisSum = 0;
+      var kpisNb = 0;
+      _.each(findtasks, function(task, index) {
+        _.each(task.kpis, function(kpi, index2) { // list kpi
+          if (!kpisSumBy[kpi._id]) {
+            kpisSumBy[kpi._id] = 0;
+          }
+          if (!kpisNbBy[kpi._id]) {
+            kpisNbBy[kpi._id] = 0;
+          }
+          kpisSumBy[kpi._id] += parseInt(kpi.calcul.task || 0);
+          kpisNbBy[kpi._id] += (parseInt(kpi.calcul.task) > 0) ? 1 : 0;
+          kpisSum += parseInt(kpi.calcul.task || 0);
+          kpisNb += (parseInt(kpi.calcul.task) > 0) ? 1 : 0;
+        })
+        _.each(task.alerts, function(alert, index2) { // list alert
+          if (!alertsSumBy[alert._id]) {
+            alertsSumBy[alert._id] = 0;
+          }
+          alertsSumBy[alert._id] += parseInt(alert.calcul.task || 0);
+          dashboard.alertsValue += parseInt(alert.calcul.task || 0);
+        });
+
+        if (index === findtasks.length - 1) {
+          _.each(kpisSumBy, function(value, key) {
+            var mKPI = _.filter(kpis, function(kpi) {
+              return kpi._id.toString() === key;
+            })[0];
+            dashboard.kpis.push({
+              kpiId: key,
+              name: mKPI.name,
+              constraint: mKPI.constraint,
+              category: mKPI.category,
+              calcul: {
+                task: parseInt(value / kpisNbBy[key])
+              }
+            });
+          });
+          _.each(alertsSumBy, function(value, key) {
+            var mKPI = _.filter(alerts, function(alert) {
+              return alert._id.toString() === key;
+            })[0];
+            dashboard.alerts.push({
+              alertId: key,
+              name: mKPI.name,
+              constraint: mKPI.constraint,
+              category: mKPI.category,
+              calcul: {
+                task: value
+              }
+            });
+          });
+          if (kpisNb > 0) {
+            dashboard.kpisValue = parseInt(kpisSum / kpisNb);
+          }
+        }
+      });
       deferred.resolve(dashboard);
     });
     return deferred.promise;
   })
 
-  .then(function(dashboard) {
-    // Get related Tasks
-    var deferred = Q.defer();
-    //logger.trace("Add calculs");
-    dashboard.kpis = [];
-    dashboard.kpisValue = null;
-    dashboard.alerts = [];
-    dashboard.alertsValue = 0;
-    var alertsSumBy = {};
-    var kpisSumBy = {};
-    var kpisNbBy = {};
-    var kpisSum = 0;
-    var kpisNb = 0;
-    _.each(tasks, function(task, index) {
-      _.each(task.kpis, function(kpi, index2) { // list kpi
-        if (!kpisSumBy[kpi._id]) {
-          kpisSumBy[kpi._id] = 0;
-        }
-        if (!kpisNbBy[kpi._id]) {
-          kpisNbBy[kpi._id] = 0;
-        }
-        kpisSumBy[kpi._id] += parseInt(kpi.calcul.task || 0);
-        kpisNbBy[kpi._id] += (parseInt(kpi.calcul.task) > 0) ? 1 : 0;
-        kpisSum += parseInt(kpi.calcul.task || 0);
-        kpisNb += (parseInt(kpi.calcul.task) > 0) ? 1 : 0;
-      })
-      _.each(task.alerts, function(alert, index2) { // list alert
-        if (!alertsSumBy[alert._id]) {
-          alertsSumBy[alert._id] = 0;
-        }
-        alertsSumBy[alert._id] += parseInt(alert.calcul.task || 0);
-        dashboard.alertsValue += parseInt(alert.calcul.task || 0);
-      });
-    });
-    _.each(kpisSumBy, function(value, key) {
-      var mKPI = _.filter(kpis, function(kpi) {
-        return kpi._id.toString() === key;
-      })[0];
-      dashboard.kpis.push({
-        kpiId: key,
-        name: mKPI.name,
-        constraint: mKPI.constraint,
-        category: mKPI.category,
-        calcul: {
-          task: parseInt(value / kpisNbBy[key])
-        }
-      });
-    });
-    _.each(alertsSumBy, function(value, key) {
-      var mKPI = _.filter(alerts, function(alert) {
-        return alert._id.toString() === key;
-      })[0];
-      dashboard.alerts.push({
-        alertId: key,
-        name: mKPI.name,
-        constraint: mKPI.constraint,
-        category: mKPI.category,
-        calcul: {
-          task: value
-        }
-      });
-    });
-    if (kpisNb > 0) {
-      dashboard.kpisValue = parseInt(kpisSum / kpisNb);
-    }
-
-    deferred.resolve(dashboard);
-    return deferred.promise;
-
-  })
-
   // Save a single dashboard complete
   .then(function(dashboard) {
     DashboardComplete.findById(dashboardId, function(err, dashboardComplete) {
-      if (err) {
-        
-      }
-
       // si non existant
       if (!dashboardComplete) {
         DashboardComplete.create(dashboard, function(err, CreateddashboardComplete) {
-          if (err) {
-            
-          }
-          
           callback(CreateddashboardComplete);
           return true;
         });
@@ -278,10 +273,6 @@ function createCompleteDashboard(dashboardId, callback) {
         updated.markModified('kpis');
         updated.markModified('alerts');
         updated.save(function(err) {
-          if (err) {
-            
-          }
-          
           callback(dashboardComplete);
           return true;
         });
@@ -289,7 +280,6 @@ function createCompleteDashboard(dashboardId, callback) {
     });
 
   })
-
 }
 
 // Get list of dashboardCompletes
@@ -320,7 +310,7 @@ exports.index = function(req, res) {
 
 // Get a single dashboardComplete
 exports.show = function(req, res) {
-  DashboardComplete.findById(req.params.id).populate('tasks').lean().exec(function(err, dashboardComplete) {
+  DashboardComplete.findById(req.params.id).populate('tasks', '-metrics -watchers -dashboards -kpis -alerts -actors -version').lean().exec(function(err, dashboardComplete) {
     if (err) {
       return handleError(res, err);
     }

@@ -1,9 +1,11 @@
 {
   "name": "board-os",
-  "version": "1.6.11",
+  "version": "1.6.12",
   "main": "server/app.js",
   "dependencies": {
+    "async": "^2.1.4",
     "body-parser": "^1.14.1",
+    "bson": "^0.5.7",
     "composable-middleware": "^0.3.0",
     "compression": "^1.6.0",
     "connect-mongo": "^0.8.2",

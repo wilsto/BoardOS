@@ -62,13 +62,13 @@ function calcBusinessDays(dDate1, dDate2) { // input given as Date objects
 
 function createAllCompleteTask() {
   TaskComplete.remove({}, function(err, numberRemoved) {
-    
-
     Task.find({}, '-__v').lean().exec(function(err, tasks) {
       _.each(tasks, function(task, index) { // pour chaque tache
+        console.log('index', index);
+        console.log('task._id', task._id);
         createCompleteTask(task._id, false, function(data) {});
       });
-      
+
     });
   });
 
@@ -78,7 +78,7 @@ var j = schedule.scheduleJob({
   hour: 0,
   minute: 30
 }, function() {
-  
+
   createAllCompleteTask()
 });
 
@@ -88,16 +88,16 @@ process.on('metricChanged', function(taskId, refreshDashboard) {
 });
 
 process.on('taskRemoved', function(task) {
-  
+
   TaskComplete.remove({
     _id: task._id
   }, function(err, numberRemoved) {
-    
+
   });
 });
 
 function createCompleteTask(taskId, refreshDashboard, callback) {
-  
+
   Q()
     .then(function() {
       // Get a single user
@@ -113,12 +113,19 @@ function createCompleteTask(taskId, refreshDashboard, callback) {
   .then(function() {
     var deferred = Q.defer();
     if (typeof taskId === 'undefined') {
-      
+
     } else {
-      
+
       Task.findById(taskId, {
         __v: false
       }).lean().exec(function(err, task) {
+        delete task.actor.provider;
+        delete task.actor.last_connection_date;
+        delete task.actor.active;
+        delete task.actor.location;
+        delete task.actor.create_date;
+        delete task.actor.email;
+        delete task.actor.role;
         task.watchersId = task.watchers;
         task.actors = [];
         task.watchers = [];
@@ -159,7 +166,14 @@ function createCompleteTask(taskId, refreshDashboard, callback) {
       task.dashboards = [];
       _.each(dashboards, function(dashboard, index) {
         if ((dashboard.context === undefined || task.context.indexOf(dashboard.context) >= 0) && (dashboard.activity === undefined || task.activity.indexOf(dashboard.activity) >= 0)) {
-          task.dashboards.push(dashboard.toObject());
+          var mydashboard = dashboard.toObject();
+          delete mydashboard.date;
+          delete mydashboard.owner.email;
+          delete mydashboard.owner.last_connection_date;
+          delete mydashboard.owner.provider;
+          delete mydashboard.owner.active;
+          delete mydashboard.owner.role;
+          task.dashboards.push(mydashboard);
         }
       });
       deferred.resolve(task);
@@ -181,19 +195,6 @@ function createCompleteTask(taskId, refreshDashboard, callback) {
       date: 'asc'
     }).lean().exec(function(err, metrics) {
       _.each(metrics, function(metric, index) { // pour chaque metric
-
-        delete metric.__v;
-        delete metric.taskname;
-        delete metric.activity;
-        delete metric.context;
-        delete metric.actor.email;
-        delete metric.actor.provider;
-        delete metric.actor.location;
-        delete metric.actor.active;
-        delete metric.actor.last_connection_date;
-        delete metric.actor.create_date;
-        delete metric.actor.role;
-
         metric.taskId = task._id;
         // si c'est la première métric, on crèe l'objet
         if (typeof task.metrics === 'undefined') {
@@ -208,8 +209,8 @@ function createCompleteTask(taskId, refreshDashboard, callback) {
 
         // nombre de jours séparant la date de début, fin, entre les deux
         metric.duration = calcBusinessDays(metric.startDate, metric.endDate);
-        metric.timeToBegin = moment(metric.startDate).diff(moment(), 'days');
-        metric.timeToEnd = moment(metric.endDate).diff(moment(), 'days');
+        //  metric.timeToBegin = moment(metric.startDate).diff(moment(), 'days');
+        //  metric.timeToEnd = moment(metric.endDate).diff(moment(), 'days');
 
         // convert to numeric
         metric.timeSpent = parseFloat(String(metric.timeSpent).replace(',', '.'));
@@ -267,6 +268,23 @@ function createCompleteTask(taskId, refreshDashboard, callback) {
         if (metric.actor) {
           task.actors.push(metric.actor);
         }
+
+        delete metric.__v;
+        delete metric.taskname;
+        delete metric.activity;
+        delete metric.context;
+        delete metric.actor.email;
+        delete metric.actor.provider;
+        delete metric.actor.location;
+        delete metric.actor.active;
+        delete metric.actor.last_connection_date;
+        delete metric.actor.create_date;
+        delete metric.actor.role;
+        delete metric.color;
+        delete metric.description;
+        delete metric.timeToBegin;
+        delete metric.timeToEnd;
+
         //on l'ajoute à la liste
         task.metrics.push(metric);
         task.lastmetric = metric;
@@ -296,23 +314,23 @@ function createCompleteTask(taskId, refreshDashboard, callback) {
 
       // on ajoute des caractéristiques aux KPI
       //##############################################
-      mKPI.metricsGroupBy = {};
+      //mKPI.metricsGroupBy = {};
       mKPI.calcul = {};
       mKPI._id = kpi._id;
       mKPI.name = kpi.name;
       mKPI.category = kpi.category;
       mKPI.constraint = kpi.constraint;
-      mKPI.metricsGroupBy.Time = tools.groupMultiBy(task.metrics, ['groupTimeByValue']);
+      //mKPI.metricsGroupBy.Time = tools.groupMultiBy(task.metrics, ['groupTimeByValue']);
       var filteredMetrics = _.filter(task.metrics, function(metric) {
         return (task.category === 'Alert') ? metric.groupTimeByValue === moment(new Date()).format("YYYY-MM") : _.last(metric.groupTimeByValue); //filtrer par le mois en cours
       });
       mKPI.calcul.task = tools.calculKPI(filteredMetrics, kpi);
-      mKPI.calcul.taskTime = _.map(mKPI.metricsGroupBy.Time, function(value, key) {
-        return {
-          month: key,
-          value: tools.calculKPI(value, kpi)
-        };
-      });
+      // mKPI.calcul.taskTime = _.map(mKPI.metricsGroupBy.Time, function(value, key) {
+      //   return {
+      //     month: key,
+      //     value: tools.calculKPI(value, kpi)
+      //   };
+      // });
 
       if (kpi.category === 'Alert') {
         task.alerts.push(mKPI);
@@ -329,16 +347,9 @@ function createCompleteTask(taskId, refreshDashboard, callback) {
   .then(function(task) {
 
     TaskComplete.findById(taskId, function(err, taskComplete) {
-      if (err) {
-        
-      }
-
       // si non existant
       if (!taskComplete) {
         TaskComplete.create(task, function(err, CreatedtaskComplete) {
-          if (err) {
-            
-          }
           if (refreshDashboard) {
             process.emit('taskChanged', task);
           }
@@ -367,7 +378,7 @@ function createCompleteTask(taskId, refreshDashboard, callback) {
         updated.markModified('dashboards');
         updated.save(function(err) {
           if (err) {
-            
+
           }
           if (refreshDashboard) {
             process.emit('taskChanged', task);
@@ -413,8 +424,8 @@ exports.index = function(req, res) {
     "actor.location": false
   }, function(err, taskCompletes) {
     if (err) {
-      
-      
+
+
       return handleError(res, err);
     }
     return res.status(200).json(taskCompletes);
