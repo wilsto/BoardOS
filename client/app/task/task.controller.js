@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('TaskCtrl', function($rootScope, $scope, $http, $stateParams, $location, Auth, Notification, socket) {
+  .controller('TaskCtrl', function($rootScope, $scope, $http, $stateParams, $location, Auth, Notification) {
 
     $scope.activeTab = 1;
     $scope.errors = {};
@@ -21,13 +21,13 @@ angular.module('boardOsApp')
       $scope.isManager = data;
     });
 
-    socket.on('taskComplete:save', function(data) {
-      $scope.loadTask();
-    });
+    // socket.on('taskComplete:save', function(data) {
+    //   $scope.loadTask();
+    // });
 
     $scope.refreshTask = function() {
       $scope.myPromise = $http.get('/api/taskCompletes/executeId/' + $scope.currentTask._id).success(function(response) {
-        
+
       });
     };
 
