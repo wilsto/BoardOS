@@ -28,7 +28,7 @@ function SendMails(callback) {
       // Get a single user
       var deferred = Q.defer();
       User.find({
-        _id: "549800f633fca76c16fca2af"
+        active: true
       }, '-salt -hashedPassword', function(err, user) {
         usersList = user;
         deferred.resolve(usersList);
