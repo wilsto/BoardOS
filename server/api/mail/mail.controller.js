@@ -28,7 +28,9 @@ function SendMails(callback) {
       // Get a single user
       var deferred = Q.defer();
       User.find({
-        active: true
+        active: {
+          $ne: false
+        }
       }, '-salt -hashedPassword', function(err, user) {
         usersList = user;
         deferred.resolve(usersList);
@@ -146,7 +148,9 @@ function SendMails(callback) {
 
 // Get list of mails
 exports.index = function(req, res) {
+  console.log('Send Mail Start');
   SendMails(function(json) {
+    console.log('Send Mail End');
     return res.json(json);
   });
 };

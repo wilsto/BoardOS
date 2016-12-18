@@ -222,21 +222,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col3">
-                  <div class="date">
-                    <span style="color:orange" ng-show="task.timebetween < 0 && task.timebetween !== null ">{{ Math.abs(task.timebetween) }}
-                      days ago</span>
-                    <span ng-show="task.timebetween > 0 && task.timebetween !== null">in
-                      {{ Math.abs(task.timebetween) }}
-                      days
-                    </span>
-                    <span style="color:orange" ng-show=" task.lastmetric === 'undefined'">
-                      No metrics
-                    </span>
-                    <span class="label label-sm label-warning " ng-show="task.timebetween < 0 && task.timebetween !== null ">
-                      Need Metric</span>
-                  </div>
-                </div>
+
               </a>
             </li>
             <li ng-repeat="task in tasksToNotify | orderBy:'endDate'">
@@ -244,13 +230,13 @@
                 <div class="col1">
                   <div class="cont">
                     <div class="cont-col1">
-                      <div class="label label-sm label-danger" ng-show="task.lastmetric.progressStatus ==='Late' ">
+                      <div class="label label-sm label-danger" ng-show="task.lastmetric.progressStatus ==='Late' || task.lastmetric.projectedWorkload > task.load ">
                         <i class="fa fa-bell"></i>
                       </div>
-                      <div class="label label-sm label-warning" ng-show="(task.timebetween < 0 && task.timebetween !== null && task.lastmetric.progressStatus !=='Late' ) || task.lastmetric.progressStatus ==='At Risk' ">
+                      <div class="label label-sm label-warning" ng-show="(task.needToFeed && task.lastmetric.progressStatus !=='Late' && task.lastmetric.projectedWorkload <= task.load ) || task.lastmetric.progressStatus ==='At Risk' ">
                         <i class="fa fa-clock-o"></i>
                       </div>
-                      <div class="label label-sm label-success" ng-show="(task.timebetween > 0 && task.timebetween !== null && task.lastmetric.progressStatus !=='Late' && task.lastmetric.progressStatus !=='At Risk')">
+                      <div class="label label-sm label-success" ng-show="(!task.needToFeed && task.lastmetric.progressStatus !=='Late' && task.lastmetric.progressStatus !=='At Risk' && task.lastmetric.projectedWorkload <= task.load)">
                         <i class="fa fa-clock-o"></i>
                       </div>
                     </div>
@@ -285,16 +271,10 @@
                 </div>
                 <div class="col2">
                   <div class="date">
-                    <span style="color:orange" ng-show="task.timebetween < 0 && task.timebetween !== null ">{{ Math.abs(task.timebetween) }}
-                      days ago</span>
-                    <span ng-show="task.timebetween > 0 && task.timebetween !== null">in
-                      {{ Math.abs(task.timebetween) }}
-                      days
-                    </span>
-                    <span style="color:orange" ng-show=" task.lastmetric === 'undefined'">
+                    <span style="color:orange" ng-show=" task.lastmetric === undefined">
                       No metrics
                     </span>
-                    <span class="label label-sm label-warning " ng-show="task.timebetween < 0 && task.timebetween !== null ">
+                    <span class="label label-sm label-warning " ng-show="task.needToFeed">
                       Need Metric</span>
                   </div>
                 </div>
@@ -302,10 +282,8 @@
             </li>
           </ul>
         </div>
-
         <!--END TABS-->
       </div>
     </div>
   </div>
-</div>
 </div>

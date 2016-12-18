@@ -6368,12 +6368,17 @@ Profile Page
 }
 
 .label-lightdanger {
-  background-color: rgba(148, 58, 46, 0.25);
+  background-color: rgba(148, 58, 46, 0.25)!important;
 }
 
 .label-lightwarning {
-  background-color: rgba(190, 166, 95, 0.5);
-  color: darkorange;
+  background-color: rgba(228, 231, 59, 0.54)!important;
+  color: rgb(212, 169, 60);
+}
+
+.label-lightinfo {
+  background-color: rgba(59, 153, 231, 0.30)!important;
+  color: rgba(74, 139, 215, 0.6);
 }
 
 .label-lightgrey {

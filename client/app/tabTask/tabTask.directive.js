@@ -14,7 +14,8 @@ angular.module('boardOsApp')
         scope.filterStatus = 'Not Finished';
         scope.filterProgressStatus = 'All';
         scope.searchText = '';
-
+        scope.orderByField = 'lastmetric.date';
+        scope.reverseSort = true;
         scope.page = $location.path().split('/')[1];
 
         scope.giveMeMyColor = function(value, category) {
@@ -22,7 +23,7 @@ angular.module('boardOsApp')
         };
 
         scope.sortByDate = function(task) {
-          
+
           return (task.lastmetric) ? task.lastmetric.endDate : -1;
         };
 

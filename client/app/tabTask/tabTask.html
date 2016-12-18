@@ -41,26 +41,41 @@
 </div>
 <div style="padding:15px;">
     Filter :
-    <input style="width:100%" ng-model="searchText">
+    <input style="width:100%" ng-model="searchText"  class="form-control">
 </div>
 <table class="table table-striped table-bordered table-hover" id="sample_4">
     <thead>
         <tr>
-            <th class="hidden-xs">
-                Owner
-            </th>
-            <th style="width:30%">
-                Name
-            </th>
-            <th>
-                Start
-            </th>
-            <th>
-                End
-            </th>
-            <th>
-                Last Metric
-            </th>
+          <th class="hidden-xs">
+            <a style="text-decoration: none" href="#" ng-click="orderByField='actor.name'; reverseSort = !reverseSort">
+              Owner <span ng-show="orderByField == 'actor.name'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
+            </a>
+          </th>
+          <th  style="width:auto;min-width:50px;">
+            <a style="text-decoration: none" href="#" ng-click="orderByField='Name'; reverseSort = !reverseSort">
+              Name <span ng-show="orderByField == 'Name'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
+            </a>
+          </th>
+          <th  style="max-width:50px;width:auto;min-width:20px;">
+            <a style="text-decoration: none" href="#" ng-click="orderByField='lastmetric.startDate'; reverseSort = !reverseSort">
+              Start <span ng-show="orderByField == 'lastmetric.startDate'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
+            </a>
+          </th>
+          <th style="max-width:50px;width:auto;min-width:20px;">
+            <a style="text-decoration: none" href="#" ng-click="orderByField='lastmetric.load'; reverseSort = !reverseSort">
+              Workload <span ng-show="orderByField == 'lastmetric.load'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
+            </a>
+          </th>
+          <th  style="max-width:50px;width:auto;min-width:20px;">
+            <a style="text-decoration: none" href="#" ng-click="orderByField='lastmetric.endDate'; reverseSort = !reverseSort">
+              End <span ng-show="orderByField == 'lastmetric.endDate'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
+            </a>
+          </th>
+          <th >
+            <a style="text-decoration: none" href="#" ng-click="orderByField='lastmetric.date'; reverseSort = !reverseSort">
+              last Metric <span ng-show="orderByField == 'lastmetric.date'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
+            </a>
+          </th>
             <th ng-if="page === 'KPI'">KPI </th>
             <th ng-if="page === 'KPI'">Last Metric
                 <br/><small>{{kpi.metricTaskField}}</small></th>
@@ -71,28 +86,62 @@
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="task in tasks | orderBy:'lastmetric.endDate' | filter:filter()">
+        <tr ng-repeat="task in tasks |  orderBy:orderByField:reverseSort | filter:filter()">
             <td style="text-align: center">
                 <div popover-html-unsafe="Name : <b>{{task.actor.name}}</b> </br> Role : <b>{{task.actor.role}}</b> " popover-trigger="mouseenter" popover-title="Owner Identity" popover-placement="right">
                     <img alt="" ng-src="assets/images/avatars/{{task.actor._id}}.png" class="img-circle" style="width:30px;height:30px;" err-src="assets/images/avatars/avatar.png" />
                 </div>
             </td>
             <td>
-                <a href="/task/{{task._id}}"><div class="desc" popover-html-unsafe="Context : {{task.context}} </p>  Activity : {{task.activity}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="right" popover-delay ="1000">{{task.name}}  <span class="label label-sm label-warning " ng-show="task.timebetween < 0 && task.timebetween !== null "> Need Metric</span></div></a>
+                <a href="/task/{{task._id}}"><div class="desc" popover-html-unsafe="Context : {{task.context}} </p>  Activity : {{task.activity}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="right" popover-delay ="1000">{{task.name}}  <span class="label label-sm label-warning " ng-show="task.needToFeed"> Need Metric</span></div></a>
             </td>
             <td class="hidden-xs">
-                {{task.lastmetric.startDate | date:'mediumDate'}}
-                <br/>
-                <span class="label label-sm" ng-class="{'label-info':task.lastmetric.status =='In Progress','label-success':task.lastmetric.status =='Finished','label-default':task.lastmetric.status =='Not Started','label-lightgrey':task.lastmetric.status =='Withdrawn'}">
-                         {{task.lastmetric.status}}
-                       </span>
+              {{task.startDate | date:'mediumDate'}}<br/>
+              <div ng-if="task.lastmetric.status ==='Not Started' ">
+                <div class="label label-sm label-warning" ng-if="task.lastmetric.startDate < today ">
+                  <i class="fa fa-bell"></i>
+                </div>
+                <span
+                  class="label label-sm"
+                  ng-class="{'label-info':task.lastmetric.status ==='In Progress','label-success':task.lastmetric.status ==='Finished','label-default':task.lastmetric.status ==='Not Started','label-lightgrey':task.lastmetric.status =='Withdrawn'}">
+                  {{task.lastmetric.status}}
+                </span>
+              </div>
+              <div ng-if="task.lastmetric.status !=='Not Started'">
+                <span
+                  class="label label-sm"
+                  ng-class="{'label-info':task.lastmetric.status ==='In Progress','label-success':task.lastmetric.status ==='Finished','label-default':task.lastmetric.status ==='Not Started','label-lightgrey':task.lastmetric.status =='Withdrawn'}">
+                  {{task.lastmetric.status}}
+                </span>
+                <span class="label label-sm label-lightinfo" ng-if="task.lastmetric.startDate > task.startDate " >&nbsp;&nbsp;{{task.lastmetric.startDate | date:'mediumDate'}}</span>
+              </div>
             </td>
             <td class="hidden-xs">
-                {{task.lastmetric.endDate | date:'mediumDate'}}
-                <br/>
-                <span class="label label-sm" ng-class="{'label-warning':task.lastmetric.progressStatus =='At Risk','label-success':task.lastmetric.progressStatus =='On Time','label-danger':task.lastmetric.progressStatus =='Late'}">
-                         {{task.lastmetric.progressStatus}}
-                       </span>
+              {{task.load}} &nbsp;<small class="text-muted pull-right" ng-if="task.lastmetric.status ==='In Progress'"><i>({{task.lastmetric.progress}}%)</i></small>
+              <br/>
+              <div ng-if="task.lastmetric.projectedWorkload > task.load">
+                <div class="label label-sm label-danger">
+                  <i class="fa fa-bell"></i>
+                </div>
+                <span class="label label-sm label-lightdanger">
+                  &nbsp;&nbsp;{{task.lastmetric.projectedWorkload}}
+                </span>
+              </div>
+              <div ng-if="task.lastmetric.projectedWorkload < task.load">
+                <div class="label label-sm label-warning">
+                  <i class="fa fa-bell"></i>
+                </div>
+                <span class="label label-sm label-lightwarning">
+                  &nbsp;&nbsp;{{task.lastmetric.projectedWorkload}}
+                </span>
+              </div>
+            </td>
+            <td class="hidden-xs">
+              {{task.endDate | date:'mediumDate'}}<br/>
+              <span class="label label-sm" ng-class="{'label-warning':task.lastmetric.progressStatus ==='At Risk','label-success':task.lastmetric.progressStatus ==='On Time','label-danger':task.lastmetric.progressStatus ==='Late'}">
+                {{task.lastmetric.progressStatus}}
+              </span>
+              <span class="label label-sm label-lightdanger"  ng-if="task.lastmetric.progressStatus === 'Late' || task.lastmetric.progressStatus === 'At Risk'">&nbsp;&nbsp;{{task.lastmetric.endDate | date:'mediumDate'}}</span>
             </td>
             <td>
                 <span style="color:grey">{{task.lastmetric.fromNow}}</span>

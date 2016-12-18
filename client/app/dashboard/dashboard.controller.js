@@ -84,7 +84,7 @@ angular.module('boardOsApp')
       if ($stateParams.id) {
         $scope.myPromise = $http.get('/api/dashboardCompletes/' + $stateParams.id).success(function(dashboard) {
           $scope.dashboard = dashboard;
-          
+
           $rootScope.perimeter.name = dashboard.name;
           $rootScope.perimeter.id = dashboard._id;
           $rootScope.perimeter.activity = dashboard.activity;
@@ -279,7 +279,7 @@ angular.module('boardOsApp')
           $scope.dashboard = dashboard;
 
           $scope.OutofDateTasks = _.filter($scope.dashboard.tasks, function(task) {
-            return task.timebetween < 0 && task.timebetween !== null;
+            return task.needToFeed;
           });
 
           $scope.dataGoals = [{

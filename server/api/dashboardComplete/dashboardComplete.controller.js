@@ -134,6 +134,10 @@ function createAllCompleteDashboard() {
     });
 }
 
+// createCompleteDashboard('5852cfed1738410400b26117', function() {
+//   console.log('end dashboard 5852cfed1738410400b26117');
+// });
+
 function createCompleteDashboard(dashboardId, callback) {
   Q()
     // Get a single task
@@ -197,9 +201,13 @@ function createCompleteDashboard(dashboardId, callback) {
             kpisNbBy[kpi._id] = 0;
           }
           kpisSumBy[kpi._id] += parseInt(kpi.calcul.task || 0);
-          kpisNbBy[kpi._id] += (parseInt(kpi.calcul.task) > 0) ? 1 : 0;
+          kpisNbBy[kpi._id] += (kpi.calcul.task !== null && kpi.calcul.task !== undefined && !isNaN(kpi.calcul.task)) ? 1 : 0;
           kpisSum += parseInt(kpi.calcul.task || 0);
-          kpisNb += (parseInt(kpi.calcul.task) > 0) ? 1 : 0;
+          kpisNb += (kpi.calcul.task !== null && kpi.calcul.task !== undefined && !isNaN(kpi.calcul.task)) ? 1 : 0;
+          // if (kpi.name === 'Deliver On Time') {
+          //   console.log('task', task.lastmetric.startDate);
+          //   console.log('kpi.calcul.task', kpi.calcul.task);
+          // }
         })
         _.each(task.alerts, function(alert, index2) { // list alert
           if (!alertsSumBy[alert._id]) {
@@ -214,6 +222,13 @@ function createCompleteDashboard(dashboardId, callback) {
             var mKPI = _.filter(kpis, function(kpi) {
               return kpi._id.toString() === key;
             })[0];
+            // if (mKPI.name === 'Deliver On Time') {
+            //   console.log('dashboard.name', dashboard.name);
+            //   console.log('kpi.name', mKPI.name);
+            //   console.log('value', value);
+            //   console.log('kpisNbBy[key]', kpisNbBy[key]);
+            //   console.log('parseInt(value / kpisNbBy[key]', parseInt(value / kpisNbBy[key]));
+            // }
             dashboard.kpis.push({
               kpiId: key,
               name: mKPI.name,

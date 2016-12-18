@@ -16,6 +16,7 @@ var Q = require('q');
 var Dashboard = require('../dashboard/dashboard.model');
 var KPI = require('./KPI.model');
 var Task = require('../task/task.model');
+var TaskComplete = require('../taskComplete/taskComplete.model');
 var Metric = require('../metric/metric.model');
 var Hierarchies = require('../hierarchy/hierarchy.model');
 var getData = require('../../config/getData');
@@ -121,7 +122,7 @@ exports.tasksList = function(req, res) {
       var taskFilter = (typeof req.query.taskFilter === 'undefined') ? {} : {
         _id: req.query.taskFilter
       };
-      Task.find(taskFilter).lean().exec(function(err, tasks) {
+      TaskComplete.find(taskFilter).lean().exec(function(err, tasks) {
         mTasks = [];
         _.each(tasks, function(rowdata, index) {
 
@@ -134,79 +135,14 @@ exports.tasksList = function(req, res) {
       return deferred.promise;
     })
     .then(function() {
-      // Get related metrics
-      var deferred = Q.defer();
-      Metric.find({}).sort({
-        date: 'asc'
-      }).lean().exec(function(err, Metrics) {
-        mMetrics = [];
-        _.each(Metrics, function(rowdata, index) {
-          if (rowdata.context.indexOf(mKPI.context) >= 0 && rowdata.activity.indexOf(mKPI.activity) >= 0) {
-            mMetrics.push(rowdata);
-          }
-        });
-        deferred.resolve(mMetrics);
-      });
-      return deferred.promise;
-    })
-    .then(function() {
-      // Get related metrics
-      var dateNow = new Date();
-
       var deferred = Q.defer();
       _.each(mTasks, function(rowTask, index) {
-        rowTask.metrics = [];
-        _.each(mMetrics, function(rowMetric, index2) {
-          if (rowTask.context === rowMetric.context && rowTask.activity === rowMetric.activity) {
-
-            // ajouter calcul auto
-            rowMetric.taskname = rowTask.name;
-            rowMetric.startDate = new Date(rowMetric.startDate);
-            rowMetric.endDate = new Date(rowMetric.endDate);
-            rowMetric.date = new Date(rowMetric.date);
-            rowTask.endDate = new Date(rowTask.endDate);
-
-            // nombre de jours séparant la date de début, fin, entre les deux
-            rowMetric.duration = calcBusinessDays(rowMetric.startDate, rowMetric.endDate);
-            rowMetric.timeToBegin = moment(rowMetric.startDate).diff(moment(), 'days');
-            rowMetric.timeToEnd = moment(rowMetric.endDate).diff(moment(), 'days');
-            rowMetric.fromNow = moment(rowMetric.date).fromNow();
-
-            // convert to numeric
-            rowMetric.timeSpent = parseFloat(rowMetric.timeSpent.replace(',', '.'));
-
-            // predictedCharge
-            rowMetric.projectedWorkload = (rowMetric.progress > 0) ? Math.round(1000 * rowMetric.timeSpent * 100 / parseFloat(rowMetric.progress)) / 1000 : rowMetric.load;
-            delete rowMetric.progressStatus;
-            // progressStatus
-            if (moment(dateNow).isAfter(rowTask.endDate, 'day')) {
-              if ((moment(rowMetric.endDate).isAfter(rowTask.endDate, 'day') || (moment(dateNow).isAfter(rowMetric.endDate, 'day') && moment(rowMetric.date).isAfter(rowMetric.endDate, 'day'))) && (rowMetric.status === 'In Progress' || rowMetric.status === 'Not Started')) {
-                rowMetric.progressStatus = 'Late';
-              } else {
-                rowMetric.progressStatus = 'On Time';
-              }
-            } else {
-              if (moment(rowMetric.endDate).isAfter(rowTask.endDate, 'day')) {
-                rowMetric.progressStatus = 'At Risk';
-              } else {
-                rowMetric.progressStatus = 'On Time';
-              }
-            }
-
-            rowTask.metrics.push(rowMetric);
-            rowTask.lastmetric = rowMetric;
-            if (moment(dateNow).isAfter(rowTask.lastmetric.endDate, 'day') && moment(dateNow).isAfter(rowTask.endDate, 'day') && (rowTask.lastmetric.status === 'In Progress' || rowTask.lastmetric.status === 'Not Started')) {
-              rowTask.lastmetric.progressStatus = 'Late';
-            }
-          }
-        });
         rowTask.KPI = tools.calculKPI(rowTask.metrics, mKPI);
       });
       deferred.resolve(mTasks);
       return deferred.promise;
     })
     .then(function() {
-
       return res.status(200).json(mTasks);
     });
 };

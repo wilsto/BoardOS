@@ -20,7 +20,7 @@ var TaskCompleteSchema = new Schema({
   alerts: Schema.Types.Mixed,
   dashboards: Schema.Types.Mixed,
   tags: String,
-  load: String,
+  load: Number,
   budget: String,
   impact: String,
   deliverables: String,

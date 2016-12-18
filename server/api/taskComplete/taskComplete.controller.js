@@ -64,8 +64,6 @@ function createAllCompleteTask() {
   TaskComplete.remove({}, function(err, numberRemoved) {
     Task.find({}, '-__v').lean().exec(function(err, tasks) {
       _.each(tasks, function(task, index) { // pour chaque tache
-        console.log('index', index);
-        console.log('task._id', task._id);
         createCompleteTask(task._id, false, function(data) {});
       });
 
@@ -95,6 +93,10 @@ process.on('taskRemoved', function(task) {
 
   });
 });
+
+// createCompleteTask('582c17e6beb4f31200f279cb', false, function() {
+//   console.log('end task 5852cfed1738410400b26117');
+// });
 
 function createCompleteTask(taskId, refreshDashboard, callback) {
 
@@ -220,13 +222,19 @@ function createCompleteTask(taskId, refreshDashboard, callback) {
 
         // progressStatus
         delete metric.progressStatus;
-        if (moment(dateNow).isAfter(task.endDate, 'day')) {
-          if ((moment(metric.endDate).isAfter(task.endDate, 'day') || (moment(dateNow).isAfter(metric.endDate, 'day') && moment(metric.date).isAfter(metric.endDate, 'day'))) && (metric.status === 'In Progress' || metric.status === 'Not Started')) {
+        if (moment(dateNow).isAfter(task.endDate, 'day')) { // On est post la date de fin engagé
+          var maxLastEndDate;
+          if (metric.status === 'In Progress' || metric.status === 'Not Started') {
+            maxLastEndDate = Math.max(metric.endDate, metric.date);
+          } else {
+            maxLastEndDate = Math.max(metric.endDate);
+          }
+          if (moment(maxLastEndDate).isAfter(task.endDate, 'day')) {
             metric.progressStatus = 'Late';
           } else {
             metric.progressStatus = 'On Time';
           }
-        } else {
+        } else { // On est avant la date de fin engagé
           if (moment(metric.endDate).isAfter(task.endDate, 'day')) {
             metric.progressStatus = 'At Risk';
           } else {
@@ -322,8 +330,9 @@ function createCompleteTask(taskId, refreshDashboard, callback) {
       mKPI.constraint = kpi.constraint;
       //mKPI.metricsGroupBy.Time = tools.groupMultiBy(task.metrics, ['groupTimeByValue']);
       var filteredMetrics = _.filter(task.metrics, function(metric) {
-        return (task.category === 'Alert') ? metric.groupTimeByValue === moment(new Date()).format("YYYY-MM") : _.last(metric.groupTimeByValue); //filtrer par le mois en cours
+        return (kpi.category === 'Alert') ? metric.groupTimeByValue === moment(new Date()).format("YYYY-MM") : _.last(metric.groupTimeByValue); //filtrer par le mois en cours
       });
+
       mKPI.calcul.task = tools.calculKPI(filteredMetrics, kpi);
       // mKPI.calcul.taskTime = _.map(mKPI.metricsGroupBy.Time, function(value, key) {
       //   return {

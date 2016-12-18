@@ -416,7 +416,7 @@ module.exports = {
           calcul = parseInt((calculMain / calculRef) * 100);
           break;
         case 'Alert':
-          calcul = ((parseInt(calculMain) - parseInt(calculRef)) > 0) ? 1 : 0;
+          calcul = (calculMain - calculRef > 0) ? 1 : 0;
           break;
       }
     }

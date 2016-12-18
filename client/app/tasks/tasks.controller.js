@@ -8,6 +8,9 @@ angular.module('boardOsApp')
     $scope.filterStatus = 'Not Finished';
     $scope.filterProgressStatus = 'All';
     $scope.searchText = '';
+    $scope.orderByField = 'lastmetric.date';
+    $scope.reverseSort = true;
+    $scope.today = new Date().toISOString();
 
     $rootScope.taskStatus = statusTask;
     $rootScope.progressStatus = progressStatusTask;
