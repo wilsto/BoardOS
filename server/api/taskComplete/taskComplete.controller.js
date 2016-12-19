@@ -86,12 +86,9 @@ process.on('metricChanged', function(taskId, refreshDashboard) {
 });
 
 process.on('taskRemoved', function(task) {
-
   TaskComplete.remove({
     _id: task._id
-  }, function(err, numberRemoved) {
-
-  });
+  }, function(err, numberRemoved) {});
 });
 
 // createCompleteTask('582c17e6beb4f31200f279cb', false, function() {
@@ -222,6 +219,8 @@ function createCompleteTask(taskId, refreshDashboard, callback) {
 
         // progressStatus
         delete metric.progressStatus;
+        console.log('dateNow', dateNow);
+        console.log('task.endDate', task.endDate);
         if (moment(dateNow).isAfter(task.endDate, 'day')) { // On est post la date de fin engagé
           var maxLastEndDate;
           if (metric.status === 'In Progress' || metric.status === 'Not Started') {
@@ -229,7 +228,11 @@ function createCompleteTask(taskId, refreshDashboard, callback) {
           } else {
             maxLastEndDate = Math.max(metric.endDate);
           }
-          if (moment(maxLastEndDate).isAfter(task.endDate, 'day')) {
+          console.log('maxLastEndDate', maxLastEndDate);
+          var maxEndDate = Math.max(task.endDate);
+          console.log('maxEndDate', maxEndDate);
+          console.log('(moment(maxLastEndDate).isAfter(maxEndDate, \'day\'))', (moment(maxLastEndDate).isAfter(maxEndDate, 'day')));
+          if (moment(maxLastEndDate).isAfter(maxEndDate, 'day')) {
             metric.progressStatus = 'Late';
           } else {
             metric.progressStatus = 'On Time';
