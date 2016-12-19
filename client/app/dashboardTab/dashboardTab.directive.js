@@ -323,7 +323,9 @@ angular.module('boardOsApp')
                   $scope.submitted = true;
                   if ($scope.form.$valid) {
                     delete $scope.formData.___v;
+                    
                     if ($scope.formData._id) {
+                      
                       $http.put('/api/metrics/' + $scope.formData._id, $scope.formData).success(function(data) {
                         var logInfo = 'A Metric for Task "' + scope.dashboardData.name + '" was updated';
                         Notification.success(logInfo);
@@ -332,7 +334,7 @@ angular.module('boardOsApp')
                           info: logInfo,
                           actor: $scope.currentUser
                         });
-
+                        $rootScope.$emit('reloadTask');
                         $scope.closeThisDialog();
                       });
                     } else {
@@ -344,6 +346,7 @@ angular.module('boardOsApp')
                           info: logInfo,
                           actor: $scope.currentUser
                         });
+                        $rootScope.$emit('reloadTask');
                         $scope.closeThisDialog();
                       });
                     }

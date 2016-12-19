@@ -25,9 +25,15 @@ angular.module('boardOsApp')
     //   $scope.loadTask();
     // });
 
+    $rootScope.$on('reloadTask', function(event, data) {
+      
+      $scope.loadTask();
+    });
+
     $scope.refreshTask = function() {
       $scope.myPromise = $http.get('/api/taskCompletes/executeId/' + $scope.currentTask._id).success(function(response) {
-
+        $scope.loadTask();
+        
       });
     };
 
@@ -42,6 +48,10 @@ angular.module('boardOsApp')
           $scope.task.context_old = task.context;
 
           $scope.updateWatch();
+
+          //detect if late
+          $scope.lateStart = new Date($scope.task.lastmetric.startDate).setHours(0, 0, 0, 0) > new Date($scope.task.startDate).setHours(0, 0, 0, 0);
+          $scope.lateEnd = new Date($scope.task.lastmetric.endDate).setHours(0, 0, 0, 0) > new Date($scope.task.endDate).setHours(0, 0, 0, 0);
 
           // calcul des alertes
           var alertValue = _.pluck(_.pick(_.pluck(task.alerts, function(kpi) { // valeurs existantes
@@ -102,7 +112,7 @@ angular.module('boardOsApp')
         $scope.task.actor = $scope.currentUser;
         $scope.task.date = Date.now();
 
-        if (typeof $scope.task._id === 'undefined') {
+        if ($scope.task._id === undefined) {
           // Nouvelle tache
           $http.get('/api/tasks/search', {
             params: {
@@ -137,9 +147,8 @@ angular.module('boardOsApp')
               info: logInfo,
               actor: $scope.currentUser
             });
+            $scope.refreshTask();
             Notification.success(logInfo);
-
-            $scope.loadTask();
           });
         }
       }

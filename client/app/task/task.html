@@ -99,7 +99,7 @@
             <div ng-if="task.lastmetric.startDate !== task.startDate " class="">
               <small style="font-size:9px">Reestimated:
               </small>
-              <small class="pull-right" ng-class="(task.lastmetric.startDate > task.startDate)?'bg-info text-info':'bg-success text-success'">{{task.lastmetric.startDate | date:'mediumDate'}}</small>
+              <small class="pull-right" ng-class="(lateStart) ?'bg-info text-info':'bg-success text-success'">{{task.lastmetric.startDate | date:'mediumDate'}}</small>
             </div>
           </div>
         </div>
@@ -115,7 +115,7 @@
             <div ng-if="task.lastmetric.endDate !== task.endDate " class="">
               <small style="font-size:9px">Reestimated:
               </small>
-              <small class="pull-right" ng-class="(task.lastmetric.endDate> task.endDate)?'bg-danger text-danger':'bg-success text-success'">{{task.lastmetric.endDate | date:'mediumDate'}}</small>
+              <small class="pull-right" ng-class="(lateEnd)?'bg-danger text-danger':'bg-success text-success'">{{task.lastmetric.endDate | date:'mediumDate'}}</small>
             </div>
           </div>
         </div>
