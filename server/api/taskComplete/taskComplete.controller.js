@@ -167,11 +167,13 @@ function createCompleteTask(taskId, refreshDashboard, callback) {
         if ((dashboard.context === undefined || task.context.indexOf(dashboard.context) >= 0) && (dashboard.activity === undefined || task.activity.indexOf(dashboard.activity) >= 0)) {
           var mydashboard = dashboard.toObject();
           delete mydashboard.date;
-          delete mydashboard.owner.email;
-          delete mydashboard.owner.last_connection_date;
-          delete mydashboard.owner.provider;
-          delete mydashboard.owner.active;
-          delete mydashboard.owner.role;
+          if (mydashboard.owner) {
+            delete mydashboard.owner.email;
+            delete mydashboard.owner.last_connection_date;
+            delete mydashboard.owner.provider;
+            delete mydashboard.owner.active;
+            delete mydashboard.owner.role;
+          }
           task.dashboards.push(mydashboard);
         }
       });
@@ -284,13 +286,15 @@ function createCompleteTask(taskId, refreshDashboard, callback) {
         delete metric.taskname;
         delete metric.activity;
         delete metric.context;
-        delete metric.actor.email;
-        delete metric.actor.provider;
-        delete metric.actor.location;
-        delete metric.actor.active;
-        delete metric.actor.last_connection_date;
-        delete metric.actor.create_date;
-        delete metric.actor.role;
+        if (metric.actor) {
+          delete metric.actor.email;
+          delete metric.actor.provider;
+          delete metric.actor.location;
+          delete metric.actor.active;
+          delete metric.actor.last_connection_date;
+          delete metric.actor.create_date;
+          delete metric.actor.role;
+        }
         delete metric.color;
         delete metric.description;
         delete metric.timeToBegin;
