@@ -16,6 +16,7 @@ var indexalert = [];
 var textUser;
 
 var j = schedule.scheduleJob({
+  dayOfWeek: [new schedule.Range(1, 5)],
   hour: 6,
   minute: 0
 }, function() {

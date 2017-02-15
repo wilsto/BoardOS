@@ -13,7 +13,6 @@ angular.module('boardOsApp')
       $scope.loadDashBoards();
     });
 
-
     $scope.loadKPIs = function() {
       $http.get('/api/KPIs/list').success(function(KPIs) {
         $scope.KPIs = KPIs;

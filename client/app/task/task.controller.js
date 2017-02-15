@@ -1,7 +1,46 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('TaskCtrl', function($rootScope, $scope, $http, $stateParams, $location, Auth, Notification) {
+  .controller('TaskCtrl', function($rootScope, $scope, $http, $stateParams, $location, Auth, Notification, myLibrary) {
+
+    $scope.opened = {};
+
+    //todoList
+    $scope.show = "All";
+    $scope.currentShow = 0;
+    $scope.model = [{
+        taskName: 'Create an Angular-js TodoList',
+        isDone: false
+      },
+      {
+        taskName: 'Understanding Angular-js Directives',
+        isDone: true
+      }
+    ];
+
+    /* Filter Function for All | Incomplete | Complete */
+    $scope.showFn = function(todo) {
+      if ($scope.show === 'All') {
+        return true;
+      } else if (todo.isDone && $scope.show === 'Complete') {
+        return true;
+      } else if (!todo.isDone && $scope.show === 'Incomplete') {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
+    $scope.giveMeMyColor = function(value, category) {
+      return myLibrary.giveMeMyColor(value, category);
+    };
+
+    $scope.open = function($event, elementOpened) {
+      $event.preventDefault();
+      $event.stopPropagation();
+
+      $scope.opened[elementOpened] = !$scope.opened[elementOpened];
+    };
 
     $scope.activeTab = 1;
     $scope.errors = {};
@@ -26,14 +65,14 @@ angular.module('boardOsApp')
     // });
 
     $rootScope.$on('reloadTask', function(event, data) {
-      
+
       $scope.loadTask();
     });
 
     $scope.refreshTask = function() {
       $scope.myPromise = $http.get('/api/taskCompletes/executeId/' + $scope.currentTask._id).success(function(response) {
         $scope.loadTask();
-        
+
       });
     };
 
@@ -75,7 +114,7 @@ angular.module('boardOsApp')
     };
 
     $scope.updateWatch = function() {
-      $scope.taskIsWatched = (_.intersection([$scope.currentUser._id], _.pluck($scope.currentTask.watchers, '_id')).length > 0) ? 'YES' : 'NO';
+      $scope.taskIsWatched = (_.intersection([$scope.currentUser._id], _.pluck($scope.currentTask.watchers, '_id')).length > 0) ? 'Unfollow' : 'Follow';
     };
 
     $scope.loadTask();

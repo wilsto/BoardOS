@@ -14,7 +14,7 @@
                 <!-- BEGIN NOTIFICATION DROPDOWN -->
                 <li class="dropdown" id="header_notification_bar">
                     <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" ng-init="alertTaskDrop = false" ng-click='alertTaskDrop = !alertTaskDrop'>
-                        <i class="fa fa-dashboard"></i><span style="color:white" ng-if="alertTaskDrop"> Your {{dashboards.length}} dashboards</span>
+                        <i class="fa fa-dashboard"></i><span style="color:white"> Dashboards</span>
                         <span class="badge badge-primary" ng-show="dashboards.length>0">
                   {{dashboards.length}} </span>
                     </a>
@@ -41,7 +41,7 @@
                 <!-- BEGIN TODO DROPDOWN -->
                 <li class="dropdown" id="header_task_bar">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" ng-init="taskDrop = false" ng-click='taskDrop = !taskDrop'>
-                        <i class="fa fa-tasks"></i> <span style="color:white" ng-if="taskDrop"> You have {{navBarTasks.length}} pending tasks</span>
+                        <i class="fa fa-tasks"></i> <span style="color:white" > Tasks</span>
                         <span class="badge badge-warning" style="color:black" ng-show="navBarTasks.length>0">
                     {{navBarTasks.length}} </span>
                     </a>
@@ -106,4 +106,5 @@
     <!-- END HEADER -->
     <div class="clearfix">
     </div>
+
 </div>

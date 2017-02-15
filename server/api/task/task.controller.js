@@ -80,53 +80,53 @@ exports.list = function(req, res) {
       return deferred.promise;
     })
 
-  // aller chercher la last métrique
-  .then(function() {
-    var deferred = Q.defer();
+    // aller chercher la last métrique
+    .then(function() {
+      var deferred = Q.defer();
 
-    getData.addMetrics(allTasks, function(tasks) {
-      var perimeterFilter = true;
-      var userFilter = true;
-      var opentask = true;
-      _.each(tasks, function(rowdata, index) {
-        if (typeof req.query.status !== 'undefined' && typeof rowdata.lastmetric !== 'undefined') {
-          opentask = false;
-          if (rowdata.lastmetric.status === 'In Progress' || rowdata.lastmetric.status === 'Not Started') {
-            opentask = true;
+      getData.addMetrics(allTasks, function(tasks) {
+        var perimeterFilter = true;
+        var userFilter = true;
+        var opentask = true;
+        _.each(tasks, function(rowdata, index) {
+          if (typeof req.query.status !== 'undefined' && typeof rowdata.lastmetric !== 'undefined') {
+            opentask = false;
+            if (rowdata.lastmetric.status === 'In Progress' || rowdata.lastmetric.status === 'Not Started') {
+              opentask = true;
+            }
           }
-        }
 
-        // Si la query restreint le périmètre
-        if (typeof req.query.context !== 'undefined' && typeof req.query.activity !== 'undefined') {
-          // activation du filtre
-          perimeterFilter = false;
-          if (rowdata.context.indexOf(req.query.context) >= 0 && rowdata.activity.indexOf(req.query.activity) >= 0) {
-            perimeterFilter = true;
+          // Si la query restreint le périmètre
+          if (typeof req.query.context !== 'undefined' && typeof req.query.activity !== 'undefined') {
+            // activation du filtre
+            perimeterFilter = false;
+            if (rowdata.context.indexOf(req.query.context) >= 0 && rowdata.activity.indexOf(req.query.activity) >= 0) {
+              perimeterFilter = true;
+            }
           }
-        }
 
-        // Si la query restreint le user
-        if (typeof req.query.userId !== 'undefined') {
-          userFilter = false;
-          if (rowdata.actors) {
-            rowdata.actors_id = _.pluck(rowdata.actors, '_id');
+          // Si la query restreint le user
+          if (typeof req.query.userId !== 'undefined') {
+            userFilter = false;
+            if (rowdata.actors) {
+              rowdata.actors_id = _.pluck(rowdata.actors, '_id');
+            }
+            //               owner                                                     watchers
+            if ((rowdata.actors_id && rowdata.actors_id.indexOf(req.query.userId) !== -1) || (rowdata.watchers && rowdata.watchers.indexOf(req.query.userId) !== -1)) {
+              userFilter = true;
+            }
           }
-          //               owner                                                     watchers
-          if ((rowdata.actors_id && rowdata.actors_id.indexOf(req.query.userId) !== -1) || (rowdata.watchers && rowdata.watchers.indexOf(req.query.userId) !== -1)) {
-            userFilter = true;
+
+          if (perimeterFilter && userFilter && opentask) {
+            mTasks.push(rowdata);
           }
-        }
 
-        if (perimeterFilter && userFilter && opentask) {
-          mTasks.push(rowdata);
-        }
-
-        if (index === tasks.length - 1) {
-          return res.status(200).json(mTasks);
-        }
-      });
+          if (index === tasks.length - 1) {
+            return res.status(200).json(mTasks);
+          }
+        });
+      })
     })
-  })
 
 };
 
@@ -418,6 +418,7 @@ exports.create = function(req, res) {
       activity: cleanTask.activity,
       date: date.toISOString(),
       actor: cleanTask.actor,
+      description: cleanTask.description,
       status: 'Not Started',
       startDate: cleanTask.startDate,
       endDate: cleanTask.endDate,
@@ -455,6 +456,7 @@ exports.update = function(req, res) {
     delete req.body.activity_old;
     delete req.body.context_old;
     var updated = _.merge(task, req.body);
+    console.log('updated', updated);
     updated.save(function(err) {
       if (err) {
         return handleError(res, err);

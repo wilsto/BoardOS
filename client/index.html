@@ -28,6 +28,10 @@
 <link rel="stylesheet" href="bower_components/select2/select2.css" />
 <link rel="stylesheet" href="bower_components/angular-ui-notification/dist/angular-ui-notification.css" />
 <link rel="stylesheet" href="bower_components/angular-busy/dist/angular-busy.css" />
+<link rel="stylesheet" href="bower_components/bootstrap-daterangepicker/daterangepicker.css" />
+<link rel="stylesheet" href="bower_components/vis/dist/vis.css" />
+<link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.css" />
+<link rel="stylesheet" href="bower_components/ngEmbed/src/ng-embed.css" />
 <!-- endbower -->
 <!-- endbuild -->
 <!-- build:css({.tmp,client}) app/app.css -->
@@ -231,8 +235,8 @@
         <div class="page-content" style="padding-top:0;">
           <!-- END BEGIN STYLE CUSTOMIZER -->
           <!-- BEGIN PAGE HEADER-->
-          <div class="page-bar" ng-cloak ng-if="currentUser.name" style="top:45px;position:fixed;width:98%;z-index:9">
-            <ul class="page-breadcrumb" >
+          <div class="page-bar" ng-cloak ng-if="currentUser.name" style="top:45px;position:fixed;width:99%;z-index:9">
+            <ul class="page-breadcrumb" style="margin-top:10px">
               <li>
                 <i class="fa fa-home"></i>
                 <a href="/">Home</a>
@@ -260,11 +264,11 @@
               </li>
             </ul>
             <ul class="page-breadcrumb pull-right" >
-              <li class="">
-                 <i class="fa fa-calendar-o"></i> Time Scope : <span style="font-size:16px">  {{'Everything' ||getCurrentMonthName()}} </span>
-              </li>
+              <div id="reportrange" class="pull-right btn btn-primary btn-fit-height" style="width: 100%">
+                  <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                  <span></span> <b class="caret"></b>
+              </div>
             </ul>
-
           </div>
 
           <!-- END PAGE HEADER-->
@@ -291,7 +295,7 @@
 
       </script>
 
-    <!--[if lt IE 9]>
+          <!--[if lt IE 9]>
     <script src="bower_components/es5-shim/es5-shim.js"></script>
     <script src="bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
@@ -331,6 +335,11 @@
     <script src="bower_components/ng-infinite-scroll-npm-is-better-than-bower/build/ng-infinite-scroll.js"></script>
     <script src="bower_components/angular-busy/dist/angular-busy.js"></script>
     <script src="bower_components/socket.io-dist/socket.io.min.js"></script>
+    <script src="bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <script src="bower_components/vis/dist/vis.js"></script>
+    <script src="bower_components/angular-visjs/angular-vis.js"></script>
+    <script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
+    <script src="bower_components/ngEmbed/src/ng-embed.js"></script>
     <!-- endbower -->
     <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->

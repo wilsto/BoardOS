@@ -875,7 +875,7 @@ Page breadcrumb
 .page-bar .page-breadcrumb {
   display: inline-block;
   float: left;
-  padding: 8px;
+  padding: 0;
   margin: 0;
   list-style: none;
 }
@@ -906,7 +906,7 @@ Page breadcrumb
   padding: 0;
 }
 
-.page-bar .page-toolbar .btn-fit-height {
+.btn-fit-height {
   padding-top: 8px;
   padding-bottom: 8px;
   border-radius: 0;
@@ -6493,4 +6493,45 @@ Profile Page
   border-color: #d29a3a #cc9436 #c89133;
   text-shadow: 0 1px 0 #fee1a0;
   box-shadow: 0 1px 1px #d4d4d4, inset 0 1px 0 #fed17e;
+}
+
+
+/*Bootstrap button outline override*/
+
+.btn-outline {
+  background-color: transparent;
+  color: inherit;
+  transition: all .5s;
+}
+
+.btn-primary.btn-outline {
+  color: #428bca;
+}
+
+.btn-default.btn-outline {
+  color: #838383;
+}
+
+.btn-success.btn-outline {
+  color: #5cb85c;
+}
+
+.btn-info.btn-outline {
+  color: #5bc0de;
+}
+
+.btn-warning.btn-outline {
+  color: #f0ad4e;
+}
+
+.btn-danger.btn-outline {
+  color: #d9534f;
+}
+
+.btn-primary.btn-outline:hover, .btn-success.btn-outline:hover, .btn-info.btn-outline:hover, .btn-warning.btn-outline:hover, .btn-danger.btn-outline:hover {
+  color: #fff;
+}
+
+.btn-default.btn-outline:hover, {
+  color: #000;
 }

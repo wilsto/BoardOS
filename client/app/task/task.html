@@ -4,395 +4,457 @@
   <div class="col-md-12">
     <!--BEGIN TABS-->
     <div class="row profile-nav">
-      <div class="col-md-2">
-        <img src="assets/images/todo.png" class="img-responsive" alt=""/>
-        <a href="#" ng-click="watchThisTask()" class="underImage" ng-if="task._id" > <i class="fa fa-eye"></i> Watch this task <span>
-                {{taskIsWatched}}</span>
-        </a>
-      </div>
-      <div class="col-md-10">
+      <!--start col-md-9-->
+      <div class="col-md-9 " ng-if="task._id">
+        <!-- Title -->
         <div class="row">
-          <div class="col-md-10 profile-info" >
-            <!--TODO : Fix inline style-->
-            <h1 style="padding-top:15px">
-              {{task.name}}
-            </h1>
-            <ul class="list list-inline">
-              <li>
-                <i class="fa fa-map-marker"></i>
-                <span class="text-muted">
-                  Context
+          <div class="col-md-2" ng-if="task._id">
+            <button type="button" name="button" style="margin-bottom:5px;width:100%" class="btn btn-xs btn-outline btn-info" ng-click="refreshTask()">Refresh</button>
+            <img src="assets/images/todo.png" class="img-responsive" alt="" />
+          </div>
+          <div class="col-md-10">
+            <div class="row">
+              <div class="col-md-9 col-sm-12 profile-info">
+                <h1>
+                                    <a href="#" style="color:black!important" editable-text="task.name" e-style="width: 500px" buttons="right">{{ task.name || 'Please give a name of your task' }}</a>
+                                </h1>
+                <ul class="list list-inline">
+                  <li style="margin-top:5px">
+                    <i class="fa fa-flash"></i>
+                    <span class="text-muted" style="margin-right:10px">
+                                Activity
+                              </span> <a href="#" editable-text="task.activity" e-style="width: 500px" e-uib-typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:8">
+                                {{task.activity || 'Please give activity' }}
+                              </a>
+                  </li><br>
+                  <li style="margin-top:5px">
+                    <i class="fa fa-map-marker"></i>
+                    <span class="text-muted" style="margin-right:10px">
+                              Context
+                            </span> <a href="#" editable-text="task.context" e-style="width: 500px" e-uib-typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:8">
+                              {{task.context || 'Please give context' }}
+                            </a>
+                  </li>
+                </ul>
+                <div class="row">
+                  <div class="descriptionTask">
+                    <span ng-if="task.description">Description : </span>
+                    <a href="#" editable-textarea="task.description" style="color:grey!important;margin-right:25px" e-label="Description" e-style="width: 500px">{{ task.description || ' + Description' }}</a>
+                    <div class="" style="height:10px;" ng-if="task.description || task.hypothesis">
+                      <br>
+                    </div>
+                    <span ng-if="task.hypothesis">Hypothesis : </span>
+                    <a href="#" style="color:grey!important;margin-right:25px" e-label="Hypothesis" editable-text="task.hypothesis" e-style="width: 400px" buttons="right">{{ task.hypothesis || ' + Hypothesis ' }}</a>
+                    <div class="" style="height:10px;" ng-if="task.hypothesis || task.risks">
+                      <br>
+                    </div>
+                    <span ng-if="task.risks">Risks : </span>
+                    <a href="#" style="color:grey!important;margin-right:25px" e-label="Risks" editable-textarea="task.risks" e-style="width: 400px" buttons="right">{{ task.risks || ' + Risks' }}</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--Metrics  -->
+        <div class="row stats-overview-cont" ng-if="task._id" style="padding-top:15px">
+          <div class="portlet sale-summary" ng-if="task._id">
+            <div class="portlet-title">
+              <div class="caption">
+                Main task
+                <small style="margin-left:25px">Status:
+                  <span class="text-info">{{task.lastmetric.status}} </span>
+                </small>
+              </div>
+              <div class="tools">
+                <button type="button" name="button" style="margin-left:5px;" class="btn btn-xs btn-outline btn-info">ReOpen</button>
+                <button type="button" name="button" style="margin-left:5px;" class="btn btn-xs btn-outline btn-warning">Withdraw</button>
+                <button type="button" name="button" style="margin-left:5px;" class="btn btn-xs btn-outline btn-danger">Delete</button>
+              </div>
+            </div>
+            <div class="portlet-body" style="padding-bottom:5px;overflow: auto;">
+              <div class="col-md-2 col-sm-12 ">
+                <div class="stats-overview stat-block">
+                  <div class="details" style="height:45px;">
+                    <div class="title">
+                      <span class="text-muted">Start
+                          </span>
+                      <span class="pull-right text-info">
+                    <a href="#" editable-bsdate="task.startDate" e-is-open="opened.$data" e-ng-click="open($event,'$data')" e-datepicker-popup="mediumDate">
+                        {{ (task.startDate | date:'mediumDate') || 'empty' }}
+                      </a>
+                  </span>
+                    </div>
+                    <div ng-if="task.lastmetric.startDate !== task.startDate " class="">
+                      <small style="font-size:9px">Reestimated:
+                          </small>
+                      <small class="pull-right" ng-class="(lateStart) ?'bg-info text-info':'bg-success text-success'">{{task.lastmetric.startDate | date:'mediumDate'}}</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-3 col-sm-12">
+                <div class="stats-overview ">
+                  <div class="details" style="height:65px;">
+                    <div class="title">
+                      <small class="text-muted">Progress</small> <a href="#" editable-text="task.lastmetric.progress" e-style="width: 50px;height:20px;font-size:12px;" buttons="no">{{ task.lastmetric.progress || 0}}</a>
+                      <small class="text-muted">%</small>
+                      <div class="pull-right">
+                        <small class="text-muted">Spent&nbsp;
+                    </small>
+                        <span>
+                      <a href="#" editable-number="task.lastmetric.timeSpent" e-style="width: 60px" buttons="no">{{ task.lastmetric.timeSpent || 0}}</a>
+                      <small class="text-muted">days</small>
+                    </span>
+                      </div>
+                    </div>
+                    <span class="row" style="padding:0;margin:0;">
+                  <span class="col-sm-3" style="padding:5px 0 0 0">
+                    <span class="pull-right" style="margin-right:10px;">
+                    </span>
+                    </span>
+                    <span class="col-sm-9" style="padding:5px">
+                  <uib-progressbar value="task.lastmetric.progress" style=";height:20px" type="info"></uib-progressbar>
                 </span>
-                {{task.context}}
+
+                    </span>
+                    <div class="row" style="padding:0;margin:0">
+                      <small class="text-muted">Estimate
+                </small>
+                      <span>
+                  <a href="#" editable-number="task.load" e-style="width: 60px" buttons="no">{{ task.load || 0}}</a>
+                    </span>
+                      <small>days</small>
+
+                      <div ng-if="task.lastmetric.projectedWorkload !== task.load" class="pull-right">
+                        <small>Reestimated:</small>
+                        <small ng-class="(task.lastmetric.projectedWorkload > task.load)?'bg-danger text-danger':'bg-success text-success'">
+                      {{task.lastmetric.projectedWorkload}}</small>
+                        <small>  days  </small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-2 col-sm-4">
+                <div class="stats-overview stat-block ">
+                  <div class="details " style="height:45px;">
+                    <div class="title">
+                      <span class="text-muted">Due Date
+                          </span>
+                      <span class="pull-right  text-info">
+                  <a href="#" editable-bsdate="task.endDate" e-is-open="opened.$data2"                              e-ng-click="open($event,'$data2')"                            e-datepicker-popup="mediumDate">
+                      {{ (task.endDate | date:'mediumDate') || 'empty' }}
+                    </a>
+                </div>
+                <div ng-if="task.lastmetric.endDate !== task.endDate " class="">
+                  <small style="font-size:9px">Reestimated:
+                          </small>
+                  <small class="pull-right" ng-class="(lateEnd)?'bg-danger text-danger':'bg-success text-success'">{{task.lastmetric.endDate | date:'mediumDate'}}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2 col-sm-12">
+            <div class="stats-overview stat-block">
+              <div class="details" style="height:45px;">
+                <div class="title">
+                  <span style="margin-left:-5px;">Confidence</span>
+                      <span class="pull-right text-info">
+                    <a href="#" editable-text="task.lastmetric.trust" e-style="width: 50px;height:20px;font-size:12px;" buttons="no">{{ task.lastmetric.trust || 100}}</a>
+                    %</span>
+                    </div>
+                    <div class="">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-12">
+                <div class="stats-overview stat-block ">
+                  <div class="details" style="height:100px;">
+                    <div class="title">
+                      <span class="text-muted"><b> Delivery Status</b><small> (only Finished task)</small>
+                          </span>
+                    </div>
+                    <div class="" style="padding-bottom:7px;padding-top:3px;">
+                      User Satisfaction
+                      <small class="pull-right">
+                    <span class="pull-right" style="margin-right:10px;">
+                        <a href="#" editable-text="task.lastmetric.userSatisfaction" e-style="width: 50px;height:20px;font-size:12px;" buttons="no">{{ task.lastmetric.userSatisfaction || 0}}</a>
+                        %
+                    </span>
+                  </small>
+                    </div>
+                    <div class="" style="padding-bottom:7px;">
+
+                      Actor Satisfaction
+                      <small class="pull-right">
+                    <span class="pull-right" style="margin-right:10px;">
+                        <a href="#" editable-text="task.lastmetric.actorSatisfaction" e-style="width: 50px;height:20px;font-size:12px;" buttons="no">{{ task.lastmetric.actorSatisfaction || 0}}</a>
+                        %
+                    </span>
+                  </small>
+                    </div>
+
+                    <div class="">
+                      Deliverables as defined
+                      <small class="pull-right">
+                    <span class="pull-right" style="margin-right:10px;">
+                        <a href="#" editable-text="task.lastmetric.deliverableStatus" e-style="width: 50px;height:20px;font-size:12px;" buttons="no">{{ task.lastmetric.deliverableStatus || 0}}</a>
+                        %
+                    </span>
+                  </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--Todo + Comments  -->
+        <div class="row">
+          <div class="col-md-5 col-sm-12" style="padding-right:25px">
+            <div class="row stats-overview-cont" ng-if="task._id" style="padding-top:15px">
+              <div class="portlet sale-summary" ng-if="task._id">
+                <div class="portlet-title">
+                  <div class="caption">
+                    TodoList
+                  </div>
+                  <div class="tools">
+                    Number : <span class="text-info">{{model.length}}</span>
+                  </div>
+                </div>
+                <!-- <div class="row">
+                  <div class="col-xs-6">
+                    <div class="input-group">
+                      <span class="input-group-btn">
+                        <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+                      </span>
+                      <input  type="search" class="form-control" placeholder="Search" ng-model="todoSearch">
+                    </div>
+                  </div>
+                  <div class="col-xs-6">
+                    <ul class="list-inline" style="padding-top:20px">
+                      <li class="btn btn-xs btn-default" ng-class="{'active' : show == 'All' }" ng-click="show='All'"><a  href="#">All</a></li>
+                      <li class="btn btn-xs btn-default" ng-class="{'active' : show == 'Incomplete' }" ng-click="show='Incomplete'"><a   href="#">Incomplete</a></li>
+                      <li class="btn btn-xs btn-default" ng-class="{'active' : show == 'Complete' }" ng-click="show='Complete'"><a href="#">Complete</a></li>
+                    </ul>
+                  </div>
+                </div> -->
+                <div class="portlet-body" style="padding-bottom:5px;">
+                  <div class="row">
+                    <div class="form-group" style="width:94%;margin-left:20px;padding-bottom:10px">
+                      <div class="input-group">
+                        <input class="form-control" type="text" ng-model="newTodo" placeholder="Add New Todo" ng-enter>
+                      <span class="input-group-btn">
+                        <button class="btn btn-outline btn-info" type="button"><span ng-click="addTodo()">Add</button>
+                      </span>
+                    </div>
+                    </div>
+                  </div>
+                    <div class="row">
+                      <ul class="" ui-sortable="todoSortable" style="-webkit-padding-start: 15px!important;" >
+                        <li class="todoTask" ng-repeat="todo in model track by $index | filter:showFn | filter :todoSearch ">
+                          <div class="circularToggleButtonView taskCheckboxNodeView " ng-class="todo.isDone ? ' circularToggleButtonView--toggledOn': 'circularToggleButtonView--toggledOff'">
+                          <div class="circularButtonView circularToggleButtonView-button circularButtonView--xsmall circularButtonView--onWhiteBackground circularButtonView--active">
+                            <span class="circularButtonView-label">
+                              <svg class="svgIcon " viewBox="0 0 32 32" title="checkmark">
+                                <polygon points="27.672,4.786 10.901,21.557 4.328,14.984 1.5,17.812 10.901,27.214 30.5,7.615 "></polygon>
+                              </svg>
+                            </span>
+                          </div>
+                          <span ng-class="{'barre':todo.isDone}"><span style="color:black" >{{todo.taskName}}</span></span>
+                          </div>
+                          <div class="pull-right" style="margin-top:-20px;margin-right:20px;">
+                            <a>
+                              <div class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground">
+                                <span class="circularButtonView-label">
+                              <svg class="svgIcon task-row-due-date-icon" viewBox="0 0 32 32" title="calendar">
+                                <rect x="16" y="16" width="2" height="2"></rect><rect x="20" y="16" width="2" height="2"></rect>
+                                <rect x="20" y="20" width="2" height="2"></rect><rect x="16" y="20" width="2" height="2"></rect>
+                                <rect x="8" y="20" width="2" height="2"></rect><rect x="8" y="24" width="2" height="2"></rect>
+                                <rect x="16" y="24" width="2" height="2"></rect><rect x="12" y="16" width="2" height="2"></rect>
+                                <rect x="12" y="20" width="2" height="2"></rect><rect x="12" y="24" width="2" height="2"></rect>
+                                <path d="M22,2V0h-2v2h-8V0h-2v2H2v30h28V2H22z M28,30H4V12h24V30z M28,10H4V4h6v2h2V4h8v2h2V4h6V10z"></path>
+                              </svg>
+                            </span>
+                          </div>
+                            </a>
+                            <a>
+                              <div class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground">
+                                <span class="circularButtonView-label">
+                              <svg class="svgIcon task-row-assignee-icon" viewBox="0 0 32 32" title="unassigned">
+                                <path d="M20.534,16.765C23.203,15.204,25,12.315,25,9c0-4.971-4.029-9-9-9S7,4.029,7,9c0,3.315,1.797,6.204,4.466,7.765C5.962,18.651,2,23.857,2,30c0,0.681,0.065,1.345,0.159,2h27.682C29.935,31.345,30,30.681,30,30C30,23.857,26.038,18.651,20.534,16.765z M9,9c0-3.86,3.14-7,7-7s7,3.14,7,7s-3.14,7-7,7S9,12.86,9,9z M4,30c0-6.617,5.383-12,12-12s12,5.383,12,12H4z"></path>
+                              </svg>
+                            </span>
+                          </div>
+                            </a>
+                            <!-- <button type="button" class=" " aria-hidden="true" ng-click="deleteTodo(todo)">&times;</button> -->
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+
+                </div>
+                </div>
+                </div>
+          </div>
+          <div class="col-md-7 col-sm-12" style="padding-left:25px">
+            <div class="row stats-overview-cont" ng-if="task._id" style="padding-top:15px">
+              <div class="portlet sale-summary" ng-if="task._id">
+                <div class="portlet-title">
+                  <div class="caption">
+                    Comments, Informations & Links
+                  </div>
+                  <div class="tools">
+                    Number : <span class="text-info">{{0}}</span>
+                    <button type="button" name="button" style="margin-left:5px;" class="btn btn-xs btn-outline btn-info">Add</button>
+
+                  </div>
+                </div>
+                <div class="portlet-body" style="padding:0;overflow: auto;">
+                  <div class="" style="height:35px;background-color:lightgrey;padding:0;margin:0">
+                    <div class="">
+                      <img alt="" ng-src="assets/images/avatars/{{currentUser._id}}.png" style="width:30px;height:30px" class="img-circle" err-src="assets/images/avatars/avatar.png" />&nbsp;
+                    </div>
+                    <div class="">
+
+                    </div>
+                  </div>
+                </div>
+                </div>
+                </div>
+          </div>
+        </div>
+      </div>
+      <!--end col-md-9-->
+      <!--start col-md-3-->
+      <div class="col-md-3">
+        <!-- Alerts -->
+        <div class="" id="Alert">
+          <div class="portlet sale-summary" ng-if="task._id">
+            <div class="portlet-title">
+              <div class="caption">
+                Alerts
+              </div>
+              <div class="tools">
+              </div>
+            </div>
+          </div>
+          <div class="stats-overview stat-block">
+            <div class="details">
+              <table class="table table-striped table-bordered table-hover">
+                <tbody style="text-align:center;">
+                  <tr ng-repeat="KPI in task.alerts | orderBy:'constraint' track by $index" on-finish-render>
+                    <td>{{KPI.constraint}}</td>
+                    <td style="text-align:left;"><a href="/KPI/{{KPI._id}}">{{KPI.name}}</a></td>
+                    <td style="text-align:left;font-size:13px">
+                      <span ng-if="KPI.calcul.task !== undefined && KPI.calcul.task !== null" class="badge" ng-style="{'background-color':giveMeMyColor(KPI.calcul.task, KPI.category)}" style="height:25px;line-height:20px;width:25px;margin-right: 15px">&nbsp;&nbsp;</span>                      {{KPI.calcul.task}}
+                      <span ng-if="KPI.category === 'Goal' && KPI.calcul.task !== undefined && KPI.calcul.task !== null"> %</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- KPIs -->
+        <div class="" id="KPI">
+          <div class="portlet sale-summary" ng-if="task._id">
+            <div class="portlet-title">
+              <div class="caption">
+                KPIs
+              </div>
+              <div class="tools">
+              </div>
+            </div>
+          </div>
+          <div class="stats-overview stat-block">
+            <div class="details">
+              <table class="table table-striped table-bordered table-hover">
+                <tbody style="text-align:center;">
+                  <tr ng-repeat="KPI in task.kpis | orderBy:'constraint' track by $index" on-finish-render>
+                    <td>{{KPI.constraint}}</td>
+                    <td style="text-align:left;"><a href="/KPI/{{KPI._id}}">{{KPI.name}}</a></td>
+                    <td style="text-align:left;font-size:13px">
+                      <span ng-if="KPI.calcul.task !== undefined && KPI.calcul.task !== null" class="badge" ng-style="{'background-color':giveMeMyColor(KPI.calcul.task, KPI.category)}" style="height:25px;line-height:20px;width:25px;margin-right: 15px">&nbsp;&nbsp;</span>                      {{KPI.calcul.task}}
+                      <span ng-if="KPI.category === 'Goal' && KPI.calcul.task !== undefined && KPI.calcul.task !== null"> %</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- Team -->
+
+        <div class="portlet sale-summary" ng-if="task._id">
+          <div class="portlet-title">
+            <div class="caption">
+              Team
+            </div>
+            <div class="tools">
+              <span class="text-info">{{task.actors.length + task.watchers.length}}</span>
+            </div>
+          </div>
+          <div class="portlet-body">
+            <ul class="list-unstyled">
+              <li style="margin-top:10px;margin-bottom:10px;">
+                <div class="pull-left" style="color:#898E95;width:65px;margin-top:10px">Actors</div>
+                <div class="pull-left" ng-repeat="actor in task.actors">
+                  <img alt="" ng-src="assets/images/avatars/{{actor._id}}.png" style="width:30px;height:30px;" class="img-circle" err-src="assets/images/avatars/avatar.png" />&nbsp;
+                </div>
+                <div class="circularButtonView add-button detailsFollowersView-addButton circularButtonView--small circularButtonView--onWhiteBackground circularButtonView--active">
+                  <span class="circularButtonView-label">
+                                          <svg class="svgIcon add-followers-icon" viewBox="0 0 32 32" title="plus">
+                                            <polygon points="28,14 18,14 18,4 14,4 14,14 4,14 4,18 14,18 14,28 18,28 18,18 28,18"></polygon>
+                                          </svg>
+                                        </span>
+                </div>
               </li>
-              <br/>
               <li style="margin-top:10px">
-                <i class="fa fa-calendar"></i>
-                <span class="text-muted">
-                  Activity
-                </span>
-                {{task.activity}}
+                <div class="pull-left" style="color:#898E95;width:65px;margin-top:18px">Followers</div>
+                <div class="pull-left" ng-repeat="actor in task.watchers" style="margin-top:10px">
+                  <img alt="" ng-src="assets/images/avatars/{{actor._id}}.png" style="width:30px;height:30px" class="img-circle" err-src="assets/images/avatars/avatar.png" />&nbsp;
+                </div>
+                <div style="margin-top:10px" class="circularButtonView add-button detailsFollowersView-addButton circularButtonView--small circularButtonView--onWhiteBackground circularButtonView--active">
+                  <span class="circularButtonView-label">
+                                        <svg class="svgIcon add-followers-icon" viewBox="0 0 32 32" title="plus">
+                                          <polygon points="28,14 18,14 18,4 14,4 14,14 4,14 4,18 14,18 14,28 18,28 18,18 28,18"></polygon>
+                                        </svg>
+                                      </span>
+                </div>
+                <!-- <div class="sale-num" style="font-size:14px;color:grey;margin-top:10px">  <i class="fa fa-bell-o"></i>
+                                          <a href="#" ng-click="watchThisTask()" ng-if="task._id">
+                                            {{taskIsWatched}}
+                                          </a> </div> -->
               </li>
             </ul>
           </div>
-          <!--end col-md-8-->
-          <div class="col-md-2">
-            <div class="portlet sale-summary" ng-if="task._id" >
-              <div class="portlet-title">
-                <div class="caption">
-                  Refresh Task
-                </div>
-                <div class="tools">
-                  <a class="reload" href="javascript:;" ng-click="refreshTask()"></a>
-                </div>
+        </div>
+        <!-- Dashboards -->
+        <div class="" id="Dashboards">
+          <div class="portlet sale-summary" ng-if="task._id">
+            <div class="portlet-title">
+              <div class="caption">
+                Dashboards
               </div>
-              <div class="portlet-body">
-                <div id="myChartQCT"></div>
+              <div class="tools">
+                <span class="text-info">{{0}}</span>
               </div>
             </div>
           </div>
-          <!--end col-md-4-->
+          <div class="stats-overview stat-block">
+            <div class="details">
+              <div tab-dashboard data="task" ng-if="task"></div>
+            </div>
+          </div>
         </div>
-        <!--end row-->
       </div>
+      <!--end col-md-3-->
     </div>
-    <!-- BEGIN OVERVIEW STATISTIC BARS-->
-    <div class="row" ng-if="task._id" >
-      <div class="col-md-2 col-sm-12 ">
-        &nbsp;
-      </div>
-      <div class="col-md-6 col-sm-12 text-center">
-        <span class="text-muted">Metrics</span>
-        <br>
-        <div class="headerMetric">
-          &nbsp;</div>
-      </div>
-      <div class="col-md-4 col-sm-12 text-center">
-        <span class="text-muted">KPIs</span>
-        <br>
-        <div class="headerKPIs">
-          &nbsp;</div>
-      </div>
-    </div>
-    <!-- BEGIN OVERVIEW STATISTIC BARS-->
-    <div class="row stats-overview-cont" style="margin-left:25px;" ng-if="task._id" >
-      <div class="col-md-2 col-sm-4 ">
-        <div class="">
-          <div class="details">
-            <div class="title pull-right">
-              <span style="text-align:right;font-size:20px;font-weight:bold;color:#1f77b4">Target
-                <i class="fa fa-crosshairs"></i>
-              </span>
-              <span class="label label-sm label-warning" ng-show="task.needToFeed"><br>Need Metric</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-2 col-sm-4 ">
-        <div class="stats-overview stat-block">
-          <div class="details" style="height:45px;">
-            <div class="title">
-              <span class="text-muted">Start
-              </span>
-              <span class="pull-right text-info">{{task.startDate | date:'mediumDate'}}</span>
-            </div>
-            <div ng-if="task.lastmetric.startDate !== task.startDate " class="">
-              <small style="font-size:9px">Reestimated:
-              </small>
-              <small class="pull-right" ng-class="(lateStart) ?'bg-info text-info':'bg-success text-success'">{{task.lastmetric.startDate | date:'mediumDate'}}</small>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-2 col-sm-4">
-        <div class="stats-overview stat-block ">
-          <div class="details " style="height:45px;">
-            <div class="title">
-              <span class="text-muted">End
-              </span>
-              <span class="pull-right  text-info">{{task.endDate | date:'mediumDate'}}</span>
-            </div>
-            <div ng-if="task.lastmetric.endDate !== task.endDate " class="">
-              <small style="font-size:9px">Reestimated:
-              </small>
-              <small class="pull-right" ng-class="(lateEnd)?'bg-danger text-danger':'bg-success text-success'">{{task.lastmetric.endDate | date:'mediumDate'}}</small>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-2 col-sm-4">
-        <div class="stats-overview stat-block">
-          <div class="details" style="height:45px;">
-            <div class="title">
-              <span class="text-muted">Load
-              </span>
-              <span class="pull-right  text-info">{{task.load}}
-                <small>days</small>
-              </span>
-            </div>
-            <div ng-if="task.lastmetric.projectedWorkload !== task.load">
-              <small style="font-size:9px">Reestimated:
-              </small>
-              <small class="pull-right" ng-class="(task.lastmetric.projectedWorkload > task.load)?'bg-danger text-danger':'bg-success text-success'">
-                {{task.lastmetric.projectedWorkload}}
-                days</small>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-2 col-sm-4">
-        <div class="stats-overview stat-block" ng-class="(alertsNb !==null && alertsNb>0)?'bg-danger':'bg-success'">
-          <div class="details" style="height:45px;">
-            <div class="title">
-              <span style="font-weight:bold" ng-class="{'text-success':alertsNb===0,'text-danger':alertsNb>0, }">{{alertsNb}}</span>
-              Alerts
-              <small>(nb)</small>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-2 col-sm-4">
-        <div class="stats-overview stat-block" ng-class="(goalsNb !==null && goalsNb<75)?'bg-danger':'bg-success'">
-          <div class="details" style="height:45px;">
-            <div class="title">
-              <span style="font-weight:bold;" ng-class="(goalsNb !==null &&  goalsNb<75)?'text-danger':'text-success'">{{goalsNb}}%</span>
-              Goals
-              <small>(mean)</small>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <tabset>
-        <!--tab Metrics-->
-        <tab ng-if="task._id" active="true">
-          <tab-heading>
-            Metrics
-            <span class="badge badge-default">
-              {{task.metrics.length}}</span>
-          </tab-heading>
-          <div dashboard-tab dashboard-type="metrics" dashboard-data="task" ng-if="task"></div>
-        </tab>
-        <tab ng-if="task._id">
-          <tab-heading>
-            KPIs
-            <span class="badge badge-default">
-              {{task.kpis.length}}</span>
-          </tab-heading>
-          <div tab-k-p-i data="task" ng-if="task"></div>
-        </tab>
-        <!--tab Dashboard-->
-        <tab ng-if="task._id">
-          <tab-heading>
-            Dashboards
-            <span class="badge badge-default">
-              {{task.dashboards.length}}</span>
-          </tab-heading>
-          <div tab-dashboard data="task" ng-if="task"></div>
-        </tab>
-        <!--tab Actors-->
-        <tab ng-if="task._id">
-          <tab-heading>
-            Actors
-            <span class="badge badge-default">{{task.actors.length + task.watchers.length}}</span>
-          </tab-heading>
-          <div tab-actor data="task" ng-if="task"></div>
-        </tab>
-        <!-- <tab ng-if="task._id">
-          <tab-heading>
-            Help
-          </tab-heading>
-          <div dashboard-tab dashboard-type="help" dashboard-data="task" ng-if="task"></div>
-        </tab> -->
-        <tab>
-          <tab-heading>
-            Edit
-          </tab-heading>
-          <div class="row profile-account">
-            <div class="col-md-3">
-              <ul class="ver-inline-menu tabbable margin-bottom-10">
-                <li class="active">
-                  <a data-toggle="tab" ng-click="changeTab($event, 1)">
-                    <i class="fa fa-recycle"></i>Perimeter & Informations
-                  </a>
-                  <span class="after"></span>
-                </li>
-                <li ng-if="1===2">
-                  <a data-toggle="tab" ng-click="changeTab($event, 4)">
-                    <i class="fa fa-bookmark"></i>Qualification</a>
-                  <span class="after"></span>
-                </li>
-                <li ng-if="1===1">
-                  <a data-toggle="tab" ng-click="changeTab($event, 3)">
-                    <i class="fa fa-bolt"></i>Actions on task</a>
-                  <span class="after"></span>
-                </li>
-                <li ng-if="task._id && 1===2">
-                  <a data-toggle="tab" ng-click="changeTab($event, 2)" style="background:#FF6666;color:white">
-                    <i class="fa fa-bomb"></i>Danger Zone
-                  </a>
-                  <span class="after"></span>
-                </li>
-              </ul>
-            </div>
-            <form name="form" role="form" class="form-horizontal" ng-submit="save(form)" novalidate>
-              <div class="col-md-9">
-                <div class="tab-content">
-                  <div id="tab1" class="tab" ng-show="activeTab === 1">
-                    <div class="form-body">
-                      <div class="form-group" ng-class="{'bg-danger':form.name.$invalid && submitted}">
-                        <label class="col-md-3 control-label">Name</label>
-                        <div class="col-md-9">
-                          <input type="text" name="name" placeholder="" class="form-control" ng-model="task.name" ng-required="true"/>
-                          <small class="text-danger" ng-show="form.name.$error.required && submitted">Please enter a name.</small>
-                        </div>
-                      </div>
-                      <div class="form-group" ng-class="{'bg-danger':form.context.$invalid && submitted}">
-                        <label class="col-md-3 control-label">Context</label>
-                        <div class="col-md-9">
-                          <input type="text" name="context" placeholder="" class="form-control" ng-model="task.context" ng-required="true" typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:8"/>
-                          <small class="text-danger" ng-show="form.context.$error.required && submitted">Please enter a context.</small>
-                        </div>
-                      </div>
-                      <div class="form-group" ng-class="{'bg-danger':form.activity.$invalid && submitted}">
-                        <label class="col-md-3 control-label">Activity</label>
-                        <div class="col-md-9">
-                          <input type="text" name="activity" placeholder="" class="form-control" ng-model="task.activity" ng-required="true" typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:8"/>
-                          <small class="text-danger" ng-show="form.activity.$error.required && submitted">Please enter an activity.</small>
-                        </div>
-                      </div>
-                      <div class="form-group" ng-if="1===2">
-                        <label class="col-md-3 control-label">Tags</label>
-                        <div class="col-md-9">
-                          <input type="text" placeholder="" class="form-control" ng-model="task.tags"/>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div id="tab2" class="tab" ng-show="activeTab === 1">
-                    <div class="form-body">
-                      <div class="form-group" ng-class="{'bg-danger':form.startDate.$invalid && submitted}">
-                        <label class="col-md-3 control-label">Target Start Date</label>
-                        <div class="col-md-9">
-                          <p class="input-group">
-                            <input name="startDate" type="text" placeholder="" ng-required="true" class="form-control" ng-model="task.startDate" datepicker-popup="{{format}}" is-open="opened1" datepicker-options="dateOptions" close-text="Fermer"/>
-                            <span class="input-group-btn">
-                              <button class="btn btn-default" ng-click="open1($event)">
-                                <span class="fa fa-calendar"></span>
-                              </button>
-                            </span>
-                          </p>
-                          <small class="text-danger" ng-show="form.startDate.$error.required && submitted">Please enter a target start date of the task.</small>
-                        </div>
-                      </div>
-                      <div class="form-group" ng-class="{'bg-danger':form.endDate.$invalid && submitted}">
-                        <label class="col-md-3 control-label">Target End Date</label>
-                        <div class="col-md-9">
-                          <p class="input-group">
-                            <input name="endDate" type="text" ng-required="true" class="form-control" ng-model="task.endDate" datepicker-popup="{{format}}" is-open="opened2" datepicker-options="dateOptions" close-text="Fermer"/>
-                            <span class="input-group-btn">
-                              <button class="btn btn-default" ng-click="open2($event)">
-                                <span class="fa fa-calendar"></span>
-                              </button>
-                            </span>
-                          </p>
-                          <small class="text-danger" ng-show="form.endDate.$error.required && submitted">Please enter a target end date of the task.</small>
-                        </div>
-                      </div>
-                      <div class="form-group" ng-class="{'bg-danger':form.load.$invalid && submitted}">
-                        <label class="col-md-3 control-label">Target Work Load</label>
-                        <div class="col-md-9">
-                          <input name="load" type="text" placeholder="" ng-required="true" class="form-control" ng-model="task.load"/>
-                          <small class="text-danger" ng-show="form.load.$error.required && submitted">Please enter a target workload of the task.</small>
-                        </div>
-                      </div>
-                      <div class="form-group" ng-if="1===2">
-                        <label class="col-md-3 control-label">Target Budget (k€)</label>
-                        <div class="col-md-9">
-                          <input type="text" placeholder="" class="form-control" ng-model="task.budget"/>
-                        </div>
-                      </div>
-                      <div class="form-group" ng-if="1===2">
-                        <label class="col-md-3 control-label">Deliverables</label>
-                        <div class="col-md-9">
-                          <input type="text" placeholder="" class="form-control" ng-model="task.deliverables"/>
-                        </div>
-                      </div>
-                      <div class="form-group" ng-if="1===2">
-                        <label class="col-md-3 control-label">Risks</label>
-                        <div class="col-md-9">
-                          <input type="text" placeholder="" class="form-control" ng-model="task.risks"/>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div id="tab3" class="tab" ng-show="activeTab === 3">
-                    <div class="form-body">
-                      <div class="form-group">
-                        <label class="col-md-3 control-label">Change status of task to "Withdrawn", leave current metrics & kpis but close the task.</label>
-                        <div class="col-md-9">
-                          <button class="btn btn-warning" ng-click="withdraw()">Withdraw this task</button>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <label class="col-md-3 control-label">Delete this task and associated Metrics & KPis, there is no going back. Please be certain.</label>
-                        <div class="col-md-9">
-                          <button class="btn btn-danger" ng-click="delete()">Delete this task</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div id="tab2" class="tab" ng-show="activeTab === 4">
-                    <div class="form-body">
-                      <div class="form-group">
-                        <label class="col-md-3 control-label">Overall Impact</label>
-                        <div class="col-md-9">
-                          <input type="text" placeholder="" class="form-control" ng-model="task.impact"/>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <label class="col-md-3 control-label">Previous task</label>
-                        <div class="col-md-9">
-                          <input type="text" placeholder="" class="form-control" ng-model="task.previous"/>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div id="tab2" class="tab" ng-show="activeTab === 2">
-                    <div class="form-body">
-                      <div class="form-group">
-                        <label class="col-md-3 control-label">Once you delete your task, there is no going back. Please be certain.</label>
-                        <div class="col-md-9">
-                          <button class="btn btn-danger" ng-click="delete()">Delete this task</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group has-error">
-                    <small class="text-danger" ng-show="taskAlreadyExist.id !== null && submitted">
-                      A task with same context and activity already exist, please
-                      <a href="/task/{{taskAlreadyExist.id}}" target="_blank">click here to see this task named
-                        {{taskAlreadyExist.name}}</a>
-                      or change perimeter of metrics.
-                    </small>
-                    <small class="text-danger">{{ errors.other }}</small>
-                  </div>
-                  <div class="form-actions">
-                    <div class="pull-right">
-                      <button type="submit" class="btn btn-info pull-right" ng-disabled="submitted && form.$invalid">Save</button>
-                    </div>
-                    <input type="submit" value="Submit" style="display:none"/>
-                    <a href="#" class="btn btn-default" ng-click="reset()">Cancel</a>
-                  </div>
-                </div>
-                </div>
-              </form>
-              <!-- END CONTENT -->
-            </div>
-          </tab>
-        </tabset>
-          </div>
-        </div>
-<!-- END PAGE CONTENT-->
+    <!--end row-->
+  </div>
+  <!-- END PAGE CONTENT-->
 </div>
