@@ -8,3 +8,4 @@ karma_html
 coverage-results
 newrelic_agent.log
 /server/config/local.env.js
+client/bower_components_2/
