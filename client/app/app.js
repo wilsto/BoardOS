@@ -15,7 +15,8 @@ angular.module('boardOsApp', [
     'ui-notification',
     'cgBusy',
     'xeditable',
-    'ngEmbed'
+    'ngEmbed',
+    'ui.sortable'
   ])
   .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, NotificationProvider) {
     $urlRouterProvider.otherwise('/');
@@ -278,7 +279,6 @@ angular.module('boardOsApp', [
         }
       });
     });
-
 
     $timeout(function() {
       $rootScope.startRange = moment().subtract(365, 'days');

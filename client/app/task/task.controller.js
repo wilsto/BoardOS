@@ -1,50 +1,42 @@
 'use strict';
+/*jshint loopfunc:true */
 
 angular.module('boardOsApp')
-  .controller('TaskCtrl', function($rootScope, $scope, $http, $stateParams, $location, Auth, Notification, myLibrary) {
+  .controller('TaskCtrl', function($rootScope, $scope, $http, $stateParams, $location, Auth, Notification, myLibrary, $filter, $timeout) {
 
-    $scope.opened = {};
+    var initializing = true;
 
-    //todoList
-    $scope.show = "All";
-    $scope.currentShow = 0;
-    $scope.model = [{
-        taskName: 'Create an Angular-js TodoList',
-        isDone: false
-      },
-      {
-        taskName: 'Understanding Angular-js Directives',
-        isDone: true
-      }
-    ];
-
-    /* Filter Function for All | Incomplete | Complete */
-    $scope.showFn = function(todo) {
-      if ($scope.show === 'All') {
-        return true;
-      } else if (todo.isDone && $scope.show === 'Complete') {
-        return true;
-      } else if (!todo.isDone && $scope.show === 'Incomplete') {
-        return true;
-      } else {
-        return false;
-      }
-    };
-
-    $scope.giveMeMyColor = function(value, category) {
-      return myLibrary.giveMeMyColor(value, category);
-    };
-
-    $scope.open = function($event, elementOpened) {
-      $event.preventDefault();
-      $event.stopPropagation();
-
-      $scope.opened[elementOpened] = !$scope.opened[elementOpened];
-    };
-
-    $scope.activeTab = 1;
-    $scope.errors = {};
+    // si cela n'existe pas
     $scope.task = {};
+    $scope.task.date = Date.now();
+    $scope.task.comments = [{
+      text: 'create task',
+      date: Date.now(),
+      user: $scope.currentUser._id,
+      auto: true
+    }];
+    $scope.task.metrics = [];
+    $scope.task.metrics.push({
+      progress: 0,
+      timeSpent: 0,
+      status: 'Not Started'
+    });
+    $scope.task.todos = [];
+    $scope.task.todos.push({
+      text: 'Appeler Paul pour récupérer liste users',
+      isDone: true
+    });
+    $scope.task.todos.push({
+      text: 'Organiser l\'atelier avec les users',
+      isDone: false
+    });
+    $scope.task.todos.push({
+      text: 'Ecrire le compte rendu de l\'atelier',
+      isDone: false
+    });
+    $scope.task.actors = [$scope.currentUser._id];
+    console.log('$scope.task', $scope.task);
+    $scope.errors = {};
     $scope.taskAlreadyExist = {
       id: null,
       name: null
@@ -60,12 +52,73 @@ angular.module('boardOsApp')
       $scope.isManager = data;
     });
 
+    $scope.opened = {};
+
+    //todoList
+    //***************
+    $scope.show = 'All';
+    $scope.currentShow = 0;
+    $scope.newTodo = {
+      text: ''
+    }; // ng-model need object to sync
+
+    $scope.addTodo = function() {
+      $scope.task.todos.push({
+        text: $scope.newTodo.text,
+        isDone: false
+      });
+      $scope.newTodo.text = ''; //Reset the text field.
+    };
+    $scope.changeStatusTodo = function(index) {
+      $scope.task.todos[index].isDone = !$scope.task.todos[index].isDone;
+    };
+
+    /* Filter Function for All | Incomplete | Complete */
+    $scope.showFn = function(todo) {
+      if ($scope.show === 'All') {
+        return true;
+      } else if (todo.isDone && $scope.show === 'Complete') {
+        return true;
+      } else if (!todo.isDone && $scope.show === 'Incomplete') {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
+    //comments
+    //***************
+    $scope.comment = {};
+    $scope.addComment = function() {
+      var maintenant = new Date().toISOString();
+      $scope.task.comments.push({
+        text: $scope.comment.text,
+        auto: false,
+        date: maintenant,
+        user: $scope.currentUser._id
+      });
+      $scope.comment.text = ''; //Reset the text field.
+      $scope.updateSecondary();
+    };
+
+
+    $scope.giveMeMyColor = function(value, category) {
+      return myLibrary.giveMeMyColor(value, category);
+    };
+
+    $scope.open = function($event, elementOpened) {
+      $event.preventDefault();
+      $event.stopPropagation();
+
+      $scope.opened[elementOpened] = !$scope.opened[elementOpened];
+    };
+
+
     // socket.on('taskComplete:save', function(data) {
     //   $scope.loadTask();
     // });
 
     $rootScope.$on('reloadTask', function(event, data) {
-
       $scope.loadTask();
     });
 
@@ -76,134 +129,174 @@ angular.module('boardOsApp')
       });
     };
 
+    // *******************
+    // Load a task
+    // *******************
     $scope.loadTask = function() {
       $scope.currentTask = {};
-      if ($stateParams.id) {
-        $scope.myPromise = $http.get('/api/taskCompletes/' + $stateParams.id).success(function(task) {
+      var taskId = $stateParams.id || $scope.task._id;
+      if (taskId) {
+        $scope.myPromise = $http.get('/api/taskFulls/' + taskId).success(function(task) {
           $scope.task = task;
-
-          $scope.currentTask = task;
-          $scope.task.activity_old = task.activity;
-          $scope.task.context_old = task.context;
-
-          $scope.updateWatch();
-
+          $timeout(function() {
+            initializing = false;
+          }, 500);
           //detect if late
-          $scope.lateStart = new Date($scope.task.lastmetric.startDate).setHours(0, 0, 0, 0) > new Date($scope.task.startDate).setHours(0, 0, 0, 0);
-          $scope.lateEnd = new Date($scope.task.lastmetric.endDate).setHours(0, 0, 0, 0) > new Date($scope.task.endDate).setHours(0, 0, 0, 0);
-
-          // calcul des alertes
-          var alertValue = _.pluck(_.pick(_.pluck(task.alerts, function(kpi) { // valeurs existantes
-            return kpi.calcul.task;
-          }), _.isNumber));
-          var alertSum = _.reduce(alertValue, function(alertSum, kpicalcul) { // sum
-            return alertSum + kpicalcul;
+          $scope.task.metrics.forEach(function(metric) {
+            metric.lateStart = new Date(metric.startDate).setHours(0, 0, 0, 0) > new Date(metric.targetstartDate).setHours(0, 0, 0, 0);
+            metric.lateEnd = new Date(metric.endDate).setHours(0, 0, 0, 0) > new Date(metric.targetEndDate).setHours(0, 0, 0, 0);
           });
-          $scope.alertsNb = alertSum;
-
-          // calcul des kpis
-          var goalsValue = _.pluck(_.pick(_.pluck(task.kpis, function(kpi) { // valeurs existantes
-            return kpi.calcul.task;
-          }), _.isNumber));
-          var goalsSum = _.reduce(goalsValue, function(goalsSum, kpicalcul) { // sum
-            return goalsSum + kpicalcul;
-          });
-          $scope.goalsNb = parseInt(goalsSum / goalsValue.length); // moyenne
         });
+      } else {
+        $timeout(function() {
+          initializing = false;
+        }, 500);
       }
-    };
-
-    $scope.updateWatch = function() {
-      $scope.taskIsWatched = (_.intersection([$scope.currentUser._id], _.pluck($scope.currentTask.watchers, '_id')).length > 0) ? 'Unfollow' : 'Follow';
     };
 
     $scope.loadTask();
 
-    $scope.changeTab = function(e, tabNb) {
-      $('.ver-inline-menu li').removeClass('active');
-      $(e.target).closest('li').addClass('active');
-      $scope.activeTab = tabNb;
+    // *******************
+    // create a new task
+    // *******************
+    $scope.create = function() {
+      // Nouvelle tache
+      $http.get('/api/tasks/search', {
+        params: {
+          activity: $scope.task.activity,
+          context: $scope.task.context
+        }
+      }).success(function(alreadyExit) {
+        if (alreadyExit.length === 0) {
+          $http.post('/api/taskFulls', $scope.task).success(function(data) {
+            var logInfo = 'Task "' + $scope.task.name + '" was created';
+            Notification.success(logInfo);
+            $location.path('/task/' + data._id);
+          });
+        } else {
+          $scope.taskAlreadyExist.id = alreadyExit[0]._id;
+          $scope.taskAlreadyExist.name = alreadyExit[0].name;
+          $scope.messageCreation = 'This task (WBS) already exist, you must change either the activity or the context';
+        }
+      });
     };
 
-    $scope.watchThisTask = function() {
-      $scope.myPromise = $http.post('/api/tasks/watch/' + $scope.currentTask._id + '/' + $scope.currentUser._id).success(function(data) {
-        $scope.currentTask.watchers = data.watchers;
-        var logInfo = 'Task watch "' + $scope.currentTask.name + '" was updated by ' + $scope.currentUser.name;
-        $http.post('/api/logs', {
-          info: logInfo,
-          actor: $scope.currentUser
+    $scope.$watch('task', function(newMap, previousMap) {
+      console.log('initializing', initializing);
+      if (initializing) {
+        console.log('CONDITION PASSED');
+        $timeout(function() {
+          initializing = true;
         });
-        $scope.loadTask();
-        Notification.success(logInfo);
+      } else {
+        if (newMap !== previousMap) {
+
+          var newObject = newMap;
+          var previousObject = previousMap;
+          for (var property in newObject) {
+            // console.log('property', property);
+            // console.log('typeof', typeof newObject[property]);
+            // pour les non objects
+            if (typeof newObject[property] !== 'object' && property !== '_id' && property !== '__v' && property !== 'date' && !angular.equals(newObject[property], previousObject[property])) {
+              // console.log('newObject[property]', newObject[property]);
+              // console.log('previousObject[property]', previousObject[property]);
+              $scope.autoComment('set ' + property + ' to ' + newObject[property]);
+            }
+            // pour les objects
+            if (typeof newObject[property] === 'object' && property !== 'comments' && !angular.equals(newObject[property], previousObject[property])) {
+              angular.forEach(newObject[property], function(value, key) {
+                // console.log('key', key);
+                // console.log('value', value);
+                var previousValue = previousObject[property][key];
+                // console.log('previousValue', previousValue);
+                for (var subproperty in value) {
+                  if (subproperty !== '$$hashKey' && subproperty !== '_id' && (!previousValue || !angular.equals(value[subproperty], previousValue[subproperty]))) {
+                    console.log('subproperty', subproperty);
+                    // if (previousValue) {
+                    //   console.log('previousValue[subproperty]', previousValue[subproperty]);
+                    // }
+                    // console.log('value[subproperty]', value[subproperty]);
+                    console.log('subproperty.toLowerCase().indexOf(\'date\') > -1', subproperty.toLowerCase().indexOf('date') > -1);
+                    if (subproperty.toLowerCase().indexOf('date') > -1) {
+                      console.log('CONDITION PASSED');
+                      $scope.autoComment('set ' + subproperty + ' to ' + $filter('date')(value[subproperty], 'mediumDate') + '              [' + property + ':' + key.toString() + ']');
+                    } else {
+                      $scope.autoComment('set ' + subproperty + ' to ' + value[subproperty] + '              [' + property + ':' + key.toString() + ']');
+                    }
+                  }
+                }
+              });
+            }
+          }
+        }
+      }
+    }, true);
+
+
+    $scope.autoComment = function(text) {
+      var maintenant = new Date().toISOString();
+      $scope.task.comments.push({
+        text: text,
+        auto: true,
+        date: maintenant,
+        user: $scope.currentUser._id
       });
     };
 
     $scope.save = function(form) {
-      $scope.submitted = true;
 
       // si la form est valide
-      if (form.$valid) {
-        delete $scope.task.__v;
-        delete $scope.task.kpis;
-        delete $scope.task.metrics;
-        delete $scope.task.tasks;
+      delete $scope.task.__v;
+      delete $scope.task.kpis;
+      delete $scope.task.tasks;
+      $scope.task.date = Date.now();
 
-        $scope.task.actor = $scope.currentUser;
-        $scope.task.date = Date.now();
-
-        if ($scope.task._id === undefined) {
-          // Nouvelle tache
-          $http.get('/api/tasks/search', {
-            params: {
-              activity: $scope.task.activity,
-              context: $scope.task.context
-            }
-          }).success(function(alreadyExit) {
-            // si cela n'existe pas
-            if (alreadyExit.length === 0) {
-              $http.post('/api/tasks', $scope.task).success(function(data) {
-                var logInfo = 'Task "' + $scope.task.name + '" was created';
-                $http.post('/api/logs', {
-                  info: logInfo,
-                  actor: $scope.currentUser
-                });
-                Notification.success(logInfo);
-
-                $location.path('/task/' + data._id);
+      if ($scope.task._id === undefined && $scope.task.activity !== undefined && $scope.task.context !== undefined) {
+        // Nouvelle tache
+        $http.get('/api/tasks/search', {
+          params: {
+            activity: $scope.task.activity,
+            context: $scope.task.context
+          }
+        }).success(function(alreadyExit) {
+          // si cela n'existe pas
+          if (alreadyExit.length === 0) {
+            $http.post('/api/fulltasks', $scope.task).success(function(data) {
+              var logInfo = 'Task "' + $scope.task.name + '" was created';
+              $http.post('/api/logs', {
+                info: logInfo,
+                actor: $scope.currentUser
               });
-            } else {
-              $scope.taskAlreadyExist.id = alreadyExit[0]._id;
-              $scope.taskAlreadyExist.name = alreadyExit[0].name;
-            }
-          });
-        } else {
-          // tache déjà existante en cours de modification
-          $scope.task.activity_old = $scope.task.activity_old;
-          $scope.task.context_old = $scope.task.context_old;
-          $http.put('/api/tasks/' + $scope.task._id, $scope.task).success(function(data) {
-            var logInfo = 'Task "' + $scope.task.name + '" was updated';
-            $http.post('/api/logs', {
-              info: logInfo,
-              actor: $scope.currentUser
+              Notification.success(logInfo);
+
+              $location.path('/task/' + data._id);
             });
-            $scope.refreshTask();
-            Notification.success(logInfo);
+          } else {
+            $scope.taskAlreadyExist.id = alreadyExit[0]._id;
+            $scope.taskAlreadyExist.name = alreadyExit[0].name;
+          }
+        });
+      } else {
+        // tache déjà existante en cours de modification
+        $scope.task.activity_old = $scope.task.activity_old;
+        $scope.task.context_old = $scope.task.context_old;
+        $http.put('/api/tasks/' + $scope.task._id, $scope.task).success(function(data) {
+          var logInfo = 'Task "' + $scope.task.name + '" was updated';
+          $http.post('/api/logs', {
+            info: logInfo,
+            actor: $scope.currentUser
           });
-        }
+          $scope.refreshTask();
+          Notification.success(logInfo);
+        });
       }
     };
-
     $scope.delete = function() {
       bootbox.confirm('Are you sure to delete this task and all associated metrics ? It can NOT be undone.', function(result) {
         if (result) {
-          $http.delete('/api/tasks/' + $scope.task._id).success(function() {
+          $http.delete('/api/taskFulls/' + $scope.task._id).success(function() {
             var logInfo = 'Task "' + $scope.task.name + '" was deleted';
-            $http.post('/api/logs', {
-              info: logInfo,
-              actor: $scope.currentUser
-            });
             Notification.success(logInfo);
-
             $location.path('/tasks');
           });
         }
@@ -211,7 +304,7 @@ angular.module('boardOsApp')
     };
 
     $scope.withdraw = function() {
-      var withdrawnmetric = _.clone($scope.currentTask.lastmetric);
+      var withdrawnmetric = _.clone($scope.currentTask.metrics);
       Auth.getCurrentUser(function(data) {
         delete withdrawnmetric._id;
         withdrawnmetric.status = 'Withdrawn';

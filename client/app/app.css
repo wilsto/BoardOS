@@ -6159,6 +6159,10 @@ Profile Page
 
 /*profile sales summary*/
 
+.sale-summary {
+  margin-bottom: 12px;
+}
+
 .sale-summary ul {
   margin-top: -12px;
 }
@@ -6185,23 +6189,6 @@ Profile Page
   color: #169ef4;
   font-size: 20px;
   font-weight: 300;
-}
-
-.sale-summary li span i {
-  top: 1px;
-  width: 13px;
-  height: 14px;
-  margin-left: 3px;
-  position: relative;
-  display: inline-block;
-}
-
-.sale-summary li i.icon-img-up {
-  background: url(../../img/icon-img-up.png) no-repeat !important;
-}
-
-.sale-summary li i.icon-img-down {
-  background: url(../../img/icon-img-down.png) no-repeat !important;
 }
 
 .sale-summary .caption h4 {

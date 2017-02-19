@@ -11,6 +11,7 @@ module.exports = function(app) {
   // Insert routes below
   app.use('/api/dashboardCompletes', require('./api/dashboardComplete'));
   app.use('/api/taskCompletes', require('./api/taskComplete'));
+  app.use('/api/taskFulls', require('./api/taskFull'));
   app.use('/api/mails', require('./api/mail'));
   app.use('/api/dqms', require('./api/dqm'));
   app.use('/api/helps', require('./api/help'));

@@ -5,35 +5,37 @@
     <!--BEGIN TABS-->
     <div class="row profile-nav">
       <!--start col-md-9-->
-      <div class="col-md-9 " ng-if="task._id">
+      <div class="col-md-9 " >
         <!-- Title -->
         <div class="row">
-          <div class="col-md-2" ng-if="task._id">
-            <button type="button" name="button" style="margin-bottom:5px;width:100%" class="btn btn-xs btn-outline btn-info" ng-click="refreshTask()">Refresh</button>
+          <div class="col-md-1">
+            <button  ng-if="task._id" type="button" name="button" style="margin-bottom:5px;width:100%" class="btn btn-xs btn-outline btn-info" ng-click="refreshTask()">Refresh</button>
             <img src="assets/images/todo.png" class="img-responsive" alt="" />
           </div>
-          <div class="col-md-10">
+          <div class="col-md-11">
             <div class="row">
               <div class="col-md-9 col-sm-12 profile-info">
                 <h1>
-                                    <a href="#" style="color:black!important" editable-text="task.name" e-style="width: 500px" buttons="right">{{ task.name || 'Please give a name of your task' }}</a>
-                                </h1>
+                    <a href="#" style="color:black!important" editable-text="task.name" e-style="width: 500px" buttons="right">{{ task.name || 'Please give a name of your task' }}</a>
+                </h1>
                 <ul class="list list-inline">
                   <li style="margin-top:5px">
                     <i class="fa fa-flash"></i>
                     <span class="text-muted" style="margin-right:10px">
-                                Activity
-                              </span> <a href="#" editable-text="task.activity" e-style="width: 500px" e-uib-typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:8">
-                                {{task.activity || 'Please give activity' }}
-                              </a>
+                      Activity
+                    </span>
+                    <a href="#" editable-text="task.activity" e-style="width: 500px" e-uib-typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:8">
+                      {{task.activity || 'Please give activity' }}
+                    </a>
                   </li><br>
                   <li style="margin-top:5px">
                     <i class="fa fa-map-marker"></i>
                     <span class="text-muted" style="margin-right:10px">
-                              Context
-                            </span> <a href="#" editable-text="task.context" e-style="width: 500px" e-uib-typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:8">
-                              {{task.context || 'Please give context' }}
-                            </a>
+                      Context
+                    </span>
+                    <a href="#" editable-text="task.context" e-style="width: 500px" e-uib-typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:8">
+                      {{task.context || 'Please give context' }}
+                    </a>
                   </li>
                 </ul>
                 <div class="row">
@@ -57,112 +59,115 @@
           </div>
         </div>
         <!--Metrics  -->
-        <div class="row stats-overview-cont" ng-if="task._id" style="padding-top:15px">
-          <div class="portlet sale-summary" ng-if="task._id">
+        <div class="row stats-overview-cont" style="margin-bottom:0" ng-repeat="(key, currentMetric) in task.metrics">
+          <div class="portlet sale-summary">
             <div class="portlet-title">
               <div class="caption">
-                Main task
-                <small style="margin-left:25px">Status:
-                  <span class="text-info">{{task.lastmetric.status}} </span>
-                </small>
+                <span ng-if="key === 0">Main </span> <span ng-if="key > 0">Rework {{key}} :</span>Metrics
+                <span ng-if="task._id && key === task.metrics.length-1">
+                <button type="button" name="button" style="margin-left:5px;" class="btn btn-xs btn-outline btn-warning" ng-click="withdraw()">Withdraw</button>
+                <button type="button" name="button" style="margin-left:5px;" class="btn btn-xs btn-outline btn-danger" ng-click="delete()">Delete</button>
+              </span>
               </div>
               <div class="tools">
-                <button type="button" name="button" style="margin-left:5px;" class="btn btn-xs btn-outline btn-info">ReOpen</button>
-                <button type="button" name="button" style="margin-left:5px;" class="btn btn-xs btn-outline btn-warning">Withdraw</button>
-                <button type="button" name="button" style="margin-left:5px;" class="btn btn-xs btn-outline btn-danger">Delete</button>
+                <small style="margin-left:25px">Task status:</small>
+                <span
+                class="label"
+                ng-class="{'label-info':currentMetric.status ==='In Progress','label-success':currentMetric.status ==='Finished','label-default':currentMetric.status ==='Not Started','label-lightgrey':currentMetric.status =='Withdrawn'}">
+                {{currentMetric.status}}
+              </span>
+                <button type="button" name="button" style="margin-left:5px;" class="btn btn-xs btn-outline btn-info" ng-click="reopen()" ng-if="currentMetric.status ==='Finished' && key === task.metrics.length-1">ReOpen</button>
               </div>
             </div>
-            <div class="portlet-body" style="padding-bottom:5px;overflow: auto;">
+            <div class="portlet-body" style="padding-bottom:5px;min-height:130px">
               <div class="col-md-2 col-sm-12 ">
                 <div class="stats-overview stat-block">
-                  <div class="details" style="height:45px;">
+                  <div class="details" >
                     <div class="title">
                       <span class="text-muted">Start
                           </span>
                       <span class="pull-right text-info">
-                    <a href="#" editable-bsdate="task.startDate" e-is-open="opened.$data" e-ng-click="open($event,'$data')" e-datepicker-popup="mediumDate">
-                        {{ (task.startDate | date:'mediumDate') || 'empty' }}
+                    <a href="#" editable-bsdate="currentMetric.targetstartDate" e-is-open="opened.$data" e-ng-click="open($event,'$data')" e-datepicker-popup="mediumDate" e-readonly="true">
+                        {{ (currentMetric.targetstartDate | date:'mediumDate') || 'empty' }}
                       </a>
                   </span>
                     </div>
-                    <div ng-if="task.lastmetric.startDate !== task.startDate " class="">
-                      <small style="font-size:9px">Reestimated:
-                          </small>
-                      <small class="pull-right" ng-class="(lateStart) ?'bg-info text-info':'bg-success text-success'">{{task.lastmetric.startDate | date:'mediumDate'}}</small>
+                    <div ng-if="currentMetric.status !== 'Not Started'" class="" style="    margin-top: 8px;">
+                      <small>Reestimated:</small>
+                      <small class="pull-right" ng-class="(currentMetric.lateStart) ?'bg-info text-info':'bg-success text-success'">{{currentMetric.startDate | date:'mediumDate'}}</small>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div class="col-md-3 col-sm-12">
+              <div class="col-md-3 col-sm-12" >
                 <div class="stats-overview ">
                   <div class="details" style="height:65px;">
                     <div class="title">
-                      <small class="text-muted">Progress</small> <a href="#" editable-text="task.lastmetric.progress" e-style="width: 50px;height:20px;font-size:12px;" buttons="no">{{ task.lastmetric.progress || 0}}</a>
+                      <small class="text-muted">Progress</small> <a href="#" editable-text="currentMetric.progress" e-style="width: 50px;height:20px;font-size:12px;" buttons="no">{{currentMetric.progress}}</a>
                       <small class="text-muted">%</small>
                       <div class="pull-right">
-                        <small class="text-muted">Spent&nbsp;
-                    </small>
+                        <small class="text-muted">Estimate
+                  </small>
                         <span>
-                      <a href="#" editable-number="task.lastmetric.timeSpent" e-style="width: 60px" buttons="no">{{ task.lastmetric.timeSpent || 0}}</a>
+                    <a href="#" editable-text="currentMetric.targetLoad" e-style="width: 60px" buttons="no">{{ currentMetric.targetLoad || 'empty'}}</a>
+                      </span>
                       <small class="text-muted">days</small>
-                    </span>
                       </div>
                     </div>
                     <span class="row" style="padding:0;margin:0;">
-                  <span class="col-sm-3" style="padding:5px 0 0 0">
-                    <span class="pull-right" style="margin-right:10px;">
-                    </span>
-                    </span>
-                    <span class="col-sm-9" style="padding:5px">
-                  <uib-progressbar value="task.lastmetric.progress" style=";height:20px" type="info"></uib-progressbar>
-                </span>
+
+                  <uib-progressbar value="currentMetric.progress" style=";height:20px" type="info"></uib-progressbar>
 
                     </span>
-                    <div class="row" style="padding:0;margin:0">
-                      <small class="text-muted">Estimate
-                </small>
+                    <div class="row" style="margin:-8px 0 0 0;padding:0">
+                      <small class="text-muted">Spent&nbsp;
+                  </small>
                       <span>
-                  <a href="#" editable-number="task.load" e-style="width: 60px" buttons="no">{{ task.load || 0}}</a>
-                    </span>
+                    <a href="#" editable-text="currentMetric.timeSpent" e-style="width: 60px" buttons="no">{{currentMetric.timeSpent}}</a>
+
                       <small>days</small>
 
-                      <div ng-if="task.lastmetric.projectedWorkload !== task.load" class="pull-right">
+                      <div ng-if="currentMetric.projectedWorkload !== currentMetric.targetLoad" class="pull-right">
                         <small>Reestimated:</small>
-                        <small ng-class="(task.lastmetric.projectedWorkload > task.load)?'bg-danger text-danger':'bg-success text-success'">
-                      {{task.lastmetric.projectedWorkload}}</small>
+                        <small ng-class="(currentMetric.projectedWorkload > currentMetric.targetLoad)?'bg-danger text-danger':'bg-success text-success'">
+                      {{currentMetric.projectedWorkload}}</small>
                         <small>  days  </small>
                       </div>
+                    </span>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="col-md-2 col-sm-4">
                 <div class="stats-overview stat-block ">
-                  <div class="details " style="height:45px;">
+                  <div class="details " style="height:75px;">
                     <div class="title">
-                      <span class="text-muted">Due Date
-                          </span>
+                      <span class="text-muted">Due Date</span>
                       <span class="pull-right  text-info">
-                  <a href="#" editable-bsdate="task.endDate" e-is-open="opened.$data2"                              e-ng-click="open($event,'$data2')"                            e-datepicker-popup="mediumDate">
-                      {{ (task.endDate | date:'mediumDate') || 'empty' }}
+                          <a href="#" editable-bsdate="currentMetric.targetEndDate" e-is-open="opened.$data2" e-ng-click="open($event,'$data2')" e-datepicker-popup="mediumDate" e-readonly="true">
+                      {{ (currentMetric.targetEndDate | date:'mediumDate') || 'empty' }}
                     </a>
+                  </span>
+
                 </div>
-                <div ng-if="task.lastmetric.endDate !== task.endDate " class="">
-                  <small style="font-size:9px">Reestimated:
-                          </small>
-                  <small class="pull-right" ng-class="(lateEnd)?'bg-danger text-danger':'bg-success text-success'">{{task.lastmetric.endDate | date:'mediumDate'}}</small>
+                <div ng-if="currentMetric.endDate && currentMetric.endDate !== currentMetric.targetEndDate" class="" style="margin-top:8px;">
+                  <small>Reestimated:</small>
+                  <small class="pull-right" ng-class="(currentMetric.lateEnd)?'bg-danger text-danger':'bg-success text-success'">{{currentMetric.endDate | date:'mediumDate' || currentMetric.targetEndDate}}</small>
                 </div>
+                <span style="margin-top:8px;" class="pull-right label label-sm" ng-class="{'label-warning':currentMetric.progressStatus ==='At Risk','label-success':currentMetric.progressStatus ==='On Time','label-danger':currentMetric.progressStatus ==='Late'}">
+                  {{currentMetric.progressStatus}}
+                </span>
               </div>
             </div>
           </div>
-          <div class="col-md-2 col-sm-12">
+          <div class="col-md-2 col-sm-12" >
             <div class="stats-overview stat-block">
               <div class="details" style="height:45px;">
                 <div class="title">
                   <span style="margin-left:-5px;">Confidence</span>
                       <span class="pull-right text-info">
-                    <a href="#" editable-text="task.lastmetric.trust" e-style="width: 50px;height:20px;font-size:12px;" buttons="no">{{ task.lastmetric.trust || 100}}</a>
+                    <a href="#" editable-text="currentMetric.trust" e-style="width: 50px;height:20px;font-size:12px;" buttons="no">{{ currentMetric.trust || 'empty'}}</a>
                     %</span>
                     </div>
                     <div class="">
@@ -170,18 +175,18 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-3 col-sm-12">
+              <div class="col-md-3 col-sm-12" uib-tooltip-html="'Only For FinishedTask'" tooltip-placement="bottom" ng-if="task._id">
                 <div class="stats-overview stat-block ">
                   <div class="details" style="height:100px;">
                     <div class="title">
-                      <span class="text-muted"><b> Delivery Status</b><small> (only Finished task)</small>
+                      <span class="text-muted" ><b> Delivery Status</b>
                           </span>
                     </div>
                     <div class="" style="padding-bottom:7px;padding-top:3px;">
                       User Satisfaction
                       <small class="pull-right">
                     <span class="pull-right" style="margin-right:10px;">
-                        <a href="#" editable-text="task.lastmetric.userSatisfaction" e-style="width: 50px;height:20px;font-size:12px;" buttons="no">{{ task.lastmetric.userSatisfaction || 0}}</a>
+                        <a href="#" editable-text="currentMetric.userSatisfaction" e-style="width: 50px;height:20px;font-size:12px;" buttons="no">{{ currentMetric.userSatisfaction || 'empty'}}</a>
                         %
                     </span>
                   </small>
@@ -191,17 +196,17 @@
                       Actor Satisfaction
                       <small class="pull-right">
                     <span class="pull-right" style="margin-right:10px;">
-                        <a href="#" editable-text="task.lastmetric.actorSatisfaction" e-style="width: 50px;height:20px;font-size:12px;" buttons="no">{{ task.lastmetric.actorSatisfaction || 0}}</a>
+                        <a href="#" editable-text="currentMetric.actorSatisfaction" e-style="width: 50px;height:20px;font-size:12px;" buttons="no">{{ currentMetric.actorSatisfaction || 'empty'}}</a>
                         %
                     </span>
                   </small>
                     </div>
 
                     <div class="">
-                      Deliverables as defined
+                      Deliverables
                       <small class="pull-right">
                     <span class="pull-right" style="margin-right:10px;">
-                        <a href="#" editable-text="task.lastmetric.deliverableStatus" e-style="width: 50px;height:20px;font-size:12px;" buttons="no">{{ task.lastmetric.deliverableStatus || 0}}</a>
+                        <a href="#" editable-text="currentMetric.deliverableStatus" e-style="width: 50px;height:20px;font-size:12px;" buttons="no">{{ currentMetric.deliverableStatus || 'empty'}}</a>
                         %
                     </span>
                   </small>
@@ -211,18 +216,21 @@
               </div>
             </div>
           </div>
+          <div  class="pull-right" style="width:200px" ng-if="!task._id" uib-tooltip-html="'You must fill the 7 mandatories fields : name, activity, context, startDate, Estimate workload, DueDate and confidence to be able to save'"  tooltip-placement="bottom" >
+            <button type="button" name="button" style="width:200px" class="btn  btn-primary" ng-click="create()" ng-disabled="!(task.name && task.context && task.activity && task.metrics[0].targetstartDate && task.metrics[0].targetEndDate && task.metrics[0].targetLoad && task.metrics[0].trust)">Create</button>
+          </div>
         </div>
         <!--Todo + Comments  -->
-        <div class="row">
+        <div class="row" ng-if="task._id">
           <div class="col-md-5 col-sm-12" style="padding-right:25px">
-            <div class="row stats-overview-cont" ng-if="task._id" style="padding-top:15px">
-              <div class="portlet sale-summary" ng-if="task._id">
+            <div class="row stats-overview-cont" >
+              <div class="portlet sale-summary" >
                 <div class="portlet-title">
                   <div class="caption">
                     TodoList
                   </div>
                   <div class="tools">
-                    Number : <span class="text-info">{{model.length}}</span>
+                    Number : <span class="text-info">{{task.todos.length}}</span>
                   </div>
                 </div>
                 <!-- <div class="row">
@@ -246,7 +254,7 @@
                   <div class="row">
                     <div class="form-group" style="width:94%;margin-left:20px;padding-bottom:10px">
                       <div class="input-group">
-                        <input class="form-control" type="text" ng-model="newTodo" placeholder="Add New Todo" ng-enter>
+                        <input class="form-control" type="text" ng-model="newTodo.text" placeholder="Add New Todo" ng-enter="addTodo()">
                       <span class="input-group-btn">
                         <button class="btn btn-outline btn-info" type="button"><span ng-click="addTodo()">Add</button>
                       </span>
@@ -254,9 +262,9 @@
                     </div>
                   </div>
                     <div class="row">
-                      <ul class="" ui-sortable="todoSortable" style="-webkit-padding-start: 15px!important;" >
-                        <li class="todoTask" ng-repeat="todo in model track by $index | filter:showFn | filter :todoSearch ">
-                          <div class="circularToggleButtonView taskCheckboxNodeView " ng-class="todo.isDone ? ' circularToggleButtonView--toggledOn': 'circularToggleButtonView--toggledOff'">
+                      <ul class="" ui-sortable style="-webkit-padding-start: 15px!important;" ng-model="task.todos" >
+                        <li class="todoTask" ng-repeat="todo in task.todos track by $index | filter:showFn | filter :todoSearch ">
+                          <div ng-click="changeStatusTodo($index)" class="circularToggleButtonView taskCheckboxNodeView " ng-class="todo.isDone ? ' circularToggleButtonView--toggledOn': 'circularToggleButtonView--toggledOff'">
                           <div class="circularButtonView circularToggleButtonView-button circularButtonView--xsmall circularButtonView--onWhiteBackground circularButtonView--active">
                             <span class="circularButtonView-label">
                               <svg class="svgIcon " viewBox="0 0 32 32" title="checkmark">
@@ -264,11 +272,11 @@
                               </svg>
                             </span>
                           </div>
-                          <span ng-class="{'barre':todo.isDone}"><span style="color:black" >{{todo.taskName}}</span></span>
+                          <span ng-class="{'barre':todo.isDone}"><span style="color:black" >{{todo.text}}</span></span>
                           </div>
-                          <div class="pull-right" style="margin-top:-20px;margin-right:20px;">
-                            <a>
-                              <div class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground">
+                          <div class="pull-right" style="margin-top:-20px;margin-right:20px;" >
+                            <a >
+                              <div class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground" uib-tooltip-html="'Add a due date to this subtask'" tooltip-placement="bottom">
                                 <span class="circularButtonView-label">
                               <svg class="svgIcon task-row-due-date-icon" viewBox="0 0 32 32" title="calendar">
                                 <rect x="16" y="16" width="2" height="2"></rect><rect x="20" y="16" width="2" height="2"></rect>
@@ -281,8 +289,8 @@
                             </span>
                           </div>
                             </a>
-                            <a>
-                              <div class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground">
+                            <a >
+                              <div class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground" uib-tooltip-html="'Assign this subtask'" tooltip-placement="bottom">
                                 <span class="circularButtonView-label">
                               <svg class="svgIcon task-row-assignee-icon" viewBox="0 0 32 32" title="unassigned">
                                 <path d="M20.534,16.765C23.203,15.204,25,12.315,25,9c0-4.971-4.029-9-9-9S7,4.029,7,9c0,3.315,1.797,6.204,4.466,7.765C5.962,18.651,2,23.857,2,30c0,0.681,0.065,1.345,0.159,2h27.682C29.935,31.345,30,30.681,30,30C30,23.857,26.038,18.651,20.534,16.765z M9,9c0-3.86,3.14-7,7-7s7,3.14,7,7s-3.14,7-7,7S9,12.86,9,9z M4,30c0-6.617,5.383-12,12-12s12,5.383,12,12H4z"></path>
@@ -295,45 +303,64 @@
                         </li>
                       </ul>
                     </div>
-
                 </div>
+
                 </div>
                 </div>
           </div>
           <div class="col-md-7 col-sm-12" style="padding-left:25px">
-            <div class="row stats-overview-cont" ng-if="task._id" style="padding-top:15px">
-              <div class="portlet sale-summary" ng-if="task._id">
+            <div class="row stats-overview-cont" ng-if="task._id">
+              <div class="portlet sale-summary">
                 <div class="portlet-title">
                   <div class="caption">
                     Comments, Informations & Links
                   </div>
                   <div class="tools">
-                    Number : <span class="text-info">{{0}}</span>
-                    <button type="button" name="button" style="margin-left:5px;" class="btn btn-xs btn-outline btn-info">Add</button>
-
+                    Number : <span class="text-info">{{task.comments.length}}</span>
                   </div>
                 </div>
-                <div class="portlet-body" style="padding:0;overflow: auto;">
-                  <div class="" style="height:35px;background-color:lightgrey;padding:0;margin:0">
+                <div class="portlet-body" style="padding:10px;">
+                  <div class="form-group" style="padding-bottom:10px;display:flex">
                     <div class="">
-                      <img alt="" ng-src="assets/images/avatars/{{currentUser._id}}.png" style="width:30px;height:30px" class="img-circle" err-src="assets/images/avatars/avatar.png" />&nbsp;
+                      <img uib-tooltip-html="'{{currentUser.name}}'" tooltip-placement="bottom" alt="" ng-src="assets/images/avatars/{{currentUser._id}}.png" style="width:30px;height:30px" class="img-circle" err-src="assets/images/avatars/avatar.png" />
                     </div>
-                    <div class="">
-
-                    </div>
+                    <div class="input-group" style="width:90%;padding-left:15px;">
+                      <input class="form-control " type="text" ng-model="comment.text"  placeholder="Write a comment, an info or a link" ng-enter="addComment()">
+                    <span class="input-group-btn">
+                      <button class="btn btn-outline btn-info" type="button"><span ng-click="addComment()">Comment</button>
+                    </span>
+                  </div>
+                  </div>
+                  <div class="">
+                    <ul class="" style="-webkit-padding-start: 0px!important;" >
+                      <li class="todoTask" ng-repeat="comment in task.comments | orderBy:'date':true track by $index" style="display:flex">
+                        <div class="" style="width:50px;display:flex">
+                          <div class="" ng-if="comment.date.toString().substring(1,10) !== task.comments[$index-1].date.toString().substring(1,10)">
+                            <img uib-tooltip-html="'{{comment.user.name}}'" tooltip-placement="bottom" alt="" ng-src="{{comment.user.avatar}}" style="width:25px;height:25px" ng-class="{'imageTransparent':comment.auto}" class="img-circle" err-src="assets/images/avatars/avatar.png" />
+                            <svg ng-if="!comment.auto" style="width:16px;color:#B9BCC0;fill:grey" class="svgIcon " viewBox="0 0 32 32" title=""><path d="M19,2c6.065,0,11,4.935,11,11s-4.935,11-11,11h-5.19L8,28.126v-5.282l-0.919-0.59C3.899,20.211,2,16.751,2,13C2,6.935,6.935,2,13,2H19 M19,0h-6C5.832,0,0,5.832,0,13c0,4.59,2.398,8.623,6,10.937V32l8.448-6H19c7.168,0,13-5.832,13-13S26.168,0,19,0L19,0z"></path></svg>
+                          </div>
+                        </div>
+                        <div style="width:120px" >
+                          <span class="dateComment" ng-if="comment.date.toString().substring(1,10) !== task.comments[$index-1].date.toString().substring(1,10)">{{comment.date | date:'MMM d, y HH:mm '}}</span>
+                        </div>
+                          <div class="">
+                          <span class="autoComment" ng-if="comment.auto === 2" style="color:rgba(91, 103, 133, 0.5)">{{comment.user.name}} </span>  <span ng-class="{'autoComment':comment.auto}" ng-bind-html="comment.text | embed:{sanitizeHtml:false,linkTarget:'_blank'}"></span>
+                          </div>
+                      </li>
+                    </ul>
                   </div>
                 </div>
                 </div>
-                </div>
+          </div>
           </div>
         </div>
       </div>
       <!--end col-md-9-->
       <!--start col-md-3-->
-      <div class="col-md-3">
+      <div class="col-md-3" ng-if="task._id">
         <!-- Alerts -->
-        <div class="" id="Alert">
-          <div class="portlet sale-summary" ng-if="task._id">
+        <div class="" id="Alert" style="margin-bottom:0!important" >
+          <div class="portlet sale-summary" ng-if="task._id" >
             <div class="portlet-title">
               <div class="caption">
                 Alerts
@@ -341,23 +368,20 @@
               <div class="tools">
               </div>
             </div>
-          </div>
-          <div class="stats-overview stat-block">
-            <div class="details">
-              <table class="table table-striped table-bordered table-hover">
+          <div class="portlet-body" style="padding:0!important">
+              <table class="table table-striped table-hover">
                 <tbody style="text-align:center;">
-                  <tr ng-repeat="KPI in task.alerts | orderBy:'constraint' track by $index" on-finish-render>
-                    <td>{{KPI.constraint}}</td>
-                    <td style="text-align:left;"><a href="/KPI/{{KPI._id}}">{{KPI.name}}</a></td>
+                  <tr ng-repeat="KPI in task.alerts | orderBy:'constraint' track by $index" on-finish-render uib-tooltip-html="'Contraint : {{KPI.constraint}}'" tooltip-placement="left">
+                    <td style="text-align:left;" ><a href="/KPI/{{KPI._id}}">{{KPI.name}}</a></td>
                     <td style="text-align:left;font-size:13px">
-                      <span ng-if="KPI.calcul.task !== undefined && KPI.calcul.task !== null" class="badge" ng-style="{'background-color':giveMeMyColor(KPI.calcul.task, KPI.category)}" style="height:25px;line-height:20px;width:25px;margin-right: 15px">&nbsp;&nbsp;</span>                      {{KPI.calcul.task}}
+                      <span ng-if="KPI.calcul.task !== undefined && KPI.calcul.task !== null" class="badge" ng-style="{'background-color':giveMeMyColor(KPI.calcul.task, KPI.category)}" style="height:15px;line-height:10px;width:15px;margin-right: 10px">&nbsp;&nbsp;</span>                      {{KPI.calcul.task}}
                       <span ng-if="KPI.category === 'Goal' && KPI.calcul.task !== undefined && KPI.calcul.task !== null"> %</span>
                     </td>
                   </tr>
                 </tbody>
               </table>
-            </div>
           </div>
+        </div>
         </div>
         <!-- KPIs -->
         <div class="" id="KPI">
@@ -369,16 +393,13 @@
               <div class="tools">
               </div>
             </div>
-          </div>
-          <div class="stats-overview stat-block">
-            <div class="details">
-              <table class="table table-striped table-bordered table-hover">
+          <div class="portlet-body" style="padding:0!important">
+              <table class="table table-striped table-hover">
                 <tbody style="text-align:center;">
-                  <tr ng-repeat="KPI in task.kpis | orderBy:'constraint' track by $index" on-finish-render>
-                    <td>{{KPI.constraint}}</td>
-                    <td style="text-align:left;"><a href="/KPI/{{KPI._id}}">{{KPI.name}}</a></td>
+                  <tr ng-repeat="KPI in task.kpis | orderBy:'constraint' track by $index" on-finish-render uib-tooltip-html="'Contraint : {{KPI.constraint}}'" tooltip-placement="left">
+                    <td style="text-align:left;" ><a href="/KPI/{{KPI._id}}">{{KPI.name}}</a></td>
                     <td style="text-align:left;font-size:13px">
-                      <span ng-if="KPI.calcul.task !== undefined && KPI.calcul.task !== null" class="badge" ng-style="{'background-color':giveMeMyColor(KPI.calcul.task, KPI.category)}" style="height:25px;line-height:20px;width:25px;margin-right: 15px">&nbsp;&nbsp;</span>                      {{KPI.calcul.task}}
+                      <span ng-if="KPI.calcul.task !== undefined && KPI.calcul.task !== null" class="badge" ng-style="{'background-color':giveMeMyColor(KPI.calcul.task, KPI.category)}" style="height:15px;line-height:10px;width:15px;margin-right: 10px">&nbsp;&nbsp;</span>                      {{KPI.calcul.task}}
                       <span ng-if="KPI.category === 'Goal' && KPI.calcul.task !== undefined && KPI.calcul.task !== null"> %</span>
                     </td>
                   </tr>
@@ -398,14 +419,14 @@
               <span class="text-info">{{task.actors.length + task.watchers.length}}</span>
             </div>
           </div>
-          <div class="portlet-body">
-            <ul class="list-unstyled">
-              <li style="margin-top:10px;margin-bottom:10px;">
-                <div class="pull-left" style="color:#898E95;width:65px;margin-top:10px">Actors</div>
+          <div class="portlet-body" style="padding-bottom:0!important">
+            <ul class="list-unstyled" style="margin-bottom:0!important">
+              <li>
+                <div class="pull-left" style="color:#898E95;width:65px;">Actors</div>
                 <div class="pull-left" ng-repeat="actor in task.actors">
-                  <img alt="" ng-src="assets/images/avatars/{{actor._id}}.png" style="width:30px;height:30px;" class="img-circle" err-src="assets/images/avatars/avatar.png" />&nbsp;
+                  <img uib-tooltip-html="'{{actor.name}}'" tooltip-placement="bottom" alt="" ng-src="{{actor.avatar}}" style="width:30px;height:30px;" class="img-circle" err-src="assets/images/avatars/avatar.png" />&nbsp;
                 </div>
-                <div class="circularButtonView add-button detailsFollowersView-addButton circularButtonView--small circularButtonView--onWhiteBackground circularButtonView--active">
+                <div uib-tooltip-html="'Add an actor to this task not yet involved.'" tooltip-placement="bottom" class="circularButtonView add-button detailsFollowersView-addButton circularButtonView--small circularButtonView--onWhiteBackground circularButtonView--active">
                   <span class="circularButtonView-label">
                                           <svg class="svgIcon add-followers-icon" viewBox="0 0 32 32" title="plus">
                                             <polygon points="28,14 18,14 18,4 14,4 14,14 4,14 4,18 14,18 14,28 18,28 18,18 28,18"></polygon>
@@ -413,12 +434,12 @@
                                         </span>
                 </div>
               </li>
-              <li style="margin-top:10px">
-                <div class="pull-left" style="color:#898E95;width:65px;margin-top:18px">Followers</div>
-                <div class="pull-left" ng-repeat="actor in task.watchers" style="margin-top:10px">
-                  <img alt="" ng-src="assets/images/avatars/{{actor._id}}.png" style="width:30px;height:30px" class="img-circle" err-src="assets/images/avatars/avatar.png" />&nbsp;
+              <li>
+                <div class="pull-left" style="color:#898E95;width:65px;">Followers</div>
+                <div class="pull-left" ng-repeat="actor in task.watchers">
+                  <img uib-tooltip-html="'{{actor.name}}'" tooltip-placement="bottom"  alt="" ng-src="assets/images/avatars/{{actor._id}}.png" style="width:30px;height:30px" class="img-circle" err-src="assets/images/avatars/avatar.png" />&nbsp;
                 </div>
-                <div style="margin-top:10px" class="circularButtonView add-button detailsFollowersView-addButton circularButtonView--small circularButtonView--onWhiteBackground circularButtonView--active">
+                <div uib-tooltip-html="'Add a follower to this task.<br />Followers don\'t have actions in tasks '" tooltip-placement="bottom"  class="circularButtonView add-button detailsFollowersView-addButton circularButtonView--small circularButtonView--onWhiteBackground circularButtonView--active">
                   <span class="circularButtonView-label">
                                         <svg class="svgIcon add-followers-icon" viewBox="0 0 32 32" title="plus">
                                           <polygon points="28,14 18,14 18,4 14,4 14,14 4,14 4,18 14,18 14,28 18,28 18,18 28,18"></polygon>
@@ -441,12 +462,14 @@
                 Dashboards
               </div>
               <div class="tools">
-                <span class="text-info">{{0}}</span>
+                <div class="pull-right" ng-init="DashboardIsExpanded=false" ng-click="DashboardIsExpanded=!DashboardIsExpanded">
+                  <svg class="svgIcon " style="width:16px;color:#B9BCC0;fill:grey" ng-show="!DashboardIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                  <svg class="svgIcon " style="width:16px;color:#B9BCC0;fill:grey" ng-show="DashboardIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                </div>
+                <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{task.dashboards.length}}</span></span>
               </div>
             </div>
-          </div>
-          <div class="stats-overview stat-block">
-            <div class="details">
+          <div class="portlet-body" style="padding:0!important" ng-show="DashboardIsExpanded">
               <div tab-dashboard data="task" ng-if="task"></div>
             </div>
           </div>
@@ -455,6 +478,11 @@
       <!--end col-md-3-->
     </div>
     <!--end row-->
+  </div>
+  <div style="padding-top:25px">
+    <span>Debug</span>
+    <br>
+    <pre>{{task | json}}</pre>
   </div>
   <!-- END PAGE CONTENT-->
 </div>
