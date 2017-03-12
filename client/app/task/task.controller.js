@@ -50,6 +50,7 @@ angular.module('boardOsApp')
     $scope.currentShow = 0;
     $scope.filterToDo = '';
     $scope.filterComments = '';
+
     $scope.filterCommentType = {
       auto: true,
       manual: true
