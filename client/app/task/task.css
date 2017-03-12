@@ -479,3 +479,11 @@
 .imageTransparent {
   opacity: 0.5;
 }
+
+.myfilter {
+  border: 1px lightgrey solid;
+  border-radius: 5px;
+  margin-top: -10px;
+  margin-right: 25px;
+  padding: 5px;
+}

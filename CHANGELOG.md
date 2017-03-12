@@ -1,5 +1,28 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.20...HEAD)
+
+**Implemented enhancements:**
+
+- Tab responsive [\#25](https://github.com/wilsto/BoardOS/issues/25)
+- Ajouter Information Action sur les KPI [\#6](https://github.com/wilsto/BoardOS/issues/6)
+
+**Closed issues:**
+
+- Ajouter filtres à todo et comments [\#169](https://github.com/wilsto/BoardOS/issues/169)
+- Dynamique de calcul intra task [\#168](https://github.com/wilsto/BoardOS/issues/168)
+- followers id incorrect [\#167](https://github.com/wilsto/BoardOS/issues/167)
+- Navbar avec les titres de boutons explicites [\#155](https://github.com/wilsto/BoardOS/issues/155)
+- Plus de mail le WE [\#154](https://github.com/wilsto/BoardOS/issues/154)
+- Late incorrect [\#153](https://github.com/wilsto/BoardOS/issues/153)
+- Ajout Interface RangeDate [\#151](https://github.com/wilsto/BoardOS/issues/151)
+- Aide sur les champs [\#147](https://github.com/wilsto/BoardOS/issues/147)
+
+## [v1.6.20](https://github.com/wilsto/boardos/tree/v1.6.20) (2017-01-02)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.19...v1.6.20)
+
 ## [v1.6.19](https://github.com/wilsto/boardos/tree/v1.6.19) (2016-12-19)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.18...v1.6.19)
 

@@ -64,9 +64,10 @@ function createAllFullTask() {
   TaskFull.remove({}, function(err, numberRemoved) {
     Task.find({}, '-__v').lean().exec(function(err, tasks) {
       _.each(tasks, function(task, index) { // pour chaque tache
-        createFullTask(task._id, false, function(data) {});
+        createFullTask(task._id, false, function(data) {
+          console.log('fulltask', data._id);
+        });
       });
-
     });
   });
 }
@@ -75,9 +76,9 @@ var j = schedule.scheduleJob({
   hour: 0,
   minute: 30
 }, function() {
-
   createAllFullTask()
 });
+
 
 process.on('metricChanged', function(taskId, refreshDashboard) {
   refreshDashboard = (refreshDashboard === undefined) ? true : refreshDashboard;
@@ -89,11 +90,12 @@ process.on('taskRemoved', function(task) {
     _id: task._id
   }, function(err, numberRemoved) {});
 });
+
 TaskFull.remove({
-  _id: '5888afd7623165040023c9d1'
+  _id: '584ec0dee2a26f04006d023e'
 }, function(err, numberRemoved) {
-  createFullTask('5888afd7623165040023c9d1', false, function() {
-    console.log('*******************end fulltask 5888afd7623165040023c9d1');
+  createFullTask('584ec0dee2a26f04006d023e', false, function() {
+    console.log('*******************end fulltask 584ec0dee2a26f04006d023e');
   });
 });
 
@@ -381,6 +383,11 @@ function createFullTask(taskId, refreshDashboard, callback) {
     })
 
     .then(function(task) {
+
+      task.comments = _.sortBy(task.comments, function(comment) {
+        return -comment.date;
+      });
+
       task.actors = task.actors.reduce(function(a, b) {
         if (a.indexOf(b) < 0) a.push(b);
         return a;
@@ -442,7 +449,6 @@ function createFullTask(taskId, refreshDashboard, callback) {
         // si non existant
         if (!taskFull) {
           TaskFull.create(task, function(err, CreatedtaskFull) {
-            console.log('err', err);
             if (refreshDashboard) {
               process.emit('taskChanged', task);
             }
@@ -451,20 +457,20 @@ function createFullTask(taskId, refreshDashboard, callback) {
           });
         } else {
           //si existant
+          var updated = _.merge(taskFull, task);
           taskFull.actors = task.actors;
           taskFull.followers = task.followers;
           taskFull.metrics = task.metrics;
           taskFull.comments = task.comments;
-          console.log(' task.comments', task.comments);
-          console.log('taskFull.comments ', taskFull.comments);
+          taskFull.todos = task.todos;
           taskFull.kpis = task.kpis;
           taskFull.alerts = task.alerts;
           taskFull.dashboards = task.dashboards;
-          var updated = _.merge(taskFull, task);
           updated.markModified('actors');
           updated.markModified('followers');
           updated.markModified('metrics');
           updated.markModified('comments');
+          updated.markModified('todos');
           updated.markModified('kpis');
           updated.markModified('alerts');
           updated.markModified('dashboards');
@@ -528,8 +534,10 @@ exports.index = function(req, res) {
 exports.show = function(req, res) {
   TaskFull.findById(req.params.id)
     .populate('actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
+    .populate('followers', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
     .populate('comments.user', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
     .lean().exec(function(err, taskFull) {
+      console.log('taskFullShow', taskFull);
       if (err) {
         return handleError(res, err);
       }
@@ -539,12 +547,17 @@ exports.show = function(req, res) {
       _.each(taskFull.actors, function(actor) {
         actor.avatar = (actor.avatar) ? actor.avatar : 'assets/images/avatars/' + actor._id + '.png';
       });
+      console.log('taskFullShow1');
+      console.log('followers', taskFull.followers);
       _.each(taskFull.followers, function(follower) {
+        console.log('follower', follower);
         follower.avatar = (follower.avatar) ? follower.avatar : 'assets/images/avatars/' + follower._id + '.png';
       });
+      console.log('taskFullShow2');
       _.each(taskFull.comments, function(comment) {
         comment.user.avatar = (comment.user.avatar) ? comment.user.avatar : 'assets/images/avatars/' + comment.user._id + '.png';
       });
+      console.log('taskFullShow3');
       return res.json(taskFull);
     });
 };
@@ -561,8 +574,9 @@ exports.create = function(req, res) {
 
 // Updates an existing taskFull in the DB.
 exports.update = function(req, res) {
-  if (req.body._id) {
-    delete req.body._id;
+  var task = req.body;
+  if (task._id) {
+    delete task._id;
   }
   TaskFull.findById(req.params.id, function(err, taskFull) {
     if (err) {
@@ -571,7 +585,43 @@ exports.update = function(req, res) {
     if (!taskFull) {
       return res.status(404).send('Not Found');
     }
-    var updated = _.merge(taskFull, req.body);
+
+    var actors = [];
+    _.each(task.actors, function(actor) {
+      actors.push(actor._id);
+    });
+    task.actors = actors;
+
+    var followers = [];
+    _.each(task.followers, function(follower) {
+      followers.push(follower._id);
+    });
+    console.log('task.followers', task.followers);
+    console.log('followers', followers);
+    task.followers = followers;
+
+    _.each(task.comments, function(comment) {
+      comment.user = comment.user._id;
+    });
+    console.log('task', task);
+
+    var updated = _.merge(taskFull, task);
+    taskFull.actors = task.actors;
+    taskFull.followers = task.followers;
+    taskFull.metrics = task.metrics;
+    taskFull.comments = task.comments;
+    taskFull.todos = task.todos;
+    taskFull.kpis = task.kpis;
+    taskFull.alerts = task.alerts;
+    taskFull.dashboards = task.dashboards;
+    updated.markModified('actors');
+    updated.markModified('followers');
+    updated.markModified('metrics');
+    updated.markModified('comments');
+    updated.markModified('todos');
+    updated.markModified('kpis');
+    updated.markModified('alerts');
+    updated.markModified('dashboards');
     updated.save(function(err) {
       if (err) {
         return handleError(res, err);

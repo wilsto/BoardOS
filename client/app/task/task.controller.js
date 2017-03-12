@@ -5,6 +5,9 @@ angular.module('boardOsApp')
   .controller('TaskCtrl', function($rootScope, $scope, $http, $stateParams, $location, Auth, Notification, myLibrary, $filter, $timeout) {
 
     var initializing = true;
+    Auth.getCurrentUser(function(data) {
+      $scope.currentUser = Auth.getCurrentUser();
+    });
 
     // si cela n'existe pas
     $scope.task = {};
@@ -22,20 +25,7 @@ angular.module('boardOsApp')
       status: 'Not Started'
     });
     $scope.task.todos = [];
-    $scope.task.todos.push({
-      text: 'Appeler Paul pour récupérer liste users',
-      isDone: true
-    });
-    $scope.task.todos.push({
-      text: 'Organiser l\'atelier avec les users',
-      isDone: false
-    });
-    $scope.task.todos.push({
-      text: 'Ecrire le compte rendu de l\'atelier',
-      isDone: false
-    });
     $scope.task.actors = [$scope.currentUser._id];
-    console.log('$scope.task', $scope.task);
     $scope.errors = {};
     $scope.taskAlreadyExist = {
       id: null,
@@ -58,6 +48,15 @@ angular.module('boardOsApp')
     //***************
     $scope.show = 'All';
     $scope.currentShow = 0;
+    $scope.filterToDo = '';
+    $scope.filterComments = '';
+    $scope.filterCommentType = {
+      auto: true,
+      manual: true
+    };
+    $scope.filterByAutoManual = function(comment) {
+      return ($scope.filterCommentType.auto === true && comment.auto === true) || ($scope.filterCommentType.manual === true && comment.auto === false);
+    };
     $scope.newTodo = {
       text: ''
     }; // ng-model need object to sync
@@ -72,6 +71,26 @@ angular.module('boardOsApp')
     $scope.changeStatusTodo = function(index) {
       $scope.task.todos[index].isDone = !$scope.task.todos[index].isDone;
     };
+
+
+    $scope.$watch('task.metrics', function(newVal, oldVal) {
+      if (!initializing) {
+        _.each(newVal, function(metric) {
+
+          // reestimated workload
+          metric.projectedWorkload = metric.progress * metric.timeSpent / 100;
+
+          // status
+          if (metric.progress >= 100) {
+            metric.status = 'Finished';
+          } else if (metric.progress < 100 && metric.progress > 0) {
+            metric.status = 'In Progress';
+          } else {
+            metric.status = 'Not Started';
+          }
+        });
+      }
+    }, true);
 
     /* Filter Function for All | Incomplete | Complete */
     $scope.showFn = function(todo) {
@@ -95,10 +114,12 @@ angular.module('boardOsApp')
         text: $scope.comment.text,
         auto: false,
         date: maintenant,
-        user: $scope.currentUser._id
+        user: {
+          _id: $scope.currentUser._id
+        }
       });
       $scope.comment.text = ''; //Reset the text field.
-      $scope.updateSecondary();
+      $scope.update();
     };
 
 
@@ -181,44 +202,41 @@ angular.module('boardOsApp')
       });
     };
 
+    // *******************
+    // create a new task
+    // *******************
+    $scope.update = function() {
+      $http.put('/api/taskFulls/' + $scope.task._id, $scope.task).success(function(data) {
+        var logInfo = 'Task "' + $scope.task.name + '" was updated';
+        $timeout(function() {
+          initializing = true;
+          $scope.loadTask();
+        }, 500);
+        Notification.success(logInfo);
+      });
+    };
+
     $scope.$watch('task', function(newMap, previousMap) {
-      console.log('initializing', initializing);
       if (initializing) {
-        console.log('CONDITION PASSED');
         $timeout(function() {
           initializing = true;
         });
       } else {
         if (newMap !== previousMap) {
-
           var newObject = newMap;
           var previousObject = previousMap;
           for (var property in newObject) {
-            // console.log('property', property);
-            // console.log('typeof', typeof newObject[property]);
             // pour les non objects
             if (typeof newObject[property] !== 'object' && property !== '_id' && property !== '__v' && property !== 'date' && !angular.equals(newObject[property], previousObject[property])) {
-              // console.log('newObject[property]', newObject[property]);
-              // console.log('previousObject[property]', previousObject[property]);
               $scope.autoComment('set ' + property + ' to ' + newObject[property]);
             }
             // pour les objects
             if (typeof newObject[property] === 'object' && property !== 'comments' && !angular.equals(newObject[property], previousObject[property])) {
               angular.forEach(newObject[property], function(value, key) {
-                // console.log('key', key);
-                // console.log('value', value);
                 var previousValue = previousObject[property][key];
-                // console.log('previousValue', previousValue);
                 for (var subproperty in value) {
                   if (subproperty !== '$$hashKey' && subproperty !== '_id' && (!previousValue || !angular.equals(value[subproperty], previousValue[subproperty]))) {
-                    console.log('subproperty', subproperty);
-                    // if (previousValue) {
-                    //   console.log('previousValue[subproperty]', previousValue[subproperty]);
-                    // }
-                    // console.log('value[subproperty]', value[subproperty]);
-                    console.log('subproperty.toLowerCase().indexOf(\'date\') > -1', subproperty.toLowerCase().indexOf('date') > -1);
                     if (subproperty.toLowerCase().indexOf('date') > -1) {
-                      console.log('CONDITION PASSED');
                       $scope.autoComment('set ' + subproperty + ' to ' + $filter('date')(value[subproperty], 'mediumDate') + '              [' + property + ':' + key.toString() + ']');
                     } else {
                       $scope.autoComment('set ' + subproperty + ' to ' + value[subproperty] + '              [' + property + ':' + key.toString() + ']');
@@ -239,8 +257,11 @@ angular.module('boardOsApp')
         text: text,
         auto: true,
         date: maintenant,
-        user: $scope.currentUser._id
+        user: {
+          _id: $scope.currentUser._id
+        }
       });
+      $scope.update();
     };
 
     $scope.save = function(form) {
@@ -278,8 +299,6 @@ angular.module('boardOsApp')
         });
       } else {
         // tache déjà existante en cours de modification
-        $scope.task.activity_old = $scope.task.activity_old;
-        $scope.task.context_old = $scope.task.context_old;
         $http.put('/api/tasks/' + $scope.task._id, $scope.task).success(function(data) {
           var logInfo = 'Task "' + $scope.task.name + '" was updated';
           $http.post('/api/logs', {
@@ -291,6 +310,8 @@ angular.module('boardOsApp')
         });
       }
     };
+
+
     $scope.delete = function() {
       bootbox.confirm('Are you sure to delete this task and all associated metrics ? It can NOT be undone.', function(result) {
         if (result) {
