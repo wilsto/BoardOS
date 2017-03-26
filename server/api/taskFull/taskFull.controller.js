@@ -78,7 +78,7 @@ var j = schedule.scheduleJob({
 }, function() {
   createAllFullTask()
 });
-
+createAllFullTask();
 
 process.on('metricChanged', function(taskId, refreshDashboard) {
   refreshDashboard = (refreshDashboard === undefined) ? true : refreshDashboard;
@@ -524,6 +524,20 @@ exports.index = function(req, res) {
     if (err) {
 
 
+      return handleError(res, err);
+    }
+    return res.status(200).json(taskFulls);
+  });
+};
+
+// Get list of hierarchies of taskFulls
+exports.listHierarchies = function(req, res) {
+  TaskFull.find({}, {
+    _id: true,
+    context: true,
+    activity: true
+  }, function(err, taskFulls) {
+    if (err) {
       return handleError(res, err);
     }
     return res.status(200).json(taskFulls);

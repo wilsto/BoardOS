@@ -1,5 +1,13 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.23...HEAD)
+
+**Closed issues:**
+
+- Repair Global Change \(!!crash app!!\) [\#172](https://github.com/wilsto/BoardOS/issues/172)
+
 ## [v1.6.23](https://github.com/wilsto/boardos/tree/v1.6.23) (2017-03-12)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.22...v1.6.23)
 
