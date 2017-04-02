@@ -487,3 +487,40 @@
   margin-right: 25px;
   padding: 5px;
 }
+
+.pdcaCol {
+  width: 100%;
+  text-align: center;
+  line-height: 25px;
+  font-weight: bold;
+  height: 25px;
+  border-bottom: 1px solid lightgrey;
+  margin-bottom: 10px;
+}
+
+.notMandatoryField {
+  color: grey!important;
+}
+
+.editable-wrap {
+  display: inline-block;
+  white-space: nowrap;
+  margin: 0;
+  width: 100%; //
+}
+
+.editable-wrap .editable-controls, .editable-wrap .editable-error {
+  margin-bottom: 0;
+  width: 100%;
+}
+
+.editable-wrap .editable-controls>select {
+  margin-bottom: 0;
+}
+
+.editable-wrap .editable-controls>input, .editable-wrap .editable-controls>textarea {
+  margin-bottom: 0;
+  width: -moz-calc(100% - 76px);
+  width: -webkit-calc(100% - 76px);
+  width: calc(100% - 76px);
+}

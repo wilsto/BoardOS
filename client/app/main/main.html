@@ -230,13 +230,13 @@
                 <div class="col1">
                   <div class="cont">
                     <div class="cont-col1">
-                      <div class="label label-sm label-danger" ng-show="task.lastmetric.progressStatus ==='Late' || task.lastmetric.projectedWorkload > task.load ">
+                      <div class="label label-sm label-danger" ng-show="task.metrics[task.metrics.length - 1].progressStatus ==='Late' || task.metrics[task.metrics.length - 1].projectedWorkload > task.metrics[task.metrics.length - 1].targetLoad ">
                         <i class="fa fa-bell"></i>
                       </div>
-                      <div class="label label-sm label-warning" ng-show="(task.needToFeed && task.lastmetric.progressStatus !=='Late' && task.lastmetric.projectedWorkload <= task.load ) || task.lastmetric.progressStatus ==='At Risk' ">
+                      <div class="label label-sm label-warning" ng-show="(task.needToFeed && task.metrics[task.metrics.length - 1].progressStatus !=='Late' && task.metrics[task.metrics.length - 1].projectedWorkload <= task.metrics[task.metrics.length - 1].targetLoad ) || task.metrics[task.metrics.length - 1].progressStatus ==='At Risk' ">
                         <i class="fa fa-clock-o"></i>
                       </div>
-                      <div class="label label-sm label-success" ng-show="(!task.needToFeed && task.lastmetric.progressStatus !=='Late' && task.lastmetric.progressStatus !=='At Risk' && task.lastmetric.projectedWorkload <= task.load)">
+                      <div class="label label-sm label-success" ng-show="(!task.needToFeed && task.metrics[task.metrics.length - 1].progressStatus !=='Late' && task.metrics[task.metrics.length - 1].progressStatus !=='At Risk' && task.metrics[task.metrics.length - 1].projectedWorkload <= task.metrics[task.metrics.length - 1].targetLoad)">
                         <i class="fa fa-clock-o"></i>
                       </div>
                     </div>
@@ -246,22 +246,22 @@
                         <br>
                         <span style="color:grey">
                           <i class="fa fa-crosshairs"></i>
-                          {{task.startDate | date:'dd/MM/yyyy'}}
+                          {{task.metrics[task.metrics.length - 1].targetstartDate | date:'dd/MM/yyyy'}}
                           --[
-                          {{task.load}}
-                          <span class="text-danger label-lightdanger" ng-if="task.lastmetric.projectedWorkload - task.load > 0">+
-                            {{Math.round((task.lastmetric.projectedWorkload - task.load)*10)/10}}</span>
-                          <span class="label-lightwarning" ng-if="task.lastmetric.projectedWorkload - task.load < 0">-
-                            {{Math.round((task.lastmetric.projectedWorkload - task.load)*10*-1)/10}}</span>
+                          {{task.metrics[task.metrics.length - 1].targetLoad}}
+                          <span class="text-danger label-lightdanger" ng-if="task.metrics[task.metrics.length - 1].projectedWorkload - task.metrics[task.metrics.length - 1].targetLoad > 0">+
+                            {{Math.round((task.metrics[task.metrics.length - 1].projectedWorkload - task.metrics[task.metrics.length - 1].targetLoad)*10)/10}}</span>
+                          <span class="label-lightwarning" ng-if="task.metrics[task.metrics.length - 1].projectedWorkload - task.metrics[task.metrics.length - 1].targetLoad < 0">-
+                            {{Math.round((task.metrics[task.metrics.length - 1].projectedWorkload - task.metrics[task.metrics.length - 1].targetLoad)*10*-1)/10}}</span>
                           ]-->
-                          {{task.endDate | date:'dd/MM/yyyy'}}
+                          {{task.metrics[task.metrics.length - 1].targetEndDate | date:'dd/MM/yyyy'}}
                         </span>
-                        <span class="label label-sm label-lightdanger" ng-if="task.lastmetric.progressStatus =='Late' || task.lastmetric.progressStatus =='At Risk'">
+                        <span class="label label-sm label-lightdanger" ng-if="task.metrics[task.metrics.length - 1].progressStatus =='Late' || task.metrics[task.metrics.length - 1].progressStatus =='At Risk'">
                           <span class="text-danger">
-                            {{task.lastmetric.progressStatus || 'No metrics'}}
-                            <span ng-if="task.lastmetric.endDate !== task.endDate">
+                            {{task.metrics[task.metrics.length - 1].progressStatus || 'No metrics'}}
+                            <span ng-if="task.metrics[task.metrics.length - 1].endDate !== task.metrics[task.metrics.length - 1].targetEndDate">
                               -->
-                              {{task.lastmetric.endDate | date:'dd/MM/yyyy'}}
+                              {{task.metrics[task.metrics.length - 1].endDate | date:'dd/MM/yyyy'}}
                             </span>
                           </span>
                         </span>
@@ -271,7 +271,7 @@
                 </div>
                 <div class="col2">
                   <div class="date">
-                    <span style="color:orange" ng-show=" task.lastmetric === undefined">
+                    <span style="color:orange" ng-show=" task.metrics[task.metrics.length - 1] === undefined">
                       No metrics
                     </span>
                     <span class="label label-sm label-warning " ng-show="task.needToFeed">

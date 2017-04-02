@@ -78,8 +78,7 @@ var j = schedule.scheduleJob({
 }, function() {
   createAllFullTask()
 });
-createAllFullTask();
-
+//createAllFullTask();
 process.on('metricChanged', function(taskId, refreshDashboard) {
   refreshDashboard = (refreshDashboard === undefined) ? true : refreshDashboard;
   createFullTask(taskId, refreshDashboard, function(data) {});
@@ -505,27 +504,20 @@ exports.executeId = function(req, res) {
 // Get list of taskFulls
 exports.index = function(req, res) {
   var filterUser = (req.query.userId) ? {
-    "actors._id": req.query.userId
+    "actors": {
+      "$in": [req.query.userId]
+    }
   } : {};
 
   TaskFull.find(filterUser, {
-    __v: false,
-    metrics: false,
-    alerts: false,
-    kpis: false,
-    "actor.last_connection_date": false,
-    "actor.create_date": false,
-    "actor.provider": false,
-    "actor.email": false,
-    "actor.role": false,
-    "actor.active": false,
-    "actor.location": false
+    __v: false
   }, function(err, taskFulls) {
     if (err) {
 
 
       return handleError(res, err);
     }
+    //console.log('taskFulls', taskFulls);
     return res.status(200).json(taskFulls);
   });
 };
@@ -551,7 +543,6 @@ exports.show = function(req, res) {
     .populate('followers', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
     .populate('comments.user', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
     .lean().exec(function(err, taskFull) {
-      console.log('taskFullShow', taskFull);
       if (err) {
         return handleError(res, err);
       }
@@ -561,23 +552,20 @@ exports.show = function(req, res) {
       _.each(taskFull.actors, function(actor) {
         actor.avatar = (actor.avatar) ? actor.avatar : 'assets/images/avatars/' + actor._id + '.png';
       });
-      console.log('taskFullShow1');
-      console.log('followers', taskFull.followers);
       _.each(taskFull.followers, function(follower) {
         console.log('follower', follower);
         follower.avatar = (follower.avatar) ? follower.avatar : 'assets/images/avatars/' + follower._id + '.png';
       });
-      console.log('taskFullShow2');
       _.each(taskFull.comments, function(comment) {
         comment.user.avatar = (comment.user.avatar) ? comment.user.avatar : 'assets/images/avatars/' + comment.user._id + '.png';
       });
-      console.log('taskFullShow3');
       return res.json(taskFull);
     });
 };
 
 // Creates a new taskFull in the DB.
 exports.create = function(req, res) {
+  console.log('req.body', req.body);
   TaskFull.create(req.body, function(err, taskFull) {
     if (err) {
       return handleError(res, err);

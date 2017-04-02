@@ -15,7 +15,7 @@ var DashboardCompleteSchema = new Schema({
   alertsValue: Number,
   tasks: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'TaskComplete'
+    ref: 'TaskFull'
   }],
   tasksNb: Number,
   openTasksNb: Number,

@@ -1,0 +1,241 @@
+.bosskb-cell {
+  vertical-align: top;
+}
+
+.bosskb-cell.bosskb-row-header.bosskb-toggle-button-area {
+  width: 1px;
+  margin-right: 0;
+  padding-right: 0;
+}
+
+.bosskb-group-collapsed .bosskb-cell.bosskb-row-header.bosskb-toggle-button-area {
+  padding-left: 3px;
+  padding-right: 1px;
+}
+
+.bosskb-header {
+  margin: 4px;
+  padding: 0 4px;
+}
+
+.bosskb-state-header {
+  padding: 2px 8px;
+  font-size: smaller;
+  vertical-align: bottom;
+}
+
+.bosskb-group-container {
+  margin: 4px;
+  padding: 0;
+}
+
+.bosskb-group {
+  margin: 0;
+  border: solid 1px #c0c0c0;
+  padding: 0;
+  margin-top: 8px;
+  margin-left: 2px;
+}
+
+.bosskb-items-container {
+  margin: 4px;
+}
+
+.bosskb-item-container {
+  margin: 2px;
+}
+
+.bosskb-item {
+  margin: 0;
+  border: solid 1px #c0c0c0;
+  padding: 0;
+}
+
+.bosskb-content-box {
+  overflow: hidden;
+}
+
+.bosskb-group-collapsed {
+  background-color: #f0f0f0;
+}
+
+.bosskb-group-collapsed .bosskb-group {
+  margin-right: 6px;
+}
+
+.bosskb-group-collapsed .bosskb-toggle-button-area {
+  border-top: 4px solid white;
+}
+
+.bosskb-toggle-button {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  vertical-align: top;
+}
+
+.bosskb-group-collapsed .bosskb-toggle-button {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  vertical-align: top;
+}
+
+.bosskb-cell.bosskb-items-container {
+  background-color: #f0f0f0;
+  padding: 4px;
+  border-left: 4px solid white;
+  border-top: 4px solid white;
+}
+
+.bosskb-group-collapsed .bosskb-cell.bosskb-group-container {
+  border-top: 4px solid white;
+}
+
+.bosskb-group-collapsed .bosskb-group {
+  margin-top: 6.5px;
+}
+
+.bosskb-toggle-button-expanded {
+  stroke: #808080;
+  fill: #808080;
+  cursor: pointer;
+}
+
+.bosskb-toggle-button-collapsed {
+  stroke: #808080;
+  fill: white;
+  cursor: pointer;
+}
+
+.bosskb-gripper {
+  width: 12px;
+  cursor: move;
+}
+
+.bosskb-item-content {
+  width: 100%;
+  padding: 3px 2px;
+}
+
+.bosskb-group-content {
+  width: 100%;
+  padding: 3px 2px;
+}
+
+.bosskb-editors-area {
+  position: relative;
+  top: -45.5px;
+  left: 10px;
+  margin-right: 15px;
+}
+
+.bosskb-group-editors-area {
+  top: -66px;
+  left: 12px;
+  margin-right: 17px;
+}
+
+.bosskb-group-collapsed .bosskb-group-editors-area {
+  top: -24px;
+  margin-right: 23px;
+}
+
+.bosskb-item-commands-container {
+  float: right;
+  margin-left: 1px;
+  margin-right: -2px;
+  margin-top: -1px;
+  font-size: smaller;
+}
+
+.bosskb-group-container .bosskb-item-commands-container {
+  margin-top: -0.5px;
+}
+
+.bosskb-property {
+  height: 20px;
+  font-size: smaller;
+  overflow: hidden;
+}
+
+.bosskb-property-secondary {
+  color: gray;
+}
+
+.bosskb-property-editor {
+  margin-left: 1px;
+}
+
+.bosskb-property-label {
+  float: left;
+  margin-bottom: 1px;
+  margin-left: 2px;
+  margin-right: 2px;
+  color: gray;
+}
+
+.bosskb-property-image {
+  float: left;
+  margin: 1px;
+  height: 18px;
+}
+
+.bosskb-property-table {
+  width: 100%;
+}
+
+.bosskb-commands-container {
+  margin: 2px;
+}
+
+.bosskb-button {
+  font-size: smaller;
+  border: 1px solid #c0c0c0;
+  background-color: #f8f8f8;
+  padding: 2px 4px;
+  margin-right: 1.5px;
+}
+
+.bosskb-button:hover {
+  border-color: #84cbff;
+}
+
+.bosskb-button.bosskb-new-item-command {
+  padding: 2px 6px;
+}
+
+.bosskb-no-items-label {
+  padding: 6px;
+}
+
+.bosskb input, .bosskb select {
+  border-style: none;
+  background-color: transparent;
+  width: 100%;
+}
+
+.bosskb input {
+  padding-left: 3px;
+  padding-right: 2px;
+}
+
+.bosskb input.bosskb-select-replacement {
+  margin-left: 1px;
+}
+
+.bosskb table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.bosskb a {
+  text-decoration: none;
+  color: initial;
+}
+
+.bosskb a:visited {
+  color: initial;
+}
+
+.bosskb * {
+  box-sizing: border-box;
+}

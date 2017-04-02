@@ -79,7 +79,7 @@ var j = schedule.scheduleJob({
 
   createAllCompleteTask()
 });
-
+//createAllCompleteTask();
 process.on('metricChanged', function(taskId, refreshDashboard) {
   refreshDashboard = (refreshDashboard === undefined) ? true : refreshDashboard;
   createCompleteTask(taskId, refreshDashboard, function(data) {});
@@ -108,304 +108,304 @@ function createCompleteTask(taskId, refreshDashboard, callback) {
       return deferred.promise;
     })
 
-  // Get a single task
-  .then(function() {
-    var deferred = Q.defer();
-    if (typeof taskId === 'undefined') {
+    // Get a single task
+    .then(function() {
+      var deferred = Q.defer();
+      if (typeof taskId === 'undefined') {
 
-    } else {
+      } else {
 
-      Task.findById(taskId, {
-        __v: false
-      }).lean().exec(function(err, task) {
-        delete task.actor.provider;
-        delete task.actor.last_connection_date;
-        delete task.actor.active;
-        delete task.actor.location;
-        delete task.actor.create_date;
-        delete task.actor.email;
-        delete task.actor.role;
-        task.watchersId = task.watchers;
-        task.actors = [];
-        task.watchers = [];
-        // ajout du owner
-        task.actors.push({
-          name: task.actor.name,
-          __v: 0,
-          _id: task.actor._id
-        });
-        _.each(task.watchersId, function(watcher) {
-          var name = _.pluck(_.filter(usersList, function(user) {
+        Task.findById(taskId, {
+          __v: false
+        }).lean().exec(function(err, task) {
+          delete task.actor.provider;
+          delete task.actor.last_connection_date;
+          delete task.actor.active;
+          delete task.actor.location;
+          delete task.actor.create_date;
+          delete task.actor.email;
+          delete task.actor.role;
+          task.watchersId = task.watchers;
+          task.actors = [];
+          task.watchers = [];
+          // ajout du owner
+          task.actors.push({
+            name: task.actor.name,
+            __v: 0,
+            _id: task.actor._id
+          });
+          _.each(task.watchersId, function(watcher) {
+            var name = _.pluck(_.filter(usersList, function(user) {
               return (watcher === user._id.toString())
             }), 'name').toString()
             // ajout des metrics
-          task.actors.push({
-            name: name,
-            __v: 0,
-            _id: watcher
+            task.actors.push({
+              name: name,
+              __v: 0,
+              _id: watcher
+            });
+            // ajout des watchers
+            task.watchers.push({
+              name: name,
+              __v: 0,
+              _id: watcher
+            });
           });
-          // ajout des watchers
-          task.watchers.push({
-            name: name,
-            __v: 0,
-            _id: watcher
-          });
+          deferred.resolve(task);
+        })
+      }
+      return deferred.promise;
+    })
+
+    // Start dashboards
+    .then(function(task) {
+      // Get a single user
+      var deferred = Q.defer();
+      Dashboard.find({}, '-__v', function(err, dashboards) {
+        task.dashboards = [];
+        _.each(dashboards, function(dashboard, index) {
+          if ((dashboard.context === undefined || task.context.indexOf(dashboard.context) >= 0) && (dashboard.activity === undefined || task.activity.indexOf(dashboard.activity) >= 0)) {
+            var mydashboard = dashboard.toObject();
+            delete mydashboard.date;
+            if (mydashboard.owner) {
+              delete mydashboard.owner.email;
+              delete mydashboard.owner.last_connection_date;
+              delete mydashboard.owner.provider;
+              delete mydashboard.owner.active;
+              delete mydashboard.owner.role;
+            }
+            task.dashboards.push(mydashboard);
+          }
         });
         deferred.resolve(task);
       })
-    }
-    return deferred.promise;
-  })
-
-  // Start dashboards
-  .then(function(task) {
-    // Get a single user
-    var deferred = Q.defer();
-    Dashboard.find({}, '-__v', function(err, dashboards) {
-      task.dashboards = [];
-      _.each(dashboards, function(dashboard, index) {
-        if ((dashboard.context === undefined || task.context.indexOf(dashboard.context) >= 0) && (dashboard.activity === undefined || task.activity.indexOf(dashboard.activity) >= 0)) {
-          var mydashboard = dashboard.toObject();
-          delete mydashboard.date;
-          if (mydashboard.owner) {
-            delete mydashboard.owner.email;
-            delete mydashboard.owner.last_connection_date;
-            delete mydashboard.owner.provider;
-            delete mydashboard.owner.active;
-            delete mydashboard.owner.role;
-          }
-          task.dashboards.push(mydashboard);
-        }
-      });
-      deferred.resolve(task);
+      return deferred.promise;
     })
-    return deferred.promise;
-  })
 
-  // Start metrics
-  .then(function(task) {
-    //
-    var dateNow = new Date();
-    //var dateNow = d2.toISOString();
-    // Get related metrics
-    var deferred = Q.defer();
-    Metric.find({
-      activity: task.activity,
-      context: task.context
-    }, '-__v').sort({
-      date: 'asc'
-    }).lean().exec(function(err, metrics) {
-      _.each(metrics, function(metric, index) { // pour chaque metric
-        metric.taskId = task._id;
-        // si c'est la première métric, on crèe l'objet
-        if (typeof task.metrics === 'undefined') {
-          task.metrics = []
-        }
-
-        // ajouter calcul auto
-        metric.startDate = new Date(metric.startDate);
-        metric.endDate = new Date(metric.endDate);
-        metric.date = new Date(metric.date);
-        task.endDate = new Date(task.endDate);
-
-        // nombre de jours séparant la date de début, fin, entre les deux
-        metric.duration = calcBusinessDays(metric.startDate, metric.endDate);
-        //  metric.timeToBegin = moment(metric.startDate).diff(moment(), 'days');
-        //  metric.timeToEnd = moment(metric.endDate).diff(moment(), 'days');
-
-        // convert to numeric
-        metric.timeSpent = parseFloat(String(metric.timeSpent).replace(',', '.'));
-
-        // predictedCharge
-        metric.projectedWorkload = (metric.progress > 0) ? Math.round(1000 * metric.timeSpent * 100 / parseFloat(metric.progress)) / 1000 : metric.load;
-
-        // progressStatus
-        delete metric.progressStatus;
-        console.log('dateNow', dateNow);
-        console.log('task.endDate', task.endDate);
-        if (moment(dateNow).isAfter(task.endDate, 'day')) { // On est post la date de fin engagé
-          var maxLastEndDate;
-          if (metric.status === 'In Progress' || metric.status === 'Not Started') {
-            maxLastEndDate = Math.max(metric.endDate, metric.date);
-          } else {
-            maxLastEndDate = Math.max(metric.endDate);
+    // Start metrics
+    .then(function(task) {
+      //
+      var dateNow = new Date();
+      //var dateNow = d2.toISOString();
+      // Get related metrics
+      var deferred = Q.defer();
+      Metric.find({
+        activity: task.activity,
+        context: task.context
+      }, '-__v').sort({
+        date: 'asc'
+      }).lean().exec(function(err, metrics) {
+        _.each(metrics, function(metric, index) { // pour chaque metric
+          metric.taskId = task._id;
+          // si c'est la première métric, on crèe l'objet
+          if (typeof task.metrics === 'undefined') {
+            task.metrics = []
           }
-          console.log('maxLastEndDate', maxLastEndDate);
-          var maxEndDate = Math.max(task.endDate);
-          console.log('maxEndDate', maxEndDate);
-          console.log('(moment(maxLastEndDate).isAfter(maxEndDate, \'day\'))', (moment(maxLastEndDate).isAfter(maxEndDate, 'day')));
-          if (moment(maxLastEndDate).isAfter(maxEndDate, 'day')) {
-            metric.progressStatus = 'Late';
-          } else {
-            metric.progressStatus = 'On Time';
-          }
-        } else { // On est avant la date de fin engagé
-          if (moment(metric.endDate).isAfter(task.endDate, 'day')) {
-            metric.progressStatus = 'At Risk';
-          } else {
-            metric.progressStatus = 'On Time';
-          }
-        }
 
-        // ajouter information par mois
-        metric.groupTimeByValue = moment(metric.date).format("YYYY-MM");
+          // ajouter calcul auto
+          metric.startDate = new Date(metric.startDate);
+          metric.endDate = new Date(metric.endDate);
+          metric.date = new Date(metric.date);
+          task.endDate = new Date(task.endDate);
 
-        // kpis
-        _.each(kpis, function(kpi, index) {
+          // nombre de jours séparant la date de début, fin, entre les deux
+          metric.duration = calcBusinessDays(metric.startDate, metric.endDate);
+          //  metric.timeToBegin = moment(metric.startDate).diff(moment(), 'days');
+          //  metric.timeToEnd = moment(metric.endDate).diff(moment(), 'days');
 
-          // ajout des couleurs
-          if (typeof metric[kpi.metricTaskField] === 'string') {
-            var Value = _.filter(hierarchyValues, function(item) {
-              return kpi.metricTaskField && item.text.toLowerCase() === metric[kpi.metricTaskField].toLowerCase();
-            });
-            if (Value.length > 0) {
-              metric.color = Value[0].color;
-              metric.value = Value[0].value;
-              metric.description = Value[0].description;
+          // convert to numeric
+          metric.timeSpent = parseFloat(String(metric.timeSpent).replace(',', '.'));
+
+          // predictedCharge
+          metric.projectedWorkload = (metric.progress > 0) ? Math.round(1000 * metric.timeSpent * 100 / parseFloat(metric.progress)) / 1000 : metric.load;
+
+          // progressStatus
+          delete metric.progressStatus;
+          console.log('dateNow', dateNow);
+          console.log('task.endDate', task.endDate);
+          if (moment(dateNow).isAfter(task.endDate, 'day')) { // On est post la date de fin engagé
+            var maxLastEndDate;
+            if (metric.status === 'In Progress' || metric.status === 'Not Started') {
+              maxLastEndDate = Math.max(metric.endDate, metric.date);
+            } else {
+              maxLastEndDate = Math.max(metric.endDate);
+            }
+            console.log('maxLastEndDate', maxLastEndDate);
+            var maxEndDate = Math.max(task.endDate);
+            console.log('maxEndDate', maxEndDate);
+            console.log('(moment(maxLastEndDate).isAfter(maxEndDate, \'day\'))', (moment(maxLastEndDate).isAfter(maxEndDate, 'day')));
+            if (moment(maxLastEndDate).isAfter(maxEndDate, 'day')) {
+              metric.progressStatus = 'Late';
+            } else {
+              metric.progressStatus = 'On Time';
+            }
+          } else { // On est avant la date de fin engagé
+            if (moment(metric.endDate).isAfter(task.endDate, 'day')) {
+              metric.progressStatus = 'At Risk';
+            } else {
+              metric.progressStatus = 'On Time';
             }
           }
+
+          // ajouter information par mois
+          metric.groupTimeByValue = moment(metric.date).format("YYYY-MM");
+
+          // kpis
+          _.each(kpis, function(kpi, index) {
+
+            // ajout des couleurs
+            if (typeof metric[kpi.metricTaskField] === 'string') {
+              var Value = _.filter(hierarchyValues, function(item) {
+                return kpi.metricTaskField && item.text.toLowerCase() === metric[kpi.metricTaskField].toLowerCase();
+              });
+              if (Value.length > 0) {
+                metric.color = Value[0].color;
+                metric.value = Value[0].value;
+                metric.description = Value[0].description;
+              }
+            }
+          });
+
+          // on calcule les temps d'écarts
+          var oneDay = 24 * 60 * 60 * 1000;
+          var d = new Date(task.startDate);
+          var dateStart = d.setDate(d.getDate() - timetowait);
+          var firstDate = (new Date(metric.date) > new Date(task.startDate)) ? new Date(metric.date) : new Date(dateStart);
+          var currentDate = new Date();
+          task.timewaited = Math.round((currentDate.getTime() - firstDate.getTime()) / (oneDay));
+          task.needToFeed = (metric.status === 'In Progress' || metric.status === 'Not Started') && task.timewaited > timetowait;
+          delete task.timewaited;
+          metric.fromNow = moment(metric.date).fromNow();
+
+          //on ajoute l'acteur ou les watchers
+          if (metric.actor) {
+            task.actors.push(metric.actor);
+          }
+
+          delete metric.__v;
+          delete metric.taskname;
+          delete metric.activity;
+          delete metric.context;
+          if (metric.actor) {
+            delete metric.actor.email;
+            delete metric.actor.provider;
+            delete metric.actor.location;
+            delete metric.actor.active;
+            delete metric.actor.last_connection_date;
+            delete metric.actor.create_date;
+            delete metric.actor.role;
+          }
+          delete metric.color;
+          delete metric.description;
+          delete metric.timeToBegin;
+          delete metric.timeToEnd;
+
+          //on l'ajoute à la liste
+          task.metrics.push(metric);
+          task.lastmetric = metric;
+
         });
-
-        // on calcule les temps d'écarts
-        var oneDay = 24 * 60 * 60 * 1000;
-        var d = new Date(task.startDate);
-        var dateStart = d.setDate(d.getDate() - timetowait);
-        var firstDate = (new Date(metric.date) > new Date(task.startDate)) ? new Date(metric.date) : new Date(dateStart);
-        var currentDate = new Date();
-        task.timewaited = Math.round((currentDate.getTime() - firstDate.getTime()) / (oneDay));
-        task.needToFeed = (metric.status === 'In Progress' || metric.status === 'Not Started') && task.timewaited > timetowait;
-        delete task.timewaited;
-        metric.fromNow = moment(metric.date).fromNow();
-
-        //on ajoute l'acteur ou les watchers
-        if (metric.actor) {
-          task.actors.push(metric.actor);
-        }
-
-        delete metric.__v;
-        delete metric.taskname;
-        delete metric.activity;
-        delete metric.context;
-        if (metric.actor) {
-          delete metric.actor.email;
-          delete metric.actor.provider;
-          delete metric.actor.location;
-          delete metric.actor.active;
-          delete metric.actor.last_connection_date;
-          delete metric.actor.create_date;
-          delete metric.actor.role;
-        }
-        delete metric.color;
-        delete metric.description;
-        delete metric.timeToBegin;
-        delete metric.timeToEnd;
-
-        //on l'ajoute à la liste
-        task.metrics.push(metric);
-        task.lastmetric = metric;
-
-      });
-      task.actors = _.map(_.groupBy(task.actors, function(doc) {
-        return doc._id;
-      }), function(grouped) {
-        return grouped[0];
-      });
-      deferred.resolve(task);
+        task.actors = _.map(_.groupBy(task.actors, function(doc) {
+          return doc._id;
+        }), function(grouped) {
+          return grouped[0];
+        });
+        deferred.resolve(task);
+      })
+      return deferred.promise;
     })
-    return deferred.promise;
-  })
 
 
-  .then(function(task) {
-    //logger.trace("Start Calculer les KPI par taches");
-    // Calculer les KPI par taches
-    var deferred = Q.defer();
-    // pour chaque tache
-    task.kpis = [];
-    task.alerts = [];
-    // kpis
-    _.each(kpis, function(kpi, index) {
-      var mKPI = {};
+    .then(function(task) {
+      //logger.trace("Start Calculer les KPI par taches");
+      // Calculer les KPI par taches
+      var deferred = Q.defer();
+      // pour chaque tache
+      task.kpis = [];
+      task.alerts = [];
+      // kpis
+      _.each(kpis, function(kpi, index) {
+        var mKPI = {};
 
-      // on ajoute des caractéristiques aux KPI
-      //##############################################
-      //mKPI.metricsGroupBy = {};
-      mKPI.calcul = {};
-      mKPI._id = kpi._id;
-      mKPI.name = kpi.name;
-      mKPI.category = kpi.category;
-      mKPI.constraint = kpi.constraint;
-      //mKPI.metricsGroupBy.Time = tools.groupMultiBy(task.metrics, ['groupTimeByValue']);
-      var filteredMetrics = _.filter(task.metrics, function(metric) {
-        return (kpi.category === 'Alert') ? metric.groupTimeByValue === moment(new Date()).format("YYYY-MM") : _.last(metric.groupTimeByValue); //filtrer par le mois en cours
+        // on ajoute des caractéristiques aux KPI
+        //##############################################
+        //mKPI.metricsGroupBy = {};
+        mKPI.calcul = {};
+        mKPI._id = kpi._id;
+        mKPI.name = kpi.name;
+        mKPI.category = kpi.category;
+        mKPI.constraint = kpi.constraint;
+        //mKPI.metricsGroupBy.Time = tools.groupMultiBy(task.metrics, ['groupTimeByValue']);
+        var filteredMetrics = _.filter(task.metrics, function(metric) {
+          return (kpi.category === 'Alert') ? metric.groupTimeByValue === moment(new Date()).format("YYYY-MM") : _.last(metric.groupTimeByValue); //filtrer par le mois en cours
+        });
+
+        mKPI.calcul.task = tools.calculKPI(filteredMetrics, kpi);
+        // mKPI.calcul.taskTime = _.map(mKPI.metricsGroupBy.Time, function(value, key) {
+        //   return {
+        //     month: key,
+        //     value: tools.calculKPI(value, kpi)
+        //   };
+        // });
+
+        if (kpi.category === 'Alert') {
+          task.alerts.push(mKPI);
+        } else {
+          task.kpis.push(mKPI);
+        }
       });
 
-      mKPI.calcul.task = tools.calculKPI(filteredMetrics, kpi);
-      // mKPI.calcul.taskTime = _.map(mKPI.metricsGroupBy.Time, function(value, key) {
-      //   return {
-      //     month: key,
-      //     value: tools.calculKPI(value, kpi)
-      //   };
-      // });
+      deferred.resolve(task);
+      return deferred.promise;
+    })
 
-      if (kpi.category === 'Alert') {
-        task.alerts.push(mKPI);
-      } else {
-        task.kpis.push(mKPI);
-      }
-    });
+    // Save a single task complete
+    .then(function(task) {
 
-    deferred.resolve(task);
-    return deferred.promise;
-  })
+      TaskComplete.findById(taskId, function(err, taskComplete) {
+        // si non existant
+        if (!taskComplete) {
+          TaskComplete.create(task, function(err, CreatedtaskComplete) {
+            if (refreshDashboard) {
+              process.emit('taskChanged', task);
+            }
+            callback(CreatedtaskComplete);
+            return true;
+          });
+        } else {
+          //si existant
+          taskComplete.actor = task.actor;
+          taskComplete.actors = task.actors;
+          taskComplete.watchers = task.watchers;
+          taskComplete.metrics = task.metrics;
+          taskComplete.lastmetric = task.lastmetric;
+          taskComplete.kpis = task.kpis;
+          taskComplete.kpis = task.kpis;
+          taskComplete.alerts = task.alerts;
+          taskComplete.dashboards = task.dashboards;
+          var updated = _.merge(taskComplete, task);
+          updated.markModified('actor');
+          updated.markModified('actors');
+          updated.markModified('watchers');
+          updated.markModified('metrics');
+          updated.markModified('lastmetric');
+          updated.markModified('kpis');
+          updated.markModified('alerts');
+          updated.markModified('dashboards');
+          updated.save(function(err) {
+            if (err) {
 
-  // Save a single task complete
-  .then(function(task) {
+            }
+            if (refreshDashboard) {
+              process.emit('taskChanged', task);
+            }
+            callback(updated);
+            return true;
+          });
+        }
+      });
 
-    TaskComplete.findById(taskId, function(err, taskComplete) {
-      // si non existant
-      if (!taskComplete) {
-        TaskComplete.create(task, function(err, CreatedtaskComplete) {
-          if (refreshDashboard) {
-            process.emit('taskChanged', task);
-          }
-          callback(CreatedtaskComplete);
-          return true;
-        });
-      } else {
-        //si existant
-        taskComplete.actor = task.actor;
-        taskComplete.actors = task.actors;
-        taskComplete.watchers = task.watchers;
-        taskComplete.metrics = task.metrics;
-        taskComplete.lastmetric = task.lastmetric;
-        taskComplete.kpis = task.kpis;
-        taskComplete.kpis = task.kpis;
-        taskComplete.alerts = task.alerts;
-        taskComplete.dashboards = task.dashboards;
-        var updated = _.merge(taskComplete, task);
-        updated.markModified('actor');
-        updated.markModified('actors');
-        updated.markModified('watchers');
-        updated.markModified('metrics');
-        updated.markModified('lastmetric');
-        updated.markModified('kpis');
-        updated.markModified('alerts');
-        updated.markModified('dashboards');
-        updated.save(function(err) {
-          if (err) {
-
-          }
-          if (refreshDashboard) {
-            process.emit('taskChanged', task);
-          }
-          callback(updated);
-          return true;
-        });
-      }
-    });
-
-  })
+    })
 }
 // Get list of dashboardCompletes
 exports.execute = function(req, res) {

@@ -11,6 +11,10 @@ var TaskFullSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  active: {
+    type: Boolean,
+    default: false
+  },
   description: String,
   hypothesis: String,
   risks: String,

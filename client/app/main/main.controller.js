@@ -31,12 +31,13 @@ angular.module('boardOsApp')
         }
       };
 
-      $http.get('/api/taskCompletes/', myparams).success(function(tasks) {
+      $http.get('/api/taskFulls/', myparams).success(function(tasks) {
         $scope.tasksToNotify = _.filter(tasks, function(task) {
-          if (typeof task.lastmetric === 'undefined' || task.lastmetric.status === 'In Progress' || task.lastmetric.status === 'Not Started') {
+          if (typeof task.metrics[task.metrics.length - 1] === 'undefined' || task.metrics[task.metrics.length - 1].status === 'In Progress' || task.metrics[task.metrics.length - 1].status === 'Not Started') {
             return true;
           }
         });
+        console.log('$scope.tasksToNotify', $scope.tasksToNotify);
       });
 
       $http.get('/api/tasks/countByMonth').success(function(tasks) {

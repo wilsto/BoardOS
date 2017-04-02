@@ -4,6 +4,8 @@
 angular.module('boardOsApp')
   .controller('TaskCtrl', function($rootScope, $scope, $http, $stateParams, $location, Auth, Notification, myLibrary, $filter, $timeout) {
 
+    $scope.parseFloat = parseFloat;
+
     var initializing = true;
     Auth.getCurrentUser(function(data) {
       $scope.currentUser = Auth.getCurrentUser();
@@ -52,7 +54,7 @@ angular.module('boardOsApp')
     $scope.filterComments = '';
 
     $scope.filterCommentType = {
-      auto: true,
+      auto: false,
       manual: true
     };
     $scope.filterByAutoManual = function(comment) {
@@ -79,7 +81,7 @@ angular.module('boardOsApp')
         _.each(newVal, function(metric) {
 
           // reestimated workload
-          metric.projectedWorkload = metric.progress * metric.timeSpent / 100;
+          metric.projectedWorkload = (metric.timeSpent / metric.progress * 100).toFixed(1);
 
           // status
           if (metric.progress >= 100) {
@@ -116,7 +118,7 @@ angular.module('boardOsApp')
         auto: false,
         date: maintenant,
         user: {
-          _id: $scope.currentUser._id
+          id: $scope.currentUser._id
         }
       });
       $scope.comment.text = ''; //Reset the text field.
@@ -147,27 +149,37 @@ angular.module('boardOsApp')
     $scope.refreshTask = function() {
       $scope.myPromise = $http.get('/api/taskCompletes/executeId/' + $scope.currentTask._id).success(function(response) {
         $scope.loadTask();
-
       });
     };
 
     // *******************
     // Load a task
-    // *******************
+    // ******************
     $scope.loadTask = function() {
       $scope.currentTask = {};
       var taskId = $stateParams.id || $scope.task._id;
+      $scope.TeamIsExpanded = (taskId === undefined);
+      $scope.OptionIsExpanded = (taskId === undefined);
+      $scope.CommentIsExpanded = (taskId !== undefined);
       if (taskId) {
         $scope.myPromise = $http.get('/api/taskFulls/' + taskId).success(function(task) {
           $scope.task = task;
           $timeout(function() {
             initializing = false;
-          }, 500);
+            $('#inactive').bootstrapToggle();
+            $('#inactive').change(function() {
+              $scope.task.active = !$scope.task.active;
+              $scope.autoComment('set active to ' + !$scope.task.active);
+            });
+          }, 5);
           //detect if late
           $scope.task.metrics.forEach(function(metric) {
             metric.lateStart = new Date(metric.startDate).setHours(0, 0, 0, 0) > new Date(metric.targetstartDate).setHours(0, 0, 0, 0);
             metric.lateEnd = new Date(metric.endDate).setHours(0, 0, 0, 0) > new Date(metric.targetEndDate).setHours(0, 0, 0, 0);
           });
+          if ($scope.task.active === undefined) {
+            $scope.task.active = false;
+          }
         });
       } else {
         $timeout(function() {
@@ -251,18 +263,28 @@ angular.module('boardOsApp')
       }
     }, true);
 
+    $scope.changeActive = function() {
+      console.log('$scope.task.active', $scope.task.active);
+      $scope.autoComment('set active to ' + !$scope.task.active);
+    };
 
     $scope.autoComment = function(text) {
       var maintenant = new Date().toISOString();
+      var currentUserId = $scope.currentUser._id;
+      var userid = ($scope.task._id) ? {
+        _id: currentUserId
+      } : currentUserId;
+      console.log('$scope.task._id', $scope.task._id);
       $scope.task.comments.push({
         text: text,
         auto: true,
         date: maintenant,
-        user: {
-          _id: $scope.currentUser._id
-        }
+        user: userid
       });
-      $scope.update();
+      console.log('$scope.task.comments', $scope.task.comments);
+      if ($scope.task._id !== undefined) {
+        $scope.update();
+      }
     };
 
     $scope.save = function(form) {
@@ -283,7 +305,7 @@ angular.module('boardOsApp')
         }).success(function(alreadyExit) {
           // si cela n'existe pas
           if (alreadyExit.length === 0) {
-            $http.post('/api/fulltasks', $scope.task).success(function(data) {
+            $http.post('/api/taskFulls', $scope.task).success(function(data) {
               var logInfo = 'Task "' + $scope.task.name + '" was created';
               $http.post('/api/logs', {
                 info: logInfo,

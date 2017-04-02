@@ -27,7 +27,7 @@
                                           <i class="fa fa-dashboard"></i>
                                         </span>&nbsp; {{dashboard.name}}
                                         <span class="time pull-right" style="color:red" ng-show="dashboard.timebetween <= 0 && dashboard.timebetween !== null ">{{dashboard.timebetween}} days ago</span>
-                                        <span class="time pull-right" style="color:red" ng-show="dashboard.lastmetric.progressStatus !== 'On Time'"> {{dashboard.lastmetric.progressStatus}}  </span>
+                                        <span class="time pull-right" style="color:red" ng-show="dashboard.metrics[task.metrics.length - 1].progressStatus !== 'On Time'"> {{dashboard.metrics[task.metrics.length - 1].progressStatus}}  </span>
                                     </a>
                                 </li>
                             </ul>
@@ -48,16 +48,16 @@
                     <ul class="dropdown-menu extended tasks" style="width:500px!important;position:relative">
                         <li>
                             <ul class="dropdown-menu-list scroller" style="height: 350px;overflow:auto">
-                                <li ng-repeat="task in navBarTasks | orderBy:'lastmetric.endDate' track by $index">
+                                <li ng-repeat="task in navBarTasks | orderBy:'metrics[task.metrics.length - 1].targetEndDate' track by $index">
                                     <a href="/task/{{task._id}}">
                                         <span class="task">
                               <span class="desc">
                                 {{task.name}} </span>
                                         <span class="percent">
-                                  {{task.lastmetric.progress}}% </span>
+                                  {{task.metrics[task.metrics.length - 1].progress}}% </span>
                                         </span>
                                         <span class="progress">
-                                  <span ng-attr-style="width: {{task.lastmetric.progress}}%;" class="progress-bar progress-bar-primary" aria-valuetext="{{task.lastmetric.progress}}" aria-valuenow="{{task.lastmetric.progress}}" percent="{{task.lastmetric.progress}}"  aria-valuemin="0" aria-valuemax="100">
+                                  <span ng-attr-style="width: {{task.metrics[task.metrics.length - 1].progress}}%;" class="progress-bar progress-bar-primary" aria-valuetext="{{task.metrics[task.metrics.length - 1].progress}}" aria-valuenow="{{task.metrics[task.metrics.length - 1].progress}}" percent="{{task.metrics[task.metrics.length - 1].progress}}"  aria-valuemin="0" aria-valuemax="100">
                                     </span>
                                         </span>
                                     </a>

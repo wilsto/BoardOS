@@ -8,7 +8,7 @@ var schedule = require('node-schedule');
 
 var DashboardComplete = require('./dashboardComplete.model');
 var Dashboard = require('../dashboard/dashboard.model');
-var TaskComplete = require('../taskComplete/taskComplete.model');
+var TaskFull = require('../taskFull/taskFull.model');
 var Hierarchies = require('../hierarchy/hierarchy.model');
 var KPI = require('../KPI/KPI.model');
 
@@ -134,9 +134,9 @@ function createAllCompleteDashboard() {
     });
 }
 
-// createCompleteDashboard('5852cfed1738410400b26117', function() {
-//   console.log('end dashboard 5852cfed1738410400b26117');
-// });
+createCompleteDashboard('5852cfed1738410400b26117', function() {
+  console.log('end dashboard 5852cfed1738410400b26117');
+});
 
 function createCompleteDashboard(dashboardId, callback) {
   Q()
@@ -155,146 +155,147 @@ function createCompleteDashboard(dashboardId, callback) {
       return deferred.promise;
     })
 
-  // Start tasks
-  .then(function(dashboard) {
-    // Get related tasks
-    var deferred = Q.defer();
-    dashboard.tasks = [];
-    TaskComplete.find({
-      activity: {
-        '$regex': dashboard.activity || '',
-        $options: '-i'
-      },
-      context: {
-        '$regex': dashboard.context || '',
-        $options: '-i'
-      }
-    }, 'lastmetric needToFeed kpis alerts').sort({
-      date: 'asc'
-    }).lean().exec(function(err, findtasks) {
-      _.each(findtasks, function(task) {
-        dashboard.tasks.push(task._id);
-      });
-      dashboard.openTasksNb = _.where(findtasks, function(task) {
-        return task.lastmetric && (task.lastmetric.status === 'In Progress' || task.lastmetric.status === 'Not Started');
-      }).length;
-      dashboard.toFeedTasksNb = _.where(findtasks, function(task) {
-        return task.needToFeed;
-      }).length;
-      dashboard.tasksNb = dashboard.tasks.length;
-
-      dashboard.kpis = [];
-      dashboard.kpisValue = null;
-      dashboard.alerts = [];
-      dashboard.alertsValue = 0;
-      var alertsSumBy = {};
-      var kpisSumBy = {};
-      var kpisNbBy = {};
-      var kpisSum = 0;
-      var kpisNb = 0;
-      _.each(findtasks, function(task, index) {
-        _.each(task.kpis, function(kpi, index2) { // list kpi
-          if (!kpisSumBy[kpi._id]) {
-            kpisSumBy[kpi._id] = 0;
-          }
-          if (!kpisNbBy[kpi._id]) {
-            kpisNbBy[kpi._id] = 0;
-          }
-          kpisSumBy[kpi._id] += parseInt(kpi.calcul.task || 0);
-          kpisNbBy[kpi._id] += (kpi.calcul.task !== null && kpi.calcul.task !== undefined && !isNaN(kpi.calcul.task)) ? 1 : 0;
-          kpisSum += parseInt(kpi.calcul.task || 0);
-          kpisNb += (kpi.calcul.task !== null && kpi.calcul.task !== undefined && !isNaN(kpi.calcul.task)) ? 1 : 0;
-          // if (kpi.name === 'Deliver On Time') {
-          //   console.log('task', task.lastmetric.startDate);
-          //   console.log('kpi.calcul.task', kpi.calcul.task);
-          // }
-        })
-        _.each(task.alerts, function(alert, index2) { // list alert
-          if (!alertsSumBy[alert._id]) {
-            alertsSumBy[alert._id] = 0;
-          }
-          alertsSumBy[alert._id] += parseInt(alert.calcul.task || 0);
-          dashboard.alertsValue += parseInt(alert.calcul.task || 0);
+    // Start tasks
+    .then(function(dashboard) {
+      // Get related tasks
+      var deferred = Q.defer();
+      dashboard.tasks = [];
+      TaskFull.find({
+        activity: {
+          '$regex': dashboard.activity || '',
+          $options: '-i'
+        },
+        context: {
+          '$regex': dashboard.context || '',
+          $options: '-i'
+        }
+      }, 'metrics needToFeed kpis alerts').sort({
+        date: 'asc'
+      }).lean().exec(function(err, findtasks) {
+        _.each(findtasks, function(task) {
+          dashboard.tasks.push(task._id);
         });
 
-        if (index === findtasks.length - 1) {
-          _.each(kpisSumBy, function(value, key) {
-            var mKPI = _.filter(kpis, function(kpi) {
-              return kpi._id.toString() === key;
-            })[0];
-            // if (mKPI.name === 'Deliver On Time') {
-            //   console.log('dashboard.name', dashboard.name);
-            //   console.log('kpi.name', mKPI.name);
-            //   console.log('value', value);
-            //   console.log('kpisNbBy[key]', kpisNbBy[key]);
-            //   console.log('parseInt(value / kpisNbBy[key]', parseInt(value / kpisNbBy[key]));
+        dashboard.openTasksNb = _.where(findtasks, function(task) {
+          return task.metrics[task.metrics.length - 1] && (task.metrics[task.metrics.length - 1].status === 'In Progress' || task.metrics[task.metrics.length - 1].status === 'Not Started');
+        }).length;
+        dashboard.toFeedTasksNb = _.where(findtasks, function(task) {
+          return task.needToFeed;
+        }).length;
+        dashboard.tasksNb = dashboard.tasks.length;
+
+        dashboard.kpis = [];
+        dashboard.kpisValue = null;
+        dashboard.alerts = [];
+        dashboard.alertsValue = 0;
+        var alertsSumBy = {};
+        var kpisSumBy = {};
+        var kpisNbBy = {};
+        var kpisSum = 0;
+        var kpisNb = 0;
+        _.each(findtasks, function(task, index) {
+          _.each(task.kpis, function(kpi, index2) { // list kpi
+            if (!kpisSumBy[kpi._id]) {
+              kpisSumBy[kpi._id] = 0;
+            }
+            if (!kpisNbBy[kpi._id]) {
+              kpisNbBy[kpi._id] = 0;
+            }
+            kpisSumBy[kpi._id] += parseInt(kpi.calcul.task || 0);
+            kpisNbBy[kpi._id] += (kpi.calcul.task !== null && kpi.calcul.task !== undefined && !isNaN(kpi.calcul.task)) ? 1 : 0;
+            kpisSum += parseInt(kpi.calcul.task || 0);
+            kpisNb += (kpi.calcul.task !== null && kpi.calcul.task !== undefined && !isNaN(kpi.calcul.task)) ? 1 : 0;
+            // if (kpi.name === 'Deliver On Time') {
+            //   console.log('task', task.metrics[task.metrics.length - 1].startDate);
+            //   console.log('kpi.calcul.task', kpi.calcul.task);
             // }
-            dashboard.kpis.push({
-              kpiId: key,
-              name: mKPI.name,
-              constraint: mKPI.constraint,
-              category: mKPI.category,
-              calcul: {
-                task: parseInt(value / kpisNbBy[key])
-              }
-            });
+          })
+          _.each(task.alerts, function(alert, index2) { // list alert
+            if (!alertsSumBy[alert._id]) {
+              alertsSumBy[alert._id] = 0;
+            }
+            alertsSumBy[alert._id] += parseInt(alert.calcul.task || 0);
+            dashboard.alertsValue += parseInt(alert.calcul.task || 0);
           });
-          _.each(alertsSumBy, function(value, key) {
-            var mKPI = _.filter(alerts, function(alert) {
-              return alert._id.toString() === key;
-            })[0];
-            dashboard.alerts.push({
-              alertId: key,
-              name: mKPI.name,
-              constraint: mKPI.constraint,
-              category: mKPI.category,
-              calcul: {
-                task: value
-              }
+
+          if (index === findtasks.length - 1) {
+            _.each(kpisSumBy, function(value, key) {
+              var mKPI = _.filter(kpis, function(kpi) {
+                return kpi._id.toString() === key;
+              })[0];
+              // if (mKPI.name === 'Deliver On Time') {
+              //   console.log('dashboard.name', dashboard.name);
+              //   console.log('kpi.name', mKPI.name);
+              //   console.log('value', value);
+              //   console.log('kpisNbBy[key]', kpisNbBy[key]);
+              //   console.log('parseInt(value / kpisNbBy[key]', parseInt(value / kpisNbBy[key]));
+              // }
+              dashboard.kpis.push({
+                kpiId: key,
+                name: mKPI.name,
+                constraint: mKPI.constraint,
+                category: mKPI.category,
+                calcul: {
+                  task: parseInt(value / kpisNbBy[key])
+                }
+              });
             });
-          });
-          if (kpisNb > 0) {
-            dashboard.kpisValue = parseInt(kpisSum / kpisNb);
+            _.each(alertsSumBy, function(value, key) {
+              var mKPI = _.filter(alerts, function(alert) {
+                return alert._id.toString() === key;
+              })[0];
+              dashboard.alerts.push({
+                alertId: key,
+                name: mKPI.name,
+                constraint: mKPI.constraint,
+                category: mKPI.category,
+                calcul: {
+                  task: value
+                }
+              });
+            });
+            if (kpisNb > 0) {
+              dashboard.kpisValue = parseInt(kpisSum / kpisNb);
+            }
           }
+        });
+        deferred.resolve(dashboard);
+      });
+      return deferred.promise;
+    })
+
+    // Save a single dashboard complete
+    .then(function(dashboard) {
+      DashboardComplete.findById(dashboardId, function(err, dashboardComplete) {
+        // si non existant
+        if (!dashboardComplete) {
+          DashboardComplete.create(dashboard, function(err, CreateddashboardComplete) {
+            callback(CreateddashboardComplete);
+            return true;
+          });
+        } else {
+          //si existant
+          dashboardComplete.tasks = dashboard.tasks;
+          dashboardComplete.kpis = dashboard.kpis;
+          dashboardComplete.alerts = dashboard.alerts;
+          dashboardComplete.owner = dashboard.owner;
+          dashboardComplete.categories = dashboard.categories;
+          dashboardComplete.actors = dashboard.actors;
+          var updated = _.merge(dashboardComplete, dashboard);
+          updated.markModified('owner');
+          updated.markModified('categories');
+          updated.markModified('actors');
+          updated.markModified('tasks');
+          updated.markModified('kpis');
+          updated.markModified('alerts');
+          updated.save(function(err) {
+            callback(dashboardComplete);
+            return true;
+          });
         }
       });
-      deferred.resolve(dashboard);
-    });
-    return deferred.promise;
-  })
 
-  // Save a single dashboard complete
-  .then(function(dashboard) {
-    DashboardComplete.findById(dashboardId, function(err, dashboardComplete) {
-      // si non existant
-      if (!dashboardComplete) {
-        DashboardComplete.create(dashboard, function(err, CreateddashboardComplete) {
-          callback(CreateddashboardComplete);
-          return true;
-        });
-      } else {
-        //si existant
-        dashboardComplete.tasks = dashboard.tasks;
-        dashboardComplete.kpis = dashboard.kpis;
-        dashboardComplete.alerts = dashboard.alerts;
-        dashboardComplete.owner = dashboard.owner;
-        dashboardComplete.categories = dashboard.categories;
-        dashboardComplete.actors = dashboard.actors;
-        var updated = _.merge(dashboardComplete, dashboard);
-        updated.markModified('owner');
-        updated.markModified('categories');
-        updated.markModified('actors');
-        updated.markModified('tasks');
-        updated.markModified('kpis');
-        updated.markModified('alerts');
-        updated.save(function(err) {
-          callback(dashboardComplete);
-          return true;
-        });
-      }
-    });
-
-  })
+    })
 }
 
 // Get list of dashboardCompletes
@@ -325,15 +326,18 @@ exports.index = function(req, res) {
 
 // Get a single dashboardComplete
 exports.show = function(req, res) {
-  DashboardComplete.findById(req.params.id).populate('tasks', '-metrics -watchers -dashboards -kpis -alerts -actors -version').lean().exec(function(err, dashboardComplete) {
-    if (err) {
-      return handleError(res, err);
-    }
-    if (!dashboardComplete) {
-      return res.status(404).send('Not Found');
-    }
-    return res.json(dashboardComplete);
-  });
+  DashboardComplete.findById(req.params.id)
+    .populate('tasks', ' -watchers -dashboards -kpis -alerts -version')
+    .populate('tasks.actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
+    .lean().exec(function(err, dashboardComplete) {
+      if (err) {
+        return handleError(res, err);
+      }
+      if (!dashboardComplete) {
+        return res.status(404).send('Not Found');
+      }
+      return res.json(dashboardComplete);
+    });
 };
 
 // Creates a new dashboardComplete in the DB.
