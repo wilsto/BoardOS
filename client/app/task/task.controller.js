@@ -11,6 +11,12 @@ angular.module('boardOsApp')
       $scope.currentUser = Auth.getCurrentUser();
     });
 
+    // recherche des membres
+    $http.get('/api/users/members').success(function(members) {
+      $scope.members = members;
+      
+    });
+
     // si cela n'existe pas
     $scope.task = {};
     $scope.task.date = Date.now();
@@ -152,6 +158,7 @@ angular.module('boardOsApp')
       });
     };
 
+
     // *******************
     // Load a task
     // ******************
@@ -159,6 +166,10 @@ angular.module('boardOsApp')
       $scope.currentTask = {};
       var taskId = $stateParams.id || $scope.task._id;
       $scope.TeamIsExpanded = (taskId === undefined);
+      $scope.TeamIsExpanded = true;
+      $scope.blnAddActor = false;
+      $scope.blnAddFollower = false;
+      $scope.blnAssignSubtaskActor = false;
       $scope.OptionIsExpanded = (taskId === undefined);
       $scope.CommentIsExpanded = (taskId !== undefined);
       if (taskId) {
@@ -180,6 +191,13 @@ angular.module('boardOsApp')
           if ($scope.task.active === undefined) {
             $scope.task.active = false;
           }
+          $scope.mePresentInActors = _.filter($scope.task.actors, function(actor) {
+            return actor._id === $scope.currentUser._id;
+          }).length > 0;
+
+          $scope.mePresentInFollowers = _.filter($scope.task.followers, function(actor) {
+            return actor._id === $scope.currentUser._id;
+          }).length > 0;
         });
       } else {
         $timeout(function() {
@@ -229,6 +247,77 @@ angular.module('boardOsApp')
       });
     };
 
+    // *******************
+    // add an actor
+    // *******************
+    //
+
+    $scope.namesWith = function(member, viewValue) {
+      if (typeof member.name !== 'undefined') {
+        return member.name.toLowerCase().indexOf(viewValue.toLowerCase()) >= 0;
+      }
+    };
+
+    $scope.addActor = function(member) {
+      var index = _.indexOf(_.pluck($scope.task.actors, '_id'), member._id);
+      if (index < 0) {
+        $scope.task.actors.push(member);
+      } else {
+        Notification.warning('Actor "' + member.name + '" already present in list');
+      }
+    };
+
+    $scope.addMeToActor = function() {
+      var member = _.filter($scope.members, function(member) {
+        return member._id === $scope.currentUser._id;
+      })[0];
+      $scope.task.actors.push(member);
+    };
+
+    $scope.removeMeToActor = function() {
+      $scope.task.actors = _.without($scope.task.actors, _.findWhere($scope.task.actors, {
+        _id: $scope.currentUser._id
+      }));
+      $scope.update();
+      $scope.loadTask();
+    };
+
+    // *******************
+    // add a follower
+    // *******************
+    $scope.addFollower = function(member) {
+      var index = _.indexOf(_.pluck($scope.task.followers, '_id'), member._id);
+      if (index < 0) {
+        $scope.task.followers.push(member);
+      } else {
+        Notification.warning('Follower "' + member.name + '" already present in list');
+      }
+    };
+
+    $scope.addMeToFollower = function() {
+      var member = _.filter($scope.members, function(member) {
+        return member._id === $scope.currentUser._id;
+      })[0];
+      $scope.task.followers.push(member);
+    };
+
+    $scope.removeMeToFollower = function() {
+      $scope.task.followers = _.without($scope.task.followers, _.findWhere($scope.task.followers, {
+        _id: $scope.currentUser._id
+      }));
+      $scope.update();
+      $scope.loadTask();
+    };
+
+
+    // *******************
+    // add a follower
+    // *******************
+    $scope.AssignSubtaskActor = function(todo) {
+      $scope.blnAssignSubtaskActor = true;
+      $scope.currentTodo = todo;
+    };
+
     $scope.$watch('task', function(newMap, previousMap) {
       if (initializing) {
         $timeout(function() {
@@ -264,7 +353,7 @@ angular.module('boardOsApp')
     }, true);
 
     $scope.changeActive = function() {
-      console.log('$scope.task.active', $scope.task.active);
+      
       $scope.autoComment('set active to ' + !$scope.task.active);
     };
 
@@ -274,14 +363,14 @@ angular.module('boardOsApp')
       var userid = ($scope.task._id) ? {
         _id: currentUserId
       } : currentUserId;
-      console.log('$scope.task._id', $scope.task._id);
+      
       $scope.task.comments.push({
         text: text,
         auto: true,
         date: maintenant,
         user: userid
       });
-      console.log('$scope.task.comments', $scope.task.comments);
+      
       if ($scope.task._id !== undefined) {
         $scope.update();
       }

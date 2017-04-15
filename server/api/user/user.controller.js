@@ -22,6 +22,32 @@ exports.index = function(req, res) {
   User.find({}, '-salt -hashedPassword').sort({
     name: 1
   }).exec().then(function(users) {
+
+    _.each(users, function(user) {
+      user.avatar = (user.avatar) ? user.avatar : 'assets/images/avatars/' + user._id + '.png';
+    });
+
+    res.json(200, users);
+  });
+};
+
+/**
+ * Get list of members
+ * restriction: 'none'
+ */
+exports.members = function(req, res) {
+  User.find({
+    active: {
+      $ne: false
+    }
+  }, '_id name avatar').sort({
+    name: 1
+  }).exec().then(function(users) {
+
+    _.each(users, function(user) {
+      user.avatar = (user.avatar) ? user.avatar : 'assets/images/avatars/' + user._id + '.png';
+    });
+
     res.json(200, users);
   });
 };

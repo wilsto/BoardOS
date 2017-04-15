@@ -176,7 +176,8 @@
 .bosskb-property-image {
   float: left;
   margin: 1px;
-  height: 18px;
+  height: 50px;
+  width: 50px;
 }
 
 .bosskb-property-table {

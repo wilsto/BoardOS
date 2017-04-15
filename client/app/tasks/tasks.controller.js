@@ -17,7 +17,7 @@ angular.module('boardOsApp')
 
     $scope.Load = function() {
       $http.get('/api/taskFulls').success(function(data) {
-        console.log('data', data);
+        
         $scope.alltasks = data;
         $scope.tasks = data;
         $scope.filterTasks();

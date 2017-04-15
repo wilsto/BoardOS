@@ -38,7 +38,8 @@
     "angular-xeditable": "^0.6.0",
     "ngEmbed": "ng-embed#^2.1.1",
     "angular-ui-sortable": "0.14.x",
-    "bootstrap-toggle": "^2.2.2"
+    "bootstrap-toggle": "^2.2.2",
+    "DlhSoft.KanbanLibrary": "http://DlhSoft.com/Packages/DlhSoft.KanbanLibrary.zip"
   },
   "devDependencies": {
     "angular-mocks": "~1.4.x",

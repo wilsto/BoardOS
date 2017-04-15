@@ -37,7 +37,7 @@ angular.module('boardOsApp')
             return true;
           }
         });
-        console.log('$scope.tasksToNotify', $scope.tasksToNotify);
+        
       });
 
       $http.get('/api/tasks/countByMonth').success(function(tasks) {

@@ -65,39 +65,7 @@
                                     </tr>
                                 </table>
                             </div>
-                            <div ng-hide="isReadOnly || group.isReadOnly" class="bosskb-editors-area bosskb-group-editors-area" ng-style="{ backgroundColor: group.backgroundColor ? group.backgroundColor : (group.itemType && group.itemType.backgroundColor ? group.itemType.backgroundColor : defaultGroupType.backgroundColor) }">
-                                <div class="bosskb-item-commands-container" ng-show="onEditingGroup && isHovered">
-                                    <a ng-hide="areEditItemButtonsHidden || areEditGroupButtonsHidden || group.isEditItemButtonHidden || group.state.areEditItemButtonsHidden" href="javascript://" ng-click="onEditingGroup({group: group})" class="bosskb-button bosskb-edit-button" title="{{ editGroupButtonToolTip }}">
-                                        {{ editGroupButtonText }}
-                                    </a>
-                                </div>
-                                <div ng-hide="areItemsReadOnly || areGroupsReadOnly || group.isItemReadOnly || group.isGroupReadOnly" class="bosskb-properties-container">
-                                    <div class="bosskb-property">
-                                        <input type="text" ng-model="group[groupNameField]"/>
-                                    </div>
-                                    <table ng-hide="group.isCollapsed" class="bosskb-property bosskb-property-editor bosskb-property-table">
-                                        <tr>
-                                            <td>
-                                                <img ng-if="!isGroupItemsCountVisible && assignableResources && group.assignedResource.imageUrl" ng-src="{{ group.assignedResource.imageUrl }}" class="bosskb-property-image"/>
-                                            </td>
-                                            <td class="bosskb-property-table">
-                                                <!-- <select ng-if="!isGroupItemsCountVisible && assignableResources" ng-model="group.assignedResource" ng-options="resource as resource.name for resource in assignableResources" class="bosskb-property-secondary"></select> -->
-                                                <span ng-if="isGroupItemsCountVisible || !assignableResources">{{ getItemsInGroup(group).length }} {{ itemsLabel }}</span>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <table ng-hide="group.isCollapsed" class="bosskb-property bosskb-property-editor bosskb-property-table">
-                                        <tr>
-                                            <td>
-                                                <span class="bosskb-property-label">{{ stateLabel }}:</span>
-                                            </td>
-                                            <td class="bosskb-property-table">
-                                                <!-- <select ng-model="group.state" ng-options="groupState as groupState.name for groupState in groupStates"></select> -->
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
+
                         </div>
                       </div>
                   </td>
@@ -106,7 +74,7 @@
                           <div ng-repeat="item in getItemsInGroupAndState(group, state)" ds:kanban-item-drop-zone can-drop="canDropItem(type, index, group, state, items.indexOf(item))" on-drop="onItemDrop(type, index, group, state, items.indexOf(item))">
                               <div ng-style="{ height: itemHeight + 'px' }" class="bosskb-content-box">
                                 <div ng-mouseenter="isHovered = true" ng-mouseleave="isHovered = false" class="bosskb-item-container">
-                                    <div class="bosskb-item" ds:kanban-draggable-item drag-type="itemType" drag-index="items.indexOf(item)" is-dragging-parent="true" ng-style="{ backgroundColor: item.backgroundColor ? item.backgroundColor : (item.itemType && item.itemType.backgroundColor ? item.itemType.backgroundColor : defaultItemType.backgroundColor) }">
+                                    <div class="bosskb-item" ds-kanban-draggable-item drag-type="itemType" drag-index="items.indexOf(item)" is-dragging-parent="true" ng-style="{ backgroundColor: item.backgroundColor ? item.backgroundColor : (item.itemType && item.itemType.backgroundColor ? item.itemType.backgroundColor : defaultItemType.backgroundColor) }">
                                         <table>
                                             <tr>
                                                 <td class="bosskb-gripper" ng-style="{ backgroundColor: item.color ? item.color : (item.itemType ? item.itemType.color : defaultItemType.color) }">&nbsp;</td>
@@ -117,37 +85,16 @@
                                                     <table class="bosskb-property bosskb-property-editor bosskb-property-table">
                                                         <tr>
                                                             <td>
-                                                                <img ng-if="assignableResources && item.assignedResource.imageUrl" ng-src="{{ item.assignedResource.imageUrl }}" class="bosskb-property-image"/>
+                                                                <!-- <img ng-if="assignableResources && item.assignedResource.imageUrl" ng-src="{{ item.assignedResource.imageUrl }}" class="bosskb-property-image"/> -->
                                                             </td>
                                                             <td class="bosskb-property-table">
-                                                                <input ng-model="assignableResources ? item.assignedResource.name : null" ng-model-options="{ getterSetter: true }" readonly="readonly" class="bosskb-property-secondary bosskb-select-replacement"/>
+                                                                <!-- <input ng-model="assignableResources ? item.assignedResource.name : null" ng-model-options="{ getterSetter: true }" readonly="readonly" class="bosskb-property-secondary bosskb-select-replacement"/> -->
                                                             </td>
                                                         </tr>
                                                     </table>
                                                 </td>
                                             </tr>
                                         </table>
-                                    </div>
-                                    <div ng-hide="isReadOnly || item.isReadOnly || item.group.isReadOnly || item.state.isReadOnly" class="bosskb-editors-area" ng-style="{ backgroundColor: item.backgroundColor ? item.backgroundColor : (item.itemType && item.itemType.backgroundColor ? item.itemType.backgroundColor : defaultItemType.backgroundColor) }">
-                                        <div class="bosskb-item-commands-container" ng-show="onEditingItem && isHovered">
-                                            <a ng-hide="areEditItemButtonsHidden || item.isEditItemButtonHidden || item.state.areEditItemButtonsHidden || item.group.areEditItemButtonsHidden" href="javascript://" ng-click="onEditingItem({item: item})" class="bosskb-button bosskb-edit-button" title="{{ editItemButtonToolTip }}">
-                                                {{ editItemButtonText }}
-                                            </a>
-                                        </div>
-                                        <div ng-hide="areItemsReadOnly || item.isItemReadOnly || item.group.areItemsReadOnly || item.state.areItemsReadOnly" class="bosskb-properties-container">
-                                            <div class="bosskb-property bosskb-property-editor">
-                                                <input type="text" disabled ng-model="item[itemNameField]"/>
-                                            </div>
-                                            <table ng-if="assignableResources" class="bosskb-property bosskb-property-editor bosskb-property-table">
-                                                <tr>
-                                                    <td>
-                                                        <img ng-if="item.assignedResource.imageUrl" ng-src="{{ item.assignedResource.imageUrl }}" class="bosskb-property-image"/>
-                                                    </td>
-                                                    <td class="bosskb-property-table">
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </div>
                                     </div>
                                 </div>
                               </div>

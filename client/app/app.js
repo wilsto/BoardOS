@@ -16,7 +16,8 @@ angular.module('boardOsApp', [
     'cgBusy',
     'xeditable',
     'ngEmbed',
-    'ui.sortable'
+    'ui.sortable',
+    'DlhSoft.Kanban.Angular.Components'
   ])
   .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, NotificationProvider) {
     $urlRouterProvider.otherwise('/');

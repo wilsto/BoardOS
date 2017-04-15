@@ -5,47 +5,7 @@ angular.module('boardOsApp')
     var groups = [];
     var items = [];
     var group = {};
-    $scope.Load = function() {
-      $http.get('/api/taskFulls').success(function(data) {
-        $scope.tasks = _.filter(data, function(task) {
-          var retour;
-          if (task.metrics) {
-            retour = (task.metrics[0].status === 'Not Started' || task.metrics[0].status === 'In Progress') ? true : false;
-          }
-          return retour;
-        });
-        $scope.tasks = _.sortBy($scope.tasks, function(task) {
-          return task.actors[0];
-        });
-        console.log('$scope.tasks', $scope.tasks);
-        var previousGroup;
-        _.each($scope.tasks, function(task) {
-          if (previousGroup !== task.actors[0]) {
-            group[task.actors[0]] = {
-              name: task.actors[0],
-              state: state2,
-              assignedResource: resource1
-            };
-            groups.push(group[task.actors[0]]);
-          }
 
-          var taskState = (task.metrics[0].status === 'Not Started') ? state1 : state2;
-          console.log('task', task);
-          console.log('group[task.actors[0]]', group[task.actors[0]]);
-          items.push({
-            name: task.name,
-            group: group[task.actors[0]],
-            state: taskState,
-            assignedResource: resource2
-          });
-          previousGroup = task.actors[0];
-        });
-        console.log('items', items);
-        console.log('$scope.groups', $scope.groups);
-
-      });
-    };
-    $scope.Load();
 
     var KanbanBoard = {};
     KanbanBoard.types = {
@@ -76,15 +36,19 @@ angular.module('boardOsApp')
     KanbanBoard.DefaultItemTypes = DefaultItemTypes;
     KanbanBoard.defaultItemTypes = {
       task: {
-        color: '#ffd800',
+        color: '#c6c6c6',
         backgroundColor: 'white'
       },
-      bug: {
-        color: '#ca3838',
+      taskInProgress: {
+        color: '#89c4f4',
+        backgroundColor: '#fff8f4'
+      },
+      taskDone: {
+        color: '#89c4f4',
         backgroundColor: '#fff8f4'
       },
       story: {
-        color: '#0094ff',
+        color: '#fff8f4',
         backgroundColor: 'white'
       },
       feature: {
@@ -138,7 +102,8 @@ angular.module('boardOsApp')
 
 
     var state1 = {
-        name: 'Not Started'
+        name: 'Not Started',
+        areNewItemButtonsHidden: true
       },
       state2 = {
         name: 'In progress',
@@ -182,14 +147,56 @@ angular.module('boardOsApp')
 
     $scope.states = states;
     $scope.groups = groups;
-    console.log('$scope.groups', $scope.groups);
+    
     $scope.items = items;
-    console.log('items', items);
+    
     $scope.assignableResources = assignableResources;
 
     var item;
     var i;
-    var group;
+
+    $scope.Load = function() {
+      $http.get('/api/taskFulls').success(function(data) {
+        $scope.tasks = _.filter(data, function(task) {
+          var retour;
+          if (task.metrics) {
+            retour = (task.metrics[0].status === 'Not Started' || task.metrics[0].status === 'In Progress') ? true : false;
+          }
+          return retour;
+        });
+        $scope.tasks = _.sortBy($scope.tasks, function(task) {
+          return task.actors[0]._id;
+        });
+        var previousGroup;
+        _.each($scope.tasks, function(task) {
+          if (previousGroup !== task.actors[0]._id) {
+            group[task.actors[0]._id] = {
+              name: task.actors[0].name,
+              state: state2,
+              assignedResource: {
+                imageUrl: task.actors[0].avatar
+              }
+            };
+            groups.push(group[task.actors[0]._id]);
+          }
+
+          var taskState = (task.metrics[0].status === 'Not Started') ? state1 : state2;
+          var taskType = (task.metrics[0].status === 'Not Started') ? KanbanBoard.defaultItemTypes.task : KanbanBoard.defaultItemTypes.taskInProgress;
+          
+          items.push({
+            name: task.name,
+            group: group[task.actors[0]._id],
+            state: taskState,
+            itemType: taskType,
+            assignedResource: resource2
+          });
+          previousGroup = task.actors[0]._id;
+        });
+      });
+    };
+    $scope.Load();
+
+
     // Force early binding to controller.
     if (!$scope.groups) {
       for (i = 0; i < $scope.items.length; i++) {
@@ -284,15 +291,6 @@ angular.module('boardOsApp')
     if (!$scope.collapsedGroupHeight) {
       $scope.collapsedGroupHeight = 36;
     }
-    if (!$scope.itemTemplateUrl) {
-      $scope.itemTemplateUrl = 'Templates/kanban-item.html';
-    }
-    if (!$scope.groupTemplateUrl) {
-      $scope.groupTemplateUrl = 'Templates/kanban-group.html';
-    }
-    if (!$scope.stateTemplateUrl) {
-      $scope.stateTemplateUrl = 'Templates/kanban-state.html';
-    }
     var setItemState = function(item, state) {
       var previousState = item.state;
       item.state = state;
@@ -338,9 +336,9 @@ angular.module('boardOsApp')
         return;
       }
       var item = $scope.items[index];
-      // console.log('index', index);
-      // console.log('$scope.items', $scope.items);
-      // console.log('item', item);
+      
+      
+      
       if (group !== item.group) {
         setItemGroup(item, group);
       }

@@ -848,15 +848,21 @@ Page breadcrumb
 
 /* Page breadcrumb */
 
-.page-bar {
-  border: 0;
-  padding: 0;
-  background-color: #eee;
-  margin-bottom: 25px;
-  margin-left: -20px;
-  margin-right: -20px;
-  padding-left: 10px;
-  padding-right: 20px;
+@media (min-width: 480px) {
+  .page-bar {
+    border: 0;
+    padding: 0;
+    background-color: #eee;
+    margin-bottom: 25px;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 10px;
+    padding-right: 20px;
+    top: 45px;
+    position: fixed;
+    width: 99%;
+    z-index: 9
+  }
 }
 
 .page-boxed .page-bar {
@@ -3994,9 +4000,9 @@ Form Layouts
   border-left: 1px solid #efefef;
 }
 
-@media (max-width: 991px) {
+@media (max-width: 1024px) {
   .form .form-bordered .form-group>div {
-    /* 991px */
+    /* 1024px */
     border-left: 0;
   }
 }
@@ -4009,9 +4015,9 @@ Form Layouts
   padding-top: 20px;
 }
 
-@media (max-width: 991px) {
+@media (max-width: 1024px) {
   .form .form-bordered .form-group .control-label {
-    /* 991px */
+    /* 1024px */
     padding-top: 10px;
   }
 }
@@ -4035,9 +4041,9 @@ Form Layouts
   padding-right: 16px !important;
 }
 
-@media (max-width: 991px) {
+@media (max-width: 1024px) {
   .form .form-bordered .form-actions {
-    /* 991px */
+    /* 1024px */
     padding-left: 15px !important;
     padding-right: 15px !important;
   }
@@ -5277,7 +5283,7 @@ From Medium Devices Up To Larger Devices
 Up To Medium Devices
 ***/
 
-@media (max-width:991px) {
+@media (max-width:1024px) {
   /***
   Page header
   ***/
@@ -5407,7 +5413,7 @@ Up To Medium Devices
 From Small Devices Up To Medium Devices
 ***/
 
-@media (min-width: 768px) and (max-width: 991px) {
+@media (min-width: 768px) and (max-width: 1024px) {
   /***
   Body
   ***/
@@ -5926,7 +5932,7 @@ Footer
 Landscape phone to portrait tablet
 ***/
 
-@media (max-width: 991px) {
+@media (max-width: 1024px) {
   /***
     page sidebar
     ***/
@@ -6521,4 +6527,25 @@ Profile Page
 
 .btn-default.btn-outline:hover, {
   color: #000;
+}
+
+@media (max-width: 1024px) {
+  .navbar-boss {
+    position: fixed;
+    /* Set the navbar to fixed position */
+    top: 10px;
+    /* Position the navbar at the top of the page */
+    width: 110%;
+    /* Full width */
+    margin: -10px!important;
+    padding: -10px!important;
+    width: 100%
+  }
+  .container-fluid {
+    margin: 0px!important;
+    padding: 0px!important;
+  }
+  .header-inner span {
+    top: 100px!important;
+  }
 }

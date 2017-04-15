@@ -510,16 +510,22 @@ exports.index = function(req, res) {
   } : {};
 
   TaskFull.find(filterUser, {
-    __v: false
-  }, function(err, taskFulls) {
-    if (err) {
-
-
-      return handleError(res, err);
-    }
-    //console.log('taskFulls', taskFulls);
-    return res.status(200).json(taskFulls);
-  });
+      __v: false
+    }).populate('actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
+    .populate('followers', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
+    .populate('comments.user', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
+    .lean().exec(function(err, taskFulls) {
+      if (err) {
+        return handleError(res, err);
+      }
+      _.each(taskFulls, function(taskFull) {
+        _.each(taskFull.actors, function(actor) {
+          actor.avatar = (actor.avatar) ? actor.avatar : 'assets/images/avatars/' + actor._id + '.png';
+        });
+      });
+      //console.log('taskFulls', taskFulls);
+      return res.status(200).json(taskFulls);
+    });
 };
 
 // Get list of hierarchies of taskFulls

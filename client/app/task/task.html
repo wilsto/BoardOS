@@ -1,7 +1,11 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 <!-- BEGIN PAGE CONTENT-->
 <div class="" cg-busy="myPromise">
-
+  <script type="text/ng-template" id="memberTemplate.html">
+     <a >
+        <img class="img-circle" ng-src="{{match.model.avatar}}" err-src="assets/images/avatars/avatar.png" > {{match.model.name}}
+     </a>
+  </script>
 <div class="row profile" >
     <div class="col-md-12">
         <!--BEGIN TABS-->
@@ -152,8 +156,8 @@
                 <div class="row">
                     <ul class="" ui-sortable style="-webkit-padding-start: 15px!important;" ng-model="task.todos">
                         <li class="todoTask" ng-repeat="todo in task.todos | filter:filterToDo track by $index  ">
-                            <div ng-click="changeStatusTodo($index)" class="circularToggleButtonView taskCheckboxNodeView " ng-class="todo.isDone ? ' circularToggleButtonView--toggledOn': 'circularToggleButtonView--toggledOff'">
-                                <div class="circularButtonView circularToggleButtonView-button circularButtonView--xsmall circularButtonView--onWhiteBackground circularButtonView--active">
+                            <div class="circularToggleButtonView taskCheckboxNodeView " ng-class="todo.isDone ? ' circularToggleButtonView--toggledOn': 'circularToggleButtonView--toggledOff'">
+                                <div ng-click="changeStatusTodo($index)"  class="circularButtonView circularToggleButtonView-button circularButtonView--xsmall circularButtonView--onWhiteBackground circularButtonView--active">
                                     <span class="circularButtonView-label">
                                       <svg class="svgIcon " viewBox="0 0 32 32" title="checkmark">
                                         <polygon points="27.672,4.786 10.901,21.557 4.328,14.984 1.5,17.812 10.901,27.214 30.5,7.615 "></polygon>
@@ -177,7 +181,7 @@
                                     </span>
                                     </div>
                                 </a>
-                                <a>
+                                <a ng-click="AssignSubtaskActor(todo)">
                                     <div class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground" uib-tooltip-html="'Assign this subtask'" tooltip-placement="bottom">
                                         <span class="circularButtonView-label">
                                       <svg class="svgIcon task-row-assignee-icon" viewBox="0 0 32 32" title="unassigned">
@@ -188,6 +192,15 @@
                                 </a>
                                 <!-- <button type="button" class=" " aria-hidden="true" ng-click="deleteTodo(todo)">&times;</button> -->
                             </div>
+                        </li>
+                        <li ng-show="blnAssignSubtaskActor">
+                          {{currentTodo}}
+                              <input class="mysearchname" type="text" placeholder="Name" ng-model="subtaskactorselected" uib-typeahead="member as member.name for member in members | filter:$viewValue:namesWith | limitTo:5" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
+                              <span class="btn btn-primary" ng-click="addSubTaskActor(subtaskactorselected)">Add</span>
+                              <span class="task-or">or</span>
+                              <span class="btn btn-info  btn-sm btn-outline" ng-click='addMeToSubTaskActor()' ng-show="!mePresentInSubTaskActors">Assign to Me</span>
+                              <span class="btn btn-info  btn-sm btn-outline" ng-click='removeMeToSubTaskActor()' ng-show="mePresentInSubTaskActors">Unassign to Me</span>
+
                         </li>
                     </ul>
                 </div>
@@ -216,6 +229,7 @@
                         <div class="pull-left" ng-repeat="actor in task.actors ">
                             <img uib-tooltip-html="'{{actor.name}}'" tooltip-placement="bottom" alt="" ng-src="{{actor.avatar}}" style="width:30px;height:30px;" class="img-circle" err-src="assets/images/avatars/avatar.png" />&nbsp;
                         </div>
+                        <a href="#" ng-click="blnAddActor=true" ng-hide="blnAddActor">
                         <div uib-tooltip-html="'Add an actor to this task not yet involved.'" tooltip-placement="bottom" class="circularButtonView add-button detailsFollowersView-addButton circularButtonView--small circularButtonView--onWhiteBackground circularButtonView--active">
                             <span class="circularButtonView-label">
                               <svg class="svgIcon add-followers-icon" viewBox="0 0 32 32" title="plus">
@@ -223,21 +237,45 @@
                               </svg>
                             </span>
                         </div>
+                      </a>
+                      <a href="#"  ng-show="blnAddActor" ng-click="blnAddActor=false">
+                        <span class="btn btn-default  btn-sm btn-outline">Cancel</span>
+                      </a>
                     </li>
+                      <li ng-show="blnAddActor">
+                            <input class="mysearchname" type="text" placeholder="Name" ng-model="actorselected" uib-typeahead="member as member.name for member in members | filter:$viewValue:namesWith | limitTo:5" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
+                            <span class="btn btn-primary" ng-click="addActor(actorselected)">Add</span>
+                            <span class="task-or">or</span>
+                            <span class="btn btn-info  btn-sm btn-outline" ng-click='addMeToActor()' ng-show="!mePresentInActors">Assign to Me</span>
+                            <span class="btn btn-info  btn-sm btn-outline" ng-click='removeMeToActor()' ng-show="mePresentInActors">Unassign to Me</span>
+
+                      </li>
                     <li>
                         <div class="pull-left" style="color:#898E95;width:65px;">Followers</div>
                         <div class="pull-left" ng-repeat="actor in task.followers">
                             <img uib-tooltip-html="'{{actor.name}}'" tooltip-placement="bottom" alt="" ng-src="assets/images/avatars/{{actor._id}}.png" style="width:30px;height:30px" class="img-circle" err-src="assets/images/avatars/avatar.png" />&nbsp;
                         </div>
-                        <div uib-tooltip-html="'Add a follower to this task.<br />Followers don\'t have actions in tasks '" tooltip-placement="bottom" class="circularButtonView add-button detailsFollowersView-addButton circularButtonView--small circularButtonView--onWhiteBackground circularButtonView--active">
-                            <span class="circularButtonView-label">
-                              <svg class="svgIcon add-followers-icon" viewBox="0 0 32 32" title="plus">
-                                <polygon points="28,14 18,14 18,4 14,4 14,14 4,14 4,18 14,18 14,28 18,28 18,18 28,18"></polygon>
-                              </svg>
-                            </span>
-                        </div>
+                        <a href="#" ng-click="blnAddFollower=true" ng-hide="blnAddFollower">
+                          <div uib-tooltip-html="'Add a follower to this task.<br />Followers don\'t have actions in tasks '" tooltip-placement="bottom" class="circularButtonView add-button detailsFollowersView-addButton circularButtonView--small circularButtonView--onWhiteBackground circularButtonView--active">
+                              <span class="circularButtonView-label">
+                                <svg class="svgIcon add-followers-icon" viewBox="0 0 32 32" title="plus">
+                                  <polygon points="28,14 18,14 18,4 14,4 14,14 4,14 4,18 14,18 14,28 18,28 18,18 28,18"></polygon>
+                                </svg>
+                              </span>
+                          </div>
+                        </a>
+                        <a href="#"  ng-show="blnAddFollower" ng-click="blnAddFollower=false">
+                          <span class="btn btn-default  btn-sm btn-outline">Cancel</span>
+                        </a>
+                      </li>
+                      <li ng-show="blnAddFollower">
+                            <input class="mysearchname" type="text" placeholder="Name" ng-model="followerselected" uib-typeahead="member as member.name for member in members | filter:$viewValue:namesWith | limitTo:5" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
+                            <span class="btn btn-primary" ng-click="addFollower(followerselected)">Add</span>
+                            <span class="task-or">or</span>
+                            <span class="btn btn-info  btn-sm btn-outline" ng-click='addMeToFollower()' ng-show="!mePresentInFollowers">Assign to Me</span>
+                            <span class="btn btn-info  btn-sm btn-outline" ng-click='removeMeToFollower()' ng-show="mePresentInFollowers">Unassign to Me</span>
 
-                    </li>
+                      </li>
                 </ul>
             </div>
         </div>

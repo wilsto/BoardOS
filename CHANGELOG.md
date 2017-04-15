@@ -6,6 +6,12 @@
 
 **Closed issues:**
 
+- Ajouter des followers à une tache [\#182](https://github.com/wilsto/BoardOS/issues/182)
+- Ajouter des acteurs à une tache [\#181](https://github.com/wilsto/BoardOS/issues/181)
+- mise à jour de la liste des taches vers taskfull [\#178](https://github.com/wilsto/BoardOS/issues/178)
+- mise à jour de la navbar vers taskfulls [\#176](https://github.com/wilsto/BoardOS/issues/176)
+- mise à jour des dashboard vers taskfulls [\#175](https://github.com/wilsto/BoardOS/issues/175)
+- MIse à jour du main vers taskfull [\#174](https://github.com/wilsto/BoardOS/issues/174)
 - Repair Global Change \(!!crash app!!\) [\#172](https://github.com/wilsto/BoardOS/issues/172)
 
 ## [v1.6.23](https://github.com/wilsto/boardos/tree/v1.6.23) (2017-03-12)

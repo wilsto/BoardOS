@@ -488,6 +488,20 @@
   padding: 5px;
 }
 
+.mysearchname {
+  border: 1px lightgrey solid;
+  border-radius: 5px;
+  margin-top: -10px;
+  padding: 5px;
+  width: 190px;
+}
+
+.task-or {
+  margin-left: 5px;
+  margin-right: 5px;
+  padding: 5px;
+}
+
 .pdcaCol {
   width: 100%;
   text-align: center;
