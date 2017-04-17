@@ -31,7 +31,10 @@ Hierarchies.find({
   }
 });
 
-KPI.find({}, '-__v').lean().exec(function(err, mKPI) {
+KPI.find({}, '-__v').sort({
+  constraint: 1,
+  name: 1
+}).lean().exec(function(err, mKPI) {
   kpis = mKPI;
 })
 
@@ -78,7 +81,7 @@ var j = schedule.scheduleJob({
 }, function() {
   createAllFullTask()
 });
-//createAllFullTask();
+createAllFullTask();
 process.on('metricChanged', function(taskId, refreshDashboard) {
   refreshDashboard = (refreshDashboard === undefined) ? true : refreshDashboard;
   createFullTask(taskId, refreshDashboard, function(data) {});
@@ -90,13 +93,13 @@ process.on('taskRemoved', function(task) {
   }, function(err, numberRemoved) {});
 });
 
-TaskFull.remove({
-  _id: '584ec0dee2a26f04006d023e'
-}, function(err, numberRemoved) {
-  createFullTask('584ec0dee2a26f04006d023e', false, function() {
-    console.log('*******************end fulltask 584ec0dee2a26f04006d023e');
-  });
-});
+// TaskFull.remove({
+//   _id: '58eb314f86b5b10400a6bf61'
+// }, function(err, numberRemoved) {
+//   createFullTask('58eb314f86b5b10400a6bf61', false, function() {
+//     console.log('*******************end fulltask 58eb314f86b5b10400a6bf61');
+//   });
+// });
 
 
 function createFullTask(taskId, refreshDashboard, callback) {
@@ -402,28 +405,14 @@ function createFullTask(taskId, refreshDashboard, callback) {
       //
       _.each(kpis, function(kpi, index) {
         var mKPI = {};
-
         // on ajoute des caractéristiques aux KPI
         //##############################################
-        //mKPI.metricsGroupBy = {};
         mKPI.calcul = {};
         mKPI._id = kpi._id;
         mKPI.name = kpi.name;
         mKPI.category = kpi.category;
         mKPI.constraint = kpi.constraint;
-        //mKPI.metricsGroupBy.Time = tools.groupMultiBy(task.metrics, ['groupTimeByValue']);
-        var filteredMetrics = _.filter(task.metrics, function(metric) {
-          return (kpi.category === 'Alert') ? metric.groupTimeByValue === moment(new Date()).format("YYYY-MM") : _.last(metric.groupTimeByValue); //filtrer par le mois en cours
-        });
-
-        mKPI.calcul.task = tools.calculKPI(filteredMetrics, kpi);
-        // mKPI.calcul.taskTime = _.map(mKPI.metricsGroupBy.Time, function(value, key) {
-        //   return {
-        //     month: key,
-        //     value: tools.calculKPI(value, kpi)
-        //   };
-        // });
-
+        mKPI.calcul.task = tools.calculKPI(task.metrics, kpi);
         if (kpi.category === 'Alert') {
           task.alerts.push(mKPI);
         } else {
@@ -555,6 +544,20 @@ exports.show = function(req, res) {
       if (!taskFull) {
         return res.status(404).send('Not Found');
       }
+      _.each(taskFull.kpis, function(kpi) {
+        var completekpi = _.filter(kpis, function(thiskpi) {
+          return thiskpi._id.toString() === kpi._id.toString();
+        })[0];
+        kpi.description = completekpi.description;
+        kpi.suggestion = completekpi.suggestion;
+      });
+      _.each(taskFull.alerts, function(alert) {
+        var completekpi = _.filter(kpis, function(thiskpi) {
+          return thiskpi._id.toString() === alert._id.toString();
+        })[0];
+        alert.description = completekpi.description;
+        alert.suggestion = completekpi.suggestion;
+      });
       _.each(taskFull.actors, function(actor) {
         actor.avatar = (actor.avatar) ? actor.avatar : 'assets/images/avatars/' + actor._id + '.png';
       });
@@ -571,8 +574,36 @@ exports.show = function(req, res) {
 
 // Creates a new taskFull in the DB.
 exports.create = function(req, res) {
-  console.log('req.body', req.body);
-  TaskFull.create(req.body, function(err, taskFull) {
+  var task = req.body;
+
+  // mise à jour des acteurs
+  var actors = [];
+  _.each(task.actors, function(actor) {
+    actors.push(actor._id);
+  });
+  task.actors = actors;
+
+  // mise à jour des kpis
+  task.kpis = [];
+  task.alerts = [];
+  _.each(kpis, function(kpi, index) {
+    var mKPI = {};
+    // on ajoute des caractéristiques aux KPI
+    //##############################################
+    mKPI.calcul = {};
+    mKPI._id = kpi._id;
+    mKPI.name = kpi.name;
+    mKPI.category = kpi.category;
+    mKPI.constraint = kpi.constraint;
+    mKPI.calcul.task = tools.calculKPI(task.metrics, kpi);
+    if (kpi.category === 'Alert') {
+      task.alerts.push(mKPI);
+    } else {
+      task.kpis.push(mKPI);
+    }
+  });
+
+  TaskFull.create(task, function(err, taskFull) {
     if (err) {
       return handleError(res, err);
     }
@@ -604,14 +635,31 @@ exports.update = function(req, res) {
     _.each(task.followers, function(follower) {
       followers.push(follower._id);
     });
-    console.log('task.followers', task.followers);
-    console.log('followers', followers);
     task.followers = followers;
 
     _.each(task.comments, function(comment) {
       comment.user = comment.user._id;
     });
-    console.log('task', task);
+
+    // mise à jour des kpis
+    task.kpis = [];
+    task.alerts = [];
+    _.each(kpis, function(kpi, index) {
+      var mKPI = {};
+      // on ajoute des caractéristiques aux KPI
+      //##############################################
+      mKPI.calcul = {};
+      mKPI._id = kpi._id;
+      mKPI.name = kpi.name;
+      mKPI.category = kpi.category;
+      mKPI.constraint = kpi.constraint;
+      mKPI.calcul.task = tools.calculKPI(task.metrics, kpi);
+      if (kpi.category === 'Alert') {
+        task.alerts.push(mKPI);
+      } else {
+        task.kpis.push(mKPI);
+      }
+    });
 
     var updated = _.merge(taskFull, task);
     taskFull.actors = task.actors;

@@ -1,6 +1,6 @@
 {
   "name": "board-os",
-  "version": "1.6.26",
+  "version": "1.6.27",
   "main": "server/app.js",
   "dependencies": {
     "async": "^2.1.4",

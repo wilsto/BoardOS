@@ -2,7 +2,7 @@
 /*jshint loopfunc:true */
 
 angular.module('boardOsApp')
-  .controller('TaskCtrl', function($rootScope, $scope, $http, $stateParams, $location, Auth, Notification, myLibrary, $filter, $timeout) {
+  .controller('TaskCtrl', function($rootScope, $scope, $http, $stateParams, $location, Auth, Notification, myLibrary, $filter, $timeout, $mdpDatePicker) {
 
     $scope.parseFloat = parseFloat;
 
@@ -14,7 +14,7 @@ angular.module('boardOsApp')
     // recherche des membres
     $http.get('/api/users/members').success(function(members) {
       $scope.members = members;
-      
+
     });
 
     // si cela n'existe pas
@@ -33,7 +33,11 @@ angular.module('boardOsApp')
       status: 'Not Started'
     });
     $scope.task.todos = [];
-    $scope.task.actors = [$scope.currentUser._id];
+    $scope.task.actors = [{
+      _id: $scope.currentUser._id,
+      name: $scope.currentUser.name,
+      avatar: $scope.currentUser.avatar
+    }];
     $scope.errors = {};
     $scope.taskAlreadyExist = {
       id: null,
@@ -51,6 +55,40 @@ angular.module('boardOsApp')
     });
 
     $scope.opened = {};
+
+
+
+    function calcBusinessDays(dDate1, dDate2) { // input given as Date objects
+      dDate1 = new Date(dDate1);
+      dDate2 = new Date(dDate2);
+
+      var iWeeks, iDateDiff, iAdjust = 0;
+      if (dDate2 < dDate1) {
+        return -1;
+      } // error code if dates transposed
+      var iWeekday1 = dDate1.getDay(); // day of week
+      var iWeekday2 = dDate2.getDay();
+      iWeekday1 = (iWeekday1 === 0) ? 7 : iWeekday1; // change Sunday from 0 to 7
+      iWeekday2 = (iWeekday2 === 0) ? 7 : iWeekday2;
+      if ((iWeekday1 > 5) && (iWeekday2 > 5)) {
+        iAdjust = 1; // adjustment if both days on weekend
+      }
+      iWeekday1 = (iWeekday1 > 5) ? 5 : iWeekday1; // only count weekdays
+      iWeekday2 = (iWeekday2 > 5) ? 5 : iWeekday2;
+
+      // calculate differnece in weeks (1000mS * 60sec * 60min * 24hrs * 7 days = 604800000)
+      iWeeks = Math.floor((dDate2.getTime() - dDate1.getTime()) / 604800000);
+
+      if (iWeekday1 <= iWeekday2) {
+        iDateDiff = (iWeeks * 5) + (iWeekday2 - iWeekday1);
+      } else {
+        iDateDiff = ((iWeeks + 1) * 5) - (iWeekday1 - iWeekday2);
+      }
+
+      iDateDiff -= iAdjust; // take into account both days on weekend
+
+      return (iDateDiff + 1); // add 1 because dates are inclusive
+    }
 
     //todoList
     //***************
@@ -87,13 +125,18 @@ angular.module('boardOsApp')
         _.each(newVal, function(metric) {
 
           // reestimated workload
-          metric.projectedWorkload = (metric.timeSpent / metric.progress * 100).toFixed(1);
+          metric.projectedWorkload = (metric.progress > 0) ? Math.round(1000 * metric.timeSpent * 100 / parseFloat(metric.progress)) / 1000 : metric.targetLoad;
+          metric.duration = calcBusinessDays(metric.startDate || metric.targetstartDate, metric.endDate || metric.targetEndDate);
+          
 
           // status
           if (metric.progress >= 100) {
             metric.status = 'Finished';
           } else if (metric.progress < 100 && metric.progress > 0) {
             metric.status = 'In Progress';
+            if (metric.startDate === undefined) {
+              metric.startDate = new Date();
+            }
           } else {
             metric.status = 'Not Started';
           }
@@ -124,7 +167,7 @@ angular.module('boardOsApp')
         auto: false,
         date: maintenant,
         user: {
-          id: $scope.currentUser._id
+          _id: $scope.currentUser._id
         }
       });
       $scope.comment.text = ''; //Reset the text field.
@@ -198,6 +241,10 @@ angular.module('boardOsApp')
           $scope.mePresentInFollowers = _.filter($scope.task.followers, function(actor) {
             return actor._id === $scope.currentUser._id;
           }).length > 0;
+
+          $scope.KPIIsExpanded = (task.metrics[0].status === 'Finished' || task.metrics[0].status === 'Withdrawn');
+          $scope.ReviewIsExpanded = (task.metrics[0].status === 'Finished' || task.metrics[0].status === 'Withdrawn');
+          $scope.ActionPlanIsExpanded = (task.metrics[0].status === 'Finished' || task.metrics[0].status === 'Withdrawn');
         });
       } else {
         $timeout(function() {
@@ -311,12 +358,43 @@ angular.module('boardOsApp')
 
 
     // *******************
-    // add a follower
+    // add a subtaskactor
     // *******************
-    $scope.AssignSubtaskActor = function(todo) {
+    $scope.AssignSubtTaskActor = function(todo) {
       $scope.blnAssignSubtaskActor = true;
       $scope.currentTodo = todo;
     };
+
+    $scope.addSubTaskActor = function(member) {
+      $scope.currentTodo.actor = member;
+    };
+
+    $scope.addMeToSubTaskActor = function() {
+      var member = _.filter($scope.members, function(member) {
+        return member._id === $scope.currentUser._id;
+      })[0];
+      $scope.currentTodo.actor = member;
+    };
+
+    $scope.showTodoDatePicker = function(todo, ev) {
+      var currentdate = (todo.date) ? new Date(todo.date) : new Date();
+      $mdpDatePicker(currentdate, {
+        targetEvent: ev
+      }).then(function(selectedDate) {
+        todo.date = selectedDate.toISOString();
+      });
+    };
+
+    $scope.showDatePicker = function(item, datename, ev) {
+      var currentdate = (item[datename]) ? new Date(item[datename]) : new Date();
+      $mdpDatePicker(currentdate, {
+        targetEvent: ev
+      }).then(function(selectedDate) {
+        item[datename] = selectedDate.toISOString();
+        
+      });
+    };
+
 
     $scope.$watch('task', function(newMap, previousMap) {
       if (initializing) {
@@ -353,7 +431,7 @@ angular.module('boardOsApp')
     }, true);
 
     $scope.changeActive = function() {
-      
+
       $scope.autoComment('set active to ' + !$scope.task.active);
     };
 
@@ -363,14 +441,14 @@ angular.module('boardOsApp')
       var userid = ($scope.task._id) ? {
         _id: currentUserId
       } : currentUserId;
-      
+
       $scope.task.comments.push({
         text: text,
         auto: true,
         date: maintenant,
         user: userid
       });
-      
+
       if ($scope.task._id !== undefined) {
         $scope.update();
       }

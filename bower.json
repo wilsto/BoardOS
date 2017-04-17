@@ -39,7 +39,8 @@
     "ngEmbed": "ng-embed#^2.1.1",
     "angular-ui-sortable": "0.14.x",
     "bootstrap-toggle": "^2.2.2",
-    "DlhSoft.KanbanLibrary": "http://DlhSoft.com/Packages/DlhSoft.KanbanLibrary.zip"
+    "DlhSoft.KanbanLibrary": "http://DlhSoft.com/Packages/DlhSoft.KanbanLibrary.zip",
+    "mdPickers": "^0.7.5"
   },
   "devDependencies": {
     "angular-mocks": "~1.4.x",

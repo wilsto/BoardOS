@@ -17,7 +17,8 @@ angular.module('boardOsApp', [
     'xeditable',
     'ngEmbed',
     'ui.sortable',
-    'DlhSoft.Kanban.Angular.Components'
+    'DlhSoft.Kanban.Angular.Components',
+    'mdPickers'
   ])
   .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, NotificationProvider) {
     $urlRouterProvider.otherwise('/');
@@ -282,7 +283,7 @@ angular.module('boardOsApp', [
     });
 
     $timeout(function() {
-      $rootScope.startRange = moment().subtract(365, 'days');
+      $rootScope.startRange = moment().subtract(7, 'days');
       $rootScope.endRange = moment();
 
       function cb(start, end) {
@@ -299,7 +300,7 @@ angular.module('boardOsApp', [
           'Last 90 Days': [moment().subtract(90, 'days'), moment()],
           'Last 180 Days': [moment().subtract(180, 'days'), moment()],
           'Last 365 Days': [moment().subtract(365, 'days'), moment()],
-          'All': [moment().subtract(1462, 'days'), moment()],
+          'All': [moment().subtract(5000, 'days'), moment()],
         },
         showCustomRangeLabel: false,
         autoApply: true

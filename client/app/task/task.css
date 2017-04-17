@@ -538,3 +538,42 @@
   width: -webkit-calc(100% - 76px);
   width: calc(100% - 76px);
 }
+
+.mdp-calendar-monthyear {
+  font-size: 14px;
+}
+
+.mdp-calendar-week-days {
+  font-size: 14px;
+}
+
+.md-button-slim {
+  margin: 0;
+  min-height: 0;
+  min-width: 18px;
+  line-height: 14px;
+  font-size: 14px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-transform: none;
+  border-bottom: dashed 1px #428bca;
+}
+
+.days::after {
+  content: " days";
+  font-size: 12px;
+}
+
+.pourcentage::after {
+  content: " %";
+  font-size: 12px;
+}
+
+.tooltipkpi {
+  width: 500px;
+}
+
+.tooltipkpi>.tooltip-inner {
+  text-align: left;
+  max-width: 500px;
+  padding: 10px;
+}

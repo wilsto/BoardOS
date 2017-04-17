@@ -190,6 +190,15 @@ function createCompleteDashboard(dashboardId, callback) {
         dashboard.alertsValue = 0;
         var alertsSumBy = {};
         var kpisSumBy = {};
+        var kpisSumByDate = {
+          last7: 0,
+          last14: 0,
+          last30: 0,
+          last90: 0,
+          last180: 0,
+          last365: 0,
+          lastAll: 0
+        };
         var kpisNbBy = {};
         var kpisSum = 0;
         var kpisNb = 0;
