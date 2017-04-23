@@ -553,21 +553,22 @@
               </span>
                         </div>
                     </div>
-                    <div class="">
-                        <ul class="" style="-webkit-padding-start: 0px!important;">
+                    <div class="dont-break-out">
+                        <ul class="dont-break-out" style="-webkit-padding-start: 0px!important;">
                             <li class="todoTask" ng-repeat="comment in task.comments | orderBy:'-date' | filter:filterComments | filter:filterByAutoManual track by $index" style="min-height:40px;height:auto;padding:10px 0 0 0!important;display:flex;vertical-align: middle;">
-                                <div class="" style="width:50px;display:flex">
+                                <div class="" style="min-width:50px;display:flex">
                                     <div class="" style="display:inline-flex">
                                         <img uib-tooltip-html="'{{comment.user.name}} <br/>
                                         {{comment.date | date:'MMM d, y HH:mm '}}'" tooltip-placement="bottom" alt="" ng-src="{{comment.user.avatar}}" style="width:25px;height:25px" ng-class="{'imageTransparent':comment.auto}" class="img-circle" err-src="assets/images/avatars/avatar.png" />
                                         <svg ng-if="!comment.auto" style="width:16px;color:#B9BCC0;fill:grey;margin-top:-8px;" class="svgIco" viewBox="0 0 32 32" title=""><path d="M19,2c6.065,0,11,4.935,11,11s-4.935,11-11,11h-5.19L8,28.126v-5.282l-0.919-0.59C3.899,20.211,2,16.751,2,13C2,6.935,6.935,2,13,2H19 M19,0h-6C5.832,0,0,5.832,0,13c0,4.59,2.398,8.623,6,10.937V32l8.448-6H19c7.168,0,13-5.832,13-13S26.168,0,19,0L19,0z"></path></svg>
                                     </div>
                                 </div>
-                                <div style="width:60px">
-                                    <span class="dateComment">{{comment.date | date:'d MMM, HH:mm'}}</span>
+                                <div style="min-width:50px" class="dont-break-out">
+                                    <span class="dateComment">{{comment.date | date:'d MMM'}}</span>
                                 </div>
-                                <div class="">
-                                    <span class="autoComment" ng-if="comment.auto === 2" style="color:rgba(91, 103, 133, 0.5)">{{comment.user.name}} </span> <span ng-class="{'autoComment':comment.auto}" ng-bind-html="comment.text | embed:{sanitizeHtml:false,linkTarget:'_blank'}"></span>
+                                <div class="dont-break-out">
+                                    <span class="autoComment" ng-if="comment.auto === 2" style="color:rgba(91, 103, 133, 0.5)">{{comment.user.name}} </span>
+                                    <span class="" ng-class="{'autoComment':comment.auto}" ng-bind-html="comment.text | embed:{sanitizeHtml:false,linkTarget:'_blank'}"></span>
                                 </div>
                             </li>
                         </ul>
@@ -776,7 +777,7 @@
                           </tr>
                       </tbody>
                   </table>
-                    
+
                 </div>
             </div>
         </div>

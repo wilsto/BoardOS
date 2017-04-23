@@ -234,7 +234,7 @@ angular.module('boardOsApp', [
 
   ])
 
-  .run(function($rootScope, $location, Auth, $http, progressStatusTask, statusTask, metricTaskFields, categoryKPI, actionKPI, groupByKPI, $cookieStore, $timeout, editableOptions) {
+  .run(function($rootScope, $location, Auth, $http, progressStatusTask, statusTask, metricTaskFields, categoryKPI, actionKPI, groupByKPI, $cookieStore, $timeout, editableOptions, dateRangeService) {
 
     editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 
@@ -283,16 +283,15 @@ angular.module('boardOsApp', [
     });
 
     $timeout(function() {
-      $rootScope.startRange = moment().subtract(7, 'days');
-      $rootScope.endRange = moment();
+      
 
       function cb(start, end) {
         $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
       }
 
       $('#reportrange').daterangepicker({
-        startDate: $rootScope.startRange,
-        endDate: $rootScope.endRange,
+        startDate: dateRangeService.startRange,
+        endDate: dateRangeService.endRange,
         ranges: {
           'Last 7 Days': [moment().subtract(7, 'days'), moment()],
           'Last 14 Days': [moment().subtract(14, 'days'), moment()],
@@ -306,12 +305,28 @@ angular.module('boardOsApp', [
         autoApply: true
       }, cb);
 
-      cb($rootScope.startRange, $rootScope.endRange);
+      cb(dateRangeService.startRange, dateRangeService.endRange);
 
       $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
-        $rootScope.startRange = picker.startDate;
-        $rootScope.endRange = picker.endDate;
+        
+        $rootScope.$broadcast('dateRangeService:updated', picker.chosenLabel);
+        dateRangeService.startRange = picker.startDate;
+        dateRangeService.endRange = picker.endDate;
       });
     }, 500);
 
+  })
+
+  .factory('dateRangeService', function() {
+
+    var rangeDate = 'last7';
+    var startRange = moment().subtract(7, 'days');
+    var endRange = moment();
+
+    // this is simplified for illustration, see edit below
+    return {
+      rangeDate: rangeDate,
+      startRange: startRange,
+      endRange: endRange,
+    };
   });

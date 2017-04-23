@@ -81,7 +81,7 @@ var j = schedule.scheduleJob({
 }, function() {
   createAllFullTask()
 });
-createAllFullTask();
+//createAllFullTask();
 process.on('metricChanged', function(taskId, refreshDashboard) {
   refreshDashboard = (refreshDashboard === undefined) ? true : refreshDashboard;
   createFullTask(taskId, refreshDashboard, function(data) {});
@@ -93,13 +93,13 @@ process.on('taskRemoved', function(task) {
   }, function(err, numberRemoved) {});
 });
 
-// TaskFull.remove({
-//   _id: '58eb314f86b5b10400a6bf61'
-// }, function(err, numberRemoved) {
-//   createFullTask('58eb314f86b5b10400a6bf61', false, function() {
-//     console.log('*******************end fulltask 58eb314f86b5b10400a6bf61');
-//   });
-// });
+TaskFull.remove({
+  _id: '58d3773d26b3bd0400317cab'
+}, function(err, numberRemoved) {
+  createFullTask('58d3773d26b3bd0400317cab', false, function() {
+    console.log('*******************end fulltask 58d3773d26b3bd0400317cab');
+  });
+});
 
 
 function createFullTask(taskId, refreshDashboard, callback) {
@@ -177,6 +177,7 @@ function createFullTask(taskId, refreshDashboard, callback) {
       }, '-__v').sort({
         date: 'asc'
       }).lean().exec(function(err, metrics) {
+        var lastComment = '';
         _.each(metrics, function(metric, index) { // pour chaque metric
           // si c'est la première métric, on crèe l'objet
           if (typeof task.metrics === 'undefined') {
@@ -224,6 +225,21 @@ function createFullTask(taskId, refreshDashboard, callback) {
               date: moment(metric.date).add(moment.duration(6, 'seconds')),
               auto: true
             });
+          } else {
+            console.log('metric.comments', metric.comments);
+            console.log('lastComment', lastComment);
+            if (metric.comments !== undefined && metric.comments !== '' && lastComment !== metric.comments) {
+              console.log('CONDITION PASSED');
+              var currentComment = (lastComment.length > 0) ? metric.comments.replace(lastComment, '').trim() : metric.comments.trim();
+              lastComment = currentComment;
+              console.log('currentComment', currentComment);
+              task.comments.push({
+                text: currentComment,
+                user: metric.actor._id,
+                date: moment(metric.date).add(moment.duration(6, 'seconds')),
+                auto: false
+              });
+            }
           }
           metric.date = new Date(metric.date);
 
@@ -500,7 +516,8 @@ exports.index = function(req, res) {
 
   TaskFull.find(filterUser, {
       __v: false
-    }).populate('actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
+    })
+    .populate('actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
     .populate('followers', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
     .populate('comments.user', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
     .lean().exec(function(err, taskFulls) {

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('DashboardCtrl', function($scope, $rootScope, $http, $stateParams, myLibrary, $cookieStore, $location, Notification) {
+  .controller('DashboardCtrl', function($scope, $rootScope, $http, $stateParams, myLibrary, $cookieStore, $location, Notification, $timeout, dateRangeService) {
 
     function average(arr) {
       return _.reduce(arr, function(memo, num) {
@@ -78,6 +78,65 @@ angular.module('boardOsApp')
         $scope.confidenceMean = _.last($scope.dataConfidence[0].values).count;
       });
     };
+    $scope.giveMeMyColor = function(value, category) {
+      return myLibrary.giveMeMyColor(value, category);
+    };
+
+    $scope.$on('dateRangeService:updated', function(event, data) {
+      $scope.datediff = 7;
+      if (data) {
+        switch (data) {
+          case 'Last 7 Days':
+            dateRangeService.rangeDate = 'last7';
+            $scope.datediff = 7;
+            break;
+          case 'Last 14 Days':
+            dateRangeService.rangeDate = 'last14';
+            $scope.datediff = 14;
+            break;
+          case 'Last 30 Days':
+            dateRangeService.rangeDate = 'last30';
+            $scope.datediff = 30;
+            break;
+          case 'Last 90 Days':
+            dateRangeService.rangeDate = 'last90';
+            $scope.datediff = 90;
+            break;
+          case 'Last 180 Days':
+            dateRangeService.rangeDate = 'last180';
+            $scope.datediff = 180;
+            break;
+          case 'Last 365 Days':
+            dateRangeService.rangeDate = 'last365';
+            $scope.datediff = 365;
+            break;
+          case 'All':
+            dateRangeService.rangeDate = 'task';
+            $scope.datediff = 5000;
+            break;
+        }
+      }
+      $scope.rangeDate = dateRangeService.rangeDate;
+      $timeout(function() {
+        $scope.$apply(function() {
+          $scope.filteredPlanTasks = _.filter($scope.dashboard.tasks, function(task) {
+            var a = moment(new Date()).add($scope.datediff, 'days');
+            var b = moment(new Date(task.metrics[0].targetstartDate));
+            return $scope.datediff >= b.diff(a, 'days') && task.metrics[0].status === 'Not Started';
+          });
+          $scope.filteredInProgressTasks = _.filter($scope.dashboard.tasks, function(task) {
+            var a = moment(new Date()).add($scope.datediff, 'days');
+            var b = moment(new Date(task.metrics[0].startDate || task.metrics[0].targetstartDate));
+            return $scope.datediff >= b.diff(a, 'days') && task.metrics[0].status === 'In Progress';
+          });
+          $scope.filteredFinishedTasks = _.filter($scope.dashboard.tasks, function(task) {
+            var a = moment(new Date());
+            var b = moment(new Date(task.metrics[0].endDate));
+            return ($scope.datediff >= a.diff(b, 'days')) && (task.metrics[0].status === 'Finished');
+          });
+        });
+      });
+    });
 
     $scope.loadCompleteDashboard = function() {
       $scope.btndisabled = false;
@@ -94,6 +153,9 @@ angular.module('boardOsApp')
           $cookieStore.put('perimeter', $rootScope.perimeter);
 
           $scope.tasksNb = dashboard.tasks.length;
+
+          $rootScope.$broadcast('dateRangeService:updated');
+
 
           var dataGoals = [];
           var dataAllGoals = [];

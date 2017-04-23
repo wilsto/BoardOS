@@ -16,7 +16,7 @@ var Q = require('q');
 var Dashboard = require('../dashboard/dashboard.model');
 var KPI = require('./KPI.model');
 var Task = require('../task/task.model');
-var TaskComplete = require('../taskComplete/taskComplete.model');
+var TaskFull = require('../taskFull/taskFull.model');
 var Metric = require('../metric/metric.model');
 var Hierarchies = require('../hierarchy/hierarchy.model');
 var getData = require('../../config/getData');
@@ -119,19 +119,56 @@ exports.tasksList = function(req, res) {
     .then(function() {
       // Get related tasks
       var deferred = Q.defer();
-      var taskFilter = (typeof req.query.taskFilter === 'undefined') ? {} : {
-        _id: req.query.taskFilter
-      };
-      TaskComplete.find(taskFilter).lean().exec(function(err, tasks) {
-        mTasks = [];
-        _.each(tasks, function(rowdata, index) {
 
-          if (rowdata.context.indexOf(mKPI.context) >= 0 && rowdata.activity.indexOf(mKPI.activity) >= 0) {
-            mTasks.push(rowdata);
+      var taskFilter = {};
+      var cutoff = new Date();
+      cutoff.setDate(cutoff.getDate() - req.query.rangedate - 1);
+      if (typeof req.query.taskFilter !== 'undefined') {
+        if (req.query.rangedate) {
+          taskFilter = {
+            _id: req.query.taskFilter,
+            'metrics': {
+              $elemMatch: {
+                endDate: {
+                  $gte: cutoff
+                }
+              }
+            }
           }
+        } else {
+          taskFilter = {
+            _id: req.query.taskFilter
+          }
+        }
+      } else {
+        if (req.query.rangedate) {
+          taskFilter = {
+            'metrics': {
+              $elemMatch: {
+                endDate: {
+                  $gte: cutoff
+                }
+              }
+            }
+          }
+        }
+      }
+      TaskFull.find(taskFilter)
+        .populate('actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
+        .lean().exec(function(err, tasks) {
+          mTasks = [];
+          _.each(tasks, function(rowdata, index) {
+
+            if (rowdata.context.indexOf(mKPI.context) >= 0 && rowdata.activity.indexOf(mKPI.activity) >= 0) {
+              mTasks.push(rowdata);
+            }
+            _.each(rowdata.actors, function(actor) {
+              actor.avatar = (actor.avatar) ? actor.avatar : 'assets/images/avatars/' + actor._id + '.png';
+            });
+
+          });
+          deferred.resolve(mTasks);
         });
-        deferred.resolve(mTasks);
-      });
       return deferred.promise;
     })
     .then(function() {
