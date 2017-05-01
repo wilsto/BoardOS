@@ -7,6 +7,7 @@
     "angular-bootstrap": "0.14.3",
     "angular-confirm-field": "~0.1.2",
     "angular-cookies": "1.4.14",
+    "angular-filter": "^0.5.16",
     "angular-nvd3": "~0.0.9",
     "angular-resource": "~1.4.x",
     "angular-sanitize": "~1.4.x",
@@ -23,8 +24,10 @@
     "jquery": "~1.11.0",
     "json3": "~3.3.1",
     "lodash": "~2.4.1",
+    "mdPickers": "^0.7.5",
     "moment": ">=2.9.0",
     "ng-js-tree": "~0.0.3",
+    "ng-material-floating-button": "ng-mfb#^0.6.2",
     "ng-table": "~0.3.3",
     "ngDialog": "~0.3.8",
     "select2": "~3.5.2",
@@ -39,10 +42,7 @@
     "ngEmbed": "ng-embed#^2.1.1",
     "angular-ui-sortable": "0.14.x",
     "bootstrap-toggle": "^2.2.2",
-    "DlhSoft.KanbanLibrary": "http://DlhSoft.com/Packages/DlhSoft.KanbanLibrary.zip",
-    "mdPickers": "^0.7.5",
-    "ng-material-floating-button": "ng-mfb#^0.6.2",
-    "angular-filter": "^0.5.16"
+    "DlhSoft.KanbanLibrary": "http://DlhSoft.com/Packages/DlhSoft.KanbanLibrary.zip"
   },
   "devDependencies": {
     "angular-mocks": "~1.4.x",
