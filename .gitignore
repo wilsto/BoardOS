@@ -11,3 +11,5 @@ newrelic_agent.log
 client/bower_components_2/
 
 client/bower_components_3/
+
+server/config/environment/test\.js
