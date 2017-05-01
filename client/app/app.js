@@ -17,7 +17,6 @@ angular.module('boardOsApp', [
     'xeditable',
     'ngEmbed',
     'ui.sortable',
-    'DlhSoft.Kanban.Angular.Components',
     'angular.filter',
     'mdPickers',
     'ng-mfb'
