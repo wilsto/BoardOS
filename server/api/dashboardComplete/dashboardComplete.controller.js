@@ -79,25 +79,13 @@ process.on('dashboardChanged', function(dashboard) {
 });
 
 process.on('dashboardRemoved', function(dashboard) {
-
   DashboardComplete.remove({
     _id: dashboard._id
-  }, function(err, numberRemoved) {
-
-  });
+  }, function(err, numberRemoved) {});
 });
-
-var j = schedule.scheduleJob({
-  hour: 1,
-  minute: 0
-}, function() {
-
-});
-
 
 function createAllCompleteDashboard() {
   var alldashboards;
-
   Q()
     // Get a single task
     .then(function() {
@@ -328,13 +316,13 @@ function createCompleteDashboard(dashboardId, callback) {
               var mKPI = _.filter(kpis, function(kpi) {
                 return kpi._id.toString() === key;
               })[0];
-              if (mKPI.name === 'Deliver On Time') {
-                console.log('dashboard.name', dashboard.name);
-                console.log('kpi.name', mKPI.name);
-                console.log('value', value);
-                console.log('kpisNbBy[key]', kpisNbBy[key]);
-                console.log('parseInt(value / kpisNbBy[key]', parseInt(value / kpisNbBy[key]));
-              }
+              // if (mKPI.name === 'Deliver On Time') {
+              //   console.log('dashboard.name', dashboard.name);
+              //   console.log('kpi.name', mKPI.name);
+              //   console.log('value', value);
+              //   console.log('kpisNbBy[key]', kpisNbBy[key]);
+              //   console.log('parseInt(value / kpisNbBy[key]', parseInt(value / kpisNbBy[key]));
+              // }
               dashboard.kpis.push({
                 kpiId: key,
                 name: mKPI.name,

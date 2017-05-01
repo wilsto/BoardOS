@@ -1,4 +1,11 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
+<nav mfb-menu position="br" effect="slidein" label="create a new task with same"
+     active-icon="ion-edit" resting-icon="ion-plus-round"
+     toggling-method="click">
+     <a mfb-button label="context" icon="ion-android-pin" ng-click="createNewTask('context')"></a>
+     <a mfb-button label="activity" icon="ion-ios-gear" ng-click="createNewTask('activity')"></a>
+     <a mfb-button label="both" icon="ion-fork-repo" ng-click="createNewTask('both')"></a>
+  </nav>
 <!-- BEGIN PAGE CONTENT-->
 <div class="" cg-busy="myPromise">
   <script type="text/ng-template" id="memberTemplate.html">
@@ -6,6 +13,103 @@
         <img class="img-circle" ng-src="{{match.model.avatar}}" err-src="assets/images/avatars/avatar.png" > {{match.model.name}}
      </a>
   </script>
+  <script type="text/ng-template" id="reOpenModal.html">
+    <div class="modal-header">
+        <h4 class="modal-title">ReOpen a task</h4>
+    </div>
+    <div class="modal-body" id="modal-body-{{name}}">
+        If you want to reopen a finished task, please indicate the reason and the new engagement<br /><br />
+        <table class="table table-striped table-hover">
+            <tbody style="text-align:left;">
+              <tr>
+                  <td>
+                      <span class="text-muted">Rework Reason
+                      </span>
+                  </td>
+                  <td>
+                      <span class="pull-right text-info">
+                        <input type="radio" ng-model="selected.reworkReason" value="Internal" ng-required="!reworkReason">  Internal
+                        <input type="radio" ng-model="selected.reworkReason" value="External" ng-required="!reworkReason"> External
+                      </span>
+                  </td>
+              </tr>
+              <tr>
+                  <td>
+                      <span class="text-muted">Rework Comment
+                      </span>
+                  </td>
+                  <td>
+                      <span class="pull-right text-info">
+                        <a href="#" editable-textarea="selected.comment" e-style="width: 380px">{{ selected.comment || 'empty' }}</a>
+                      </span>
+                  </td>
+              </tr>
+              <tr>
+                  <td>
+
+                  </td>
+                  <td>
+
+                  </td>
+              </tr>
+                <tr>
+                    <td>
+                        <span class="text-muted">Rework StartDate
+                        </span>
+                    </td>
+                    <td>
+                        <span class="pull-right text-info">
+                          <!-- <a href="#" editable-bsdate="task.metrics[task.metrics.length-1].targetstartDate" e-is-open="opened.$data" e-ng-click="open($event,'$data')" e-datepicker-popup="mediumDate" e-readonly="true"> -->
+                          <md-button class="md-button-slim" ng-click="showDatePicker(selected,'targetstartDate', $event)" aria-label="none" >
+                              <span ng-class="{'MandatoryField':selected.targetstartDate === undefined}">{{ (selected.targetstartDate | date:'mediumDate') || 'empty' }}</span>
+                          </md-button>
+                          <!-- </a> -->
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:left">
+                        <span class="text-muted">Rework Due Date
+                        </span>
+                    </td>
+                    <td>
+                        <span class="pull-right text-info">
+                          <!-- <a href="#" editable-bsdate="task.metrics[task.metrics.length-1].targetEndDate" e-is-open="opened.$data" e-ng-click="open($event,'$data')" e-datepicker-popup="mediumDate" e-readonly="true"> -->
+                          <md-button class="md-button-slim" ng-click="showDatePicker(selected,'targetEndDate', $event)" aria-label="none" >
+                            <span ng-class="{'MandatoryField':selected.targetEndDate === undefined}"> {{ (selected.targetEndDate | date:'mediumDate') || 'empty' }}</span>
+                          </md-button>
+                          <!-- </a> -->
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:left">
+                        <span class="text-muted">Rework WorkLoad </span>
+                    </td>
+                    <td>
+                        <span class="pull-right text-info">
+                          <a href="#" class="days" e-min="0" e-step="0.001" editable-number="selected.targetLoad" e-style="width: 100px;"  buttons="no">{{selected.targetLoad || 'empty'}}</a>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="padding-top:25px">
+            <span>Debug</span>
+                <div ng-init="DebugModalIsExpanded=false" ng-click="DebugModalIsExpanded=!DebugModalIsExpanded">
+                    <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!DebugModalIsExpanded" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                    <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="DebugModalIsExpanded" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                </div>
+            <br>
+            <pre ng-show="DebugModalIsExpanded">{{selected | json}}</pre>
+        </div>
+    </div>
+    <div class="modal-footer">
+            <button class="btn btn-warning" type="button" ng-click="ok()" ng-disabled="selected.reworkReason === null || selected.comment === null || selected.targetstartDate === null || selected.targetEndDate === null || selected.targetLoad === null ">OK</button>
+            <button class="btn btn-default pull-left" type="button" ng-click="cancel()">Cancel</button>
+        </div>
+</script>
+
 <div class="row profile" >
     <div class="col-md-12">
         <!--BEGIN TABS-->
@@ -43,6 +147,9 @@
                                           {{task.context || 'Please give context' }}
                                         </a>
                                     </li>
+                                    <li style="margin-top:5px" >
+                                      <span ng-show="messageCreation" class="label label-danger">  {{messageCreation}}</span>
+                                    </li>
                                 </ul>
                                 <div class="row">
                                     <div class="descriptionTask">
@@ -66,26 +173,31 @@
 <div class="row">
     <!--############### PLAN ############  -->
 
-    <div class="col-lg-3 col-md-6 col-sm-12" ng-class="{'label-default':task.metrics[0].status ==='Not Started'}" style="padding-bottom:10px;">
-        <div class="pdcaCol" ng-class="{'label-default':task.metrics[0].status ==='Not Started'}">
+    <div class="col-lg-3 col-md-6 col-sm-12" ng-class="{'label-default':task.metrics[task.metrics.length-1].status ==='Not Started'}" style="padding-bottom:10px;">
+        <div class="pdcaCol" ng-class="{'label-default':task.metrics[task.metrics.length-1].status ==='Not Started'}">
             PLAN
-            <div class="pull-right" ng-if="task.metrics[0].status ==='Not Started'">
-                <span class="label" ng-class="{'label-info':task.metrics[0].status ==='In Progress','label-success':task.metrics[0].status ==='Finished','label-default':task.metrics[0].status ==='Not Started','label-lightgrey':task.metrics[0].status =='Withdrawn'}">
-                      {{task.metrics[0].status}}
+            <div class="pull-right" ng-if="task.metrics[task.metrics.length-1].status ==='Not Started'">
+                <span class="label" ng-class="{'label-info':task.metrics[task.metrics.length-1].status ==='In Progress','label-success':task.metrics[task.metrics.length-1].status ==='Finished','label-default':task.metrics[task.metrics.length-1].status ==='Not Started','label-lightgrey':task.metrics[task.metrics.length-1].status =='Withdrawn'}">
+                      {{task.metrics[task.metrics.length-1].status}}
                     </span>
             </div>
         </div>
 
         <!-- Engagement -->
-        <div class="portlet sale-summary" >
+        <div class="portlet sale-summary" ng-repeat="(key, currentMetric) in task.metrics">
             <div class="portlet-title">
                 <div class="caption">
-                    Engagement
+                  <span ng-if="key === 0">Primary </span> <span ng-if="key > 0">Re</span>Engagement <span ng-if="key > 0"> {{key}}</span>
                 </div>
                 <div class="tools">
+                    <div class="pull-right" ng-init="EngagementIsExpanded[key]=(key===task.metrics.length-1 || key===0)" ng-click="EngagementIsExpanded[key]=!EngagementIsExpanded[key]">
+                        <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!EngagementIsExpanded[key]" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                        <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="EngagementIsExpanded[key]" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                    </div>
+                    <span ng-if="key > 0" class="pull-right" style="margin-right:15px;"> <span class="label label-warning">  {{currentMetric.reworkReason}}</span></span>
                 </div>
             </div>
-            <div class="portlet-body" style="padding:0!important">
+            <div class="portlet-body" style="padding:0!important" ng-show="EngagementIsExpanded[key]">
                 <table class="table table-striped table-hover">
                     <tbody style="text-align:left;">
                         <tr>
@@ -95,9 +207,9 @@
                             </td>
                             <td>
                                 <span class="pull-right text-info">
-                                  <!-- <a href="#" editable-bsdate="task.metrics[0].targetstartDate" e-is-open="opened.$data" e-ng-click="open($event,'$data')" e-datepicker-popup="mediumDate" e-readonly="true"> -->
-                                  <md-button class="md-button-slim" ng-click="showDatePicker(task.metrics[0],'targetstartDate', $event)" aria-label="none" >
-                                    {{ (task.metrics[0].targetstartDate | date:'mediumDate') || 'empty' }}
+                                  <!-- <a href="#" editable-bsdate="task.metrics[task.metrics.length-1].targetstartDate" e-is-open="opened.$data" e-ng-click="open($event,'$data')" e-datepicker-popup="mediumDate" e-readonly="true"> -->
+                                  <md-button class="md-button-slim" ng-click="showDatePicker(currentMetric,'targetstartDate', $event)" aria-label="none" >
+                                      <span ng-class="{'mandatoryField':currentMetric.targetstartDate === undefined}">{{ (currentMetric.targetstartDate | date:'mediumDate') || 'empty' }}</span>
                                   </md-button>
                                   <!-- </a> -->
                                 </span>
@@ -110,27 +222,44 @@
                             </td>
                             <td>
                                 <span class="pull-right text-info">
-                                  <!-- <a href="#" editable-bsdate="task.metrics[0].targetEndDate" e-is-open="opened.$data" e-ng-click="open($event,'$data')" e-datepicker-popup="mediumDate" e-readonly="true"> -->
-                                    <md-button class="md-button-slim" ng-click="showDatePicker(task.metrics[0],'targetEndDate', $event)" aria-label="none" >
-
-                                  {{ (task.metrics[0].targetEndDate | date:'mediumDate') || 'empty' }}
-                                </md-button>
-
+                                  <!-- <a href="#" editable-bsdate="task.metrics[task.metrics.length-1].targetEndDate" e-is-open="opened.$data" e-ng-click="open($event,'$data')" e-datepicker-popup="mediumDate" e-readonly="true"> -->
+                                  <md-button class="md-button-slim" ng-click="showDatePicker(currentMetric,'targetEndDate', $event)" aria-label="none" >
+                                    <span ng-class="{'mandatoryField':currentMetric.targetEndDate === undefined}"> {{ (currentMetric.targetEndDate | date:'mediumDate') || 'empty' }}</span>
+                                  </md-button>
                                   <!-- </a> -->
                                 </span>
                             </td>
                         </tr>
                         <tr>
                             <td style="text-align:left">
-                                <span class="text-muted">WorkLoad <small style="font-size:10px"><a href="#"> >> PERT</a></small>
+                                <span class="text-muted">WorkLoad <small style="font-size:10px"><a href="#" ng-click="standardPERT()"> >> PERT</a></small>
                                 </span>
                             </td>
                             <td>
                                 <span class="pull-right text-info">
-                                  <a href="#" class="days" e-min="0" e-step="0.001" editable-number="task.metrics[0].targetLoad" e-style="width: 100px;"  buttons="no">{{ task.metrics[0].targetLoad || 'empty'}}</a>
+                                  <a href="#" class="days" e-min="0" e-step="0.001" editable-number="currentMetric.targetLoad" e-style="width: 100px;"  buttons="no">{{currentMetric.targetLoad || 'empty'}}</a>
                                 </span>
                             </td>
                         </tr>
+                        <tr>
+                            <td style="text-align:left">
+                                <span class="text-muted">Hypothesis
+                              </span>
+                            </td>
+                            <td style="text-align:right">
+                                <a href="#" style="color:grey!important;" e-label="Hypothesis" editable-textarea="task.hypothesis" buttons="right">{{ task.hypothesis || ' Optional ' }}</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:left">
+                                <span class="text-muted">Risks
+                              </span>
+                            </td>
+                            <td style="text-align:right" >
+                                <a href="#" style="color:grey!important;" e-label="Risks" editable-textarea="task.risks" buttons="right">{{ task.risks || ' Optional' }}</a>
+                            </td>
+                        </tr>
+
                     </tbody>
                 </table>
 
@@ -153,18 +282,18 @@
                         <div class="input-group" style="width:96%">
                             <input class="form-control" type="text" ng-model="newTodo.text" placeholder="Add New Todo" ng-enter="addTodo()">
                             <span class="input-group-btn">
-                                <button class="btn btn-outline btn-info" type="button"><span ng-click="addTodo()">Add</button>
+                                <button class="btn btn-outline btn-info" type="button" ng-click="addTodo()">Add</button>
                               </span>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <ul class="" ui-sortable style="-webkit-padding-start: 15px!important;" ng-model="task.todos">
+                    <ul class="" ui-sortable style="padding-left:15px;-webkit-padding-start: 15px!important;" ng-model="task.todos">
                         <li class="todoTask" ng-repeat="todo in task.todos | filter:filterToDo track by $index  ">
                             <div class="circularToggleButtonView taskCheckboxNodeView " ng-class="todo.isDone ? ' circularToggleButtonView--toggledOn': 'circularToggleButtonView--toggledOff'">
                                 <div ng-click="changeStatusTodo($index)"  class="circularButtonView circularToggleButtonView-button circularButtonView--xsmall circularButtonView--onWhiteBackground circularButtonView--active">
                                     <span class="circularButtonView-label">
-                                      <svg class="svgIcon " viewBox="0 0 32 32" title="checkmark">
+                                      <svg class="svgIcon " viewbox="0 0 32 32" title="checkmark">
                                         <polygon points="27.672,4.786 10.901,21.557 4.328,14.984 1.5,17.812 10.901,27.214 30.5,7.615 "></polygon>
                                       </svg>
                                     </span>
@@ -176,7 +305,7 @@
                                   <small class="text-muted" ng-show="todo.date">{{todo.date |date:'dd MMM' }}</small>
                                     <div ng-hide="todo.date" class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground" uib-tooltip-html="'Add a due date to this subtask'" tooltip-placement="bottom">
                                         <span class="circularButtonView-label">
-                                      <svg class="svgIcon task-row-due-date-icon" viewBox="0 0 32 32" title="calendar">
+                                      <svg class="svgIcon task-row-due-date-icon" viewbox="0 0 32 32" title="calendar">
                                         <rect x="16" y="16" width="2" height="2"></rect><rect x="20" y="16" width="2" height="2"></rect>
                                         <rect x="20" y="20" width="2" height="2"></rect><rect x="16" y="20" width="2" height="2"></rect>
                                         <rect x="8" y="20" width="2" height="2"></rect><rect x="8" y="24" width="2" height="2"></rect>
@@ -191,7 +320,7 @@
                                     <img ng-show="todo.actor" uib-tooltip-html="'{{todo.actor.name}}'" tooltip-placement="bottom" alt="" ng-src="{{todo.actor.avatar}}" style="width:30px;height:30px;" class="img-circle" err-src="assets/images/avatars/avatar.png" />&nbsp;
                                     <div ng-hide="todo.actor" class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground" uib-tooltip-html="'Assign this subtask'" tooltip-placement="bottom">
                                         <span class="circularButtonView-label">
-                                      <svg class="svgIcon task-row-assignee-icon" viewBox="0 0 32 32" title="unassigned">
+                                      <svg class="svgIcon task-row-assignee-icon" viewbox="0 0 32 32" title="unassigned">
                                         <path d="M20.534,16.765C23.203,15.204,25,12.315,25,9c0-4.971-4.029-9-9-9S7,4.029,7,9c0,3.315,1.797,6.204,4.466,7.765C5.962,18.651,2,23.857,2,30c0,0.681,0.065,1.345,0.159,2h27.682C29.935,31.345,30,30.681,30,30C30,23.857,26.038,18.651,20.534,16.765z M9,9c0-3.86,3.14-7,7-7s7,3.14,7,7s-3.14,7-7,7S9,12.86,9,9z M4,30c0-6.617,5.383-12,12-12s12,5.383,12,12H4z"></path>
                                       </svg>
                                     </span>
@@ -204,9 +333,8 @@
                               <input class="mysearchname" type="text" placeholder="Name" ng-model="subtaskactorselected" uib-typeahead="member as member.name for member in members | filter:$viewValue:namesWith | limitTo:5" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
                               <span class="btn btn-primary" ng-click="addSubTaskActor(subtaskactorselected)">Add</span>
                               <span class="task-or">or</span>
-                              <span class="btn btn-info  btn-sm btn-outline" ng-click='addMeToSubTaskActor()' ng-show="!mePresentInSubTaskActors">Assign to Me</span>
-                              <span class="btn btn-info  btn-sm btn-outline" ng-click='removeMeToSubTaskActor()' ng-show="mePresentInSubTaskActors">Unassign to Me</span>
-
+                              <span class="btn btn-info  btn-sm btn-outline" ng-click="addMeToSubTaskActor()" ng-show="!mePresentInSubTaskActors">Assign to Me</span>
+                              <span class="btn btn-info  btn-sm btn-outline" ng-click="removeMeToSubTaskActor()" ng-show="mePresentInSubTaskActors">Unassign to Me</span>
                         </li>
                     </ul>
                 </div>
@@ -222,8 +350,8 @@
                 </div>
                 <div class="tools">
                     <div class="pull-right" ng-click="TeamIsExpanded=!TeamIsExpanded">
-                        <svg class="svgIcon " style="width:16px;color:#B9BCC0;fill:grey" ng-show="!TeamIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
-                        <svg class="svgIcon " style="width:16px;color:#B9BCC0;fill:grey" ng-show="TeamIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                        <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!TeamIsExpanded" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                        <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="TeamIsExpanded" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
                     </div>
                     <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{task.actors.length + task.followers.length}}</span></span>
                 </div>
@@ -235,21 +363,21 @@
                         <div class="pull-left" ng-repeat="actor in task.actors ">
                             <img uib-tooltip-html="'{{actor.name}}'" tooltip-placement="bottom" alt="" ng-src="{{actor.avatar}}" style="width:30px;height:30px;" class="img-circle" err-src="assets/images/avatars/avatar.png" />&nbsp;
                         </div>
-                        <a href="#" ng-click="blnAddActor=true" ng-hide="blnAddActor">
+                        <a href="#" ng-click="openAddActorBox()" ng-hide="blnAddActor">
                         <div uib-tooltip-html="'Add an actor to this task not yet involved.'" tooltip-placement="bottom" class="circularButtonView add-button detailsFollowersView-addButton circularButtonView--small circularButtonView--onWhiteBackground circularButtonView--active">
                             <span class="circularButtonView-label">
-                              <svg class="svgIcon add-followers-icon" viewBox="0 0 32 32" title="plus">
+                              <svg class="svgIcon add-followers-icon" viewbox="0 0 32 32" title="plus">
                                 <polygon points="28,14 18,14 18,4 14,4 14,14 4,14 4,18 14,18 14,28 18,28 18,18 28,18"></polygon>
                               </svg>
                             </span>
                         </div>
                       </a>
-                      <a href="#"  ng-show="blnAddActor" ng-click="blnAddActor=false">
+                      <a href="#"  ng-show="blnAddActor" ng-click="closeAddActorBox()">
                         <span class="btn btn-default  btn-sm btn-outline">Cancel</span>
                       </a>
                     </li>
                       <li ng-show="blnAddActor">
-                            <input class="mysearchname" type="text" placeholder="Name" ng-model="actorselected" uib-typeahead="member as member.name for member in members | filter:$viewValue:namesWith | limitTo:5" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
+                            <input id="actorselected" class="mysearchname" type="text" placeholder="Name" ng-model="actorselected" uib-typeahead="member as member.name for member in members | filter:$viewValue:namesWith | limitTo:5" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
                             <span class="btn btn-primary" ng-click="addActor(actorselected)">Add</span>
                             <span class="task-or">or</span>
                             <span class="btn btn-info  btn-sm btn-outline" ng-click='addMeToActor()' ng-show="!mePresentInActors">Assign to Me</span>
@@ -261,21 +389,21 @@
                         <div class="pull-left" ng-repeat="actor in task.followers">
                             <img uib-tooltip-html="'{{actor.name}}'" tooltip-placement="bottom" alt="" ng-src="assets/images/avatars/{{actor._id}}.png" style="width:30px;height:30px" class="img-circle" err-src="assets/images/avatars/avatar.png" />&nbsp;
                         </div>
-                        <a href="#" ng-click="blnAddFollower=true" ng-hide="blnAddFollower">
+                        <a href="#" ng-click="openAddFollowerBox()" ng-hide="blnAddFollower">
                           <div uib-tooltip-html="'Add a follower to this task.<br />Followers don\'t have actions in tasks '" tooltip-placement="bottom" class="circularButtonView add-button detailsFollowersView-addButton circularButtonView--small circularButtonView--onWhiteBackground circularButtonView--active">
                               <span class="circularButtonView-label">
-                                <svg class="svgIcon add-followers-icon" viewBox="0 0 32 32" title="plus">
+                                <svg class="svgIcon add-followers-icon" viewbox="0 0 32 32" title="plus">
                                   <polygon points="28,14 18,14 18,4 14,4 14,14 4,14 4,18 14,18 14,28 18,28 18,18 28,18"></polygon>
                                 </svg>
                               </span>
                           </div>
                         </a>
-                        <a href="#"  ng-show="blnAddFollower" ng-click="blnAddFollower=false">
+                        <a href="#"  ng-show="blnAddFollower" ng-click="closeAddFollowerBox()">
                           <span class="btn btn-default  btn-sm btn-outline">Cancel</span>
                         </a>
                       </li>
                       <li ng-show="blnAddFollower">
-                            <input class="mysearchname" type="text" placeholder="Name" ng-model="followerselected" uib-typeahead="member as member.name for member in members | filter:$viewValue:namesWith | limitTo:5" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
+                            <input  id="followerselected"  class="mysearchname" type="text" placeholder="Name" ng-model="followerselected" uib-typeahead="member as member.name for member in members | filter:$viewValue:namesWith | limitTo:5" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
                             <span class="btn btn-primary" ng-click="addFollower(followerselected)">Add</span>
                             <span class="task-or">or</span>
                             <span class="btn btn-info  btn-sm btn-outline" ng-click='addMeToFollower()' ng-show="!mePresentInFollowers">Assign to Me</span>
@@ -285,93 +413,52 @@
                 </ul>
             </div>
         </div>
-
-        <!-- Options -->
-        <div class="portlet sale-summary">
-            <div class="portlet-title">
-                <div class="caption">
-                    Options
-                </div>
-                <div class="tools">
-                    <div class="pull-right"  ng-click="OptionIsExpanded=!OptionIsExpanded">
-                        <svg class="svgIcon " style="width:16px;color:#B9BCC0;fill:grey" ng-show="!OptionIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
-                        <svg class="svgIcon " style="width:16px;color:#B9BCC0;fill:grey" ng-show="OptionIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
-                    </div>
-                    <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  2</span></span>
-                </div>
-            </div>
-            <div class="portlet-body" style="padding:0!important" ng-show="OptionIsExpanded">
-                <table class="table table-striped table-hover">
-                    <tbody style="text-align:left;">
-                        <tr>
-                            <td style="text-align:left">
-                                <span class="text-muted">Hypothesis
-                              </span>
-                            </td>
-                            <td style="text-align:right">
-                                <a href="#" style="color:grey!important;" e-label="Hypothesis" editable-textarea="task.hypothesis" buttons="right">{{ task.hypothesis || ' Optional ' }}</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="text-align:left">
-                                <span class="text-muted">Risks
-                              </span>
-                            </td>
-                            <td style="text-align:right" >
-                                <a href="#" style="color:grey!important;" e-label="Risks" editable-textarea="task.risks" buttons="right">{{ task.risks || ' Optional' }}</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="text-align:left">
-                              <br>
-                            </td>
-                            <td style="text-align:right" >
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="text-align:left">
-                              <button ng-if="task._id"  type="button" name="button" style="width:100%;height:30px" class="btn btn-xs btn-outline btn-warning" ng-click="withdraw()">Withdraw</button>
-                            </td>
-                            <td style="text-align:right" >
-                              <button ng-if="task._id" type="button" name="button" style="width:100%;height:30px" class="btn btn-xs btn-outline btn-danger" ng-click="delete()">Delete</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <!-- Dashboards -->
-        <div class="" id="Dashboards">
-            <div class="portlet sale-summary" ng-if="task._id">
-                <div class="portlet-title">
-                    <div class="caption">
-                        Dashboards
-                    </div>
-                    <div class="tools">
-                        <div class="pull-right" ng-init="DashboardIsExpanded=false" ng-click="DashboardIsExpanded=!DashboardIsExpanded">
-                            <svg class="svgIcon " style="width:16px;color:#B9BCC0;fill:grey" ng-show="!DashboardIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
-                            <svg class="svgIcon " style="width:16px;color:#B9BCC0;fill:grey" ng-show="DashboardIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
-                        </div>
-                        <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{task.dashboards.length}}</span></span>
-                    </div>
-                </div>
-                <div class="portlet-body" style="padding:0!important" ng-show="DashboardIsExpanded">
-                    <div tab-dashboard data="task" ng-if="task"></div>
-                </div>
-            </div>
-        </div>
     </div>
     <!--############### DO ############  -->
-    <div class="col-lg-3 col-md-6 col-sm-12" ng-class="{'label-info':task.metrics[0].status ==='In Progress'}" style="padding-bottom:20px;">
-        <div class="pdcaCol" ng-class="{'label-info':task.metrics[0].status ==='In Progress'}">
+    <div class="col-lg-3 col-md-6 col-sm-12" ng-class="{'label-info':task.metrics[task.metrics.length-1].status ==='In Progress'}" style="padding-bottom:20px;" ng-if="!openedPERT">
+        <div class="pdcaCol" ng-class="{'label-info':task.metrics[task.metrics.length-1].status ==='In Progress'}">
             DO
-            <div class="pull-right" ng-if="task.metrics[0].status ==='In Progress'">
-                <span class="label" ng-class="{'label-info':task.metrics[0].status ==='In Progress','label-success':task.metrics[0].status ==='Finished','label-default':task.metrics[0].status ==='Not Started','label-lightgrey':task.metrics[0].status =='Withdrawn'}">
-                      {{task.metrics[0].status}}
+            <div class="pull-right" ng-if="task.metrics[task.metrics.length-1].status ==='In Progress'">
+                <span class="label" ng-class="{'label-info':task.metrics[task.metrics.length-1].status ==='In Progress','label-success':task.metrics[task.metrics.length-1].status ==='Finished','label-default':task.metrics[task.metrics.length-1].status ==='Not Started','label-lightgrey':task.metrics[task.metrics.length-1].status =='Withdrawn'}">
+                      {{task.metrics[task.metrics.length-1].status}}
                     </span>
             </div>
             <div class="pull-right">
-              <button type="button" name="button" style="margin-left:5px;" class="btn btn-xs btn-outline btn-warning" ng-click="reopen()" ng-if="task.metrics[0].status ==='Finished' ">ReOpen</button>
+              <button type="button" name="button" style="margin-left:5px;" class="btn btn-xs btn-outline btn-warning" ng-click="reopen()" ng-if="task.metrics[task.metrics.length-1].status ==='Finished' ">ReOpen</button>
+            </div>
+        </div>
+        <!-- Alerts -->
+        <div class="" id="Alert" style="margin-bottom:0!important">
+            <div class="portlet sale-summary" ng-if="task._id">
+                <div class="portlet-title">
+                    <div class="caption">
+                        Alerts
+                    </div>
+                    <div class="tools">
+                      <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{task.alerts.length}}</span></span>
+                    </div>
+                </div>
+                <div class="portlet-body" style="padding:0!important">
+                    <table class="table table-striped table-hover">
+                        <tbody style="text-align:center;">
+                            <tr ng-repeat="KPI in task.alerts | orderBy:'constraint' track by $index" on-finish-render uib-tooltip-html="'Contraint : {{KPI.constraint}}<br /> <br /> Description :  {{KPI.description}}  <br /> Suggestion :  {{KPI.suggestion}}'" tooltip-placement="left"  tooltip-class="tooltipkpi" >
+                                <td style="text-align:left;width:65%">
+                                  <a href="/KPI/{{KPI._id}}">{{KPI.name}}</a>
+                                  <!-- <br ng-if="KPI.name==='Predicted OverCharge'"><small ng-if="KPI.name==='Predicted OverCharge'" class="text-muted">Projected WorkLoad </small> -->
+                                </td>
+                                <td style="text-align:left;width:35%;font-size:13px">
+                                    <span ng-if="KPI.calcul.task !== undefined && KPI.calcul.task !== null" class="badge" ng-style="{'background-color':giveMeMyColor(KPI.calcul.task, KPI.category)}" style="height:15px;line-height:10px;width:15px;margin-right: 10px">&nbsp;</span>
+                                    <span class="text-muted days" ng-if="KPI.name==='Predicted OverCharge'">
+                                      {{task.metrics[task.metrics.length-1].projectedWorkload - task.metrics[task.metrics.length-1].targetLoad}}
+                                    </span>
+                                    <span class="text-muted days" ng-if="KPI.name==='Delivery Overdue'">
+                                      {{task.metrics[task.metrics.length-1].delay}}
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -379,31 +466,19 @@
             <div class="portlet sale-summary" ng-repeat="(key, currentMetric) in task.metrics" >
                 <div class="portlet-title">
                     <div class="caption">
-                        <span ng-if="key === 0">Main </span> <span ng-if="key > 0">Rework {{key}} :</span>Metrics
+                        <span ng-if="key === 0">Primary </span> <span ng-if="key > 0">Re</span>work <span ng-if="key > 0"> {{key}}</span>
+                    </div>
+                    <div class="tools">
+                        <div class="pull-right" ng-init="MetricIsExpanded[key]=(key===task.metrics.length-1)" ng-click="MetricIsExpanded[key]=!MetricIsExpanded[key]">
+                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!MetricIsExpanded[key]" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="MetricIsExpanded[key]" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                        </div>
                     </div>
                 </div>
-                <div class="portlet-body" style="padding:0!important">
+                <div class="portlet-body" style="padding:0!important" ng-show="MetricIsExpanded[key]">
                     <table class="table table-striped table-hover">
                         <tbody style="text-align:left;">
-                          <tr>
-                              <td style="text-align:left">
-                                  <span class="text-muted">Confidence to succeed
-                                          </span>
-                              </td>
-                              <td>
-                                  <span class="pull-right text-info">
-                                    <a href="#" class="pourcentage" editable-text="currentMetric.trust" e-style="width: 60px"  buttons="no">{{ currentMetric.trust || 'empty'}}</a>
-                                  </span>
-                              </td>
-                          </tr>
-                          <tr ng-if="task._id">
-                            <td style="text-align:left">
 
-                            </td>
-                            <td>
-                            </td>
-
-                            </tr>
                             <tr ng-if="task._id">
                                 <td>
                                     <span class="text-muted">Real StartDate
@@ -412,8 +487,7 @@
                                 <td>
                                     <span class="pull-right text-info" ng-class="{'bg-info text-info':currentMetric.lateStart}">
                                         <md-button class="md-button-slim" ng-click="showDatePicker(currentMetric,'startDate', $event)" aria-label="none" >
-                                          <span ng-if="currentMetric.startDate"> {{currentMetric.startDate | date:'mediumDate'}}</span>
-                                          <span ng-if="!currentMetric.startDate"> Wait to start</span>
+                                          <span ng-class="{'mandatoryField':currentMetric.startDate === undefined}"> {{(currentMetric.startDate | date:'mediumDate') || 'Wait to start' }}</span>
                                         </md-button>
                                     </span>
                                 </td>
@@ -441,13 +515,13 @@
                                 </td>
                             </tr>
                             <tr ng-if="task._id">
-                                <td style="text-align:left">
+                                <td style="text-align:left" >
                                     <span class="text-muted">Spent Time
                                     </span>
                                 </td>
                                 <td>
                                     <span class="pull-right text-info">
-                                      <a href="#" class="days" e-min="0" e-step="0.001" editable-number="currentMetric.timeSpent" e-style="width: 100px;"  buttons="no">{{currentMetric.timeSpent}}</a>
+                                      <a href="#" class="days" ng-class="{'mandatoryField':currentMetric.timeSpent === 0}" e-min="0" e-step="0.01" editable-number="currentMetric.timeSpent" e-style="width: 100px;"  buttons="no">{{currentMetric.timeSpent}}</a>
                                     </span>
                                 </td>
                             </tr>
@@ -459,7 +533,7 @@
                                 <td style="text-align:right;">
                                     <span style=" display:inline">
                                       <!-- <uib-progressbar value="currentMetric.progress" style="margin-bottom:0;height:15px;" type="info"></uib-progressbar> -->
-                                      <a href="#" class="pourcentage" e-min="0" e-max="100" editable-number="currentMetric.progress" e-style="width: 100px;" buttons="no">{{currentMetric.progress}}</a>
+                                      <a href="#" class="pourcentage" ng-class="{'mandatoryField':currentMetric.progress === 0}" e-min="0" e-max="100" editable-number="currentMetric.progress" e-style="width: 100px;" buttons="no">{{currentMetric.progress}}</a>
                                     </span>
                                 </td>
                             </tr>
@@ -471,7 +545,26 @@
 
                                 </td>
                             </tr>
+                            <tr>
+                                <td style="text-align:left">
+                                    <span class="text-muted">Confidence to succeed
+                                            </span>
+                                </td>
+                                <td>
+                                    <span class="pull-right text-info">
+                                      <a href="#" class="pourcentage" e-min="0"  e-max="100" e-step="1" editable-number="currentMetric.trust" e-style="width: 100px"  buttons="no">{{ currentMetric.trust || 'empty'}}</a>
+                                    </span>
+                                </td>
+                            </tr>
                             <tr ng-if="task._id">
+                              <td style="text-align:left">
+
+                              </td>
+                              <td>
+                              </td>
+
+                              </tr>
+                            <tr ng-if="task._id && currentMetric.status ==='Finished'">
                                 <td style="text-align:left">
                                     <span class="text-muted">
                                       User Satisfaction
@@ -483,7 +576,7 @@
                                     </span>
                                 </td>
                             </tr>
-                            <tr ng-if="task._id">
+                            <tr ng-if="task._id && currentMetric.status ==='Finished'">
                                 <td style="text-align:left">
                                     <span class="text-muted">  Actor Satisfaction
                                             </span>
@@ -494,7 +587,7 @@
                                       </span>
                                 </td>
                             </tr>
-                            <tr ng-if="task._id">
+                            <tr ng-if="task._id && currentMetric.status ==='Finished'">
                                 <td style="text-align:left">
                                     <span class="text-muted">Full Delivery
                                               </span>
@@ -511,56 +604,43 @@
                 </div>
             </div>
             <div class="pull-right" style="width:200px" ng-if="!task._id" uib-tooltip-html="'You must fill the 7 mandatories fields : name, activity, context, startDate, Estimate workload, DueDate and confidence to be able to save'" tooltip-placement="bottom">
-                <button type="button" name="button" style="width:200px" class="btn  btn-primary" ng-click="create()" ng-disabled="!(task.name && task.context && task.activity && task.metrics[0].targetstartDate && task.metrics[0].targetEndDate && task.metrics[0].targetLoad && task.metrics[0].trust)">Create</button>
+                <button type="button" name="button" style="width:200px" class="btn  btn-primary" ng-click="create()" ng-disabled="!(task.name && task.context && task.activity && task.metrics[task.metrics.length-1].targetstartDate && task.metrics[task.metrics.length-1].targetEndDate && task.metrics[task.metrics.length-1].targetLoad && task.metrics[task.metrics.length-1].trust)">Create</button>
             </div>
 
-            <div class="portlet sale-summary" ng-repeat="(key, currentMetric) in task.metrics" ng-if="task._id">
+            <div class="portlet sale-summary" ng-if="task._id">
                 <div class="portlet-title">
                     <div class="caption">
-                        Info & Issues
+                        Information
                     </div>
                     <div class="tools">
+                      <input type="text" class="myfilter" name="filterComments" ng-model="filterComments" placeholder="Filter Comments" style="margin-left:15px;">
                         <div class="pull-right" ng-click="CommentIsExpanded=!CommentIsExpanded">
-                            <svg class="svgIcon " style="width:16px;color:#B9BCC0;fill:grey" ng-show="!CommentIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
-                            <svg class="svgIcon " style="width:16px;color:#B9BCC0;fill:grey" ng-show="CommentIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!CommentIsExpanded" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="CommentIsExpanded" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
                         </div>
                         <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{task.comments.length}}</span></span>
                     </div>
                 </div>
-                <div class="portlet-body" style="height:45px;" ng-show="CommentIsExpanded">
-                    <div class="pull-right" style="margin-right:-15px;display:inline-block">
-                        <label class="form-check-label" style="color:grey">
-               <input type="checkbox" class="form-check-input" ng-model="filterCommentType.auto">
-               Auto
-             </label>
-                        <label class="form-check-label" style="color:grey">
-                <input type="checkbox" class="form-check-input" ng-model="filterCommentType.manual" style="margin-left:15px;">
-                Manual
-              </label>
-                        <input type="text" class="myfilter" name="filterComments" ng-model="filterComments" placeholder="Filter Comments" style="margin-left:15px;">
-                    </div>
-                </div>
-
                 <div class="portlet-body" style="padding:10px;" ng-show="CommentIsExpanded">
                     <div class="form-group" style="padding-bottom:10px;display:flex">
                         <div class="">
                             <img uib-tooltip-html="'{{currentUser.name}}'" tooltip-placement="bottom" alt="" ng-src="assets/images/avatars/{{currentUser._id}}.png" style="width:30px;height:30px" class="img-circle" err-src="assets/images/avatars/avatar.png" />
                         </div>
                         <div class="input-group" style="width:90%;padding-left:16px;">
-                            <input class="form-control " type="text" ng-model="comment.text" placeholder="Write a comment, an info or a link" ng-enter="addComment()">
+                            <input class="form-control " type="text" ng-model="comment.text" placeholder="Add a comment, an info or a link" ng-enter="addComment()">
                             <span class="input-group-btn">
-                <button class="btn btn-outline btn-info" type="button"><span ng-click="addComment()">Comment</button>
+                <button class="btn btn-outline btn-info" type="button" ng-click="addComment()">Comment</button>
               </span>
                         </div>
                     </div>
                     <div class="dont-break-out">
-                        <ul class="dont-break-out" style="-webkit-padding-start: 0px!important;">
-                            <li class="todoTask" ng-repeat="comment in task.comments | orderBy:'-date' | filter:filterComments | filter:filterByAutoManual track by $index" style="min-height:40px;height:auto;padding:10px 0 0 0!important;display:flex;vertical-align: middle;">
+                        <ul class="dont-break-out" style="padding-left:0px;-webkit-padding-start: 0px!important;">
+                            <li class="todoTask" ng-repeat="comment in task.comments | orderBy:'-date' | filter:filterComments | filter:{auto:false} track by $index" style="min-height:40px;height:auto;padding:10px 0 0 0!important;display:flex;vertical-align: middle;">
                                 <div class="" style="min-width:50px;display:flex">
                                     <div class="" style="display:inline-flex">
                                         <img uib-tooltip-html="'{{comment.user.name}} <br/>
                                         {{comment.date | date:'MMM d, y HH:mm '}}'" tooltip-placement="bottom" alt="" ng-src="{{comment.user.avatar}}" style="width:25px;height:25px" ng-class="{'imageTransparent':comment.auto}" class="img-circle" err-src="assets/images/avatars/avatar.png" />
-                                        <svg ng-if="!comment.auto" style="width:16px;color:#B9BCC0;fill:grey;margin-top:-8px;" class="svgIco" viewBox="0 0 32 32" title=""><path d="M19,2c6.065,0,11,4.935,11,11s-4.935,11-11,11h-5.19L8,28.126v-5.282l-0.919-0.59C3.899,20.211,2,16.751,2,13C2,6.935,6.935,2,13,2H19 M19,0h-6C5.832,0,0,5.832,0,13c0,4.59,2.398,8.623,6,10.937V32l8.448-6H19c7.168,0,13-5.832,13-13S26.168,0,19,0L19,0z"></path></svg>
+                                        <svg ng-if="!comment.auto" style="width:16px;height:16px;color:#B9BCC0;fill:grey;margin-top:-8px;" class="svgIco" viewbox="0 0 32 32" title=""><path d="M19,2c6.065,0,11,4.935,11,11s-4.935,11-11,11h-5.19L8,28.126v-5.282l-0.919-0.59C3.899,20.211,2,16.751,2,13C2,6.935,6.935,2,13,2H19 M19,0h-6C5.832,0,0,5.832,0,13c0,4.59,2.398,8.623,6,10.937V32l8.448-6H19c7.168,0,13-5.832,13-13S26.168,0,19,0L19,0z"></path></svg>
                                     </div>
                                 </div>
                                 <div style="min-width:50px" class="dont-break-out">
@@ -576,46 +656,16 @@
                 </div>
             </div>
     </div>
-    <div class="col-lg-3 col-md-6 col-sm-12" ng-class="{'label-success':task.metrics[0].status ==='Finished','label-lightgrey':task.metrics[0].status =='Withdrawn'}" style="padding-bottom:20px;">
-        <div class="pdcaCol" ng-class="{'label-success':task.metrics[0].status ==='Finished','label-lightgrey':task.metrics[0].status =='Withdrawn'}">
+    <div class="col-lg-3 col-md-6 col-sm-12" ng-class="{'label-success':task.metrics[task.metrics.length-1].status ==='Finished','label-lightgrey':task.metrics[task.metrics.length-1].status =='Withdrawn'}" style="padding-bottom:20px;" ng-if="!openedPERT">
+        <div class="pdcaCol" ng-class="{'label-success':task.metrics[task.metrics.length-1].status ==='Finished','label-lightgrey':task.metrics[task.metrics.length-1].status =='Withdrawn'}">
             CHECK
-            <div class="pull-right" ng-if="task.metrics[0].status ==='Finished' || task.metrics[0].status =='Withdrawn'">
+            <div class="pull-right" ng-if="task.metrics[task.metrics.length-1].status ==='Finished' || task.metrics[task.metrics.length-1].status =='Withdrawn'">
                 <span class="label" >
-                      {{task.metrics[0].status}}
+                      {{task.metrics[task.metrics.length-1].status}}
                     </span>
             </div>
         </div>
-        <!-- Alerts -->
-        <div class="" id="Alert" style="margin-bottom:0!important">
-            <div class="portlet sale-summary" ng-if="task._id">
-                <div class="portlet-title">
-                    <div class="caption">
-                        Alerts
-                    </div>
-                    <div class="tools">
-                      <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{task.alerts.length}}</span></span>
-                    </div>
-                </div>
-                <div class="portlet-body" style="padding:0!important">
-                    <table class="table table-striped table-hover">
-                        <tbody style="text-align:center;">
-                            <tr ng-repeat="KPI in task.alerts | orderBy:'constraint' track by $index" on-finish-render uib-tooltip-html="'Contraint : {{KPI.constraint}}<br /> <br /> Description :  {{KPI.description}}  <br /> Suggestion :  {{KPI.suggestion}}'" tooltip-placement="left"  tooltip-class="tooltipkpi" >
-                                <td style="text-align:left;width:65%">
-                                  <a href="/KPI/{{KPI._id}}">{{KPI.name}}</a>
-                                  <!-- <br ng-if="KPI.name==='Predicted OverCharge'"><small ng-if="KPI.name==='Predicted OverCharge'" class="text-muted">Projected WorkLoad </small> -->
-                                </td>
-                                <td style="text-align:left;width:35%;font-size:13px">
-                                    <span ng-if="KPI.calcul.task !== undefined && KPI.calcul.task !== null" class="badge" ng-style="{'background-color':giveMeMyColor(KPI.calcul.task, KPI.category)}" style="height:15px;line-height:10px;width:15px;margin-right: 10px">&nbsp;</span>
-                                    <span class="text-muted days" ng-if="KPI.name==='Predicted OverCharge'">
-                                      {{task.metrics[task.metrics.length-1].projectedWorkload}}
-                                    </span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+
         <!-- KPIs -->
         <div class="" id="KPI">
             <div class="portlet sale-summary" ng-if="task._id">
@@ -625,8 +675,8 @@
                     </div>
                     <div class="tools">
                         <div class="pull-right" ng-click="KPIIsExpanded=!KPIIsExpanded">
-                            <svg class="svgIcon " style="width:16px;color:#B9BCC0;fill:grey" ng-show="!KPIIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
-                            <svg class="svgIcon " style="width:16px;color:#B9BCC0;fill:grey" ng-show="KPIIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!KPIIsExpanded" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="KPIIsExpanded" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
                         </div>
                         <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{task.kpis.length}}</span></span>
                     </div>
@@ -655,18 +705,38 @@
                     </div>
                     <div class="tools">
                         <div class="pull-right" >
-                            <svg class="svgIcon " style="width:16px;color:#B9BCC0;fill:grey" ng-show="!AnomalyIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
-                            <svg class="svgIcon " style="width:16px;color:#B9BCC0;fill:grey" ng-show="AnomalyIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!AnomalyIsExpanded" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="AnomalyIsExpanded" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
                         </div>
                         <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{task.dashboards.length}}</span></span>
                     </div>
                 </div>
-                <div class="portlet-body" style="padding:0!important">
+                <div class="portlet-body" >
+                </div>
+            </div>
+        </div>
+        <!-- Dashboards -->
+        <div class="" id="Dashboards">
+            <div class="portlet sale-summary" ng-if="task._id">
+                <div class="portlet-title">
+                    <div class="caption">
+                        Dashboards
+                    </div>
+                    <div class="tools">
+                        <div class="pull-right" ng-init="DashboardIsExpanded=false" ng-click="DashboardIsExpanded=!DashboardIsExpanded">
+                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!DashboardIsExpanded" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="DashboardIsExpanded" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                        </div>
+                        <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{task.dashboards.length}}</span></span>
+                    </div>
+                </div>
+                <div class="portlet-body"  ng-show="DashboardIsExpanded">
+                    <div tab-dashboard data="task" ng-if="task"></div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-lg-3 col-md-6 col-sm-12" ng-class="{'label-success':task.metrics[0].status ==='Finished','label-lightgrey':task.metrics[0].status =='Withdrawn'}" style="padding-bottom:20px;">
+    <div class="col-lg-3 col-md-6 col-sm-12" ng-class="{'label-success':task.metrics[task.metrics.length-1].status ==='Finished','label-lightgrey':task.metrics[task.metrics.length-1].status =='Withdrawn'}" style="padding-bottom:20px;" ng-if="!openedPERT">
         <div class="pdcaCol">
             ACT
         </div>
@@ -679,8 +749,8 @@
                     </div>
                     <div class="tools">
                         <div class="pull-right" ng-click="ReviewIsExpanded=!ReviewIsExpanded">
-                            <svg class="svgIcon " style="width:16px;color:#B9BCC0;fill:grey" ng-show="!ReviewIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
-                            <svg class="svgIcon " style="width:16px;color:#B9BCC0;fill:grey" ng-show="ReviewIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!ReviewIsExpanded" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="ReviewIsExpanded" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
                         </div>
                         <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{task.reviews.length ||0}}</span></span>
                     </div>
@@ -693,7 +763,7 @@
                               <td style="text-align:right;padding-right:25px;font-size:13px">
                                 <div class="circularButtonView circularToggleButtonView-button circularButtonView--xsmall circularButtonView--onWhiteBackground circularButtonView--active">
                                     <span class="circularButtonView-label">
-                                      <svg class="svgIcon " viewBox="0 0 32 32" title="checkmark">
+                                      <svg class="svgIcon " viewbox="0 0 32 32" title="checkmark">
                                         <polygon points="27.672,4.786 10.901,21.557 4.328,14.984 1.5,17.812 10.901,27.214 30.5,7.615 "></polygon>
                                       </svg>
                                     </span>
@@ -705,7 +775,7 @@
                               <td style="text-align:right;padding-right:25px;font-size:13px">
                                 <div class="circularButtonView circularToggleButtonView-button circularButtonView--xsmall circularButtonView--onWhiteBackground circularButtonView--active">
                                     <span class="circularButtonView-label">
-                                      <svg class="svgIcon " viewBox="0 0 32 32" title="checkmark">
+                                      <svg class="svgIcon " viewbox="0 0 32 32" title="checkmark">
                                         <polygon points="27.672,4.786 10.901,21.557 4.328,14.984 1.5,17.812 10.901,27.214 30.5,7.615 "></polygon>
                                       </svg>
                                     </span>
@@ -725,8 +795,8 @@
                     </div>
                     <div class="tools">
                         <div class="pull-right" ng-click="ActionPlanIsExpanded=!ActionPlanIsExpanded">
-                            <svg class="svgIcon " style="width:16px;color:#B9BCC0;fill:grey" ng-show="!ActionPlanIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
-                            <svg class="svgIcon " style="width:16px;color:#B9BCC0;fill:grey" ng-show="ActionPlanIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!ActionPlanIsExpanded" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="ActionPlanIsExpanded" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
                         </div>
                         <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{task.ActionPlans.length ||0}}</span></span>
                     </div>
@@ -738,7 +808,7 @@
                               <td style="text-align:left;font-size:13px;width:32px;">
                                 <div class="circularButtonView circularToggleButtonView-button circularButtonView--xsmall circularButtonView--onWhiteBackground circularButtonView--active">
                                     <span class="circularButtonView-label">
-                                      <svg class="svgIcon " viewBox="0 0 32 32" title="checkmark">
+                                      <svg class="svgIcon " viewbox="0 0 32 32" title="checkmark">
                                         <polygon points="27.672,4.786 10.901,21.557 4.328,14.984 1.5,17.812 10.901,27.214 30.5,7.615 "></polygon>
                                       </svg>
                                     </span>
@@ -752,7 +822,7 @@
                                   <small class="text-muted" ng-show="todo.date">{{todo.date |date:'dd MMM' }}</small>
                                     <div ng-hide="todo.date" class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground" uib-tooltip-html="'Add a due date to this subtask'" tooltip-placement="bottom">
                                         <span class="circularButtonView-label">
-                                      <svg class="svgIcon task-row-due-date-icon" viewBox="0 0 32 32" title="calendar">
+                                      <svg class="svgIcon task-row-due-date-icon" viewbox="0 0 32 32" title="calendar">
                                         <rect x="16" y="16" width="2" height="2"></rect><rect x="20" y="16" width="2" height="2"></rect>
                                         <rect x="20" y="20" width="2" height="2"></rect><rect x="16" y="20" width="2" height="2"></rect>
                                         <rect x="8" y="20" width="2" height="2"></rect><rect x="8" y="24" width="2" height="2"></rect>
@@ -767,7 +837,7 @@
                                     <img ng-show="todo.actor" uib-tooltip-html="'{{todo.actor.name}}'" tooltip-placement="bottom" alt="" ng-src="{{todo.actor.avatar}}" style="width:30px;height:30px;" class="img-circle" err-src="assets/images/avatars/avatar.png" />&nbsp;
                                     <div ng-hide="todo.actor" class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground" uib-tooltip-html="'Assign this subtask'" tooltip-placement="bottom">
                                         <span class="circularButtonView-label">
-                                      <svg class="svgIcon task-row-assignee-icon" viewBox="0 0 32 32" title="unassigned">
+                                      <svg class="svgIcon task-row-assignee-icon" viewbox="0 0 32 32" title="unassigned">
                                         <path d="M20.534,16.765C23.203,15.204,25,12.315,25,9c0-4.971-4.029-9-9-9S7,4.029,7,9c0,3.315,1.797,6.204,4.466,7.765C5.962,18.651,2,23.857,2,30c0,0.681,0.065,1.345,0.159,2h27.682C29.935,31.345,30,30.681,30,30C30,23.857,26.038,18.651,20.534,16.765z M9,9c0-3.86,3.14-7,7-7s7,3.14,7,7s-3.14,7-7,7S9,12.86,9,9z M4,30c0-6.617,5.383-12,12-12s12,5.383,12,12H4z"></path>
                                       </svg>
                                     </span>
@@ -781,17 +851,188 @@
                 </div>
             </div>
         </div>
+
+        <!-- Options -->
+        <div class="portlet sale-summary">
+            <div class="portlet-title">
+                <div class="caption">
+                    Options
+                </div>
+                <div class="tools">
+                    <div class="pull-right"  ng-click="OptionIsExpanded=!OptionIsExpanded">
+                        <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!OptionIsExpanded" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                        <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="OptionIsExpanded" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                    </div>
+                    <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  2</span></span>
+                </div>
+            </div>
+            <div class="portlet-body" style="padding:0!important" ng-show="OptionIsExpanded">
+                <table class="table table-striped table-hover">
+                    <tbody style="text-align:left;">
+
+                        <tr>
+                            <td style="text-align:left">
+                              <button ng-if="task._id"  type="button" name="button" style="width:100%;height:30px" class="btn btn-xs btn-outline btn-warning" ng-click="withdraw()">Withdraw</button>
+                            </td>
+                            <td style="text-align:right" >
+                              <button ng-if="task._id" type="button" name="button" style="width:100%;height:30px" class="btn btn-xs btn-outline btn-danger" ng-click="delete()">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9 col-sm-12" ng-if="openedPERT">
+      <div class="pdcaCol">
+          PERT
+      </div>
+
+      <!-- Options -->
+      <div class="portlet sale-summary">
+          <div class="portlet-title">
+              <div class="caption">
+                  PERT
+              </div>
+              <div class="tools">
+                  <div class="pull-right">
+                      <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!OptionIsExpanded" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                      <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="OptionIsExpanded" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                  </div>
+                  <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  2</span></span>
+              </div>
+          </div>
+          <div class="portlet-body" style="padding:0!important">
+
+            <div class="pertGroup1" ng-repeat="groupPERTTasks in pertTasks | groupBy:'subContext1'">
+              {{groupPERTTasks[0].subContext1}}
+              <span class="pull-right" style="padding-left:5px;width:100px;font-weight:bold;color:black" uib-tooltip-html="'
+                              max: {{ calcAverage(groupPERTTasks).max  }}<br />
+                              avg: {{ calcAverage(groupPERTTasks).average  }}<br />
+                              min: {{ calcAverage(groupPERTTasks).min  }}<br />
+                            '" tooltip-placement="left" >
+                {{ parseFloat(((calcAverage(groupPERTTasks, "timeSpent").max +calcAverage(groupPERTTasks, "timeSpent").min+ 4* calcAverage(groupPERTTasks, "timeSpent").average)/6).toFixed(2))}}
+              </span>
+              <small class="pull-right">PERT: </small>
+              <span class="pull-right" style="width:80px;"><small>Number:</small><span style="font-weight:bold;color:black"> {{groupPERTTasks.length}}</span></span>
+              <br />  
+              <div class="pertGroup2" ng-repeat="group2PERTTasks in groupPERTTasks | groupBy:'subContext2'">
+                {{group2PERTTasks[0].subContext2}}
+                <span class="pull-right" style="padding-left:5px;width:90px;font-weight:bold;color:black" uib-tooltip-html="'
+                                max: {{ calcAverage(group2PERTTasks).max  }}<br />
+                                avg: {{ calcAverage(group2PERTTasks).average  }}<br />
+                                min: {{ calcAverage(group2PERTTasks).min  }}<br />
+                              '" tooltip-placement="left" >
+                  {{ parseFloat(((calcAverage(group2PERTTasks, "timeSpent").max +calcAverage(group2PERTTasks, "timeSpent").min+ 4* calcAverage(group2PERTTasks, "timeSpent").average)/6).toFixed(2))}}
+                </span>
+                <small class="pull-right">PERT: </small>
+                <span class="pull-right" style="width:80px;"><small>Number:</small><span style="font-weight:bold;color:black"> {{group2PERTTasks.length}}</span></span>
+
+                <br />
+              <div class="pertGroup3" ng-repeat="group3PERTTasks in group2PERTTasks | groupBy:'subContext3'">
+                {{group3PERTTasks[0].subContext3}}
+                <span class="pull-right" style="padding-left:5px;width:80px;font-weight:bold;color:black" uib-tooltip-html="'
+                                max: {{ calcAverage(group3PERTTasks).max  }}<br />
+                                avg: {{ calcAverage(group3PERTTasks).average  }}<br />
+                                min: {{ calcAverage(group3PERTTasks).min  }}<br />
+                              '" tooltip-placement="left" >
+                  {{ parseFloat(((calcAverage(group3PERTTasks, "timeSpent").max +calcAverage(group3PERTTasks, "timeSpent").min+ 4* calcAverage(group3PERTTasks, "timeSpent").average)/6).toFixed(2))}}
+                </span>
+                <small class="pull-right">PERT: </small>
+                <span class="pull-right" style="width:80px;"><small>Number:</small><span style="font-weight:bold;color:black"> {{group3PERTTasks.length}}</span></span>
+                <br />
+                <div class="pertGroup4" ng-repeat="group4PERTTasks in group3PERTTasks | groupBy:'subContext4'">
+                  {{group4PERTTasks[0].subContext4}}
+                  <div class="pull-right" ng-init="expandedPERT[group4PERTTasks[0].subContext4]=(task.context.indexOf(group4PERTTasks[0].subContext4)>=0)" ng-click="expandedPERT[group4PERTTasks[0].subContext4]=!expandedPERT[group4PERTTasks[0].subContext4]">
+                      <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!expandedPERT[group4PERTTasks[0].subContext4]" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                      <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="expandedPERT[group4PERTTasks[0].subContext4]" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                  </div>
+                  <span class="pull-right" style="padding-left:5px;width:55px;font-weight:bold;color:black" uib-tooltip-html="'
+                                  max: {{ calcAverage(group4PERTTasks).max  }}<br />
+                                  avg: {{ calcAverage(group4PERTTasks).average  }}<br />
+                                  min: {{ calcAverage(group4PERTTasks).min  }}<br />
+                                '" tooltip-placement="left" >
+                    {{ parseFloat(((calcAverage(group4PERTTasks, "timeSpent").max +calcAverage(group4PERTTasks, "timeSpent").min+ 4* calcAverage(group4PERTTasks, "timeSpent").average)/6).toFixed(2))}}
+                  </span>
+                  <small class="pull-right">PERT: </small>
+                  <span class="pull-right" style="width:80px;"><small>Number:</small><span style="font-weight:bold;color:black"> {{group4PERTTasks.length}}</span></span>
+                  <br />
+                <div class="" ng-show="expandedPERT[group4PERTTasks[0].subContext4]">
+                <div class="pertDetail" ng-repeat="pertTask in group4PERTTasks">
+
+                  <span style="width:30px">
+                    <img alt="" ng-src="{{pertTask.actors[0].avatar}}" class="img-circle" style="width:30px;height:30px;" err-src="assets/images/avatars/avatar.png" uib-tooltip-html="'Name <br /> {{pertTask.actors[0].name}}'" tooltip-placement="top"/>
+                  </span>
+                  <span >
+                    <a href="/task/{{pertTask._id}}" target="_blank">
+                      {{pertTask.name}}
+                    </a>
+                  </span>
+                    <small class="dont-break-out"> {{pertTask.activity}}</small> /
+                    <small class="dont-break-out"> {{pertTask.context}}</small>
+                    <span class="pull-right days" style="width:80px">
+                      {{ pertTask.metrics[0].timeSpent  }}
+                    </span>
+                  </div>
+                </div>
+
+
+                </div>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+      </div>
     </div>
 </div>
-<div style="padding-top:25px">
-    <span>Debug</span>
-        <div ng-init="DebugIsExpanded=false" ng-click="DebugIsExpanded=!DebugIsExpanded">
-            <svg class="svgIcon " style="width:16px;color:#B9BCC0;fill:grey" ng-show="!DebugIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
-            <svg class="svgIcon " style="width:16px;color:#B9BCC0;fill:grey" ng-show="DebugIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+<div class="row" style="padding-top:30px;">
+  <div class="col-md-6">
+        <span>Audit trail</span>
+        <div  style="height:30px;" ng-init="AuditIsExpanded=false" ng-click="AuditIsExpanded=!AuditIsExpanded">
+            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!AuditIsExpanded" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="AuditIsExpanded" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
         </div>
-    <br>
-    <pre ng-show="DebugIsExpanded">{{task | json}}</pre>
+        <div class="dont-break-out"  ng-show="AuditIsExpanded">
+          <div style="height:45px;" ng-show="CommentIsExpanded">
+              <div style="display:inline-block;width:100%">
+                <input type="text" class="myfilter" name="filterAudit" ng-model="filterAudit" placeholder="Filter Audit" style="margin-left:15px;">
+              </div>
+          </div>
+            <ul class="dont-break-out" style="padding-left:0px;-webkit-padding-start: 0px!important;">
+                <li class="todoTask" ng-repeat="comment in task.comments | orderBy:'-date' | filter:filterAudit | filter:auto track by $index" style="min-height:40px;height:auto;padding:10px 0 0 0!important;display:flex;vertical-align: middle;">
+                    <div class="" style="min-width:50px;display:flex">
+                        <div class="" style="display:inline-flex">
+                            <img uib-tooltip-html="'{{comment.user.name}} <br/>
+                            {{comment.date | date:'MMM d, y HH:mm '}}'" tooltip-placement="bottom" alt="" ng-src="{{comment.user.avatar}}" style="width:25px;height:25px" ng-class="{'imageTransparent':comment.auto}" class="img-circle" err-src="assets/images/avatars/avatar.png" />
+                            <svg ng-if="!comment.auto" style="width:16px;height:16px;color:#B9BCC0;fill:grey;margin-top:-8px;" class="svgIco" viewbox="0 0 32 32" title=""><path d="M19,2c6.065,0,11,4.935,11,11s-4.935,11-11,11h-5.19L8,28.126v-5.282l-0.919-0.59C3.899,20.211,2,16.751,2,13C2,6.935,6.935,2,13,2H19 M19,0h-6C5.832,0,0,5.832,0,13c0,4.59,2.398,8.623,6,10.937V32l8.448-6H19c7.168,0,13-5.832,13-13S26.168,0,19,0L19,0z"></path></svg>
+                        </div>
+                    </div>
+                    <div style="min-width:50px" class="dont-break-out">
+                        <span class="dateComment">{{comment.date | date:'d MMM'}}</span>
+                    </div>
+                    <div class="dont-break-out">
+                        <span class="autoComment" ng-if="comment.auto === 2" style="color:rgba(91, 103, 133, 0.5)">{{comment.user.name}} </span>
+                        <span class="" ng-class="{'autoComment':comment.auto}" ng-bind-html="comment.text | embed:{sanitizeHtml:false,linkTarget:'_blank'}"></span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+  </div>
+  <div class="col-md-6">
+        <span>Debug</span>
+            <div  style="height:30px;" ng-init="DebugIsExpanded=false" ng-click="DebugIsExpanded=!DebugIsExpanded">
+                <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!DebugIsExpanded" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="DebugIsExpanded" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+            </div>
+        <br>
+        <pre ng-show="DebugIsExpanded">{{task | json}}</pre>
+    </div>
+    <!-- END PAGE CONTENT-->
+  </div>
+
 </div>
-</div>
+
 
 <!-- END PAGE CONTENT-->

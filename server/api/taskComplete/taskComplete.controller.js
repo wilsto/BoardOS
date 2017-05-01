@@ -66,7 +66,6 @@ function createAllCompleteTask() {
       _.each(tasks, function(task, index) { // pour chaque tache
         createCompleteTask(task._id, false, function(data) {});
       });
-
     });
   });
 
@@ -91,8 +90,8 @@ process.on('taskRemoved', function(task) {
   }, function(err, numberRemoved) {});
 });
 
-// createCompleteTask('582c17e6beb4f31200f279cb', false, function() {
-//   console.log('end task 5852cfed1738410400b26117');
+// createCompleteTask('5900b09fbad4d30400ea771c', false, function() {
+//   console.log('end task 5900b09fbad4d30400ea771c');
 // });
 
 function createCompleteTask(taskId, refreshDashboard, callback) {
@@ -505,6 +504,7 @@ exports.destroy = function(req, res) {
     });
   });
 };
+
 
 function handleError(res, err) {
   return res.status(500).send(err);

@@ -512,6 +512,11 @@
   margin-bottom: 10px;
 }
 
+.mandatoryField {
+  color: #DD1144!important;
+  font-style: italic;
+}
+
 .notMandatoryField {
   color: grey!important;
 }
@@ -576,4 +581,46 @@
   text-align: left;
   max-width: 500px;
   padding: 10px;
+}
+
+.md-dialog-container {
+  z-index: 20000!important;
+}
+
+.pertGroup1 {
+  width: 100%;
+  padding: 10px;
+  line-height: 15px;
+  margin-top: 5px;
+  background-color: rgb(150, 150, 150);
+}
+
+.pertGroup2 {
+  padding: 10px;
+  line-height: 15px;
+  margin-top: 5px;
+  background-color: rgb(185, 187, 191);
+}
+
+.pertGroup3 {
+  padding: 10px;
+  line-height: 15px;
+  margin-top: 5px;
+  background-color: rgb(210, 211, 213);
+}
+
+.pertGroup4 {
+  padding: 10px;
+  line-height: 15px;
+  margin-top: 5px;
+  background-color: rgb(232, 234, 238);
+}
+
+.pertDetail {
+  width: 100%;
+  padding-left: 10px;
+  line-height: 30px;
+  margin-top: 5px;
+  background-color: rgb(255, 255, 255);
+  display: inline-block;
 }

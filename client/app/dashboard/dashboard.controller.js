@@ -17,6 +17,10 @@ angular.module('boardOsApp')
       owner: $scope.currentUser
     };
 
+    $scope.createNewTask = function(data) {
+      
+    };
+
     $scope.loadKPIs = function() {
       $http.get('/api/KPIs/list').success(function(KPIs) {
         $scope.KPIs = KPIs;
@@ -122,12 +126,12 @@ angular.module('boardOsApp')
           $scope.filteredPlanTasks = _.filter($scope.dashboard.tasks, function(task) {
             var a = moment(new Date()).add($scope.datediff, 'days');
             var b = moment(new Date(task.metrics[0].targetstartDate));
-            return $scope.datediff >= b.diff(a, 'days') && task.metrics[0].status === 'Not Started';
+            return task.metrics[0].status === 'Not Started';
           });
           $scope.filteredInProgressTasks = _.filter($scope.dashboard.tasks, function(task) {
             var a = moment(new Date()).add($scope.datediff, 'days');
             var b = moment(new Date(task.metrics[0].startDate || task.metrics[0].targetstartDate));
-            return $scope.datediff >= b.diff(a, 'days') && task.metrics[0].status === 'In Progress';
+            return task.metrics[0].status === 'In Progress';
           });
           $scope.filteredFinishedTasks = _.filter($scope.dashboard.tasks, function(task) {
             var a = moment(new Date());
@@ -155,7 +159,6 @@ angular.module('boardOsApp')
           $scope.tasksNb = dashboard.tasks.length;
 
           $rootScope.$broadcast('dateRangeService:updated');
-
 
           var dataGoals = [];
           var dataAllGoals = [];

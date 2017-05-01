@@ -18,7 +18,9 @@ angular.module('boardOsApp', [
     'ngEmbed',
     'ui.sortable',
     'DlhSoft.Kanban.Angular.Components',
-    'mdPickers'
+    'mdPickers',
+    'ng-mfb',
+    'angular.filter'
   ])
   .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, NotificationProvider) {
     $urlRouterProvider.otherwise('/');
@@ -283,7 +285,7 @@ angular.module('boardOsApp', [
     });
 
     $timeout(function() {
-      
+
 
       function cb(start, end) {
         $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
@@ -308,7 +310,7 @@ angular.module('boardOsApp', [
       cb(dateRangeService.startRange, dateRangeService.endRange);
 
       $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
-        
+
         $rootScope.$broadcast('dateRangeService:updated', picker.chosenLabel);
         dateRangeService.startRange = picker.startDate;
         dateRangeService.endRange = picker.endDate;

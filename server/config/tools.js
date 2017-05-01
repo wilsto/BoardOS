@@ -354,12 +354,15 @@ module.exports = {
     var refField = completekpi.refMetricTaskField;
     var listValues = completekpi.listValues;
     var refListValues = completekpi.refListValues;
+    console.log('completekpi', completekpi.name);
 
     if (metrics.length > 0) { // si metric existe
 
       // filtrer par Liste (first, last, all)
       switch (listValues) {
         case 'AllValues':
+          filteredMetrics = metrics;
+          break;
         case 'UniqueValues':
         case 'LastValue':
           filteredMetrics = [_.last(metrics)];
@@ -391,10 +394,19 @@ module.exports = {
         })
       }
 
+      console.log('filteredMetricsbefore', filteredMetrics);
       // filtrer par valeur
       filteredMetrics = _.filter(filteredMetrics, function(metric) {
-        var metricFieldValue = (typeof metric[field] === 'undefined' || metric[field].length === 0) ? 'null' : metric[field];
-        return (typeof values === 'undefined' || values.length === 0 || typeof metric[field] === 'undefined') ? 1 : _.contains(values, metricFieldValue);
+        var metricFieldValue = (metric[field] === undefined || metric[field] === null || metric[field].length === 0) ? 'toto' : metric[field];
+        var response = (typeof values === 'undefined' || values.length === 0) ? 1 : _.contains(values, metricFieldValue);
+        if (kpi.name === 'User Satisfaction') {
+          // console.log('filteredMetrics', filteredMetrics);
+          // console.log('metric[field]', metric[field]);
+          // console.log('metricFieldValue', metricFieldValue);
+          // console.log('values', values);
+          // console.log('response', response);
+        }
+        return response;
       });
       filteredRefMetrics = (refField.toLowerCase() === 'constant') ? refValues : _.filter(filteredRefMetrics, function(metric) {
         return (typeof refValues === 'undefined' || refValues.length === 0 || typeof metric[refField] === 'undefined') ? 1 : _.contains(refValues, metric[refField]);
@@ -406,6 +418,15 @@ module.exports = {
         case 'count':
           calculMain = filteredMetrics.length;
           calculRef = (refField.toLowerCase() === 'constant') ? metrics.length : filteredRefMetrics.length;
+          break;
+        case 'absence':
+          calculMain = filteredMetrics.length;
+          calculRef = (refField.toLowerCase() === 'constant') ? metrics.length : filteredRefMetrics.length;
+          if (calculMain === 0) {
+            calculMain = calculRef;
+          } else {
+            calculMain = 0;
+          }
           break;
         case 'comparedate':
           var dateValue = _.pluck(filteredMetrics, field);
@@ -432,7 +453,14 @@ module.exports = {
       }
       switch (kpi.category) {
         case 'Goal':
+          if (kpi.name === 'Deliver On Time') {
+            // console.log('calculMain', calculMain);
+            // console.log('calculRef', calculRef);
+          }
           calcul = parseInt((calculMain / calculRef) * 100);
+          if (kpi.name === 'Deliver On Time') {
+            // console.log('calcul', calcul);
+          }
           break;
         case 'Alert':
           calcul = (calculMain - calculRef > 0) ? 1 : 0;

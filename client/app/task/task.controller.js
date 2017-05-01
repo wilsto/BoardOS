@@ -2,7 +2,7 @@
 /*jshint loopfunc:true */
 
 angular.module('boardOsApp')
-  .controller('TaskCtrl', function($rootScope, $scope, $http, $stateParams, $location, Auth, Notification, myLibrary, $filter, $timeout, $mdpDatePicker) {
+  .controller('TaskCtrl', function($rootScope, $scope, $http, $stateParams, $location, Auth, Notification, myLibrary, $filter, $timeout, $mdpDatePicker, $uibModal, focus) {
 
     $scope.parseFloat = parseFloat;
 
@@ -19,6 +19,8 @@ angular.module('boardOsApp')
 
     // si cela n'existe pas
     $scope.task = {};
+    $scope.task.context = $stateParams.context;
+    $scope.task.activity = $stateParams.activity;
     $scope.task.date = Date.now();
     $scope.task.comments = [{
       text: 'create task',
@@ -38,11 +40,13 @@ angular.module('boardOsApp')
       name: $scope.currentUser.name,
       avatar: $scope.currentUser.avatar
     }];
+    $scope.task.followers = [];
     $scope.errors = {};
     $scope.taskAlreadyExist = {
       id: null,
       name: null
     };
+
 
     $scope.isAdmin = false;
     Auth.isAdmin(function(data) {
@@ -56,7 +60,19 @@ angular.module('boardOsApp')
 
     $scope.opened = {};
 
-
+    $scope.createNewTask = function(data) {
+      switch (data) {
+        case 'context':
+          $location.path('/task//' + $scope.task.context);
+          break;
+        case 'activity':
+          $location.path('/task///' + $scope.task.activity);
+          break;
+        case 'both':
+          $location.path('/task//' + $scope.task.context + '/' + $scope.task.activity);
+          break;
+      }
+    };
 
     function calcBusinessDays(dDate1, dDate2) { // input given as Date objects
       dDate1 = new Date(dDate1);
@@ -96,7 +112,8 @@ angular.module('boardOsApp')
     $scope.currentShow = 0;
     $scope.filterToDo = '';
     $scope.filterComments = '';
-
+    $scope.filterAudit = '';
+    $scope.openedPERT = false;
     $scope.filterCommentType = {
       auto: false,
       manual: true
@@ -124,10 +141,9 @@ angular.module('boardOsApp')
       if (!initializing) {
         _.each(newVal, function(metric) {
 
-          // reestimated workload
-          metric.projectedWorkload = (metric.progress > 0) ? Math.round(1000 * metric.timeSpent * 100 / parseFloat(metric.progress)) / 1000 : metric.targetLoad;
-          metric.duration = calcBusinessDays(metric.startDate || metric.targetstartDate, metric.endDate || metric.targetEndDate);
-          
+          // // reestimated workload
+          // metric.projectedWorkload = (metric.progress > 0) ? Math.round(1000 * metric.timeSpent * 100 / parseFloat(metric.progress)) / 1000 : metric.targetLoad;
+          // metric.duration = calcBusinessDays(metric.startDate || metric.targetstartDate, metric.endDate || metric.targetEndDate);
 
           // status
           if (metric.progress >= 100) {
@@ -143,6 +159,60 @@ angular.module('boardOsApp')
         });
       }
     }, true);
+
+    $scope.$watch('task', function(newMap, previousMap) {
+      if (initializing) {
+        $timeout(function() {
+          initializing = true;
+        });
+      } else {
+        if (newMap !== previousMap) {
+          var newObject = newMap;
+          var previousObject = previousMap;
+          for (var property in newObject) {
+            // pour les non objects
+            if (typeof newObject[property] !== 'object' && property !== '_id' && property !== '__v' && property !== 'date' && !angular.equals(newObject[property], previousObject[property])) {
+              $scope.autoComment('set ' + property + ' to ' + newObject[property]);
+            }
+            // pour les objects
+            if (typeof newObject[property] === 'object' && property !== 'comments' && !angular.equals(newObject[property], previousObject[property])) {
+              angular.forEach(newObject[property], function(value, key) {
+                var previousValue = previousObject[property][key];
+                for (var subproperty in value) {
+                  if (subproperty !== '$$hashKey' && subproperty !== '_id' && (!previousValue || !angular.equals(value[subproperty], previousValue[subproperty]))) {
+                    if (subproperty.toLowerCase().indexOf('date') > -1) {
+                      $scope.autoComment('set ' + subproperty + ' to ' + $filter('date')(value[subproperty], 'mediumDate') + '              [' + property + ':' + key.toString() + ']');
+                    } else {
+                      $scope.autoComment('set ' + subproperty + ' to ' + value[subproperty] + '              [' + property + ':' + key.toString() + ']');
+                    }
+                  }
+                }
+              });
+            }
+          }
+          if ($scope.task._id !== undefined) {
+            
+            $scope.update();
+          }
+        }
+      }
+    }, true);
+
+    $scope.autoComment = function(text) {
+      
+      var maintenant = new Date().toISOString();
+      var currentUserId = $scope.currentUser._id;
+      var userid = ($scope.task._id) ? {
+        _id: currentUserId
+      } : currentUserId;
+
+      $scope.task.comments.push({
+        text: text,
+        auto: true,
+        date: maintenant,
+        user: userid
+      });
+    };
 
     /* Filter Function for All | Incomplete | Complete */
     $scope.showFn = function(todo) {
@@ -186,6 +256,63 @@ angular.module('boardOsApp')
       $scope.opened[elementOpened] = !$scope.opened[elementOpened];
     };
 
+    $scope.reopen = function() {
+
+      var ModalInstanceCtrl = function($scope, $uibModalInstance) {
+        $scope.selected = {
+          reworkReason: null,
+          comment: null,
+          targetstartDate: null,
+          targetEndDate: null,
+          targetload: null,
+        };
+
+        $scope.showDatePicker = function(item, datename, ev) {
+          var currentdate = (item[datename]) ? new Date(item[datename]) : new Date();
+          $mdpDatePicker(currentdate, {
+            targetEvent: ev
+          }).then(function(selectedDate) {
+            item[datename] = selectedDate.toISOString();
+          });
+        };
+
+        $scope.ok = function() {
+          $uibModalInstance.close($scope.selected);
+        };
+
+        $scope.cancel = function() {
+          $uibModalInstance.dismiss('cancel');
+        };
+      };
+
+      var modalInstance = $uibModal.open({
+        templateUrl: 'reOpenModal.html',
+        controller: ModalInstanceCtrl,
+        backdrop: 'static',
+        keyboard: false
+      });
+
+      modalInstance.result.then(function(result) {
+        var maintenant = new Date().toISOString();
+        $scope.task.comments.push({
+          text: result.comment,
+          auto: false,
+          date: maintenant,
+          user: {
+            _id: $scope.currentUser._id
+          }
+        });
+        $scope.task.metrics.push({
+          reworkReason: result.reworkReason,
+          targetstartDate: result.targetstartDate,
+          targetEndDate: result.targetEndDate,
+          targetLoad: result.targetLoad,
+          progress: 0
+        });
+
+      });
+
+    };
 
     // socket.on('taskComplete:save', function(data) {
     //   $scope.loadTask();
@@ -211,6 +338,7 @@ angular.module('boardOsApp')
       $scope.TeamIsExpanded = (taskId === undefined);
       $scope.TeamIsExpanded = true;
       $scope.blnAddActor = false;
+      $scope.actorselected = null;
       $scope.blnAddFollower = false;
       $scope.blnAssignSubtaskActor = false;
       $scope.OptionIsExpanded = (taskId === undefined);
@@ -260,7 +388,7 @@ angular.module('boardOsApp')
     // *******************
     $scope.create = function() {
       // Nouvelle tache
-      $http.get('/api/tasks/search', {
+      $http.get('/api/taskFulls/search', {
         params: {
           activity: $scope.task.activity,
           context: $scope.task.context
@@ -305,10 +433,23 @@ angular.module('boardOsApp')
       }
     };
 
+    $scope.openAddActorBox = function() {
+      focus('actorselected');
+      $scope.blnAddActor = true;
+    };
+
+    $scope.closeAddActorBox = function() {
+      $scope.actorselected = null;
+      $scope.blnAddActor = false;
+    };
+
+
     $scope.addActor = function(member) {
       var index = _.indexOf(_.pluck($scope.task.actors, '_id'), member._id);
       if (index < 0) {
         $scope.task.actors.push(member);
+        $scope.blnAddActor = false;
+        $scope.actorselected = null;
       } else {
         Notification.warning('Actor "' + member.name + '" already present in list');
       }
@@ -319,6 +460,9 @@ angular.module('boardOsApp')
         return member._id === $scope.currentUser._id;
       })[0];
       $scope.task.actors.push(member);
+      $scope.blnAddActor = false;
+      $scope.actorselected = null;
+
     };
 
     $scope.removeMeToActor = function() {
@@ -332,10 +476,23 @@ angular.module('boardOsApp')
     // *******************
     // add a follower
     // *******************
+    //
+    $scope.openAddFollowerBox = function() {
+      focus('followerselected');
+      $scope.blnAddFollower = true;
+    };
+
+    $scope.closeAddFollowerBox = function() {
+      $scope.blnAddFollower = false;
+      $scope.followerselected = null;
+    };
+
     $scope.addFollower = function(member) {
       var index = _.indexOf(_.pluck($scope.task.followers, '_id'), member._id);
       if (index < 0) {
         $scope.task.followers.push(member);
+        $scope.blnAddFollower = false;
+        $scope.followerselected = null;
       } else {
         Notification.warning('Follower "' + member.name + '" already present in list');
       }
@@ -346,6 +503,8 @@ angular.module('boardOsApp')
         return member._id === $scope.currentUser._id;
       })[0];
       $scope.task.followers.push(member);
+      $scope.blnAddFollower = false;
+      $scope.followerselected = null;
     };
 
     $scope.removeMeToFollower = function() {
@@ -391,68 +550,12 @@ angular.module('boardOsApp')
         targetEvent: ev
       }).then(function(selectedDate) {
         item[datename] = selectedDate.toISOString();
-        
+
       });
     };
 
 
-    $scope.$watch('task', function(newMap, previousMap) {
-      if (initializing) {
-        $timeout(function() {
-          initializing = true;
-        });
-      } else {
-        if (newMap !== previousMap) {
-          var newObject = newMap;
-          var previousObject = previousMap;
-          for (var property in newObject) {
-            // pour les non objects
-            if (typeof newObject[property] !== 'object' && property !== '_id' && property !== '__v' && property !== 'date' && !angular.equals(newObject[property], previousObject[property])) {
-              $scope.autoComment('set ' + property + ' to ' + newObject[property]);
-            }
-            // pour les objects
-            if (typeof newObject[property] === 'object' && property !== 'comments' && !angular.equals(newObject[property], previousObject[property])) {
-              angular.forEach(newObject[property], function(value, key) {
-                var previousValue = previousObject[property][key];
-                for (var subproperty in value) {
-                  if (subproperty !== '$$hashKey' && subproperty !== '_id' && (!previousValue || !angular.equals(value[subproperty], previousValue[subproperty]))) {
-                    if (subproperty.toLowerCase().indexOf('date') > -1) {
-                      $scope.autoComment('set ' + subproperty + ' to ' + $filter('date')(value[subproperty], 'mediumDate') + '              [' + property + ':' + key.toString() + ']');
-                    } else {
-                      $scope.autoComment('set ' + subproperty + ' to ' + value[subproperty] + '              [' + property + ':' + key.toString() + ']');
-                    }
-                  }
-                }
-              });
-            }
-          }
-        }
-      }
-    }, true);
 
-    $scope.changeActive = function() {
-
-      $scope.autoComment('set active to ' + !$scope.task.active);
-    };
-
-    $scope.autoComment = function(text) {
-      var maintenant = new Date().toISOString();
-      var currentUserId = $scope.currentUser._id;
-      var userid = ($scope.task._id) ? {
-        _id: currentUserId
-      } : currentUserId;
-
-      $scope.task.comments.push({
-        text: text,
-        auto: true,
-        date: maintenant,
-        user: userid
-      });
-
-      if ($scope.task._id !== undefined) {
-        $scope.update();
-      }
-    };
 
     $scope.save = function(form) {
 
@@ -464,7 +567,7 @@ angular.module('boardOsApp')
 
       if ($scope.task._id === undefined && $scope.task.activity !== undefined && $scope.task.context !== undefined) {
         // Nouvelle tache
-        $http.get('/api/tasks/search', {
+        $http.get('/api/taskFulls/search', {
           params: {
             activity: $scope.task.activity,
             context: $scope.task.context
@@ -489,7 +592,7 @@ angular.module('boardOsApp')
         });
       } else {
         // tache déjà existante en cours de modification
-        $http.put('/api/tasks/' + $scope.task._id, $scope.task).success(function(data) {
+        $http.put('/api/taskFulls/' + $scope.task._id, $scope.task).success(function(data) {
           var logInfo = 'Task "' + $scope.task.name + '" was updated';
           $http.post('/api/logs', {
             info: logInfo,
@@ -541,6 +644,21 @@ angular.module('boardOsApp')
       });
     };
 
+    $scope.standardPERT = function() {
+      $scope.openedPERT = !$scope.openedPERT;
+      // Nouvelle tache
+      $http.get('/api/taskFulls/standardPERT', {
+        params: {
+          activity: $scope.task.activity,
+          context: $scope.task.context
+        }
+      }).success(function(pertTasks) {
+        
+        $scope.pertTasks = pertTasks;
+      });
+    };
+
+
     $scope.showWeeks = true;
 
     $scope.today = function() {
@@ -586,5 +704,27 @@ angular.module('boardOsApp')
     };
 
     $scope.format = 'dd-MMMM-yyyy';
+
+    function average(arr) {
+      return _.reduce(arr, function(memo, num) {
+        return memo + num;
+      }, 0) / (arr.length === 0 ? 1 : arr.length);
+    }
+
+    $scope.calcAverage = function(tasks, item) {
+      var test = _.chain(tasks)
+        .pluck('metrics')
+        .flatten()
+        .pluck('timeSpent')
+        .unique()
+        .value();
+
+      return {
+        average: parseFloat(average(test).toFixed(2)),
+        min: parseFloat(_.min(test).toFixed(2)),
+        max: parseFloat(_.max(test).toFixed(2))
+      };
+    };
+
 
   });

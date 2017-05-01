@@ -6,13 +6,18 @@
 
 **Closed issues:**
 
+- Ajouter une date dans une checklist dans une date [\#184](https://github.com/wilsto/BoardOS/issues/184)
+- Ajouter un acteur à une checklist dans une tache [\#183](https://github.com/wilsto/BoardOS/issues/183)
 - Ajouter des followers à une tache [\#182](https://github.com/wilsto/BoardOS/issues/182)
 - Ajouter des acteurs à une tache [\#181](https://github.com/wilsto/BoardOS/issues/181)
+- actor avatar ne fonctionne plus [\#179](https://github.com/wilsto/BoardOS/issues/179)
 - mise à jour de la liste des taches vers taskfull [\#178](https://github.com/wilsto/BoardOS/issues/178)
 - mise à jour de la navbar vers taskfulls [\#176](https://github.com/wilsto/BoardOS/issues/176)
 - mise à jour des dashboard vers taskfulls [\#175](https://github.com/wilsto/BoardOS/issues/175)
 - MIse à jour du main vers taskfull [\#174](https://github.com/wilsto/BoardOS/issues/174)
 - Repair Global Change \(!!crash app!!\) [\#172](https://github.com/wilsto/BoardOS/issues/172)
+- Impossible de créer une tache si certains champs ne contiennent pas du numérique [\#157](https://github.com/wilsto/BoardOS/issues/157)
+- RangeDate in Requests [\#152](https://github.com/wilsto/BoardOS/issues/152)
 
 ## [v1.6.23](https://github.com/wilsto/boardos/tree/v1.6.23) (2017-03-12)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.22...v1.6.23)

@@ -41,6 +41,8 @@ KPI.find({}, '-__v').sort({
 function calcBusinessDays(dDate1, dDate2) { // input given as Date objects
   var iWeeks, iDateDiff, iAdjust = 0;
   if (dDate2 < dDate1) return -1; // error code if dates transposed
+  dDate1 = new Date(dDate1);
+  dDate2 = new Date(dDate2);
   var iWeekday1 = dDate1.getDay(); // day of week
   var iWeekday2 = dDate2.getDay();
   iWeekday1 = (iWeekday1 === 0) ? 7 : iWeekday1; // change Sunday from 0 to 7
@@ -75,32 +77,15 @@ function createAllFullTask() {
   });
 }
 
-var j = schedule.scheduleJob({
-  hour: 0,
-  minute: 30
-}, function() {
-  createAllFullTask()
-});
 //createAllFullTask();
-process.on('metricChanged', function(taskId, refreshDashboard) {
-  refreshDashboard = (refreshDashboard === undefined) ? true : refreshDashboard;
-  createFullTask(taskId, refreshDashboard, function(data) {});
-});
 
-process.on('taskRemoved', function(task) {
-  TaskFull.remove({
-    _id: task._id
-  }, function(err, numberRemoved) {});
-});
-
-TaskFull.remove({
-  _id: '58d3773d26b3bd0400317cab'
-}, function(err, numberRemoved) {
-  createFullTask('58d3773d26b3bd0400317cab', false, function() {
-    console.log('*******************end fulltask 58d3773d26b3bd0400317cab');
-  });
-});
-
+// TaskFull.remove({
+//   _id: '58d3773d26b3bd0400317cab'
+// }, function(err, numberRemoved) {
+//   createFullTask('58d3773d26b3bd0400317cab', false, function() {
+//     console.log('*******************end fulltask 58d3773d26b3bd0400317cab');
+//   });
+// });
 
 function createFullTask(taskId, refreshDashboard, callback) {
   Q()
@@ -178,6 +163,10 @@ function createFullTask(taskId, refreshDashboard, callback) {
         date: 'asc'
       }).lean().exec(function(err, metrics) {
         var lastComment = '';
+        var mainstart = null;
+        var targetEndDate = null;
+        var reworkstart = null;
+        var reworkspent = 0;
         _.each(metrics, function(metric, index) { // pour chaque metric
           // si c'est la première métric, on crèe l'objet
           if (typeof task.metrics === 'undefined') {
@@ -226,13 +215,9 @@ function createFullTask(taskId, refreshDashboard, callback) {
               auto: true
             });
           } else {
-            console.log('metric.comments', metric.comments);
-            console.log('lastComment', lastComment);
             if (metric.comments !== undefined && metric.comments !== '' && lastComment !== metric.comments) {
-              console.log('CONDITION PASSED');
               var currentComment = (lastComment.length > 0) ? metric.comments.replace(lastComment, '').trim() : metric.comments.trim();
               lastComment = currentComment;
-              console.log('currentComment', currentComment);
               task.comments.push({
                 text: currentComment,
                 user: metric.actor._id,
@@ -241,7 +226,6 @@ function createFullTask(taskId, refreshDashboard, callback) {
               });
             }
           }
-          metric.date = new Date(metric.date);
 
           // target
           metric.targetstartDate = new Date(task.startDate);
@@ -249,42 +233,41 @@ function createFullTask(taskId, refreshDashboard, callback) {
           metric.targetLoad = task.load;
 
           // in progress
-          metric.startDate = new Date(metric.startDate);
+          metric.startDate = (reworkstart) ? reworkstart : new Date(metric.startDate);
           metric.endDate = new Date(metric.endDate);
-          metric.timeSpent = parseFloat(String(metric.timeSpent).replace(',', '.'));
+          metric.timeSpent = parseFloat(String(metric.timeSpent).replace(',', '.')) - reworkspent;
 
           // auto
           metric.startDate = new Date(metric.startDate);
           metric.endDate = new Date(metric.endDate);
-          metric.date = new Date(metric.date);
+
+          //convert to number
+          metric.progress = parseFloat(metric.progress);
+          metric.actorSatisfaction = parseFloat(metric.actorSatisfaction);
+          metric.userSatisfaction = parseFloat(metric.userSatisfaction);
+          metric.deliverableStatus = parseFloat(metric.deliverableStatus);
+          metric.trust = parseFloat(metric.trust);
+
+          var startDate = (metric.startDate) ? metric.startDate : metric.targetstartDate;
+          var endDate = (metric.endDate) ? metric.endDate : metric.targetEndDate;
+
+          if (index === 0) {
+            mainstart = metric.startDate;
+            targetEndDate = metric.targetEndDate;
+          }
 
           // nombre de jours séparant la date de début, fin, entre les deux
-          metric.duration = calcBusinessDays(metric.startDate, metric.endDate);
+          metric.duration = calcBusinessDays(mainstart, endDate);
+          metric.delay = calcBusinessDays(targetEndDate, endDate) - 1;
 
           // predictedCharge
-          metric.projectedWorkload = (metric.progress > 0) ? Math.round(1000 * metric.timeSpent * 100 / parseFloat(metric.progress)) / 1000 : metric.targetLoad;
+          metric.projectedWorkload = (metric.progress > 0) ? reworkspent + Math.round(1000 * metric.timeSpent * 100 / parseFloat(metric.progress)) / 1000 : metric.targetLoad;
 
           // progressStatus
-          delete metric.progressStatus;
-          if (moment(dateNow).isAfter(task.endDate, 'day')) { // On est post la date de fin engagé
-            var maxLastEndDate;
-            if (metric.status === 'In Progress' || metric.status === 'Not Started') {
-              maxLastEndDate = Math.max(metric.endDate, metric.date);
-            } else {
-              maxLastEndDate = Math.max(metric.endDate);
-            }
-            var maxEndDate = Math.max(task.endDate);
-            if (moment(maxLastEndDate).isAfter(maxEndDate, 'day')) {
-              metric.progressStatus = 'Late';
-            } else {
-              metric.progressStatus = 'On Time';
-            }
-          } else { // On est avant la date de fin engagé
-            if (moment(metric.endDate).isAfter(task.endDate, 'day')) {
-              metric.progressStatus = 'At Risk';
-            } else {
-              metric.progressStatus = 'On Time';
-            }
+          if (moment(metric.endDate).isAfter(targetEndDate, 'day')) {
+            metric.progressStatus = 'Late';
+          } else {
+            metric.progressStatus = 'On Time';
           }
 
           // comments
@@ -389,9 +372,19 @@ function createFullTask(taskId, refreshDashboard, callback) {
           delete metric.description;
           delete metric.timeToBegin;
           delete metric.timeToEnd;
+          delete metric.date;
+          delete metric.comments;
+          delete metric.dateNow;
+          delete metric.fromNow;
+          delete metric.taskId;
+          delete metric.groupTimeByValue;
+          delete metric.value;
+          delete metric.actor;
 
           //on l'ajoute à la liste
-          if (metric.progress === 100 || index === metrics.length - 1) {
+          if (metric.progress === 100 || index === metrics.length - 1 || metric.status === 'Finished') {
+            reworkstart = metric.endDate;
+            reworkspent += metric.timeSpent;
             task.metrics.push(metric);
           }
         });
@@ -624,6 +617,7 @@ exports.create = function(req, res) {
     if (err) {
       return handleError(res, err);
     }
+    process.emit('taskChanged', taskFull);
     return res.status(201).json(taskFull);
   });
 };
@@ -657,6 +651,43 @@ exports.update = function(req, res) {
     _.each(task.comments, function(comment) {
       comment.user = comment.user._id;
     });
+
+    var mainstart = null;
+    var targetEndDate = null;
+    var reworkstart = null;
+    var reworkspent = 0;
+    var dateNow = new Date();
+    _.each(task.metrics, function(metric, index) { // pour chaque metric
+
+      var startDate = (metric.startDate) ? metric.startDate : metric.targetstartDate;
+      var endDate = (metric.endDate) ? metric.endDate : metric.targetEndDate;
+
+      if (index === 0) {
+        mainstart = metric.startDate;
+        targetEndDate = metric.targetEndDate;
+      }
+
+      // nombre de jours séparant la date de début, fin, entre les deux
+      metric.duration = calcBusinessDays(mainstart, endDate);
+      metric.delay = calcBusinessDays(targetEndDate, endDate) - 1;
+
+      // predictedCharge
+      metric.projectedWorkload = (metric.progress > 0) ? reworkspent + Math.round(1000 * metric.timeSpent * 100 / parseFloat(metric.progress)) / 1000 : metric.targetLoad;
+
+      // progressStatus
+      if (moment(metric.endDate).isAfter(targetEndDate, 'day')) {
+        metric.progressStatus = 'Late';
+      } else {
+        metric.progressStatus = 'On Time';
+      }
+
+      //on l'ajoute à la liste
+      if (metric.progress === 100 || index === task.metrics.length - 1 || metric.status === 'Finished') {
+        reworkstart = metric.endDate;
+        reworkspent += metric.timeSpent;
+      }
+    });
+
 
     // mise à jour des kpis
     task.kpis = [];
@@ -699,6 +730,7 @@ exports.update = function(req, res) {
       if (err) {
         return handleError(res, err);
       }
+      process.emit('taskChanged', taskFull);
       return res.status(200).json(taskFull);
     });
   });
@@ -713,6 +745,7 @@ exports.destroy = function(req, res) {
     if (!taskFull) {
       return res.status(404).send('Not Found');
     }
+    process.emit('taskChanged', taskFull);
     taskFull.remove(function(err) {
       if (err) {
         return handleError(res, err);
@@ -720,6 +753,59 @@ exports.destroy = function(req, res) {
       return res.status(204).send('No Content');
     });
   });
+};
+
+// Get list of tasks
+exports.search = function(req, res) {
+  TaskFull.find({
+    activity: req.query.activity,
+    context: req.query.context
+  }, function(err, tasks) {
+    console.log('err', err);
+    if (err) {
+      return handleError(res, err);
+    }
+    return res.json(200, tasks);
+  });
+};
+
+// Get list of tasks
+exports.standardPERT = function(req, res) {
+  TaskFull.find({
+      activity: {
+        '$regex': req.query.activity || '',
+        $options: '-i'
+      },
+      'metrics.status': 'Finished'
+    }, 'context activity actors name metrics').sort({
+      context: 'asc'
+    })
+    .populate('actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
+    .lean().exec(function(err, tasks) {
+      _.each(tasks, function(task) {
+        var tokens1 = task.context.split('.').slice(0, 1);
+        var result1 = tokens1.join('.');
+        var tokens2 = task.context.split('.').slice(0, 2);
+        var result2 = tokens2.join('.');
+        var tokens3 = task.context.split('.').slice(0, 3);
+        var result3 = tokens3.join('.');
+        var tokens4 = task.context.split('.').slice(0, 4);
+        var result4 = tokens4.join('.');
+        task.subContext1 = result1;
+        task.subContext2 = result2;
+        task.subContext3 = result3;
+        task.subContext4 = result4;
+
+        _.each(task.actors, function(actor) {
+          actor.avatar = (actor.avatar) ? actor.avatar : 'assets/images/avatars/' + actor._id + '.png';
+        });
+
+      });
+      if (err) {
+        return handleError(res, err);
+      }
+      return res.json(200, tasks);
+    });
 };
 
 function handleError(res, err) {
