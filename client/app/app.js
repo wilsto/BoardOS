@@ -16,7 +16,9 @@ angular.module('boardOsApp', [
     'cgBusy',
     'xeditable',
     'ngEmbed',
-    'ui.sortable'
+    'ui.sortable',
+    'ng-mfb',
+    'angular.filter'
   ])
   .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, NotificationProvider) {
     $urlRouterProvider.otherwise('/');
