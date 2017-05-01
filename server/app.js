@@ -21,14 +21,10 @@ mongoose.connection.on('error', function(err) {
 });
 
 // Connect to database
-mongoose.connect(config.mongo.uri, config.mongo.options, function(error) {
-  console.log('config.mongo.uri', config.mongo.uri);
-  console.log('config.mongo.options', config.mongo.options);
-  console.log('mongoose', mongoose);
-  console.log('mongoose.connection.readyState', mongoose.connection.readyState);
-  if (error) throw error; // Handle failed connection
-  console.log('conn ready:  ', mongoose.connection.readyState);
-});
+console.log('config.mongo.uri', config.mongo.uri);
+console.log('config.mongo.options', config.mongo.options);
+mongoose.connect(config.mongo.uri, config.mongo.options);
+console.log('mongoose', mongoose);
 
 //Mongoose: default lean to true (always on)
 var __setOptions = mongoose.Query.prototype.setOptions;
