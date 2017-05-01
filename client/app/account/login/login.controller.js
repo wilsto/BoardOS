@@ -5,8 +5,8 @@ angular.module('boardOsApp')
     $scope.user = {};
     $scope.errors = {};
 
-    $http.get('/api/thing/32').success(function(data) {
-      
+    $http.get('/api/things/32').success(function(data) {
+
     });
 
     $scope.login = function(form) {
