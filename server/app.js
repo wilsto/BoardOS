@@ -12,10 +12,23 @@ var express = require('express');
 var mongoose = require('mongoose');
 var config = require('./config/environment');
 
+mongoose.connection.on('open', function(ref) {
+  console.log('Connected to mongo server.');
+});
+mongoose.connection.on('error', function(err) {
+  console.log('Could not connect to mongo server!');
+  console.log(err);
+});
+
 // Connect to database
-mongoose.connect(config.mongo.uri, config.mongo.options);
-console.log('config.mongo.uri', config.mongo.uri);
-console.log('mongoose', mongoose);
+mongoose.connect(config.mongo.uri, config.mongo.options, function(error) {
+  console.log('config.mongo.uri', config.mongo.uri);
+  console.log('config.mongo.options', config.mongo.options);
+  console.log('mongoose', mongoose);
+  console.log('mongoose.connection.readyState', mongoose.connection.readyState);
+  if (error) throw error; // Handle failed connection
+  console.log('conn ready:  ', mongoose.connection.readyState);
+});
 
 //Mongoose: default lean to true (always on)
 var __setOptions = mongoose.Query.prototype.setOptions;
