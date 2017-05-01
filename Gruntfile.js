@@ -662,7 +662,6 @@ module.exports = function(grunt) {
       'clean:dist',
       'concurrent:dist',
       'removelogging',
-      'injector',
       'wiredep',
       'useminPrepare',
       'autoprefixer',
