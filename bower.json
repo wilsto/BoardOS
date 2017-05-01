@@ -24,10 +24,8 @@
     "jquery": "~1.11.0",
     "json3": "~3.3.1",
     "lodash": "~2.4.1",
-    "mdPickers": "^0.7.5",
     "moment": "~2.10.6",
     "ng-js-tree": "^0.0.10",
-    "ng-material-floating-button": "ng-mfb#^0.6.2",
     "ng-table": "~0.3.3",
     "ngDialog": "~0.3.8",
     "select2": "~3.5.2",
@@ -42,17 +40,20 @@
     "ngEmbed": "ng-embed#^2.1.1",
     "angular-ui-sortable": "0.14.x",
     "bootstrap-toggle": "^2.2.2",
+    "mdPickers": "^0.7.5",
+    "ng-material-floating-button": "ng-mfb#^0.6.2",
     "DlhSoft.KanbanLibrary": "http://DlhSoft.com/Packages/DlhSoft.KanbanLibrary.zip"
   },
   "devDependencies": {
     "angular-mocks": "~1.4.x",
-    "angular-scenario": "~1.4.x"
+    "angular-scenario": "~1.4.x",
+    "angular-aria": "~1.4.x",
+    "angular-messages": "~1.4.x"
   },
   "resolutions": {
     "angular": "~1.4.x",
     "d3": "~3.4",
     "nvd3": "~v1.1.15-beta",
-    "jquery": "~1.11.0",
-    "moment": "~2.10.6"
+    "jquery": "~1.11.0"
   }
 }

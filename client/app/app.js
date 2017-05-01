@@ -6,6 +6,8 @@ angular.module('boardOsApp', [
     'ngSanitize',
     'ui.router',
     'ui.bootstrap',
+    'btford.socket-io',
+    'ngJsTree',
     'ngDialog',
     'nvd3',
     'ng.confirmField',
@@ -15,10 +17,8 @@ angular.module('boardOsApp', [
     'xeditable',
     'ngEmbed',
     'ui.sortable',
-    'DlhSoft.Kanban.Angular.Components',
     'mdPickers',
     'ng-mfb',
-    'btford.socket-io',
     'angular.filter'
   ])
   .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, NotificationProvider) {
