@@ -1,6 +1,6 @@
 {
   "name": "board-os",
-  "version": "1.6.54",
+  "version": "1.6.55",
   "main": "server/app.js",
   "dependencies": {
     "async": "^2.1.4",
@@ -105,7 +105,7 @@
     "time-grunt": "~0.3.1"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": "~5.7.1"
   },
   "scripts": {
     "start": "node server/app.js",

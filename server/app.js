@@ -12,19 +12,8 @@ var express = require('express');
 var mongoose = require('mongoose');
 var config = require('./config/environment');
 
-mongoose.connection.on('open', function(ref) {
-  console.log('Connected to mongo server.');
-});
-mongoose.connection.on('error', function(err) {
-  console.log('Could not connect to mongo server!');
-  console.log(err);
-});
-
 // Connect to database
-console.log('config.mongo.uri', config.mongo.uri);
-console.log('config.mongo.options', config.mongo.options);
 mongoose.connect(config.mongo.uri, config.mongo.options);
-console.log('mongoose', mongoose);
 
 //Mongoose: default lean to true (always on)
 var __setOptions = mongoose.Query.prototype.setOptions;
