@@ -18,7 +18,7 @@ angular.module('boardOsApp', [
     'ngEmbed',
     'ui.sortable',
     'angular.filter',
-    'mdPickers'
+    'ng-mfb'
   ])
   .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, NotificationProvider) {
     $urlRouterProvider.otherwise('/');
