@@ -17,7 +17,6 @@ angular.module('boardOsApp', [
     'xeditable',
     'ngEmbed',
     'ui.sortable',
-    'ng-mfb',
     'angular.filter'
   ])
   .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, NotificationProvider) {
