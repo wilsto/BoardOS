@@ -354,7 +354,7 @@ module.exports = {
     var refField = completekpi.refMetricTaskField;
     var listValues = completekpi.listValues;
     var refListValues = completekpi.refListValues;
-    console.log('completekpi', completekpi.name);
+    //console.log('completekpi', completekpi.name);
 
     if (metrics.length > 0) { // si metric existe
 
@@ -394,7 +394,7 @@ module.exports = {
         })
       }
 
-      console.log('filteredMetricsbefore', filteredMetrics);
+      //console.log('filteredMetricsbefore', filteredMetrics);
       // filtrer par valeur
       filteredMetrics = _.filter(filteredMetrics, function(metric) {
         var metricFieldValue = (metric[field] === undefined || metric[field] === null || metric[field].length === 0) ? 'toto' : metric[field];
