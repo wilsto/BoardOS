@@ -1,5 +1,8 @@
 # Change Log
 
+## [v1.6.59](https://github.com/wilsto/boardos/tree/v1.6.59) (2017-05-02)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.58...v1.6.59)
+
 ## [v1.6.58](https://github.com/wilsto/boardos/tree/v1.6.58) (2017-05-01)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.57...v1.6.58)
 
