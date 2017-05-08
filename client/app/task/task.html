@@ -449,7 +449,7 @@
                                 <td style="text-align:left;width:35%;font-size:13px">
                                     <span ng-if="KPI.calcul.task !== undefined && KPI.calcul.task !== null" class="badge" ng-style="{'background-color':giveMeMyColor(KPI.calcul.task, KPI.category)}" style="height:15px;line-height:10px;width:15px;margin-right: 10px">&nbsp;</span>
                                     <span class="text-muted days" ng-if="KPI.name==='Predicted OverCharge'">
-                                      {{task.metrics[task.metrics.length-1].projectedWorkload - task.metrics[task.metrics.length-1].targetLoad}}
+                                      {{parseFloat((task.metrics[task.metrics.length-1].projectedWorkload - task.metrics[task.metrics.length-1].targetLoad).toFixed(2))}}
                                     </span>
                                     <span class="text-muted days" ng-if="KPI.name==='Delivery Overdue'">
                                       {{task.metrics[task.metrics.length-1].delay}}
@@ -915,7 +915,7 @@
               </span>
               <small class="pull-right">PERT: </small>
               <span class="pull-right" style="width:80px;"><small>Number:</small><span style="font-weight:bold;color:black"> {{groupPERTTasks.length}}</span></span>
-              <br />  
+              <br />
               <div class="pertGroup2" ng-repeat="group2PERTTasks in groupPERTTasks | groupBy:'subContext2'">
                 {{group2PERTTasks[0].subContext2}}
                 <span class="pull-right" style="padding-left:5px;width:90px;font-weight:bold;color:black" uib-tooltip-html="'

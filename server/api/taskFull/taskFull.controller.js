@@ -80,10 +80,10 @@ function createAllFullTask() {
 //createAllFullTask();
 
 // TaskFull.remove({
-//   _id: '58d3773d26b3bd0400317cab'
+//   _id: '59035ce0dbfa440400814208'
 // }, function(err, numberRemoved) {
-//   createFullTask('58d3773d26b3bd0400317cab', false, function() {
-//     console.log('*******************end fulltask 58d3773d26b3bd0400317cab');
+//   createFullTask('59035ce0dbfa440400814208', false, function() {
+//     console.log('*******************end fulltask 59035ce0dbfa440400814208');
 //   });
 // });
 
@@ -228,18 +228,14 @@ function createFullTask(taskId, refreshDashboard, callback) {
           }
 
           // target
-          metric.targetstartDate = new Date(task.startDate);
-          metric.targetEndDate = new Date(task.endDate);
+          metric.targetstartDate = new Date(moment(task.startDate).startOf('day'));
+          metric.targetEndDate = new Date(moment(task.endDate).startOf('day'));
           metric.targetLoad = task.load;
 
           // in progress
-          metric.startDate = (reworkstart) ? reworkstart : new Date(metric.startDate);
-          metric.endDate = new Date(metric.endDate);
+          metric.startDate = (reworkstart) ? reworkstart : new Date(moment(metric.startDate).startOf('day'));
+          metric.endDate = new Date(moment(metric.endDate).startOf('day'));
           metric.timeSpent = parseFloat(String(metric.timeSpent).replace(',', '.')) - reworkspent;
-
-          // auto
-          metric.startDate = new Date(metric.startDate);
-          metric.endDate = new Date(metric.endDate);
 
           //convert to number
           metric.progress = parseFloat(metric.progress);
@@ -582,6 +578,42 @@ exports.show = function(req, res) {
     });
 };
 
+
+// Get count of tasks which start
+exports.countByMonth = function(req, res) {
+  var o = {};
+  o.map = function() {
+    emit((new Date(this.date)).getFullYear() + '.' + ((new Date(this.date)).getMonth() + 1), {
+      count: 1,
+      qty: this.comments.length
+    });
+  };
+  o.reduce = function(k, values) {
+    var total = {
+      count: 0,
+      qty: 0
+    };
+    for (var i in values) {
+      total.qty += values[i].qty;
+      total.count += values[i].count;
+    }
+
+    return total;
+  };
+  o.query = {
+    activity: new RegExp(req.query.activity),
+    context: new RegExp(req.query.context)
+  };
+  TaskFull.mapReduce(o, function(err, results) {
+    if (err) {
+      return handleError(res, err);
+    }
+    return res.status(200).json(results);
+  });
+};
+
+
+
 // Creates a new taskFull in the DB.
 exports.create = function(req, res) {
   var task = req.body;
@@ -640,7 +672,10 @@ exports.update = function(req, res) {
     _.each(task.actors, function(actor) {
       actors.push(actor._id);
     });
-    task.actors = actors;
+    _.each(task.todos, function(todo) {
+      actors.push(todo.actor._id);
+    });
+    task.actors = _.uniq(actors);
 
     var followers = [];
     _.each(task.followers, function(follower) {

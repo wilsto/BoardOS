@@ -11,6 +11,7 @@ router.get('/execute', controller.execute);
 router.get('/search', controller.search);
 router.get('/standardPERT', controller.standardPERT);
 router.get('/executeId/:taskId', controller.executeId);
+router.get('/countByMonth', controller.countByMonth);
 router.get('/:id', controller.show);
 router.post('/', controller.create);
 router.put('/:id', controller.update);

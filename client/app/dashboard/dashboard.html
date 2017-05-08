@@ -15,41 +15,43 @@
     </div>
     <div class="col-md-11">
       <div class="row">
-        <div class="col-md-3 profile-info">
-          <h1>{{dashboard.name}}</h1>
+        <div class="col-md-7 profile-info">
+          <h1>
+            <a href="#" style="color:black!important" editable-text="dashboard.name" e-style="width: 500px" buttons="right">{{ dashboard.name || 'Please give a name of your dashboard' }}</a>
+          </h1>
           <ul class="list list-inline">
-            <li>
-              <i class="fa fa-calendar"></i>
-              <span class="text-info">
-                Activity
-              </span>
-              {{dashboard.activity || 'All'}}
-            </li>
-            <br>
-            <li>
-              <i class="fa fa-map-marker"></i>
-              <span class="text-info">
-                Context
-              </span>
-              {{dashboard.context || 'All'}}
-            </li>
+              <li style="margin-top:5px">
+                  <i class="fa fa-flash"></i>
+                  <span class="text-muted" style="margin-right:10px">
+                    Activity
+                  </span>
+                  <a href="#" editable-text="dashboard.activity" class="notMandatoryField" e-style="width: 500px" e-uib-typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:8">
+                    {{dashboard.activity || 'All' }}
+                  </a>
+              </li><br>
+              <li style="margin-top:5px">
+                  <i class="fa fa-map-marker"></i>
+                  <span class="text-muted" style="margin-right:10px">
+                    Context
+                  </span>
+                  <a href="#" editable-text="dashboard.context"  class="notMandatoryField" e-style="width: 500px" e-uib-typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:8">
+                    {{dashboard.context || 'All' }}
+                  </a>
+              </li>
+              <li style="margin-top:5px" >
+                <span ng-show="messageCreation" class="label label-danger">  {{messageCreation}}</span>
+              </li>
           </ul>
+          <div class="pull-right" style="width:200px" ng-if="!dashboard._id" uib-tooltip-html="'You must fill the 7 mandatories fields : name, activity, context, startDate, Estimate workload, DueDate and confidence to be able to save'" tooltip-placement="bottom">
+              <button type="button" name="button" style="width:200px" class="btn  btn-primary" ng-click="create()" ng-disabled="!(dashboard.name && (dashboard.context || dashboard.activity))">Create</button>
+          </div>
         </div>
         <!--end col-md-8-->
-        <div class="col-md-6 profile-info">
-
+        <div class="col-md-2 profile-info">
           <!-- BEGIN OVERVIEW STATISTIC BARS-->
-          <div class="row" ng-if="dashboard._id">
-            <div class="col-md-12 col-sm-12 text-center">
-              <span class="text-muted">Metrics</span>
-              <br>
-              <div class="headerMetric">
-                &nbsp;</div>
-            </div>
-          </div>
           <!-- BEGIN OVERVIEW STATISTIC BARS-->
           <div class="row stats-overview-cont" ng-if="dashboard._id">
-            <div class="col-md-4 col-sm-4">
+            <div class="col-md-12 col-sm-12">
               <div class="stats-overview stat-block">
                 <div class="details">
                   <div class="title">
@@ -60,8 +62,7 @@
                   <nvd3 options="optionsTasks" data="dataTasks"></nvd3>
                 </div>
               </div>
-            </div>
-            <div class="col-md-4 col-sm-4">
+
               <div class="stats-overview stat-block">
                 <div class="details">
                   <div class="title">
@@ -73,35 +74,15 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-4 col-sm-4">
-              <div class="stats-overview stat-block">
-                <div class="details">
-                  <div class="title">
-                    <span style="font-weight:bold;color:#bcbd22">{{confidenceMean}}%</span>
-                    Confidence</div>
-                  <nvd3 options="optionsConfidence" data="dataConfidence"></nvd3>
-                </div>
-              </div>
-            </div>
-
           </div>
           <!-- END OVERVIEW STATISTIC BARS-->
         </div>
         <!--end col-md-8-->
         <div class="col-md-3">
-          <div class="portlet sale-summary">
-            <div class="portlet-title">
-              <div class="caption">
-                Refresh Dashboard
-              </div>
-              <div class="tools">
-                <a class="reload" href="javascript:;" ng-click="refreshDashboard()"></a>
-              </div>
-            </div>
-            <div class="portlet-body" style="padding:0!important">
+          <div class="stats-overview stat-block">
+
               <div id="myChartQCT"></div>
-            </div>
-          </div>
+        </div>
         </div>
         <!--end col-md-4-->
       </div>
@@ -111,7 +92,7 @@
 
 </div>
 
-<div class="row">
+<div class="row" ng-if="dashboard._id">
     <!--############### PLAN ############  -->
 
     <div class="col-lg-3 col-md-6 col-sm-12" ng-class="{'label-default':task.metrics[0].status ==='Not Started'}" style="padding-bottom:10px;">
@@ -198,7 +179,7 @@
                         <tbody style="text-align:center;">
                             <tr ng-repeat="KPI in dashboard.alerts | orderBy:'constraint' track by $index" on-finish-render uib-tooltip-html="'Contraint : {{KPI.constraint}}<br /> <br /> Description :  {{KPI.description}}  <br /> Suggestion :  {{KPI.suggestion}}'" tooltip-placement="left"  tooltip-class="tooltipkpi" >
                                 <td style="text-align:left;width:75%">
-                                  <a href="/KPI/{{KPI._id}}">{{KPI.name}}</a>
+                                  <a href="/KPI/{{KPI.alertId}}?type=dashboard&typeid={{dashboard._id}}&rangedate={{datediff}}">{{KPI.name}}</a>
                                 </td>
                                 <td style="text-align:left;width:25%;font-size:13px">
                                     <span ng-if="KPI.calcul[rangeDate] !== undefined && KPI.calcul[rangeDate] !== null" class="badge" ng-style="{'background-color':giveMeMyColor(KPI.calcul[rangeDate], KPI.category)}" style="height:15px;line-height:10px;width:15px;margin-right: 10px">&nbsp;</span>

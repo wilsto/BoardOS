@@ -3,13 +3,13 @@
 angular.module('boardOsApp')
   .controller('DashboardCtrl', function($scope, $rootScope, $http, $stateParams, myLibrary, $cookieStore, $location, Notification, $timeout, dateRangeService) {
 
+    var initializing = true;
+
     function average(arr) {
       return _.reduce(arr, function(memo, num) {
         return memo + num;
       }, 0) / arr.length;
     }
-
-    $scope.activeTab = 1;
 
     $scope.dashboard = {
       name: '',
@@ -18,18 +18,7 @@ angular.module('boardOsApp')
     };
 
     $scope.createNewTask = function(data) {
-      
-    };
 
-    $scope.loadKPIs = function() {
-      $http.get('/api/KPIs/list').success(function(KPIs) {
-        $scope.KPIs = KPIs;
-        $scope.dataKPIs = [{
-          values: []
-        }];
-        $scope.predataKPIs = myLibrary.getByMonth(KPIs, 'date', 'value');
-        $scope.dataKPIs[0].values = $scope.predataKPIs;
-      });
     };
 
     $scope.refreshDashboard = function() {
@@ -38,9 +27,8 @@ angular.module('boardOsApp')
       });
     };
 
-
     $scope.loadTasks = function() {
-      $http.get('/api/tasks/countByMonth', {
+      $http.get('/api/taskFulls/countByMonth', {
         params: {
           activity: $rootScope.perimeter.activity,
           context: $rootScope.perimeter.context
@@ -50,38 +38,20 @@ angular.module('boardOsApp')
           values: []
         }];
 
-        $scope.dataTasks[0].values = myLibrary.displayLastYear(tasks, '_id', 'value', true);
-      });
-    };
-
-    $scope.loadMetrics = function() {
-
-      $http.get('/api/metrics/countByMonth', {
-        params: {
-          activity: $rootScope.perimeter.activity,
-          context: $rootScope.perimeter.context
-        }
-      }).success(function(metrics) {
         $scope.dataMetrics = [{
           values: []
         }];
-        $scope.dataConfidence = [{
-          values: []
-        }];
-        //TODO vérifier le calcul des nombres de metrics
-        $scope.metricsNb = metrics.reduce(function(pv, cv) {
-          return pv + cv.value.count;
+
+        $scope.metricsNb = tasks.reduce(function(pv, cv) {
+          return pv + cv.value.qty;
         }, 0);
 
-        _.each(metrics, function(metric) {
-          metric.count = metric.value.count;
-          metric.trust = parseInt(metric.value.trust / metric.value.count);
-        });
-        $scope.dataMetrics[0].values = myLibrary.displayLastYear(metrics, '_id', 'count', true);
-        $scope.dataConfidence[0].values = myLibrary.displayLastYear(metrics, '_id', 'trust', true);
-        $scope.confidenceMean = _.last($scope.dataConfidence[0].values).count;
+        $scope.dataTasks[0].values = myLibrary.displayLastYear(tasks, '_id', 'count', true);
+        $scope.dataMetrics[0].values = myLibrary.displayLastYear(tasks, '_id', 'qty', true);
+
       });
     };
+
     $scope.giveMeMyColor = function(value, category) {
       return myLibrary.giveMeMyColor(value, category);
     };
@@ -143,7 +113,6 @@ angular.module('boardOsApp')
     });
 
     $scope.loadCompleteDashboard = function() {
-      $scope.btndisabled = false;
       if ($stateParams.id) {
         $scope.myPromise = $http.get('/api/dashboardCompletes/' + $stateParams.id).success(function(dashboard) {
           $scope.dashboard = dashboard;
@@ -171,35 +140,14 @@ angular.module('boardOsApp')
             var kpiGoals = [];
 
             if (kpi.category === 'Goal') {
-
-              //  var goalsByMonth = _.pluck(myLibrary.getByMonth(kpi.calcul.taskTime, 'month', 'value'), 'mean');
-              // dataGoals.push(goalsByMonth);
               dataGoals4QCT.push({
                 name: kpi.constraint,
                 value: kpi.calcul.task
               });
-              // kpiGoals.push(goalsByMonth);
-
-              // kpi.calcul.time = _.map(myLibrary.getCalculByMonth(kpiGoals), function(data) {
-              //   return {
-              //     month: data.label,
-              //     valueKPI: data.mean
-              //   };
-              // });
-
               dataAllGoals.push(kpi.calcul.task);
             }
-            // if (kpi.category === 'Alert') {
-            //
-            //   var alertsByMonth = _.pluck(myLibrary.getByMonth(kpi.calcul.taskTime, 'month', 'value'), 'mean');
-            //   kpiAlerts.push(alertsByMonth);
-            //   dataAlerts.push(alertsByMonth);
-            //   $scope.alertsNb += kpi.calcul.task;
-            //
-            // }
           });
-          // $scope.dataGoals[0].values = myLibrary.getCalculByMonth(dataGoals);
-          // $scope.dataAlerts[0].values = myLibrary.getCalculByMonth(dataAlerts);
+
 
           var scoreOnQCT = _.chain(dataGoals4QCT)
             .flatten()
@@ -330,110 +278,49 @@ angular.module('boardOsApp')
             });
 
             $scope.loadTasks();
-            $scope.loadMetrics();
+            initializing = false;
           });
         });
       }
     };
     $scope.loadCompleteDashboard();
 
-    $scope.load = function() {
-      if ($stateParams.id) {
-        $http.get('/api/dashboards/' + $stateParams.id).success(function(dashboard) {
-
-          $scope.dashboard = dashboard;
-
-          $scope.OutofDateTasks = _.filter($scope.dashboard.tasks, function(task) {
-            return task.needToFeed;
-          });
-
-          $scope.dataGoals = [{
-            values: []
-          }];
-          $scope.dataAlerts = [{
-            values: []
-          }];
-          // on rassemble les métriques
-          $scope.dashboard.metrics = [];
-          _.each($scope.dashboard.tasks, function(task) {
-            _.each(task.metrics, function(metric) {
-              $scope.dashboard.metrics.push(metric);
-            });
-          });
-
-
-
-
-        });
-      } else {
-        $scope.dashboard = {
-          name: '',
-          owner: $scope.currentUser
-        };
-
-      }
-    };
-
-    $scope.cancel = function() {
-      if (!$stateParams.id) {
-        $location.path('/dashboards');
-      }
-    };
-
-
-    $scope.changeTab = function(e, tabNb) {
-      $('.ver-inline-menu li').removeClass('active');
-      $(e.target).closest('li').addClass('active');
-      $scope.activeTab = tabNb;
-    };
-
-    $scope.save = function() {
-      if (typeof $scope.dashboard._id === 'undefined') {
-        $scope.btndisabled = true;
-        delete $scope.dashboard.kpis;
-        delete $scope.dashboard.fullKPIs;
-        delete $scope.dashboard.metrics;
-        delete $scope.dashboard.tasks;
-
-        $http.post('/api/dashboards', $scope.dashboard).success(function(data) {
-          var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was created';
-
-          $http.post('/api/logs', {
-            info: logInfo,
-            actor: $scope.currentUser
-          });
-
-          setTimeout(function() {
-            Notification.success(logInfo);
-            $location.path('/dashboard/' + data._id);
-          }, 1000);
-
-        });
-      } else {
-        $http.put('/api/dashboards/' + $scope.dashboard._id, $scope.dashboard).success(function() {
-          var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was updated';
-          $http.post('/api/logs', {
-            info: logInfo,
-            actor: $scope.currentUser
-          });
-          Notification.success(logInfo);
-          $scope.loadCompleteDashboard();
-        });
-      }
-
-    };
-
-    $scope.delete = function() {
-      bootbox.confirm('Are you sure?', function(result) {
-        if (result) {
-          $http.delete('/api/dashboards/' + $scope.dashboard._id).success(function() {
-            var logInfo = 'dashboard "' + $scope.dashboard.name + '" was deleted';
-            Notification.success(logInfo);
-            $location.path('/dashboards');
-          });
-        }
+    // *******************
+    // create a new dashboard
+    // *******************
+    $scope.create = function() {
+      $http.post('/api/dashboards', $scope.dashboard).success(function(data) {
+        var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was created';
+        Notification.success(logInfo);
+        $location.path('/dashboard/' + data._id);
       });
     };
+
+    // *******************
+    // update a task
+    // *******************
+    $scope.update = function() {
+      $http.put('/api/dashboards/' + $scope.dashboard._id, $scope.dashboard).success(function() {
+        var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was updated';
+        $http.post('/api/logs', {
+          info: logInfo,
+          actor: $scope.currentUser
+        });
+        Notification.success(logInfo);
+        $scope.loadCompleteDashboard();
+      });
+    };
+
+
+    $scope.$watchGroup(['dashboard.name', 'dashboard.context', 'dashboard.activity'], function(newMap, previousMap) {
+      if (initializing) {
+        $timeout(function() {
+          //initializing = true;
+        });
+      } else {
+        $scope.update();
+      }
+    }, true);
 
     $scope.options = {
       chart: {
@@ -453,7 +340,7 @@ angular.module('boardOsApp')
           return d.label;
         },
         y: function(d) {
-          return d.count;
+          return parseInt(d.count);
         },
         showValues: false,
         transitionDuration: 500
@@ -465,21 +352,4 @@ angular.module('boardOsApp')
 
     $scope.optionsMetrics = angular.copy($scope.options);
     $scope.optionsMetrics.chart.color = ['#87CEEB'];
-
-    $scope.optionsAlerts = angular.copy($scope.options);
-    $scope.optionsAlerts.chart.color = ['#CB4B16'];
-    $scope.optionsAlerts.chart.y = function(d) {
-      return d.sum;
-    };
-
-    $scope.optionsGoals = angular.copy($scope.options);
-    $scope.optionsGoals.chart.color = function(d) {
-      return myLibrary.giveMeMyColor(d.mean);
-    };
-    $scope.optionsGoals.chart.y = function(d) {
-      return d.mean;
-    };
-
-    $scope.optionsConfidence = angular.copy($scope.options);
-    $scope.optionsConfidence.chart.color = ['#bcbd22'];
   });

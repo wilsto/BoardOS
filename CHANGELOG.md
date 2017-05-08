@@ -1,5 +1,21 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.65...HEAD)
+
+**Implemented enhancements:**
+
+- Retravailler le rework [\#135](https://github.com/wilsto/BoardOS/issues/135)
+
+**Closed issues:**
+
+- Mapper les anciens formats de taches vers les nouvelles [\#185](https://github.com/wilsto/BoardOS/issues/185)
+- Refonte infos tasks [\#156](https://github.com/wilsto/BoardOS/issues/156)
+
+## [v1.6.65](https://github.com/wilsto/boardos/tree/v1.6.65) (2017-05-02)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.64...v1.6.65)
+
 ## [v1.6.64](https://github.com/wilsto/boardos/tree/v1.6.64) (2017-05-02)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.63...v1.6.64)
 

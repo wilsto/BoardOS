@@ -13,7 +13,7 @@
         </span>
       </a>
     </div>
-    <div class="col-md-1 col-sm-2">
+    <div class="col-md-2 col-sm-2">
     </div>
     <div class="col-md-2 col-sm-4">
       <div class="stats-overview stat-block">
@@ -45,20 +45,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-2 col-sm-4">
-      <div class="stats-overview stat-block">
-        <div class="isloading" ng-if="!dataConfidence">Loading
-          <br/><img src="assets/images/ajax-loader_blue.gif">
-        </div>
-        <div class="details" ng-if="dataConfidence">
-          <div class="title">
-            <span style="font-weight:bold;color:#bcbd22">{{confidenceMean || '-'}}%</span>
-            Confidence</div>
-          <nvd3 options="optionsConfidence" data="dataConfidence"></nvd3>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-1 col-sm-2">
+    <div class="col-md-2 col-sm-2">
     </div>
     <div class="col-md-2 col-sm-4 ">
       <a href="/tasks" class="anim-btn">
@@ -76,7 +63,7 @@
   <!-- END OVERVIEW STATISTIC BARS-->
 </div>
 <div class="row">
-  <div class="col-md-6 col-sm-6">
+  <div class="col-md-3 col-sm-12">
     <!-- BEGIN OVERVIEW STATISTIC BLOCKS-->
     <div class="portlet">
       <div class="portlet-title">
@@ -114,12 +101,8 @@
                 </th>
                 <th style="width:8%;text-align: right;">
                   <small class="text-muted">
-                    On Going
+                    Active
                   </small>
-                </th>
-                <th style="font-size:11px;width:5%;text-align: left;">
-                  <small style="color:#EE6A50">
-                    To feed</small>
                 </th>
               </tr>
             </thead>
@@ -135,27 +118,22 @@
                 </td>
                 <td style="background:#eee;text-align: center;   ">
                   <span ng-if="dashboards" class="badge" ng-style="goalBgColor(dashboard.kpisValue)" style="height:15px;line-height:10px;width:15px;margin-right: 15px">&nbsp;&nbsp;</span>
-                  <span ng-style="goalColor(dashboard.kpisValue)" style="font-size:22px">{{dashboard.kpisValue}}
-                    <span style="font-size:15px" ng-if="dashboards">%
-                    </span>
+                  {{dashboard.kpisValue}}%
                   </span>
                   <span class="badge" style="background:green;width:25px;font-size:15px" ng-if="dashboard.dataGoals === '####'">{{dashboard.nbGoals}}</span>
                 </td>
                 <td style="background:#eee;text-align: center;   ">
-                  <span ng-style="alertColor(dashboard.alertsValue)" style="font-size:22px">{{dashboard.alertsValue}}</span>
+                  <span ng-style="alertColor(dashboard.alertsValue)" >{{dashboard.alertsValue}}</span>
                 </td>
-                <td style="font-size:18px;text-align: right;">
+                <td style="text-align: right;">
                   <span style="color:#316BCD">{{dashboard.openTasksNb}}</span>
-                </td>
-                <td style="font-size:16px;text-align: center">
-                  <span style="color:#EE6A50">{{dashboard.toFeedTasksNb}}</span>
                 </td>
               </tr>
               <tr style="background:#eee;text-align:right">
                 <td colspan="6">
-                  <a href="/settings#dashboards" ng-if="dashboards.length > 0">
+                  <a href="/dashboards">
                     <i class="fa fa-reorder"></i>
-                    Manage/remove dashboards</a>
+                    Manage dashboards</a>
                 </td>
               </tr>
             </tbody>
@@ -164,126 +142,394 @@
       </div>
     </div>
   </div>
-  <div class="col-md-6 col-sm-6">
+  <div class="col-md-9 col-sm-12">
     <div class="portlet">
       <div class="portlet-title">
         <div class="caption">
-          <i class="fa  fa-tasks"></i>My Tasks
+          <i class="fa fa-tasks"></i>My Tasks
         </div>
-        <div class="pull-right" style="margin-top:-7px;">
-          <a class="btn btn-sm btn-info pull-right" role="button" data-toggle="collapse" href="#collapseHelp" aria-expanded="false" aria-controls="collapseHelp">
-            <i class="fa fa-info-circle"></i>
-            Show Help
-          </a>
+        <div class="tools">
+
         </div>
       </div>
       <div class="portlet-body">
-        <div class="isloading" ng-if="!tasksToNotify">Loading
+        <div class="isloading" ng-if="!dashboards">Loading
           <br/><img src="assets/images/ajax-loader_blue.gif">
         </div>
-        <div class="scroller" data-always-visible="1" data-rail-visible="0">
-          <ul class="feeds">
-            <li class="bg-lightgrey">
+    <div class="row">
+        <!--############### PLAN ############  -->
 
-              <a>
-                <div class="col1">
-                  <div class="cont">
-                    <div class="cont-col1">
+        <div class="col-lg-3 col-md-6 col-sm-12" ng-class="{'label-default':task.metrics[0].status ==='Not Started'}" style="padding-bottom:10px;">
+            <div class="pdcaCol" ng-class="{'label-default':task.metrics[0].status ==='Not Started'}">
+                PLAN
+                <div class="pull-right" ng-if="task.metrics[0].status ==='Not Started'">
+                    <span class="label" ng-class="{'label-info':task.metrics[0].status ==='In Progress','label-success':task.metrics[0].status ==='Finished','label-default':task.metrics[0].status ==='Not Started','label-lightgrey':task.metrics[0].status =='Withdrawn'}">
+                          {{task.metrics[0].status}}
+                        </span>
+                </div>
+            </div>
 
+            <!-- Tasks -->
+            <div class="portlet sale-summary" >
+                <div class="portlet-title">
+                    <div class="caption">
+                        Planned Tasks
                     </div>
-                    <div class="cont-col2 qs">
-                      <div class="desc collapse" id="collapseHelp">
-                        <div>
-                          Task name
-                          <br>
-                          <span style="color:grey">
-                            In Grey, Targeted task infos.</span>
-                          <span class="text-danger">
-                            In red, Last reestimated infos which need focus</span>
-                          <br>
-                          <span style="color:grey">
-                            <i class="fa fa-crosshairs"></i>
-                            Start Date --[ Workload
-                            <span class="text-danger label-lightdanger">+ Overcharge
-                            </span>
-                            <span class="label-lightwarning">/ Undercharge
-                            </span>
-                            ]--> End Date
-                          </span>
-                          <span class="label label-sm label-lightdanger">
-                            <span class="text-danger">Delayed delivery date
-                            </span>
-                          </span>
-                          <br>
-                          <span style="color:orange">
-                            In Orange, task with old infos, which need new metrics.</span>
+                    <div class="tools">
+                        <div class="pull-right" ng-init="PlanTasksIsExpanded=true" ng-click="PlanTasksIsExpanded=!PlanTasksIsExpanded">
+                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!PlanTasksIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="PlanTasksIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
                         </div>
-                      </div>
+                        <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{filteredPlanTasks.length}}</span></span>
                     </div>
-                  </div>
                 </div>
+                <div class="portlet-body" style="padding:0!important"  ng-show="PlanTasksIsExpanded">
+                  <table class="table table-striped table-hover">
+                      <tbody style="text-align:left;">
+                          <tr ng-repeat="task in filteredPlanTasks | orderBy:'metrics[0].targetEndDate'">
+                            <td style="text-align: center">
+                              <img alt="" ng-src="{{task.actors[0].avatar}}" class="img-circle" style="width:30px;height:30px;" err-src="assets/images/avatars/avatar.png" uib-tooltip-html="'Name <br /> {{task.actors[0].name}}'" tooltip-placement="top"/>
+                            </td>
+                              <td >
+                                  <a href="/task/{{task._id}}">
+                                    <small class="dont-break-out"> {{task.name}}</small>
+                                  </a >
+                              </td>
+                              <td style="min-width:120px">
+                                  <span class="pull-right text-info">
+                                    <small class="text-muted" >
+                                      {{ (task.metrics[0].targetstartDate | date:'MMM, dd') }} >
+                                    </small>
+                                    <small style="color:black" >
+                                      {{ (task.metrics[0].endDate || task.metrics[0].targetEndDate | date:'MMM, dd') }}
+                                    </small>
+                                  </span>
+                              </td>
+                          </tr>
+                          <tr style="background:#eee;text-align:right">
+                              <td colspan="3">
+                                  <a href="/task/" >
+                                    <i class="fa fa-plus"></i>
+                                    <span class="dont-break-out"> Create a new task</span>
+                                  </a >
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
 
-              </a>
-            </li>
-            <li ng-repeat="task in tasksToNotify | orderBy:'endDate'">
-              <a ng-href="/task/{{task._id}}">
-                <div class="col1">
-                  <div class="cont">
-                    <div class="cont-col1">
-                      <div class="label label-sm label-danger" ng-show="task.metrics[task.metrics.length - 1].progressStatus ==='Late' || task.metrics[task.metrics.length - 1].projectedWorkload > task.metrics[task.metrics.length - 1].targetLoad ">
-                        <i class="fa fa-bell"></i>
-                      </div>
-                      <div class="label label-sm label-warning" ng-show="(task.needToFeed && task.metrics[task.metrics.length - 1].progressStatus !=='Late' && task.metrics[task.metrics.length - 1].projectedWorkload <= task.metrics[task.metrics.length - 1].targetLoad ) || task.metrics[task.metrics.length - 1].progressStatus ==='At Risk' ">
-                        <i class="fa fa-clock-o"></i>
-                      </div>
-                      <div class="label label-sm label-success" ng-show="(!task.needToFeed && task.metrics[task.metrics.length - 1].progressStatus !=='Late' && task.metrics[task.metrics.length - 1].progressStatus !=='At Risk' && task.metrics[task.metrics.length - 1].projectedWorkload <= task.metrics[task.metrics.length - 1].targetLoad)">
-                        <i class="fa fa-clock-o"></i>
-                      </div>
-                    </div>
-                    <div class="cont-col2 qs">
-                      <div class="desc" popover-html-unsafe="Context : {{task.context}} </p>  Activity : {{task.activity}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="right" popover-delay="1000">
-                        {{task.name}}
-                        <br>
-                        <span style="color:grey">
-                          <i class="fa fa-crosshairs"></i>
-                          {{task.metrics[task.metrics.length - 1].targetstartDate | date:'dd/MM/yyyy'}}
-                          --[
-                          {{task.metrics[task.metrics.length - 1].targetLoad}}
-                          <span class="text-danger label-lightdanger" ng-if="task.metrics[task.metrics.length - 1].projectedWorkload - task.metrics[task.metrics.length - 1].targetLoad > 0">+
-                            {{Math.round((task.metrics[task.metrics.length - 1].projectedWorkload - task.metrics[task.metrics.length - 1].targetLoad)*10)/10}}</span>
-                          <span class="label-lightwarning" ng-if="task.metrics[task.metrics.length - 1].projectedWorkload - task.metrics[task.metrics.length - 1].targetLoad < 0">-
-                            {{Math.round((task.metrics[task.metrics.length - 1].projectedWorkload - task.metrics[task.metrics.length - 1].targetLoad)*10*-1)/10}}</span>
-                          ]-->
-                          {{task.metrics[task.metrics.length - 1].targetEndDate | date:'dd/MM/yyyy'}}
-                        </span>
-                        <span class="label label-sm label-lightdanger" ng-if="task.metrics[task.metrics.length - 1].progressStatus =='Late' || task.metrics[task.metrics.length - 1].progressStatus =='At Risk'">
-                          <span class="text-danger">
-                            {{task.metrics[task.metrics.length - 1].progressStatus || 'No metrics'}}
-                            <span ng-if="task.metrics[task.metrics.length - 1].endDate !== task.metrics[task.metrics.length - 1].targetEndDate">
-                              -->
-                              {{task.metrics[task.metrics.length - 1].endDate | date:'dd/MM/yyyy'}}
-                            </span>
-                          </span>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
                 </div>
-                <div class="col2">
-                  <div class="date">
-                    <span style="color:orange" ng-show=" task.metrics[task.metrics.length - 1] === undefined">
-                      No metrics
-                    </span>
-                    <span class="label label-sm label-warning " ng-show="task.needToFeed">
-                      Need Metric</span>
-                  </div>
-                </div>
-              </a>
-            </li>
-          </ul>
+            </div>
+
+
         </div>
-        <!--END TABS-->
-      </div>
+        <!--############### DO ############  -->
+        <div class="col-lg-3 col-md-6 col-sm-12" ng-class="{'label-info':task.metrics[0].status ==='In Progress'}" style="padding-bottom:20px;">
+            <div class="pdcaCol" ng-class="{'label-info':task.metrics[0].status ==='In Progress'}">
+                DO
+                <div class="pull-right" ng-if="task.metrics[0].status ==='In Progress'">
+                    <span class="label" ng-class="{'label-info':task.metrics[0].status ==='In Progress','label-success':task.metrics[0].status ==='Finished','label-default':task.metrics[0].status ==='Not Started','label-lightgrey':task.metrics[0].status =='Withdrawn'}">
+                          {{task.metrics[0].status}}
+                        </span>
+                </div>
+                <div class="pull-right">
+                  <button type="button" name="button" style="margin-left:5px;" class="btn btn-xs btn-outline btn-warning" ng-click="reopen()" ng-if="task.metrics[0].status ==='Finished' ">ReOpen</button>
+                </div>
+            </div>
+            <!-- Alerts -->
+            <div class="" id="Alert" style="margin-bottom:0!important">
+                <div class="portlet sale-summary" ng-if="dashboard._id">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Alerts
+                        </div>
+                        <div class="tools">
+                          <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{dashboard.alerts.length}}</span></span>
+                        </div>
+                    </div>
+                    <div class="portlet-body" style="padding:0!important">
+                        <table class="table table-striped table-hover">
+                            <tbody style="text-align:center;">
+                                <tr ng-repeat="KPI in dashboard.alerts | orderBy:'constraint' track by $index" on-finish-render uib-tooltip-html="'Contraint : {{KPI.constraint}}<br /> <br /> Description :  {{KPI.description}}  <br /> Suggestion :  {{KPI.suggestion}}'" tooltip-placement="left"  tooltip-class="tooltipkpi" >
+                                    <td style="text-align:left;width:75%">
+                                      <a href="/KPI/{{KPI._id}}">{{KPI.name}}</a>
+                                    </td>
+                                    <td style="text-align:left;width:25%;font-size:13px">
+                                        <span ng-if="KPI.calcul[rangeDate] !== undefined && KPI.calcul[rangeDate] !== null" class="badge" ng-style="{'background-color':giveMeMyColor(KPI.calcul[rangeDate], KPI.category)}" style="height:15px;line-height:10px;width:15px;margin-right: 10px">&nbsp;</span>
+                                        <span class="text-muted" >
+                                          {{KPI.calcul[rangeDate]}}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!--In Progress Tasks  -->
+            <div class="portlet sale-summary" >
+                <div class="portlet-title">
+                    <div class="caption">
+                        In Progress Tasks
+                    </div>
+                    <div class="tools">
+                        <div class="pull-right" ng-init="InProgressTasksIsExpanded=true" ng-click="InProgressTasksIsExpanded=!InProgressTasksIsExpanded">
+                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!InProgressTasksIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="InProgressTasksIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                        </div>
+                        <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{filteredInProgressTasks.length}}</span></span>
+                    </div>
+                </div>
+                <div class="portlet-body" style="padding:0!important" ng-show="InProgressTasksIsExpanded">
+                  <table class="table table-striped table-hover">
+                      <tbody style="text-align:left;">
+                          <tr ng-repeat="task in filteredInProgressTasks | orderBy:'metrics[0].endDate'">
+                            <td style="text-align: center">
+                              <img alt="" ng-src="{{task.actors[0].avatar}}" class="img-circle" style="width:30px;height:30px;" err-src="assets/images/avatars/avatar.png" uib-tooltip-html="'Name <br /> {{task.actors[0].name}}'" tooltip-placement="top"/>
+                            </td>
+                              <td>
+                                <a href="/task/{{task._id}}">
+                                <small class="dont-break-out"> {{task.name}}</small>
+                                </a >
+                              </td>
+                              <td style="min-width:120px">
+                                  <span class="pull-right text-info">
+                                    <small class="text-muted" >
+                                      {{ task.metrics[0].progress  }}% >
+                                    </small>
+                                    <small style="color:black" >
+                                      {{ (task.metrics[0].endDate || task.metrics[0].targetEndDate | date:'MMM, dd') }}
+                                    </small>
+                                  </span>
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12" ng-class="{'label-success':task.metrics[0].status ==='Finished','label-lightgrey':task.metrics[0].status =='Withdrawn'}" style="padding-bottom:20px;">
+            <div class="pdcaCol" ng-class="{'label-success':task.metrics[0].status ==='Finished','label-lightgrey':task.metrics[0].status =='Withdrawn'}">
+                CHECK
+                <div class="pull-right" ng-if="task.metrics[0].status ==='Finished' || task.metrics[0].status =='Withdrawn'">
+                    <span class="label" >
+                          {{task.metrics[0].status}}
+                        </span>
+                </div>
+            </div>
+            <!-- KPIs -->
+            <div class="" id="KPI">
+                <div class="portlet sale-summary" ng-if="dashboard._id">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            KPIs
+                        </div>
+                        <div class="tools">
+                            <div class="pull-right" ng-init="KPIIsExpanded=true" ng-click="KPIIsExpanded=!KPIIsExpanded">
+                                <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!KPIIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                                <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="KPIIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                            </div>
+                            <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{dashboard.kpis.length}}</span></span>
+                        </div>
+                    </div>
+                    <div class="portlet-body" style="padding:0!important" ng-show="KPIIsExpanded">
+                        <table class="table table-striped table-hover">
+                            <tbody style="text-align:center;">
+                                <tr ng-repeat="KPI in dashboard.kpis | orderBy:['constraint','name'] track by $index" on-finish-render uib-tooltip-html="'Contraint : {{KPI.constraint}}<br /> <br /> Description :  {{KPI.description}}  <br /> Suggestion :  {{KPI.suggestion}}'" tooltip-placement="left"  tooltip-class="tooltipkpi"  >
+                                    <td style="text-align:left;width:75%"><a href="/KPI/{{KPI.kpiId}}?type=dashboard&typeid={{dashboard._id}}&rangedate={{datediff}}">{{KPI.name}}</a></td>
+                                    <td style="text-align:left;width:25%;font-size:13px">
+                                        <span ng-if="KPI.calcul[rangeDate] !== undefined && KPI.calcul[rangeDate] !== null" class="badge" ng-style="{'background-color':giveMeMyColor(KPI.calcul[rangeDate], KPI.category)}" style="height:15px;line-height:10px;width:15px;margin-right: 10px">&nbsp;&nbsp;</span> {{KPI.calcul[rangeDate]}}
+                                        <span ng-if="KPI.category === 'Goal' && KPI.calcul[rangeDate] !== undefined && KPI.calcul[rangeDate] !== null"> %</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!--Finished Tasks  -->
+            <div class="portlet sale-summary" >
+                <div class="portlet-title">
+                    <div class="caption">
+                        Finished Tasks
+                    </div>
+                    <div class="tools">
+                        <div class="pull-right" ng-init="FinishedTasksIsExpanded=true" ng-click="FinishedTasksIsExpanded=!FinishedTasksIsExpanded">
+                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!FinishedTasksIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="FinishedTasksIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                        </div>
+                        <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{filteredFinishedTasks.length}}</span></span>
+                    </div>
+                </div>
+                <div class="portlet-body" style="padding:0!important" ng-show="FinishedTasksIsExpanded">
+                    <table class="table table-striped table-hover">
+                        <tbody style="text-align:left;">
+                            <tr ng-repeat="task in filteredFinishedTasks | orderBy:'-metrics[0].endDate'">
+                              <td style="text-align: center">
+                                <img alt="" ng-src="{{task.actors[0].avatar}}" class="img-circle" style="width:30px;height:30px;" err-src="assets/images/avatars/avatar.png" uib-tooltip-html="'Name <br /> {{task.actors[0].name}}'" tooltip-placement="top"/>
+                              </td>
+                                <td>
+                                  <a href="/task/{{task._id}}">
+                                    <small class="dont-break-out"> {{task.name}}</small>
+
+                                  </a >
+                                </td>
+                                <td style="min-width:120px">
+                                    <span class="pull-right text-info">
+                                      <small class="text-muted" >
+                                        {{ (task.metrics[0].endDate | date:'mediumDate') }}
+                                      </small>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+
+            <!-- Anomalies -->
+            <div class="" id="Anomalies">
+                <div class="portlet sale-summary" ng-if="dashboard._id">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Anomalies
+                        </div>
+                        <div class="tools">
+                            <div class="pull-right" >
+                                <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!AnomalyIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                                <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="AnomalyIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                            </div>
+                            <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{task.dashboards.length}}</span></span>
+                        </div>
+                    </div>
+                    <div class="portlet-body" style="padding:0!important">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12" ng-class="{'label-success':task.metrics[0].status ==='Finished','label-lightgrey':task.metrics[0].status =='Withdrawn'}" style="padding-bottom:20px;">
+            <div class="pdcaCol">
+                ACT
+            </div>
+            <!-- Review -->
+            <div class="" id="Review">
+                <div class="portlet sale-summary" ng-if="dashboard._id">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            Review
+                        </div>
+                        <div class="tools">
+                            <div class="pull-right" ng-click="ReviewIsExpanded=!ReviewIsExpanded">
+                                <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!ReviewIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                                <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="ReviewIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                            </div>
+                            <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{task.reviews.length ||0}}</span></span>
+                        </div>
+                    </div>
+                    <div class="portlet-body" style="padding:0!important" ng-show="ReviewIsExpanded">
+                      <table class="table table-striped table-hover">
+                          <tbody style="text-align:center;">
+                              <tr >
+                                  <td style="text-align:left;">Task Review</td>
+                                  <td style="text-align:right;padding-right:25px;font-size:13px">
+                                    <div class="circularButtonView circularToggleButtonView-button circularButtonView--xsmall circularButtonView--onWhiteBackground circularButtonView--active">
+                                        <span class="circularButtonView-label">
+                                          <svg class="svgIcon " viewBox="0 0 32 32" title="checkmark">
+                                            <polygon points="27.672,4.786 10.901,21.557 4.328,14.984 1.5,17.812 10.901,27.214 30.5,7.615 "></polygon>
+                                          </svg>
+                                        </span>
+                                    </div>
+                                  </td>
+                              </tr>
+                              <tr >
+                                  <td style="text-align:left;">Perimeter Review</td>
+                                  <td style="text-align:right;padding-right:25px;font-size:13px">
+                                    <div class="circularButtonView circularToggleButtonView-button circularButtonView--xsmall circularButtonView--onWhiteBackground circularButtonView--active">
+                                        <span class="circularButtonView-label">
+                                          <svg class="svgIcon " viewBox="0 0 32 32" title="checkmark">
+                                            <polygon points="27.672,4.786 10.901,21.557 4.328,14.984 1.5,17.812 10.901,27.214 30.5,7.615 "></polygon>
+                                          </svg>
+                                        </span>
+                                    </div>
+                                  </td>
+                              </tr>
+                          </tbody>
+                      </table>
+                    </div>
+                </div>
+            </div>
+            <div class="" id="ActionPlans">
+                <div class="portlet sale-summary" ng-if="dashboard._id">
+                    <div class="portlet-title" >
+                        <div class="caption">
+                            Action Plan
+                        </div>
+                        <div class="tools">
+                            <div class="pull-right" ng-click="ActionPlanIsExpanded=!ActionPlanIsExpanded">
+                                <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!ActionPlanIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                                <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="ActionPlanIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                            </div>
+                            <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{task.ActionPlans.length ||0}}</span></span>
+                        </div>
+                    </div>
+                    <div class="portlet-body" style="padding:0!important;" ng-show="ActionPlanIsExpanded">
+                      <table class="table table-striped table-hover">
+                          <tbody style="text-align:center;">
+                              <tr ng-repeat="todo in task.todos | filter:filterToDo track by $index  " >
+                                  <td style="text-align:left;font-size:13px;width:32px;">
+                                    <div class="circularButtonView circularToggleButtonView-button circularButtonView--xsmall circularButtonView--onWhiteBackground circularButtonView--active">
+                                        <span class="circularButtonView-label">
+                                          <svg class="svgIcon " viewBox="0 0 32 32" title="checkmark">
+                                            <polygon points="27.672,4.786 10.901,21.557 4.328,14.984 1.5,17.812 10.901,27.214 30.5,7.615 "></polygon>
+                                          </svg>
+                                        </span>
+                                    </div>
+                                  </td>
+                                  <td style="text-align:left">
+                                    <span ng-class="{'barre':todo.isDone}"><span style="color:black" >{{todo.text}}</span></span>
+                                  </td>
+                                  <td style="text-align:right;">
+                                    <md-button  class="md-button-slim" ng-click="$parent.showTodoDatePicker(todo, $event)" aria-label="none" style="min-width:20px!important;margin:0!important;padding:0!important;border-bottom:none;">
+                                      <small class="text-muted" ng-show="todo.date">{{todo.date |date:'dd MMM' }}</small>
+                                        <div ng-hide="todo.date" class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground" uib-tooltip-html="'Add a due date to this subtask'" tooltip-placement="bottom">
+                                            <span class="circularButtonView-label">
+                                          <svg class="svgIcon task-row-due-date-icon" viewBox="0 0 32 32" title="calendar">
+                                            <rect x="16" y="16" width="2" height="2"></rect><rect x="20" y="16" width="2" height="2"></rect>
+                                            <rect x="20" y="20" width="2" height="2"></rect><rect x="16" y="20" width="2" height="2"></rect>
+                                            <rect x="8" y="20" width="2" height="2"></rect><rect x="8" y="24" width="2" height="2"></rect>
+                                            <rect x="16" y="24" width="2" height="2"></rect><rect x="12" y="16" width="2" height="2"></rect>
+                                            <rect x="12" y="20" width="2" height="2"></rect><rect x="12" y="24" width="2" height="2"></rect>
+                                            <path d="M22,2V0h-2v2h-8V0h-2v2H2v30h28V2H22z M28,30H4V12h24V30z M28,10H4V4h6v2h2V4h8v2h2V4h6V10z"></path>
+                                          </svg>
+                                        </span>
+                                        </div>
+                                    </md-button>
+                                    <a ng-click="AssignSubtTaskActor(todo)">
+                                        <img ng-show="todo.actor" uib-tooltip-html="'{{todo.actor.name}}'" tooltip-placement="bottom" alt="" ng-src="{{todo.actor.avatar}}" style="width:30px;height:30px;" class="img-circle" err-src="assets/images/avatars/avatar.png" />&nbsp;
+                                        <div ng-hide="todo.actor" class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground" uib-tooltip-html="'Assign this subtask'" tooltip-placement="bottom">
+                                            <span class="circularButtonView-label">
+                                          <svg class="svgIcon task-row-assignee-icon" viewBox="0 0 32 32" title="unassigned">
+                                            <path d="M20.534,16.765C23.203,15.204,25,12.315,25,9c0-4.971-4.029-9-9-9S7,4.029,7,9c0,3.315,1.797,6.204,4.466,7.765C5.962,18.651,2,23.857,2,30c0,0.681,0.065,1.345,0.159,2h27.682C29.935,31.345,30,30.681,30,30C30,23.857,26.038,18.651,20.534,16.765z M9,9c0-3.86,3.14-7,7-7s7,3.14,7,7s-3.14,7-7,7S9,12.86,9,9z M4,30c0-6.617,5.383-12,12-12s12,5.383,12,12H4z"></path>
+                                          </svg>
+                                        </span>
+                                        </div>
+                                    </a>
+                                  </td>
+                              </tr>
+                          </tbody>
+                      </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    </div>
+    </div>
+
+
   </div>
 </div>

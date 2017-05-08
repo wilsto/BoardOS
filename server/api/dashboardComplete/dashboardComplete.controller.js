@@ -83,6 +83,7 @@ process.on('dashboardRemoved', function(dashboard) {
     _id: dashboard._id
   }, function(err, numberRemoved) {});
 });
+//createAllCompleteDashboard();
 
 function createAllCompleteDashboard() {
   var alldashboards;

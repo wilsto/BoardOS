@@ -191,7 +191,7 @@ angular.module('boardOsApp')
             }
           }
           if ($scope.task._id !== undefined) {
-            
+
             $scope.update();
           }
         }
@@ -199,7 +199,7 @@ angular.module('boardOsApp')
     }, true);
 
     $scope.autoComment = function(text) {
-      
+
       var maintenant = new Date().toISOString();
       var currentUserId = $scope.currentUser._id;
       var userid = ($scope.task._id) ? {
@@ -409,7 +409,7 @@ angular.module('boardOsApp')
     };
 
     // *******************
-    // create a new task
+    // update a task
     // *******************
     $scope.update = function() {
       $http.put('/api/taskFulls/' + $scope.task._id, $scope.task).success(function(data) {
@@ -653,7 +653,7 @@ angular.module('boardOsApp')
           context: $scope.task.context
         }
       }).success(function(pertTasks) {
-        
+
         $scope.pertTasks = pertTasks;
       });
     };

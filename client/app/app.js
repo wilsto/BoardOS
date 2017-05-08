@@ -18,7 +18,8 @@ angular.module('boardOsApp', [
     'ngEmbed',
     'ui.sortable',
     'angular.filter',
-    'mdPickers'
+    'mdPickers',
+    'DlhSoft.Kanban.Angular.Components'
   ])
   .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, NotificationProvider) {
     $urlRouterProvider.otherwise('/');
@@ -40,25 +41,6 @@ angular.module('boardOsApp', [
       maxCount: 2
     });
   })
-
-  /*  .config(function ($httpProvider) {
-          $httpProvider.requestInterceptors.push('httpRequestInterceptorIECacheSlayer');
-      })
-      // IE 8 cache problem - Request Interceptor - https://github.com/angular/angular.js/issues/1418#issuecomment-11750815
-      .factory('httpRequestInterceptorIECacheSlayer', function($log) {
-          return function(promise) {
-              return promise.then(function(request) {
-                  // If not a partial, append timestamp query string
-                  if(request.url.indexOf("partials/") === -1) {
-                      var d = new Date();
-                      request.url = request.url + '?cacheSlayer=' + d.getTime();
-                  }
-                  $log.info('request.url = ' + request.url);
-                  // return the config object to pass it on to the next interceptor
-                  return request;
-              });
-          };
-      });*/
 
   .factory('authInterceptor', function($rootScope, $q, $cookieStore, $location) {
     return {
@@ -283,7 +265,6 @@ angular.module('boardOsApp', [
     });
 
     $timeout(function() {
-
 
       function cb(start, end) {
         $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));

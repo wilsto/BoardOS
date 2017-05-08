@@ -34,15 +34,18 @@ angular.module('boardOsApp')
         };
         $http.get('/api/KPIs/' + $stateParams.id).success(function(KPI) {
           $scope.KPI = KPI;
+          
           var metricTaskValues = KPI.metricTaskValues || 'All';
           var refMetricTaskValues = KPI.refMetricTaskValues || 'All';
           $scope.calculation = '# ' + KPI.metricTaskField + '[' + metricTaskValues + '] <b class="text-primary">/ </b> # ' + KPI.refMetricTaskField + '[' + refMetricTaskValues + ']';
           $scope.where = (typeof $scope.KPI.whereField !== 'undefined' && KPI.whereField.length > 0) ? ' ' + KPI.whereField + ' ' + KPI.whereOperator + ' ' + KPI.whereValues : '';
+          $scope.reverseSort = (KPI.category === 'Alert');
+
         });
 
-        
+
         $http.get('/api/KPIs/tasksList/' + $stateParams.id, query).success(function(tasksList) {
-          
+
           $scope.tasksList = tasksList;
 
           $scope.metricsNb = 0;
@@ -52,11 +55,17 @@ angular.module('boardOsApp')
           $scope.nbKPI = 0;
           $scope.lastmetricDate = '';
 
+          
           _.forEach($scope.tasksList, function(task) {
-            if (task.metrics[task.metrics.length - 1].status === 'Finished') {
-
+            if (task.metrics[task.metrics.length - 1].status === 'Finished' && $scope.KPI.category === 'Goal') {
               $scope.sumKPI += (!task.KPI && isNaN(parseFloat(task.KPI))) ? 0 : parseFloat(task.KPI);
-              
+              $scope.nbKPI += (!task.KPI && isNaN(parseFloat(task.KPI))) ? 0 : 1;
+              // ##TODO plus tard
+              // $scope.sumValue += parseFloat(task.lastmetric[$scope.KPI.metricTaskField]);
+              // $scope.sumRefValue += parseFloat(task.lastmetric[$scope.KPI.refMetricTaskField]);
+            }
+            if (task.metrics[task.metrics.length - 1].status !== 'Finished' && $scope.KPI.category === 'Alert') {
+              $scope.sumKPI += (!task.KPI && isNaN(parseFloat(task.KPI))) ? 0 : parseFloat(task.KPI);
               $scope.nbKPI += (!task.KPI && isNaN(parseFloat(task.KPI))) ? 0 : 1;
               // ##TODO plus tard
               // $scope.sumValue += parseFloat(task.lastmetric[$scope.KPI.metricTaskField]);
@@ -67,8 +76,16 @@ angular.module('boardOsApp')
           //$scope.globalKPI = parseInt($scope.sumValue / $scope.sumRefValue * 100);
           //$scope.globalKPI = (isNaN($scope.globalKPI)) ? parseInt($scope.sumKPI / $scope.nbKPI) : $scope.globalKPI;
           $scope.globalKPI = ($scope.KPI.category === 'Goal') ? parseInt($scope.sumKPI / $scope.nbKPI) : parseInt($scope.sumKPI);
-          
-          
+
+          if (typeof $scope.tasksList !== 'undefined') {
+            //on fait la somme des calculs de kpi pour chaque tache
+            $scope.alltasks = $scope.tasksList;
+            $scope.filterTasks();
+            if ($scope.page === 'KPI') {
+              $scope.filters.status = (typeof $scope.KPI !== 'undefined' && ((typeof $scope.KPI.whereField !== 'undefined' && $scope.KPI.whereField !== '') || $scope.KPI.whereField === 'status')) ? $scope.KPI.whereValues : 'Not Finished';
+            }
+          }
+
         });
 
       } else {
@@ -161,5 +178,29 @@ angular.module('boardOsApp')
       return myLibrary.giveMeMyColor(value, category);
     };
     $scope.load();
+
+
+    /************ TASKS *************/
+    $scope.filters = {
+      status: 'Not Finished',
+      searchText: '',
+      progressStatus: 'All'
+    };
+    $scope.orderByField = 'KPI';
+    $scope.page = $location.path().split('/')[1];
+
+    $scope.filterTasks = function() {
+      $scope.tasks = _.filter($scope.alltasks, function(task) {
+        var blnSearchText = ($scope.filters.searchText.length === 0) ? true : task.name.toLowerCase().indexOf($scope.filters.searchText.toLowerCase()) >= 0 || task.activity.toLowerCase().indexOf($scope.filters.searchText.toLowerCase()) >= 0 || task.context.toLowerCase().indexOf($scope.filters.searchText.toLowerCase()) >= 0;
+        var blnStatus = (typeof task.metrics[task.metrics.length - 1] === 'undefined') ? true : task.metrics[task.metrics.length - 1].status.toLowerCase().indexOf($scope.filters.status.replace('All', '').replace('Not Finished', 'o').toLowerCase()) >= 0;
+        var blnProgressStatus = (typeof task.metrics[task.metrics.length - 1] === 'undefined' || typeof task.metrics[task.metrics.length - 1].progressStatus === 'undefined') ? true : task.metrics[task.metrics.length - 1].progressStatus.toLowerCase().indexOf($scope.filters.progressStatus.replace('All', '').toLowerCase()) >= 0;
+        return blnSearchText && blnProgressStatus && blnStatus;
+      });
+    };
+
+    $scope.$watch('filters', function() {
+      
+      $scope.filterTasks();
+    }, true);
 
   });

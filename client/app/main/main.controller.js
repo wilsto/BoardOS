@@ -1,28 +1,66 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('MainCtrl', function($scope, $http, myLibrary, Auth) {
+  .controller('MainCtrl', function($scope, $http, myLibrary, Auth, $timeout, dateRangeService) {
 
     $scope.Math = window.Math;
     Auth.getCurrentUser(function(data) {
       $scope.currentUser = data;
-
-      $scope.loadKPIs();
       $scope.loadTasks();
-      $scope.loadMetrics();
       $scope.loadDashBoards();
     });
 
-    $scope.loadKPIs = function() {
-      $http.get('/api/KPIs/list').success(function(KPIs) {
-        $scope.KPIs = KPIs;
-        $scope.dataKPIs = [{
-          values: []
-        }];
-        $scope.predataKPIs = myLibrary.getByMonth(KPIs, 'date', 'value');
-        $scope.dataKPIs[0].values = $scope.predataKPIs;
+    $scope.$on('dateRangeService:updated', function(event, data) {
+      $scope.datediff = 7;
+      if (data) {
+        switch (data) {
+          case 'Last 7 Days':
+            dateRangeService.rangeDate = 'last7';
+            $scope.datediff = 7;
+            break;
+          case 'Last 14 Days':
+            dateRangeService.rangeDate = 'last14';
+            $scope.datediff = 14;
+            break;
+          case 'Last 30 Days':
+            dateRangeService.rangeDate = 'last30';
+            $scope.datediff = 30;
+            break;
+          case 'Last 90 Days':
+            dateRangeService.rangeDate = 'last90';
+            $scope.datediff = 90;
+            break;
+          case 'Last 180 Days':
+            dateRangeService.rangeDate = 'last180';
+            $scope.datediff = 180;
+            break;
+          case 'Last 365 Days':
+            dateRangeService.rangeDate = 'last365';
+            $scope.datediff = 365;
+            break;
+          case 'All':
+            dateRangeService.rangeDate = 'task';
+            $scope.datediff = 5000;
+            break;
+        }
+      }
+      $scope.rangeDate = dateRangeService.rangeDate;
+      $timeout(function() {
+        $scope.$apply(function() {
+          $scope.filteredPlanTasks = _.filter($scope.myTasks, function(task) {
+            return task.metrics[0].status === 'Not Started';
+          });
+          $scope.filteredInProgressTasks = _.filter($scope.myTasks, function(task) {
+            return task.metrics[0].status === 'In Progress';
+          });
+          $scope.filteredFinishedTasks = _.filter($scope.myTasks, function(task) {
+            var a = moment(new Date());
+            var b = moment(new Date(task.metrics[0].endDate));
+            return ($scope.datediff >= a.diff(b, 'days')) && (task.metrics[0].status === 'Finished');
+          });
+        });
       });
-    };
+    });
 
     $scope.loadTasks = function() {
       var myparams = {
@@ -32,45 +70,28 @@ angular.module('boardOsApp')
       };
 
       $http.get('/api/taskFulls/', myparams).success(function(tasks) {
-        $scope.tasksToNotify = _.filter(tasks, function(task) {
-          if (typeof task.metrics[task.metrics.length - 1] === 'undefined' || task.metrics[task.metrics.length - 1].status === 'In Progress' || task.metrics[task.metrics.length - 1].status === 'Not Started') {
-            return true;
-          }
-        });
-        
+        $scope.myTasks = tasks;
+        $scope.$broadcast('dateRangeService:updated', 'last7');
       });
 
-      $http.get('/api/tasks/countByMonth').success(function(tasks) {
+      $http.get('/api/taskFulls/countByMonth').success(function(tasks) {
         $scope.dataTasks = [{
           values: []
         }];
         $scope.tasksNb = tasks.reduce(function(pv, cv) {
-          return pv + cv.value;
-        }, 0);
-        $scope.dataTasks[0].values = myLibrary.displayLastYear(tasks, '_id', 'value', true);
-      });
-    };
-
-    $scope.loadMetrics = function() {
-
-      $http.get('/api/metrics/countByMonth').success(function(metrics) {
-        $scope.dataMetrics = [{
-          values: []
-        }];
-        $scope.dataConfidence = [{
-          values: []
-        }];
-        $scope.metricsNb = metrics.reduce(function(pv, cv) {
           return pv + cv.value.count;
         }, 0);
 
-        _.each(metrics, function(metric) {
-          metric.count = metric.value.count;
-          metric.trust = parseInt(metric.value.trust / metric.value.count);
-        });
-        $scope.dataMetrics[0].values = myLibrary.displayLastYear(metrics, '_id', 'count', true);
-        $scope.dataConfidence[0].values = myLibrary.displayLastYear(metrics, '_id', 'trust', true);
-        $scope.confidenceMean = _.last($scope.dataConfidence[0].values).count;
+        $scope.dataMetrics = [{
+          values: []
+        }];
+        $scope.metricsNb = tasks.reduce(function(pv, cv) {
+          return pv + cv.value.qty;
+        }, 0);
+
+        $scope.dataTasks[0].values = myLibrary.displayLastYear(tasks, '_id', 'count', true);
+        $scope.dataMetrics[0].values = myLibrary.displayLastYear(tasks, '_id', 'qty', true);
+
       });
     };
 
