@@ -8,16 +8,6 @@ angular.module('boardOsApp')
     var alltasks = {};
     var allhierarchies = {};
 
-    $scope.load = function() {
-      $http.get('/api/hierarchies/list/' + $scope.HierarchyType).success(function(hierarchies) {
-        allhierarchies = _.sortBy(hierarchies.list, 'longname');
-        $http.get('/api/taskFulls/list/hierarchies').success(function(tasks) {
-          alltasks = tasks;
-          filterTasks();
-        });
-      });
-    };
-
     var filterTasks = function() {
       var allTaskHierachies = _.pluck(_.sortBy(alltasks, $scope.HierarchyType.toLowerCase()), $scope.HierarchyType.toLowerCase());
       var paths = [];
@@ -42,9 +32,19 @@ angular.module('boardOsApp')
         }
       });
       paths = _.sortBy(paths, 'longname');
-      
+
       $scope.paths = _.uniq(paths, true, function(x) {
         return x.longname;
+      });
+    };
+
+    $scope.load = function() {
+      $http.get('/api/hierarchies/list/' + $scope.HierarchyType).success(function(hierarchies) {
+        allhierarchies = _.sortBy(hierarchies.list, 'longname');
+        $http.get('/api/taskFulls/list/hierarchies').success(function(tasks) {
+          alltasks = tasks;
+          filterTasks();
+        });
       });
     };
 

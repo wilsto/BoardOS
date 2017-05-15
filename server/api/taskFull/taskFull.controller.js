@@ -5,6 +5,7 @@ var moment = require('moment');
 var math = require('mathjs');
 var Q = require('q');
 var schedule = require('node-schedule');
+var json2csv = require('json2csv');
 
 var TaskFull = require('./taskFull.model');
 var Task = require('../task/task.model');
@@ -609,6 +610,89 @@ exports.countByMonth = function(req, res) {
       return handleError(res, err);
     }
     return res.status(200).json(results);
+  });
+};
+
+
+
+// Get count of tasks which start
+exports.countByActivity = function(req, res) {
+
+  var o = {};
+  o.map = function() {
+    emit(this.activity, // Or put a GROUP BY key here
+      {
+        sum: this.metrics[0].timeSpent, // the field you want stats for
+        min: this.metrics[0].timeSpent,
+        max: this.metrics[0].timeSpent,
+        count: 1,
+        diff: 0, // M2,n:  sum((val-mean)^2)
+      });
+  };
+
+  o.reduce = function(key, values) {
+    var a = values[0]; // will reduce into here
+    for (var i = 1 /*!*/ ; i < values.length; i++) {
+      var b = values[i]; // will merge 'b' into 'a'
+
+
+      // temp helpers
+      var delta = a.sum / a.count - b.sum / b.count; // a.mean - b.mean
+      var weight = (a.count * b.count) / (a.count + b.count);
+
+      // do the reducing
+      a.diff += b.diff + delta * delta * weight;
+      a.sum += b.sum;
+      a.count += b.count;
+      a.min = Math.min(a.min, b.min);
+      a.max = Math.max(a.max, b.max);
+    }
+
+    return a;
+  };
+
+  o.finalize = function(key, value) {
+    value.sum = parseFloat(value.sum).toFixed(2);
+    value.min = parseFloat(value.min).toFixed(2);
+    value.max = parseFloat(value.max).toFixed(2);
+    value.avg = parseFloat(value.sum / value.count).toFixed(2);
+    value.variance = parseFloat(value.diff / value.count).toFixed(2);
+    value.stddev = parseFloat(Math.sqrt(value.variance)).toFixed(2);
+    value.diff = parseFloat(value.diff).toFixed(2);
+    return value;
+  };
+
+  o.query = {
+    'metrics.status': 'Finished',
+    'metrics.endDate': {
+      '$gte': new Date('2017-04-01T00:00:00.000Z')
+    }
+  };
+
+  TaskFull.mapReduce(o, function(err, results) {
+    if (err) {
+      return handleError(res, err);
+    }
+    _.sortBy(results, '_id');
+    var mydata = [];
+    _.each(results, function(r) {
+      mydata.push({
+        activity: r._id,
+        count: parseFloat(r.value.count),
+        min: parseFloat(r.value.min),
+        max: parseFloat(r.value.max),
+        avg: parseFloat(r.value.avg),
+        stddev: parseFloat(r.value.stddev),
+        variance: parseFloat(r.value.variance)
+      })
+    });
+    json2csv({
+      data: mydata
+    }, function(err, csv) {
+      res.setHeader('Content-disposition', 'attachment; filename=data.csv');
+      res.set('Content-Type', 'text/csv');
+      return res.status(200).send(csv);
+    });
   });
 };
 

@@ -78,7 +78,7 @@ var j = schedule.scheduleJob({
 
   createAllCompleteTask()
 });
-createAllCompleteTask();
+//createAllCompleteTask();
 process.on('metricChanged', function(taskId, refreshDashboard) {
   refreshDashboard = (refreshDashboard === undefined) ? true : refreshDashboard;
   createCompleteTask(taskId, refreshDashboard, function(data) {});

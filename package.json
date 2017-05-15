@@ -1,6 +1,6 @@
 {
   "name": "board-os",
-  "version": "1.6.66",
+  "version": "1.6.67",
   "main": "server/app.js",
   "dependencies": {
     "async": "^2.1.4",
@@ -16,6 +16,7 @@
     "express": "^4.13.3",
     "express-jwt": "^3.1.0",
     "express-session": "^1.11.3",
+    "json2csv": "^3.7.3",
     "jsonwebtoken": "^5.4.0",
     "lodash": "^2.4.2",
     "log4js": "^0.6.26",
@@ -26,6 +27,7 @@
     "mongoose": "~3.8.8",
     "morgan": "~1.0.0",
     "newrelic": "^1.16.2",
+    "node-excel-export": "^1.4.1",
     "node-schedule": "^1.2.0",
     "passport": "~0.2.0",
     "passport-google-oauth": "latest",

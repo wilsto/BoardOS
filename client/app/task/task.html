@@ -13,6 +13,12 @@
         <img class="img-circle" ng-src="{{match.model.avatar}}" err-src="assets/images/avatars/avatar.png" > {{match.model.name}}
      </a>
   </script>
+  <script type="text/ng-template" id="activityTemplate.html">
+     <a >
+       <b >{{match.model.longname}}</b><br/>
+       <span>{{match.model.text}}</span>
+     </a>
+  </script>
   <script type="text/ng-template" id="reOpenModal.html">
     <div class="modal-header">
         <h4 class="modal-title">ReOpen a task</h4>
@@ -134,7 +140,7 @@
                                         <span class="text-muted" style="margin-right:10px">
                                           Activity
                                         </span>
-                                        <a href="#" editable-text="task.activity" e-style="width: 500px" e-uib-typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:8">
+                                        <a href="#" editable-text="task.activity" e-style="width: 500px" e-uib-typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:8" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
                                           {{task.activity || 'Please give activity' }}
                                         </a>
                                     </li><br>
