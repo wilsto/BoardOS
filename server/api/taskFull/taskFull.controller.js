@@ -666,6 +666,9 @@ exports.countByActivity = function(req, res) {
     'metrics.status': 'Finished',
     'metrics.endDate': {
       '$gte': new Date('2017-04-01T00:00:00.000Z')
+    },
+    'metrics.startDate': {
+      '$gte': new Date('2017-04-01T00:00:00.000Z')
     }
   };
 

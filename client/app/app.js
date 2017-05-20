@@ -19,6 +19,7 @@ angular.module('boardOsApp', [
     'ui.sortable',
     'angular.filter',
     'mdPickers',
+    'ng-mfb',
     'DlhSoft.Kanban.Angular.Components'
   ])
   .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, NotificationProvider) {

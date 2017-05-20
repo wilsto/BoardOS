@@ -9,7 +9,7 @@ angular.module('boardOsApp')
       });
     };
     $scope.calculateTasks = function() {
-      $http.get('/api/taskCompletes/execute').success(function(response) {
+      $http.get('/api/taskFulls/execute').success(function(response) {
         $scope.message = response;
       });
     };
