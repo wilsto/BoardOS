@@ -20,7 +20,9 @@ angular.module('boardOsApp', [
     'angular.filter',
     'mdPickers',
     'ng-mfb',
-    'DlhSoft.Kanban.Angular.Components'
+    'DlhSoft.Kanban.Angular.Components',
+    'angular-advanced-searchbox',
+    'autocomplete'
   ])
   .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, NotificationProvider) {
     $urlRouterProvider.otherwise('/');

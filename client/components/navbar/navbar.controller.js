@@ -8,21 +8,75 @@ angular.module('boardOsApp')
       $scope.loadDashBoards();
     });
 
+
+    $scope.availableSearchParams = [{
+        key: 'task',
+        name: 'Task',
+        placeholder: 'Task...'
+      },
+      {
+        key: 'dashboard',
+        name: 'Dashboard',
+        placeholder: 'Dashboard...'
+      }
+    ];
+
+    // $scope.availableSearchParams = [{
+    //     key: 'name',
+    //     name: 'Name',
+    //     placeholder: 'Name...'
+    //   },
+    //   {
+    //     key: 'activity',
+    //     name: 'Activity',
+    //     placeholder: 'Activity...'
+    //   },
+    //   {
+    //     key: 'context',
+    //     name: 'Context',
+    //     placeholder: 'Context...'
+    //   },
+    //   {
+    //     key: 'description',
+    //     name: 'Description',
+    //     placeholder: 'Description...'
+    //   },
+    //   {
+    //     key: 'hypothesis',
+    //     name: 'Hypothesis',
+    //     placeholder: 'Hypothesis...'
+    //   },
+    //   {
+    //     key: 'risks',
+    //     name: 'Risks',
+    //     placeholder: 'Risks...'
+    //   },
+    //   {
+    //     key: 'comments.text',
+    //     name: 'Comment',
+    //     placeholder: 'Comment...'
+    //   }
+    // ];
+
     $scope.load = function() {
       var myparams = {
         params: {
-          userId: $scope.currentUser._id
+          userId: $scope.currentUser._id,
+          status: ['Not Started', 'In Progress']
         }
       };
 
       $http.get('/api/taskFulls/', myparams).success(function(tasks) {
-        $scope.navBarTasks = _.filter(tasks, function(task) {
-          if (typeof task.metrics[task.metrics.length - 1] === 'undefined' || task.metrics[task.metrics.length - 1].status === 'In Progress' || task.metrics[task.metrics.length - 1].status === 'Not Started') {
-            return true;
-          }
-        });
+        $scope.navBarTasks = tasks;
       });
     };
+
+
+    /** SearhBar **/
+    $http.get('/api/taskFulls/').success(function(objects) {
+      $scope.mySearchTasks = objects;
+      
+    });
 
     $scope.loadDashBoards = function() {
       var myparams = {
@@ -33,8 +87,37 @@ angular.module('boardOsApp')
       };
       $http.get('/api/dashboardCompletes/', myparams).success(function(dashboards) {
         $scope.dashboards = dashboards;
+        $rootScope.dashboards = dashboards;
       });
     };
+    $scope.quickSearchTxt = '';
+
+    $scope.onSelect = function($item, $model, $label) {
+      $scope.$item = $item;
+      
+      $scope.$model = $model;
+      $scope.$label = $label;
+    };
+
+    $scope.updateMySearch = function(typed) {
+      
+      $scope.mySearch = [];
+      $http.get('/api/taskFulls/').success(function(objects) {
+        _.each(objects, function(object) {
+          $scope.mySearch.push(object.name);
+        });
+        $scope.mySearch = _.uniq($scope.mySearch);
+        
+      });
+    };
+
+    $scope.findMySearch = function(finded) {
+      
+    };
+
+    $scope.$watch('quickSearchTxt', function() {});
+
+
 
     $scope.logout = function() {
       Auth.logout();

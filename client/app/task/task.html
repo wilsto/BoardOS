@@ -336,7 +336,7 @@
                             </div>
                         </li>
                         <li ng-show="blnAssignSubtaskActor">
-                              <input class="mysearchname" type="text" placeholder="Name" ng-model="subtaskactorselected" uib-typeahead="member as member.name for member in members | filter:$viewValue:namesWith | limitTo:5" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
+                              <input class="mysearchname" type="text" placeholder="Name" ng-model="subtaskactorselected" uib-typeahead="member as member.name for member in members | filter:$viewValue:memberNamesWith | limitTo:5" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
                               <span class="btn btn-primary" ng-click="addSubTaskActor(subtaskactorselected)">Add</span>
                               <span class="task-or">or</span>
                               <span class="btn btn-info  btn-sm btn-outline" ng-click="addMeToSubTaskActor()" ng-show="!mePresentInSubTaskActors">Assign to Me</span>
@@ -383,7 +383,7 @@
                       </a>
                     </li>
                       <li ng-show="blnAddActor">
-                            <input id="actorselected" class="mysearchname" type="text" placeholder="Name" ng-model="actorselected" uib-typeahead="member as member.name for member in members | filter:$viewValue:namesWith | limitTo:5" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
+                            <input id="actorselected" class="mysearchname" type="text" placeholder="Name" ng-model="actorselected" uib-typeahead="member as member.name for member in members | filter:$viewValue:memberNamesWith | limitTo:5" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
                             <span class="btn btn-primary" ng-click="addActor(actorselected)">Add</span>
                             <span class="task-or">or</span>
                             <span class="btn btn-info  btn-sm btn-outline" ng-click='addMeToActor()' ng-show="!mePresentInActors">Assign to Me</span>
@@ -409,7 +409,7 @@
                         </a>
                       </li>
                       <li ng-show="blnAddFollower">
-                            <input  id="followerselected"  class="mysearchname" type="text" placeholder="Name" ng-model="followerselected" uib-typeahead="member as member.name for member in members | filter:$viewValue:namesWith | limitTo:5" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
+                            <input  id="followerselected"  class="mysearchname" type="text" placeholder="Name" ng-model="followerselected" uib-typeahead="member as member.name for member in members | filter:$viewValue:memberNamesWith | limitTo:5" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
                             <span class="btn btn-primary" ng-click="addFollower(followerselected)">Add</span>
                             <span class="task-or">or</span>
                             <span class="btn btn-info  btn-sm btn-outline" ng-click='addMeToFollower()' ng-show="!mePresentInFollowers">Assign to Me</span>

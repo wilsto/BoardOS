@@ -135,3 +135,7 @@
 .left-caret:after {
   border-right: 5px solid #ffaf46;
 }
+
+.oneDashboard:hover {
+  background-color: rgb(203, 209, 219)
+}

@@ -14,7 +14,6 @@ angular.module('boardOsApp')
     // recherche des membres
     $http.get('/api/users/members').success(function(members) {
       $scope.members = members;
-
     });
 
     // si cela n'existe pas
@@ -427,7 +426,7 @@ angular.module('boardOsApp')
     // *******************
     //
 
-    $scope.namesWith = function(member, viewValue) {
+    $scope.memberNamesWith = function(member, viewValue) {
       if (typeof member.name !== 'undefined') {
         return member.name.toLowerCase().indexOf(viewValue.toLowerCase()) >= 0;
       }

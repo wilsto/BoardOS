@@ -1,148 +1,81 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 <div class="row">
-  <!-- BEGIN OVERVIEW STATISTIC BARS-->
-  <div class="row stats-overview-cont">
-    <div class="col-md-2 col-sm-4">
-      <a class="anim-btn"  href="/dashboards">
-        <span class="anim-btn-text">Dashboard</span>
-        <span class="anim-btn-slide-text">Add a new one</span>
-        <span class="anim-btn-icon-right">
-          <span>
-            <i class="fa fa-2x fa-cog fa-spin fa-fw" aria-hidden="true"></i>
-          </span>
-        </span>
-      </a>
-    </div>
-    <div class="col-md-2 col-sm-2">
-    </div>
-    <div class="col-md-2 col-sm-4">
-      <div class="stats-overview stat-block">
-        <div class="isloading" ng-if="!dataTasks">Loading
-          <br/><img src="assets/images/ajax-loader_blue.gif">
-        </div>
-        <div class="details" ng-if="dataTasks">
-          <div class="title">
-            <a href="/tasks">
-              <span style="font-weight:bold;color:#9467bd">{{tasksNb|| 0 }}</span>
-              Tasks</a>
-          </div>
-          <nvd3 options="optionsTasks" data="dataTasks"></nvd3>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-2 col-sm-4">
-      <div class="stats-overview stat-block">
-        <div class="isloading" ng-if="!dataMetrics">Loading
-          <br/><img src="assets/images/ajax-loader_blue.gif">
-        </div>
-        <div class="details" ng-if="dataMetrics">
-          <div class="title">
-            <a href="/metrics">
-              <span style="font-weight:bold;color:#87CEEB">{{metricsNb|| 0 }}</span>
-              Metrics</a>
-          </div>
-          <nvd3 options="optionsMetrics" data="dataMetrics"></nvd3>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-2 col-sm-2">
-    </div>
-    <div class="col-md-2 col-sm-4 ">
-      <a href="/tasks" class="anim-btn">
-        <span class="anim-btn-text">Task&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-        <span class="anim-btn-slide-text">Add a new one</span>
-        <span class="anim-btn-icon-right">
-          <span>
-            <i class="fa fa-2x fa-cog fa-spin fa-fw" aria-hidden="true"></i>
-          </span>
-        </span>
-      </a>
 
-    </div>
-  </div>
+
   <!-- END OVERVIEW STATISTIC BARS-->
-</div>
-<div class="row">
-  <div class="col-md-3 col-sm-12">
-    <!-- BEGIN OVERVIEW STATISTIC BLOCKS-->
-    <div class="portlet">
-      <div class="portlet-title">
-        <div class="caption">
-          <i class="fa fa-dashboard"></i>My Dashboards
-        </div>
-        <div class="tools">
 
+  <div class="col-md-10 col-sm-12">
+      <!-- BEGIN My Dashboards-->
+      <div class="portlet">
+        <div class="portlet-title">
+          <div class="caption">
+            <i class="fa fa-dashboard"></i>My Dashboards
+          </div>
+          <div class="tools">
+            <a href="/dashboards" >
+              <i class="fa fa-reorder"></i>
+              <span>Manage dashboards</span>
+            </a>
+          </div>
+        </div>
+        <div class="portlet-body" style="overflow:hidden;margin-bottom:5px;" >
+          <div class="isloading" ng-if="!dashboards">Loading
+            <br/><img src="assets/images/ajax-loader_blue.gif">
+          </div>
+          <div style="zoom: 1; display: inline;" >
+                <div ng-repeat="dashboard in dashboards | orderBy:'name' track by dashboard._id">
+                    <a href="/dashboard/{{dashboard._id}}">
+                    <div style="min-width:15%;min-height:30px;border:1px lightgrey solid;padding:8px;margin:2px" class="pull-left oneDashboard" uib-tooltip-html="'Activity : {{dashboard.activity || 'All'}} <br/>  Context : {{dashboard.context || 'All'}} <br/> <br/>  Open Tasks : {{dashboard.openTasksNb}}   <br/>  Performance : {{dashboard.kpisValue}}%  <br/> Alerts :  <span style=\x22color:red\x22>{{dashboard.alertsValue}} </span>'" tooltip-placement="top" tooltip-class="tooltipdashboard">
+                      <span style="font-size:15px">
+                      <span ng-if="dashboards" class="badge" ng-style="goalBgColor(dashboard.kpisValue)" style="height:17px;line-height:10px;width:17px;margin-right: 5px">&nbsp;</span>
+                      <!-- <span ng-if="dashboard.alertsValue" class="badge" style="background-color:rgb(230, 80, 40);font-size:10px!important;height:17px;line-height:10px;width:17px;margin-right: 0px">{{dashboard.alertsValue}}</span> -->
+                      <!-- <img  ng-if="dashboard.alertsValue>0" style="height:17px;line-height:10px;width:17px;margin-right:15px" src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgMCA0NzMuOTMxIDQ3My45MzEiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDQ3My45MzEgNDczLjkzMTsiIHhtbDpzcGFjZT0icHJlc2VydmUiIHdpZHRoPSI1MTJweCIgaGVpZ2h0PSI1MTJweCI+CjxjaXJjbGUgc3R5bGU9ImZpbGw6I0U3OUUyRDsiIGN4PSIyMzYuOTY2IiBjeT0iMjM2Ljk2NiIgcj0iMjM2Ljk2NiIvPgo8cGF0aCBzdHlsZT0iZmlsbDojQ0E3QjI5OyIgZD0iTTIxNC4zOTksMjUyLjM4OWwtNi42OTgtMTAwLjE1OWMtMS4yNTctMTkuNTE3LTEuODcxLTMzLjUyNi0xLjg3MS00Mi4wMjcgIGMwLTExLjU3LDMuMDM1LTIwLjYwMiw5LjA4NS0yNy4wNzJjNi4wNjUtNi40OTksMTQuMDU0LTkuNzQsMjMuOTQtOS43NGMxMS45OTYsMCwyMC4wMjIsNC4xNSwyNC4wNTYsMTIuNDQ1ICBjNC4wMzQsOC4zMDMsNi4wNjUsMjAuMjU4LDYuMDY1LDM1Ljg1N2MwLDkuMjA1LTAuNDk0LDE4LjU1OS0xLjQ1OSwyOC4wMjJsLTguOTk1LDEwMy4wODljLTAuOTczLDEyLjI3Ny0zLjA2MSwyMS42OC02LjI3OSwyOC4yMzkgIGMtMy4yMDcsNi41NDQtOC41MDksOS44MTUtMTUuODg4LDkuODE1Yy03LjUzNiwwLTEyLjc1Ni0zLjE1OC0xNS42ODItOS41MTJDMjE3Ljc0NCwyNzUuMDE2LDIxNS42NDUsMjY1LjM1MSwyMTQuMzk5LDI1Mi4zODl6ICAgTTIzNy42MDksMzg5Ljk3NGMtOC41MDEsMC0xNS45MzYtMi43MzktMjIuMjY3LTguMjUxYy02LjM0Ni01LjQ5Ny05LjUxMi0xMy4xOTctOS41MTItMjMuMTAyYzAtOC42NDcsMy4wMzUtMTYuMDA0LDkuMDg1LTIyLjA2OSAgYzYuMDY1LTYuMDY1LDEzLjQ5My05LjA5MiwyMi4yNzUtOS4wOTJjOC43ODYsMCwxNi4yNjksMy4wMjcsMjIuNDc3LDkuMDkyYzYuMjA0LDYuMDY1LDkuMzEsMTMuNDI1LDkuMzEsMjIuMDY5ICBjMCw5Ljc1MS0zLjEzNiwxNy40MTQtOS40MTgsMjIuOTk3QzI1My4yOTEsMzg3LjE5LDI0NS45NzYsMzg5Ljk3NCwyMzcuNjA5LDM4OS45NzR6Ii8+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=" /> -->
+                       {{dashboard.name}}
+                      </span>
+                      <span ng-if="dashboard.alertsValue>0" class="badge pull-right" style="background-color:rgb(230, 80, 40);font-size:10px!important;width:30px;align-text:right!important;margin-left:-12px;margin-top:3px;padding-right:0">{{dashboard.alertsValue}}</span>
+                      <span class="badge pull-right" style="color:black;background-color:rgb(219, 223, 227);width:35px;margin-top:3px">{{dashboard.openTasksNb}}</span>
+                    </div>
+                  </a>
+                </div>
+          </div>
         </div>
       </div>
-      <div class="portlet-body">
-        <div class="isloading" ng-if="!dashboards">Loading
-          <br/><img src="assets/images/ajax-loader_blue.gif">
-        </div>
-        <div class="table-scrollable">
-          <table class="table table-striped  table-hover dataTable no-footer " role="grid">
-            <thead>
-              <tr>
-                <th colspan="3" style="width:60%">
-                  Name
-                </th>
-                <th colspan="2" style="width:30%;text-align: center;">
-                  Tasks
-                </th>
-
-              </tr>
-              <tr role="row" style="height:10px">
-                <th style="width:55%;padding:0"></th>
-                <th style="background:#eee;width:15%;text-align: center; ">
-                  <small class="text-muted">Goals</small>
-                </th>
-                <th style="background:#eee;width:8%;text-align: center; ">
-                  <small class="text-muted">
-                    Alerts</small>
-                </th>
-                <th style="width:8%;text-align: right;">
-                  <small class="text-muted">
-                    Active
-                  </small>
-                </th>
-              </tr>
-            </thead>
-            <tbody class="ajaxContent">
-              <tr role="row" ng-repeat="dashboard in dashboards | orderBy:'name' track by dashboard._id">
-                <td class="sorting_1">
-                  <div popover-html-unsafe="Context : {{dashboard.context || 'All'}} </p>  Activity : {{dashboard.activity || 'All'}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="left">
-                    <span style="font-size:15px">
-                      <a href="/dashboard/{{dashboard._id}}">{{dashboard.name}}
-                      </a>
-                    </span>
-                  </div>
-                </td>
-                <td style="background:#eee;text-align: center;   ">
-                  <span ng-if="dashboards" class="badge" ng-style="goalBgColor(dashboard.kpisValue)" style="height:15px;line-height:10px;width:15px;margin-right: 15px">&nbsp;&nbsp;</span>
-                  {{dashboard.kpisValue}}%
-                  </span>
-                  <span class="badge" style="background:green;width:25px;font-size:15px" ng-if="dashboard.dataGoals === '####'">{{dashboard.nbGoals}}</span>
-                </td>
-                <td style="background:#eee;text-align: center;   ">
-                  <span ng-style="alertColor(dashboard.alertsValue)" >{{dashboard.alertsValue}}</span>
-                </td>
-                <td style="text-align: right;">
-                  <span style="color:#316BCD">{{dashboard.openTasksNb}}</span>
-                </td>
-              </tr>
-              <tr style="background:#eee;text-align:right">
-                <td colspan="6">
-                  <a href="/dashboards">
-                    <i class="fa fa-reorder"></i>
-                    Manage dashboards</a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <!-- END My Dashboards-->
     </div>
+
+        <div class="col-md-2 col-sm-4">
+          <div class="stats-overview stat-block">
+            <div class="isloading" ng-if="!dataTasks">Loading
+              <br/><img src="assets/images/ajax-loader_blue.gif">
+            </div>
+            <div class="details" ng-if="dataTasks">
+              <div class="title">
+                <a href="/tasks">
+                  <span style="font-weight:bold;color:#9467bd">{{tasksNb|| 0 }}</span>
+                  Tasks</a>
+              </div>
+              <nvd3 options="optionsTasks" data="dataTasks"></nvd3>
+            </div>
+          </div>
+          <div class="stats-overview stat-block">
+            <div class="isloading" ng-if="!dataMetrics">Loading
+              <br/><img src="assets/images/ajax-loader_blue.gif">
+            </div>
+            <div class="details" ng-if="dataMetrics">
+              <div class="title">
+                <a href="/metrics">
+                  <span style="font-weight:bold;color:#87CEEB">{{metricsNb|| 0 }}</span>
+                  Metrics</a>
+              </div>
+              <nvd3 options="optionsMetrics" data="dataMetrics"></nvd3>
+            </div>
+          </div>
+        </div>
   </div>
-  <div class="col-md-9 col-sm-12">
+  <br>
+  <div class="row">
+
+  <div class="col-md-12 col-sm-12">
     <div class="portlet">
       <div class="portlet-title">
         <div class="caption">
@@ -153,7 +86,7 @@
         </div>
       </div>
       <div class="portlet-body">
-        <div class="isloading" ng-if="!dashboards">Loading
+        <div class="isloading" ng-if="!myTasks">Loading
           <br/><img src="assets/images/ajax-loader_blue.gif">
         </div>
     <div class="row">
@@ -190,12 +123,12 @@
                             <td style="text-align: center">
                               <img alt="" ng-src="{{task.actors[0].avatar}}" class="img-circle" style="width:30px;height:30px;" err-src="assets/images/avatars/avatar.png" uib-tooltip-html="'Name <br /> {{task.actors[0].name}}'" tooltip-placement="top"/>
                             </td>
-                              <td >
+                              <td style="min-width:60%">
                                   <a href="/task/{{task._id}}">
                                     <small class="dont-break-out"> {{task.name}}</small>
                                   </a >
                               </td>
-                              <td style="min-width:120px">
+                              <td >
                                   <span class="pull-right text-info">
                                     <small class="text-muted" >
                                       {{ (task.metrics[0].targetstartDate | date:'MMM, dd') }} >
@@ -286,12 +219,13 @@
                             <td style="text-align: center">
                               <img alt="" ng-src="{{task.actors[0].avatar}}" class="img-circle" style="width:30px;height:30px;" err-src="assets/images/avatars/avatar.png" uib-tooltip-html="'Name <br /> {{task.actors[0].name}}'" tooltip-placement="top"/>
                             </td>
-                              <td>
-                                <a href="/task/{{task._id}}">
+                              <td style="min-width:60%">
+
+                                <a href="/task/{{task._id}}" >
                                 <small class="dont-break-out"> {{task.name}}</small>
                                 </a >
                               </td>
-                              <td style="min-width:120px">
+                              <td >
                                   <span class="pull-right text-info">
                                     <small class="text-muted" >
                                       {{ task.metrics[0].progress  }}% >
@@ -369,16 +303,16 @@
                               <td style="text-align: center">
                                 <img alt="" ng-src="{{task.actors[0].avatar}}" class="img-circle" style="width:30px;height:30px;" err-src="assets/images/avatars/avatar.png" uib-tooltip-html="'Name <br /> {{task.actors[0].name}}'" tooltip-placement="top"/>
                               </td>
-                                <td>
+                                <td style="min-width:60%">
                                   <a href="/task/{{task._id}}">
                                     <small class="dont-break-out"> {{task.name}}</small>
 
                                   </a >
                                 </td>
-                                <td style="min-width:120px">
+                                <td >
                                     <span class="pull-right text-info">
                                       <small class="text-muted" >
-                                        {{ (task.metrics[0].endDate | date:'mediumDate') }}
+                                        {{ (task.metrics[0].endDate | date:'MMM, dd') }}
                                       </small>
                                     </span>
                                 </td>

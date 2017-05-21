@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('MainCtrl', function($scope, $http, myLibrary, Auth, $timeout, dateRangeService) {
+  .controller('MainCtrl', function($scope, $rootScope, $http, myLibrary, Auth, $timeout, dateRangeService) {
 
     $scope.Math = window.Math;
     Auth.getCurrentUser(function(data) {
@@ -102,10 +102,17 @@ angular.module('boardOsApp')
           quick: true
         }
       };
-      $http.get('/api/dashboardCompletes/', myparams).success(function(dashboards) {
-        $scope.dashboards = dashboards;
-      });
+      // $http.get('/api/dashboardCompletes/', myparams).success(function(dashboards) {
+      //   $scope.dashboards = dashboards;
+      // });
     };
+
+    $scope.dashboards = $rootScope.dashboards;
+
+
+    $rootScope.$watch('dashboards', function() {
+      $scope.dashboards = $rootScope.dashboards;
+    });
 
     $scope.goalColor = function(value) {
       return {

@@ -42,7 +42,9 @@
     "bootstrap-toggle": "^2.2.2",
     "mdPickers": "^0.7.5",
     "ng-material-floating-button": "ng-mfb#^0.6.2",
-    "DlhSoft.KanbanLibrary": "http://DlhSoft.com/Packages/DlhSoft.KanbanLibrary.zip"
+    "DlhSoft.KanbanLibrary": "http://DlhSoft.com/Packages/DlhSoft.KanbanLibrary.zip",
+    "angular-advanced-searchbox": "^3.0.0",
+    "allmighty-autocomplete": "*"
   },
   "devDependencies": {
     "angular-mocks": "~1.4.x",

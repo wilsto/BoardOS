@@ -498,18 +498,29 @@ exports.executeId = function(req, res) {
 
 // Get list of taskFulls
 exports.index = function(req, res) {
-  var filterUser = (req.query.userId) ? {
-    "actors": {
-      "$in": [req.query.userId]
-    }
+  var myFilter = (req.query.status) ? {
+    $or: [{
+      'metrics.status': 'Not Started'
+    }, {
+      'metrics.status': 'In Progress'
+    }]
   } : {};
 
-  TaskFull.find(filterUser, {
-      __v: false
+  if (req.query.userId) {
+    myFilter.actors = {
+      "$in": [req.query.userId]
+    }
+  }
+
+  TaskFull.find(myFilter, {
+      __v: false,
+      alerts: false,
+      kpis: false,
+      comments: false
     })
     .populate('actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
-    .populate('followers', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
-    .populate('comments.user', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
+    //.populate('followers', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
+    //.populate('comments.user', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
     .lean().exec(function(err, taskFulls) {
       if (err) {
         return handleError(res, err);
