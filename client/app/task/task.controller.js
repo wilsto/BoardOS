@@ -16,36 +16,6 @@ angular.module('boardOsApp')
       $scope.members = members;
     });
 
-    // si cela n'existe pas
-    $scope.task = {};
-    $scope.task.context = $stateParams.context;
-    $scope.task.activity = $stateParams.activity;
-    $scope.task.date = Date.now();
-    $scope.task.comments = [{
-      text: 'create task',
-      date: Date.now(),
-      user: $scope.currentUser._id,
-      auto: true
-    }];
-    $scope.task.metrics = [];
-    $scope.task.metrics.push({
-      progress: 0,
-      timeSpent: 0,
-      status: 'Not Started'
-    });
-    $scope.task.todos = [];
-    $scope.task.actors = [{
-      _id: $scope.currentUser._id,
-      name: $scope.currentUser.name,
-      avatar: $scope.currentUser.avatar
-    }];
-    $scope.task.followers = [];
-    $scope.errors = {};
-    $scope.taskAlreadyExist = {
-      id: null,
-      name: null
-    };
-
 
     $scope.isAdmin = false;
     Auth.isAdmin(function(data) {
@@ -160,6 +130,11 @@ angular.module('boardOsApp')
     }, true);
 
     $scope.$watch('task', function(newMap, previousMap) {
+      $rootScope.currentTaskName = {
+        name: newMap.name,
+        activity: newMap.activity,
+        context: newMap.context
+      };
       if (initializing) {
         $timeout(function() {
           initializing = true;
@@ -327,11 +302,11 @@ angular.module('boardOsApp')
       });
     };
 
-
     // *******************
     // Load a task
     // ******************
     $scope.loadTask = function() {
+      $scope.task = {};
       $scope.currentTask = {};
       var taskId = $stateParams.id || $scope.task._id;
       $scope.TeamIsExpanded = (taskId === undefined);
@@ -375,6 +350,34 @@ angular.module('boardOsApp')
         });
       } else {
         $timeout(function() {
+          // si cela n'existe pas
+          $scope.task.context = $stateParams.context;
+          $scope.task.activity = $stateParams.activity;
+          $scope.task.date = Date.now();
+          $scope.task.comments = [{
+            text: 'create task',
+            date: Date.now(),
+            user: $scope.currentUser._id,
+            auto: true
+          }];
+          $scope.task.metrics = [];
+          $scope.task.metrics.push({
+            progress: 0,
+            timeSpent: 0,
+            status: 'Not Started'
+          });
+          $scope.task.todos = [];
+          $scope.task.actors = [{
+            _id: $scope.currentUser._id,
+            name: $scope.currentUser.name,
+            avatar: $scope.currentUser.avatar
+          }];
+          $scope.task.followers = [];
+          $scope.errors = {};
+          $scope.taskAlreadyExist = {
+            id: null,
+            name: null
+          };
           initializing = false;
         }, 500);
       }

@@ -1,5 +1,21 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.70...HEAD)
+
+**Closed issues:**
+
+- AJouter le titre de la tache, du dashboard ou di KPI dans l'entete de la page [\#191](https://github.com/wilsto/BoardOS/issues/191)
+- Ajouter d'un quick search [\#190](https://github.com/wilsto/BoardOS/issues/190)
+- bug affichage filtres todo et comments [\#189](https://github.com/wilsto/BoardOS/issues/189)
+- Zoom sur les alertes [\#187](https://github.com/wilsto/BoardOS/issues/187)
+- Adapter global change avec taskfull [\#173](https://github.com/wilsto/BoardOS/issues/173)
+- Main avec action plan/preview [\#162](https://github.com/wilsto/BoardOS/issues/162)
+
+## [v1.6.70](https://github.com/wilsto/boardos/tree/v1.6.70) (2017-05-22)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.69...v1.6.70)
+
 ## [v1.6.69](https://github.com/wilsto/boardos/tree/v1.6.69) (2017-05-21)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.68...v1.6.69)
 
