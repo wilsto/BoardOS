@@ -15,7 +15,7 @@
             <img src="assets/images/rainbow_logo.jpg" style="vertical-align:middle;display:inline-block;" alt="logo" />
             <span style="margin-left:5px;font-size:30px;color:white;display:inline-block; vertical-align:middle" uib-tooltip-html="' Board Of Supervision System'" tooltip-placement="bottom" > BOSS </span>
               <!-- <autocomplete ng-model="quickSearchTxt" data="mySearch" on-type="updateMySearch" on-select="findMySearch"  attr-placeholder="Quick Search"></autocomplete> -->
-              <input  style="width:400px;margin-top:6px;margin-left:40px;" class="mysearchname" type="text" placeholder="Quick Search ..." ng-model="mySearchTxt" uib-typeahead="mySearchTask as mySearchTask.name for mySearchTask in mySearchTasks | filter:$viewValue:namesWith | orderBy:'-date' | limitTo:100" typeahead-min-length="0" typeahead-template-url="searchBarTemplate.html" typeahead-on-select="onSelect($item, $model, $label)">
+              <input  style="width:400px;margin-top:6px;margin-left:40px;" class="mysearchname" type="text" placeholder="Quick Search ..." ng-model="mySearchTxt" uib-typeahead="mySearchTask as mySearchTask.name for mySearchTask in mySearchTasks | filter:$viewValue:namesWith | orderBy:'-date' | limitTo:100" typeahead-min-length="0" typeahead-template-url="searchBarTemplate.html" >
           </div>
             <!-- <input class="myfilter" type="text" name="" value="" style="margin-left:25px;width:400px" placeholder="Quick Search" ng-model="quickSearchTxt" uib-typeahead="quickSearch as quickSearch.name for quickSearch in quickSearchs | filter:$viewValue:namesWith | limitTo:10" typeahead-min-length="0" typeahead-template-url="quickSearchTemplate.html"> -->
             <!-- BEGIN RESPONSIVE MENU TOGGLER -->

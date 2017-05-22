@@ -86,6 +86,8 @@ process.on('dashboardRemoved', function(dashboard) {
 //createAllCompleteDashboard();
 
 function createAllCompleteDashboard() {
+  console.log('Start Calculating Dashboards');
+
   var alldashboards;
   Q()
     // Get a single task
@@ -129,19 +131,12 @@ function createAllCompleteDashboard() {
     });
 }
 
-// createCompleteDashboard('5852cfed1738410400b26117', function() {
-//   console.log('end dashboard 5852cfed1738410400b26117');
-// });
-// createCompleteDashboard('5506b234b7228311003ef67c', function() {
-//   console.log('end dashboard 5506b234b7228311003ef67c');
-// });
-// createCompleteDashboard('54e3db715ef9d41100cb44ed', function() {
-//   console.log('end dashboard 54e3db715ef9d41100cb44ed');
+// createCompleteDashboard('59229550349959a8807aa2be', function() {
+//   console.log('end dashboard 59229550349959a8807aa2be');
 // });
 //createAllCompleteDashboard()
 
 function createCompleteDashboard(dashboardId, callback) {
-  console.log('start dashboard ' + dashboardId);
   Q()
     // Get a single task
     .then(function() {
@@ -197,175 +192,182 @@ function createCompleteDashboard(dashboardId, callback) {
         var kpisNbBy = {};
         var kpisSum = 0;
         var kpisNb = 0;
+
         _.each(findtasks, function(task, index) {
+          if (task.metrics && task.metrics.length > 0) {
 
-          var a = moment(new Date());
-          var b = moment(new Date(task.metrics[task.metrics.length - 1].startDate));
-          var c = moment(new Date(task.metrics[task.metrics.length - 1].endDate || task.metrics[task.metrics.length - 1].targetEndDate));
-          _.each(task.kpis, function(kpi, index2) { // list kpi
-            if (!kpisSumBy[kpi._id]) {
-              kpisSumBy[kpi._id] = {
-                last7: 0,
-                last14: 0,
-                last30: 0,
-                last90: 0,
-                last180: 0,
-                last365: 0,
-                lastAll: 0
-              };
-            }
-            if (!kpisNbBy[kpi._id]) {
-              kpisNbBy[kpi._id] = {
-                last7: 0,
-                last14: 0,
-                last30: 0,
-                last90: 0,
-                last180: 0,
-                last365: 0,
-                lastAll: 0
-              };
-            }
-            if (task.metrics[task.metrics.length - 1].status === 'Finished') {
+            var a = moment(new Date());
+            var b = moment(new Date(task.metrics[task.metrics.length - 1].startDate));
+            var c = moment(new Date(task.metrics[task.metrics.length - 1].endDate || task.metrics[task.metrics.length - 1].targetEndDate));
 
-              kpisSumBy[kpi._id].lastAll += parseInt(kpi.calcul.task || 0);
-              if ((7 >= a.diff(c, 'days'))) {
-                kpisSumBy[kpi._id].last7 += parseInt(kpi.calcul.task || 0)
+            _.each(task.kpis, function(kpi, index2) { // list kpi
+              if (!kpisSumBy[kpi._id]) {
+                kpisSumBy[kpi._id] = {
+                  last7: 0,
+                  last14: 0,
+                  last30: 0,
+                  last90: 0,
+                  last180: 0,
+                  last365: 0,
+                  lastAll: 0
+                };
               }
-              if ((14 >= a.diff(c, 'days'))) {
-                kpisSumBy[kpi._id].last14 += parseInt(kpi.calcul.task || 0);
-              }
-              if ((30 >= a.diff(c, 'days'))) {
-                kpisSumBy[kpi._id].last30 += parseInt(kpi.calcul.task || 0);
-              }
-              if ((90 >= a.diff(c, 'days'))) {
-                kpisSumBy[kpi._id].last90 += parseInt(kpi.calcul.task || 0);
-              }
-              if ((180 >= a.diff(c, 'days'))) {
-                kpisSumBy[kpi._id].last180 += parseInt(kpi.calcul.task || 0);
-              }
-              if ((365 >= a.diff(c, 'days'))) {
-                kpisSumBy[kpi._id].last365 += parseInt(kpi.calcul.task || 0);
+              if (!kpisNbBy[kpi._id]) {
+                kpisNbBy[kpi._id] = {
+                  last7: 0,
+                  last14: 0,
+                  last30: 0,
+                  last90: 0,
+                  last180: 0,
+                  last365: 0,
+                  lastAll: 0
+                };
               }
 
-              kpisNbBy[kpi._id].lastAll += (kpi.calcul.task !== null && kpi.calcul.task !== undefined && !isNaN(kpi.calcul.task)) ? 1 : 0;
-              if ((7 >= a.diff(c, 'days'))) {
-                kpisNbBy[kpi._id].last7 += (kpi.calcul.task !== null && kpi.calcul.task !== undefined && !isNaN(kpi.calcul.task)) ? 1 : 0;
-              }
-              if ((14 >= a.diff(c, 'days'))) {
-                kpisNbBy[kpi._id].last14 += (kpi.calcul.task !== null && kpi.calcul.task !== undefined && !isNaN(kpi.calcul.task)) ? 1 : 0;
-              }
-              if ((30 >= a.diff(c, 'days'))) {
-                kpisNbBy[kpi._id].last30 += (kpi.calcul.task !== null && kpi.calcul.task !== undefined && !isNaN(kpi.calcul.task)) ? 1 : 0;
-              }
-              if ((90 >= a.diff(c, 'days'))) {
-                kpisNbBy[kpi._id].last90 += (kpi.calcul.task !== null && kpi.calcul.task !== undefined && !isNaN(kpi.calcul.task)) ? 1 : 0;
-              }
-              if ((180 >= a.diff(c, 'days'))) {
-                kpisNbBy[kpi._id].last180 += (kpi.calcul.task !== null && kpi.calcul.task !== undefined && !isNaN(kpi.calcul.task)) ? 1 : 0;
-              }
-              if ((365 >= a.diff(c, 'days'))) {
-                kpisNbBy[kpi._id].last365 += (kpi.calcul.task !== null && kpi.calcul.task !== undefined && !isNaN(kpi.calcul.task)) ? 1 : 0;
-              }
+              if (task.metrics[task.metrics.length - 1].status === 'Finished') {
 
-              kpisSum += parseInt(kpi.calcul.task || 0);
-              kpisNb += (kpi.calcul.task !== null && kpi.calcul.task !== undefined && !isNaN(kpi.calcul.task)) ? 1 : 0;
-            }
-            // if (kpi.name === 'Deliver On Time') {
-            //   console.log('task', task.metrics[task.metrics.length - 1].startDate);
-            //   console.log('kpi.calcul.task', kpi.calcul.task);
-            // }
-          })
-          _.each(task.alerts, function(alert, index2) { // list alert
-            if (!alertsSumBy[alert._id]) {
-              alertsSumBy[alert._id] = {
-                last7: 0,
-                last14: 0,
-                last30: 0,
-                last90: 0,
-                last180: 0,
-                last365: 0,
-                lastAll: 0
-              };
-            }
+                kpisSumBy[kpi._id].lastAll += parseInt(kpi.calcul.task || 0);
+                if ((7 >= a.diff(c, 'days'))) {
+                  kpisSumBy[kpi._id].last7 += parseInt(kpi.calcul.task || 0)
+                }
+                if ((14 >= a.diff(c, 'days'))) {
+                  kpisSumBy[kpi._id].last14 += parseInt(kpi.calcul.task || 0);
+                }
+                if ((30 >= a.diff(c, 'days'))) {
+                  kpisSumBy[kpi._id].last30 += parseInt(kpi.calcul.task || 0);
+                }
+                if ((90 >= a.diff(c, 'days'))) {
+                  kpisSumBy[kpi._id].last90 += parseInt(kpi.calcul.task || 0);
+                }
+                if ((180 >= a.diff(c, 'days'))) {
+                  kpisSumBy[kpi._id].last180 += parseInt(kpi.calcul.task || 0);
+                }
+                if ((365 >= a.diff(c, 'days'))) {
+                  kpisSumBy[kpi._id].last365 += parseInt(kpi.calcul.task || 0);
+                }
 
-            if (task.metrics[task.metrics.length - 1].status === 'In Progress') {
-              alertsSumBy[alert._id].lastAll += parseInt(alert.calcul.task || 0);
-              if ((7 >= a.diff(b, 'days')) || (7 >= a.diff(c, 'days'))) {
-                alertsSumBy[alert._id].last7 += parseInt(alert.calcul.task || 0);
-              }
-              if ((14 >= a.diff(b, 'days')) || (14 >= a.diff(c, 'days'))) {
-                alertsSumBy[alert._id].last14 += parseInt(alert.calcul.task || 0);
-              }
-              if ((30 >= a.diff(b, 'days')) || (30 >= a.diff(c, 'days'))) {
-                alertsSumBy[alert._id].last30 += parseInt(alert.calcul.task || 0);
-              }
-              if ((90 >= a.diff(b, 'days')) || (90 >= a.diff(c, 'days'))) {
-                alertsSumBy[alert._id].last90 += parseInt(alert.calcul.task || 0);
-              }
-              if ((180 >= a.diff(b, 'days')) || (180 >= a.diff(c, 'days'))) {
-                alertsSumBy[alert._id].last180 += parseInt(alert.calcul.task || 0);
-              }
-              if ((365 >= a.diff(b, 'days')) || (365 >= a.diff(c, 'days'))) {
-                alertsSumBy[alert._id].last365 += parseInt(alert.calcul.task || 0);
-              }
-              dashboard.alertsValue += parseInt(alert.calcul.task || 0);
-            }
-          });
+                kpisNbBy[kpi._id].lastAll += (kpi.calcul.task !== null && kpi.calcul.task !== undefined && !isNaN(kpi.calcul.task)) ? 1 : 0;
+                if ((7 >= a.diff(c, 'days'))) {
+                  kpisNbBy[kpi._id].last7 += (kpi.calcul.task !== null && kpi.calcul.task !== undefined && !isNaN(kpi.calcul.task)) ? 1 : 0;
+                }
+                if ((14 >= a.diff(c, 'days'))) {
+                  kpisNbBy[kpi._id].last14 += (kpi.calcul.task !== null && kpi.calcul.task !== undefined && !isNaN(kpi.calcul.task)) ? 1 : 0;
+                }
+                if ((30 >= a.diff(c, 'days'))) {
+                  kpisNbBy[kpi._id].last30 += (kpi.calcul.task !== null && kpi.calcul.task !== undefined && !isNaN(kpi.calcul.task)) ? 1 : 0;
+                }
+                if ((90 >= a.diff(c, 'days'))) {
+                  kpisNbBy[kpi._id].last90 += (kpi.calcul.task !== null && kpi.calcul.task !== undefined && !isNaN(kpi.calcul.task)) ? 1 : 0;
+                }
+                if ((180 >= a.diff(c, 'days'))) {
+                  kpisNbBy[kpi._id].last180 += (kpi.calcul.task !== null && kpi.calcul.task !== undefined && !isNaN(kpi.calcul.task)) ? 1 : 0;
+                }
+                if ((365 >= a.diff(c, 'days'))) {
+                  kpisNbBy[kpi._id].last365 += (kpi.calcul.task !== null && kpi.calcul.task !== undefined && !isNaN(kpi.calcul.task)) ? 1 : 0;
+                }
 
-          if (index === findtasks.length - 1) {
-            _.each(kpisSumBy, function(value, key) {
-              var mKPI = _.filter(kpis, function(kpi) {
-                return kpi._id.toString() === key;
-              })[0];
-              // if (mKPI.name === 'Deliver On Time') {
-              //   console.log('dashboard.name', dashboard.name);
-              //   console.log('kpi.name', mKPI.name);
-              //   console.log('value', value);
-              //   console.log('kpisNbBy[key]', kpisNbBy[key]);
-              //   console.log('parseInt(value / kpisNbBy[key]', parseInt(value / kpisNbBy[key]));
+                kpisSum += parseInt(kpi.calcul.task || 0);
+                kpisNb += (kpi.calcul.task !== null && kpi.calcul.task !== undefined && !isNaN(kpi.calcul.task)) ? 1 : 0;
+              }
+              // if (kpi.name === 'Deliver On Time') {
+              //   console.log('task', task.metrics[task.metrics.length - 1].startDate);
+              //   console.log('kpi.calcul.task', kpi.calcul.task);
               // }
-              dashboard.kpis.push({
-                kpiId: key,
-                name: mKPI.name,
-                constraint: mKPI.constraint,
-                category: mKPI.category,
-                description: mKPI.description,
-                suggestion: mKPI.suggestion,
-                calcul: {
-                  task: parseInt(value.lastAll / kpisNbBy[key].lastAll),
-                  last7: parseInt(value.last7 / kpisNbBy[key].last7),
-                  last14: parseInt(value.last14 / kpisNbBy[key].last14),
-                  last30: parseInt(value.last30 / kpisNbBy[key].last30),
-                  last90: parseInt(value.last90 / kpisNbBy[key].last90),
-                  last180: parseInt(value.last180 / kpisNbBy[key].last180),
-                  last365: parseInt(value.last365 / kpisNbBy[key].last365),
+            })
+            _.each(task.alerts, function(alert, index2) { // list alert
+              if (!alertsSumBy[alert._id]) {
+                alertsSumBy[alert._id] = {
+                  last7: 0,
+                  last14: 0,
+                  last30: 0,
+                  last90: 0,
+                  last180: 0,
+                  last365: 0,
+                  lastAll: 0
+                };
+              }
+
+              if (task.metrics[task.metrics.length - 1].status === 'In Progress') {
+                alertsSumBy[alert._id].lastAll += parseInt(alert.calcul.task || 0);
+                if ((7 >= a.diff(b, 'days')) || (7 >= a.diff(c, 'days'))) {
+                  alertsSumBy[alert._id].last7 += parseInt(alert.calcul.task || 0);
                 }
-              });
-            });
-            _.each(alertsSumBy, function(value, key) {
-              var mKPI = _.filter(alerts, function(alert) {
-                return alert._id.toString() === key;
-              })[0];
-              dashboard.alerts.push({
-                alertId: key,
-                name: mKPI.name,
-                constraint: mKPI.constraint,
-                category: mKPI.category,
-                description: mKPI.description,
-                suggestion: mKPI.suggestion,
-                calcul: {
-                  task: value.lastAll,
-                  last7: value.last7,
-                  last14: value.last14,
-                  last30: value.last30,
-                  last90: value.last90,
-                  last180: value.last180,
-                  last365: value.last365,
+                if ((14 >= a.diff(b, 'days')) || (14 >= a.diff(c, 'days'))) {
+                  alertsSumBy[alert._id].last14 += parseInt(alert.calcul.task || 0);
                 }
-              });
+                if ((30 >= a.diff(b, 'days')) || (30 >= a.diff(c, 'days'))) {
+                  alertsSumBy[alert._id].last30 += parseInt(alert.calcul.task || 0);
+                }
+                if ((90 >= a.diff(b, 'days')) || (90 >= a.diff(c, 'days'))) {
+                  alertsSumBy[alert._id].last90 += parseInt(alert.calcul.task || 0);
+                }
+                if ((180 >= a.diff(b, 'days')) || (180 >= a.diff(c, 'days'))) {
+                  alertsSumBy[alert._id].last180 += parseInt(alert.calcul.task || 0);
+                }
+                if ((365 >= a.diff(b, 'days')) || (365 >= a.diff(c, 'days'))) {
+                  alertsSumBy[alert._id].last365 += parseInt(alert.calcul.task || 0);
+                }
+                dashboard.alertsValue += parseInt(alert.calcul.task || 0);
+              }
             });
-            if (kpisNb > 0) {
-              dashboard.kpisValue = parseInt(kpisSum / kpisNb);
+
+            if (index === findtasks.length - 1) {
+
+              _.each(kpisSumBy, function(value, key) {
+                var mKPI = _.filter(kpis, function(kpi) {
+                  return kpi._id.toString() === key;
+                })[0];
+                // if (mKPI.name === 'Deliver On Time') {
+                //   console.log('dashboard.name', dashboard.name);
+                //   console.log('kpi.name', mKPI.name);
+                //   console.log('value', value);
+                //   console.log('kpisNbBy[key]', kpisNbBy[key]);
+                //   console.log('parseInt(value / kpisNbBy[key]', parseInt(value / kpisNbBy[key]));
+                // }
+                dashboard.kpis.push({
+                  kpiId: key,
+                  name: mKPI.name,
+                  constraint: mKPI.constraint,
+                  category: mKPI.category,
+                  description: mKPI.description,
+                  suggestion: mKPI.suggestion,
+                  calcul: {
+                    task: parseInt(value.lastAll / kpisNbBy[key].lastAll),
+                    last7: parseInt(value.last7 / kpisNbBy[key].last7),
+                    last14: parseInt(value.last14 / kpisNbBy[key].last14),
+                    last30: parseInt(value.last30 / kpisNbBy[key].last30),
+                    last90: parseInt(value.last90 / kpisNbBy[key].last90),
+                    last180: parseInt(value.last180 / kpisNbBy[key].last180),
+                    last365: parseInt(value.last365 / kpisNbBy[key].last365),
+                  }
+                });
+              });
+
+              _.each(alertsSumBy, function(value, key) {
+                var mKPI = _.filter(alerts, function(alert) {
+                  return alert._id.toString() === key;
+                })[0];
+                dashboard.alerts.push({
+                  alertId: key,
+                  name: mKPI.name,
+                  constraint: mKPI.constraint,
+                  category: mKPI.category,
+                  description: mKPI.description,
+                  suggestion: mKPI.suggestion,
+                  calcul: {
+                    task: value.lastAll,
+                    last7: value.last7,
+                    last14: value.last14,
+                    last30: value.last30,
+                    last90: value.last90,
+                    last180: value.last180,
+                    last365: value.last365,
+                  }
+                });
+              });
+              if (kpisNb > 0) {
+                dashboard.kpisValue = parseInt(kpisSum / kpisNb);
+              }
             }
           }
         });
@@ -376,6 +378,7 @@ function createCompleteDashboard(dashboardId, callback) {
 
     // Save a single dashboard complete
     .then(function(dashboard) {
+
       DashboardComplete.findById(dashboardId, function(err, dashboardComplete) {
         // si non existant
         if (!dashboardComplete) {

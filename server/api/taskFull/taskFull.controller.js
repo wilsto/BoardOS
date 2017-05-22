@@ -70,7 +70,9 @@ function createAllFullTask() {
   TaskFull.remove({}, function(err, numberRemoved) {
     Task.find({}, '-__v').lean().exec(function(err, tasks) {
       _.each(tasks, function(task, index) { // pour chaque tache
+        process.emit('taskFullstart', task._id);
         createFullTask(task._id, false, function(data) {
+          process.emit('taskFullrun', data._id);
           console.log('fulltask', data._id);
         });
       });
@@ -81,10 +83,11 @@ function createAllFullTask() {
 //createAllFullTask();
 
 // TaskFull.remove({
-//   _id: '59035ce0dbfa440400814208'
+//   _id: '54f6d8482961711100fea6cf'
 // }, function(err, numberRemoved) {
-//   createFullTask('59035ce0dbfa440400814208', false, function() {
-//     console.log('*******************end fulltask 59035ce0dbfa440400814208');
+//   console.log('*******************start fulltask 54f6d8482961711100fea6cf');
+//   createFullTask('54f6d8482961711100fea6cf', false, function() {
+//     console.log('*******************end fulltask 54f6d8482961711100fea6cf');
 //   });
 // });
 
@@ -113,10 +116,14 @@ function createFullTask(taskId, refreshDashboard, callback) {
           task.actors = [];
           task.followers = [];
           // ajout du owner
-          task.actors.push(task.actor._id);
+          if (task.actor._id !== undefined && task.actor._id !== 'undefined') {
+            task.actors.push(task.actor._id);
+          }
           // ajout des followers
           _.each(task.watchers, function(watcher) {
-            task.followers.push(watcher);
+            if (watcher !== undefined && watcher !== 'undefined') {
+              task.followers.push(watcher);
+            }
           });
           deferred.resolve(task);
         })
@@ -259,6 +266,9 @@ function createFullTask(taskId, refreshDashboard, callback) {
 
           // predictedCharge
           metric.projectedWorkload = (metric.progress > 0) ? reworkspent + Math.round(1000 * metric.timeSpent * 100 / parseFloat(metric.progress)) / 1000 : metric.targetLoad;
+          if (metric.duration === 1) {
+            metric.duration = metric.projectedWorkload;
+          }
 
           // progressStatus
           if (moment(metric.endDate).isAfter(targetEndDate, 'day')) {
@@ -392,9 +402,11 @@ function createFullTask(taskId, refreshDashboard, callback) {
 
     .then(function(task) {
 
-      task.comments = _.sortBy(task.comments, function(comment) {
-        return -comment.date;
-      });
+      if (task.comments) {
+        task.comments = _.sortBy(task.comments, function(comment) {
+          return -comment.date;
+        });
+      }
 
       task.actors = task.actors.reduce(function(a, b) {
         if (a.indexOf(b) < 0) a.push(b);
@@ -403,6 +415,12 @@ function createFullTask(taskId, refreshDashboard, callback) {
 
       //logger.trace("Start Calculer les KPI par taches");
       // Calculer les KPI par taches
+      //
+
+      if (!task.metrics) {
+        task.metrics = [];
+      }
+
       var deferred = Q.defer();
       // pour chaque tache
       task.kpis = [];
@@ -443,6 +461,10 @@ function createFullTask(taskId, refreshDashboard, callback) {
         // si non existant
         if (!taskFull) {
           TaskFull.create(task, function(err, CreatedtaskFull) {
+            if (err) {
+              console.log('task', task);
+              console.log('err', err);
+            }
             if (refreshDashboard) {
               process.emit('taskChanged', task);
             }
@@ -470,7 +492,8 @@ function createFullTask(taskId, refreshDashboard, callback) {
           updated.markModified('dashboards');
           updated.save(function(err) {
             if (err) {
-
+              console.log('updated', updated);
+              console.log('err', err);
             }
             if (refreshDashboard) {
               process.emit('taskChanged', task);
@@ -806,6 +829,9 @@ exports.update = function(req, res) {
 
       // predictedCharge
       metric.projectedWorkload = (metric.progress > 0) ? reworkspent + Math.round(1000 * metric.timeSpent * 100 / parseFloat(metric.progress)) / 1000 : metric.targetLoad;
+      if (metric.duration === 1) {
+        metric.duration = metric.projectedWorkload;
+      }
 
       // progressStatus
       if (moment(metric.endDate).isAfter(targetEndDate, 'day')) {
