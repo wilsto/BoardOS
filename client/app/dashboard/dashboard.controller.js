@@ -92,18 +92,18 @@ angular.module('boardOsApp')
         $scope.$apply(function() {
           $scope.filteredPlanTasks = _.filter($scope.dashboard.tasks, function(task) {
             var a = moment(new Date()).add($scope.datediff, 'days');
-            var b = moment(new Date(task.metrics[0].targetstartDate));
-            return task.metrics[0].status === 'Not Started';
+            var b = moment(new Date(task.metrics[task.metrics.length - 1].targetstartDate));
+            return task.metrics[task.metrics.length - 1].status === 'Not Started';
           });
           $scope.filteredInProgressTasks = _.filter($scope.dashboard.tasks, function(task) {
             var a = moment(new Date()).add($scope.datediff, 'days');
-            var b = moment(new Date(task.metrics[0].startDate || task.metrics[0].targetstartDate));
-            return task.metrics[0].status === 'In Progress';
+            var b = moment(new Date(task.metrics[task.metrics.length - 1].startDate || task.metrics[task.metrics.length - 1].targetstartDate));
+            return task.metrics[task.metrics.length - 1].status === 'In Progress';
           });
           $scope.filteredFinishedTasks = _.filter($scope.dashboard.tasks, function(task) {
             var a = moment(new Date());
-            var b = moment(new Date(task.metrics[0].endDate));
-            return ($scope.datediff >= a.diff(b, 'days')) && (task.metrics[0].status === 'Finished');
+            var b = moment(new Date(task.metrics[task.metrics.length - 1].endDate || task.metrics[task.metrics.length - 1].targetEndDate));
+            return ($scope.datediff >= a.diff(b, 'days')) && (task.metrics[task.metrics.length - 1].status === 'Finished');
           });
         });
       });
@@ -116,8 +116,10 @@ angular.module('boardOsApp')
           dashboard.subscribed = false;
           var userlist = _.pluck(dashboard.users, '_id');
           $scope.userindex = userlist.indexOf($scope.currentUser._id.toString());
-          if ($scope.userindex >= 0) {
-            dashboard.name = dashboard.users[$scope.userindex].dashboardname;
+          
+          if ($scope.userindex >= 0 && dashboard.users[$scope.userindex] && dashboard.users[$scope.userindex].dashboardName && dashboard.users[$scope.userindex].dashboardName.length > 0) {
+            dashboard.name = dashboard.users[$scope.userindex].dashboardName;
+            
             dashboard.subscribed = true;
           }
           $scope.dashboard = dashboard;
@@ -292,8 +294,8 @@ angular.module('boardOsApp')
           name: '',
           paramId: $stateParams.id,
           users: [{
-            user: $scope.currentUser._id,
-            name: ''
+            _id: $scope.currentUser._id,
+            dashboardName: ''
           }]
         };
       }
@@ -304,7 +306,7 @@ angular.module('boardOsApp')
     // create a new dashboard
     // *******************
     $scope.create = function() {
-      
+      $scope.dashboard.users[$scope.userindex].name = $scope.dashboard.name;
       $http.post('/api/dashboardCompletes', $scope.dashboard).success(function(data) {
         var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was created';
         Notification.success(logInfo);
@@ -316,6 +318,10 @@ angular.module('boardOsApp')
     // update a task
     // *******************
     $scope.update = function() {
+      delete $scope.dashboard.tasks;
+      delete $scope.dashboard.kpis;
+      delete $scope.dashboard.alerts;
+
       $http.put('/api/dashboardCompletes/' + $scope.dashboard._id, $scope.dashboard).success(function() {
         var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was updated';
         Notification.success(logInfo);
@@ -328,12 +334,12 @@ angular.module('boardOsApp')
         $timeout(function() {
           //initializing = true;
           if ($scope.dashboard) {
-            $scope.dashboard.users[$scope.userindex].name = $scope.dashboard.name;
+            $scope.dashboard.users[$scope.userindex].dashboardName = $scope.dashboard.name;
           }
           //
         });
       } else {
-        $scope.dashboard.users[$scope.userindex].name = $scope.dashboard.name;
+        $scope.dashboard.users[$scope.userindex].dashboardName = $scope.dashboard.name;
         $scope.update();
       }
     }, true);

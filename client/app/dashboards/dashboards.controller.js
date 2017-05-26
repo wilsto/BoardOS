@@ -40,8 +40,8 @@ angular.module('boardOsApp')
           dashboard.subscribed = false;
           var userlist = _.pluck(dashboard.users, '_id');
           var userindex = userlist.indexOf($scope.currentUser._id.toString());
-          if (userindex >= 0) {
-            dashboard.name = dashboard.users[userindex].dashboardname;
+          if (userindex >= 0 && dashboard.users[userindex] && dashboard.users[userindex].dashboardName && dashboard.users[userindex].dashboardName.length > 0) {
+            dashboard.name = dashboard.users[userindex].dashboardName;
             dashboard.subscribed = true;
           }
         });

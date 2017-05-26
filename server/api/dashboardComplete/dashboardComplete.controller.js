@@ -60,25 +60,19 @@ process.on('taskChanged', function(task) {
         var deferred = Q.defer();
         _.each(alldashboards, function(dashboard, index) {
           if ((dashboard.context === undefined || task.context.indexOf(dashboard.context) >= 0) && (dashboard.activity === undefined || task.activity.indexOf(dashboard.activity) >= 0)) {
-
             createCompleteDashboard(dashboard._id, function(data) {});
           }
           deferred.resolve(dashboard);
         });
         return deferred.promise;
       });
-  }, 1000);
+  }, 500);
 });
 
 process.on('dashboardChanged', function(dashboard) {
   createCompleteDashboard(dashboard._id, function(data) {});
 });
 
-process.on('dashboardRemoved', function(dashboard) {
-  DashboardComplete.remove({
-    _id: dashboard._id
-  }, function(err, numberRemoved) {});
-});
 //createAllCompleteDashboard();
 
 function createAllCompleteDashboard() {
@@ -86,71 +80,12 @@ function createAllCompleteDashboard() {
 
   var alldashboards;
   Q()
-    // Get a single task
-    .then(function() {
-      var deferred = Q.defer();
-      DashboardComplete.remove({}, function(err, numberRemoved) {
-        console.log('numberRemoved', numberRemoved);
-        deferred.resolve(numberRemoved);
-      });
-      return deferred.promise;
-    })
+    // Get list of dashboard
     .then(function() {
       var deferred = Q.defer();
       DashboardComplete.find({}, '-__v').lean().exec(function(err, dashboards) {
         console.log('dashboards', dashboards.length);
-        alldashboards = [];
-        _.each(dashboards, function(dashboard) {
-          if (!dashboard.activity) {
-            dashboard.activity = '';
-          }
-          if (!dashboard.context) {
-            dashboard.context = '';
-          }
-
-          var value = _.where(alldashboards, function(groupdashboard) {
-            var bln = ((dashboard.activity === groupdashboard.activity) && (dashboard.context === groupdashboard.context));
-            return bln;
-          });
-
-          if (value.length === 0) {
-            var newdashboard = {
-              _id: dashboard._id,
-              date: dashboard.date,
-              activity: dashboard.activity,
-              context: dashboard.context,
-              users: []
-            };
-            if (dashboard.owner) {
-              newdashboard.users.push({
-                _id: dashboard.owner._id,
-                dashboardName: dashboard.name
-              });
-            }
-            alldashboards.push(newdashboard);
-          } else {
-            _.each(alldashboards, function(thisdashboard) {
-              if (thisdashboard._id.toString() === value[0]._id.toString() && dashboard.owner) {
-                var userindex = -1;
-                var users = thisdashboard.users || [];
-                var userlist = _.pluck(users, '_id');
-                _.each(userlist, function(data, idx) {
-                  // égalité imparfaite car id
-                  if (data !== undefined && data.toString() === dashboard.owner._id.toString()) {
-                    userindex = idx;
-                  }
-                });
-                if (userindex < 0) {
-                  thisdashboard.users.push({
-                    _id: dashboard.owner._id,
-                    dashboardName: dashboard.name
-                  });
-                }
-              }
-              return thisdashboard;
-            });
-          }
-        });
+        alldashboards = dashboards;
         deferred.resolve(alldashboards);
       });
       return deferred.promise;
@@ -159,7 +94,7 @@ function createAllCompleteDashboard() {
       var deferred = Q.defer();
       async.each(alldashboards, function(dashboard, callback) {
         process.emit('dashboardCompletestart', dashboard._id);
-        createCompleteDashboard(dashboard._id, dashboard.users, function(data) {
+        createCompleteDashboard(dashboard._id, function(data) {
           process.emit('dashboardCompleterun', data._id);
           callback();
         });
@@ -180,7 +115,8 @@ function createAllCompleteDashboard() {
 // });
 //createAllCompleteDashboard()
 
-function createCompleteDashboard(dashboardId, users, callback) {
+function createCompleteDashboard(dashboardId, callback) {
+  console.log('dashboardId', dashboardId);
   Q()
     // Get a single task
     .then(function() {
@@ -214,7 +150,6 @@ function createCompleteDashboard(dashboardId, users, callback) {
       }, 'metrics needToFeed kpis alerts').sort({
         date: 'asc'
       }).lean().exec(function(err, findtasks) {
-
         _.each(findtasks, function(task) {
           dashboard.tasks.push(task._id);
         });
@@ -226,7 +161,6 @@ function createCompleteDashboard(dashboardId, users, callback) {
           return task.needToFeed;
         }).length;
         dashboard.tasksNb = dashboard.tasks.length;
-        dashboard.users = users;
 
         dashboard.kpis = [];
         dashboard.kpisValue = null;
@@ -423,13 +357,6 @@ function createCompleteDashboard(dashboardId, users, callback) {
 
     // Save a single dashboard complete
     .then(function(dashboard) {
-
-      if (dashboard.owner) {
-        delete dashboard.owner;
-      }
-      if (dashboard.actors) {
-        delete dashboard.actors;
-      }
       DashboardComplete.findById(dashboardId, function(err, dashboardComplete) {
         // si non existant
         if (!dashboardComplete) {
@@ -439,15 +366,17 @@ function createCompleteDashboard(dashboardId, users, callback) {
           });
         } else {
           //si existant
-          dashboardComplete.tasks = dashboard.tasks;
-          dashboardComplete.kpis = dashboard.kpis;
-          dashboardComplete.alerts = dashboard.alerts;
-          dashboardComplete.categories = dashboard.categories;
           var updated = _.merge(dashboardComplete, dashboard);
+          updated.users = dashboard.users;
+          updated.tasks = dashboard.tasks;
+          updated.kpis = dashboard.kpis;
+          updated.alerts = dashboard.alerts;
+          updated.categories = dashboard.categories;
           updated.markModified('categories');
           updated.markModified('tasks');
           updated.markModified('kpis');
           updated.markModified('alerts');
+          updated.markModified('users');
           updated.save(function(err) {
             callback(dashboardComplete);
             return true;
@@ -485,14 +414,14 @@ exports.index = function(req, res) {
       var actors = [];
       _.each(dashboard.users, function(actor) {
         var thisuser = _.filter(usersList, function(user) {
-          return user._id.toString() === actor._id.toString();
+          return actor && user._id.toString() === actor._id.toString();
         });
         if (thisuser.length > 0 && thisuser[0].active) {
           actors.push({
             _id: actor._id,
             avatar: (thisuser[0].avatar) ? thisuser[0].avatar : 'assets/images/avatars/' + thisuser[0]._id + '.png',
             name: thisuser[0].name,
-            dashboardname: actor.dashboardName
+            dashboardName: actor.dashboardName
           });
         }
       });
@@ -511,24 +440,25 @@ exports.show = function(req, res) {
     .populate('tasks.actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
     .lean().exec(function(err, dashboardComplete) {
       if (err) {
-        console.log('err', err);
         return handleError(res, err);
       }
 
       var actors = [];
-      _.each(dashboardComplete.users, function(actor) {
-        var thisuser = _.filter(usersList, function(user) {
-          return user._id.toString() === actor._id.toString();
-        });
-        if (thisuser.length > 0) {
-          actors.push({
-            _id: actor._id,
-            avatar: (thisuser[0].avatar) ? thisuser[0].avatar : 'assets/images/avatars/' + thisuser[0]._id + '.png',
-            name: thisuser[0].name,
-            dashboardname: actor.dashboardName
+      if (dashboardComplete.users && dashboardComplete.users.length > 0) {
+        _.each(dashboardComplete.users, function(actor) {
+          var thisuser = _.filter(usersList, function(user) {
+            return actor && user._id.toString() === actor._id.toString();
           });
-        }
-      });
+          if (thisuser.length > 0) {
+            actors.push({
+              _id: actor._id,
+              avatar: (thisuser[0].avatar) ? thisuser[0].avatar : 'assets/images/avatars/' + thisuser[0]._id + '.png',
+              name: thisuser[0].name,
+              dashboardName: actor.dashboardName
+            });
+          }
+        });
+      }
       dashboardComplete.users = actors;
 
       _.each(dashboardComplete.tasks, function(task) {
@@ -579,6 +509,17 @@ exports.update = function(req, res) {
       return res.status(404).send('Not Found');
     }
     var updated = _.merge(dashboardComplete, req.body);
+    updated.users = req.body.users;
+    updated.tasks = req.body.tasks;
+    updated.kpis = req.body.kpis;
+    updated.alerts = req.body.alerts;
+    updated.categories = req.body.categories;
+    updated.markModified('categories');
+    updated.markModified('tasks');
+    updated.markModified('kpis');
+    updated.markModified('alerts');
+    updated.markModified('users');
+
     updated.save(function(err) {
       if (err) {
         return handleError(res, err);
@@ -601,7 +542,7 @@ exports.subscribe = function(req, res) {
     var users = dashboardComplete.users || [];
     users.push({
       _id: req.body._id,
-      dashboardname: dashboardComplete.name
+      dashboardName: dashboardComplete.name
     });
     dashboardComplete.users = users;
     var updated = dashboardComplete;

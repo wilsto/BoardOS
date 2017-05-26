@@ -41,7 +41,7 @@ KPI.find({}, '-__v').sort({
 
 function calcBusinessDays(dDate1, dDate2) { // input given as Date objects
   var iWeeks, iDateDiff, iAdjust = 0;
-  if (dDate2 < dDate1) return -1; // error code if dates transposed
+  if (dDate2 < dDate1) return 1; // error code if dates transposed
   dDate1 = new Date(dDate1);
   dDate2 = new Date(dDate2);
   var iWeekday1 = dDate1.getDay(); // day of week
@@ -492,7 +492,6 @@ function createFullTask(taskId, refreshDashboard, callback) {
           updated.markModified('dashboards');
           updated.save(function(err) {
             if (err) {
-              console.log('updated', updated);
               console.log('err', err);
             }
             if (refreshDashboard) {
@@ -603,7 +602,6 @@ exports.show = function(req, res) {
         actor.avatar = (actor.avatar) ? actor.avatar : 'assets/images/avatars/' + actor._id + '.png';
       });
       _.each(taskFull.followers, function(follower) {
-        console.log('follower', follower);
         follower.avatar = (follower.avatar) ? follower.avatar : 'assets/images/avatars/' + follower._id + '.png';
       });
       _.each(taskFull.comments, function(comment) {
@@ -816,7 +814,8 @@ exports.update = function(req, res) {
     _.each(task.metrics, function(metric, index) { // pour chaque metric
 
       var startDate = (metric.startDate) ? metric.startDate : metric.targetstartDate;
-      var endDate = (metric.endDate) ? metric.endDate : metric.targetEndDate;
+      var endDate = (metric.endDate) ? metric.endDate : (metric.startDate) ? metric.startDate : metric.targetEndDate;
+      metric.endDate = endDate;
 
       if (index === 0) {
         mainstart = metric.startDate;
@@ -825,14 +824,19 @@ exports.update = function(req, res) {
 
       // nombre de jours séparant la date de début, fin, entre les deux
       metric.duration = calcBusinessDays(mainstart, endDate);
+      console.log('endDate', endDate);
+      console.log('mainstart', mainstart);
       metric.delay = calcBusinessDays(targetEndDate, endDate) - 1;
 
       // predictedCharge
       metric.projectedWorkload = (metric.progress > 0) ? reworkspent + Math.round(1000 * metric.timeSpent * 100 / parseFloat(metric.progress)) / 1000 : metric.targetLoad;
+      console.log('metric.duration', metric.duration);
       if (metric.duration === 1) {
         metric.duration = metric.projectedWorkload;
       }
 
+      console.log('metric.projectedWorkload', metric.projectedWorkload);
+      console.log('metric.duration', metric.duration);
       // progressStatus
       if (moment(metric.endDate).isAfter(targetEndDate, 'day')) {
         metric.progressStatus = 'Late';
