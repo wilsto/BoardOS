@@ -2,7 +2,25 @@
 
 ## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
 
-[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.70...HEAD)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.71...HEAD)
+
+**Implemented enhancements:**
+
+- infinite scroll [\#139](https://github.com/wilsto/BoardOS/issues/139)
+- Affichage de la dernière metric sur le main [\#59](https://github.com/wilsto/BoardOS/issues/59)
+- KPI par Manager | Leader [\#35](https://github.com/wilsto/BoardOS/issues/35)
+- list of actions first page [\#1](https://github.com/wilsto/BoardOS/issues/1)
+
+**Closed issues:**
+
+- Filtre de date n'est plus appliqué lors d'un retour arrière [\#196](https://github.com/wilsto/BoardOS/issues/196)
+- Delete a dashboard is not visible [\#195](https://github.com/wilsto/BoardOS/issues/195)
+- refresh a task en recette, plante BOSS [\#193](https://github.com/wilsto/BoardOS/issues/193)
+- ajouter infinitescroll aux page de chargements [\#192](https://github.com/wilsto/BoardOS/issues/192)
+- Tâche non prise en compte dans le dashboard [\#186](https://github.com/wilsto/BoardOS/issues/186)
+
+## [v1.6.71](https://github.com/wilsto/boardos/tree/v1.6.71) (2017-05-22)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.70...v1.6.71)
 
 **Closed issues:**
 

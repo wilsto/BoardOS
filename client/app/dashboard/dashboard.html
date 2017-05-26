@@ -11,11 +11,12 @@
 <div class="row">
   <div class="row ">
     <div class="col-md-1">
+      <button ng-if="dashboard._id" type="button" name="button" style="margin-bottom:5px;width:100%" class="btn btn-xs btn-outline btn-info" ng-click="refreshDashboard()">Refresh</button>
       <img src="assets/images/dashboard.png" class="img-responsive" style="max-height:200px;" alt=""/>
     </div>
     <div class="col-md-11">
       <div class="row">
-        <div class="col-md-7 profile-info">
+        <div class="col-md-5 profile-info">
           <h1>
             <a href="#" style="color:black!important" editable-text="dashboard.name" e-style="width: 500px" buttons="right">{{ dashboard.name || 'Please give a name of your dashboard' }}</a>
           </h1>
@@ -42,11 +43,34 @@
                 <span ng-show="messageCreation" class="label label-danger">  {{messageCreation}}</span>
               </li>
           </ul>
-          <div class="pull-right" style="width:200px" ng-if="!dashboard._id" uib-tooltip-html="'You must fill the 7 mandatories fields : name, activity, context, startDate, Estimate workload, DueDate and confidence to be able to save'" tooltip-placement="bottom">
+          <div class="pull-right" style="width:200px" ng-if="!dashboard._id" uib-tooltip-html="'You must fill at least 2 mandatories fields : name and (activity and/or context)to be able to save'" tooltip-placement="bottom">
               <button type="button" name="button" style="width:200px" class="btn  btn-primary" ng-click="create()" ng-disabled="!(dashboard.name && (dashboard.context || dashboard.activity))">Create</button>
           </div>
         </div>
         <!--end col-md-8-->
+        <div class="col-md-2 profile-info">
+
+          <div class="portlet sale-summary" ng-if="dashboard._id" >
+              <div class="portlet-title" >
+                  <div class="caption">
+                      Subscribers
+                  </div>
+                  <div class="tools">
+                      <div class="pull-right">
+                          <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!ActionPlanIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                          <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="ActionPlanIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                      </div>
+                      <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{dashboard.users.length ||0}}</span></span>
+                  </div>
+              </div>
+              <div class="portlet-body"  style="height:160px;margin-bottom:5px;">
+                          <div ng-repeat="user in dashboard.users" uib-tooltip-html="'Name : <b>{{user.name}}</b>'" class="pull-left">
+                            <img style="margin:2px;" alt="" ng-src="{{user.avatar}}" class="img-circle" err-src="assets/images/avatars/avatar.png"/>
+                          </div>
+              </div>
+          </div>
+
+        </div>
         <div class="col-md-2 profile-info">
           <!-- BEGIN OVERVIEW STATISTIC BARS-->
           <!-- BEGIN OVERVIEW STATISTIC BARS-->
@@ -62,7 +86,8 @@
                   <nvd3 options="optionsTasks" data="dataTasks"></nvd3>
                 </div>
               </div>
-
+<br>
+<br>
               <div class="stats-overview stat-block">
                 <div class="details">
                   <div class="title">

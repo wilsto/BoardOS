@@ -8,56 +8,6 @@ angular.module('boardOsApp')
       $scope.loadDashBoards();
     });
 
-
-    $scope.availableSearchParams = [{
-        key: 'task',
-        name: 'Task',
-        placeholder: 'Task...'
-      },
-      {
-        key: 'dashboard',
-        name: 'Dashboard',
-        placeholder: 'Dashboard...'
-      }
-    ];
-
-    // $scope.availableSearchParams = [{
-    //     key: 'name',
-    //     name: 'Name',
-    //     placeholder: 'Name...'
-    //   },
-    //   {
-    //     key: 'activity',
-    //     name: 'Activity',
-    //     placeholder: 'Activity...'
-    //   },
-    //   {
-    //     key: 'context',
-    //     name: 'Context',
-    //     placeholder: 'Context...'
-    //   },
-    //   {
-    //     key: 'description',
-    //     name: 'Description',
-    //     placeholder: 'Description...'
-    //   },
-    //   {
-    //     key: 'hypothesis',
-    //     name: 'Hypothesis',
-    //     placeholder: 'Hypothesis...'
-    //   },
-    //   {
-    //     key: 'risks',
-    //     name: 'Risks',
-    //     placeholder: 'Risks...'
-    //   },
-    //   {
-    //     key: 'comments.text',
-    //     name: 'Comment',
-    //     placeholder: 'Comment...'
-    //   }
-    // ];
-
     $scope.load = function() {
       var myparams = {
         params: {
@@ -71,11 +21,9 @@ angular.module('boardOsApp')
       });
     };
 
-
     /** SearhBar **/
     $http.get('/api/taskFulls/').success(function(objects) {
       $scope.mySearchTasks = objects;
-      
     });
 
     $scope.loadDashBoards = function() {
@@ -86,6 +34,18 @@ angular.module('boardOsApp')
         }
       };
       $http.get('/api/dashboardCompletes/', myparams).success(function(dashboards) {
+
+        _.each(dashboards, function(dashboard) {
+          dashboard.subscribed = false;
+          var userlist = _.pluck(dashboard.users, '_id');
+          var userindex = userlist.indexOf($scope.currentUser._id.toString());
+          if (userindex >= 0) {
+            dashboard.name = dashboard.users[userindex].dashboardname;
+            dashboard.subscribed = true;
+          }
+        });
+        dashboards = _.sortBy(dashboards, ['activity', 'context']);
+
         $scope.dashboards = dashboards;
         $rootScope.dashboards = dashboards;
       });
@@ -94,30 +54,20 @@ angular.module('boardOsApp')
 
     $scope.onSelect = function($item, $model, $label) {
       $scope.$item = $item;
-      
       $scope.$model = $model;
       $scope.$label = $label;
     };
 
     $scope.updateMySearch = function(typed) {
-      
+
       $scope.mySearch = [];
       $http.get('/api/taskFulls/').success(function(objects) {
         _.each(objects, function(object) {
           $scope.mySearch.push(object.name);
         });
         $scope.mySearch = _.uniq($scope.mySearch);
-        
       });
     };
-
-    $scope.findMySearch = function(finded) {
-      
-    };
-
-    $scope.$watch('quickSearchTxt', function() {});
-
-
 
     $scope.logout = function() {
       Auth.logout();
@@ -150,17 +100,7 @@ angular.module('boardOsApp')
         if (_.intersection([$scope.currentUser._id], _.pluck(task.watchers, '_id')).length > 0) {
           return true;
         }
-
       });
       return filtertasks;
     };
-    /*        jQuery(document).ready(function($) {
-        $('#header_notification_bar').on('show.bs.dropdown', function() {
-
-        });
-
-        $('.dropdown').on('show.bs.dropdown', function() {
-
-        });
-    });*/
   });

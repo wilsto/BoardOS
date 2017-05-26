@@ -22,6 +22,14 @@ exports.register = function(socket) {
     socket.emit('taskFull:run', data);
   });
 
+  process.on('dashboardCompletestart', function(data) {
+    socket.emit('dashboardComplete:start', data);
+  });
+
+  process.on('dashboardCompleterun', function(data) {
+    socket.emit('dashboardComplete:run', data);
+  });
+
 }
 
 function onSave(socket, doc, cb) {

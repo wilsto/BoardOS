@@ -20,7 +20,8 @@ angular.module('boardOsApp', [
     'angular.filter',
     'mdPickers',
     'ng-mfb',
-    'DlhSoft.Kanban.Angular.Components'
+    'DlhSoft.Kanban.Angular.Components',
+    'infinite-scroll'
   ])
   .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, NotificationProvider) {
     $urlRouterProvider.otherwise('/');
@@ -69,7 +70,8 @@ angular.module('boardOsApp', [
   })
 
   .value('cgBusyDefaults', {
-    message: 'Please wait, Processing calculation...'
+    message: 'Please wait, Processing calculation...',
+    wrapperClass: 'loadingboss'
   })
 
   .constant('progressStatusTask', [{

@@ -135,11 +135,6 @@
                 End <span ng-show="orderByField == 'metrics[task.metrics.length - 1].endDate'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
               </a>
             </th>
-            <th >
-              <a style="text-decoration: none" href="#" ng-click="orderByField='metrics[task.metrics.length - 1].date'; reverseSort = !reverseSort">
-                last Metric <span ng-show="orderByField == 'metrics[task.metrics.length - 1].date'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
-              </a>
-            </th>
             <th class="hidden-xs text-muted">
               <i class="fa fa-bookmark"></i>
               Action
@@ -147,8 +142,8 @@
             <th ng-if="isAdmin"></th>
           </tr>
         </thead>
-        <tbody>
-          <tr ng-repeat="task in tasks | orderBy:orderByField:reverseSort| filter:filter()">
+        <tbody infinite-scroll="getMoreData()" infinite-scroll-distance="3">
+          <tr ng-repeat="task in showTasks">
             <td style="text-align: center">
               <div popover-html-unsafe="<b>{{task.actors[0].name}}</b>" popover-trigger="mouseenter" popover-title="Owner Identity" popover-placement="right">
                 <img alt="" ng-src="{{ task.actors[0].avatar || 'assets/images/avatars/' + task.actors[0]._id + '.png'}} " class="img-circle" err-src="assets/images/avatars/avatar.png"/>
@@ -210,9 +205,6 @@
                 {{task.metrics[task.metrics.length - 1].progressStatus}}
               </span>
               <span class="label label-sm label-lightdanger"  ng-if="task.metrics[task.metrics.length - 1].progressStatus === 'Late' || task.metrics[task.metrics.length - 1].progressStatus === 'At Risk'">&nbsp;&nbsp;{{task.metrics[task.metrics.length - 1].endDate | date:'mediumDate'}}</span>
-            </td>
-            <td>
-              <span style="color:grey">{{task.metrics[task.metrics.length - 1].fromNow}}</span>
             </td>
             <td>
               <button class="btn btn-xs text-muted" ng-click="watchTask(task)">Follow</button>

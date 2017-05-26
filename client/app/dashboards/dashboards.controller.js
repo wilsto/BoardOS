@@ -2,13 +2,26 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('DashboardsCtrl', function($scope, $http, categoryKPI, Notification) {
+  .controller('DashboardsCtrl', function($scope, $rootScope, $http, categoryKPI, Notification) {
+    $scope.alldashboards = [];
     $scope.dashboards = [];
-    $scope.dashboard = {};
+    $scope.otherdashboards = [];
+    $scope.mydashboards = [];
+    $scope.orderByField = 'subscribed';
+    $scope.reverseSort = true;
     $scope.searchText = '';
-    $scope.config = {
-      tab1: true,
-      tab2: false
+
+    var filterDashboards = function(data) {
+      return _.filter(data, function(dashboard) {
+        if (!dashboard.activity) {
+          dashboard.activity = '';
+        }
+        if (!dashboard.context) {
+          dashboard.context = '';
+        }
+        var blnSearchText = ($scope.searchText.length === 0) ? true : dashboard.name.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0 || dashboard.activity.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0 || dashboard.context.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0;
+        return blnSearchText;
+      });
     };
 
     $scope.load = function() {
@@ -19,53 +32,72 @@ angular.module('boardOsApp')
       };
 
       $http.get('/api/dashboardCompletes/', myparams).success(function(dashboards) {
-        $scope.alldashboards = dashboards;
-        $scope.dashboards = dashboards;
-
+        $scope.alldashboards = [];
+        $scope.dashboards = [];
+        $scope.otherdashboards = [];
+        $scope.mydashboards = [];
+        _.each(dashboards, function(dashboard) {
+          dashboard.subscribed = false;
+          var userlist = _.pluck(dashboard.users, '_id');
+          var userindex = userlist.indexOf($scope.currentUser._id.toString());
+          if (userindex >= 0) {
+            dashboard.name = dashboard.users[userindex].dashboardname;
+            dashboard.subscribed = true;
+          }
+        });
+        $scope.alldashboards = _.sortBy(dashboards, ['activity', 'context']).reverse();
+        $scope.reloadDashboards();
       });
     };
 
-    $scope.save = function() {
+    $scope.getMoreData = function() {
+      var filterdashboards = _.where($scope.alldashboards, function(dashboard) {
+        var userlist = _.pluck(dashboard.users, '_id');
+        return userlist.indexOf($scope.currentUser._id.toString()) < 0;
+      });
+      filterdashboards = filterDashboards(filterdashboards);
+      $scope.otherdashboards = filterdashboards.slice(0, $scope.otherdashboards.length + 15);
+      $scope.dashboards = $scope.mydashboards.concat($scope.otherdashboards);
+    };
 
-      if (typeof $scope.dashboard._id === 'undefined') {
-        $http.post('/api/dashboards', $scope.dashboard);
-        Notification.success('Dashboard "' + $scope.dashboard.name + '" was created');
-      } else {
-        $http.put('/api/dashboards/' + $scope.dashboard._id, $scope.dashboard);
-        Notification.success('Dashboard "' + $scope.dashboard.name + '" was updated');
-      }
-      $scope.load();
-      $scope.config = {
-        tab1: true,
-        tab2: false
-      };
+    $scope.reloadDashboards = function() {
+      var mydashboards = _.filter($scope.alldashboards, function(dashboard) {
+        var userlist = _.pluck(dashboard.users, '_id');
+        return userlist.indexOf($scope.currentUser._id.toString()) >= 0;
+      });
+      mydashboards = filterDashboards(mydashboards);
+      $scope.mydashboards = mydashboards;
+      var filterdashboards = _.where($scope.alldashboards, function(dashboard) {
+        var userlist = _.pluck(dashboard.users, 'user');
+        return userlist.indexOf($scope.currentUser._id.toString()) < 0;
+      });
+      filterdashboards = filterDashboards(filterdashboards);
+      $scope.otherdashboards = filterdashboards.slice(0, Math.max(15, $scope.dashboards.length - mydashboards.length));
+      $scope.dashboards = $scope.mydashboards.concat($scope.otherdashboards);
     };
 
     $scope.pinDashboard = function(dashboard) {
-      dashboard.owner = $scope.currentUser;
-      delete dashboard._id;
-      delete dashboard.__v;
-      delete dashboard.kpis;
-      $http.post('/api/dashboards', dashboard);
-      Notification.success('Dashboard "' + $scope.dashboard.name + '" was pinned to your dashboards');
+      $http.post('/api/dashboardCompletes/subscribe/' + dashboard._id, $scope.currentUser);
+      Notification.success('You subscribe to dashboard "' + dashboard.name + '"');
+      $scope.load();
+    };
+
+    $scope.unpinDashboard = function(dashboard) {
+      $http.post('/api/dashboardCompletes/unsubscribe/' + dashboard._id, $scope.currentUser);
+      Notification.success('You unsubscribe to dashboard "' + dashboard.name + '"');
       $scope.load();
     };
 
     $scope.$watch('searchText', function() {
-      $scope.dashboards = ($scope.searchText.length === 0) ? $scope.alldashboards : _.filter($scope.alldashboards, function(dashboard) {
-        dashboard.name = dashboard.name || '';
-        dashboard.activity = dashboard.activity || '';
-        dashboard.context = dashboard.context || '';
-        return dashboard.name.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0 || dashboard.activity.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0 || dashboard.context.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0;
-      });
+      $scope.reloadDashboards();
     });
 
     $scope.delete = function(dashboard, index) {
-      bootbox.confirm('Are you sure?', function(result) {
+      bootbox.confirm('Are you sure to delete this dashboard ?', function(result) {
         if (result) {
-          $http.delete('/api/dashboards/' + dashboard._id).success(function() {
-            $scope.dashboards.splice(index, 1);
-            Notification.success('Dashboard "' + $scope.dashboard.name + '" was deleted');
+          $http.delete('/api/dashboardCompletes/' + dashboard._id).success(function() {
+            Notification.success('Dashboard "' + dashboard.name + '" was deleted');
+            $scope.load();
           });
         }
       });

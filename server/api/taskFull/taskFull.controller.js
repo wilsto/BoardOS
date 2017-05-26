@@ -73,7 +73,7 @@ function createAllFullTask() {
         process.emit('taskFullstart', task._id);
         createFullTask(task._id, false, function(data) {
           process.emit('taskFullrun', data._id);
-          console.log('fulltask', data._id);
+          //console.log('fulltask', data._id);
         });
       });
     });
@@ -620,7 +620,7 @@ exports.countByMonth = function(req, res) {
   o.map = function() {
     emit((new Date(this.date)).getFullYear() + '.' + ((new Date(this.date)).getMonth() + 1), {
       count: 1,
-      qty: this.comments.length
+      qty: (this.comments) ? this.comments.length : 0
     });
   };
   o.reduce = function(k, values) {

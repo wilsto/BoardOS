@@ -11,6 +11,14 @@ Purchase: http://themeforest.net/item/conquer-responsive-admin-dashboard-templat
 }
 
 
+/** Reset and overrides CG BUSY**/
+
+.cg-busy {
+  margin-left: -40px!important;
+  width: 120%!important;
+}
+
+
 /***
 Reset and overrides
 ***/

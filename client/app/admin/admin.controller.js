@@ -5,7 +5,9 @@ angular.module('boardOsApp')
 
     // Use the User $resource to fetch all users
     $scope.users = User.query();
+    
     $scope.formData = {};
+    $scope.searchFilter = '';
     $scope.sortHeader = 'name';
     $scope.onlyactive = true;
     $http.get('/api/users/roles').success(function(roles) {

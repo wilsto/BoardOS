@@ -11,16 +11,6 @@ angular.module('boardOsApp')
       }, 0) / arr.length;
     }
 
-    $scope.dashboard = {
-      name: '',
-      paramId: $stateParams.id,
-      owner: $scope.currentUser
-    };
-
-    $scope.createNewTask = function(data) {
-
-    };
-
     $scope.refreshDashboard = function() {
       $scope.myPromise = $http.get('/api/dashboardCompletes/executeId/' + $stateParams.id).success(function(response) {
         $scope.loadCompleteDashboard();
@@ -62,30 +52,37 @@ angular.module('boardOsApp')
         switch (data) {
           case 'Last 7 Days':
             dateRangeService.rangeDate = 'last7';
+            dateRangeService.rangeDateTxt = 'Last 7 Days';
             $scope.datediff = 7;
             break;
           case 'Last 14 Days':
             dateRangeService.rangeDate = 'last14';
+            dateRangeService.rangeDateTxt = 'Last 14 Days';
             $scope.datediff = 14;
             break;
           case 'Last 30 Days':
             dateRangeService.rangeDate = 'last30';
+            dateRangeService.rangeDateTxt = 'Last 30 Days';
             $scope.datediff = 30;
             break;
           case 'Last 90 Days':
             dateRangeService.rangeDate = 'last90';
+            dateRangeService.rangeDateTxt = 'Last 90 Days';
             $scope.datediff = 90;
             break;
           case 'Last 180 Days':
             dateRangeService.rangeDate = 'last180';
+            dateRangeService.rangeDateTxt = 'Last 180 Days';
             $scope.datediff = 180;
             break;
           case 'Last 365 Days':
             dateRangeService.rangeDate = 'last365';
+            dateRangeService.rangeDateTxt = 'Last 365 Days';
             $scope.datediff = 365;
             break;
           case 'All':
-            dateRangeService.rangeDate = 'task';
+            dateRangeService.rangeDate = 'All';
+            dateRangeService.rangeDateTxt = 'All';
             $scope.datediff = 5000;
             break;
         }
@@ -115,6 +112,14 @@ angular.module('boardOsApp')
     $scope.loadCompleteDashboard = function() {
       if ($stateParams.id) {
         $scope.myPromise = $http.get('/api/dashboardCompletes/' + $stateParams.id).success(function(dashboard) {
+
+          dashboard.subscribed = false;
+          var userlist = _.pluck(dashboard.users, '_id');
+          $scope.userindex = userlist.indexOf($scope.currentUser._id.toString());
+          if ($scope.userindex >= 0) {
+            dashboard.name = dashboard.users[$scope.userindex].dashboardname;
+            dashboard.subscribed = true;
+          }
           $scope.dashboard = dashboard;
 
           $rootScope.perimeter.name = dashboard.name;
@@ -127,7 +132,7 @@ angular.module('boardOsApp')
 
           $scope.tasksNb = dashboard.tasks.length;
 
-          $rootScope.$broadcast('dateRangeService:updated');
+          $rootScope.$broadcast('dateRangeService:updated', dateRangeService.rangeDateTxt);
 
           var dataGoals = [];
           var dataAllGoals = [];
@@ -281,6 +286,16 @@ angular.module('boardOsApp')
             initializing = false;
           });
         });
+      } else {
+        $scope.userindex = 0;
+        $scope.dashboard = {
+          name: '',
+          paramId: $stateParams.id,
+          users: [{
+            user: $scope.currentUser._id,
+            name: ''
+          }]
+        };
       }
     };
     $scope.loadCompleteDashboard();
@@ -289,7 +304,8 @@ angular.module('boardOsApp')
     // create a new dashboard
     // *******************
     $scope.create = function() {
-      $http.post('/api/dashboards', $scope.dashboard).success(function(data) {
+      
+      $http.post('/api/dashboardCompletes', $scope.dashboard).success(function(data) {
         var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was created';
         Notification.success(logInfo);
         $location.path('/dashboard/' + data._id);
@@ -300,24 +316,24 @@ angular.module('boardOsApp')
     // update a task
     // *******************
     $scope.update = function() {
-      $http.put('/api/dashboards/' + $scope.dashboard._id, $scope.dashboard).success(function() {
+      $http.put('/api/dashboardCompletes/' + $scope.dashboard._id, $scope.dashboard).success(function() {
         var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was updated';
-        $http.post('/api/logs', {
-          info: logInfo,
-          actor: $scope.currentUser
-        });
         Notification.success(logInfo);
         $scope.loadCompleteDashboard();
       });
     };
 
-
     $scope.$watchGroup(['dashboard.name', 'dashboard.context', 'dashboard.activity'], function(newMap, previousMap) {
       if (initializing) {
         $timeout(function() {
           //initializing = true;
+          if ($scope.dashboard) {
+            $scope.dashboard.users[$scope.userindex].name = $scope.dashboard.name;
+          }
+          //
         });
       } else {
+        $scope.dashboard.users[$scope.userindex].name = $scope.dashboard.name;
         $scope.update();
       }
     }, true);

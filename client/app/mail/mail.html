@@ -1,35 +1,38 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 <!-- BEGIN PAGE CONTENT-->
 <div class="row">
-<div class="col-md-1">
-  <button class="btn" ng-click="sendMail()">Run</button>
-</div>
-<div class="col-md-11 vcenter">
-  Send a mail to everyone with current open tasks.
-</div>
+    <div class="col-md-1">
+        <button class="btn" ng-click="sendMail()">Run</button>
+    </div>
+    <div class="col-md-11 vcenter">
+        Send a mail to everyone with current open tasks.
+    </div>
 </div>
 <br>
 <div class="row">
-<div class="col-md-1">
-  <button class="btn" ng-click="calculateTasks()">Run	</button>
-</div>
-<div class="col-md-11 vcenter">
-Recalculate every tasks<br/>
- <span style="font-weight:bold;color:rgb(61, 137, 170)" ng-if="taskNb>0"> {{(taskDoneNb / taskNb *100).toFixed(1)}}%</span><br/>
- <small class="text-muted"> {{taskDoneNb}} / {{taskNb}} tasks</small><br/>
- <div class="text-danger" ng-bind-html="messageTask"></div><span ng-if="number>0">{{number}} secondes</span>
+    <div class="col-md-1">
+        <button class="btn" ng-click="calculateTasks()">Run	</button>
+    </div>
+    <div class="col-md-11 vcenter">
+        Recalculate every tasks<br/>
+        <span style="font-weight:bold;color:rgb(61, 137, 170)" ng-if="taskNb>0"> {{(taskDoneNb / taskNb *100).toFixed(1)}}%</span><br/>
+        <small class="text-muted"> {{taskDoneNb}} / {{taskNb}} tasks</small><br/>
+        <div class="text-danger" ng-bind-html="messageTask"></div><span ng-if="number>0">{{number}} secondes</span>
 
 
-</div>
+    </div>
 </div>
 
 <br>
 
 <div class="row">
-<div class="col-md-1">
-  <button class="btn" ng-click="calculateDashboards()">Run	</button>
-</div>
-<div class="col-md-11 vcenter">
-Calculate every dashboards .
-</div>
+    <div class="col-md-1">
+        <button class="btn" ng-click="calculateDashboards()">Run	</button>
+    </div>
+    <div class="col-md-11 vcenter">
+        Recalculate every dashboards<br/>
+        <span style="font-weight:bold;color:rgb(61, 137, 170)" ng-if="dashboardNb>0"> {{(dashboardDoneNb / dashboardNb *100).toFixed(1)}}%</span><br/>
+        <small class="text-muted"> {{dashboardDoneNb}} / {{dashboardNb}} dashboards</small><br/>
+        <div class="text-danger" ng-bind-html="messageDashboard"></div><span ng-if="numberDashboard>0">{{numberDashboard}} secondes</span>
+    </div>
 </div>
