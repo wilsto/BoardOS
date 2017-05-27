@@ -17,6 +17,22 @@ angular.module('boardOsApp')
       });
     };
 
+
+    $scope.createNewTask = function(data) {
+      
+      switch (data) {
+        case 'context':
+          $location.path('/task//' + $scope.dashboard.context);
+          break;
+        case 'activity':
+          $location.path('/task///' + $scope.dashboard.activity);
+          break;
+        case 'both':
+          $location.path('/task//' + $scope.dashboard.context + '/' + $scope.dashboard.activity);
+          break;
+      }
+    };
+
     $scope.loadTasks = function() {
       $http.get('/api/taskFulls/countByMonth', {
         params: {
@@ -116,10 +132,10 @@ angular.module('boardOsApp')
           dashboard.subscribed = false;
           var userlist = _.pluck(dashboard.users, '_id');
           $scope.userindex = userlist.indexOf($scope.currentUser._id.toString());
-          
+
           if ($scope.userindex >= 0 && dashboard.users[$scope.userindex] && dashboard.users[$scope.userindex].dashboardName && dashboard.users[$scope.userindex].dashboardName.length > 0) {
             dashboard.name = dashboard.users[$scope.userindex].dashboardName;
-            
+
             dashboard.subscribed = true;
           }
           $scope.dashboard = dashboard;

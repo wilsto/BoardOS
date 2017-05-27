@@ -608,41 +608,33 @@ angular.module('boardOsApp')
 
 
     $scope.delete = function() {
-      bootbox.confirm('Are you sure to delete this task and all associated metrics ? It can NOT be undone.', function(result) {
+      bootbox.confirm('Are you sure to delete this task ? It can NOT be undone.', function(result) {
         if (result) {
           $http.delete('/api/taskFulls/' + $scope.task._id).success(function() {
             var logInfo = 'Task "' + $scope.task.name + '" was deleted';
             Notification.success(logInfo);
-            $location.path('/tasks');
+            $location.path('/');
           });
         }
       });
     };
 
     $scope.withdraw = function() {
-      var withdrawnmetric = _.clone($scope.currentTask.metrics);
-      Auth.getCurrentUser(function(data) {
-        delete withdrawnmetric._id;
-        withdrawnmetric.status = 'Withdrawn';
-        withdrawnmetric.comments = 'Finally Withdrawn';
-        withdrawnmetric.actor = data;
-        withdrawnmetric.date = new Date();
-
-        bootbox.confirm('Are you sure to withdraw and close this task ?', function(result) {
-          if (result) {
-            $http.post('/api/metrics', withdrawnmetric).success(function(data) {
-              var logInfo = 'The Task "' + $scope.currentTask.name + '" was withdrawn';
-
-              $http.post('/api/logs', {
-                info: logInfo,
-                actor: $scope.currentUser
-              });
-
-              Notification.success(logInfo);
+      bootbox.confirm('Are you sure to withdraw and close the task "' + $scope.task.name + '" ?', function(result) {
+        
+        if (result) {
+          $scope.task.metrics[$scope.task.metrics.length - 1].status = 'Withdrawn';
+          
+          $http.put('/api/taskFulls/' + $scope.task._id, $scope.task).success(function(data) {
+            
+            var logInfo = 'Task "' + $scope.task.name + '" was withdrawn';
+            $timeout(function() {
+              initializing = true;
               $scope.loadTask();
-            });
-          }
-        });
+            }, 500);
+            Notification.success(logInfo);
+          });
+        }
       });
     };
 

@@ -2,9 +2,9 @@
 <nav mfb-menu position="br" effect="slidein" label="create a new task with same"
      active-icon="ion-edit" resting-icon="ion-plus-round"
      toggling-method="click">
-     <a mfb-button label="context" icon="ion-android-pin" ng-click="createNewTask(context)"></a>
-     <a mfb-button label="activity" icon="ion-ios-gear" ng-click="createNewTask(activity)"></a>
-     <a mfb-button label="both" icon="ion-fork-repo" ng-click="createNewTask(both)"></a>
+     <a mfb-button label="context" icon="ion-android-pin" ng-click="createNewTask('context')"></a>
+     <a mfb-button label="activity" icon="ion-ios-gear" ng-click="createNewTask('activity')"></a>
+     <a mfb-button label="both" icon="ion-fork-repo" ng-click="createNewTask('both')"></a>
 </nav>
 <!--* Modal Part-->
 <div class="row"  cg-busy="myPromise">
@@ -169,7 +169,7 @@
                       </tr>
                       <tr style="background:#eee;text-align:right">
                           <td colspan="3">
-                              <a href="/task/" >
+                              <a href="#" ng-click="createNewTask('both')">
                                 <i class="fa fa-plus"></i>
                                 <span class="dont-break-out"> Create a new task</span>
                               </a >
