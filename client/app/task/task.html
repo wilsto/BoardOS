@@ -455,7 +455,8 @@
                                 <td style="text-align:left;width:35%;font-size:13px">
                                     <span ng-if="KPI.calcul.task !== undefined && KPI.calcul.task !== null" class="badge" ng-style="{'background-color':giveMeMyColor(KPI.calcul.task, KPI.category)}" style="height:15px;line-height:10px;width:15px;margin-right: 10px">&nbsp;</span>
                                     <span class="text-muted days" ng-if="KPI.name==='Predicted OverCharge'">
-                                      {{parseFloat((task.metrics[task.metrics.length-1].projectedWorkload - task.metrics[task.metrics.length-1].targetLoad).toFixed(2))}}
+                                    <span ng-if="task.metrics[task.metrics.length-1].projectedWorkload">  {{parseFloat((task.metrics[task.metrics.length-1].projectedWorkload - task.metrics[task.metrics.length-1].targetLoad).toFixed(2))}}</span>
+                                    <span ng-if="!task.metrics[task.metrics.length-1].projectedWorkload">0</span>
                                     </span>
                                     <span class="text-muted days" ng-if="KPI.name==='Delivery Overdue'">
                                       {{task.metrics[task.metrics.length-1].delay}}

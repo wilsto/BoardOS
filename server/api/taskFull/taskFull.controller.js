@@ -813,6 +813,11 @@ exports.update = function(req, res) {
     var dateNow = new Date();
     _.each(task.metrics, function(metric, index) { // pour chaque metric
 
+      metric.targetstartDate = moment(metric.targetstartDate).hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
+      metric.targetEndDate = moment(metric.targetEndDate).hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
+      metric.startDate = moment(metric.startDate).hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
+      metric.endDate = moment(metric.endDate).hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
+
       var startDate = (metric.startDate) ? metric.startDate : metric.targetstartDate;
       var endDate = (metric.endDate) ? metric.endDate : (metric.startDate) ? metric.startDate : metric.targetEndDate;
       metric.endDate = endDate;
@@ -823,20 +828,15 @@ exports.update = function(req, res) {
       }
 
       // nombre de jours séparant la date de début, fin, entre les deux
-      metric.duration = calcBusinessDays(mainstart, endDate);
-      console.log('endDate', endDate);
-      console.log('mainstart', mainstart);
-      metric.delay = calcBusinessDays(targetEndDate, endDate) - 1;
+      metric.duration = Math.max(calcBusinessDays(mainstart, endDate), 0);
+      metric.delay = Math.max(calcBusinessDays(targetEndDate, endDate) - 1, 0);
 
       // predictedCharge
       metric.projectedWorkload = (metric.progress > 0) ? reworkspent + Math.round(1000 * metric.timeSpent * 100 / parseFloat(metric.progress)) / 1000 : metric.targetLoad;
-      console.log('metric.duration', metric.duration);
       if (metric.duration === 1) {
         metric.duration = metric.projectedWorkload;
       }
 
-      console.log('metric.projectedWorkload', metric.projectedWorkload);
-      console.log('metric.duration', metric.duration);
       // progressStatus
       if (moment(metric.endDate).isAfter(targetEndDate, 'day')) {
         metric.progressStatus = 'Late';
