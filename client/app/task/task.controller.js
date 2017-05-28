@@ -11,6 +11,16 @@ angular.module('boardOsApp')
       $scope.currentUser = Auth.getCurrentUser();
     });
 
+    // Mettre les informations transversales en mémoire
+    $http.get('/api/hierarchies/listContext').success(function(contexts) {
+      $rootScope.contexts = [];
+      _.each(contexts, function(context) {
+        $rootScope.contexts.push({
+          longname: context
+        });
+      });
+    });
+
     // recherche des membres
     $http.get('/api/users/members').success(function(members) {
       $scope.members = members;
@@ -165,7 +175,6 @@ angular.module('boardOsApp')
             }
           }
           if ($scope.task._id !== undefined) {
-
             $scope.update();
           }
         }
@@ -349,35 +358,35 @@ angular.module('boardOsApp')
           $scope.ActionPlanIsExpanded = (task.metrics[0].status === 'Finished' || task.metrics[0].status === 'Withdrawn');
         });
       } else {
+        // si cela n'existe pas
+        $scope.task.context = $stateParams.context;
+        $scope.task.activity = $stateParams.activity;
+        $scope.task.date = Date.now();
+        $scope.task.comments = [{
+          text: 'create task',
+          date: Date.now(),
+          user: $scope.currentUser._id,
+          auto: true
+        }];
+        $scope.task.metrics = [];
+        $scope.task.metrics.push({
+          progress: 0,
+          timeSpent: 0,
+          status: 'Not Started'
+        });
+        $scope.task.todos = [];
+        $scope.task.actors = [{
+          _id: $scope.currentUser._id,
+          name: $scope.currentUser.name,
+          avatar: $scope.currentUser.avatar
+        }];
+        $scope.task.followers = [];
+        $scope.errors = {};
+        $scope.taskAlreadyExist = {
+          id: null,
+          name: null
+        };
         $timeout(function() {
-          // si cela n'existe pas
-          $scope.task.context = $stateParams.context;
-          $scope.task.activity = $stateParams.activity;
-          $scope.task.date = Date.now();
-          $scope.task.comments = [{
-            text: 'create task',
-            date: Date.now(),
-            user: $scope.currentUser._id,
-            auto: true
-          }];
-          $scope.task.metrics = [];
-          $scope.task.metrics.push({
-            progress: 0,
-            timeSpent: 0,
-            status: 'Not Started'
-          });
-          $scope.task.todos = [];
-          $scope.task.actors = [{
-            _id: $scope.currentUser._id,
-            name: $scope.currentUser.name,
-            avatar: $scope.currentUser.avatar
-          }];
-          $scope.task.followers = [];
-          $scope.errors = {};
-          $scope.taskAlreadyExist = {
-            id: null,
-            name: null
-          };
           initializing = false;
         }, 500);
       }
@@ -621,12 +630,12 @@ angular.module('boardOsApp')
 
     $scope.withdraw = function() {
       bootbox.confirm('Are you sure to withdraw and close the task "' + $scope.task.name + '" ?', function(result) {
-        
+
         if (result) {
           $scope.task.metrics[$scope.task.metrics.length - 1].status = 'Withdrawn';
-          
+
           $http.put('/api/taskFulls/' + $scope.task._id, $scope.task).success(function(data) {
-            
+
             var logInfo = 'Task "' + $scope.task.name + '" was withdrawn';
             $timeout(function() {
               initializing = true;

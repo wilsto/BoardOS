@@ -1,5 +1,22 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.75...HEAD)
+
+**Fixed bugs:**
+
+- Les 4 premières taches créées dans BOSS n'affichent pas de KPI [\#92](https://github.com/wilsto/BoardOS/issues/92)
+- L'ordre des élements est incorrect dans les hierarchies  [\#58](https://github.com/wilsto/BoardOS/issues/58)
+
+**Closed issues:**
+
+- Optimiser le nombre de dashboards \(1 meme context et activty\) = unique [\#199](https://github.com/wilsto/BoardOS/issues/199)
+- La fonction withdraw this task ne fonctionne pas correctement [\#180](https://github.com/wilsto/BoardOS/issues/180)
+
+## [v1.6.75](https://github.com/wilsto/boardos/tree/v1.6.75) (2017-05-27)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.74...v1.6.75)
+
 ## [v1.6.74](https://github.com/wilsto/boardos/tree/v1.6.74) (2017-05-27)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.73...v1.6.74)
 

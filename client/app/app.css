@@ -7214,6 +7214,7 @@ TASK
 }
 
 .scrollable-dropdown-menu .dropdown-menu {
+  width: 75%;
   max-height: 500px;
   overflow-y: auto;
 }

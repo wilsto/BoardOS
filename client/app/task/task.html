@@ -136,22 +136,26 @@
                                 </h1>
                                 <ul class="list list-inline">
                                     <li style="margin-top:5px">
+                                      <div class="scrollable-dropdown-menu" style="display:inline-block; ">
                                         <i class="fa fa-flash"></i>
-                                        <span class="text-muted" style="margin-right:10px">
+                                        <div class="text-muted" style="margin-right:10px;display:inline-block; ">
                                           Activity
-                                        </span>
-                                        <a href="#" editable-text="task.activity" e-style="width: 500px" e-uib-typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:8" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
+                                        </div>
+                                        <a style="display:inline-block; " href="#" editable-text="task.activity" e-style="width: 500px;display:inline-block;" e-uib-typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:50" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
                                           {{task.activity || 'Please give activity' }}
                                         </a>
+                                      </div>
                                     </li><br>
                                     <li style="margin-top:5px">
+                                      <div class="scrollable-dropdown-menu" style="display:inline-block; ">
                                         <i class="fa fa-map-marker"></i>
                                         <span class="text-muted" style="margin-right:10px">
                                           Context
                                         </span>
-                                        <a href="#" editable-text="task.context" e-style="width: 500px" e-uib-typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:8">
+                                          <a href="#" editable-text="task.context" e-style="width: 500px" e-uib-typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:50">
                                           {{task.context || 'Please give context' }}
                                         </a>
+                                      </div>
                                     </li>
                                     <li style="margin-top:5px" >
                                       <span ng-show="messageCreation" class="label label-danger">  {{messageCreation}}</span>

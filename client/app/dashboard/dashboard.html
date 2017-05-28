@@ -22,22 +22,29 @@
           </h1>
           <ul class="list list-inline">
               <li style="margin-top:5px">
+                <div class="scrollable-dropdown-menu">
+
                   <i class="fa fa-flash"></i>
                   <span class="text-muted" style="margin-right:10px">
                     Activity
                   </span>
-                  <a href="#" editable-text="dashboard.activity" class="notMandatoryField" e-style="width: 500px" e-uib-typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:8">
+                  <a href="#" editable-text="dashboard.activity" class="notMandatoryField" e-style="width: 500px" e-uib-typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:50">
                     {{dashboard.activity || 'All' }}
                   </a>
+                </div>
               </li><br>
               <li style="margin-top:5px">
+                <div class="scrollable-dropdown-menu">
+
                   <i class="fa fa-map-marker"></i>
                   <span class="text-muted" style="margin-right:10px">
                     Context
                   </span>
-                  <a href="#" editable-text="dashboard.context"  class="notMandatoryField" e-style="width: 500px" e-uib-typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:8">
+                  <a href="#" editable-text="dashboard.context"  class="notMandatoryField" e-style="width: 500px" e-uib-typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:50">
                     {{dashboard.context || 'All' }}
                   </a>
+                </div>
+                  
               </li>
               <li style="margin-top:5px" >
                 <span ng-show="messageCreation" class="label label-danger">  {{messageCreation}}</span>

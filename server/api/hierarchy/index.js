@@ -6,6 +6,7 @@ var controller = require('./hierarchy.controller');
 var router = express.Router();
 
 router.get('/', controller.index);
+router.get('/listContext', controller.listContext);
 router.get('/:id', controller.show);
 router.get('/merge/:id', controller.merge);
 router.get('/list/:id', controller.list);

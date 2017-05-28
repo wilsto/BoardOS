@@ -244,8 +244,13 @@ angular.module('boardOsApp', [
     $rootScope.constant.groupByKPI = groupByKPI;
 
     // Mettre les informations transversales en mémoire
-    $http.get('/api/hierarchies/list/Context').success(function(contexts) {
-      $rootScope.contexts = contexts.list;
+    $http.get('/api/hierarchies/listContext').success(function(contexts) {
+      $rootScope.contexts = [];
+      _.each(contexts, function(context) {
+        $rootScope.contexts.push({
+          longname: context
+        });
+      });
     });
 
     $http.get('/api/hierarchies/list/Activity').success(function(activities) {
