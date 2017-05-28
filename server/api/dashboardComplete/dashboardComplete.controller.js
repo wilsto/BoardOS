@@ -487,12 +487,51 @@ exports.show = function(req, res) {
 
 // Creates a new dashboardComplete in the DB.
 exports.create = function(req, res) {
-  DashboardComplete.create(req.body, function(err, dashboardComplete) {
+  // req.body
+  var filter = {};
+  filter.activity = req.body.activity || '';
+  filter.context = req.body.context || '';
+  DashboardComplete.find(filter, function(err, dashboardCompletes) {
     if (err) {
       return handleError(res, err);
     }
-    process.emit('dashboardChanged', dashboardComplete);
-    return res.status(201).json(dashboardComplete);
+    if (dashboardCompletes.length > 0) {
+      var updated = dashboardCompletes[0];
+      // on ajoute le user au dashboard déjà existant
+      var users = updated.users || [];
+      var userlist = _.pluck(users, '_id');
+      var userindex = -1;
+      _.each(userlist, function(data, idx) {
+        // égalité imparfaite car id
+        if (data.toString() === req.body.users[0]._id.toString()) {
+          userindex = idx;
+          return;
+        }
+      });
+      if (userindex === -1) {
+        users.push({
+          _id: req.body.users[0]._id,
+          dashboardName: req.body.users[0].dashboardName
+        });
+      }
+      updated.users = users;
+      updated.markModified('users');
+      updated.save(function(err) {
+        if (err) {
+          return handleError(res, err);
+        }
+        return res.status(200).json(updated);
+      });
+
+    } else {
+      DashboardComplete.create(req.body, function(err, dashboardComplete) {
+        if (err) {
+          return handleError(res, err);
+        }
+        process.emit('dashboardChanged', dashboardComplete);
+        return res.status(201).json(dashboardComplete);
+      });
+    }
   });
 };
 
