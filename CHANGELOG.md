@@ -1,8 +1,7 @@
 # Change Log
 
-## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
-
-[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.75...HEAD)
+## [v1.6.76](https://github.com/wilsto/boardos/tree/v1.6.76) (2017-05-28)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.75...v1.6.76)
 
 **Fixed bugs:**
 
@@ -13,6 +12,7 @@
 
 - Optimiser le nombre de dashboards \(1 meme context et activty\) = unique [\#199](https://github.com/wilsto/BoardOS/issues/199)
 - La fonction withdraw this task ne fonctionne pas correctement [\#180](https://github.com/wilsto/BoardOS/issues/180)
+- Refondre le context et les activités [\#159](https://github.com/wilsto/BoardOS/issues/159)
 
 ## [v1.6.75](https://github.com/wilsto/boardos/tree/v1.6.75) (2017-05-27)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.74...v1.6.75)

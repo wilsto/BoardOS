@@ -240,37 +240,9 @@ angular.module('boardOsApp')
     };
 
     $scope.reopen = function() {
-
-      var ModalInstanceCtrl = function($scope, $uibModalInstance) {
-        $scope.selected = {
-          reworkReason: null,
-          comment: null,
-          targetstartDate: null,
-          targetEndDate: null,
-          targetload: null,
-        };
-
-        $scope.showDatePicker = function(item, datename, ev) {
-          var currentdate = (item[datename]) ? new Date(item[datename]) : new Date();
-          $mdpDatePicker(currentdate, {
-            targetEvent: ev
-          }).then(function(selectedDate) {
-            item[datename] = selectedDate.toISOString();
-          });
-        };
-
-        $scope.ok = function() {
-          $uibModalInstance.close($scope.selected);
-        };
-
-        $scope.cancel = function() {
-          $uibModalInstance.dismiss('cancel');
-        };
-      };
-
       var modalInstance = $uibModal.open({
         templateUrl: 'reOpenModal.html',
-        controller: ModalInstanceCtrl,
+        controller: 'ModalInstanceCtrl',
         backdrop: 'static',
         keyboard: false
       });
@@ -296,10 +268,6 @@ angular.module('boardOsApp')
       });
 
     };
-
-    // socket.on('taskComplete:save', function(data) {
-    //   $scope.loadTask();
-    // });
 
     $rootScope.$on('reloadTask', function(event, data) {
       $scope.loadTask();
@@ -358,37 +326,40 @@ angular.module('boardOsApp')
           $scope.ActionPlanIsExpanded = (task.metrics[0].status === 'Finished' || task.metrics[0].status === 'Withdrawn');
         });
       } else {
-        // si cela n'existe pas
-        $scope.task.context = $stateParams.context;
-        $scope.task.activity = $stateParams.activity;
-        $scope.task.date = Date.now();
-        $scope.task.comments = [{
-          text: 'create task',
-          date: Date.now(),
-          user: $scope.currentUser._id,
-          auto: true
-        }];
-        $scope.task.metrics = [];
-        $scope.task.metrics.push({
-          progress: 0,
-          timeSpent: 0,
-          status: 'Not Started'
-        });
-        $scope.task.todos = [];
-        $scope.task.actors = [{
-          _id: $scope.currentUser._id,
-          name: $scope.currentUser.name,
-          avatar: $scope.currentUser.avatar
-        }];
-        $scope.task.followers = [];
-        $scope.errors = {};
-        $scope.taskAlreadyExist = {
-          id: null,
-          name: null
-        };
+        $timeout(function() {
+          // si cela n'existe pas
+          $scope.task.context = $stateParams.context;
+          $scope.task.activity = $stateParams.activity;
+          $scope.task.date = Date.now();
+          $scope.task.comments = [{
+            text: 'create task',
+            date: Date.now(),
+            user: $scope.currentUser._id,
+            auto: true
+          }];
+          $scope.task.metrics = [];
+          $scope.task.metrics.push({
+            progress: 0,
+            timeSpent: 0,
+            status: 'Not Started'
+          });
+          $scope.task.todos = [];
+          $scope.task.actors = [{
+            _id: $scope.currentUser._id,
+            name: $scope.currentUser.name,
+            avatar: $scope.currentUser.avatar
+          }];
+          $scope.task.followers = [];
+          $scope.errors = {};
+          $scope.taskAlreadyExist = {
+            id: null,
+            name: null
+          };
+        }, 500);
+
         $timeout(function() {
           initializing = false;
-        }, 500);
+        }, 800);
       }
     };
 
@@ -730,4 +701,30 @@ angular.module('boardOsApp')
     };
 
 
+  })
+  .controller('ModalInstanceCtrl', function($scope, $mdpDatePicker, $uibModalInstance) {
+    $scope.selected = {
+      reworkReason: null,
+      comment: null,
+      targetstartDate: null,
+      targetEndDate: null,
+      targetload: null,
+    };
+
+    $scope.showDatePicker = function(item, datename, ev) {
+      var currentdate = (item[datename]) ? new Date(item[datename]) : new Date();
+      $mdpDatePicker(currentdate, {
+        targetEvent: ev
+      }).then(function(selectedDate) {
+        item[datename] = selectedDate.toISOString();
+      });
+    };
+
+    $scope.ok = function() {
+      $uibModalInstance.close($scope.selected);
+    };
+
+    $scope.cancel = function() {
+      $uibModalInstance.dismiss('cancel');
+    };
   });
