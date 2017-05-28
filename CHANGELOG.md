@@ -1,5 +1,19 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.77...HEAD)
+
+**Closed issues:**
+
+- targetLoad not working when rework [\#206](https://github.com/wilsto/BoardOS/issues/206)
+- Repoen ne marche pas en recette [\#204](https://github.com/wilsto/BoardOS/issues/204)
+- Ajouter le champ "Task review " pour les positionner dans la colonne ACT [\#203](https://github.com/wilsto/BoardOS/issues/203)
+- Créer une tache vie un bouton rouge [\#200](https://github.com/wilsto/BoardOS/issues/200)
+
+## [v1.6.77](https://github.com/wilsto/boardos/tree/v1.6.77) (2017-05-28)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.76...v1.6.77)
+
 ## [v1.6.76](https://github.com/wilsto/boardos/tree/v1.6.76) (2017-05-28)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.75...v1.6.76)
 

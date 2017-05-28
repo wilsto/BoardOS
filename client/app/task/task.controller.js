@@ -115,6 +115,9 @@ angular.module('boardOsApp')
       $scope.task.todos[index].isDone = !$scope.task.todos[index].isDone;
     };
 
+    $scope.changeStatusReviewTask = function() {
+      $scope.task.reviewTask = !$scope.task.reviewTask;
+    };
 
     $scope.$watch('task.metrics', function(newVal, oldVal) {
       if (!initializing) {
@@ -248,6 +251,7 @@ angular.module('boardOsApp')
       });
 
       modalInstance.result.then(function(result) {
+        
         var maintenant = new Date().toISOString();
         $scope.task.comments.push({
           text: result.comment,
@@ -394,7 +398,9 @@ angular.module('boardOsApp')
     // update a task
     // *******************
     $scope.update = function() {
+      
       $http.put('/api/taskFulls/' + $scope.task._id, $scope.task).success(function(data) {
+        
         var logInfo = 'Task "' + $scope.task.name + '" was updated';
         $timeout(function() {
           initializing = true;

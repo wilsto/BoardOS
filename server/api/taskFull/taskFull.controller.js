@@ -881,6 +881,7 @@ exports.update = function(req, res) {
     taskFull.kpis = task.kpis;
     taskFull.alerts = task.alerts;
     taskFull.dashboards = task.dashboards;
+    taskFull.reviewTask = task.reviewTask;
     updated.markModified('actors');
     updated.markModified('followers');
     updated.markModified('metrics');
@@ -889,6 +890,7 @@ exports.update = function(req, res) {
     updated.markModified('kpis');
     updated.markModified('alerts');
     updated.markModified('dashboards');
+    updated.markModified('reviewTask');
     updated.save(function(err) {
       if (err) {
         return handleError(res, err);

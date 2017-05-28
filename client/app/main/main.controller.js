@@ -48,16 +48,22 @@ angular.module('boardOsApp')
       $timeout(function() {
         $scope.$apply(function() {
           $scope.filteredPlanTasks = _.filter($scope.myTasks, function(task) {
-            return task.metrics[0].status === 'Not Started';
+            return task.metrics[task.metrics.length - 1].status === 'Not Started';
           });
           $scope.filteredInProgressTasks = _.filter($scope.myTasks, function(task) {
-            return task.metrics[0].status === 'In Progress';
+            return task.metrics[task.metrics.length - 1].status === 'In Progress';
           });
           $scope.filteredFinishedTasks = _.filter($scope.myTasks, function(task) {
             var a = moment(new Date());
-            var b = moment(new Date(task.metrics[0].endDate));
-            return ($scope.datediff >= a.diff(b, 'days')) && (task.metrics[0].status === 'Finished');
+            var b = moment(new Date(task.metrics[task.metrics.length - 1].endDate));
+            return ($scope.datediff >= a.diff(b, 'days')) && (task.metrics[task.metrics.length - 1].status === 'Finished') && (task.reviewTask === undefined || task.reviewTask === false);
           });
+          $scope.filteredReviewedTasks = _.filter($scope.myTasks, function(task) {
+            var a = moment(new Date());
+            var b = moment(new Date(task.metrics[task.metrics.length - 1].endDate));
+            return ($scope.datediff >= a.diff(b, 'days')) && (task.metrics[task.metrics.length - 1].status === 'Finished') && (task.reviewTask === true);
+          });
+
         });
       });
     });

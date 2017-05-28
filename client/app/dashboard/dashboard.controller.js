@@ -19,7 +19,7 @@ angular.module('boardOsApp')
 
 
     $scope.createNewTask = function(data) {
-      
+
       switch (data) {
         case 'context':
           $location.path('/task//' + $scope.dashboard.context);
@@ -118,8 +118,13 @@ angular.module('boardOsApp')
           });
           $scope.filteredFinishedTasks = _.filter($scope.dashboard.tasks, function(task) {
             var a = moment(new Date());
-            var b = moment(new Date(task.metrics[task.metrics.length - 1].endDate || task.metrics[task.metrics.length - 1].targetEndDate));
-            return ($scope.datediff >= a.diff(b, 'days')) && (task.metrics[task.metrics.length - 1].status === 'Finished');
+            var b = moment(new Date(task.metrics[task.metrics.length - 1].endDate));
+            return ($scope.datediff >= a.diff(b, 'days')) && (task.metrics[task.metrics.length - 1].status === 'Finished') && (task.reviewTask === undefined || task.reviewTask === false);
+          });
+          $scope.filteredReviewedTasks = _.filter($scope.dashboard.tasks, function(task) {
+            var a = moment(new Date());
+            var b = moment(new Date(task.metrics[task.metrics.length - 1].endDate));
+            return ($scope.datediff >= a.diff(b, 'days')) && (task.metrics[task.metrics.length - 1].status === 'Finished') && (task.reviewTask === true);
           });
         });
       });

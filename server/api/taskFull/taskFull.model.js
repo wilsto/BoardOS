@@ -22,7 +22,7 @@ var TaskFullSchema = new Schema({
   rework: Schema.Types.Mixed,
   previous: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'fulltask'
+    ref: 'TaskFull'
   },
   alerts: Schema.Types.Mixed,
   kpis: Schema.Types.Mixed,
@@ -36,6 +36,14 @@ var TaskFullSchema = new Schema({
     },
     isDone: Boolean
   }],
+  reviewTask: {
+    type: Boolean,
+    default: true
+  },
+  reviewPeriodic: {
+    type: Boolean,
+    default: true
+  },
   comments: [{
     text: String,
     date: Date,
