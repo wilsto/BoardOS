@@ -38,11 +38,11 @@ var TaskFullSchema = new Schema({
   }],
   reviewTask: {
     type: Boolean,
-    default: true
+    default: false
   },
   reviewPeriodic: {
     type: Boolean,
-    default: true
+    default: false
   },
   comments: [{
     text: String,

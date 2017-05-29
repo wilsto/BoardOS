@@ -37,6 +37,7 @@
 <link rel="stylesheet" href="bower_components/mdPickers/dist/mdPickers.min.css" />
 <link rel="stylesheet" href="bower_components/ng-material-floating-button/mfb/dist/mfb.css" />
 <link rel="stylesheet" href="bower_components/DlhSoft.KanbanLibrary/DlhSoft.Kanban.Angular.Components.css" />
+<link rel="stylesheet" href="bower_components/Feedback-Bot/src/feedback.css" />
 <!-- endbower -->
 <!-- endbuild -->
 <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
@@ -357,6 +358,7 @@
     <script src="bower_components/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
     <script src="bower_components/angular-material/angular-material.js"></script>
     <script src="bower_components/ng-infinite-scroll/ng-infinite-scroll.js"></script>
+    <script src="bower_components/Feedback-Bot/dist/feedback.0.3.1.js"></script>
     <!-- endbower -->
     <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
@@ -431,11 +433,19 @@
     <script src="components/socket/socket.service.js"></script>
     <!-- endinjector -->
     <!-- endbuild -->
-
+    <script type="text/javascript">
+          $.feedback({
+  	        html2canvasURL: 'src/html2canvas.js',
+          	githubpath: 'wilsto/BoardOS', // CHANGE THIS TO YOUR PATH
+  	        serverURL: 'http://feedbackbot.herokuapp.com', // YOU CAN HOST YOUR OWN GITHUB BOT IF YOU WANT
+            placement: 'left'
+        });
+    </script>
     <div class="page-loading-overlay">
       <div class="loader-2"></div>
     </div>
   </div>
   </div>
+
 </body>
 </html>

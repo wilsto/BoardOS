@@ -744,6 +744,14 @@ exports.create = function(req, res) {
   });
   task.actors = actors;
 
+  /** Mise en majuscule des axes */
+  if (task.activity) {
+    task.activity = task.activity.toUpperCase();
+  }
+  if (task.context) {
+    task.context = task.context.toUpperCase();
+  }
+
   // mise à jour des kpis
   task.kpis = [];
   task.alerts = [];
@@ -805,6 +813,14 @@ exports.update = function(req, res) {
     _.each(task.comments, function(comment) {
       comment.user = comment.user._id;
     });
+
+    /** Mise en majuscule des axes */
+    if (task.activity) {
+      task.activity = task.activity.toUpperCase();
+    }
+    if (task.context) {
+      task.context = task.context.toUpperCase();
+    }
 
     var mainstart = null;
     var targetEndDate = null;

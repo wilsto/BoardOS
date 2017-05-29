@@ -45,7 +45,8 @@
     "mdPickers": "^0.7.5",
     "ng-material-floating-button": "ng-mfb#^0.6.2",
     "DlhSoft.KanbanLibrary": "http://DlhSoft.com/Packages/DlhSoft.KanbanLibrary.zip",
-    "ng-infinite-scroll": "^0.0.1"
+    "ng-infinite-scroll": "^0.0.1",
+    "Feedback-Bot": "feedback-bot#^0.3.1"
   },
   "devDependencies": {
     "angular-mocks": "~1.4.x",

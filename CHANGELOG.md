@@ -1,5 +1,20 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.80...HEAD)
+
+**Closed issues:**
+
+- MIse en majuscule des contextes et acitivtés par défaut [\#208](https://github.com/wilsto/BoardOS/issues/208)
+
+## [v1.6.80](https://github.com/wilsto/boardos/tree/v1.6.80) (2017-05-29)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.79...v1.6.80)
+
+**Closed issues:**
+
+- La liste des taches n'apparait pas lorsque l'on crée une nouvelle tache en prod [\#207](https://github.com/wilsto/BoardOS/issues/207)
+
 ## [v1.6.79](https://github.com/wilsto/boardos/tree/v1.6.79) (2017-05-28)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.78...v1.6.79)
 
