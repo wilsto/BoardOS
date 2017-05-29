@@ -434,12 +434,14 @@
     <!-- endinjector -->
     <!-- endbuild -->
     <script type="text/javascript">
+    $(function() {
           $.feedback({
   	        html2canvasURL: 'src/html2canvas.js',
           	githubpath: 'wilsto/BoardOS', // CHANGE THIS TO YOUR PATH
   	        serverURL: 'http://feedbackbot.herokuapp.com', // YOU CAN HOST YOUR OWN GITHUB BOT IF YOU WANT
             placement: 'left'
         });
+      });
     </script>
     <div class="page-loading-overlay">
       <div class="loader-2"></div>
