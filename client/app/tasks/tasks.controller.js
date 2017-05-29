@@ -21,7 +21,7 @@ angular.module('boardOsApp')
       return _.filter(data, function(task) {
         var blnSearchText = ($scope.searchText.length === 0) ? true : task.name.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0 || task.activity.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0 || task.context.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0;
         var blnStatus = (typeof task.metrics === 'undefined') ? false : task.metrics[task.metrics.length - 1].status.toLowerCase().indexOf($scope.filterStatus.replace('All', '').replace('Not Finished', 'o').toLowerCase()) >= 0;
-        var blnProgressStatus = (typeof task.metrics === 'undefined') ? false : task.metrics[task.metrics.length - 1].progressStatus.toLowerCase().indexOf($scope.filterProgressStatus.replace('All', '').toLowerCase()) >= 0;
+        var blnProgressStatus = (typeof task.metrics === 'undefined') ? false : task.metrics[task.metrics.length - 1].progressStatus && task.metrics[task.metrics.length - 1].progressStatus.toLowerCase().indexOf($scope.filterProgressStatus.replace('All', '').toLowerCase()) >= 0;
         return blnSearchText && blnProgressStatus && blnStatus;
       });
     };
@@ -35,13 +35,13 @@ angular.module('boardOsApp')
     };
 
     $scope.reloadTasks = function() {
-        $scope.tasks = filterTasks($scope.alltasks);
-        $scope.showTasks = $scope.tasks.slice(0, 15);
+      $scope.tasks = filterTasks($scope.alltasks);
+      $scope.showTasks = $scope.tasks.slice(0, 15);
     };
 
 
     $scope.getMoreData = function() {
-      var tasks = filterTasks(  $scope.alltasks);
+      var tasks = filterTasks($scope.alltasks);
       $scope.showTasks = tasks.slice(0, $scope.showTasks.length + 15);
     };
 
