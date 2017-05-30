@@ -23,10 +23,15 @@ angular.module('boardOsApp')
     });
 
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+      
+      
+      
+      
+      
       if (fromState.name === 'task' && toState.name !== 'task' && !$scope.forceExit) {
-        if (angular.equals($scope.currentTask, $scope.task)) {
-          //$state.go(toState.name);
-        } else {
+        
+        if ($scope.needToSave) {
+          
           event.preventDefault();
           bootbox.confirm({
             message: 'Are you sure you want to exit task without saving ? All changed will be lost ',
@@ -173,7 +178,10 @@ angular.module('boardOsApp')
     }, true);
 
     $scope.$watch('task', function(newMap, previousMap) {
-
+      $scope.needToSave = !angular.equals($scope.currentTask, $scope.task);
+      
+      
+      
       if (initializing) {
         $timeout(function() {
           initializing = true;
@@ -186,7 +194,6 @@ angular.module('boardOsApp')
             // pour les non objects
             if (typeof newObject[property] !== 'object' && property !== '_id' && property !== '__v' && property !== 'date' && !angular.equals(newObject[property], previousObject[property])) {
               $scope.autoComment('set ' + property + ' to ' + newObject[property]);
-              $scope.needToSave = !angular.equals($scope.currentTask, $scope.task);
             }
             // pour les objects
             if (typeof newObject[property] === 'object' && property !== 'comments' && !angular.equals(newObject[property], previousObject[property])) {
@@ -196,11 +203,9 @@ angular.module('boardOsApp')
                   if (subproperty !== '$$hashKey' && subproperty !== '_id' && (!previousValue || !angular.equals(value[subproperty], previousValue[subproperty]))) {
                     if (subproperty.toLowerCase().indexOf('date') > -1) {
                       $scope.autoComment('set ' + subproperty + ' to ' + $filter('date')(value[subproperty], 'mediumDate') + '              [' + property + ':' + key.toString() + ']');
-                      $scope.needToSave = !angular.equals($scope.currentTask, $scope.task);
 
                     } else {
                       $scope.autoComment('set ' + subproperty + ' to ' + value[subproperty] + '              [' + property + ':' + key.toString() + ']');
-                      $scope.needToSave = !angular.equals($scope.currentTask, $scope.task);
 
                     }
                   }
@@ -615,7 +620,6 @@ angular.module('boardOsApp')
                 actor: $scope.currentUser
               });
               Notification.success(logInfo);
-
               $location.path('/task/' + data._id);
             });
           } else {
@@ -631,7 +635,7 @@ angular.module('boardOsApp')
             info: logInfo,
             actor: $scope.currentUser
           });
-          $scope.refreshTask();
+          $scope.loadTask();
           Notification.success(logInfo);
         });
       }
