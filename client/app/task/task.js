@@ -16,6 +16,10 @@ angular.module('boardOsApp')
           activity: {
             value: null,
             squash: true
+          },
+          forceExit: {
+            value: null,
+            squash: true
           }
         }
       });

@@ -73,6 +73,13 @@ process.on('dashboardChanged', function(dashboard) {
   createCompleteDashboard(dashboard._id, function(data) {});
 });
 
+var j = schedule.scheduleJob({
+  hour: 0,
+  minute: 30
+}, function() {
+  createAllCompleteDashboard();
+});
+
 //createAllCompleteDashboard();
 
 function createAllCompleteDashboard() {

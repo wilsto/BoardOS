@@ -2,9 +2,10 @@
 /*jshint loopfunc:true */
 
 angular.module('boardOsApp')
-  .controller('TaskCtrl', function($rootScope, $scope, $http, $stateParams, $location, Auth, Notification, myLibrary, $filter, $timeout, $mdpDatePicker, $uibModal, focus) {
+  .controller('TaskCtrl', function($rootScope, $scope, $http, $state, $stateParams, $location, Auth, Notification, myLibrary, $filter, $timeout, $mdpDatePicker, $uibModal, focus) {
 
     $scope.parseFloat = parseFloat;
+    $scope.forceExit = false;
 
     var initializing = true;
     Auth.getCurrentUser(function(data) {
@@ -19,6 +20,37 @@ angular.module('boardOsApp')
           longname: context
         });
       });
+    });
+
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+      if (fromState.name === 'task' && !$scope.forceExit) {
+        if (angular.equals($scope.currentTask, $scope.task)) {
+          $state.go(toState.name);
+        } else {
+          event.preventDefault();
+          bootbox.confirm({
+            message: 'Are you sure you want to exit task without saving ? All changed will be lost ',
+            buttons: {
+              confirm: {
+                label: 'Yes',
+                className: 'btn-danger'
+              },
+              cancel: {
+                label: 'Oh No Thank You ',
+                className: 'btn-success'
+              }
+            },
+            callback: function(result) {
+              if (!result) {
+                event.preventDefault();
+              } else {
+                $scope.forceExit = true;
+                $state.go(toState.name);
+              }
+            }
+          });
+        }
+      }
     });
 
     // recherche des membres
@@ -143,17 +175,18 @@ angular.module('boardOsApp')
     }, true);
 
     $scope.$watch('task', function(newMap, previousMap) {
-      $rootScope.currentTaskName = {
-        name: newMap.name,
-        activity: newMap.activity,
-        context: newMap.context
-      };
+
+      $scope.needToSave = !angular.equals($scope.currentTask, $scope.task);
       if (initializing) {
         $timeout(function() {
           initializing = true;
         });
       } else {
+        
+        
         if (newMap !== previousMap) {
+          
+          
           var newObject = newMap;
           var previousObject = previousMap;
           for (var property in newObject) {
@@ -178,7 +211,7 @@ angular.module('boardOsApp')
             }
           }
           if ($scope.task._id !== undefined) {
-            $scope.update();
+            //$scope.update();
           }
         }
       }
@@ -227,7 +260,7 @@ angular.module('boardOsApp')
         }
       });
       $scope.comment.text = ''; //Reset the text field.
-      $scope.update();
+      //$scope.update();
     };
 
 
@@ -251,7 +284,7 @@ angular.module('boardOsApp')
       });
 
       modalInstance.result.then(function(result) {
-        
+
         var maintenant = new Date().toISOString();
         $scope.task.comments.push({
           text: result.comment,
@@ -277,18 +310,13 @@ angular.module('boardOsApp')
       $scope.loadTask();
     });
 
-    $scope.refreshTask = function() {
-      $scope.myPromise = $http.get('/api/taskCompletes/executeId/' + $scope.currentTask._id).success(function(response) {
-        $scope.loadTask();
-      });
-    };
+
 
     // *******************
     // Load a task
     // ******************
     $scope.loadTask = function() {
       $scope.task = {};
-      $scope.currentTask = {};
       var taskId = $stateParams.id || $scope.task._id;
       $scope.TeamIsExpanded = (taskId === undefined);
       $scope.TeamIsExpanded = true;
@@ -317,6 +345,14 @@ angular.module('boardOsApp')
           if ($scope.task.active === undefined) {
             $scope.task.active = false;
           }
+
+          $scope.currentTask = _.cloneDeep($scope.task);
+          $rootScope.currentTaskName = {
+            name: $scope.task.name,
+            activity: $scope.task.activity,
+            context: $scope.task.context
+          };
+
           $scope.mePresentInActors = _.filter($scope.task.actors, function(actor) {
             return actor._id === $scope.currentUser._id;
           }).length > 0;
@@ -359,6 +395,8 @@ angular.module('boardOsApp')
             id: null,
             name: null
           };
+          $scope.currentTask = _.cloneDeep($scope.task);
+
         }, 500);
 
         $timeout(function() {
@@ -398,9 +436,7 @@ angular.module('boardOsApp')
     // update a task
     // *******************
     $scope.update = function() {
-      
       $http.put('/api/taskFulls/' + $scope.task._id, $scope.task).success(function(data) {
-        
         var logInfo = 'Task "' + $scope.task.name + '" was updated';
         $timeout(function() {
           initializing = true;
@@ -409,6 +445,18 @@ angular.module('boardOsApp')
         Notification.success(logInfo);
       });
     };
+
+    $scope.refreshTask = function() {
+      $http.put('/api/taskFulls/' + $scope.task._id, $scope.task).success(function(data) {
+        var logInfo = 'Task "' + $scope.task.name + '" was recalculated';
+        $timeout(function() {
+          initializing = true;
+          $scope.loadTask();
+        }, 500);
+        Notification.success(logInfo);
+      });
+    };
+
 
     // *******************
     // add an actor
@@ -457,7 +505,7 @@ angular.module('boardOsApp')
       $scope.task.actors = _.without($scope.task.actors, _.findWhere($scope.task.actors, {
         _id: $scope.currentUser._id
       }));
-      $scope.update();
+      //$scope.update();
       $scope.loadTask();
     };
 
@@ -499,7 +547,7 @@ angular.module('boardOsApp')
       $scope.task.followers = _.without($scope.task.followers, _.findWhere($scope.task.followers, {
         _id: $scope.currentUser._id
       }));
-      $scope.update();
+      //$scope.update();
       $scope.loadTask();
     };
 
@@ -514,6 +562,7 @@ angular.module('boardOsApp')
 
     $scope.addSubTaskActor = function(member) {
       $scope.currentTodo.actor = member;
+      $scope.blnAssignSubtaskActor = false;
     };
 
     $scope.addMeToSubTaskActor = function() {
@@ -521,6 +570,7 @@ angular.module('boardOsApp')
         return member._id === $scope.currentUser._id;
       })[0];
       $scope.currentTodo.actor = member;
+      $scope.blnAssignSubtaskActor = false;
     };
 
     $scope.showTodoDatePicker = function(todo, ev) {

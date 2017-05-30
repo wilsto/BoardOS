@@ -260,13 +260,14 @@ angular.module('boardOsApp', [
     $http.get('/api/hierarchies/list/Axis').success(function(axes) {
       $rootScope.axes = axes.list;
     });
-
-    // Redirect to login if route requires auth and you're not logged in
-    $rootScope.$on('$stateChangeStart', function(event, next) {
-
+    $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
       $rootScope.showArianeDashboard = ($location.path().indexOf('dashboard/') > 0);
       $rootScope.showArianeTask = ($location.path().indexOf('task/') > 0);
       $rootScope.showArianeKPI = ($location.path().indexOf('KPI/') > 0);
+    });
+
+    // Redirect to login if route requires auth and you're not logged in
+    $rootScope.$on('$stateChangeSuccess', function(event, next) {
 
       Auth.isLoggedIn(function(loggedIn) {
         if (next.authenticate && !loggedIn) {

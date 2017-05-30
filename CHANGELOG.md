@@ -1,5 +1,22 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.83...HEAD)
+
+**Closed issues:**
+
+- cacher subtaskactor une fois l'acteur sélectionné au niveau de la todolist [\#218](https://github.com/wilsto/BoardOS/issues/218)
+- détecter si l'on essaie de quitter la page sans avoir sauvegarder [\#217](https://github.com/wilsto/BoardOS/issues/217)
+- Mettre à jour les dashboards toutes les nuits [\#215](https://github.com/wilsto/BoardOS/issues/215)
+- Ajouter un bouton save pour faciliter la saisie des métriques et désactiver la détection auto to save [\#213](https://github.com/wilsto/BoardOS/issues/213)
+- Pouvoir relancer les calculs de la tache en cours avec le bouton refresh \(comme pour le dashboard\) [\#202](https://github.com/wilsto/BoardOS/issues/202)
+- Mise à jour des données item par item en mode update [\#188](https://github.com/wilsto/BoardOS/issues/188)
+- Implément feedback [\#166](https://github.com/wilsto/BoardOS/issues/166)
+
+## [v1.6.83](https://github.com/wilsto/boardos/tree/v1.6.83) (2017-05-29)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.82...v1.6.83)
+
 ## [v1.6.82](https://github.com/wilsto/boardos/tree/v1.6.82) (2017-05-29)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.81...v1.6.82)
 

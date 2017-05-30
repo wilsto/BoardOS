@@ -125,12 +125,15 @@
                 <!-- Title -->
                 <div class="row">
                     <div class="col-md-1">
-                        <button ng-if="task._id === 3" type="button" name="button" style="margin-bottom:5px;width:100%" class="btn btn-xs btn-outline btn-info" ng-click="refreshTask()">Refresh</button>
+                        <button type="button" name="button" style="margin-bottom:5px;width:100%" class="btn btn-xs btn-outline btn-info" ng-click="refreshTask()">Refresh</button>
                         <img src="assets/images/todo.png" class="img-responsive" alt="" />
                     </div>
                     <div class="col-md-11">
                         <div class="row">
                             <div class="col-md-9 col-sm-12 profile-info">
+                              <div class="pull-right" style="margin-top:50px;width:200px" ng-if="needToSave && task._id" ng-cloak uib-tooltip-html="'Save metrics to database'" tooltip-placement="bottom">
+                                  <button type="button" name="button" style="width:200px" class="pull-right btn  btn-primary" ng-click="update()" ng-disabled="!(task.name && task.context && task.activity && task.metrics[task.metrics.length-1].targetstartDate && task.metrics[task.metrics.length-1].targetEndDate && task.metrics[task.metrics.length-1].targetLoad && task.metrics[task.metrics.length-1].trust)">Save Data</button>
+                              </div>
                                 <h1>
                                     <a href="#" style="color:black!important" editable-text="task.name" e-style="width: 500px" buttons="right">{{ task.name || 'Please give a name of your task' }}</a>
                                 </h1>
@@ -170,6 +173,9 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="col-md-3 col-sm-12 profile-info">
+
                             </div>
                         </div>
                     </div>
