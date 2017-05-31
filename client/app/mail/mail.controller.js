@@ -47,6 +47,16 @@ angular.module('boardOsApp')
       });
     };
 
+    $scope.exportTasks = function() {
+
+      $http.get('/api/taskFulls/exportXLS', {
+        timeout: 60000
+      }).success(function(response) {
+        $scope.messageExportTask = 'Execution Done';
+      });
+    };
+
+
     socket.on('taskFull:start', function(data) {
       $scope.taskStarted.push(data);
       $scope.taskNb = $scope.taskStarted.length;
@@ -77,14 +87,14 @@ angular.module('boardOsApp')
       $scope.messageDashboard = 'Execution in progress ... please wait';
       $scope.numberDashboard = 0;
       var timer = $interval(updateNumberDashboard, 1000);
-      $http.get('/api/dashboardCompletes/execute',{
+      $http.get('/api/dashboardCompletes/execute', {
         timeout: 60000
       }).success(function(response) {
         $scope.messageDashboard = 'Execution Done';
         $interval.cancel(timer);
         $scope.numberDashboard = 0;
         var diff = _.difference($scope.dashboardStarted, $scope.dashboardEnded);
-        
+
 
       }).error(function(data) {
 
@@ -92,7 +102,7 @@ angular.module('boardOsApp')
         $scope.numberDashboard = 0;
         $scope.messageDashboard = 'Execution Done';
         var diff = _.difference($scope.dashboardStarted, $scope.dashboardEnded);
-        
+
 
       });
 

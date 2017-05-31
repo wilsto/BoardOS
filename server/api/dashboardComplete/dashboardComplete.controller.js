@@ -443,7 +443,7 @@ exports.index = function(req, res) {
 exports.show = function(req, res) {
   DashboardComplete.findById(req.params.id)
     //.populate('users.user', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
-    .populate('tasks', ' -watchers -dashboards -kpis -alerts -version')
+    .populate('tasks', ' -watchers -dashboards -kpis -alerts -comments -todos -followers -version')
     .populate('tasks.actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
     .lean().exec(function(err, dashboardComplete) {
       if (err) {

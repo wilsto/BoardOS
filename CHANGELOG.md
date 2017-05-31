@@ -1,5 +1,19 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.86...HEAD)
+
+**Closed issues:**
+
+- Mise à jourde tache avec des todos sans acteur impossible [\#224](https://github.com/wilsto/BoardOS/issues/224)
+- Update all task [\#223](https://github.com/wilsto/BoardOS/issues/223)
+- calcul du statut de la tache en lmive incorrect [\#222](https://github.com/wilsto/BoardOS/issues/222)
+- créer une api pour exporter les taches en excel [\#221](https://github.com/wilsto/BoardOS/issues/221)
+
+## [v1.6.86](https://github.com/wilsto/boardos/tree/v1.6.86) (2017-05-30)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.85...v1.6.86)
+
 ## [v1.6.85](https://github.com/wilsto/boardos/tree/v1.6.85) (2017-05-30)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.84...v1.6.85)
 

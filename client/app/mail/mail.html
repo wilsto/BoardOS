@@ -1,17 +1,13 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 <!-- BEGIN PAGE CONTENT-->
+
+
 <div class="row">
-    <div class="col-md-1">
-        <button class="btn" ng-click="sendMail()">Run</button>
-    </div>
-    <div class="col-md-11 vcenter">
-        Send a mail to everyone with current open tasks.
-    </div>
+        <h3>Tasks</h3>
 </div>
-<br>
 <div class="row">
     <div class="col-md-1">
-        <button class="btn" ng-click="calculateTasks()">Run	</button>
+        <button class="btn  btn-primary" ng-click="calculateTasks()">Run	All</button>
     </div>
     <div class="col-md-11 vcenter">
         Recalculate every tasks<br/>
@@ -24,15 +20,40 @@
 </div>
 
 <br>
-
 <div class="row">
     <div class="col-md-1">
-        <button class="btn" ng-click="calculateDashboards()">Run	</button>
+        <a class="btn btn-primary" href="/api/taskFulls/exportXLS" target="_blank">Export All	</a>
+    </div>
+    <div class="col-md-11 vcenter">
+        Export all tasks in Excel<br/>
+        <div class="text-danger" ng-bind-html="messageExportTask"></div>
+    </div>
+</div>
+
+<br>
+<div class="row">
+        <h3>Dashboards</h3>
+</div>
+<div class="row">
+    <div class="col-md-1">
+        <button class="btn  btn-primary" ng-click="calculateDashboards()">Run All</button>
     </div>
     <div class="col-md-11 vcenter">
         Recalculate every dashboards<br/>
         <span style="font-weight:bold;color:rgb(61, 137, 170)" ng-if="dashboardNb>0"> {{(dashboardDoneNb / dashboardNb *100).toFixed(1)}}%</span><br/>
         <small class="text-muted"> {{dashboardDoneNb}} / {{dashboardNb}} dashboards</small><br/>
         <div class="text-danger" ng-bind-html="messageDashboard"></div><span ng-if="numberDashboard>0">{{numberDashboard}} secondes</span>
+    </div>
+</div>
+<br>
+<div class="row">
+        <h3>Mail</h3>
+</div>
+<div class="row">
+    <div class="col-md-1">
+        <button class="btn  btn-primary" ng-click="sendMail()">Send All</button>
+    </div>
+    <div class="col-md-11 vcenter">
+        Send a mail to everyone with current open tasks.
     </div>
 </div>
