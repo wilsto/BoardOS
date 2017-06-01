@@ -9,6 +9,7 @@ angular.module('boardOsApp')
     $scope.task = {};
     $scope.filterStatus = 'Not Finished';
     $scope.filterProgressStatus = 'All';
+    $scope.filterActors = 'All';
     $scope.searchText = '';
     $scope.orderByField = 'date';
     $scope.reverseSort = true;
@@ -22,7 +23,19 @@ angular.module('boardOsApp')
         var blnSearchText = ($scope.searchText.length === 0) ? true : task.name.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0 || task.activity.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0 || task.context.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0;
         var blnStatus = (typeof task.metrics === 'undefined') ? false : task.metrics[task.metrics.length - 1].status.toLowerCase().indexOf($scope.filterStatus.replace('All', '').replace('Not Finished', 'o').toLowerCase()) >= 0;
         var blnProgressStatus = (typeof task.metrics === 'undefined') ? false : task.metrics[task.metrics.length - 1].progressStatus && task.metrics[task.metrics.length - 1].progressStatus.toLowerCase().indexOf($scope.filterProgressStatus.replace('All', '').toLowerCase()) >= 0;
-        return blnSearchText && blnProgressStatus && blnStatus;
+        var blnActors;
+        if ($scope.filterActors === 'All') {
+          blnActors = true;
+        } else {
+          blnActors = false;
+          _.each(task.actors, function(actor) {
+            if (actor._id.toString() === $scope.currentUser._id.toString()) {
+              blnActors = true;
+            }
+          });
+        }
+
+        return blnSearchText && blnProgressStatus && blnStatus && blnActors;
       });
     };
 
@@ -90,6 +103,10 @@ angular.module('boardOsApp')
     });
 
     $scope.$watch('filterProgressStatus', function() {
+      $scope.reloadTasks();
+    });
+
+    $scope.$watch('filterActors', function() {
       $scope.reloadTasks();
     });
 
