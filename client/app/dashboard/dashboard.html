@@ -217,7 +217,7 @@
                 <div class="portlet-body" style="padding:0!important">
                     <table class="table table-striped table-hover">
                         <tbody style="text-align:center;">
-                            <tr ng-repeat="KPI in dashboard.alerts | orderBy:'constraint' track by $index" on-finish-render uib-tooltip-html="'Contraint : {{KPI.constraint}}<br /> <br /> Description :  {{KPI.description}}  <br /> Suggestion :  {{KPI.suggestion}}'" tooltip-placement="left"  tooltip-class="tooltipkpi" >
+                            <tr ng-repeat="KPI in dashboard.alerts | orderBy:'constraint' track by $index" on-finish-render uib-tooltip-html="'Contraint : {{KPI.constraint}}<br /> <br /> Description :  {{KPI.description}}  <br /> Suggestion :  {{KPI.suggestion}}'" tooltip-placement="right"  tooltip-class="tooltipkpi" >
                                 <td style="text-align:left;width:75%">
                                   <a href="/KPI/{{KPI.alertId}}?type=dashboard&typeid={{dashboard._id}}&rangedate={{datediff}}">{{KPI.name}}</a>
                                 </td>

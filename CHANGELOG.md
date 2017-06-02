@@ -2,7 +2,15 @@
 
 ## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
 
-[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.87...HEAD)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.88...HEAD)
+
+**Closed issues:**
+
+- Quand tu cliques sur feed-back, La Croix de la fenêtre feed-back ne s'affiche pas donc compliqué si tu souhaites fermer cette fenêtre. [\#230](https://github.com/wilsto/BoardOS/issues/230)
+- Le handover sur les alertes du do affiche le texte dans une bulle info qui mange la partie gauche de la fenêtre [\#229](https://github.com/wilsto/BoardOS/issues/229)
+
+## [v1.6.88](https://github.com/wilsto/boardos/tree/v1.6.88) (2017-06-01)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.87...v1.6.88)
 
 **Closed issues:**
 
