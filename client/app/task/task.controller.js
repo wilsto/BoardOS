@@ -4,6 +4,29 @@
 angular.module('boardOsApp')
   .controller('TaskCtrl', function($rootScope, $scope, $http, $state, $stateParams, $location, Auth, Notification, myLibrary, $filter, $timeout, $mdpDatePicker, $uibModal, focus) {
 
+    $scope.sortme = {
+      snap: true,
+      revert: true,
+      start: function(event, ui) {
+        $scope.showTrash = true;
+        $scope.$apply();
+      },
+      stop: function(event, ui) {
+        $timeout(function() {
+          $scope.showTrash = false;
+        }, 3000);
+      },
+      remove: function(event, ui) {},
+      sort: function(e) {},
+      connectWith: '#trash-can'
+    };
+    $scope.trashcan = {
+      update: function(event, ui) {
+        //
+        //$(ui.draggable).fadeOut(1000);
+      }
+    };
+
     $scope.parseFloat = parseFloat;
     $scope.forceExit = false;
 
@@ -23,15 +46,11 @@ angular.module('boardOsApp')
     });
 
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-      
-      
-      
-      
-      
+
       if (fromState.name === 'task' && toState.name !== 'task' && !$scope.forceExit) {
-        
+
         if ($scope.needToSave) {
-          
+
           event.preventDefault();
           bootbox.confirm({
             message: 'Are you sure you want to exit task without saving ? All changed will be lost ',
@@ -179,9 +198,9 @@ angular.module('boardOsApp')
 
     $scope.$watch('task', function(newMap, previousMap) {
       $scope.needToSave = !angular.equals($scope.currentTask, $scope.task);
-      
-      
-      
+
+
+
       if (initializing) {
         $timeout(function() {
           initializing = true;
@@ -299,6 +318,7 @@ angular.module('boardOsApp')
           targetstartDate: result.targetstartDate,
           targetEndDate: result.targetEndDate,
           targetLoad: result.targetLoad,
+          trust: result.trust,
           progress: 0
         });
 
@@ -317,6 +337,9 @@ angular.module('boardOsApp')
     // ******************
     $scope.loadTask = function() {
       $scope.task = {};
+      $scope.trash = [];
+      $scope.showTrash = false;
+
       var taskId = $stateParams.id || $scope.task._id;
       $scope.TeamIsExpanded = (taskId === undefined);
       $scope.TeamIsExpanded = true;
@@ -364,6 +387,11 @@ angular.module('boardOsApp')
           $scope.KPIIsExpanded = (task.metrics[0].status === 'Finished' || task.metrics[0].status === 'Withdrawn');
           $scope.ReviewIsExpanded = (task.metrics[0].status === 'Finished' || task.metrics[0].status === 'Withdrawn');
           $scope.ActionPlanIsExpanded = (task.metrics[0].status === 'Finished' || task.metrics[0].status === 'Withdrawn');
+
+          $scope.manualComments = _.filter($scope.task.comments, function(comment) {
+            return ($scope.filterCommentType.manual === true && comment.auto === false);
+          });
+
         });
       } else {
         $timeout(function() {

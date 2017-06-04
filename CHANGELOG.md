@@ -2,7 +2,25 @@
 
 ## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
 
-[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.88...HEAD)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.89...HEAD)
+
+**Closed issues:**
+
+- targetWorkload et spentTime n'ont pas la meme profondeur de saisie \(2 et chiffres après la virgule\) [\#239](https://github.com/wilsto/BoardOS/issues/239)
+- Je n'arrive pas a enregistrer la tâche quand je fais un rework. J'ai bien mis mon nouvel engagement mais impossible de cliquer sur save data [\#237](https://github.com/wilsto/BoardOS/issues/237)
+- créer un patch pour les métriques principales qui comportent une raison de rework [\#236](https://github.com/wilsto/BoardOS/issues/236)
+- Créer une tache avec un followers provoque une erreur et empêche de créer la tache [\#234](https://github.com/wilsto/BoardOS/issues/234)
+- ajouter KPI confidence [\#233](https://github.com/wilsto/BoardOS/issues/233)
+- pour valider nos saisies des champs, obligé de taper la touche entrée sinon notre valeur saisie n'est pas prise en compte [\#232](https://github.com/wilsto/BoardOS/issues/232)
+- Feedback: Problème d'affichage [\#228](https://github.com/wilsto/BoardOS/issues/228)
+- Feedback: Problème de redimens [\#219](https://github.com/wilsto/BoardOS/issues/219)
+- Feedback: Number of information is erroned, no comment are here [\#212](https://github.com/wilsto/BoardOS/issues/212)
+- erreur de clacul du kpi internal perror prevention : [\#209](https://github.com/wilsto/BoardOS/issues/209)
+- supprimer une todolist [\#194](https://github.com/wilsto/BoardOS/issues/194)
+- Popover ne fonctionne plus [\#177](https://github.com/wilsto/BoardOS/issues/177)
+
+## [v1.6.89](https://github.com/wilsto/boardos/tree/v1.6.89) (2017-06-02)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.88...v1.6.89)
 
 **Closed issues:**
 

@@ -399,13 +399,13 @@ module.exports = {
       filteredMetrics = _.filter(filteredMetrics, function(metric) {
         var metricFieldValue = (metric[field] === undefined || metric[field] === null || metric[field].length === 0) ? 'toto' : metric[field];
         var response = (typeof values === 'undefined' || values.length === 0) ? 1 : _.contains(values, metricFieldValue);
-        if (kpi.name === 'User Satisfaction') {
-          // console.log('filteredMetrics', filteredMetrics);
-          // console.log('metric[field]', metric[field]);
-          // console.log('metricFieldValue', metricFieldValue);
-          // console.log('values', values);
-          // console.log('response', response);
-        }
+        // if (kpi.name === 'Internal Defect Prevention') {
+        //   console.log('filteredMetrics', filteredMetrics);
+        //   console.log('metric[field]', metric[field]);
+        //   console.log('metricFieldValue', metricFieldValue);
+        //   console.log('values', values);
+        //   console.log('response', response);
+        // }
         return response;
       });
       filteredRefMetrics = (refField.toLowerCase() === 'constant') ? refValues : _.filter(filteredRefMetrics, function(metric) {

@@ -7037,13 +7037,49 @@ TASK
 
 .todoTask {
   height: 40px;
-  padding-top: 0px!important;
+  width: 97%;
+  border: 1px solid lightgrey;
+  padding: 5px!important;
+  margin: 0 0 5px;
+}
+
+.todoTask .circularToggleButtonView {
+  margin-top: 0;
+}
+
+.todoTask>.sortButtons {
+  margin-top: -25px;
+}
+
+.todosPanel {
+  padding-left: 15px;
+  -webkit-padding-start: 15px!important;
 }
 
 .barre {
   text-decoration: line-through;
   color: #3b97f7;
   font-style: italic;
+}
+
+.sortTrash {
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-top: -20px;
+  margin-bottom: 20px;
+  border: 1px dotted red;
+  min-height: 50px;
+  width: 93%;
+  color: red;
+  text-align: center;
+  background-color: rgba(238, 149, 116, 0.2)
+}
+
+.sortTrash>.todoTask {
+  text-align: left;
+  margin-left: -40px;
+  margin-right: 0px!important;
+  width: 110%;
 }
 
 .dateComment {

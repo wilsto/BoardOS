@@ -16,7 +16,7 @@
     </div>
     <div class="col-md-11">
       <div class="row">
-        <div class="col-md-5 profile-info">
+        <div class="col-md-4 col-sm-12 profile-info">
           <h1>
             <a href="#" style="color:black!important" editable-text="dashboard.name" e-style="width: 500px" buttons="right">{{ dashboard.name || 'Please give a name of your dashboard' }}</a>
           </h1>
@@ -55,7 +55,7 @@
           </div>
         </div>
         <!--end col-md-8-->
-        <div class="col-md-2 profile-info">
+        <div class="col-md-3 col-sm-12 profile-info">
 
           <div class="portlet sale-summary" ng-if="dashboard._id" >
               <div class="portlet-title" >
@@ -78,7 +78,7 @@
           </div>
 
         </div>
-        <div class="col-md-2 profile-info">
+        <div class="col-md-2 col-sm-12 profile-info">
           <!-- BEGIN OVERVIEW STATISTIC BARS-->
           <!-- BEGIN OVERVIEW STATISTIC BARS-->
           <div class="row stats-overview-cont" ng-if="dashboard._id">
@@ -110,7 +110,7 @@
           <!-- END OVERVIEW STATISTIC BARS-->
         </div>
         <!--end col-md-8-->
-        <div class="col-md-3">
+        <div class="col-md-3 col-sm-12 ">
           <div class="stats-overview stat-block">
 
               <div id="myChartQCT"></div>
@@ -163,7 +163,7 @@
                                 <small class="dont-break-out"> {{task.name}}</small>
                               </a >
                           </td>
-                          <td style="min-width:120px">
+                          <td style="min-width:70px">
                               <span class="pull-right text-info">
                                 <small class="text-muted" >
                                   {{ (task.metrics[0].targetstartDate | date:'MMM, dd') }} >
@@ -259,7 +259,7 @@
                             <small class="dont-break-out"> {{task.name}}</small>
                             </a >
                           </td>
-                          <td style="min-width:120px">
+                          <td style="min-width:70px">
                               <span class="pull-right text-info">
                                 <small class="text-muted" >
                                   {{ task.metrics[0].progress  }}% >
@@ -304,8 +304,8 @@
                     <table class="table table-striped table-hover">
                         <tbody style="text-align:center;">
                             <tr ng-repeat="KPI in dashboard.kpis | orderBy:['constraint','name'] track by $index" on-finish-render uib-tooltip-html="'Contraint : {{KPI.constraint}}<br /> <br /> Description :  {{KPI.description}}  <br /> Suggestion :  {{KPI.suggestion}}'" tooltip-placement="left"  tooltip-class="tooltipkpi"  >
-                                <td style="text-align:left;width:75%"><a href="/KPI/{{KPI.kpiId}}?type=dashboard&typeid={{dashboard._id}}&rangedate={{datediff}}">{{KPI.name}}</a></td>
-                                <td style="text-align:left;width:25%;font-size:13px">
+                                <td style="text-align:left;width:65%"><a href="/KPI/{{KPI.kpiId}}?type=dashboard&typeid={{dashboard._id}}&rangedate={{datediff}}">{{KPI.name}}</a></td>
+                                <td style="text-align:left;width:35%;font-size:13px">
                                     <span ng-if="KPI.calcul[rangeDate] !== undefined && KPI.calcul[rangeDate] !== null" class="badge" ng-style="{'background-color':giveMeMyColor(KPI.calcul[rangeDate], KPI.category)}" style="height:15px;line-height:10px;width:15px;margin-right: 10px">&nbsp;&nbsp;</span> {{KPI.calcul[rangeDate]}}
                                     <span ng-if="KPI.category === 'Goal' && KPI.calcul[rangeDate] !== undefined && KPI.calcul[rangeDate] !== null"> %</span>
                                 </td>
@@ -343,7 +343,7 @@
 
                               </a >
                             </td>
-                            <td style="min-width:120px">
+                            <td style="min-width:70px">
                                 <span class="pull-right text-info">
                                   <small class="text-muted" >
                                     {{ (task.metrics[0].endDate | date:'mediumDate') }}
@@ -403,13 +403,13 @@
                           <td style="text-align: center">
                             <img alt="" ng-src="{{task.actors[0].avatar}}" class="img-circle" style="width:30px;height:30px;" err-src="assets/images/avatars/avatar.png" uib-tooltip-html="'Name <br /> {{task.actors[0].name}}'" tooltip-placement="top"/>
                           </td>
-                            <td style="min-width:60%">
+                            <td>
                               <a href="/task/{{task._id}}">
                                 <small class="dont-break-out"> {{task.name}}</small>
 
                               </a >
                             </td>
-                            <td >
+                            <td style="min-width:70px">
                                 <span class="pull-right text-info">
                                   <small class="text-muted" >
                                     {{ (task.metrics[0].endDate | date:'MMM, dd') }}

@@ -320,6 +320,13 @@ exports.create = function(req, res) {
   });
   task.actors = actors;
 
+  // mise à jour des followers
+  var followers = [];
+  _.each(task.followers, function(follower) {
+    followers.push(follower._id);
+  });
+  task.followers = followers;
+
   /** Mise en majuscule des axes */
   if (task.activity) {
     task.activity = task.activity.toUpperCase();
@@ -386,7 +393,7 @@ exports.update = function(req, res) {
     _.each(task.followers, function(follower) {
       followers.push(follower._id);
     });
-    task.followers = followers;
+    task.followers = _.compact(_.uniq(followers));
 
     _.each(task.comments, function(comment) {
       comment.user = comment.user._id;
