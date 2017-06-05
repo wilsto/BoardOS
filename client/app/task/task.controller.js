@@ -46,11 +46,10 @@ angular.module('boardOsApp')
     });
 
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-
+      
+      
       if (fromState.name === 'task' && toState.name !== 'task' && !$scope.forceExit) {
-
         if ($scope.needToSave) {
-
           event.preventDefault();
           bootbox.confirm({
             message: 'Are you sure you want to exit task without saving ? All changed will be lost ',
@@ -67,7 +66,7 @@ angular.module('boardOsApp')
             callback: function(result) {
               if (result) {
                 $scope.forceExit = true;
-                $state.go(toState.name);
+                $state.go(toState.name, toParams);
               }
             }
           });

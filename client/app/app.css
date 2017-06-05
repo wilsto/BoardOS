@@ -4680,17 +4680,18 @@ Modal header close button fix
 
 /* fix: content shifting to the right on modal open due to scrollbar closed */
 
-.modal {
-  overflow-y: auto !important;
+
+/*.modal {
+  overflow-y: auto;
 }
 
 .modal-open {
-  overflow-y: auto !important;
+  overflow-y: auto ;
 }
 
 .modal-open-noscroll {
   overflow-y: hidden !important;
-}
+}*/
 
 
 /***
@@ -6899,7 +6900,7 @@ TASK
   -o-justify-content: center;
   justify-content: center;
   -ms-flex-pack: center;
-  -webkit-transition: border 200ms, box-shadow 200ms, color 200ms;
+  -webkit-transition: border 200ms, box-shadow 20ms, color 200ms;
   -moz-transition: border 200ms, box-shadow 200ms, color 200ms;
   transition: border 200ms, box-shadow 200ms, color 200ms;
   width: 30px
@@ -7253,4 +7254,65 @@ TASK
   width: 75%;
   max-height: 500px;
   overflow-y: auto;
+}
+
+
+/* The side navigation menu */
+
+.sidenav {
+  height: 100%;
+  /* 100% Full-height */
+  width: 0;
+  /* 0 width - change this with JavaScript */
+  position: fixed;
+  /* Stay in place */
+  z-index: 9999999;
+  /* Stay on top */
+  top: 44px;
+  right: -4px;
+  margin: 0;
+  padding: 0;
+  background-color: white;
+  /* Black*/
+  overflow-x: hidden;
+  /* Place content 60px from the top */
+  transition: 0.5s;
+  /* 0.5 second transition effect to slide in the sidenav */
+  border: 2px solid lightgrey;
+}
+
+.whatsnewPanel {
+  width: 720px;
+  margin: 10px;
+}
+
+.animate-first {
+  -webkit-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
+  -moz-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
+  -o-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
+  transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
+  opacity: 1;
+  left: 0;
+  position: absolute;
+}
+
+.animate-first.ng-hide {
+  left: -100%;
+  padding: 0;
+}
+
+.animate-release {
+  position: absolute;
+  -webkit-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
+  -moz-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
+  -o-transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
+  transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
+  left: 0;
+  padding: 0;
+}
+
+.animate-release.ng-hide {
+  opacity: 1;
+  left: 100%;
+  position: absolute;
 }

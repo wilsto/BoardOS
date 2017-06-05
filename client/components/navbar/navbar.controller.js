@@ -8,6 +8,18 @@ angular.module('boardOsApp')
       $scope.loadDashBoards();
     });
 
+    $rootScope.openNav = function() {
+      $rootScope.loadNews();
+      $http.get('/api/Whatsnews/updateViewer/' + $scope.currentUser._id).success(function(infos) {
+        $rootScope.alreadyviewed = true;
+      });
+      if ($('#mySidenav').css('width') === '4px') {
+        $('#mySidenav').css('width', '755px');
+      } else {
+        $('#mySidenav').css('width', '4px');
+      }
+    };
+
     $scope.load = function() {
       var myparams = {
         params: {

@@ -221,6 +221,8 @@ angular.module('boardOsApp', [
 
   .run(function($rootScope, $location, Auth, $http, progressStatusTask, statusTask, metricTaskFields, categoryKPI, actionKPI, groupByKPI, $cookieStore, $timeout, editableOptions, dateRangeService) {
 
+    $rootScope.showHideWhatsNew = false;
+
     editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
     editableOptions.blurElem = 'submit';
     editableOptions.blurForm = 'submit';

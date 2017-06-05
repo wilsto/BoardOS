@@ -70,12 +70,13 @@
 <link rel="stylesheet" href="app/tabTask/tabTask.css">
 <link rel="stylesheet" href="app/task/task.css">
 <link rel="stylesheet" href="app/tasks/tasks.css">
+<link rel="stylesheet" href="app/whatsnew/whatsnew.css">
 <link rel="stylesheet" href="components/modal/modal.css">
 <!-- endinjector -->
 <!-- endbuild -->
 </head>
 <body ng-app="boardOsApp" class="page-header-fixed page-sidebar-closed">
-  <div ng-controller="GlobalCtrl" ng-cloak >
+  <div id="main" ng-controller="GlobalCtrl" ng-cloak >
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
       <![endif]-->
@@ -171,6 +172,12 @@
                 <span class="arrow "></span>
               </a>
               <ul class="sub-menu">
+                <li ng-if="isAdmin">
+                  <a href="/whatsnew">
+                    <i class="fa fa-newspaper-o"></i>
+                    what's New
+                  </a>
+                </li>
                 <li>
                   <a href="/hierarchies">
                     <i class="fa fa-gear"></i>
@@ -422,6 +429,8 @@
     <script src="app/task/task.js"></script>
     <script src="app/tasks/tasks.controller.js"></script>
     <script src="app/tasks/tasks.js"></script>
+    <script src="app/whatsnew/whatsnew.controller.js"></script>
+    <script src="app/whatsnew/whatsnew.js"></script>
     <script src="components/auth/auth.service.js"></script>
     <script src="components/auth/user.service.js"></script>
     <script src="components/factory/focus.js"></script>
@@ -441,10 +450,78 @@
   	        serverURL: 'http://feedbackbot.herokuapp.com', // YOU CAN HOST YOUR OWN GITHUB BOT IF YOU WANT
             placement: 'left'
         });
-      });
+    });
     </script>
     <div class="page-loading-overlay">
       <div class="loader-2"></div>
+    </div>
+    <div id="mySidenav" class="sidenav"  ng-controller="WhatsnewCtrl">
+      <div id="firstSideNavPanel" class="row whatsnewPanel animate-first"  ng-hide="info">
+        <div class="portlet">
+          <div class="portlet-title">
+            <div class="caption">
+              <i class="fa fa-check"></i>What's New &nbsp;&nbsp;&nbsp;
+            </div>
+            <div class="pull-right">
+              <button type="button" class="close" ng-click="openNav()" >&times;</button>
+            </div>
+          </div>
+          <div class="portlet-body">
+            <div class="" style="width:100%;text-align:center;margin:5px;background-color:#006B62">
+              <img src="assets/images/whatsnew.gif" alt="">
+            </div>
+            <table class="table table-bordered">
+              <tbody infinite-scroll="getMoreData()" infinite-scroll-distance="3">
+                <tr ng-repeat="info in showInfos | orderBy:orderByField:reverseSort">
+                  <td style="text-align: left">
+                    <small class="pull-right">
+                      {{info.date | date:'mediumDate'}}
+                    </small>
+                      <h3>
+                        {{info.title}}
+                      </h3>
+                      <div  ng-bind-html="info.resumeHtml" class="dont-break-out"></div>
+                      <br>
+                      <a class="pull-right btn btn-outline btn-primary" ng-click="showDetails(info)">
+                          Learn More about this {{info.type}} >
+                      </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div  id="releaseSideNavPanel" class="row whatsnewPanel animate-release" ng-show="info">
+        <div class="portlet">
+          <div class="portlet-title">
+            <div class="caption">
+              <i class="fa fa-check"></i>What's New &nbsp;&nbsp;&nbsp;
+            </div>
+            <div class="pull-right">
+              <button type="button" class="close" ng-click="openNav()" >&times;</button>
+            </div>
+          </div>
+          <div class="portlet-body">
+            <div class="" style="margin-bottom:10px">
+              <img src="assets/images/Boss_ReleaseNote.png" style="width:680px;" alt="">
+            </div>
+                    <a class="btn btn-outline btn-primary" ng-click="unshowDetails()">
+                      < Go back to list of news
+                    </a>
+                    <small class="pull-right">
+                      {{info.date | date:'mediumDate'}}
+                    </small>
+                      <h3>
+                        {{info.title}}
+                      </h3>
+                      <div  ng-bind-html="info.infoHtml" class="dont-break-out"></div>
+                      <br>
+                      <br>
+                      <br>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   </div>

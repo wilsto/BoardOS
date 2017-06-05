@@ -2,7 +2,16 @@
 
 ## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
 
-[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.89...HEAD)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.90...HEAD)
+
+**Closed issues:**
+
+- Feedback: Action toujours reli [\#240](https://github.com/wilsto/BoardOS/issues/240)
+- De plus si j'essaye de revenir sur le dashboard CM, il m'amène sur la page pour créer un dashboard [\#238](https://github.com/wilsto/BoardOS/issues/238)
+- manque commentaires sur des taches anciennes [\#231](https://github.com/wilsto/BoardOS/issues/231)
+
+## [v1.6.90](https://github.com/wilsto/boardos/tree/v1.6.90) (2017-06-04)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.89...v1.6.90)
 
 **Closed issues:**
 
