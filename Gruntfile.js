@@ -356,6 +356,7 @@ module.exports = function(grunt) {
             '.htaccess',
             'bower_components/**/*',
             'assets/images/{,*/}*.{webp}',
+            'assets/ReleaseNotes/{,*/}*.*',
             'assets/fonts/**/*',
             'index.html'
           ]
@@ -399,6 +400,18 @@ module.exports = function(grunt) {
       heroku: {
         options: {
           remote: 'heroku',
+          branch: 'master'
+        }
+      },
+      recette: {
+        options: {
+          remote: 'boardos-rec',
+          branch: 'master'
+        }
+      },
+      test: {
+        options: {
+          remote: 'heroku-test',
           branch: 'master'
         }
       },
