@@ -4,6 +4,7 @@ angular.module('boardOsApp')
   .controller('NavbarCtrl', function($scope, $rootScope, $location, Auth, $http) {
     Auth.getCurrentUser(function(data) {
       $scope.currentUser = data;
+      $rootScope.thisUser = $scope.currentUser;
       $scope.load();
       $scope.loadDashBoards();
     });

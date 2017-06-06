@@ -280,12 +280,12 @@ angular.module('boardOsApp', [
       });
     });
 
+    function cb(start, end) {
+      $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+    }
+    cb(dateRangeService.startRange, dateRangeService.endRange);
+
     $timeout(function() {
-
-      function cb(start, end) {
-        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-      }
-
       $('#reportrange').daterangepicker({
         startDate: dateRangeService.startRange,
         endDate: dateRangeService.endRange,
@@ -302,15 +302,12 @@ angular.module('boardOsApp', [
         autoApply: true
       }, cb);
 
-      cb(dateRangeService.startRange, dateRangeService.endRange);
-
       $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
-
         $rootScope.$broadcast('dateRangeService:updated', picker.chosenLabel);
         dateRangeService.startRange = picker.startDate;
         dateRangeService.endRange = picker.endDate;
       });
-    }, 500);
+    }, 2000);
 
   })
 

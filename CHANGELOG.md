@@ -1,5 +1,21 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.94...HEAD)
+
+**Fixed bugs:**
+
+- Delete one node must delte recurrent children nodes [\#62](https://github.com/wilsto/BoardOS/issues/62)
+
+**Closed issues:**
+
+- Pas de croix de fermeture des nouveautés BOSS [\#244](https://github.com/wilsto/BoardOS/issues/244)
+- mise à jour des taches avec le datetimepicker non systématique [\#235](https://github.com/wilsto/BoardOS/issues/235)
+
+## [v1.6.94](https://github.com/wilsto/boardos/tree/v1.6.94) (2017-06-05)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.93...v1.6.94)
+
 ## [v1.6.93](https://github.com/wilsto/boardos/tree/v1.6.93) (2017-06-05)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.92...v1.6.93)
 
