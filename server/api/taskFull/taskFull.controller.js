@@ -153,7 +153,9 @@ exports.show = function(req, res) {
         follower.avatar = (follower.avatar) ? follower.avatar : 'assets/images/avatars/' + follower._id + '.png';
       });
       _.each(taskFull.comments, function(comment) {
-        comment.user.avatar = (comment.user.avatar) ? comment.user.avatar : 'assets/images/avatars/' + comment.user._id + '.png';
+        if (comment.user) {
+          comment.user.avatar = (comment.user.avatar) ? comment.user.avatar : 'assets/images/avatars/' + comment.user._id + '.png';
+        }
       });
       return res.json(taskFull);
     });

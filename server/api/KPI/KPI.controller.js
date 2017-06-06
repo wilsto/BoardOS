@@ -112,6 +112,7 @@ exports.tasksList = function(req, res) {
           mKPI.activity = (typeof req.query.activity === 'undefined') ? '' : req.query.activity;
           mKPI.originalActivity = ''
         }
+        console.log('mKPI', mKPI);
         deferred.resolve(mKPI);
       })
       return deferred.promise;
@@ -122,9 +123,12 @@ exports.tasksList = function(req, res) {
 
       var taskFilter = {};
       var cutoff = new Date();
-      cutoff.setDate(cutoff.getDate() - req.query.rangedate - 1);
+      if (typeof req.query.rangedate === 'undefined') {
+        req.query.rangedate = 1;
+      }
+      cutoff = new Date(cutoff.setDate(cutoff.getDate() - req.query.rangedate - 1)).toISOString();
       if (typeof req.query.taskFilter !== 'undefined') {
-        if (req.query.rangedate) {
+        if (req.query.rangedate !== 1) {
           taskFilter = {
             _id: req.query.taskFilter,
             'metrics': {
@@ -141,7 +145,7 @@ exports.tasksList = function(req, res) {
           }
         }
       } else {
-        if (req.query.rangedate) {
+        if (req.query.rangedate !== 1) {
           taskFilter = {
             'metrics': {
               $elemMatch: {
@@ -156,6 +160,7 @@ exports.tasksList = function(req, res) {
       TaskFull.find(taskFilter)
         .populate('actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
         .lean().exec(function(err, tasks) {
+          console.log('tasks', tasks.length);
           mTasks = [];
           _.each(tasks, function(rowdata, index) {
 

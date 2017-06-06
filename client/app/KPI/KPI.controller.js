@@ -19,8 +19,10 @@ angular.module('boardOsApp')
 
     $scope.load = function() {
       if ($stateParams.id) {
+        
+        
 
-        var query = ($stateParams.type === 'task') ? {
+        var query = ($location.search().type === 'task') ? {
           params: {
             taskFilter: $location.search().typeid,
             rangedate: $location.search().rangedate
@@ -34,20 +36,15 @@ angular.module('boardOsApp')
         };
         $http.get('/api/KPIs/' + $stateParams.id).success(function(KPI) {
           $scope.KPI = KPI;
-          
           var metricTaskValues = KPI.metricTaskValues || 'All';
           var refMetricTaskValues = KPI.refMetricTaskValues || 'All';
           $scope.calculation = '# ' + KPI.metricTaskField + '[' + metricTaskValues + '] <b class="text-primary">/ </b> # ' + KPI.refMetricTaskField + '[' + refMetricTaskValues + ']';
           $scope.where = (typeof $scope.KPI.whereField !== 'undefined' && KPI.whereField.length > 0) ? ' ' + KPI.whereField + ' ' + KPI.whereOperator + ' ' + KPI.whereValues : '';
           $scope.reverseSort = (KPI.category === 'Alert');
-
         });
 
-
         $http.get('/api/KPIs/tasksList/' + $stateParams.id, query).success(function(tasksList) {
-
           $scope.tasksList = tasksList;
-
           $scope.metricsNb = 0;
           $scope.sumValue = 0;
           $scope.sumRefValue = 0;
@@ -199,7 +196,7 @@ angular.module('boardOsApp')
     };
 
     $scope.$watch('filters', function() {
-      
+
       $scope.filterTasks();
     }, true);
 

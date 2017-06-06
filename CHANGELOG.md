@@ -2,7 +2,15 @@
 
 ## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
 
-[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.94...HEAD)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.95...HEAD)
+
+**Closed issues:**
+
+- Tache sans aucun acteur plante la tache et le dashboard [\#245](https://github.com/wilsto/BoardOS/issues/245)
+- BOSS - KPIs details [\#242](https://github.com/wilsto/BoardOS/issues/242)
+
+## [v1.6.95](https://github.com/wilsto/boardos/tree/v1.6.95) (2017-06-06)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.94...v1.6.95)
 
 **Fixed bugs:**
 
@@ -11,6 +19,7 @@
 **Closed issues:**
 
 - Pas de croix de fermeture des nouveautés BOSS [\#244](https://github.com/wilsto/BoardOS/issues/244)
+- Erreur d'affichage des nouveautés BOSS [\#243](https://github.com/wilsto/BoardOS/issues/243)
 - mise à jour des taches avec le datetimepicker non systématique [\#235](https://github.com/wilsto/BoardOS/issues/235)
 
 ## [v1.6.94](https://github.com/wilsto/boardos/tree/v1.6.94) (2017-06-05)

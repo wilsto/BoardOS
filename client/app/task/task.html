@@ -474,7 +474,7 @@
                         <tbody style="text-align:center;">
                             <tr ng-repeat="KPI in task.alerts | orderBy:'constraint' track by $index" on-finish-render uib-tooltip-html="'Contraint : {{KPI.constraint}}<br /> <br /> Description :  {{KPI.description}}  <br /> Suggestion :  {{KPI.suggestion}}'" tooltip-placement="right"  tooltip-class="tooltipkpi" >
                                 <td style="text-align:left;width:65%">
-                                  <a href="/KPI/{{KPI._id}}">{{KPI.name}}</a>
+                                  <a href="/KPI/{{KPI._id}}?type=task&typeid={{task._id}}">{{KPI.name}}</a>
                                   <!-- <br ng-if="KPI.name==='Predicted OverCharge'"><small ng-if="KPI.name==='Predicted OverCharge'" class="text-muted">Projected WorkLoad </small> -->
                                 </td>
                                 <td style="text-align:left;width:35%;font-size:13px">
@@ -716,7 +716,7 @@
                     <table class="table table-striped table-hover">
                         <tbody style="text-align:center;">
                             <tr ng-repeat="KPI in task.kpis | orderBy:'constraint' track by $index" on-finish-render uib-tooltip-html="'Contraint : {{KPI.constraint}}<br /> <br /> Description :  {{KPI.description}}  <br /> Suggestion :  {{KPI.suggestion}}'" tooltip-placement="left"  tooltip-class="tooltipkpi"  >
-                                <td style="text-align:left;width:65%"><a href="/KPI/{{KPI._id}}">{{KPI.name}}</a></td>
+                                <td style="text-align:left;width:65%"><a href="/KPI/{{KPI._id}}?type=task&typeid={{task._id}}">{{KPI.name}}</a></td>
                                 <td style="text-align:left;width:35%;font-size:13px">
                                     <span ng-if="KPI.calcul.task !== undefined && KPI.calcul.task !== null" class="badge" ng-style="{'background-color':giveMeMyColor(KPI.calcul.task, KPI.category)}" style="height:15px;line-height:10px;width:15px;margin-right: 10px">&nbsp;&nbsp;</span> {{KPI.calcul.task}}
                                     <span ng-if="KPI.category === 'Goal' && KPI.calcul.task !== undefined && KPI.calcul.task !== null"> %</span>

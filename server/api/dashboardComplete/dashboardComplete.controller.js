@@ -452,7 +452,7 @@ exports.show = function(req, res) {
 
       var actors = [];
       if (dashboardComplete.users && dashboardComplete.users.length > 0) {
-        _.each(dashboardComplete.users, function(actor) {
+        _.each(_.compact(dashboardComplete.users), function(actor) {
           var thisuser = _.filter(usersList, function(user) {
             return actor && user._id.toString() === actor._id.toString();
           });
@@ -470,7 +470,7 @@ exports.show = function(req, res) {
 
       _.each(dashboardComplete.tasks, function(task) {
         var actors = [];
-        _.each(task.actors, function(actor) {
+        _.each(_.compact(task.actors), function(actor) {
           var thisuser = _.filter(usersList, function(user) {
             return user._id.toString() === actor.toString();
           });
