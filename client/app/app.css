@@ -1076,9 +1076,9 @@ Portlets
     color: #333;
     float: left;
     display: inline-block;
-    font-size: 16px;
-    line-height: 16px;
-    font-weight: 400;
+    font-size: 13px;
+    line-height: 13px;
+    font-weight: 300;
     margin: 0;
     padding: 0;
     margin-top: 1px;
@@ -6268,8 +6268,9 @@ Profile Page
   }
 
   .daterangepicker.dropdown-menu.ltr.opensleft {
-    top: 50px!important;
+    margin-top: 40px!important;
     right: 5px!important;
+    position: fixed;
   }
 
   .navbar-brand {

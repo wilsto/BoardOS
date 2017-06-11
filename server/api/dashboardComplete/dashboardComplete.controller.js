@@ -1,3 +1,4 @@
+/*jshint sub:true*/
 'use strict';
 var _ = require('lodash');
 var async = require('async');
@@ -134,6 +135,13 @@ function createCompleteDashboard(dashboardId, callback) {
         DashboardComplete.findById(dashboardId, {
           __v: false
         }).lean().exec(function(err, dashboard) {
+          if (!dashboard.perimeter || dashboard.perimeter.length === 0) {
+            dashboard.perimeter = [];
+            dashboard.perimeter.push({
+              activity: dashboard.activity,
+              context: dashboard.context
+            })
+          }
           deferred.resolve(dashboard);
         })
       }
@@ -145,16 +153,22 @@ function createCompleteDashboard(dashboardId, callback) {
       // Get related tasks
       var deferred = Q.defer();
       dashboard.tasks = [];
-      TaskFull.find({
-        activity: {
-          '$regex': dashboard.activity || '',
-          $options: '-i'
-        },
-        context: {
-          '$regex': dashboard.context || '',
-          $options: '-i'
-        }
-      }, 'metrics needToFeed kpis alerts').sort({
+      var filterPerimeter = {
+        $or: []
+      };
+      _.each(dashboard.perimeter, function(perimeter) {
+        filterPerimeter['$or'].push({
+          activity: {
+            '$regex': perimeter.activity || '',
+            $options: '-i'
+          },
+          context: {
+            '$regex': perimeter.context || '',
+            $options: '-i'
+          }
+        });
+      });
+      TaskFull.find(filterPerimeter, 'metrics needToFeed kpis alerts').sort({
         date: 'asc'
       }).lean().exec(function(err, findtasks) {
         _.each(findtasks, function(task) {
@@ -374,16 +388,18 @@ function createCompleteDashboard(dashboardId, callback) {
         } else {
           //si existant
           var updated = _.merge(dashboardComplete, dashboard);
-          updated.users = dashboard.users;
-          updated.tasks = dashboard.tasks;
-          updated.kpis = dashboard.kpis;
-          updated.alerts = dashboard.alerts;
-          updated.categories = dashboard.categories;
+          updated.markModified('perimeter');
           updated.markModified('categories');
           updated.markModified('tasks');
           updated.markModified('kpis');
           updated.markModified('alerts');
           updated.markModified('users');
+          updated.users = dashboard.users;
+          updated.tasks = dashboard.tasks;
+          updated.kpis = dashboard.kpis;
+          updated.alerts = dashboard.alerts;
+          updated.categories = dashboard.categories;
+          updated.perimeter = dashboard.perimeter;
           updated.save(function(err) {
             callback(dashboardComplete);
             return true;

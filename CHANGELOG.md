@@ -2,7 +2,15 @@
 
 ## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
 
-[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.95...HEAD)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.97...HEAD)
+
+**Closed issues:**
+
+- BUg au niveau du datepickeer lorsque l'on avance dans la page [\#253](https://github.com/wilsto/BoardOS/issues/253)
+- Nouvelle information, somme des charges des taches par étape PDCA [\#252](https://github.com/wilsto/BoardOS/issues/252)
+
+## [v1.6.97](https://github.com/wilsto/boardos/tree/v1.6.97) (2017-06-11)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.95...v1.6.97)
 
 **Closed issues:**
 

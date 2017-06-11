@@ -7,6 +7,7 @@ var DashboardCompleteSchema = new Schema({
   name: String,
   activity: String,
   context: String,
+  perimeter: Schema.Types.Mixed,
   axis: String,
   categories: Schema.Types.Mixed,
   kpis: Schema.Types.Mixed,
