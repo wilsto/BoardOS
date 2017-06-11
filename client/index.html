@@ -247,7 +247,7 @@
       <!-- END SIDEBAR -->
       <!-- BEGIN CONTENT -->
       <div class="page-content-wrapper">
-        <div class="page-content" style="padding-top:0;">
+        <div class="page-content full-height" style="padding-top:0;">
           <!-- END BEGIN STYLE CUSTOMIZER -->
           <!-- BEGIN PAGE HEADER-->
           <div class="page-bar" ng-cloak ng-if="currentUser.name" >
@@ -257,7 +257,7 @@
                 <a href="/">Home</a>
               </li>
               <!-- DASHBOARD -->
-              <li ng-show="perimeter.name && showArianeDashboard">
+              <li ng-show="perimeter.name && showArianeDashboard" class="hidden-xs">
                 <i class="fa fa-angle-right"></i>
                 <i class="fa fa-dashboard"></i> <span style="color:lightgrey"> Dashboard  </span>  {{perimeter.name}}
               </li>
@@ -270,7 +270,7 @@
                 <span style="color:lightgrey"><i class="fa fa-map-marker"></i> Context </span> {{perimeter.context || 'All'}}
               </li> -->
               <!-- DASHBOARD -->
-              <li ng-show="currentTaskName.name && showArianeTask">
+              <li ng-show="currentTaskName.name && showArianeTask"  class="hidden-xs">
                 <i class="fa fa-angle-right"></i>
                 <i class="fa fa-tasks"></i> <span style="color:lightgrey">Task  </span>  {{currentTaskName.name}}
               </li>
@@ -293,14 +293,14 @@
 
           <!-- END PAGE HEADER-->
           <!-- Add your site or application content here -->
-          <div class="container-fluid" style="margin:20px;padding-top:30px" ui-view=""></div>
+          <div class="container-fluid container-boss"  ui-view=""></div>
         </div>
       </div>
 
       <!-- BEGIN FOOTER -->
-      <div class="footer">
+      <!-- <div class="footer">
         <div class="container"></div>
-      </div>
+      </div> -->
       <!-- END FOOTER -->
 
       <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
@@ -444,12 +444,21 @@
     <!-- endbuild -->
     <script type="text/javascript">
     $(function() {
-          $.feedback({
-  	        html2canvasURL: 'src/html2canvas.js',
-          	githubpath: 'wilsto/BoardOS', // CHANGE THIS TO YOUR PATH
-  	        serverURL: 'http://feedbackbot.herokuapp.com', // YOU CAN HOST YOUR OWN GITHUB BOT IF YOU WANT
-            placement: 'left'
+
+      function isMobile() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      }
+
+      if (!isMobile() && $(window).width() > 739 ) {
+        //place script you don't want to run on mobile here
+        $.feedback({
+          html2canvasURL: 'src/html2canvas.js',
+          githubpath: 'wilsto/BoardOS', // CHANGE THIS TO YOUR PATH
+          serverURL: 'http://feedbackbot.herokuapp.com', // YOU CAN HOST YOUR OWN GITHUB BOT IF YOU WANT
+          placement: 'bottom'
         });
+      }
+
     });
     </script>
     <div class="page-loading-overlay">

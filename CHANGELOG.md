@@ -6,8 +6,15 @@
 
 **Closed issues:**
 
+- Amélioration visuelle top bar [\#251](https://github.com/wilsto/BoardOS/issues/251)
+- Correction visuel du daterangepicker [\#250](https://github.com/wilsto/BoardOS/issues/250)
+- Création d'un footer pour la page task avec les boutons [\#249](https://github.com/wilsto/BoardOS/issues/249)
+- Repositionnement du feeback [\#248](https://github.com/wilsto/BoardOS/issues/248)
+- Demande de sauver tâche sans ajout de métrique [\#247](https://github.com/wilsto/BoardOS/issues/247)
+- Searchbar Lente a s'ouvrir. Plusieurs secondes de délai entre entrée premier caractère et reaction [\#246](https://github.com/wilsto/BoardOS/issues/246)
 - Tache sans aucun acteur plante la tache et le dashboard [\#245](https://github.com/wilsto/BoardOS/issues/245)
 - BOSS - KPIs details [\#242](https://github.com/wilsto/BoardOS/issues/242)
+- Mode responsive mobile [\#171](https://github.com/wilsto/BoardOS/issues/171)
 
 ## [v1.6.95](https://github.com/wilsto/boardos/tree/v1.6.95) (2017-06-06)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.94...v1.6.95)

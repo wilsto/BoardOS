@@ -46,8 +46,8 @@ angular.module('boardOsApp')
     });
 
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-      
-      
+
+
       if (fromState.name === 'task' && toState.name !== 'task' && !$scope.forceExit) {
         if ($scope.needToSave) {
           event.preventDefault();
@@ -197,8 +197,6 @@ angular.module('boardOsApp')
 
     $scope.$watch('task', function(newMap, previousMap) {
       $scope.needToSave = !angular.equals($scope.currentTask, $scope.task);
-
-
 
       if (initializing) {
         $timeout(function() {
@@ -648,6 +646,7 @@ angular.module('boardOsApp')
               });
               Notification.success(logInfo);
               $location.path('/task/' + data._id);
+              $scope.needToSave = false;
             });
           } else {
             $scope.taskAlreadyExist.id = alreadyExit[0]._id;
@@ -663,6 +662,7 @@ angular.module('boardOsApp')
             actor: $scope.currentUser
           });
           $scope.loadTask();
+          $scope.needToSave = false;
           Notification.success(logInfo);
         });
       }
@@ -683,12 +683,9 @@ angular.module('boardOsApp')
 
     $scope.withdraw = function() {
       bootbox.confirm('Are you sure to withdraw and close the task "' + $scope.task.name + '" ?', function(result) {
-
         if (result) {
           $scope.task.metrics[$scope.task.metrics.length - 1].status = 'Withdrawn';
-
           $http.put('/api/taskFulls/' + $scope.task._id, $scope.task).success(function(data) {
-
             var logInfo = 'Task "' + $scope.task.name + '" was withdrawn';
             $timeout(function() {
               initializing = true;

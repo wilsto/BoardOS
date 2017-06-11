@@ -8,15 +8,15 @@
 </nav>
 <!--* Modal Part-->
 <div class="row"  cg-busy="myPromise">
-<div class="row">
+<div class="col-md-12">
   <div class="row ">
     <div class="col-md-1">
       <button ng-if="dashboard._id" type="button" name="button" style="margin-bottom:5px;width:100%" class="btn btn-xs btn-outline btn-info" ng-click="refreshDashboard()">Refresh</button>
-      <img src="assets/images/dashboard.png" class="img-responsive" style="max-height:200px;" alt=""/>
+      <img src="assets/images/dashboard.png" class="img-responsive hidden-xs" style="max-height:200px;" alt=""/>
     </div>
     <div class="col-md-11">
       <div class="row">
-        <div class="col-md-4 col-sm-12 profile-info">
+        <div class="col-md-4 col-sm-12">
           <h1>
             <a href="#" style="color:black!important" editable-text="dashboard.name" e-style="width: 500px" buttons="right">{{ dashboard.name || 'Please give a name of your dashboard' }}</a>
           </h1>
@@ -55,7 +55,7 @@
           </div>
         </div>
         <!--end col-md-8-->
-        <div class="col-md-3 col-sm-12 profile-info">
+        <div class="col-md-3 col-sm-12 ">
 
           <div class="portlet sale-summary" ng-if="dashboard._id" >
               <div class="portlet-title" >
@@ -78,7 +78,7 @@
           </div>
 
         </div>
-        <div class="col-md-2 col-sm-12 profile-info">
+        <div class="col-md-2 col-sm-12 ">
           <!-- BEGIN OVERVIEW STATISTIC BARS-->
           <!-- BEGIN OVERVIEW STATISTIC BARS-->
           <div class="row stats-overview-cont" ng-if="dashboard._id">
@@ -93,8 +93,8 @@
                   <nvd3 options="optionsTasks" data="dataTasks"></nvd3>
                 </div>
               </div>
-<br>
-<br>
+              <br>
+              <br>
               <div class="stats-overview stat-block">
                 <div class="details">
                   <div class="title">
@@ -112,7 +112,6 @@
         <!--end col-md-8-->
         <div class="col-md-3 col-sm-12 ">
           <div class="stats-overview stat-block">
-
               <div id="myChartQCT"></div>
         </div>
         </div>
