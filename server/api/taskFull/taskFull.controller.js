@@ -397,9 +397,18 @@ exports.update = function(req, res) {
     });
     task.followers = _.compact(_.uniq(followers));
 
+    // Suppression des commentaires incomplets
+    var commentsOk = [];
     _.each(task.comments, function(comment) {
-      comment.user = comment.user._id;
+      console.log('comment', comment);
+      if (comment.user !== null) {
+        console.log('CONDITION PASSED');
+        comment.user = comment.user._id;
+        commentsOk.push(comment);
+      }
     });
+    console.log('commentsOk', commentsOk);
+    task.comments = commentsOk;
 
     /** Mise en majuscule des axes */
     if (task.activity) {
@@ -422,7 +431,7 @@ exports.update = function(req, res) {
       metric.endDate = moment(metric.endDate).add(3, 'hours').hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
 
       var startDate = (metric.startDate) ? metric.startDate : metric.targetstartDate;
-      var endDate = (metric.endDate) ? metric.endDate : (metric.startDate) ? metric.startDate : metric.targetEndDate;
+      var endDate = (metric.endDate) ? metric.endDate : (metric.startDate && index > 0) ? metric.startDate : metric.targetEndDate;
       metric.endDate = endDate;
 
       if (index === 0) {
@@ -489,6 +498,7 @@ exports.update = function(req, res) {
       }
     });
 
+    console.log('taskFull');
     var updated = _.merge(taskFull, task);
     taskFull.actors = task.actors;
     taskFull.followers = task.followers;

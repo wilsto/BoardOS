@@ -4,6 +4,7 @@ angular.module('boardOsApp')
   .controller('DashboardCtrl', function($scope, $rootScope, $http, $stateParams, myLibrary, $cookieStore, $location, Notification, $timeout, dateRangeService) {
 
     var initializing = true;
+    $scope.newPerimeterValue = {};
 
     function average(arr) {
       return _.reduce(arr, function(memo, num) {
@@ -111,7 +112,6 @@ angular.module('boardOsApp')
             var b = moment(new Date(task.metrics[task.metrics.length - 1].targetstartDate));
             return task.metrics[task.metrics.length - 1].status === 'Not Started';
           });
-
           $scope.filteredPlanTasksLoad = _.reduce($scope.filteredPlanTasks, function(s, task) {
             return s + parseFloat(task.metrics[task.metrics.length - 1].projectedWorkload || task.metrics[task.metrics.length - 1].targetLoad);
           }, 0).toFixed(1);
@@ -157,6 +157,7 @@ angular.module('boardOsApp')
             dashboard.subscribed = true;
           }
           $scope.dashboard = dashboard;
+          $scope.PerimetersIsExpanded = false;
 
           $rootScope.perimeter.name = dashboard.name;
           $rootScope.perimeter.id = dashboard._id;
@@ -165,8 +166,10 @@ angular.module('boardOsApp')
           $rootScope.perimeter.axis = dashboard.axis;
           $rootScope.perimeter.category = dashboard.category;
           $cookieStore.put('perimeter', $rootScope.perimeter);
-          
-          $scope.tasksNb = dashboard.tasks.length;
+
+          if (dashboard.tasks) {
+            $scope.tasksNb = dashboard.tasks.length;
+          }
 
           $rootScope.$broadcast('dateRangeService:updated', dateRangeService.rangeDateTxt);
 
@@ -320,16 +323,24 @@ angular.module('boardOsApp')
 
             $scope.loadTasks();
             initializing = false;
+            $scope.needToSave = false;
+
           });
         });
       } else {
         $scope.userindex = 0;
+        $scope.PerimetersIsExpanded = true;
+
         $scope.dashboard = {
           name: '',
           paramId: $stateParams.id,
           users: [{
             _id: $scope.currentUser._id,
             dashboardName: ''
+          }],
+          perimeter: [{
+            activity: null,
+            context: null
           }]
         };
       }
@@ -341,7 +352,13 @@ angular.module('boardOsApp')
     // *******************
     $scope.create = function() {
       $scope.dashboard.users[$scope.userindex].name = $scope.dashboard.name;
-      $http.post('/api/dashboardCompletes', $scope.dashboard).success(function(data) {
+      if ($scope.newPerimeterValue.activity || $scope.newPerimeterValue.context) {
+        $scope.dashboard.perimeter.push({
+          activity: $scope.newPerimeterValue.activity,
+          context: $scope.newPerimeterValue.context
+        });
+      }
+      $scope.myPromise = $http.post('/api/dashboardCompletes', $scope.dashboard).success(function(data) {
         var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was created';
         Notification.success(logInfo);
         $location.path('/dashboard/' + data._id);
@@ -356,14 +373,23 @@ angular.module('boardOsApp')
       delete $scope.dashboard.kpis;
       delete $scope.dashboard.alerts;
 
-      $http.put('/api/dashboardCompletes/' + $scope.dashboard._id, $scope.dashboard).success(function() {
+      if ($scope.newPerimeterValue.activity || $scope.newPerimeterValue.context) {
+        $scope.dashboard.perimeter.push({
+          activity: $scope.newPerimeterValue.activity,
+          context: $scope.newPerimeterValue.context
+        });
+      }
+      $scope.myPromise = $http.put('/api/dashboardCompletes/' + $scope.dashboard._id, $scope.dashboard).success(function() {
+        
         var logInfo = 'Dashboard "' + $scope.dashboard.name + '" was updated';
         Notification.success(logInfo);
+        $scope.newPerimeterValue = {};
+        $scope.showNewPerimeter = false;
         $scope.loadCompleteDashboard();
       });
     };
 
-    $scope.$watchGroup(['dashboard.name', 'dashboard.context', 'dashboard.activity'], function(newMap, previousMap) {
+    $scope.$watchGroup(['dashboard.name', 'newPerimeterValue.activity', 'newPerimeterValue.context'], function(newMap, previousMap) {
       if (initializing) {
         $timeout(function() {
           //initializing = true;
@@ -374,9 +400,31 @@ angular.module('boardOsApp')
         });
       } else {
         $scope.dashboard.users[$scope.userindex].dashboardName = $scope.dashboard.name;
-        $scope.update();
+        $scope.needToSave = true;
       }
     }, true);
+
+    $scope.$watch('dashboard.perimeter', function(newMap, previousMap) {
+      if (initializing) {
+        $timeout(function() {
+          //initializing = true;
+          if ($scope.dashboard) {
+            $scope.dashboard.users[$scope.userindex].dashboardName = $scope.dashboard.name;
+          }
+          //
+        });
+      } else {
+        $scope.dashboard.users[$scope.userindex].dashboardName = $scope.dashboard.name;
+        $scope.needToSave = true;
+      }
+    }, true);
+
+    $scope.removePerimeter = function(data, index) {
+      
+      
+      $scope.dashboard.perimeter.splice(index, 1);
+    };
+
 
     $scope.options = {
       chart: {

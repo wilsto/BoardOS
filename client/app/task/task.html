@@ -385,10 +385,20 @@
             </div>
             <div class="portlet-body" style="padding-bottom:0!important;margin-bottom:0px;" ng-show="TeamIsExpanded">
                 <ul class="list-unstyled" style="margin-bottom:0!important">
-                    <li>
+                    <li class="TaskActors-facepile">
                         <div class="pull-left" style="color:#898E95;width:65px;">Actors</div>
-                        <div class="pull-left" ng-repeat="actor in task.actors ">
-                            <img uib-tooltip-html="'{{actor.name}}'" tooltip-placement="bottom" alt="" ng-src="{{actor.avatar}}" style="width:30px;height:30px;" class="img-circle" err-src="assets/images/avatars/avatar.png" />&nbsp;
+                        <div class="pull-left RemovableAvatar TaskActors-facepileAvatar" ng-repeat="actor in task.actors ">
+                            <img uib-tooltip-html="'{{actor.name}}'" tooltip-placement="right" alt="" ng-src="{{actor.avatar}}" style="width:35px;height:35px;" class="img-circle" err-src="assets/images/avatars/avatar.png" />
+                            <a class="RemoveButton RemovableAvatar-avatarRemoveButton" ng-click="removeActor(actor, $index)">
+                              <div uib-tooltip-html="'Remove actor'" style="width:15px;height:15px;color:white;background-color:#1aafd0;"
+                              tooltip-placement="right" class="circularButtonView add-button detailsFollowersView-addButton circularButtonView--small circularButtonView--onWhiteBackground circularButtonView--active">
+                                  <span class="circularButtonView-label">
+                                    <svg class="svgIcon XIcon RemoveButton-xIcon" title="XIcon" viewBox="0 0 32 32">
+                                      <polygon points="24.485,27.314 27.314,24.485 18.828,16 27.314,7.515 24.485,4.686 16,13.172 7.515,4.686 4.686,7.515 13.172,16 4.686,24.485 7.515,27.314 16,18.828 "></polygon>
+                                    </svg>
+                                  </span>
+                              </div>
+                            </a>
                         </div>
                         <a href="#" ng-click="openAddActorBox()" ng-hide="blnAddActor">
                         <div uib-tooltip-html="'Add an actor to this task not yet involved.'" tooltip-placement="bottom" class="circularButtonView add-button detailsFollowersView-addButton circularButtonView--small circularButtonView--onWhiteBackground circularButtonView--active">
@@ -1075,7 +1085,7 @@
     <button type="button" name="button" style="margin-top:2px;margin-right:10px;width:100px;" class="btn btn-primary pull-right hidden-xs"
         ng-if="needToSave && task._id" ng-cloak ng-click="update()"
         ng-disabled="!(task.name && task.context && task.activity && task.metrics[task.metrics.length-1].targetstartDate && task.metrics[task.metrics.length-1].targetEndDate && task.metrics[task.metrics.length-1].targetLoad && task.metrics[task.metrics.length-1].trust)"
-        uib-tooltip-html="'Resfresh will operate again all calculations'" tooltip-placement="top" >Save Task</button>
+        uib-tooltip-html="'Save will  copy data to a permanent storage'" tooltip-placement="top" >Save Task</button>
 
     <!-- small screen -->
     <button type="button" name="button" style="margin-top:5px;margin-right:5px;float:left" class="btn btn-xs btn-outline btn-info visible-xs"
@@ -1091,7 +1101,7 @@
     <button type="button" name="button" style="margin-top:2px;margin-right:40px;width:100px;float:left" class="btn btn-primary pull-right visible-xs"
       ng-if="needToSave && task._id" ng-cloak ng-click="update()"
       ng-disabled="!(task.name && task.context && task.activity && task.metrics[task.metrics.length-1].targetstartDate && task.metrics[task.metrics.length-1].targetEndDate && task.metrics[task.metrics.length-1].targetLoad && task.metrics[task.metrics.length-1].trust)"
-      uib-tooltip-html="'Resfresh will operate again all calculations'" tooltip-placement="top" >Save Task</button>
+      uib-tooltip-html="'Save will  copy data to a  permanent storage'" tooltip-placement="top" >Save Task</button>
   </div>
 </footer>
 

@@ -46,8 +46,6 @@ angular.module('boardOsApp')
     });
 
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
-
-
       if (fromState.name === 'task' && toState.name !== 'task' && !$scope.forceExit) {
         if ($scope.needToSave) {
           event.preventDefault();
@@ -437,14 +435,14 @@ angular.module('boardOsApp')
     // *******************
     $scope.create = function() {
       // Nouvelle tache
-      $http.get('/api/taskFulls/search', {
+      $scope.myPromise = $http.get('/api/taskFulls/search', {
         params: {
           activity: $scope.task.activity,
           context: $scope.task.context
         }
       }).success(function(alreadyExit) {
         if (alreadyExit.length === 0) {
-          $http.post('/api/taskFulls', $scope.task).success(function(data) {
+          $scope.myPromise = $http.post('/api/taskFulls', $scope.task).success(function(data) {
             var logInfo = 'Task "' + $scope.task.name + '" was created';
             Notification.success(logInfo);
             $location.path('/task/' + data._id);
@@ -461,7 +459,7 @@ angular.module('boardOsApp')
     // update a task
     // *******************
     $scope.update = function() {
-      $http.put('/api/taskFulls/' + $scope.task._id, $scope.task).success(function(data) {
+      $scope.myPromise = $http.put('/api/taskFulls/' + $scope.task._id, $scope.task).success(function(data) {
         var logInfo = 'Task "' + $scope.task.name + '" was updated';
         $timeout(function() {
           initializing = true;
@@ -472,7 +470,7 @@ angular.module('boardOsApp')
     };
 
     $scope.refreshTask = function() {
-      $http.put('/api/taskFulls/' + $scope.task._id, $scope.task).success(function(data) {
+      $scope.myPromise = $http.put('/api/taskFulls/' + $scope.task._id, $scope.task).success(function(data) {
         var logInfo = 'Task "' + $scope.task.name + '" was recalculated';
         $timeout(function() {
           initializing = true;
@@ -531,7 +529,12 @@ angular.module('boardOsApp')
         _id: $scope.currentUser._id
       }));
       //$scope.update();
-      $scope.loadTask();
+    };
+
+    $scope.removeActor = function(data, index) {
+      
+      
+      $scope.task.actors.splice(index, 1);
     };
 
     // *******************
@@ -630,7 +633,7 @@ angular.module('boardOsApp')
 
       if ($scope.task._id === undefined && $scope.task.activity !== undefined && $scope.task.context !== undefined) {
         // Nouvelle tache
-        $http.get('/api/taskFulls/search', {
+        $scope.myPromise = $http.get('/api/taskFulls/search', {
           params: {
             activity: $scope.task.activity,
             context: $scope.task.context
@@ -638,7 +641,7 @@ angular.module('boardOsApp')
         }).success(function(alreadyExit) {
           // si cela n'existe pas
           if (alreadyExit.length === 0) {
-            $http.post('/api/taskFulls', $scope.task).success(function(data) {
+            $scope.myPromise = $http.post('/api/taskFulls', $scope.task).success(function(data) {
               var logInfo = 'Task "' + $scope.task.name + '" was created';
               $http.post('/api/logs', {
                 info: logInfo,
@@ -655,7 +658,7 @@ angular.module('boardOsApp')
         });
       } else {
         // tache déjà existante en cours de modification
-        $http.put('/api/taskFulls/' + $scope.task._id, $scope.task).success(function(data) {
+        $scope.myPromise = $http.put('/api/taskFulls/' + $scope.task._id, $scope.task).success(function(data) {
           var logInfo = 'Task "' + $scope.task.name + '" was updated';
           $http.post('/api/logs', {
             info: logInfo,
@@ -672,7 +675,7 @@ angular.module('boardOsApp')
     $scope.delete = function() {
       bootbox.confirm('Are you sure to delete this task ? It can NOT be undone.', function(result) {
         if (result) {
-          $http.delete('/api/taskFulls/' + $scope.task._id).success(function() {
+          $scope.myPromise = $http.delete('/api/taskFulls/' + $scope.task._id).success(function() {
             var logInfo = 'Task "' + $scope.task.name + '" was deleted';
             Notification.success(logInfo);
             $location.path('/');

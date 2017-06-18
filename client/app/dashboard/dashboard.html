@@ -18,50 +18,83 @@
         <div class="col-md-6 col-sm-12">
           <h3 style="margin-top:0">
             <a href="#" style="color:black!important" editable-text="dashboard.name" e-style="width: 500px" buttons="right">{{ dashboard.name || 'Please give a name of your dashboard' }}</a>
+            <div  style="height:20px;width:20px;margin-left:35px;" class=" circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground"
+                  uib-tooltip-html="'Show/Hide perimeter details of this dashboard'" tooltip-placement="right"
+                  ng-click="PerimetersIsExpanded=!PerimetersIsExpanded">
+                <span class="circularButtonView-label">
+                  <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!PerimetersIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                  <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="PerimetersIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+
+            </span>
+            </div>
+            <span class="text-muted" style="font-size:9px;">Perimeter Details</span>
           </h3>
-          <ul class="list list-inline">
+          <ul class="list list-inline" ng-show="PerimetersIsExpanded">
               <li style="width:100%;border:1px dotted rgb(196, 197, 205);padding:5px;" ng-repeat="perimeterValue in dashboard.perimeter">
                   <div class="row">
                     <div class="col-md-6">
-                      <div  style="height:20px;width:20px" class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground" uib-tooltip-html="'Modify this perimeter'" tooltip-placement="bottom">
-                          <span class="circularButtonView-label">
-                            <svg class="svgIcon add-followers-icon" viewbox="0 0 32 32" title="MoreIcon" >
-                                <circle cx="7" cy="16" r="3"></circle>
-                                <circle cx="16" cy="16" r="3"></circle>
-                                <circle cx="25" cy="16" r="3"></circle>
-                            </svg>
-                      </span>
-                      </div>
+
                       <i class="fa fa-flash d-block"></i>
                       <span class="d-block text-muted">Activity</span>
-                      <a href="#" editable-text="perimeterValue.activity" style="color:black" class=" d-block" e-style="color:black;width: 500px" e-uib-typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:50">
+                      <a href="#" editable-text="perimeterValue.activity" class=" d-block" e-uib-typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:50">
                         {{perimeterValue.activity || 'All' }}
                       </a>
                     </div>
                     <div class="col-md-6">
                       <i class="fa fa-map-marker d-block"></i>
                         <span class="d-block text-muted">Context</span>
-                      <a href="#" editable-text="perimeterValue.context" style="color:black"  class=" d-block dont-break-out" e-style="color:black;width: 500px" e-uib-typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:50">
+                      <a href="#" editable-text="perimeterValue.context" class=" d-block dont-break-out" e-uib-typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:50">
                         {{perimeterValue.context || 'All' }}
                       </a>
+
+                      <div style="height:20px;width:20px;" class="pull-right circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground"
+                            uib-tooltip-html="'Remove this perimeter from this dashboard'" tooltip-placement="right"
+                         ng-click="removePerimeter(perimeterValue, $index)">
+                          <span class="circularButtonView-label">
+                            <svg class="svgIcon add-followers-icon" viewbox="0 0 32 32" title="minus" >
+                              <polygon points="28,14 18,14 14,14 4,14 4,18 14,18 18,18 28,18"></polygon>
+                            </svg>
+                      </span>
+                      </div>
+
                     </div>
                   </div>
               </li>
-              <li style="width:100%;border:1px dotted rgb(196, 197, 205);padding:5px;">
-                <div  style="height:20px;width:20px" class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground" uib-tooltip-html="'Add another perimeter'" tooltip-placement="bottom">
+              <li style="width:100%;border:1px dotted rgb(196, 197, 205);padding:5px;" ng-show="PerimetersIsExpanded">
+                <div class="row">
+                  <div class="col-md-6">
+                <div  style="height:20px;width:20px" class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground" uib-tooltip-html="'Add another perimeter'" tooltip-placement="bottom" ng-init="showNewPerimeter=false" ng-click="showNewPerimeter=!showNewPerimeter">
                     <span class="circularButtonView-label">
                       <svg class="svgIcon add-followers-icon" viewbox="0 0 32 32" title="plus" >
                         <polygon points="28,14 18,14 18,4 14,4 14,14 4,14 4,18 14,18 14,28 18,28 18,18 28,18"></polygon>
                       </svg>
                 </span>
                 </div>
+                <span ng-show="showNewPerimeter">
+                <i class="fa fa-flash d-block"></i>
+                <span class="d-block text-muted">Activity</span>
+                <a href="#" editable-text="newPerimeterValue.activity" class=" d-block" e-uib-typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:50">
+                  {{newPerimeterValue.activity || 'All' }}
+                </a>
+              </span>
+              </div>
+              <div class="col-md-6" >
+                <span ng-show="showNewPerimeter">
+                <i class="fa fa-map-marker d-block"></i>
+                  <span class="d-block text-muted">Context</span>
+                <a href="#" editable-text="newPerimeterValue.context" class=" d-block dont-break-out"  e-uib-typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:50">
+                  {{newPerimeterValue.context || 'All' }}
+                </a>
+              </span>
+              </div>
+            </div>
               </li>
               <li style="margin-top:5px" >
                 <span ng-show="messageCreation" class="label label-danger">  {{messageCreation}}</span>
               </li>
           </ul>
           <div class="pull-right" style="width:200px" ng-if="!dashboard._id" uib-tooltip-html="'You must fill at least 2 mandatories fields : name and (activity and/or context)to be able to save'" tooltip-placement="bottom">
-              <button type="button" name="button" style="width:200px" class="btn  btn-primary" ng-click="create()" ng-disabled="!(dashboard.name && (dashboard.context || dashboard.activity))">Create</button>
+              <button type="button" name="button" style="width:200px" class="btn  btn-primary" ng-click="create()" ng-disabled="!(dashboard.name && (dashboard.perimeter[0].context || dashboard.perimeter[0].activity))">Create</button>
           </div>
         </div>
         <!--end col-md-8-->
@@ -161,7 +194,7 @@
                     </span>
                 </div>
             </div>
-            <div class="portlet-body"  ng-show="PlanTasksIsExpanded" style="padding:0!important;height:400px;overflow:auto">
+            <div class="portlet-body"  ng-show="PlanTasksIsExpanded" style="padding:0!important;max-height:400px;overflow:auto">
               <table class="table table-striped table-hover" >
                   <tbody style="text-align:left;">
                       <tr ng-repeat="task in filteredPlanTasks | orderBy:'metrics[0].targetEndDate'">
@@ -442,7 +475,7 @@
 
             </div>
         </div>
-
+<br>
         <!-- Review -->
         <div class="" id="Review">
             <div class="portlet sale-summary" ng-if="dashboard._id === 1">
@@ -569,5 +602,8 @@
   <button type="button" name="button" style="margin-top:2px;margin-right:10px;width:100px;" class="btn btn-xs btn-outline btn-success"
     ng-click="refreshTask()" ng-if="dashboard._id" ng-cloak
     uib-tooltip-html="'Review will show you informations for your reviews'" tooltip-placement="top" >Review </button>
+    <button type="button" name="button" style="margin-top:2px;margin-right:10px;width:100px;" class="btn btn-primary pull-right "
+        ng-if="needToSave && dashboard._id" ng-cloak ng-click="update()"
+        uib-tooltip-html="'Save will  copy data to a permanent storage'" tooltip-placement="top" >Save</button>
   </div>
 </footer>

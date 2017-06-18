@@ -2,7 +2,23 @@
 
 ## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
 
-[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.97...HEAD)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.98...HEAD)
+
+**Closed issues:**
+
+- Créer un script pour passer de dashboard mono contexte/activty à multi perimeter [\#271](https://github.com/wilsto/BoardOS/issues/271)
+- Passer le script de VIZ [\#270](https://github.com/wilsto/BoardOS/issues/270)
+- Supprimer un acteur d'une tache [\#269](https://github.com/wilsto/BoardOS/issues/269)
+- afficher la première date d'engagement dans la liste des taches pour le détail d'un KPI [\#266](https://github.com/wilsto/BoardOS/issues/266)
+- ajouter les charges au niveau de la page accueil en mode PDCA [\#265](https://github.com/wilsto/BoardOS/issues/265)
+- Reverifier le best delivery date j'ai l'impression qu'il se sauvegarde mal il remet la date de start [\#264](https://github.com/wilsto/BoardOS/issues/264)
+- Reverifier le best delivery date j'ai l'impression qu'il se sauvegarde mal il remet la date de start [\#263](https://github.com/wilsto/BoardOS/issues/263)
+- la footbar est transparente en recette [\#261](https://github.com/wilsto/BoardOS/issues/261)
+- impossibilité de faire save sur une tache [\#259](https://github.com/wilsto/BoardOS/issues/259)
+- Créer des dashboards multi context et activités [\#254](https://github.com/wilsto/BoardOS/issues/254)
+
+## [v1.6.98](https://github.com/wilsto/boardos/tree/v1.6.98) (2017-06-11)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.97...v1.6.98)
 
 **Closed issues:**
 

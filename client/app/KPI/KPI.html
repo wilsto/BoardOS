@@ -167,7 +167,7 @@
                                   <a href="/task/{{task._id}}"><div class="desc" popover-html-unsafe="Context : {{task.context}} </p>  Activity : {{task.activity}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="right" popover-delay ="1000">{{task.name}}  <span class="label label-sm label-warning " ng-show="task.needToFeed"> Need Metric</span></div></a>
                               </td>
                               <td class="hidden-xs">
-                                {{task.metrics[task.metrics.length - 1].targetstartDate | date:'mediumDate'}}<br/>
+                                {{task.metrics[0].targetstartDate | date:'mediumDate'}}<br/>
                                 <div ng-if="task.metrics[task.metrics.length - 1].status ==='Not Started' ">
                                   <div class="label label-sm label-warning" ng-if="task.metrics[task.metrics.length - 1].startDate < today ">
                                     <i class="fa fa-bell"></i>
@@ -188,7 +188,7 @@
                                 </div>
                               </td>
                               <td class="hidden-xs">
-                                {{task.metrics[task.metrics.length - 1].targetLoad}} &nbsp;<small class="text-muted pull-right" ng-if="task.metrics[task.metrics.length - 1].status ==='In Progress'"><i>({{task.metrics[task.metrics.length - 1].progress}}%)</i></small>
+                                {{task.metrics[0].targetLoad}} &nbsp;<small class="text-muted pull-right" ng-if="task.metrics[task.metrics.length - 1].status ==='In Progress'"><i>({{task.metrics[task.metrics.length - 1].progress}}%)</i></small>
                                 <br/>
                                 <div ng-if="task.metrics[task.metrics.length - 1].projectedWorkload > task.metrics[task.metrics.length - 1].targetLoad">
                                   <div class="label label-sm label-danger">
@@ -208,7 +208,7 @@
                                 </div>
                               </td>
                               <td class="hidden-xs">
-                                {{task.metrics[task.metrics.length - 1].targetEndDate | date:'mediumDate'}}<br/>
+                                {{task.metrics[0].targetEndDate | date:'mediumDate'}}<br/>
                                 <span class="label label-sm" ng-class="{'label-warning':task.metrics[task.metrics.length - 1].progressStatus ==='At Risk','label-success':task.metrics[task.metrics.length - 1].progressStatus ==='On Time','label-danger':task.metrics[task.metrics.length - 1].progressStatus ==='Late'}">
                                   {{task.metrics[task.metrics.length - 1].progressStatus}}
                                 </span>

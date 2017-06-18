@@ -93,11 +93,6 @@
         <div class="col-lg-3 col-md-6 col-sm-12" ng-class="{'label-default':task.metrics[0].status ==='Not Started'}" style="padding-bottom:10px;">
             <div class="pdcaCol" ng-class="{'label-default':task.metrics[0].status ==='Not Started'}">
                 PLAN
-                <div class="pull-right" ng-if="task.metrics[0].status ==='Not Started'">
-                    <span class="label" ng-class="{'label-info':task.metrics[0].status ==='In Progress','label-success':task.metrics[0].status ==='Finished','label-default':task.metrics[0].status ==='Not Started','label-lightgrey':task.metrics[0].status =='Withdrawn'}">
-                          {{task.metrics[0].status}}
-                        </span>
-                </div>
             </div>
 
             <!-- Tasks -->
@@ -107,11 +102,14 @@
                         Planned Tasks
                     </div>
                     <div class="tools">
-                        <div class="pull-right" ng-init="PlanTasksIsExpanded=true" ng-click="PlanTasksIsExpanded=!PlanTasksIsExpanded">
-                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!PlanTasksIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
-                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="PlanTasksIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
-                        </div>
-                        <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{filteredPlanTasks.length}}</span></span>
+                      <div class="pull-right" ng-init="PlanTasksIsExpanded=true" ng-click="PlanTasksIsExpanded=!PlanTasksIsExpanded">
+                          <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!PlanTasksIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                          <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="PlanTasksIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                      </div>
+                      <span class="pull-right" style="margin-right:15px;">
+                        <i class="fa fa-hashtag" aria-hidden="true"></i><span class="text-info">  {{filteredPlanTasks.length}}</span>&nbsp;&nbsp;
+                        <i class="fa fa-clock-o" aria-hidden="true"></i><span class="text-info">  {{filteredPlanTasksLoad}} </span><small>MD</small>
+                      </span>
                     </div>
                 </div>
                 <div class="portlet-body" style="padding:0!important"  ng-show="PlanTasksIsExpanded">
@@ -157,14 +155,6 @@
         <div class="col-lg-3 col-md-6 col-sm-12" ng-class="{'label-info':task.metrics[0].status ==='In Progress'}" style="padding-bottom:20px;">
             <div class="pdcaCol" ng-class="{'label-info':task.metrics[0].status ==='In Progress'}">
                 DO
-                <div class="pull-right" ng-if="task.metrics[0].status ==='In Progress'">
-                    <span class="label" ng-class="{'label-info':task.metrics[0].status ==='In Progress','label-success':task.metrics[0].status ==='Finished','label-default':task.metrics[0].status ==='Not Started','label-lightgrey':task.metrics[0].status =='Withdrawn'}">
-                          {{task.metrics[0].status}}
-                        </span>
-                </div>
-                <div class="pull-right">
-                  <button type="button" name="button" style="margin-left:5px;" class="btn btn-xs btn-outline btn-warning" ng-click="reopen()" ng-if="task.metrics[0].status ==='Finished' ">ReOpen</button>
-                </div>
             </div>
             <!-- Alerts -->
             <div class="" id="Alert" style="margin-bottom:0!important">
@@ -203,11 +193,12 @@
                         In Progress Tasks
                     </div>
                     <div class="tools">
-                        <div class="pull-right" ng-init="InProgressTasksIsExpanded=true" ng-click="InProgressTasksIsExpanded=!InProgressTasksIsExpanded">
-                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!InProgressTasksIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
-                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="InProgressTasksIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
-                        </div>
-                        <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{filteredInProgressTasks.length}}</span></span>
+                      <div class="pull-right" ng-init="InProgressTasksIsExpanded=true" ng-click="InProgressTasksIsExpanded=!InProgressTasksIsExpanded">
+                          <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!InProgressTasksIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                          <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="InProgressTasksIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                      </div>
+                      <i class="fa fa-hashtag" aria-hidden="true"></i><span class="text-info">  {{filteredInProgressTasks.length}}</span>&nbsp;&nbsp;
+                      <i class="fa fa-clock-o" aria-hidden="true"></i><span class="text-info">  {{filteredInProgressTasksLoad}} </span><small>MD</small>
                     </div>
                 </div>
                 <div class="portlet-body" style="padding:0!important" ng-show="InProgressTasksIsExpanded">
@@ -243,11 +234,6 @@
         <div class="col-lg-3 col-md-6 col-sm-12" ng-class="{'label-success':task.metrics[0].status ==='Finished','label-lightgrey':task.metrics[0].status =='Withdrawn'}" style="padding-bottom:20px;">
             <div class="pdcaCol" ng-class="{'label-success':task.metrics[0].status ==='Finished','label-lightgrey':task.metrics[0].status =='Withdrawn'}">
                 CHECK
-                <div class="pull-right" ng-if="task.metrics[0].status ==='Finished' || task.metrics[0].status =='Withdrawn'">
-                    <span class="label" >
-                          {{task.metrics[0].status}}
-                        </span>
-                </div>
             </div>
             <!-- KPIs -->
             <div class="" id="KPI">
@@ -287,11 +273,13 @@
                         Finished Tasks <small class="text-muted">(not reviewed)</small>
                     </div>
                     <div class="tools">
-                        <div class="pull-right" ng-init="FinishedTasksIsExpanded=true" ng-click="FinishedTasksIsExpanded=!FinishedTasksIsExpanded">
-                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!FinishedTasksIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
-                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="FinishedTasksIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
-                        </div>
-                        <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{filteredFinishedTasks.length}}</span></span>
+                      <div class="pull-right" ng-init="FinishedTasksIsExpanded=true" ng-click="FinishedTasksIsExpanded=!FinishedTasksIsExpanded">
+                          <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!FinishedTasksIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                          <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="FinishedTasksIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                      </div>
+                      <i class="fa fa-hashtag" aria-hidden="true"></i><span class="text-info">  {{filteredFinishedTasks.length}}</span>&nbsp;&nbsp;
+                      <i class="fa fa-clock-o" aria-hidden="true"></i><span class="text-info">  {{filteredFinishedTasksLoad}} </span><small>MD</small>
+
                     </div>
                 </div>
                 <div class="portlet-body" style="padding:0!important" ng-show="FinishedTasksIsExpanded">
@@ -353,11 +341,12 @@
                         Reviewed Tasks
                     </div>
                     <div class="tools">
-                        <div class="pull-right" ng-init="ReviewedTasksIsExpanded=true" ng-click="ReviewedTasksIsExpanded=!ReviewedTasksIsExpanded">
-                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!ReviewedTasksIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
-                            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="ReviewedTasksIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
-                        </div>
-                        <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{filteredReviewedTasks.length}}</span></span>
+                      <div class="pull-right" ng-init="ReviewedTasksIsExpanded=true" ng-click="ReviewedTasksIsExpanded=!ReviewedTasksIsExpanded">
+                          <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!ReviewedTasksIsExpanded" viewBox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+                          <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="ReviewedTasksIsExpanded" viewBox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+                      </div>
+                      <i class="fa fa-hashtag" aria-hidden="true"></i><span class="text-info">  {{filteredReviewedTasks.length}}</span>&nbsp;&nbsp;
+                      <i class="fa fa-clock-o" aria-hidden="true"></i><span class="text-info">  {{filteredReviewedTasksLoad}} </span><small>MD</small>
                     </div>
                 </div>
                 <div class="portlet-body" style="padding:0!important" ng-show="ReviewedTasksIsExpanded">

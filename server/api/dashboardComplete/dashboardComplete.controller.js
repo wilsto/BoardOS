@@ -511,9 +511,9 @@ exports.show = function(req, res) {
 // Creates a new dashboardComplete in the DB.
 exports.create = function(req, res) {
   // req.body
-  var filter = {};
-  filter.activity = req.body.activity || '';
-  filter.context = req.body.context || '';
+  var filter = {
+    perimeter: req.body.perimeter
+  };
   DashboardComplete.find(filter, function(err, dashboardCompletes) {
     if (err) {
       return handleError(res, err);
@@ -547,6 +547,7 @@ exports.create = function(req, res) {
       });
 
     } else {
+      console.log('req.body', req.body);
       DashboardComplete.create(req.body, function(err, dashboardComplete) {
         if (err) {
           return handleError(res, err);
@@ -575,7 +576,9 @@ exports.update = function(req, res) {
     updated.tasks = req.body.tasks;
     updated.kpis = req.body.kpis;
     updated.alerts = req.body.alerts;
+    updated.perimeter = req.body.perimeter;
     updated.categories = req.body.categories;
+    updated.markModified('perimeter');
     updated.markModified('categories');
     updated.markModified('tasks');
     updated.markModified('kpis');

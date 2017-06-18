@@ -7065,3 +7065,131 @@ TASK
     left: 100%;
     position: absolute;
   }
+
+  .footer-task-boss {
+    height: 35px;
+    line-height: 35px;
+    background-color: #35363a;
+    color: white;
+  }
+
+  .mfb-component--br {
+    z-index: 99999999;
+    margin-right: 5px;
+  }
+
+  .mfb-component--br a {
+    color: white!important;
+  }
+
+  .mfb-component--br a:hover {
+    color: white!important;
+  }
+
+  .Facepile {
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    display: -webkit-inline-box;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex
+  }
+
+  .Facepile-avatar, .Facepile-avatar--clickable, .Facepile-empty, .Facepile-placeholder, .Facepile-loadingPlaceholder {
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    margin-right: 5px
+  }
+
+  .Facepile-avatar:last-child, .Facepile-avatar--clickable:last-child, .Facepile-empty:last-child, .Facepile-placeholder:last-child, .Facepile-loadingPlaceholder:last-child {
+    margin-right: 0
+  }
+
+  .Facepile-loadingPlaceholder--large {
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    margin-right: 5px
+  }
+
+  .Facepile-overflow, .Facepile-empty, .Facepile-placeholder, .Facepile-loadingPlaceholder {
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0
+  }
+
+  .Facepile--grouped>.Facepile-overflow, .Facepile--grouped>.Facepile-empty, .Facepile--grouped>.Facepile-placeholder, .Facepile--grouped>.Facepile-loadingPlaceholder {
+    font-size: 11px
+  }
+
+  .Facepile--large>.Facepile-overflow, .Facepile--large>.Facepile-empty, .Facepile--large>.Facepile-placeholder, .Facepile--large>.Facepile-loadingPlaceholder {
+    font-size: 13px
+  }
+
+  .Facepile-empty {
+    background-color: rgba(27, 36, 50, 0.5);
+    border: 0
+  }
+
+  .Facepile-overflow {
+    padding-top: 0
+  }
+
+  .Facepile-placeholder {
+    border: 1px dashed #b9bcc0;
+    fill: #b9bcc0
+  }
+
+  .Facepile-placeholderIcon {
+    width: 14px
+  }
+
+  .Facepile--grouped .Facepile-placeholderIcon {
+    width: 12px
+  }
+
+  .Facepile--large .Facepile-placeholderIcon {
+    width: 16px
+  }
+
+  .TaskActors-facepile {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap
+  }
+
+  .TaskActors-facepileAvatar {
+    cursor: pointer;
+    margin-right: 5px;
+    -webkit-transition: 200ms box-shadow, 200ms color, 200ms background, 200ms fill;
+    transition: 200ms box-shadow, 200ms color, 200ms background, 200ms fill
+  }
+
+  .TaskActors-facepileAvatar:hover {
+    box-shadow: 0 0 0 3px #02ceff
+  }
+
+  .RemovableAvatar {
+    border-radius: 50%;
+    position: relative
+  }
+
+  .RemovableAvatar-avatarRemoveButton {
+    position: absolute;
+    right: -5px;
+    top: -5px;
+    visibility: hidden
+  }
+
+  .RemovableAvatar:hover .RemovableAvatar-avatarRemoveButton {
+    visibility: visible;
+    width: 15px;
+    color: #1aafd0;
+  }
