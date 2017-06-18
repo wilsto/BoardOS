@@ -160,11 +160,11 @@ function createCompleteDashboard(dashboardId, callback) {
         filterPerimeter['$or'].push({
           activity: {
             '$regex': perimeter.activity || '',
-            $options: '-i'
+            $options: '-im'
           },
           context: {
             '$regex': perimeter.context || '',
-            $options: '-i'
+            $options: '-im'
           }
         });
       });

@@ -2,7 +2,17 @@
 
 ## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
 
-[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.98...HEAD)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.99...HEAD)
+
+**Closed issues:**
+
+- Limiter l'apparition du datepicker aux pages concernées \(main, dashboards et kpis\) [\#273](https://github.com/wilsto/BoardOS/issues/273)
+- Permettre les patterns dans les regex des dashboards [\#272](https://github.com/wilsto/BoardOS/issues/272)
+- renvoyer un feedback à l'utilisateur que la tache est en train de se sauvegarder [\#268](https://github.com/wilsto/BoardOS/issues/268)
+- renvoyer un feedback à l'utilisateur que le dashboard est en train de se sauvegarder [\#267](https://github.com/wilsto/BoardOS/issues/267)
+
+## [v1.6.99](https://github.com/wilsto/boardos/tree/v1.6.99) (2017-06-18)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.98...v1.6.99)
 
 **Closed issues:**
 

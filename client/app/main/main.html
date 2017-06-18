@@ -6,7 +6,7 @@
 
   <div class="col-md-10 col-sm-12">
       <!-- BEGIN My Dashboards-->
-      <div class="portlet">
+      <div class="portlet" style="border:0px; ">
         <div class="portlet-title">
           <div class="caption">
             <i class="fa fa-dashboard"></i>My Dashboards
@@ -18,14 +18,17 @@
             </a>
           </div>
         </div>
-        <div class="portlet-body" style="overflow:hidden;margin-bottom:5px;" >
+        <div class="portlet-body" style="border:0px; margin-bottom:5px;" >
           <div class="isloading" ng-if="!dashboards">Loading
             <br/><img src="assets/images/ajax-loader_blue.gif">
           </div>
           <div style="zoom: 1; display: inline;" >
                 <div class="col-md-3 col-sm-12" style="padding:3px" ng-repeat="dashboard in dashboards | orderBy:'name' track by dashboard._id">
                     <a href="/dashboard/{{dashboard._id}}">
-                    <div style="height:40px;width:100%;border:1px lightgrey solid;padding:8px;margin:0" class="pull-left oneDashboard " uib-tooltip-html="'Activity : {{dashboard.activity || 'All'}} <br/>  Context : {{dashboard.context || 'All'}} <br/> <br/>  Open Tasks : {{dashboard.openTasksNb}}   <br/>  Performance : {{dashboard.kpisValue}}%  <br/> Alerts :  <span style=\x22color:red\x22>{{dashboard.alertsValue}} </span>'" tooltip-placement="top" tooltip-class="tooltipdashboard">
+                    <div style="height:40px;width:100%;border:1px lightgrey solid;padding:8px;margin:0" class="pull-left oneDashboard "
+                    uib-tooltip-html="'Activity : {{dashboard.activity || 'All'}} <br/>  Context : {{dashboard.context || 'All'}} <br/> <br/>
+                    Open Tasks : {{dashboard.openTasksNb}} <br/> Alerts :  <span style=\x22color:red\x22>{{dashboard.alertsValue}} </span>   <br/>  <br/>   All Tasks : {{dashboard.tasksNb}} <br/> Performance : {{dashboard.kpisValue}}%  '"
+                    tooltip-placement="bottom" tooltip-class="tooltipdashboard">
                       <span style="font-size:15px">
                       <span ng-if="dashboards" class="badge" ng-style="goalBgColor(dashboard.kpisValue)" style="height:17px;line-height:10px;margin-right: 5px">&nbsp;</span>
                              {{dashboard.name}}
