@@ -2,7 +2,19 @@
 
 ## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
 
-[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.99...HEAD)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.100...HEAD)
+
+**Closed issues:**
+
+- Possibilité de filtrer par nom de user dans la liste des dashboards [\#280](https://github.com/wilsto/BoardOS/issues/280)
+- Tri des dashboards par date de création [\#279](https://github.com/wilsto/BoardOS/issues/279)
+- Erreurs javascript sur la page de login [\#278](https://github.com/wilsto/BoardOS/issues/278)
+- Feedback: pas le même affichag [\#277](https://github.com/wilsto/BoardOS/issues/277)
+- Feedback: je pense que les das [\#275](https://github.com/wilsto/BoardOS/issues/275)
+- La date de best delivery est la date du jour si remplie en decale [\#257](https://github.com/wilsto/BoardOS/issues/257)
+
+## [v1.6.100](https://github.com/wilsto/boardos/tree/v1.6.100) (2017-06-18)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.99...v1.6.100)
 
 **Closed issues:**
 

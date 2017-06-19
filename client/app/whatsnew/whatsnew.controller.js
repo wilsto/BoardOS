@@ -6,7 +6,9 @@ angular.module('boardOsApp')
 
     Auth.getCurrentUser(function(data) {
       $scope.currentUser = data;
-      $rootScope.loadNews();
+      if (_.isEmpty(data) === false) {
+        $rootScope.loadNews();
+      }
     });
 
     $scope.allinfos = [];

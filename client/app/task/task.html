@@ -131,7 +131,6 @@
                 <!-- Title -->
                 <div class="row">
                     <div class="col-md-1">
-                        <button type="button" name="button" style="margin-bottom:5px;width:100%" class="btn btn-xs btn-outline btn-info hidden-xs" ng-click="refreshTask()">Refresh</button>
                         <img src="assets/images/todo.png" class="img-responsive hidden-xs" alt="" />
                     </div>
                     <div class="col-md-11">
@@ -487,7 +486,7 @@
                                     <span ng-if="!task.metrics[task.metrics.length-1].projectedWorkload">0</span>
                                     </span>
                                     <span class="text-muted days" ng-if="KPI.name==='Delivery Overdue'">
-                                      {{task.metrics[task.metrics.length-1].delay}}
+                                      {{task.metrics[task.metrics.length-1].delay ||0}}
                                     </span>
                                 </td>
                             </tr>

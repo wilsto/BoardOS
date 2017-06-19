@@ -47,7 +47,6 @@ angular.module('boardOsApp')
         }
       };
       $http.get('/api/dashboardCompletes/', myparams).success(function(dashboards) {
-
         _.each(dashboards, function(dashboard) {
           dashboard.subscribed = false;
           var userlist = _.pluck(dashboard.users, '_id');

@@ -26,15 +26,16 @@
       <div class="caption">
         <i class="fa fa-dashboard"></i>Dashboards List
       </div>
-      <div class="pull-right">
-        Filter by Name, Context or Activity :
-        <input style="width:200px" ng-model="searchText">
-      </div>
     </div>
     <div class="portlet-body">
       <table class="table table-striped table-bordered table-hover" style="max-width:100%" id="sample_4">
         <thead>
           <tr>
+            <th style="max-width:60px"  class="hidden-xs">
+              <a href="#" ng-click="orderByField='date'; reverseSort = !reverseSort">
+                <i class="fa fa-calendar"></i> Date
+              </a>
+            </th>
             <th style="width:150px;" class="hidden-xs">
               <i class="fa fa-users"></i> Subscribers
             </th>
@@ -75,9 +76,36 @@
               <i class="fa fa-delete"></i>
             </th>
           </tr>
+          <tr>
+            <th style="max-width:60px"  class="hidden-xs">
+            </th>
+            <th style="width:150px;" class="hidden-xs">
+              <input style="width:200px" ng-model="searchActor">
+            </th>
+            <th style="max-width:60px" class="hidden-xs">
+            </th>
+            <th style="max-width:60px" class="hidden-xs">
+            </th>
+            <th style="width:30%">
+              <input style="width:200px" ng-model="searchName">
+            </th>
+            <th class="hidden-xs" style="max-width:25%">
+              <input style="width:200px" ng-model="searchActivity">
+            </th>
+            <th class="hidden-xs" style="max-width:25%">
+              <input style="width:200px" ng-model="searchContext">
+            </th>
+            <th>
+            </th>
+            <th ng-if="isAdmin">
+            </th>
+          </tr>
         </thead>
-        <tbody infinite-scroll="getMoreData()" infinite-scroll-distance="3">
+        <tbody>
           <tr ng-repeat="dashboard in dashboards|orderBy:orderByField:reverseSort track by $index">
+            <td class="hidden-xs">
+              {{dashboard.date | date:'mediumDate'}}
+            </td>
             <td class="hidden-xs">
               <div ng-repeat="user in dashboard.users" uib-tooltip-html="'Name : <b>{{user.name}}</b>'" class="pull-left">
                 <img style="margin:2px;" alt="" ng-src="{{user.avatar}}" class="img-circle" err-src="assets/images/avatars/avatar.png"/>
@@ -93,10 +121,14 @@
               <a href="/dashboard/{{dashboard._id}}">{{dashboard.name}}</a>
             </td>
             <td class="dont-break-out hidden-xs">
-              {{dashboard.activity || 'ALL'}}
+              <div ng-repeat="thisperimeter in dashboard.perimeter">
+              {{thisperimeter.activity || 'ALL'}} <br />
+              </div>
             </td>
             <td class="dont-break-out  hidden-xs">
-              {{dashboard.context || 'ALL'}}
+              <div ng-repeat="thisperimeter in dashboard.perimeter">
+              {{thisperimeter.context || 'ALL'}} <br />
+              </div>
             </td>
             <td >
               <button ng-if="!dashboard.subscribed" class="btn btn-primary" ng-click="pinDashboard(dashboard)" >Subscribe</button>

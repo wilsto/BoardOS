@@ -9,17 +9,32 @@ angular.module('boardOsApp')
     $scope.mydashboards = [];
     $scope.orderByField = 'subscribed';
     $scope.reverseSort = true;
-    $scope.searchText = '';
+    $scope.searchName = '';
+    $scope.searchActor = '';
+    $scope.searchActivity = '';
+    $scope.searchContext = '';
 
     var filterDashboards = function(data) {
       return _.filter(data, function(dashboard) {
-        if (!dashboard.activity) {
-          dashboard.activity = '';
-        }
-        if (!dashboard.context) {
-          dashboard.context = '';
-        }
-        var blnSearchText = ($scope.searchText.length === 0) ? true : dashboard.name.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0 || dashboard.activity.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0 || dashboard.context.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0;
+
+        var blnName = ($scope.searchName.length === 0) ? true : dashboard.name.toLowerCase().indexOf($scope.searchName.toLowerCase()) >= 0;
+        var blnActor = ($scope.searchActor.length === 0) ? true : false;
+        _.each(dashboard.users, function(actor) {
+          if (actor.name.toLowerCase().indexOf($scope.searchActor.toLowerCase()) >= 0) {
+            blnActor = true;
+          }
+        });
+        var blnActivity = ($scope.searchActivity.length === 0) ? true : false;
+        var blnContext = ($scope.searchContext.length === 0) ? true : false;
+        _.each(dashboard.perimeter, function(thisperimeter) {
+          if (thisperimeter.activity && thisperimeter.activity.toLowerCase().indexOf($scope.searchActivity.toLowerCase()) >= 0) {
+            blnActivity = true;
+          }
+          if (thisperimeter.context && thisperimeter.context.toLowerCase().indexOf($scope.searchContext.toLowerCase()) >= 0) {
+            blnContext = true;
+          }
+        });
+        var blnSearchText = blnName && blnActor && blnActivity && blnContext;
         return blnSearchText;
       });
     };
@@ -45,36 +60,19 @@ angular.module('boardOsApp')
             dashboard.subscribed = true;
           }
         });
-        $scope.alldashboards = _.sortBy(dashboards, ['activity', 'context']).reverse();
-        $scope.reloadDashboards();
-      });
-    };
+        $scope.alldashboards = _.sortBy(dashboards, 'name').reverse();
+        $scope.dashboards = $scope.alldashboards;
 
-    $scope.getMoreData = function() {
-      var filterdashboards = _.where($scope.alldashboards, function(dashboard) {
-        var userlist = _.pluck(dashboard.users, '_id');
-        return userlist.indexOf($scope.currentUser._id.toString()) < 0;
       });
-      filterdashboards = filterDashboards(filterdashboards);
-      $scope.otherdashboards = filterdashboards.slice(0, $scope.otherdashboards.length + 15);
-      $scope.dashboards = $scope.mydashboards.concat($scope.otherdashboards);
     };
 
     $scope.reloadDashboards = function() {
-      var mydashboards = _.filter($scope.alldashboards, function(dashboard) {
-        var userlist = _.pluck(dashboard.users, '_id');
-        return userlist.indexOf($scope.currentUser._id.toString()) >= 0;
-      });
-      mydashboards = filterDashboards(mydashboards);
-      $scope.mydashboards = mydashboards;
-      var filterdashboards = _.where($scope.alldashboards, function(dashboard) {
-        var userlist = _.pluck(dashboard.users, 'user');
-        return userlist.indexOf($scope.currentUser._id.toString()) < 0;
-      });
-      filterdashboards = filterDashboards(filterdashboards);
-      $scope.otherdashboards = filterdashboards.slice(0, Math.max(15, $scope.dashboards.length - mydashboards.length));
-      $scope.dashboards = $scope.mydashboards.concat($scope.otherdashboards);
+      $scope.dashboards = filterDashboards($scope.alldashboards);
     };
+
+    $scope.$watchGroup(['searchName', 'searchActor', 'searchActivity', 'searchContext'], function(newValues, oldValues) {
+      $scope.reloadDashboards();
+    });
 
     $scope.pinDashboard = function(dashboard) {
       $http.post('/api/dashboardCompletes/subscribe/' + dashboard._id, $scope.currentUser);
@@ -87,10 +85,6 @@ angular.module('boardOsApp')
       Notification.success('You unsubscribe to dashboard "' + dashboard.name + '"');
       $scope.load();
     };
-
-    $scope.$watch('searchText', function() {
-      $scope.reloadDashboards();
-    });
 
     $scope.delete = function(dashboard, index) {
       bootbox.confirm('Are you sure to delete this dashboard ?', function(result) {

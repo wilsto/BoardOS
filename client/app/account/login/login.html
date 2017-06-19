@@ -1,4 +1,3 @@
-<div ng-include="'components/navbar/navbar.html'"></div>
 <div class="login">
   <!-- BEGIN LOGO -->
   <div class="logo">
@@ -43,14 +42,14 @@
           </p>
 
           <p class="help-block text-danger">{{ errors.other }}</p>
-        </div>      
+        </div>
       <div class="form-actions">
         <label class="checkbox" style="padding-left:20px">
           <input type="checkbox" name="remember" value="1"/> Remember me </label>
           <button type="submit" class="btn btn-info pull-right">
             Login </button>
           </div>
-           <input type="submit" value="Submit" style="display:none"/> 
+           <input type="submit" value="Submit" style="display:none"/>
           <button class="btn" ng-click="ShowHelp = ! ShowHelp" ng-init="ShowHelp = false"><i class="fa fa-question"></i> Help Me</button>
           <div class="forget-password" ng-show="ShowHelp">
             <h4>Forgot your password ?</h4>
