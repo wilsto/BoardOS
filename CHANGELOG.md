@@ -1,5 +1,17 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.102...HEAD)
+
+**Closed issues:**
+
+- Problème \(mineur\) affichage page de connexion [\#274](https://github.com/wilsto/BoardOS/issues/274)
+- Feedback: la liste des taches [\#220](https://github.com/wilsto/BoardOS/issues/220)
+
+## [v1.6.102](https://github.com/wilsto/boardos/tree/v1.6.102) (2017-06-19)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.101...v1.6.102)
+
 ## [v1.6.101](https://github.com/wilsto/boardos/tree/v1.6.101) (2017-06-19)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.100...v1.6.101)
 

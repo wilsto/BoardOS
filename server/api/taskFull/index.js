@@ -15,7 +15,7 @@ router.get('/countByMonth', controller.countByMonth);
 router.get('/countByActivity', controller.countByActivity);
 router.get('/:id', controller.show);
 router.post('/', controller.create);
-router.put('/:id', controller.update);
+router.put('/:id/:blnexecuteDashboard', controller.update);
 router.patch('/:id', controller.update);
 router.delete('/:id', controller.destroy);
 

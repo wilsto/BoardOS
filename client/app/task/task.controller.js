@@ -154,6 +154,9 @@ angular.module('boardOsApp')
     $scope.newTodo = {
       text: ''
     }; // ng-model need object to sync
+    var blnexecuteDashboard = false;
+
+
 
     $scope.addTodo = function() {
       $scope.task.todos.push({
@@ -195,7 +198,6 @@ angular.module('boardOsApp')
 
     $scope.$watch('task', function(newMap, previousMap) {
       $scope.needToSave = !angular.equals($scope.currentTask, $scope.task);
-
       if (initializing) {
         $timeout(function() {
           initializing = true;
@@ -215,12 +217,13 @@ angular.module('boardOsApp')
                 var previousValue = previousObject[property][key];
                 for (var subproperty in value) {
                   if (subproperty !== '$$hashKey' && subproperty !== '_id' && (!previousValue || !angular.equals(value[subproperty], previousValue[subproperty]))) {
+                    if (property === 'metrics') {
+                      blnexecuteDashboard = true;
+                    }
                     if (subproperty.toLowerCase().indexOf('date') > -1) {
                       $scope.autoComment('set ' + subproperty + ' to ' + $filter('date')(value[subproperty], 'mediumDate') + '              [' + property + ':' + key.toString() + ']');
-
                     } else {
                       $scope.autoComment('set ' + subproperty + ' to ' + value[subproperty] + '              [' + property + ':' + key.toString() + ']');
-
                     }
                   }
                 }
@@ -346,6 +349,8 @@ angular.module('boardOsApp')
       $scope.CommentIsExpanded = (taskId !== undefined);
       if (taskId) {
         $scope.myPromise = $http.get('/api/taskFulls/' + taskId).success(function(task) {
+
+          blnexecuteDashboard = false;
           $scope.task = task;
           $timeout(function() {
             initializing = false;
@@ -444,6 +449,7 @@ angular.module('boardOsApp')
         if (alreadyExit.length === 0) {
           $scope.myPromise = $http.post('/api/taskFulls', $scope.task).success(function(data) {
             var logInfo = 'Task "' + $scope.task.name + '" was created';
+            blnexecuteDashboard = false;
             Notification.success(logInfo);
             $location.path('/task/' + data._id);
           });
@@ -459,10 +465,11 @@ angular.module('boardOsApp')
     // update a task
     // *******************
     $scope.update = function() {
-      $scope.myPromise = $http.put('/api/taskFulls/' + $scope.task._id, $scope.task).success(function(data) {
+      $scope.myPromise = $http.put('/api/taskFulls/' + $scope.task._id + '/' + blnexecuteDashboard, $scope.task).success(function(data) {
         var logInfo = 'Task "' + $scope.task.name + '" was updated';
         $timeout(function() {
           initializing = true;
+          blnexecuteDashboard = false;
           $scope.loadTask();
         }, 500);
         Notification.success(logInfo);
@@ -474,6 +481,7 @@ angular.module('boardOsApp')
         var logInfo = 'Task "' + $scope.task.name + '" was recalculated';
         $timeout(function() {
           initializing = true;
+          blnexecuteDashboard = false;
           $scope.loadTask();
         }, 500);
         Notification.success(logInfo);
@@ -532,8 +540,8 @@ angular.module('boardOsApp')
     };
 
     $scope.removeActor = function(data, index) {
-      
-      
+
+
       $scope.task.actors.splice(index, 1);
     };
 

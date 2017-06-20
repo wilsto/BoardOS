@@ -7527,3 +7527,23 @@ TASK
       font-size: 13px;
     }
   }
+  /***
+WHATSNEW  ***/
+
+  .modal-news {
+    top: 100px;
+    left: 100px;
+    background-color: white;
+    height: 600px;
+    overflow: hidden;
+  }
+
+  .modal-bodycontent {
+    overflow-y: auto!important;
+    height: 470px !important;
+    border: 0;
+  }
+
+  .modal-news .editable-wrap {
+    width: 100%;
+  }

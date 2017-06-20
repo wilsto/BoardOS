@@ -369,6 +369,8 @@ exports.create = function(req, res) {
 // Updates an existing taskFull in the DB.
 exports.update = function(req, res) {
   var task = req.body;
+  var blnexecuteDashboard = (req.params.blnexecuteDashboard === 'true');
+
   if (task._id) {
     delete task._id;
   }
@@ -400,14 +402,11 @@ exports.update = function(req, res) {
     // Suppression des commentaires incomplets
     var commentsOk = [];
     _.each(task.comments, function(comment) {
-      console.log('comment', comment);
       if (comment.user !== null) {
-        console.log('CONDITION PASSED');
         comment.user = comment.user._id;
         commentsOk.push(comment);
       }
     });
-    console.log('commentsOk', commentsOk);
     task.comments = commentsOk;
 
     /** Mise en majuscule des axes */
@@ -498,7 +497,6 @@ exports.update = function(req, res) {
       }
     });
 
-    console.log('taskFull');
     var updated = _.merge(taskFull, task);
     taskFull.actors = task.actors;
     taskFull.followers = task.followers;
@@ -522,7 +520,9 @@ exports.update = function(req, res) {
       if (err) {
         return handleError(res, err);
       }
-      process.emit('taskChanged', taskFull);
+      if (blnexecuteDashboard === true) {
+        process.emit('taskChanged', taskFull);
+      }
       return res.status(200).json(taskFull);
     });
   });
