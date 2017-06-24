@@ -2,10 +2,26 @@
 
 ## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
 
-[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.102...HEAD)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.103...HEAD)
+
+**Implemented enhancements:**
+
+- Ajouter la notion de version aux taches [\#128](https://github.com/wilsto/BoardOS/issues/128)
+- La liste des nouvelles hierarchies doit etre validée [\#40](https://github.com/wilsto/BoardOS/issues/40)
+- Dashboard. Health Monitor [\#34](https://github.com/wilsto/BoardOS/issues/34)
 
 **Closed issues:**
 
+- Refresh task renvoie un 404 [\#289](https://github.com/wilsto/BoardOS/issues/289)
+- Ajouter un visuel si la tache a changé depuis la dernière visite [\#170](https://github.com/wilsto/BoardOS/issues/170)
+- Action plan [\#163](https://github.com/wilsto/BoardOS/issues/163)
+
+## [v1.6.103](https://github.com/wilsto/boardos/tree/v1.6.103) (2017-06-20)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.102...v1.6.103)
+
+**Closed issues:**
+
+- Ne pas reexecuter les calculs des tâches dans les dashboard si non necessaire [\#281](https://github.com/wilsto/BoardOS/issues/281)
 - Problème \(mineur\) affichage page de connexion [\#274](https://github.com/wilsto/BoardOS/issues/274)
 - Feedback: la liste des taches [\#220](https://github.com/wilsto/BoardOS/issues/220)
 

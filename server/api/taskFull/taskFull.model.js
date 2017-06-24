@@ -20,10 +20,6 @@ var TaskFullSchema = new Schema({
   risks: String,
   metrics: Schema.Types.Mixed,
   rework: Schema.Types.Mixed,
-  previous: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'TaskFull'
-  },
   alerts: Schema.Types.Mixed,
   kpis: Schema.Types.Mixed,
   dashboards: Schema.Types.Mixed,
@@ -43,6 +39,26 @@ var TaskFullSchema = new Schema({
   reviewPeriodic: {
     type: Boolean,
     default: false
+  },
+  nextTasks: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'TaskFull'
+  }],
+  actionPlan: {
+    type: Boolean,
+    default: false
+  },
+  previousTasks: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'TaskFull'
+  }],
+  anomalies: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'TaskFull'
+  }],
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   },
   comments: [{
     text: String,

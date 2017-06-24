@@ -125,39 +125,53 @@ exports.show = function(req, res) {
     .populate('actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
     .populate('followers', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
     .populate('comments.user', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
-    .lean().exec(function(err, taskFull) {
+    .populate('previousTasks', '_id name actors context activity metrics.status')
+    .populate('nextTasks', '_id name actors context activity metrics')
+    .lean().exec(function(err, taskFulls) {
       if (err) {
         return handleError(res, err);
       }
-      if (!taskFull) {
+      if (!taskFulls) {
         return res.status(404).send('Not Found');
       }
-      _.each(taskFull.kpis, function(kpi) {
-        var completekpi = _.filter(kpis, function(thiskpi) {
-          return thiskpi._id.toString() === kpi._id.toString();
-        })[0];
-        kpi.description = completekpi.description;
-        kpi.suggestion = completekpi.suggestion;
-      });
-      _.each(taskFull.alerts, function(alert) {
-        var completekpi = _.filter(kpis, function(thiskpi) {
-          return thiskpi._id.toString() === alert._id.toString();
-        })[0];
-        alert.description = completekpi.description;
-        alert.suggestion = completekpi.suggestion;
-      });
-      _.each(taskFull.actors, function(actor) {
-        actor.avatar = (actor.avatar) ? actor.avatar : 'assets/images/avatars/' + actor._id + '.png';
-      });
-      _.each(taskFull.followers, function(follower) {
-        follower.avatar = (follower.avatar) ? follower.avatar : 'assets/images/avatars/' + follower._id + '.png';
-      });
-      _.each(taskFull.comments, function(comment) {
-        if (comment.user) {
-          comment.user.avatar = (comment.user.avatar) ? comment.user.avatar : 'assets/images/avatars/' + comment.user._id + '.png';
-        }
-      });
-      return res.json(taskFull);
+      TaskFull.populate(taskFulls, {
+          path: 'nextTasks.actors',
+          model: 'User'
+        },
+        function(err, taskFull) {
+          if (err) return console.log(err);
+          _.each(taskFull.kpis, function(kpi) {
+            var completekpi = _.filter(kpis, function(thiskpi) {
+              return thiskpi._id.toString() === kpi._id.toString();
+            })[0];
+            kpi.description = completekpi.description;
+            kpi.suggestion = completekpi.suggestion;
+          });
+          _.each(taskFull.alerts, function(alert) {
+            var completekpi = _.filter(kpis, function(thiskpi) {
+              return thiskpi._id.toString() === alert._id.toString();
+            })[0];
+            alert.description = completekpi.description;
+            alert.suggestion = completekpi.suggestion;
+          });
+          _.each(taskFull.nextTasks, function(nextTask) {
+            _.each(nextTask.actors, function(actor) {
+              actor.avatar = (actor.avatar) ? actor.avatar : 'assets/images/avatars/' + actor._id + '.png';
+            });
+          });
+          _.each(taskFull.actors, function(actor) {
+            actor.avatar = (actor.avatar) ? actor.avatar : 'assets/images/avatars/' + actor._id + '.png';
+          });
+          _.each(taskFull.followers, function(follower) {
+            follower.avatar = (follower.avatar) ? follower.avatar : 'assets/images/avatars/' + follower._id + '.png';
+          });
+          _.each(taskFull.comments, function(comment) {
+            if (comment.user) {
+              comment.user.avatar = (comment.user.avatar) ? comment.user.avatar : 'assets/images/avatars/' + comment.user._id + '.png';
+            }
+          });
+          return res.json(taskFull);
+        });
     });
 };
 
@@ -361,10 +375,37 @@ exports.create = function(req, res) {
     if (err) {
       return handleError(res, err);
     }
+    if (task.previousTasks.length > 0) {
+      _.each(task.previousTasks, function(prevTask) {
+        process.emit('PrevTaskToUpdate', {
+          current: prevTask,
+          next: taskFull._id
+        });
+      });
+    }
     process.emit('taskChanged', taskFull);
     return res.status(201).json(taskFull);
   });
 };
+
+process.on('PrevTaskToUpdate', function(links) {
+  TaskFull.update({
+      _id: links.current
+    }, {
+      $addToSet: {
+        nextTasks: links.next
+      }
+    }, {},
+    function(err, result) {
+      if (err) {
+        console.log('UPDATE', err);
+        return;
+      }
+      if (result) {
+        //console.log('result', result);
+      }
+    });
+});
 
 // Updates an existing taskFull in the DB.
 exports.update = function(req, res) {
@@ -374,6 +415,7 @@ exports.update = function(req, res) {
   if (task._id) {
     delete task._id;
   }
+
   TaskFull.findById(req.params.id, function(err, taskFull) {
     if (err) {
       return handleError(res, err);
@@ -398,6 +440,25 @@ exports.update = function(req, res) {
       followers.push(follower._id);
     });
     task.followers = _.compact(_.uniq(followers));
+
+
+    var nextTasks = [];
+    _.each(task.nextTasks, function(nextTask) {
+      nextTasks.push(nextTask._id);
+    });
+    task.nextTasks = _.compact(_.uniq(nextTasks));
+
+    var previousTasks = [];
+    _.each(task.previousTasks, function(previousTask) {
+      previousTasks.push(previousTask._id);
+    });
+    task.previousTasks = _.compact(_.uniq(previousTasks));
+
+    var anomalies = [];
+    _.each(task.anomalies, function(anomalie) {
+      anomalies.push(anomalie._id);
+    });
+    task.anomalies = _.compact(_.uniq(anomalies));
 
     // Suppression des commentaires incomplets
     var commentsOk = [];
@@ -523,6 +584,22 @@ exports.update = function(req, res) {
       if (blnexecuteDashboard === true) {
         process.emit('taskChanged', taskFull);
       }
+      TaskFull.find({
+        previousTasks: req.params.id
+      }, function(err, tasksWithPrevious) {
+        if (err) {
+          return handleError(res, err);
+        }
+        if (!tasksWithPrevious) {
+          return res.status(404).send('Not Found');
+        }
+        _.each(tasksWithPrevious, function(taskWithPrevious) {
+          process.emit('PrevTaskToUpdate', {
+            current: req.params.id,
+            next: taskWithPrevious._id
+          });
+        });
+      });
       return res.status(200).json(taskFull);
     });
   });

@@ -2,7 +2,7 @@
 /*jshint loopfunc:true */
 
 angular.module('boardOsApp')
-  .controller('TaskCtrl', function($rootScope, $scope, $http, $state, $stateParams, $location, Auth, Notification, myLibrary, $filter, $timeout, $mdpDatePicker, $uibModal, focus) {
+  .controller('TaskCtrl', function($rootScope, $scope, $http, $state, $stateParams, $location, $window, Auth, Notification, myLibrary, $filter, $timeout, $mdpDatePicker, $uibModal, focus) {
 
     $scope.sortme = {
       snap: true,
@@ -157,6 +157,10 @@ angular.module('boardOsApp')
     var blnexecuteDashboard = false;
 
 
+    $scope.createActionPlan = function() {
+      var path = $location.protocol() + '://' + location.host + '/task////task/' + $scope.task._id;
+      $window.open(path, '_blank');
+    };
 
     $scope.addTodo = function() {
       $scope.task.todos.push({
@@ -339,6 +343,7 @@ angular.module('boardOsApp')
       $scope.showTrash = false;
 
       var taskId = $stateParams.id || $scope.task._id;
+      
       $scope.TeamIsExpanded = (taskId === undefined);
       $scope.TeamIsExpanded = true;
       $scope.blnAddActor = false;
@@ -398,6 +403,16 @@ angular.module('boardOsApp')
           // si cela n'existe pas
           $scope.task.context = $stateParams.context;
           $scope.task.activity = $stateParams.activity;
+          $scope.task.actionPlan = $stateParams.actionPlan !== undefined;
+          $scope.task.previousTasks = [];
+          $scope.task.anomalies = [];
+          if ($stateParams.actionPlan === 'task') {
+            $scope.task.previousTasks.push($stateParams.previousId);
+          }
+          if ($stateParams.actionPlan === 'anomaly') {
+            $scope.task.anomalies.push($stateParams.previousId);
+          }
+          $scope.task.nextTasks = [];
           $scope.task.date = Date.now();
           $scope.task.comments = [{
             text: 'create task',
@@ -424,6 +439,7 @@ angular.module('boardOsApp')
             name: null
           };
           $scope.currentTask = _.cloneDeep($scope.task);
+          
 
         }, 500);
 
@@ -477,7 +493,7 @@ angular.module('boardOsApp')
     };
 
     $scope.refreshTask = function() {
-      $scope.myPromise = $http.put('/api/taskFulls/' + $scope.task._id, $scope.task).success(function(data) {
+      $scope.myPromise = $http.put('/api/taskFulls/' + $scope.task._id + '/true', $scope.task).success(function(data) {
         var logInfo = 'Task "' + $scope.task.name + '" was recalculated';
         $timeout(function() {
           initializing = true;

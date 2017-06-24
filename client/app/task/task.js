@@ -4,7 +4,7 @@ angular.module('boardOsApp')
   .config(function($stateProvider) {
     $stateProvider
       .state('task', {
-        url: '/task/:id/:context/:activity',
+        url: '/task/:id/:context/:activity/:actionPlan/:previousId',
         templateUrl: 'app/task/task.html',
         controller: 'TaskCtrl',
         authenticate: true,
@@ -17,7 +17,11 @@ angular.module('boardOsApp')
             value: null,
             squash: true
           },
-          forceExit: {
+          actionPlan: {
+            value: null,
+            squash: true
+          },
+          previousId: {
             value: null,
             squash: true
           }

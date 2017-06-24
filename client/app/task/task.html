@@ -127,13 +127,14 @@
         <!--BEGIN TABS-->
         <div class="row profile-nav">
             <!--start col-md-9-->
-            <div class="col-md-12">
+            <div class="col-md-8">
                 <!-- Title -->
                 <div class="row">
-                    <div class="col-md-1">
-                        <img src="assets/images/todo.png" class="img-responsive hidden-xs" alt="" />
+                    <div class="col-md-2">
+                        <img src="assets/images/todo.png" class="img-responsive hidden-xs" style="width:125px;height:125px;" alt="" ng-cloak ng-if="!task.actionPlan"/>
+                        <img src="assets/images/action_icon.jpg" class="img-responsive hidden-xs" style="width:125px;height:125px;"  alt="" ng-cloak ng-if="task.actionPlan"/>
                     </div>
-                    <div class="col-md-11">
+                    <div class="col-md-10">
                         <div class="row">
                             <div class="col-md-9 col-sm-12 profile-info">
                               <!-- <div class="pull-right hidden-xs" style="margin-top:50px;width:200px" ng-if="needToSave && task._id" ng-cloak uib-tooltip-html="'Save metrics to database'" tooltip-placement="bottom">
@@ -186,6 +187,18 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-4">
+                <!-- Title -->
+                <div class="row" ng-if="task.previousTasks[0]._id">
+                  Action Plan Coming From: <br>
+                  <div class="" ng-repeat="previousTask in task.previousTasks">
+                    <a href="/task/{{previousTask._id}}">
+                      <i class="fa fa-tasks"></i>
+                      {{previousTask.name}}
+                    </a>
+                  </div>
+                </div>
+              </div>
         </div>
     </div>
     <!--end col-md-12-->
@@ -836,57 +849,50 @@
                         <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{task.ActionPlans.length ||0}}</span></span>
                     </div>
                 </div>
-                <div class="portlet-body" style="padding:0!important;" ng-show="ActionPlanIsExpanded">
-                  <table class="table table-striped table-hover">
-                      <tbody style="text-align:center;">
-                          <tr ng-repeat="todo in todos | filter:filterToDo track by $index  " >
-                              <td style="text-align:left;font-size:13px;width:32px;">
-                                <div class="circularButtonView circularToggleButtonView-button circularButtonView--xsmall circularButtonView--onWhiteBackground circularButtonView--active">
-                                    <span class="circularButtonView-label">
-                                      <svg class="svgIcon " viewbox="0 0 32 32" title="checkmark">
-                                        <polygon points="27.672,4.786 10.901,21.557 4.328,14.984 1.5,17.812 10.901,27.214 30.5,7.615 "></polygon>
-                                      </svg>
-                                    </span>
-                                </div>
+                <div class="portlet-body" style="padding:0!important" ng-show="ActionPlanIsExpanded">
+                  <table class="table table-striped table-hover" >
+                      <tbody style="text-align:left;">
+                          <tr ng-repeat="task in task.nextTasks | orderBy:'date'">
+                            <td style="text-align: center;max-width:30px;">
+                              <img alt="" ng-src="{{task.actors[0].avatar}}" class="img-circle" style="width:30px;height:30px;" err-src="assets/images/avatars/avatar.png" uib-tooltip-html="'Name <br /> {{task.actors[0].name}}'" tooltip-placement="top"/>
+                            </td>
+                              <td >
+                                  <a href="/task/{{task._id}}">
+                                    <small class="dont-break-out"> {{task.name}}</small>
+                                  </a >
                               </td>
-                              <td style="text-align:left">
-                                <span ng-class="{'barre':todo.isDone}"><span style="color:black" >{{todo.text}}</span></span>
-                              </td>
-                              <td style="text-align:right;">
-                                <md-button  class="md-button-slim" ng-click="$parent.showTodoDatePicker(todo, $event)" aria-label="none" style="min-width:20px!important;margin:0!important;padding:0!important;border-bottom:none;">
-                                  <small class="text-muted" ng-show="todo.date">{{todo.date |date:'dd MMM' }}</small>
-                                    <div ng-hide="todo.date" class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground" uib-tooltip-html="'Add a due date to this subtask'" tooltip-placement="bottom">
-                                        <span class="circularButtonView-label">
-                                      <svg class="svgIcon task-row-due-date-icon" viewbox="0 0 32 32" title="calendar">
-                                        <rect x="16" y="16" width="2" height="2"></rect><rect x="20" y="16" width="2" height="2"></rect>
-                                        <rect x="20" y="20" width="2" height="2"></rect><rect x="16" y="20" width="2" height="2"></rect>
-                                        <rect x="8" y="20" width="2" height="2"></rect><rect x="8" y="24" width="2" height="2"></rect>
-                                        <rect x="16" y="24" width="2" height="2"></rect><rect x="12" y="16" width="2" height="2"></rect>
-                                        <rect x="12" y="20" width="2" height="2"></rect><rect x="12" y="24" width="2" height="2"></rect>
-                                        <path d="M22,2V0h-2v2h-8V0h-2v2H2v30h28V2H22z M28,30H4V12h24V30z M28,10H4V4h6v2h2V4h8v2h2V4h6V10z"></path>
-                                      </svg>
-                                    </span>
-                                    </div>
-                                </md-button>
-                                <a ng-click="AssignSubtTaskActor(todo)">
-                                    <img ng-show="todo.actor" uib-tooltip-html="'{{todo.actor.name}}'" tooltip-placement="bottom" alt="" ng-src="{{todo.actor.avatar}}" style="width:30px;height:30px;" class="img-circle" err-src="assets/images/avatars/avatar.png" />&nbsp;
-                                    <div ng-hide="todo.actor" class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground" uib-tooltip-html="'Assign this subtask'" tooltip-placement="bottom">
-                                        <span class="circularButtonView-label">
-                                      <svg class="svgIcon task-row-assignee-icon" viewbox="0 0 32 32" title="unassigned">
-                                        <path d="M20.534,16.765C23.203,15.204,25,12.315,25,9c0-4.971-4.029-9-9-9S7,4.029,7,9c0,3.315,1.797,6.204,4.466,7.765C5.962,18.651,2,23.857,2,30c0,0.681,0.065,1.345,0.159,2h27.682C29.935,31.345,30,30.681,30,30C30,23.857,26.038,18.651,20.534,16.765z M9,9c0-3.86,3.14-7,7-7s7,3.14,7,7s-3.14,7-7,7S9,12.86,9,9z M4,30c0-6.617,5.383-12,12-12s12,5.383,12,12H4z"></path>
-                                      </svg>
-                                    </span>
-                                    </div>
-                                </a>
+                              <td style="min-width:70px">
+                                  <span class="pull-right text-info">
+                                    <small class="text-muted" >
+                                      {{ (task.metrics[0].targetstartDate | date:'MMM, dd') }} >
+                                    </small>
+                                    <small style="color:black" >
+                                      {{ (task.metrics[0].endDate || task.metrics[0].targetEndDate | date:'MMM, dd') }}
+                                    </small>
+                                  </span>
                               </td>
                           </tr>
                       </tbody>
                   </table>
 
                 </div>
+                <div class="portlet-body" style="margin-top:8px;margin-left:0;margin-right:0;padding-left:0;padding-right:0">
+                  <table class="table table-striped table-hover" >
+                      <tbody style="text-align:left;">
+                          <tr style="height:40px;background:#eee;text-align:right">
+                              <td >
+                                  <a href="#" class="btn btn-outline btn-primary" ng-click="createActionPlan()">
+                                    <i class="fa fa-plus"></i>
+                                    <span class="dont-break-out"> Create an Action Plan</span>
+                                  </a >
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
+                </div>
             </div>
         </div>
-
+<br>
         <!-- Options -->
         <div class="portlet sale-summary">
             <div class="portlet-title">
