@@ -2,7 +2,14 @@
 
 ## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
 
-[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.103...HEAD)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.104...HEAD)
+
+**Closed issues:**
+
+- La fonction Withdraw ne fonctionne pas [\#287](https://github.com/wilsto/BoardOS/issues/287)
+
+## [v1.6.104](https://github.com/wilsto/boardos/tree/v1.6.104) (2017-06-24)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.103...v1.6.104)
 
 **Implemented enhancements:**
 

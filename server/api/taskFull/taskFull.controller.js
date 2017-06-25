@@ -14,6 +14,7 @@ var Hierarchies = require('../hierarchy/hierarchy.model');
 var KPI = require('../KPI/KPI.model');
 var Dashboard = require('../dashboard/dashboard.model');
 var User = require('../user/user.model');
+var Anomalie = require('../anomalie/anomalie.model');
 
 var getData = require('../../config/getData');
 var tools = require('../../config/tools');
@@ -127,6 +128,7 @@ exports.show = function(req, res) {
     .populate('comments.user', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
     .populate('previousTasks', '_id name actors context activity metrics.status')
     .populate('nextTasks', '_id name actors context activity metrics')
+    .populate('anomalies')
     .lean().exec(function(err, taskFulls) {
       if (err) {
         return handleError(res, err);
@@ -454,11 +456,6 @@ exports.update = function(req, res) {
     });
     task.previousTasks = _.compact(_.uniq(previousTasks));
 
-    var anomalies = [];
-    _.each(task.anomalies, function(anomalie) {
-      anomalies.push(anomalie._id);
-    });
-    task.anomalies = _.compact(_.uniq(anomalies));
 
     // Suppression des commentaires incomplets
     var commentsOk = [];
@@ -485,14 +482,14 @@ exports.update = function(req, res) {
     var dateNow = new Date();
     _.each(task.metrics, function(metric, index) { // pour chaque metric
 
+      var startDate = (metric.startDate) ? metric.startDate : metric.targetstartDate;
+      var endDate = (metric.endDate) ? metric.endDate : (metric.startDate && index > 0) ? metric.startDate : metric.targetEndDate;
+      metric.endDate = endDate;
+
       metric.targetstartDate = moment(metric.targetstartDate).add(3, 'hours').hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
       metric.targetEndDate = moment(metric.targetEndDate).add(3, 'hours').hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
       metric.startDate = moment(metric.startDate).add(3, 'hours').hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
       metric.endDate = moment(metric.endDate).add(3, 'hours').hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
-
-      var startDate = (metric.startDate) ? metric.startDate : metric.targetstartDate;
-      var endDate = (metric.endDate) ? metric.endDate : (metric.startDate && index > 0) ? metric.startDate : metric.targetEndDate;
-      metric.endDate = endDate;
 
       if (index === 0) {
         mainstart = metric.startDate;
@@ -558,50 +555,67 @@ exports.update = function(req, res) {
       }
     });
 
-    var updated = _.merge(taskFull, task);
-    taskFull.actors = task.actors;
-    taskFull.followers = task.followers;
-    taskFull.metrics = task.metrics;
-    taskFull.comments = task.comments;
-    taskFull.todos = task.todos;
-    taskFull.kpis = task.kpis;
-    taskFull.alerts = task.alerts;
-    taskFull.dashboards = task.dashboards;
-    taskFull.reviewTask = task.reviewTask;
-    updated.markModified('actors');
-    updated.markModified('followers');
-    updated.markModified('metrics');
-    updated.markModified('comments');
-    updated.markModified('todos');
-    updated.markModified('kpis');
-    updated.markModified('alerts');
-    updated.markModified('dashboards');
-    updated.markModified('reviewTask');
-    updated.save(function(err) {
+    //cumul des anomalies
+    Anomalie.find({
+      sourceTasks: req.params.id
+    }).lean().exec(function(err, findAnomalies) {
       if (err) {
         return handleError(res, err);
       }
-      if (blnexecuteDashboard === true) {
-        process.emit('taskChanged', taskFull);
-      }
-      TaskFull.find({
-        previousTasks: req.params.id
-      }, function(err, tasksWithPrevious) {
+      var anomalies = findAnomalies;
+      _.each(task.anomalies, function(anomalie) {
+        anomalies.push(anomalie._id);
+      });
+      task.anomalies = _.compact(_.uniq(anomalies));
+
+      var updated = _.merge(taskFull, task);
+      taskFull.actors = task.actors;
+      taskFull.followers = task.followers;
+      taskFull.metrics = task.metrics;
+      taskFull.comments = task.comments;
+      taskFull.todos = task.todos;
+      taskFull.kpis = task.kpis;
+      taskFull.alerts = task.alerts;
+      taskFull.dashboards = task.dashboards;
+      taskFull.reviewTask = task.reviewTask;
+      taskFull.anomalies = task.anomalies;
+      updated.markModified('actors');
+      updated.markModified('followers');
+      updated.markModified('metrics');
+      updated.markModified('comments');
+      updated.markModified('todos');
+      updated.markModified('kpis');
+      updated.markModified('alerts');
+      updated.markModified('dashboards');
+      updated.markModified('reviewTask');
+      updated.markModified('anomalies');
+      updated.save(function(err) {
         if (err) {
           return handleError(res, err);
         }
-        if (!tasksWithPrevious) {
-          return res.status(404).send('Not Found');
+        if (blnexecuteDashboard === true) {
+          process.emit('taskChanged', taskFull);
         }
-        _.each(tasksWithPrevious, function(taskWithPrevious) {
-          process.emit('PrevTaskToUpdate', {
-            current: req.params.id,
-            next: taskWithPrevious._id
+        TaskFull.find({
+          previousTasks: req.params.id
+        }, function(err, tasksWithPrevious) {
+          if (err) {
+            return handleError(res, err);
+          }
+          if (!tasksWithPrevious) {
+            return res.status(404).send('Not Found');
+          }
+          _.each(tasksWithPrevious, function(taskWithPrevious) {
+            process.emit('PrevTaskToUpdate', {
+              current: req.params.id,
+              next: taskWithPrevious._id
+            });
           });
         });
+        return res.status(200).json(taskFull);
       });
-      return res.status(200).json(taskFull);
     });
+
   });
 };
 
@@ -663,7 +677,8 @@ exports.updateAllTask = function(req, res) {
         metric.endDate = moment(metric.endDate).add(3, 'hours').hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
 
         var startDate = (metric.startDate) ? metric.startDate : metric.targetstartDate;
-        var endDate = (metric.endDate) ? metric.endDate : (metric.startDate) ? metric.startDate : metric.targetEndDate;
+        var endDate = (metric.endDate) ? metric.endDate : (metric.startDate && index > 0) ? metric.startDate : metric.targetEndDate;
+
         metric.endDate = endDate;
 
         if (index === 0) {

@@ -12,6 +12,7 @@ module.exports = function(app) {
   app.use('/api/dashboardCompletes', require('./api/dashboardComplete'));
   app.use('/api/taskCompletes', require('./api/taskComplete'));
   app.use('/api/taskFulls', require('./api/taskFull'));
+  app.use('/api/anomalies', require('./api/anomalie'));
   app.use('/api/whatsnews', require('./api/whatsnew'));
   app.use('/api/mails', require('./api/mail'));
   app.use('/api/dqms', require('./api/dqm'));

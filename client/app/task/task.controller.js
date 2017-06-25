@@ -328,6 +328,53 @@ angular.module('boardOsApp')
 
     };
 
+
+    $scope.createAnomaly = function() {
+      var modalInstance = $uibModal.open({
+        templateUrl: 'reOpenAnomaly.html',
+        controller: 'ModalAnoInstanceCtrl',
+        backdrop: 'static',
+        keyboard: false
+      });
+
+      modalInstance.result.then(function(result) {
+        var anomalie = {
+          name: result.name,
+          impact: result.impact,
+          impactWorkload: result.impactWorkload,
+          category: result.category,
+          categoryDetails: result.categoryDetails
+        };
+
+        anomalie.sourceTasks = [];
+        anomalie.sourceTasks.push($scope.task._id);
+        anomalie.context = $scope.task.context;
+        anomalie.activity = $scope.task.activity;
+
+        anomalie.actor = $scope.currentUser._id;
+
+        $scope.myPromise = $http.post('/api/anomalies', anomalie).success(function(data) {
+          if (!$scope.task.anomalies) {
+            $scope.task.anomalies = [];
+          }
+
+          $scope.task.anomalies.push(data._id);
+
+          $scope.myPromise = $http.put('/api/taskFulls/' + $scope.task._id + '/false', $scope.task).success(function(data) {
+            $timeout(function() {
+              initializing = true;
+              blnexecuteDashboard = false;
+              $scope.loadTask();
+              var logInfo = 'Anomalie "' + $scope.task.name + '" was created';
+              Notification.success(logInfo);
+
+            }, 100);
+          });
+        });
+      });
+
+    };
+
     $rootScope.$on('reloadTask', function(event, data) {
       $scope.loadTask();
     });
@@ -343,9 +390,10 @@ angular.module('boardOsApp')
       $scope.showTrash = false;
 
       var taskId = $stateParams.id || $scope.task._id;
-      
+
       $scope.TeamIsExpanded = (taskId === undefined);
       $scope.TeamIsExpanded = true;
+      $scope.AnomalyIsExpanded = true;
       $scope.blnAddActor = false;
       $scope.actorselected = null;
       $scope.blnAddFollower = false;
@@ -439,7 +487,7 @@ angular.module('boardOsApp')
             name: null
           };
           $scope.currentTask = _.cloneDeep($scope.task);
-          
+
 
         }, 500);
 
@@ -487,7 +535,7 @@ angular.module('boardOsApp')
           initializing = true;
           blnexecuteDashboard = false;
           $scope.loadTask();
-        }, 500);
+        }, 100);
         Notification.success(logInfo);
       });
     };
@@ -501,6 +549,48 @@ angular.module('boardOsApp')
           $scope.loadTask();
         }, 500);
         Notification.success(logInfo);
+      });
+    };
+
+    $scope.delete = function() {
+      bootbox.confirm('Are you sure to delete this task ? It can NOT be undone.', function(result) {
+        if (result) {
+          $scope.myPromise = $http.delete('/api/taskFulls/' + $scope.task._id).success(function() {
+            var logInfo = 'Task "' + $scope.task.name + '" was deleted';
+            Notification.success(logInfo);
+            $location.path('/');
+          });
+        }
+      });
+    };
+
+    $scope.withdraw = function() {
+      bootbox.confirm('Are you sure to withdraw and close the task "' + $scope.task.name + '" ?', function(result) {
+        if (result) {
+          $scope.task.metrics[$scope.task.metrics.length - 1].status = 'Withdrawn';
+          $http.put('/api/taskFulls/' + $scope.task._id + '/true', $scope.task).success(function(data) {
+            var logInfo = 'Task "' + $scope.task.name + '" was withdrawn';
+            $timeout(function() {
+              initializing = true;
+              $scope.loadTask();
+            }, 500);
+            Notification.success(logInfo);
+          });
+        }
+      });
+    };
+
+    $scope.standardPERT = function() {
+      $scope.openedPERT = !$scope.openedPERT;
+      // Nouvelle tache
+      $http.get('/api/taskFulls/standardPERT', {
+        params: {
+          activity: $scope.task.activity,
+          context: $scope.task.context
+        }
+      }).success(function(pertTasks) {
+
+        $scope.pertTasks = pertTasks;
       });
     };
 
@@ -644,101 +734,6 @@ angular.module('boardOsApp')
       });
     };
 
-
-
-
-    $scope.save = function(form) {
-
-      // si la form est valide
-      delete $scope.task.__v;
-      delete $scope.task.kpis;
-      delete $scope.task.tasks;
-      $scope.task.date = Date.now();
-
-      if ($scope.task._id === undefined && $scope.task.activity !== undefined && $scope.task.context !== undefined) {
-        // Nouvelle tache
-        $scope.myPromise = $http.get('/api/taskFulls/search', {
-          params: {
-            activity: $scope.task.activity,
-            context: $scope.task.context
-          }
-        }).success(function(alreadyExit) {
-          // si cela n'existe pas
-          if (alreadyExit.length === 0) {
-            $scope.myPromise = $http.post('/api/taskFulls', $scope.task).success(function(data) {
-              var logInfo = 'Task "' + $scope.task.name + '" was created';
-              $http.post('/api/logs', {
-                info: logInfo,
-                actor: $scope.currentUser
-              });
-              Notification.success(logInfo);
-              $location.path('/task/' + data._id);
-              $scope.needToSave = false;
-            });
-          } else {
-            $scope.taskAlreadyExist.id = alreadyExit[0]._id;
-            $scope.taskAlreadyExist.name = alreadyExit[0].name;
-          }
-        });
-      } else {
-        // tache déjà existante en cours de modification
-        $scope.myPromise = $http.put('/api/taskFulls/' + $scope.task._id, $scope.task).success(function(data) {
-          var logInfo = 'Task "' + $scope.task.name + '" was updated';
-          $http.post('/api/logs', {
-            info: logInfo,
-            actor: $scope.currentUser
-          });
-          $scope.loadTask();
-          $scope.needToSave = false;
-          Notification.success(logInfo);
-        });
-      }
-    };
-
-
-    $scope.delete = function() {
-      bootbox.confirm('Are you sure to delete this task ? It can NOT be undone.', function(result) {
-        if (result) {
-          $scope.myPromise = $http.delete('/api/taskFulls/' + $scope.task._id).success(function() {
-            var logInfo = 'Task "' + $scope.task.name + '" was deleted';
-            Notification.success(logInfo);
-            $location.path('/');
-          });
-        }
-      });
-    };
-
-    $scope.withdraw = function() {
-      bootbox.confirm('Are you sure to withdraw and close the task "' + $scope.task.name + '" ?', function(result) {
-        if (result) {
-          $scope.task.metrics[$scope.task.metrics.length - 1].status = 'Withdrawn';
-          $http.put('/api/taskFulls/' + $scope.task._id, $scope.task).success(function(data) {
-            var logInfo = 'Task "' + $scope.task.name + '" was withdrawn';
-            $timeout(function() {
-              initializing = true;
-              $scope.loadTask();
-            }, 500);
-            Notification.success(logInfo);
-          });
-        }
-      });
-    };
-
-    $scope.standardPERT = function() {
-      $scope.openedPERT = !$scope.openedPERT;
-      // Nouvelle tache
-      $http.get('/api/taskFulls/standardPERT', {
-        params: {
-          activity: $scope.task.activity,
-          context: $scope.task.context
-        }
-      }).success(function(pertTasks) {
-
-        $scope.pertTasks = pertTasks;
-      });
-    };
-
-
     $scope.showWeeks = true;
 
     $scope.today = function() {
@@ -833,4 +828,80 @@ angular.module('boardOsApp')
     $scope.cancel = function() {
       $uibModalInstance.dismiss('cancel');
     };
+  })
+  .controller('ModalAnoInstanceCtrl', function($scope, $mdpDatePicker, $uibModalInstance, $filter) {
+    $scope.selected = {
+      impact: null,
+      category: null,
+      dueDate: undefined
+    };
+
+    $scope.showDatePicker = function(item, datename, ev) {
+      var currentdate = (item[datename]) ? new Date(item[datename]) : new Date();
+      $mdpDatePicker(currentdate, {
+        targetEvent: ev
+      }).then(function(selectedDate) {
+        item[datename] = selectedDate.toISOString();
+      });
+    };
+
+    $scope.ok = function() {
+      $uibModalInstance.close($scope.selected);
+    };
+
+    $scope.cancel = function() {
+      $uibModalInstance.dismiss('cancel');
+    };
+
+
+    $scope.impacts = [{
+        value: 1,
+        text: 'Blocking'
+      },
+      {
+        value: 2,
+        text: 'Critic'
+      },
+      {
+        value: 3,
+        text: 'Irritant'
+      }
+    ];
+
+    $scope.showImpacts = function() {
+      var selected = $filter('filter')($scope.impacts, {
+        value: $scope.selected.impact
+      });
+      return ($scope.selected.impact && selected.length) ? selected[0].text : 'Not set';
+    };
+
+    $scope.categories = [{
+        value: 1,
+        text: 'Process'
+      },
+      {
+        value: 2,
+        text: 'RACI'
+      },
+      {
+        value: 3,
+        text: 'Tools'
+      },
+      {
+        value: 4,
+        text: 'Competencies'
+      },
+      {
+        value: 5,
+        text: 'Communication'
+      }
+    ];
+
+    $scope.showCategories = function() {
+      var selected = $filter('filter')($scope.categories, {
+        value: $scope.selected.category
+      });
+      return ($scope.selected.category && selected.length) ? selected[0].text : 'Not set';
+    };
+
   });
