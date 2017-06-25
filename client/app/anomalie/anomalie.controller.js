@@ -2,8 +2,8 @@
 /*jshint loopfunc:true */
 
 angular.module('boardOsApp')
-  .controller('AnomalieCtrl', function($scope, $filter, $stateParams, $http) {
-    var BpmnModeler = window.BpmnJS;
+  .controller('AnomalieCtrl', function($scope, $filter, $stateParams, $http, $window) {
+    var BpmnModeler = $window.BpmnJS;
 
     var anomalieId = $stateParams.id || $scope.anomalie._id;
 
@@ -232,10 +232,10 @@ angular.module('boardOsApp')
 
     viewer.importXML(fiveWhyDiagram, function(err) {
       if (!err) {
-        
+
         viewer.get('canvas').zoom('fit-viewport');
       } else {
-        
+
       }
     });
 
@@ -245,10 +245,10 @@ angular.module('boardOsApp')
 
     viewer_large.importXML(fiveWhyDiagram, function(err) {
       if (!err) {
-        
+
         viewer.get('canvas').zoom('fit-viewport');
       } else {
-        
+
       }
     });
 
