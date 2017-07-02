@@ -8,6 +8,7 @@ var router = express.Router();
 router.get('/', controller.index);
 router.get('/execute', controller.execute);
 router.get('/:id', controller.show);
+router.get('/list/:userId', controller.showUlist);
 router.get('/executeId/:dashboardId', controller.executeId);
 router.post('/', controller.create);
 router.post('/subscribe/:id', controller.subscribe);
