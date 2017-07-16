@@ -1,5 +1,16 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.111...HEAD)
+
+**Closed issues:**
+
+- BOSS en rec - créer tâche renvoie sur la création d'une tâche pour un plan d'action [\#292](https://github.com/wilsto/BoardOS/issues/292)
+
+## [v1.6.111](https://github.com/wilsto/boardos/tree/v1.6.111) (2017-06-26)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.110...v1.6.111)
+
 ## [v1.6.110](https://github.com/wilsto/boardos/tree/v1.6.110) (2017-06-26)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.109...v1.6.110)
 

@@ -51,6 +51,7 @@
 <link rel="stylesheet" href="app/account/settings/setting.css">
 <link rel="stylesheet" href="app/admin/admin.css">
 <link rel="stylesheet" href="app/anomalie/anomalie.css">
+<link rel="stylesheet" href="app/anomalies/anomalies.css">
 <link rel="stylesheet" href="app/app.css">
 <link rel="stylesheet" href="app/calendar/calendar.css">
 <link rel="stylesheet" href="app/dashboard/dashboard.css">
@@ -90,27 +91,11 @@
             <!-- BEGIN SIDEBAR MENU -->
             <!-- DOC: for circle icon style menu apply page-sidebar-menu-circle-icons class right after sidebar-toggler-wrapper -->
             <ul class="page-sidebar-menu" >
-              <li class="sidebar-toggler-wrapper">
-                <!-- BEGIN SIDEBAR TOGGLER BUTTON                 <div class="sidebar-toggler">
-              </div>-->
-
-              <div class="clearfix">
-              </div>
-              <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
-            </li>
-            <li class="sidebar-search-wrapper">
-              <form class="search-form" role="form" action="index.html" method="get">
-                <div class="input-icon right">
-                  <i class="fa fa-search"></i>
-                  <input type="text" class="form-control" name="query" placeholder="Rechercher...">
-                </div>
-              </form>
-            </li>
-            <li class="start active ">
-              <a href="/">
+            <li  class="start active ">
+              <a href="#">
                 <i class="fa fa-dashboard"></i>
-                <span class="title">Dashboard</span>
-                <span class="selected"></span>
+                <span class="title">Information</span>
+                <span class="arrow "></span>
               </a>
               <ul class="sub-menu">
                 <li>
@@ -122,28 +107,25 @@
                 <li>
                   <a href="/dashboards">
                     <i class="fa fa-list"></i>
-                    List
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li >
-              <a href="/calendar">
-                <i class="fa fa-calendar"></i>
-                <span class="title">Information</span>
-                <span class="arrow "></span>
-              </a>
-              <ul class="sub-menu">
-                <li>
-                  <a href="/KPIs">
-                    <i class="fa fa-tasks"></i>
-                    KPIs
+                    Dashboards
                   </a>
                 </li>
                 <li>
                   <a href="/tasks">
                     <i class="fa fa-check-square-o "></i>
                     Tasks
+                  </a>
+                </li>
+                <li>
+                  <a href="/anomalies">
+                    <i class="fa fa-exclamation-circle "></i>
+                    Anomalies
+                  </a>
+                </li>
+                <li>
+                  <a href="/KPIs">
+                    <i class="fa fa-tasks"></i>
+                    KPIs
                   </a>
                 </li>
                 <li>
@@ -396,6 +378,8 @@
     <script src="app/admin/admin.js"></script>
     <script src="app/anomalie/anomalie.controller.js"></script>
     <script src="app/anomalie/anomalie.js"></script>
+    <script src="app/anomalies/anomalies.controller.js"></script>
+    <script src="app/anomalies/anomalies.js"></script>
     <script src="app/calendar/calendar.controller.js"></script>
     <script src="app/calendar/calendar.js"></script>
     <script src="app/dashboard/dashboard.controller.js"></script>

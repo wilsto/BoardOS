@@ -343,6 +343,23 @@
                     </div>
                 </div>
                 <div class="portlet-body" style="padding:0!important;max-height:400px;overflow:auto">
+                  <table class="table table-striped table-hover" >
+                      <tbody style="text-align:left;">
+                          <tr ng-repeat="anomalie in anomalies | orderBy:'date'">
+                              <td >
+                                  <a href="/anomalie/{{anomalie._id}}">
+                                    <i class="fa fa-2x fa-exclamation-circle" style="color:rgb(208, 112, 65)" aria-hidden="true"></i> <small class="dont-break-out"> {{anomalie.name}}</small>
+                                  </a >
+                              </td>
+                              <td style="min-width:70px">
+                                  <span class="pull-right text-info">
+                                    <span class="btn btn-outline  btn-danger btn-xs" aria-hidden="false">CA</span>
+                                    <span class="btn  btn-outline btn-success btn-xs" aria-hidden="false">PA</span>
+                                  </span>
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
                 </div>
             </div>
         </div>

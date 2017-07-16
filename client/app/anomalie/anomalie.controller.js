@@ -2,9 +2,24 @@
 /*jshint loopfunc:true */
 
 angular.module('boardOsApp')
-  .controller('AnomalieCtrl', function($scope, $filter, $stateParams, $http) {
+  .controller('AnomalieCtrl', function($scope, $filter, $stateParams, $http, $location, $window, $timeout, Notification) {
 
     var anomalieId = $stateParams.id || $scope.anomalie._id;
+
+    $scope.createActionPlan = function() {
+      var path = $location.protocol() + '://' + location.host + '/task////anomaly/' + $scope.anomalie._id;
+      $window.open(path, '_blank');
+    };
+
+    $scope.refreshAnomalie = function() {
+      $scope.myPromise = $http.put('/api/anomalie/' + $scope.anomalie._id + '/true', $scope.anomalie).success(function(data) {
+        var logInfo = 'Anomalie "' + $scope.anomalie.name + '" was recalculated';
+        $timeout(function() {
+          $scope.loadAnomalie();
+        }, 500);
+        Notification.success(logInfo);
+      });
+    };
 
     $scope.myPromise = $http.get('/api/anomalies/' + anomalieId).success(function(anomalie) {
       $scope.anomalie = anomalie;

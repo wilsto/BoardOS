@@ -151,6 +151,15 @@ angular.module('boardOsApp')
       if ($stateParams.id) {
         $scope.myPromise = $http.get('/api/dashboardCompletes/' + $stateParams.id).success(function(dashboard) {
 
+          $http.get('/api/anomalies', {
+            params: {
+              activity: dashboard.activity,
+              context: dashboard.context
+            }
+          }).success(function(anomalies) {
+            $scope.anomalies = anomalies;
+          });
+
           dashboard.subscribed = false;
           var userlist = _.pluck(dashboard.users, '_id');
           $scope.userindex = userlist.indexOf($scope.currentUser._id.toString());

@@ -129,6 +129,7 @@ exports.show = function(req, res) {
     .populate('previousTasks', '_id name actors context activity metrics.status')
     .populate('nextTasks', '_id name actors context activity metrics')
     .populate('anomalies')
+    .populate('previousAnomalies', '_id name')
     .lean().exec(function(err, taskFulls) {
       if (err) {
         return handleError(res, err);
@@ -457,6 +458,12 @@ exports.update = function(req, res) {
     task.previousTasks = _.compact(_.uniq(previousTasks));
 
 
+    var previousAnomalies = [];
+    _.each(task.previousAnomalies, function(previousAnomalie) {
+      previousAnomalies.push(previousAnomalie._id);
+    });
+    task.previousAnomalies = _.compact(_.uniq(previousAnomalies));
+
     // Suppression des commentaires incomplets
     var commentsOk = [];
     _.each(task.comments, function(comment) {
@@ -579,6 +586,8 @@ exports.update = function(req, res) {
       taskFull.dashboards = task.dashboards;
       taskFull.reviewTask = task.reviewTask;
       taskFull.anomalies = task.anomalies;
+      taskFull.previousAnomalies = task.previousAnomalies;
+      taskFull.previousTasks = task.previousTasks;
       updated.markModified('actors');
       updated.markModified('followers');
       updated.markModified('metrics');
@@ -589,6 +598,8 @@ exports.update = function(req, res) {
       updated.markModified('dashboards');
       updated.markModified('reviewTask');
       updated.markModified('anomalies');
+      updated.markModified('previousTasks');
+      updated.markModified('previousAnomalies');
       updated.save(function(err) {
         if (err) {
           return handleError(res, err);

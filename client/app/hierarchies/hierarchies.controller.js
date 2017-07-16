@@ -41,6 +41,21 @@ angular.module('boardOsApp')
       plugins: ['wholerow', 'types', 'contextmenu', 'dnd', 'search', 'unique', 'themes', 'ui']
     };
 
+
+
+    function verboseHierarchy(data) {
+      angular.forEach($scope.hierarchies, function(obj, key) {
+        // on recherche les parents et on les concatène.
+        var parentPath = _.compact(_.map(data.instance._model.data[obj.id].parents.reverse(), function(parent) {
+          return data.instance._model.data[parent].text;
+        })).join('.');
+
+        $scope.hierarchies[key].longname = (parentPath.length > 0) ? parentPath + '.' + obj.text : obj.text;
+
+      });
+    }
+
+
     $scope.load = function() {
       $http.get('/api/hierarchies/list/' + $scope.HierarchyType).success(function(hierarchies) {
         $scope.hierarchies = hierarchies.list;
@@ -147,16 +162,5 @@ angular.module('boardOsApp')
     };
 
 
-    function verboseHierarchy(data) {
-      angular.forEach($scope.hierarchies, function(obj, key) {
-        // on recherche les parents et on les concatène.
-        var parentPath = _.compact(_.map(data.instance._model.data[obj.id].parents.reverse(), function(parent) {
-          return data.instance._model.data[parent].text;
-        })).join('.');
-
-        $scope.hierarchies[key].longname = (parentPath.length > 0) ? parentPath + '.' + obj.text : obj.text;
-
-      });
-    }
 
   });

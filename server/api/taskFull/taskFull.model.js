@@ -52,6 +52,10 @@ var TaskFullSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'TaskFull'
   }],
+  previousAnomalies: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Anomalie'
+  }],
   anomalies: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Anomalie'

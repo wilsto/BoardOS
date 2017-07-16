@@ -199,8 +199,8 @@ Please report with maximum of accucracy your problem to be able to correct it an
                 <!-- Title -->
                 <div class="row">
                     <div class="col-md-2">
-                        <img src="assets/images/todo.png" class="img-responsive hidden-xs" style="width:125px;height:125px;" alt="" ng-cloak ng-if="!task.actionPlan"/>
-                        <img src="assets/images/action_icon.jpg" class="img-responsive hidden-xs" style="width:125px;height:125px;"  alt="" ng-cloak ng-if="task.actionPlan"/>
+                        <img src="assets/images/todo.png" class="img-responsive hidden-xs" style="width:125px;height:125px;" alt="" ng-cloak ng-if="task.actionPlan == false"/>
+                        <img src="assets/images/action_icon.jpg" class="img-responsive hidden-xs" style="width:125px;height:125px;"  alt="" ng-cloak ng-if="task.actionPlan  === true"/>
                     </div>
                     <div class="col-md-10">
                         <div class="row">
@@ -258,11 +258,20 @@ Please report with maximum of accucracy your problem to be able to correct it an
             <div class="col-md-4">
                 <!-- Title -->
                 <div class="row" ng-if="task.previousTasks[0]._id">
-                  Action Plan Coming From: <br>
+                Coming From tasks: <br>
                   <div class="" ng-repeat="previousTask in task.previousTasks">
                     <a href="/task/{{previousTask._id}}">
                       <i class="fa fa-tasks"></i>
                       {{previousTask.name}}
+                    </a>
+                  </div>
+                </div>
+                <div class="row" ng-if="task.previousAnomalies[0]._id">
+                  Coming From anomalies: <br>
+                  <div class="" ng-repeat="previousAnomalie in task.previousAnomalies">
+                    <a href="/anomalie/{{previousAnomalie._id}}">
+                      <i class="fa fa-exclamation-triangle"></i>
+                      {{previousAnomalie.name}}
                     </a>
                   </div>
                 </div>
@@ -831,7 +840,7 @@ Please report with maximum of accucracy your problem to be able to correct it an
                           <tr ng-repeat="anomalie in task.anomalies | orderBy:'date'">
                               <td >
                                   <a href="/anomalie/{{anomalie._id}}">
-                                    <i class="fa fa-exclamation-triangle" style="color:rgb(167, 65, 15)" aria-hidden="true"></i> <small class="dont-break-out"> {{anomalie.name}}</small>
+                                    <i class="fa fa-exclamation-circle" style="color:rgb(167, 65, 15)" aria-hidden="true"></i> <small class="dont-break-out"> {{anomalie.name}}</small>
                                   </a >
                               </td>
                               <td style="min-width:70px">

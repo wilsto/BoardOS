@@ -50,6 +50,8 @@
   Capture specifics about the problem as well as the impact to each of the organization's overall Goals.<br>
   <ul>
       <li>Answer each question in the Outline.</li>
+      <li>Write down one of the Goals that was affected.</li>
+      <li>Write the impact to that Goal in the next box.</li>
       <li>Create a plan for actions that will be implemented to <u>correct</u> the problem.</li>
   </ul>
 
@@ -156,7 +158,9 @@
                             </span>
                         </td>
                         <td style="text-align:right">
-                          <a href="#" class="btn btn-primary btn-outline btn-xs ">Create Corrective Task</a>
+                          <a href="#" class="btn btn-primary btn-outline  btn-xs ">Select</a>
+                          <small class="text-muted" > or </small>
+                          <a href="#" class="btn btn-primary btn-outline btn-xs " ng-click="createActionPlan()">Create Corrective Task</a>
                         </td>
                     </tr>
                     <tr >
@@ -190,8 +194,6 @@
     <h2  style="margin:0">Analysis</h2>
     Lay out the cause-and-effect relationships for the incident.
 <ul>
-    <li>Write down one of the Goals that was affected.</li>
-    <li>Write the impact to that Goal in the next box.</li>
     <li>Answer the question "Why did that happen?" Ask Why again.</li>
     <li>In the more detailed analysis, ask as many Why questions as
       necessary to thoroughly explain the issue.</li>
@@ -223,7 +225,7 @@
                           </span>
                       </td>
                       <td style="text-align:right">
-                        <a href="#" class="btn btn-primary btn-outline  btn-xs ">Select a RCA Task</a>
+                        <a href="#" class="btn btn-primary btn-outline  btn-xs ">Select</a>
                         <small class="text-muted" > or </small>
                         <a href="#" class="btn btn-primary btn-outline  btn-xs ">Create RCA Task</a>
                       </td>
@@ -332,6 +334,8 @@ Select the solutions            </div>
                           </span>
                       </td>
                       <td style="text-align:right">
+                        <a href="#" class="btn btn-primary btn-outline  btn-xs ">Select</a>
+                        <small class="text-muted" > or </small>
                         <a href="#" class="btn btn-primary btn-outline  btn-xs ">Create  Action Plan Task</a>
                       </td>
                     </tr>
@@ -356,7 +360,7 @@ Select the solutions            </div>
         <div class="portlet-title">
             <div class="caption">
               <span class="badge badge-success" aria-hidden="false">6</span>
-        Measure counterMeasures Effects
+        Measure Solution Effects
             </div>
             <div class="tools">
                 <div class="pull-right" ng-init="EngagementIsExpanded[key]=(key===task.metrics.length-1 || key===0)" ng-click="EngagementIsExpanded[key]=!EngagementIsExpanded[key]">
@@ -436,6 +440,10 @@ Select the solutions            </div>
 <br>
 <footer class="navbar-fixed-bottom footer-task-boss">
   <div class="container">
+    <!-- big screen -->
+    <button type="button" name="button" style="margin-top:2px;margin-left:40%;margin-right:10px;width:100px;" class="btn btn-xs btn-outline btn-info hidden-xs"
+      ng-click="refreshAnomalie()" ng-if="anomalie._id" ng-cloak
+      uib-tooltip-html="'Resfresh will operate again all calculations'" tooltip-placement="top" >Refresh </button>
     <button type="button" name="button" style="margin-top:2px;margin-right:10px;width:100px;" class="btn btn-primary pull-right hidden-xs"
         ng-click="update()"
         uib-tooltip-html="'Save will  copy data to a permanent storage'" tooltip-placement="left" >Save </button>

@@ -1,14 +1,33 @@
+/*jshint sub:true*/
 'use strict';
 
 var _ = require('lodash');
 var Anomalie = require('./anomalie.model');
+var TaskFull = require('../taskFull/taskFull.model');
 var moment = require('moment');
 
 // Get list of anomalies
 exports.index = function(req, res) {
-  Anomalie.find().sort({
+
+  var filterPerimeter = {
+    $or: []
+  };
+
+  filterPerimeter['$or'].push({
+    activity: {
+      '$regex': req.query.activity || '',
+      $options: '-im'
+    },
+    context: {
+      '$regex': req.query.context || '',
+      $options: '-im'
+    }
+  });
+
+  Anomalie.find(filterPerimeter).sort({
     date: 'desc'
   }).lean().exec(function(err, anomalies) {
+    console.log('anomalies', anomalies.length);
     if (err) {
       return handleError(res, err);
     }
@@ -60,13 +79,29 @@ exports.update = function(req, res) {
     if (!anomalie) {
       return res.send(404);
     }
-    var updated = _.merge(anomalie, req.body);
-    updated.save(function(err) {
+
+    TaskFull.find({
+      previousAnomalies: anomalie._id
+    }, function(err, tasksWithPrevious) {
       if (err) {
         return handleError(res, err);
       }
-      return res.json(200, anomalie);
+      if (tasksWithPrevious) {
+        anomalie.correctiveActions.push(tasksWithPrevious._id);
+      }
+
+      var updated = _.merge(anomalie, req.body);
+      updated.save(function(err) {
+        if (err) {
+          return handleError(res, err);
+        }
+        return res.json(200, anomalie);
+      });
+
     });
+
+
+
   });
 };
 

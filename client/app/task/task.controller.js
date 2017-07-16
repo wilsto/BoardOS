@@ -451,7 +451,9 @@ angular.module('boardOsApp')
           // si cela n'existe pas
           $scope.task.context = $stateParams.context;
           $scope.task.activity = $stateParams.activity;
-          $scope.task.actionPlan = $stateParams.actionPlan !== undefined;
+          $scope.task.actionPlan = $stateParams.actionPlan !== null;
+          
+          
           $scope.task.previousTasks = [];
           $scope.task.anomalies = [];
           if ($stateParams.actionPlan === 'task') {
@@ -460,6 +462,7 @@ angular.module('boardOsApp')
           if ($stateParams.actionPlan === 'anomaly') {
             $scope.task.anomalies.push($stateParams.previousId);
           }
+          
           $scope.task.nextTasks = [];
           $scope.task.date = Date.now();
           $scope.task.comments = [{
@@ -855,16 +858,16 @@ angular.module('boardOsApp')
 
 
     $scope.impacts = [{
-        value: 1,
+        value: 'Blocking',
         text: 'Blocking'
       },
       {
-        value: 2,
+        value: 'Critic',
         text: 'Critic'
       },
       {
-        value: 3,
-        text: 'Irritant'
+        value: 'Irritating',
+        text: 'Irritating'
       }
     ];
 
@@ -876,23 +879,23 @@ angular.module('boardOsApp')
     };
 
     $scope.categories = [{
-        value: 1,
+        value: 'Process',
         text: 'Process'
       },
       {
-        value: 2,
+        value: 'RACI',
         text: 'RACI'
       },
       {
-        value: 3,
+        value: 'Tools',
         text: 'Tools'
       },
       {
-        value: 4,
+        value: 'Competencies',
         text: 'Competencies'
       },
       {
-        value: 5,
+        value: 'Communication',
         text: 'Communication'
       }
     ];
