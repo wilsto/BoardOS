@@ -2,6 +2,9 @@
 'use strict';
 
 var _ = require('lodash');
+var x2js = require('x2js');
+
+
 var Anomalie = require('./anomalie.model');
 var TaskFull = require('../taskFull/taskFull.model');
 var moment = require('moment');
@@ -57,6 +60,29 @@ exports.show = function(req, res) {
     });
 };
 
+// Get a single anomalie
+exports.exportFiveWhyXml = function(req, res) {
+
+  //var x2js = new X2JS();
+  Anomalie.findById(req.params.id)
+    .lean().exec(function(err, anomalie) {
+      if (err) {
+        return handleError(res, err);
+      }
+      if (!anomalie) {
+        return res.send(404);
+      }
+
+      var xml = x2js.js2xml(anomalie.fiveWhy);
+      console.log(xml);
+
+      res.setHeader('Content-disposition', 'attachment; filename=data.xml');
+      res.set('Content-Type', 'text/xml');
+      return res.status(200).send(xml);
+
+    });
+};
+
 // Creates a new anomalie in the DB.
 exports.create = function(req, res) {
   Anomalie.create(req.body, function(err, anomalie) {
@@ -69,9 +95,20 @@ exports.create = function(req, res) {
 
 // Updates an existing anomalie in the DB.
 exports.update = function(req, res) {
-  if (req.body._id) {
-    delete req.body._id;
+
+  var newAno = req.body;
+  if (newAno._id) {
+    delete newAno._id;
   }
+  var sourceTasks = [];
+  _.each(newAno.sourceTasks, function(sourceTask) {
+    sourceTasks.push(sourceTask._id);
+  });
+  newAno.sourceTasks = _.compact(_.uniq(sourceTasks));
+  newAno.actor = newAno.actor._id;
+  console.log('newAno', newAno);
+
+
   Anomalie.findById(req.params.id, function(err, anomalie) {
     if (err) {
       return handleError(res, err);
@@ -80,17 +117,23 @@ exports.update = function(req, res) {
       return res.send(404);
     }
 
+    // Recherche de la tache en anomalie
     TaskFull.find({
       previousAnomalies: anomalie._id
     }, function(err, tasksWithPrevious) {
       if (err) {
         return handleError(res, err);
       }
+      console.log('tasksWithPrevious', tasksWithPrevious);
       if (tasksWithPrevious) {
+        console.log('CONDITION PASSED');
         anomalie.correctiveActions.push(tasksWithPrevious._id);
       }
+      anomalie.correctiveActions = _.compact(_.uniq(anomalie.correctiveActions));
 
-      var updated = _.merge(anomalie, req.body);
+      var updated = _.merge(anomalie, newAno);
+      updated.markModified('fiveWhy');
+      updated.markModified('sourceTasks');
       updated.save(function(err) {
         if (err) {
           return handleError(res, err);

@@ -306,12 +306,12 @@ exports.exportXLS = function(req, res) {
       __v: false,
       todo: false,
       watchers: false,
-      actors: false,
       followers: false,
       alerts: false,
       kpis: false,
       comments: false
     })
+    .populate('actors', '-__v -hashedPassword -provider -salt')
     .lean().exec(function(err, taskFulls) {
 
       console.log('taskFulls', taskFulls.length);

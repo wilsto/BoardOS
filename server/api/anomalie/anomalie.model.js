@@ -36,7 +36,7 @@ var AnomalieSchema = new Schema({
   }],
 
   /** Analyses **/
-  fiveWhy: String,
+  fiveWhy: Schema.Types.Mixed,
   counterMeasures: String,
   rootCauseAnalysisTasks: [{
     type: mongoose.Schema.Types.ObjectId,

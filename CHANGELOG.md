@@ -1,5 +1,20 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.113...HEAD)
+
+**Fixed bugs:**
+
+- Erreur d'installation Travis CI [\#241](https://github.com/wilsto/BoardOS/issues/241)
+
+**Closed issues:**
+
+- Ajout de l'acteur dans l'export excel des taches [\#300](https://github.com/wilsto/BoardOS/issues/300)
+
+## [v1.6.113](https://github.com/wilsto/boardos/tree/v1.6.113) (2017-07-16)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.112...v1.6.113)
+
 ## [v1.6.112](https://github.com/wilsto/boardos/tree/v1.6.112) (2017-07-16)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.111...v1.6.112)
 
