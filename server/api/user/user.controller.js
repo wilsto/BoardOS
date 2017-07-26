@@ -149,6 +149,21 @@ exports.changeRole = function(req, res, next) {
   });
 };
 
+/**
+ * Change a users role
+ */
+exports.changeGroups = function(req, res, next) {
+  var userId = String(req.body.userId);
+  var newGroups = req.body.newGroups;
+  User.findById(userId, function(err, user) {
+    user.groups = newGroups;
+    user.save(function(err) {
+      if (err) return validationError(res, err);
+      res.send(200);
+    });
+  });
+};
+
 
 /**
  * Desactivate a user

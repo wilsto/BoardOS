@@ -52,7 +52,10 @@ angular.module('boardOsApp')
       $http.get('/api/taskFulls/exportXLS', {
         timeout: 60000
       }).success(function(response) {
+        
         $scope.messageExportTask = 'Execution Done';
+      }).error(function(data) {
+        
       });
     };
 

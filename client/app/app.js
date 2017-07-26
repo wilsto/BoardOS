@@ -21,7 +21,9 @@ angular.module('boardOsApp', [
     'mdPickers',
     'ng-mfb',
     'DlhSoft.Kanban.Angular.Components',
-    'infinite-scroll'
+    'infinite-scroll',
+    'ngTagsInput',
+    'angular-advanced-searchbox'
   ])
   .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, NotificationProvider) {
     $urlRouterProvider.otherwise('/');

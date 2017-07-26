@@ -1,3 +1,4 @@
+/*jshint multistr: true */
 /*jshint sub:true*/
 'use strict';
 
@@ -28,17 +29,26 @@ exports.index = function(req, res) {
   });
 
   Anomalie.find(filterPerimeter).sort({
-    date: 'desc'
-  }).lean().exec(function(err, anomalies) {
-    console.log('anomalies', anomalies.length);
-    if (err) {
-      return handleError(res, err);
-    }
-    _.each(anomalies, function(rowdata, index) {
-      rowdata.moment = moment(rowdata.date).fromNow();
+      date: 'desc'
+    })
+    .populate('actor', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
+    .populate('sourceTasks', '_id name')
+    .populate('correctiveActions', '_id name metrics.status')
+    .populate('rootCauseAnalysisTasks', '_id name metrics.status')
+    .populate('preventiveActions', '_id name metrics.status')
+    .lean().exec(function(err, anomalies) {
+      if (err) {
+        return handleError(res, err);
+      }
+      _.each(anomalies, function(anomalie) {
+        anomalie.actor.avatar = (anomalie.actor.avatar) ? anomalie.actor.avatar : 'assets/images/avatars/' + anomalie.actor._id + '.png';
+      });
+
+      _.each(anomalies, function(rowdata, index) {
+        rowdata.moment = moment(rowdata.date).fromNow();
+      });
+      return res.json(200, anomalies);
     });
-    return res.json(200, anomalies);
-  });
 };
 
 // Get a single anomalie
@@ -63,7 +73,6 @@ exports.show = function(req, res) {
 // Get a single anomalie
 exports.exportFiveWhyXml = function(req, res) {
 
-  //var x2js = new X2JS();
   Anomalie.findById(req.params.id)
     .lean().exec(function(err, anomalie) {
       if (err) {
@@ -73,11 +82,12 @@ exports.exportFiveWhyXml = function(req, res) {
         return res.send(404);
       }
 
-      var xml = x2js.js2xml(anomalie.fiveWhy);
-      console.log(xml);
-
-      res.setHeader('Content-disposition', 'attachment; filename=data.xml');
-      res.set('Content-Type', 'text/xml');
+      // var xml = anomalie.fiveWhy;
+      var xml = '<?xml version="1.0" encoding="UTF-8"?><to></to></xml>';
+      res.set({
+        'Content-Disposition': 'attachment; filename=data.xml',
+        'Content-Type': 'application/xml'
+      });
       return res.status(200).send(xml);
 
     });

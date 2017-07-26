@@ -1,8 +1,7 @@
 # Change Log
 
-## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
-
-[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.113...HEAD)
+## [v1.6.114](https://github.com/wilsto/boardos/tree/v1.6.114) (2017-07-21)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.113...v1.6.114)
 
 **Fixed bugs:**
 

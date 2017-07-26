@@ -7,6 +7,159 @@
 </div>
 
 
+  <!-- Script pour le template du search -->
+  <script type="text/ng-template" id="searchTaskTemplate.html">
+    <a  href="#">
+       <img class="img-circle" ng-src="{{match.model.actors[0].avatar}}" err-src="assets/images/avatars/avatar.png" >
+        <small class=text-muted style="margin-left:5px;margin-right:5px">   {{match.model.metrics[0].targetEndDate | date: 'mediumDate'}}</small>
+        {{match.model.name}}
+     </a>
+  </script>
+
+<script type="text/ng-template" id="selectOrCreateTask.html">
+  <div class="modal-header">
+      <h4 class="modal-title" ng-if="typeTask==='CA'">
+        First, we need a Corrective Action <b>(CA).</b><br>
+        <img src="assets/images/correctiveaction.jpg" style="height:150px;margin:5px" class="pull-right" />
+        <small>
+           Analyze the effect such a nonconformity may have had on the service produced, and take action appropriate to the severity of the situation.
+           Establish thorough follow-up to ensure the correction is effective and recurrence has been prevented.
+        </small>
+      </h4>
+      <h4 class="modal-title" ng-if="typeTask==='RCA'">
+        Next, we need a Root Cause Analysis <b>(RCA)</b>.
+        <img src="assets/images/RCA.png" style="height:150px;margin:5px" class="pull-right" />
+        <small>
+        <br/>
+        RCA is procedural and helps guide the problem solver to understand the real causes of problems and therefore lead to the development of a practical solution that will prevent the recurrence of that problem        <br />
+        </small>
+      </h4>
+      <h4 class="modal-title" ng-if="typeTask==='PA'">
+        Finally, we need a Preventive Action <b>(PA)</b>.
+        <img src="assets/images/PA.jpg" style="height:150px;margin:5px" class="pull-right" />
+        <small>
+        <br/>
+        Take proactive steps to ensure a potential nonconformity does not occur.
+        Employ process and system analysis to determine how to build in safeguards and process changes to prevent nonconformance.
+        </small>
+      </h4>
+  </div>
+  <div class="modal-body" style="padding:0" ng-if="blnSelect">
+    <table class="table table-striped table-hover" style="margin-bottom:0">
+        <tbody style="text-align:left;">
+          <tr >
+              <td style="text-align:left;width:20%">
+                  <span ><i class="fa fa-crosshairs" aria-hidden="true"></i> Select a Task
+                  </span>
+              </td>
+              <td style="text-align:right;width:80%">
+                <input  class="mysearchname" style="width:100%!important" type="text" placeholder="Enter the name of the task you search..." ng-model="mySearchTask" uib-typeahead="mySearchTask as mySearchTask.name for mySearchTask in mySearchTasks | filter:$viewValue:namesWith | orderBy:'-date' | limitTo:50"
+                  typeahead-min-length="0" typeahead-template-url="searchTaskTemplate.html"  typeahead-on-select="selectTask($item)">
+              </td>
+          </tr>
+        </tbody>
+    </table>
+  </div>
+  <div class="modal-body" style="padding:0" ng-if="!blnSelect">
+    <table class="table table-striped table-hover" style="margin-bottom:0">
+        <tbody style="text-align:left;">
+          <tr >
+              <td style="text-align:left;width:100%">
+                  <span ><i class="fa fa-plus-circle" aria-hidden="true"></i> Create a new task
+                  </span>
+              </td>
+
+          </tr>
+        </tbody>
+    </table>
+  </div>
+  <div class="modal-body" id="modal-body-{{name}}" ng-if="!blnSelect">
+      <table class="table table-striped table-hover" style="margin-left:15px">
+          <tbody style="text-align:left;">
+            <tr >
+                <td style="text-align:left">
+                    <span class="text-muted">Name
+                    </span>
+                </td>
+                <td style="text-align:right">
+                  <a href="#"  e-style="resize:vertical;width:100%"  editable-textarea="selected.name" buttons="no" blur="submit">{{ selected.name || 'To Complete ' }}</a>
+                </td>
+            </tr>
+            <tr >
+                <td style="text-align:left">
+                    <span class="text-muted">Activity
+                    </span>
+                </td>
+                <td style="text-align:right">
+                  <a style="display:inline-block; " href="#" editable-text="selected.activity" e-style="width: 80%;display:inline-block;" e-uib-typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:25" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
+                    {{selected.activity || 'Please give activity' }}
+                  </a>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left">
+                    <span class="text-muted">Context
+                  </span>
+                </td>
+                <td style="text-align:right" >
+                  <a href="#" editable-text="selected.context" e-style="width: 500px" e-uib-typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:50">
+                  {{selected.context || 'Please give context' }}
+                </a>
+                </td>
+            </tr>
+            <tr uib-tooltip-html="'Give maximum of details to describe the problem with facts : Timeline, KPIs, Process, ... <br /> <br /> You need to be sure that all people who will work on this problem have the same understanding<br /> <br /> Text Area can be enlarge'" tooltip-placement="left">
+            <td style="text-align:left">
+              <span class="text-muted" >
+                startDate <small></small>
+              </span>
+            </td>
+            <td style="text-align:right">
+              <md-button class="md-button-slim" ng-click="showDatePicker(selected,'targetstartDate', $event)" aria-label="none" >
+                  <span ng-class="{'MandatoryField':selected.targetstartDate === undefined}">{{ (selected.targetstartDate | date:'mediumDate') || 'empty' }}</span>
+              </md-button>
+            </td>
+          </tr>
+          <tr uib-tooltip-html="'Give maximum of details to describe the problem with facts : Timeline, KPIs, Process, ... <br /> <br /> You need to be sure that all people who will work on this problem have the same understanding<br /> <br /> Text Area can be enlarge'" tooltip-placement="left">
+          <td style="text-align:left">
+            <span class="text-muted" >
+              endDate <small></small>
+            </span>
+          </td>
+          <td style="text-align:right">
+            <md-button class="md-button-slim" ng-click="showDatePicker(selected,'targetEndDate', $event)" aria-label="none" >
+              <span ng-class="{'MandatoryField':selected.targetEndDate === undefined}"> {{ (selected.targetEndDate | date:'mediumDate') || 'empty' }}</span>
+            </md-button>
+          </td>
+        </tr>
+        <tr uib-tooltip-html="'Give maximum of details to describe the problem with facts : Timeline, KPIs, Process, ... <br /> <br /> You need to be sure that all people who will work on this problem have the same understanding<br /> <br /> Text Area can be enlarge'" tooltip-placement="left">
+        <td style="text-align:left">
+          <span class="text-muted" >
+            workload <small></small>
+          </span>
+        </td>
+        <td style="text-align:right">
+                          <a href="#" class="days" e-min="0" e-step="0.001" editable-number="selected.targetLoad" e-style="width: 100px;"  buttons="no" blur="submit">{{selected.targetLoad || 'empty'}}</a>
+        </td>
+      </tr>
+      <tr uib-tooltip-html="'Give maximum of details to describe the problem with facts : Timeline, KPIs, Process, ... <br /> <br /> You need to be sure that all people who will work on this problem have the same understanding<br /> <br /> Text Area can be enlarge'" tooltip-placement="left">
+      <td style="text-align:left">
+        <span class="text-muted" >
+          Confidence to succeed<small></small>
+        </span>
+      </td>
+      <td style="text-align:right">
+        <a href="#" e-min="0" e-step="1" editable-number="selected.trust" e-style="width: 100px;"  buttons="no" blur="submit">{{selected.trust || 'empty'}}</a>
+      </td>
+    </tr>
+          </tbody>
+      </table>
+  </div>
+  <div class="modal-footer">
+          <button class="btn btn-warning" type="button" ng-click="ok()" ng-disabled="selectedTask === null && (selected.name === null || selected.impact === null || selected.category === null)">OK</button>
+          <button class="btn btn-default pull-left" type="button" ng-click="cancel()">Cancel</button>
+      </div>
+</script>
+
 <div class="row anomalie-top">
   <div class="col-md-2" >
     <img style="height:60px;margin-bottom:3px;" src="assets/images/ProblemLogo.jpg" alt="">
@@ -50,8 +203,7 @@
   Capture specifics about the problem as well as the impact to each of the organization's overall Goals.<br>
   <ul>
       <li>Answer each question in the Outline.</li>
-      <li>Write down one of the Goals that was affected.</li>
-      <li>Write the impact to that Goal in the next box.</li>
+      <li>Scan the entire perimeter to ensure no other similar nonconformity could occur.</li>
       <li>Create a plan for actions that will be implemented to <u>correct</u> the problem.</li>
   </ul>
 
@@ -158,9 +310,10 @@
                             </span>
                         </td>
                         <td style="text-align:right">
-                          <a href="#" class="btn btn-primary btn-outline  btn-xs ">Select</a>
+                          <a href="#" class="btn btn-primary btn-outline  btn-xs " ng-click="selectOrCreateTask('CA','Select')">Select</a>
                           <small class="text-muted" > or </small>
-                          <a href="#" class="btn btn-primary btn-outline btn-xs " ng-click="createActionPlan()">Create Corrective Task</a>
+                          <a href="#" class="btn btn-primary btn-outline btn-xs " ng-click="selectOrCreateTask('CA','Create')">Create Corrective Task</a>
+
                         </td>
                     </tr>
                     <tr >
@@ -225,9 +378,9 @@
                           </span>
                       </td>
                       <td style="text-align:right">
-                        <a href="#" class="btn btn-primary btn-outline  btn-xs ">Select</a>
+                        <a href="#" class="btn btn-primary btn-outline  btn-xs " ng-click="selectOrCreateTask('RCA','Select')">Select</a>
                         <small class="text-muted" > or </small>
-                        <a href="#" class="btn btn-primary btn-outline  btn-xs ">Create RCA Task</a>
+                        <a href="#" class="btn btn-primary btn-outline btn-xs " ng-click="selectOrCreateTask('RCA','Create')">Create Root Cause Analysis Task</a>
                       </td>
                     </tr>
                       <tr >
@@ -337,9 +490,9 @@ Select the solutions            </div>
                           </span>
                       </td>
                       <td style="text-align:right">
-                        <a href="#" class="btn btn-primary btn-outline  btn-xs ">Select</a>
+                        <a href="#" class="btn btn-primary btn-outline  btn-xs " ng-click="selectOrCreateTask('PA','Select')">Select</a>
                         <small class="text-muted" > or </small>
-                        <a href="#" class="btn btn-primary btn-outline  btn-xs ">Create  Action Plan Task</a>
+                        <a href="#" class="btn btn-primary btn-outline btn-xs " ng-click="selectOrCreateTask('PA','Create')">Create Preventive Action Task</a>
                       </td>
                     </tr>
                       <tr >

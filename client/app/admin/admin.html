@@ -1,13 +1,7 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
-<div class="pull-right">
-    <button class="btn" ng-show="edit===false" ng-init="edit=false" ng-click="edit=true">Create New User</button>
-    <button class="btn btn-primary" ng-show="edit===true" ng-click="">Save User</button>
-</div>
 <div>
     <div class="row">
         <div class="col-sm-12">
-            <span style="padding-right:25px">{{users.length}} members</span> Search :
-            <input type="text" ng-model="searchFilter">
         </div>
     </div>
 </div>
@@ -24,6 +18,7 @@
                     <div class="form-group">
                         <label for="editName" size="30">Active</label>
                         <input id="editactive" type="checkbox" name="editActive" ng-model="editUser.active" />
+                        
                     </div>
                     <div class="form-group">
                         <label for="editName" size="30">Name</label>
@@ -66,30 +61,45 @@
 <table class="table table-hover members-table middle-align ng-scope">
     <thead>
         <tr>
-            <th>Active
-                <input id="onlyactive" type="checkbox" name="onlyactive" ng-model="onlyactive" />
-            </th>
-            <th class="hidden-xs hidden-sm">Avatar</th>
+            <th class="hidden-xs hidden-sm">Active</th>
             <th><a href="" ng-click="(sortHeader === 'name') ? sortHeader = '-name':sortHeader = 'name'">Name</a></th>
             <th><a href="" ng-click="(sortHeader === 'role') ? sortHeader = '-role':sortHeader = 'role'">Role</a></th>
+            <th><a href="" ng-click="(sortHeader === 'groups') ? sortHeader = '-groups':sortHeader = 'groups'">Groups</a></th>
             <th><a href="" ng-click="(sortHeader === 'create_date') ? sortHeader = '-create_date':sortHeader = 'create_date'">Creation</a></th>
             <th><a href="" ng-click="(sortHeader === 'last_connection_date') ? sortHeader = '-last_connection_date':sortHeader = 'last_connection_date'">Last Connection</a></th>
-            <th>Action</th>
+            <th>            <span style="padding-right:25px">{{users.length}} members</span>
+</th>
+        </tr>
+        <tr>
+          <th class="hidden-xs">
+            <input id="onlyactive" type="checkbox" name="onlyactive" ng-model="onlyactive" />
+          </th>
+
+          <th class="hidden-xs">
+            <input style="width:150px" ng-model="searchName">
+          </th>
+          <th class="hidden-xs">
+            <input style="width:60px" ng-model="searchRole">
+          </th>
+          <th>
+            <input style="width:200px" ng-model="searchGroup">
+          </th>
+          <th class="hidden-xs">
+          </th>
+          <th class="hidden-xs" >
+          </th>
+          <th >
+            Action
+          </th>
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="user in users | filter:searchFilter | orderBy:sortHeader track by user._id ">
-            <td class="user-cb">
-                <div class="cbr-replaced cbr-checked">
-                    <div class="cbr-input">
-                        <input type="checkbox" ng-model="user.active">
-                    </div>
-                    <div class="cbr-state"><span></span></div>
-                </div>
-            </td>
+        <tr ng-repeat="user in users  | orderBy:sortHeader track by user._id ">
             <td class="user-image hidden-xs hidden-sm">
                 <a href="/settings">
-                    <img alt="{{user.name}}" src="{{user.avatar || 'assets/images/avatars/' + user._id+ '.png'}} " class="img-circle" err-src="assets/images/avatars/avatar.png" />
+                    <img alt="{{user.name}}" src="{{user.avatar || 'assets/images/avatars/' + user._id+ '.png'}} " class="img-circle"  style="float:left" err-src="assets/images/avatars/avatar.png" />
+                    <img src="assets/images/Icons_flat_ok.png" ng-if="user.active" style="width:20px;position:relative;top:0;float:left;left:-12px;top:16px;">
+                    <img src="assets/images/Icons_flat_nok.png" ng-if="!user.active" style="width:20px;position:relative;top:0;float:left;left:-12px;top:16px;">
                 </a>
             </td>
             <td class="user-name">
@@ -106,6 +116,13 @@
                     <ul class="dropdown-menu" role="menu">
                         <li ng-repeat="role in roles | orderBy :'text'"><a href="#" ng-click="changeRole(user, role)">{{role.text.charAt(0).toUpperCase() + role.text.slice(1) }}</a></li>
                     </ul>
+                </div>
+            </td>
+            <td>
+                <div class="btn-group">
+                  <tags-input ng-model="user.groups" style="width:250px;" placeholder="Add a group" use-strings="true" on-tag-added="addGroups($tag, user._id, user.groups)" on-tag-removed="removeGroups($tag, user._id, user.groups)">
+                          <auto-complete source="loadGroups($query)" min-length="1"></auto-complete>
+                  </tags-input>
                 </div>
             </td>
             <td class="hidden-xs hidden-sm">

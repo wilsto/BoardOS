@@ -321,6 +321,7 @@ exports.exportXLS = function(req, res) {
       json2csv({
         data: taskFulls
       }, function(err, csv) {
+        console.log('csv', csv);
         res.setHeader('Content-disposition', 'attachment; filename=data.csv');
         res.set('Content-Type', 'text/csv');
         return res.status(200).send(csv);

@@ -18,6 +18,11 @@ var AnomalieSchema = new Schema({
   }],
   activity: String,
   context: String,
+  status: {
+    type: String,
+    default: 'Not Planned'
+  },
+
 
   /** Problem **/
   name: String,
