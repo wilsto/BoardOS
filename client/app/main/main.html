@@ -4,7 +4,7 @@
 
   <!-- END OVERVIEW STATISTIC BARS-->
 
-  <div class="col-md-10 col-sm-12">
+  <div class="col-md-12 col-sm-12">
       <!-- BEGIN My Dashboards-->
       <div class="portlet" style="border:0px; ">
         <div class="portlet-title">
@@ -44,37 +44,47 @@
       <!-- END My Dashboards-->
     </div>
 
-        <div class="col-md-2 col-sm-4">
-          <div class="stats-overview stat-block">
-            <div class="isloading" ng-if="!dataTasks">Loading
-              <br/><img src="assets/images/ajax-loader_blue.gif">
-            </div>
-            <div class="details" ng-if="dataTasks">
-              <div class="title">
-                <a href="/tasks">
-                  <span style="font-weight:bold;color:#9467bd">{{tasksNb|| 0 }}</span>
-                  Tasks</a>
-              </div>
-              <nvd3 options="optionsTasks" data="dataTasks"></nvd3>
-            </div>
-          </div>
-          <div class="stats-overview stat-block">
-            <div class="isloading" ng-if="!dataMetrics">Loading
-              <br/><img src="assets/images/ajax-loader_blue.gif">
-            </div>
-            <div class="details" ng-if="dataMetrics">
-              <div class="title">
-                <a href="/metrics">
-                  <span style="font-weight:bold;color:#87CEEB">{{metricsNb|| 0 }}</span>
-                  Metrics</a>
-              </div>
-              <nvd3 options="optionsMetrics" data="dataMetrics"></nvd3>
-            </div>
-          </div>
-        </div>
+
   </div>
   <br>
-  <div class="row">
+<div class="row">
+  <div class="col-md-12 col-sm-12">
+    <div class="portlet">
+      <div class="portlet-title">
+        <b style="color:#337ab7;position:absolute;left:0;top:10px;width:90%;text-align:center; margin-left:auto;  margin-right:auto;"> {{ calendarTitle }}</b>
+        <div class="caption">
+          <i class="fa fa-tasks"></i>My Calendar
+
+        </div>
+        <div class="tools">
+<a href="/calendar">
+          <i class="fa fa-external-link"></i>
+        </a>
+        </div>
+      </div>
+      <div class="portlet-body">
+      <div class="row">
+        <div class="col-md-12 col-sm-12">
+
+        <mwl-calendar
+          view="calendarView"
+          view-date="viewDate"
+          events="events"
+          view-title="calendarTitle"
+          cell-is-open="true"
+          on-event-click="eventClicked(calendarEvent);">
+
+      </mwl-calendar>
+      </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+<br><br>
+<div class="row">
 
   <div class="col-md-12 col-sm-12">
     <div class="portlet">

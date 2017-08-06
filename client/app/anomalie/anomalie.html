@@ -184,7 +184,7 @@
   <div class="col-md-5" >
     <ul>
         <li>Anomaly Coming From:  : <a href="/task/{{anomalie.sourceTasks[0]._id}}"> {{anomalie.sourceTasks[0].name}}</a></li>
-        <li>By : <span class="text-muted">{{anomalie.actor.name}}</span></li>
+        <li>By : <span class="text-muted">{{anomalie.actor.name}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge badge-default">{{anomalie.actor.groups[0]}}</span></li>
     </ul>
   </div>
   </div>
@@ -194,7 +194,7 @@
   <div class="col-md-1" >
 
     <h3 >    Step 1</h3>
-    <img style="margin-top:5px;height:80px;margin-left:auto;margin-right:auto;display: block;" src="assets/images/problem.jpg" alt="">
+    <img style="margin-top:5px;height:80px;margin-left:auto;margin-right:auto;display: block;" src="assets/images/correctiveaction.jpg" alt="">
 
   </div>
   <div class="col-md-3">
@@ -322,7 +322,29 @@
                             </span>
                         </td>
                         <td style="text-align:right">
-                          Not Planned
+                          <table class="table table-striped" style="margin-bottom:0">
+                              <tbody style="text-align:left;">
+                                <tr ng-repeat="action in anomalie.correctiveActions" style="border-bottom:1px solid #ddd" >
+                                    <td >
+                                        <a href="/task/{{action._id}}">
+                                          {{action.name}}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <span class="pull-right">
+                                          <span class="label label-sm"
+                                            ng-class="{'label-info':action.metrics[action.metrics.length - 1].status ==='In Progress','label-success':action.metrics[action.metrics.length - 1].status ==='Finished','label-default':action.metrics[action.metrics.length - 1].status ==='Not Started','label-lightgrey':action.metrics[action.metrics.length - 1].status =='Withdrawn'}">
+                                            {{action.metrics[action.metrics.length -1].status}}
+                                          </span>
+                                          <a class="btn btn-default btn-xs text-muted" ng-click="removeTask('CA',$index,action)"
+                                             uib-tooltip-html="'Remove this task from action plan of this anomaly'" tooltip-placement="left" >
+                                            <i class="fa fa-trash-o text-muted" aria-hidden="true"></i>
+                                          </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                              </tbody>
+                            </table>
                         </td>
                     </tr>
                 </tbody>
@@ -338,7 +360,7 @@
 <div class="row">
   <div class="col-md-1">
     <h3 >Step 2</h3>
-    <img style="margin-top:5px;height:80px;margin-left:auto;margin-right:auto;display: block;" src="assets/images/teamwork.jpg" alt="">
+    <img style="margin-top:5px;height:80px;margin-left:auto;margin-right:auto;display: block;" src="assets/images/RCA.png" alt="">
 
   </div>
   <div class="col-md-3">
@@ -389,7 +411,29 @@
                               </span>
                           </td>
                           <td style="text-align:right">
-                            Not Planned
+                            <table class="table table-striped" style="margin-bottom:0">
+                                <tbody style="text-align:left;">
+                                  <tr ng-repeat="action in anomalie.rootCauseAnalysisTasks" style="border-bottom:1px solid #ddd" >
+                                      <td >
+                                          <a href="/task/{{action._id}}">
+                                            {{action.name}}
+                                          </a>
+                                      </td>
+                                      <td>
+                                          <span class="pull-right">
+                                            <span class="label label-sm"
+                                              ng-class="{'label-info':action.metrics[action.metrics.length - 1].status ==='In Progress','label-success':action.metrics[action.metrics.length - 1].status ==='Finished','label-default':action.metrics[action.metrics.length - 1].status ==='Not Started','label-lightgrey':action.metrics[action.metrics.length - 1].status =='Withdrawn'}">
+                                              {{action.metrics[action.metrics.length -1].status}}
+                                            </span>
+                                            <a class="btn btn-default btn-xs text-muted" ng-click="removeTask('RCA',$index,action)"
+                                               uib-tooltip-html="'Remove this task from action plan of this anomaly'" tooltip-placement="left" >
+                                              <i class="fa fa-trash-o text-muted" aria-hidden="true"></i>
+                                            </a>
+                                          </span>
+                                      </td>
+                                  </tr>
+                                </tbody>
+                              </table>
                           </td>
                       </tr>
 
@@ -451,7 +495,7 @@
 <div class="row">
   <div class="col-md-1">
     <h3>Step 3</h3>
-    <img style="margin-top:5px;height:80px;margin-left:auto;margin-right:auto;display: block;" src="assets/images/solution.png" alt="">
+    <img style="margin-top:5px;height:80px;margin-left:auto;margin-right:auto;display: block;" src="assets/images/PA.jpg" alt="">
 
   </div>
   <div class="col-md-3">
@@ -501,8 +545,30 @@ Select the solutions            </div>
                               </span>
                           </td>
                           <td style="text-align:right">
-                            Not Planned
-                          </td>
+                            <table class="table table-striped" style="margin-bottom:0">
+                                <tbody style="text-align:left;">
+                                  <tr ng-repeat="action in anomalie.preventiveActions" style="border-bottom:1px solid #ddd" >
+                                      <td >
+                                          <a href="/task/{{action._id}}">
+                                            {{action.name}}
+                                          </a>
+                                      </td>
+                                      <td>
+                                          <span class="pull-right">
+                                            <span class="label label-sm"
+                                              ng-class="{'label-info':action.metrics[action.metrics.length - 1].status ==='In Progress','label-success':action.metrics[action.metrics.length - 1].status ==='Finished','label-default':action.metrics[action.metrics.length - 1].status ==='Not Started','label-lightgrey':action.metrics[action.metrics.length - 1].status =='Withdrawn'}">
+                                              {{action.metrics[action.metrics.length -1].status}}
+                                            </span>
+                                            <a class="btn btn-default btn-xs text-muted" ng-click="removeTask('PA',$index,action)"
+                                               uib-tooltip-html="'Remove this task from action plan of this anomaly'" tooltip-placement="left" >
+                                              <i class="fa fa-trash-o text-muted" aria-hidden="true"></i>
+                                            </a>
+                                          </span>
+                                      </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </td>
                       </tr>
 
                 </tbody>
@@ -583,17 +649,6 @@ Select the solutions            </div>
   </div>
 </div>
 <br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
 <footer class="navbar-fixed-bottom footer-task-boss">
   <div class="container">
     <!-- big screen -->
@@ -605,37 +660,3 @@ Select the solutions            </div>
         uib-tooltip-html="'Save will  copy data to a permanent storage'" tooltip-placement="left" >Save </button>
   </div>
 </footer>
-<!-- <script>
-  $(function() {
-
-      var BpmnViewer = window.BpmnJS;
-
-      var fiveWhyDiagram = '';
-
-      var viewer = new BpmnViewer({
-        container: '#canvas'
-      });
-
-      viewer.importXML(fiveWhyDiagram, function(err) {
-        if (!err) {
-
-          viewer.get('canvas').zoom('fit-viewport');
-        } else {
-
-        }
-      });
-
-      var viewer_large = new BpmnViewer({
-        container: '#canvas_large'
-      });
-
-      viewer_large.importXML(fiveWhyDiagram, function(err) {
-        if (!err) {
-
-          viewer.get('canvas').zoom('fit-viewport');
-        } else {
-
-        }
-      });
-    });
-</script> -->

@@ -2,7 +2,7 @@
 /*jshint loopfunc:true */
 
 angular.module('boardOsApp')
-  .controller('AnomalieCtrl', function($scope, $filter, $stateParams, $http, $location, $window, $timeout, Notification, $uibModal) {
+  .controller('AnomalieCtrl', function($scope, $filter, $stateParams, $http, $location, $window, $timeout, Notification, $uibModal, $mdpDatePicker) {
 
     var anomalieId = $stateParams.id || $scope.anomalie._id;
 
@@ -84,6 +84,27 @@ angular.module('boardOsApp')
             value: $scope.anomalie.category
           });
           return ($scope.anomalie.category && selected.length) ? selected[0].text : 'Not set';
+        };
+
+
+        $scope.removeTask = function(typeTask, index, task) {
+          bootbox.confirm('Are you sure to remove this task ? (can\'t be undone)', function(result) {
+            if (result) {
+              if (typeTask === 'CA') {
+                $scope.anomalie.correctiveActions.splice(index, 1);
+              }
+              if (typeTask === 'RCA') {
+                $scope.anomalie.rootCauseAnalysisTasks.splice(index, 1);
+                
+                
+              }
+              if (typeTask === 'PA') {
+                $scope.anomalie.preventiveActions.splice(index, 1);
+              }
+              $scope.refreshAnomalie();
+            }
+          });
+
         };
 
         //var x2js = new X2JS();
@@ -292,6 +313,29 @@ angular.module('boardOsApp')
     };
 
 
+
+    $scope.showDatePicker = function(item, datename, ev) {
+      var currentdate = (item[datename]) ? new Date(item[datename]) : new Date();
+      $mdpDatePicker(currentdate, {
+        targetEvent: ev
+      }).then(function(selectedDate) {
+        item[datename] = selectedDate.toISOString();
+
+      });
+    };
+
+    $scope.showWeeks = true;
+
+    $scope.today = function() {
+      $scope.date = new Date();
+    };
+    $scope.today();
+
+    $scope.toggleWeeks = function() {
+      $scope.showWeeks = !$scope.showWeeks;
+    };
+
+
     // *******************
     // Select or create a task
     // ******************
@@ -311,65 +355,133 @@ angular.module('boardOsApp')
         backdrop: 'static',
         keyboard: false
       });
-
       modalInstance.result.then(function(result) {
         
         var task = {};
-        if (result.typeTask === 'Select') {
+        if (result.blnSelect === 'Select') {
+          //----------------------
           // sélection de la tache
+          //----------------------
           task = result;
           if (!task.previousAnomalies) {
             task.previousAnomalies = [];
           }
           task.previousAnomalies.push($scope.anomalie._id);
+
+          //update task with previousAnomalies
+          $scope.myPromise = $http.put('/api/taskFulls/' + task._id + '/false', task).success(function(data) {
+            $timeout(function() {
+              var logInfo = $scope.typeTaskText + ' Task "' + task.name + '" was updated';
+              Notification.success(logInfo);
+            }, 100);
+            if (result.typeTask === 'CA') {
+              if (!$scope.anomalie.correctiveActions) {
+                $scope.anomalie.correctiveActions = [];
+              }
+              $scope.anomalie.correctiveActions.push(data);
+            }
+            if (result.typeTask === 'RCA') {
+              if (!$scope.anomalie.rootCauseAnalysisTasks) {
+                $scope.anomalie.rootCauseAnalysisTasks = [];
+              }
+              $scope.anomalie.rootCauseAnalysisTasks.push(data);
+            }
+            if (result.typeTask === 'PA') {
+              if (!$scope.anomalie.preventiveActions) {
+                $scope.anomalie.preventiveActions = [];
+              }
+              $scope.anomalie.preventiveActions.push(data);
+            }
+
+            $scope.refreshAnomalie();
+
+
+          });
         } else {
+          //----------------------
           // création de la tache
+          //----------------------
 
           task = {
             name: result.name,
             description: $scope.typeTaskText + ' was created from anomaly ',
             activity: result.activity,
             context: result.context,
-            startDate: result.startDate,
-            endDate: result.endDate,
-            workload: result.workload,
-            trust: result.trust
+            metrics: []
           };
+          task.metrics.push({
+            targetstartDate: result.targetstartDate,
+            targetEndDate: result.targetEndDate,
+            targetLoad: result.targetLoad,
+            trust: result.trust,
+            progress: 0,
+            timeSpent: 0,
+            status: 'Not Started'
+          });
+          task.previousTasks = [];
+          task.anomalies = [];
+          task.nextTasks = [];
+          task.date = Date.now();
+          task.comments = [{
+            text: 'create task',
+            date: Date.now(),
+            user: $scope.currentUser._id,
+            auto: true
+          }];
+          task.todos = [];
+          task.actors = [{
+            _id: $scope.currentUser._id,
+            name: $scope.currentUser.name,
+            avatar: $scope.currentUser.avatar
+          }];
+          task.followers = [];
+
           task.previousAnomalies = [];
           task.previousAnomalies.push($scope.anomalie._id);
-          task.actors = [];
-          task.actors.push($scope.currentUser._id);
+          
+
+          //create task
+          $scope.myPromise = $http.post('/api/taskFulls', task).success(function(data) {
+            
+            $timeout(function() {
+              var logInfo = $scope.typeTaskText + ' Task "' + task.name + '" was created';
+              Notification.success(logInfo);
+            }, 100);
+            if (result.typeTask === 'CA') {
+              if (!$scope.anomalie.correctiveActions) {
+                $scope.anomalie.correctiveActions = [];
+              }
+              $scope.anomalie.correctiveActions.push(data);
+            }
+            if (result.typeTask === 'RCA') {
+              if (!$scope.anomalie.rootCauseAnalysisTasks) {
+                $scope.anomalie.rootCauseAnalysisTasks = [];
+              }
+              $scope.anomalie.rootCauseAnalysisTasks.push(data);
+            }
+            if (result.typeTask === 'PA') {
+              if (!$scope.anomalie.preventiveActions) {
+                $scope.anomalie.preventiveActions = [];
+              }
+              $scope.anomalie.preventiveActions.push(data);
+            }
+
+            $scope.refreshAnomalie();
+
+          });
+
+
         }
 
         
-
-        // création de la tache
-        // ---------------------
-        // $scope.myPromise = $http.post('/api/tasks', task).success(function(data) {
-        //   if (!$scope.anomalie.anomalies) {
-        //     $scope.anomalie.anomalies = [];
-        //   }
-        //
-        //   $scope.anomalie.anomalies.push(data._id);
-        //
-        //   // update anomalie
-        //   // ----------------
-        //   $scope.myPromise = $http.put('/api/taskFulls/' + $scope.anomalie._id + '/false', $scope.task).success(function(data) {
-        //     $timeout(function() {
-        //       $scope.loadAnomalie();
-        //       var logInfo = 'Task "' + $scope.task.name + '" was created';
-        //       Notification.success(logInfo);
-        //
-        //     }, 100);
-        //   });
-        // });
       });
     };
   })
   .controller('ModalTaskInstanceCtrl', function($scope, $mdpDatePicker, $uibModalInstance, $filter, $http) {
 
     $scope.selected = {
-      typeTask: $scope.typeTask
+      typeTask: $scope.typeTask,
+      blnSelect: 'Create'
     };
 
     /** SearhBar **/
@@ -379,7 +491,9 @@ angular.module('boardOsApp')
 
     $scope.selectTask = function(task) {
       $scope.selected = task;
-      $scope.selected.typeTask = 'Select';
+      $scope.selected.blnSelect = 'Select';
+      $scope.selected.typeTask = $scope.typeTask;
+
     };
 
     $scope.showDatePicker = function(item, datename, ev) {

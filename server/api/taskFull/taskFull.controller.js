@@ -454,14 +454,21 @@ exports.update = function(req, res) {
 
     var previousTasks = [];
     _.each(task.previousTasks, function(previousTask) {
-      previousTasks.push(previousTask._id);
+      if (!previousTask._id && previousTask) {
+        previousTasks.push(previousTask);
+      } else {
+        previousTasks.push(previousTask._id);
+      }
     });
     task.previousTasks = _.compact(_.uniq(previousTasks));
 
-
     var previousAnomalies = [];
     _.each(task.previousAnomalies, function(previousAnomalie) {
-      previousAnomalies.push(previousAnomalie._id);
+      if (!previousAnomalie._id && previousAnomalie) {
+        previousAnomalies.push(previousAnomalie);
+      } else {
+        previousAnomalies.push(previousAnomalie._id);
+      }
     });
     task.previousAnomalies = _.compact(_.uniq(previousAnomalies));
 

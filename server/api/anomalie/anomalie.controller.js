@@ -110,14 +110,120 @@ exports.update = function(req, res) {
   if (newAno._id) {
     delete newAno._id;
   }
+
   var sourceTasks = [];
   _.each(newAno.sourceTasks, function(sourceTask) {
-    sourceTasks.push(sourceTask._id);
+    if (!sourceTask._id && sourceTask) {
+      sourceTasks.push(sourceTask);
+    } else {
+      sourceTasks.push(sourceTask._id);
+    }
   });
   newAno.sourceTasks = _.compact(_.uniq(sourceTasks));
-  newAno.actor = newAno.actor._id;
-  console.log('newAno', newAno);
 
+  var correctiveActions = [];
+  var blnCATaskNotStarted = false;
+  var blnCATaskIP = false;
+  var blnCATaskEnd = false;
+  _.each(newAno.correctiveActions, function(correctiveAction) {
+    if (!correctiveAction._id && correctiveAction) {
+      correctiveActions.push(correctiveAction);
+    } else {
+      correctiveActions.push(correctiveAction._id);
+    }
+    if (correctiveAction.metrics) {
+      if (correctiveAction.metrics[correctiveAction.metrics.length - 1].status === 'Not Started') {
+        blnCATaskNotStarted = true;
+      }
+      if (correctiveAction.metrics[correctiveAction.metrics.length - 1].status === 'In Progress') {
+        blnCATaskIP = true;
+      }
+      if (correctiveAction.metrics[correctiveAction.metrics.length - 1].status === 'Finished') {
+        blnCATaskEnd = true;
+      }
+    }
+  });
+  newAno.correctiveActions = _.compact(_.uniq(correctiveActions));
+  if (blnCATaskIP === false && blnCATaskEnd === false) {
+    newAno.statusCA = 'Not Started';
+  }
+  if (blnCATaskIP === true || (blnCATaskNotStarted === true && (blnCATaskIP === true || blnCATaskEnd === true))) {
+    newAno.statusCA = 'In Progress';
+  }
+  if (blnCATaskEnd === true && blnCATaskNotStarted === false && blnCATaskIP === false) {
+    newAno.statusCA = 'Finished';
+  }
+
+
+  var rootCauseAnalysisTasks = [];
+  var blnRCATaskNotStarted = false;
+  var blnRCATaskIP = false;
+  var blnRCATaskEnd = false;
+  _.each(newAno.rootCauseAnalysisTasks, function(rootCauseAnalysisTask) {
+    if (!rootCauseAnalysisTask._id && rootCauseAnalysisTask) {
+      rootCauseAnalysisTasks.push(rootCauseAnalysisTask);
+    } else {
+      rootCauseAnalysisTasks.push(rootCauseAnalysisTask._id);
+    }
+    if (rootCauseAnalysisTask.metrics) {
+      if (rootCauseAnalysisTask.metrics[rootCauseAnalysisTask.metrics.length - 1].status === 'Not Started') {
+        blnRCATaskNotStarted = true;
+      }
+      if (rootCauseAnalysisTask.metrics[rootCauseAnalysisTask.metrics.length - 1].status === 'In Progress') {
+        blnRCATaskIP = true;
+      }
+      if (rootCauseAnalysisTask.metrics[rootCauseAnalysisTask.metrics.length - 1].status === 'Finished') {
+        blnRCATaskEnd = true;
+      }
+    }
+  });
+  newAno.rootCauseAnalysisTasks = _.compact(_.uniq(rootCauseAnalysisTasks));
+  if (blnRCATaskIP === false && blnRCATaskEnd === false) {
+    newAno.statusRCA = 'Not Started';
+  }
+  if (blnRCATaskIP === true || (blnRCATaskNotStarted === true && (blnRCATaskIP === true || blnRCATaskEnd === true))) {
+    newAno.statusRCA = 'In Progress';
+  }
+  if (blnRCATaskEnd === true && blnRCATaskNotStarted === false && blnRCATaskIP === false) {
+    newAno.statusRCA = 'Finished';
+  }
+  console.log('newAno.statusRCA', newAno.statusRCA);
+
+  var preventiveActions = [];
+  var blnPATaskNotStarted = false;
+  var blnPATaskIP = false;
+  var blnPATaskEnd = false;
+  _.each(newAno.preventiveActions, function(preventiveAction) {
+    if (!preventiveAction._id && preventiveAction) {
+      preventiveActions.push(preventiveAction);
+    } else {
+      preventiveActions.push(preventiveAction._id);
+    }
+    if (preventiveAction.metrics) {
+      if (preventiveAction.metrics[preventiveAction.metrics.length - 1].status === 'Not Started') {
+        blnPATaskNotStarted = true;
+      }
+      if (preventiveAction.metrics[preventiveAction.metrics.length - 1].status === 'In Progress') {
+        blnPATaskIP = true;
+      }
+      if (preventiveAction.metrics[preventiveAction.metrics.length - 1].status === 'Finished') {
+        blnPATaskEnd = true;
+      }
+    }
+
+  });
+  newAno.preventiveActions = _.compact(_.uniq(preventiveActions));
+  if (blnPATaskIP === false && blnPATaskEnd === false) {
+    newAno.statusPA = 'Not Started';
+  }
+  if (blnPATaskIP === true || (blnPATaskNotStarted === true && (blnPATaskIP === true || blnPATaskEnd === true))) {
+    newAno.statusPA = 'In Progress';
+  }
+  if (blnPATaskEnd === true && blnPATaskNotStarted === false && blnPATaskIP === false) {
+    newAno.statusPA = 'Finished';
+  }
+
+  newAno.actor = newAno.actor._id;
 
   Anomalie.findById(req.params.id, function(err, anomalie) {
     if (err) {
@@ -127,34 +233,22 @@ exports.update = function(req, res) {
       return res.send(404);
     }
 
-    // Recherche de la tache en anomalie
-    TaskFull.find({
-      previousAnomalies: anomalie._id
-    }, function(err, tasksWithPrevious) {
+    var updated = _.merge(anomalie, newAno);
+    updated.markModified('fiveWhy');
+    updated.markModified('sourceTasks');
+    updated.markModified('correctiveActions');
+    updated.correctiveActions = newAno.correctiveActions;
+    updated.markModified('preventiveActions');
+    updated.preventiveActions = newAno.preventiveActions;
+    updated.markModified('rootCauseAnalysisTasks');
+    updated.rootCauseAnalysisTasks = newAno.rootCauseAnalysisTasks;
+
+    updated.save(function(err) {
       if (err) {
         return handleError(res, err);
       }
-      console.log('tasksWithPrevious', tasksWithPrevious);
-      if (tasksWithPrevious) {
-        console.log('CONDITION PASSED');
-        anomalie.correctiveActions.push(tasksWithPrevious._id);
-      }
-      anomalie.correctiveActions = _.compact(_.uniq(anomalie.correctiveActions));
-
-      var updated = _.merge(anomalie, newAno);
-      updated.markModified('fiveWhy');
-      updated.markModified('sourceTasks');
-      updated.save(function(err) {
-        if (err) {
-          return handleError(res, err);
-        }
-        return res.json(200, anomalie);
-      });
-
+      return res.json(200, anomalie);
     });
-
-
-
   });
 };
 

@@ -181,6 +181,21 @@ Please report with maximum of accucracy your problem to be able to correct it an
               <a href="#"  e-style="resize:vertical;width:100%" editable-textarea="selected.details" buttons="right">{{ selected.details || 'To Complete ' }}</a>
             </td>
           </tr>
+          <tr>
+              <td style="text-align:left">
+                  <span class="text-muted">Due Date
+                  </span>
+              </td>
+              <td>
+                  <span class="pull-right text-info">
+                    <!-- <a href="#" editable-bsdate="task.metrics[task.metrics.length-1].targetEndDate" e-is-open="opened.$data" e-ng-click="open($event,'$data')" e-datepicker-popup="mediumDate" e-readonly="true"> -->
+                    <md-button class="md-button-slim" ng-click="showDatePicker(selected,'dueDate', $event)" aria-label="none" >
+                      <span ng-class="{'MandatoryField':selected.dueDate === undefined}"> {{ (selected.dueDate | date:'mediumDate') || 'empty' }}</span>
+                    </md-button>
+                    <!-- </a> -->
+                  </span>
+              </td>
+          </tr>
           </tbody>
       </table>
   </div>
@@ -309,6 +324,89 @@ Please report with maximum of accucracy your problem to be able to correct it an
                 </div>
             </div>
             <div class="portlet-body" style="padding:0!important" ng-show="EngagementIsExpanded[key]">
+
+               <!-- DEBUT RECURRENCE -->
+               <!-- **************** -->
+              <table class="ep-rec" role="presentation" ng-if="blnRecurrence">
+                  <tbody>
+                      <tr>
+                          <th>Récurrent&nbsp;:</th>
+                          <td>
+                            <select class="" title="Récurrent : Toutes les semaines">
+                            <option value="0" title="Tous les jours">Tous les jours de la semaine </option>
+                            <option value="2" title="Tous les lundis, mercredis et vendredis">Tous les lundis, mercredis et vendredis</option>
+                            <option value="3" title="Tous les mardis et jeudis">Tous les mardis et jeudis</option>
+                            <option value="4" title="Toutes les semaines">Toutes les semaines</option>
+                            <option value="5" title="Tous les mois">Tous les mois</option>
+                            <option value="6" title="Tous les ans">Tous les ans</option>
+                          </select>
+                        </td>
+                      </tr>
+                  </tbody>
+                  <tbody>
+                      <tr>
+                          <th>Répéter tous les&nbsp;:</th>
+                          <td>
+                            <select id=":37.interval" title="Répéter toutes les 1 semaines">
+                              <option value="1" selected="selected">1</option>
+                              <option value="2">2</option>
+                              <option value="3">3</option>
+                              <option value="4">4</option>
+                              <option value="5">5</option>
+                              <option value="6">6</option>
+                              <option value="7">7</option>
+                              <option value="8">8</option>
+                              <option value="9">9</option>
+                              <option value="10">10</option>
+                              <option value="11">11</option>
+                              <option value="12">12</option>
+                              <option value="13">13</option>
+                              <option value="14">14</option>
+                              <option value="15">15</option>
+                              <option value="16">16</option>
+                              <option value="17">17</option>
+                              <option value="18">18</option>
+                              <option value="19">19</option>
+                              <option value="20">20</option>
+                              <option value="21">21</option>
+                              <option value="22">22</option>
+                              <option value="23">23</option>
+                              <option value="24">24</option>
+                              <option value="25">25</option>
+                              <option value="26">26</option>
+                              <option value="27">27</option>
+                              <option value="28">28</option>
+                              <option value="29">29</option>
+                              <option value="30">30</option>
+                            </select>
+                            <label>semaines</label>
+                          </td>
+                      </tr>
+                      <tr>
+                          <th>Répéter le&nbsp;:</th>
+                          <td id=":37.checkboxes">
+                              <div>
+                                <span class="ep-rec-dow"><input id=":37.dow1" name="MO" type="checkbox" aria-label="Répéter le lundi" title="lundi"><label for=":37.dow1" title="lundi">L</label></span>
+                                <span class="ep-rec-dow"><input id=":37.dow2" name="TU" type="checkbox" aria-label="Répéter le mardi" title="mardi"><label for=":37.dow2" title="mardi">M</label></span>
+                                <span class="ep-rec-dow"><input id=":37.dow3" name="WE" type="checkbox" aria-label="Répéter le mercredi" title="mercredi"><label for=":37.dow3" title="mercredi">M</label></span>
+                                <span class="ep-rec-dow"><input id=":37.dow4" name="TH" type="checkbox" aria-label="Répéter le jeudi" title="jeudi"><label for=":37.dow4" title="jeudi">J</label></span>
+                                <span class="ep-rec-dow"><input id=":37.dow5" name="FR" type="checkbox" aria-label="Répéter le vendredi" title="vendredi"><label for=":37.dow5" title="vendredi">V</label></span>
+                                <span class="ep-rec-dow"><input id=":37.dow6" name="SA" type="checkbox" aria-label="Répéter le samedi" title="samedi"><label for=":37.dow6" title="samedi">S</label></span>
+                                <span class="ep-rec-dow"><input id=":37.dow0" name="SU" type="checkbox" checked="checked" aria-label="Répéter le dimanche" title="dimanche"><label for=":37.dow0" title="dimanche">D</label></span>
+                              </div>
+                          </td>
+                      </tr>
+                      <tr tabindex="0" id=":37.recsummary">
+                          <th>Résumé&nbsp;:</th>
+                          <td class="ep-rec-summary">Toutes les semaines le dimanche</td>
+                      </tr>
+                  </tbody>
+
+              </table>
+
+              <!-- FIN RECURRENCE -->
+              <!-- **************** -->
+
                 <table class="table table-striped table-hover">
                     <tbody style="text-align:left;">
                         <tr>

@@ -7,7 +7,7 @@ var Dashboard = require('../dashboard/dashboard.model');
 var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
-var postmark = require('postmark')('308974d8-3847-4675-8666-9dd2feadcfc4');
+var sendgrid = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
 var _ = require('lodash');
 
 var validationError = function(res, err) {
@@ -67,21 +67,25 @@ exports.create = function(req, res, next) {
       expiresInMinutes: 60 * 5
     });
 
-    postmark.send({
-      'From': 'willy' + '@' + 'stophe' + '.' + 'fr',
-      'To': user.email,
-      'Subject': 'Registration to BOSS',
-      'TextBody': 'Hello ' + user.name + ', Thanks to your registration to BOSS.',
-      'HtmlBody': 'Hello ' + user.name + ', <br/> Thanks to your registration to BOSS.'
+    var email = new sendgrid.Email({
+      to: user.email,
+      from: 'willy' + '@' + 'stophe' + '.' + 'fr',
+      fromname: 'BOSS',
+      subject: 'Registration to BOSS',
+      text: 'Registration to BOSS',
+      html: 'Hello ' + user.name + ', <br/> Thanks to your registration to BOSS.',
     });
+    sendgrid.send(email);
 
-    postmark.send({
-      'From': 'willy' + '@' + 'stophe' + '.' + 'fr',
-      'To': 'willy' + '.' + 'stophe' + '@' + 'fr' + '.' + 'netgrs' + '.' + 'com',
-      'Subject': 'New Registration to BOSS',
-      'TextBody': 'A new user [' + user.name + '] (' + user.email + ') has registered to BOSS',
-      'HtmlBody': 'A new user [' + user.name + '] (' + user.email + ') has registered to BOSS'
+    var emailAdmin = new sendgrid.Email({
+      to: 'willy' + '.' + 'stophe' + '@' + 'fr' + '.' + 'netgrs' + '.' + 'com',
+      from: 'willy' + '@' + 'stophe' + '.' + 'fr',
+      fromname: 'BOSS',
+      subject: 'New Registration to BOSS',
+      text: 'New Registration to BOSS',
+      html: 'A new user [' + user.name + '] (' + user.email + ') has registered to BOSS'
     });
+    sendgrid.send(emailAdmin);
 
     res.json({
       token: token

@@ -1,5 +1,17 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.115...HEAD)
+
+**Closed issues:**
+
+- Postmark Add-on is Shutting Down June 30, 2017 [\#291](https://github.com/wilsto/BoardOS/issues/291)
+- Ajouter un visuel par Semaine [\#161](https://github.com/wilsto/BoardOS/issues/161)
+
+## [v1.6.115](https://github.com/wilsto/boardos/tree/v1.6.115) (2017-07-26)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.114...v1.6.115)
+
 ## [v1.6.114](https://github.com/wilsto/boardos/tree/v1.6.114) (2017-07-21)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.113...v1.6.114)
 

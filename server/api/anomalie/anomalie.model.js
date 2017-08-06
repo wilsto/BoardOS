@@ -18,9 +18,21 @@ var AnomalieSchema = new Schema({
   }],
   activity: String,
   context: String,
+  statusCA: {
+    type: String,
+    default: 'Not Started'
+  },
+  statusRCA: {
+    type: String,
+    default: 'Not Started'
+  },
+  statusPA: {
+    type: String,
+    default: 'Not Started'
+  },
   status: {
     type: String,
-    default: 'Not Planned'
+    default: 'Not Started'
   },
 
 

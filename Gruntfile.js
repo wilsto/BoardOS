@@ -39,8 +39,7 @@ module.exports = function(grunt) {
     },
     express: {
       options: {
-        port: process.env.PORT || 9000,
-        'trace-gc': true
+        port: process.env.PORT || 9000
       },
       dev: {
         options: {
@@ -84,20 +83,20 @@ module.exports = function(grunt) {
           '<%= yeoman.client %>/{app,components}/**/*.spec.js',
           '<%= yeoman.client %>/{app,components}/**/*.mock.js'
         ],
-        tasks: ['newer:jshint:all', 'karma']
+        tasks: ['newer:jshint:all']
       },
       gruntfile: {
         files: ['Gruntfile.js']
       },
       livereload: {
         files: [
-          '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.css',
-          '{.tmp,<%= yeoman.client %>}/app/app.css',
-          '{.tmp,<%= yeoman.client %>}/app/app.html',
-          '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.html',
-          '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.js',
-          '{.tmp,<%= yeoman.client %>}{app,components}/**/*.spec.js',
-          '!{.tmp,<%= yeoman.client %>}/{app,components}/**/*.mock.js',
+          '{<%= yeoman.client %>}/{app,components}/**/*.css',
+          '{<%= yeoman.client %>}/app/app.css',
+          '{<%= yeoman.client %>}/app/app.html',
+          '{<%= yeoman.client %>}/{app,components}/**/*.html',
+          '{<%= yeoman.client %>}/{app,components}/**/*.js',
+          '{<%= yeoman.client %>}{app,components}/**/*.spec.js',
+          '!{<%= yeoman.client %>}/{app,components}/**/*.mock.js',
           '<%= yeoman.client %>/assets/images/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}'
         ],
         options: {
@@ -196,7 +195,7 @@ module.exports = function(grunt) {
       debug: {
         script: 'server/app.js',
         options: {
-          nodeArgs: ['--debug'],
+          nodeArgs: ['--debug-brk'],
           env: {
             PORT: process.env.PORT || 9000
           },
@@ -208,7 +207,7 @@ module.exports = function(grunt) {
             // opens browser on initial server start
             nodemon.on('config:update', function() {
               setTimeout(function() {
-                require('open')('http://localhost:9000/debug?port=5858');
+                require('open')('http://localhost:8080/debug?port=5858');
               }, 500);
             });
           }
