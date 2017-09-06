@@ -50,13 +50,19 @@ angular.module('boardOsApp', [
   .config(['calendarConfig', function(calendarConfig) {
 
     // View all available config
-    
+
 
     // Change the month view template globally to a custom template
     //calendarConfig.templates.calendarMonthView = 'path/to/custom/template.html';
 
     // Use either moment or angular to format dates on the calendar. Default angular. Setting this will override any date formats you have already set.
     calendarConfig.dateFormatter = 'moment';
+
+    moment.locale('en_gb', {
+      week: {
+        dow: 1 // Monday is the first day of the week
+      }
+    });
 
     // This will configure times on the day view to display in 24 hour format rather than the default of 12 hour
     //calendarConfig.allDateFormats.moment.date.hour = 'HH:mm';

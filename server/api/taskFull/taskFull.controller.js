@@ -309,12 +309,40 @@ exports.exportXLS = function(req, res) {
       followers: false,
       alerts: false,
       kpis: false,
-      comments: false
+      comments: false,
+      risks: false,
+      reviewTask: false,
+      reviewPeriodic: false,
+      active: false,
+      dashboards: false,
+      hypothesis: false,
+      description: false,
+      todos: false,
+      date: false
     })
-    .populate('actors', '-__v -hashedPassword -provider -salt')
+    .populate('actors', 'name')
     .lean().exec(function(err, taskFulls) {
 
       console.log('taskFulls', taskFulls.length);
+      _.each(taskFulls, function(taskFull) {
+        if (taskFull.actors.length > 0) {
+          taskFull.firstActor = taskFull.actors[0].name;
+        }
+        taskFull.status = taskFull.metrics[taskFull.metrics.length - 1].status;
+        taskFull.trust = taskFull.metrics[0].trust;
+        taskFull.startDate = taskFull.metrics[0].startDate || new Date(taskFull.metrics[0].targetstartDate);
+        taskFull.endDate = taskFull.metrics[taskFull.metrics.length - 1].endDate || new Date(taskFull.metrics[0].targetEndDate);
+        taskFull.workload = 0;
+        _.each(taskFull.metrics, function(metric) {
+          if (typeof metric.projectedWorkload !== 'undefined') {
+            taskFull.workload += metric.projectedWorkload;
+          } else {
+            taskFull.workload += metric.targetLoad;
+          }
+        });
+        delete taskFull.actors;
+        delete taskFull.metrics;
+      });
       if (err) {
         return handleError(res, err);
       }
