@@ -60,9 +60,11 @@ process.on('taskChanged', function(task) {
       .then(function() {
         var deferred = Q.defer();
         _.each(alldashboards, function(dashboard, index) {
-          if ((dashboard.context === undefined || task.context.indexOf(dashboard.context) >= 0) && (dashboard.activity === undefined || task.activity.indexOf(dashboard.activity) >= 0)) {
-            createCompleteDashboard(dashboard._id, function(data) {});
-          }
+          _.each(dashboard.perimeter, function(perimeter) {
+            if ((perimeter.context === undefined || task.context.indexOf(perimeter.context) >= 0) && (perimeter.activity === undefined || task.activity.indexOf(perimeter.activity) >= 0)) {
+              createCompleteDashboard(dashboard._id, function(data) {});
+            }
+          })
           deferred.resolve(dashboard);
         });
         return deferred.promise;
@@ -124,7 +126,19 @@ function createAllCompleteDashboard() {
 //createAllCompleteDashboard()
 
 function createCompleteDashboard(dashboardId, callback) {
-  console.log('dashboardId', dashboardId);
+
+  function getPosition(string, subString, index) {
+    return string.split(subString, index).join(subString).length;
+  }
+
+  function findWithAttr(array, attr, value) {
+    for (var i = 0; i < array.length; i += 1) {
+      if (array[i][attr] === value) {
+        return i;
+      }
+    }
+    return -1;
+  }
   Q()
     // Get a single task
     .then(function() {
@@ -168,11 +182,30 @@ function createCompleteDashboard(dashboardId, callback) {
           }
         });
       });
-      TaskFull.find(filterPerimeter, 'metrics needToFeed kpis alerts').sort({
+      var sublist = []
+      TaskFull.find(filterPerimeter, 'activity context metrics needToFeed kpis alerts').sort({
         date: 'asc'
       }).lean().exec(function(err, findtasks) {
         _.each(findtasks, function(task) {
           dashboard.tasks.push(task._id);
+
+          _.each(dashboard.perimeter, function(perimeter) {
+            var posFilter = task.activity.indexOf(perimeter.activity);
+            if (posFilter > -1) {
+              // position du prochain point post root
+              var position = getPosition(task.activity.substring(posFilter + perimeter.activity.length + 1), '.', 1);
+              var subactivity = task.activity.substring(posFilter + perimeter.activity.length + 1, posFilter + perimeter.activity.length + position + 1);
+              if (findWithAttr(sublist, 'name', subactivity) === -1) {
+                sublist.push({
+                  name: subactivity,
+                  root: task.activity.substring(0, posFilter + perimeter.activity.length + 1)
+                });
+              }
+            }
+          });
+
+          ///
+          dashboard.sublist = sublist;
         });
 
         dashboard.openTasksNb = _.where(findtasks, function(task) {
@@ -394,12 +427,14 @@ function createCompleteDashboard(dashboardId, callback) {
           updated.markModified('kpis');
           updated.markModified('alerts');
           updated.markModified('users');
+          updated.markModified('sublist');
           updated.users = dashboard.users;
           updated.tasks = dashboard.tasks;
           updated.kpis = dashboard.kpis;
           updated.alerts = dashboard.alerts;
           updated.categories = dashboard.categories;
           updated.perimeter = dashboard.perimeter;
+          updated.sublist = dashboard.sublist;
           updated.save(function(err) {
             callback(dashboardComplete);
             return true;
@@ -459,7 +494,7 @@ exports.index = function(req, res) {
 exports.show = function(req, res) {
   DashboardComplete.findById(req.params.id)
     //.populate('users.user', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
-    .populate('tasks', ' -watchers -dashboards -kpis -alerts -comments -todos -followers -version')
+    .populate('tasks', ' -watchers -dashboards -alerts -comments -todos -followers -version')
     .populate('tasks.actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
     .lean().exec(function(err, dashboardComplete) {
       if (err) {
@@ -547,7 +582,6 @@ exports.create = function(req, res) {
       });
 
     } else {
-      console.log('req.body', req.body);
       DashboardComplete.create(req.body, function(err, dashboardComplete) {
         if (err) {
           return handleError(res, err);

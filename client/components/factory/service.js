@@ -32,9 +32,11 @@ angular.module('boardOsApp').factory('myLibrary', function() {
 
       if (category === 'Goal' || typeof category === 'undefined') {
         switch (true) {
+          case (value >= 120):
+            return '#10552d';
           case (value >= 80):
             return '#859900';
-          case (value >= 10):
+          case (value >= 50):
             return '#FF7F0E';
           default:
             return '#CB4B16';
@@ -64,7 +66,7 @@ angular.module('boardOsApp').factory('myLibrary', function() {
       $.each(data, function(key, item) {
         $.each(map_result, function(keyMap, itemMap) {
           if (itemMap.month === item[fieldDate] || itemMap.month2 === item[fieldDate]) {
-            itemMap.value = parseInt(item.value[field]);
+            itemMap.value = Number(item.value[field]);
           }
           if (rework) {
             itemMap.count = itemMap.value || 0;
@@ -74,6 +76,61 @@ angular.module('boardOsApp').factory('myLibrary', function() {
             itemMap.sum = null;
           }
         });
+      });
+
+      return map_result;
+
+    },
+    displayLastYearKPI: function(data, fieldDate, field, type) {
+
+      var dateResult = [];
+      var i;
+      var yourDate = new Date();
+      for (i = 0; i < 12; i++) {
+        dateResult.push(new Date(yourDate.getFullYear(), yourDate.getMonth() - i, 1));
+      }
+
+      var map_result = _.map(dateResult, function(item) {
+        var itemdate = (item.length > 7) ? moment(item).format('YYYY.MM') : item;
+        return {
+          'month': moment(itemdate).format('YYYY.MM'),
+          'month2': moment(itemdate).format('YYYY.M'),
+          'value': null,
+          'total': null,
+          'count': null,
+          'number': 0,
+          'label': moment(itemdate).format('YYYY.MM'),
+
+
+        };
+      });
+
+      map_result.reverse(); // par ordre croissant
+
+      $.each(data, function(key, item) {
+        item.month = moment(item.metrics[0].targetEndDate).format('YYYY.MM');
+        $.each(map_result, function(keyMap, itemMap) {
+          if (itemMap.month === item.month) {
+            _.each(item.kpis, function(kpi) {
+              if (kpi.constraint === type && kpi.name !== 'Effective Cycle Time') {
+                itemMap.total += Number(kpi.calcul.task);
+                if (kpi.calcul.task !== null) {
+                  itemMap.number += 1;
+                }
+              }
+            });
+          }
+        });
+      });
+
+
+      $.each(map_result, function(keyMap, itemMap) {
+        if (itemMap.number > 0) {
+          itemMap.value = itemMap.total / itemMap.number;
+        }
+        itemMap.label = itemMap.month;
+        itemMap.count = itemMap.value || 0;
+        itemMap.color = sdo.giveMeMyColor(itemMap.count, 'Goal');
       });
 
       return map_result;

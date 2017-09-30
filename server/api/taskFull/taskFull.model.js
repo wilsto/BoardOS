@@ -11,6 +11,10 @@ var TaskFullSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  modifdate: {
+    type: Date,
+    default: Date.now
+  },
   active: {
     type: Boolean,
     default: false
@@ -60,10 +64,6 @@ var TaskFullSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Anomalie'
   }],
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  },
   comments: [{
     text: String,
     date: Date,

@@ -216,10 +216,10 @@
           <br>
               <span>{{task.metrics[task.metrics.length - 1].targetLoad}} </span>
                 <span  ng-if="task.metrics[task.metrics.length - 1].projectedWorkload > task.metrics[task.metrics.length - 1].targetLoad">
-                  >> <span class="label label-sm label-danger "> {{task.metrics[task.metrics.length - 1].projectedWorkload}}</span>
+                  &gt;&gt; <span class="label label-sm label-danger "> {{task.metrics[task.metrics.length - 1].projectedWorkload}}</span>
                 </span>
                 <span  ng-if="task.metrics[task.metrics.length - 1].projectedWorkload < task.metrics[task.metrics.length - 1].targetLoad">
-                  >> <span class="label label-sm label-lightwarning "> {{task.metrics[task.metrics.length - 1].projectedWorkload}}</span>
+                  &gt;&gt; <span class="label label-sm label-lightwarning "> {{task.metrics[task.metrics.length - 1].projectedWorkload}}</span>
                 </span>
             </td>
             <td class="hidden-xs">

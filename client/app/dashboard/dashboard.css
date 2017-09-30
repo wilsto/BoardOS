@@ -5,6 +5,19 @@ a.btndisabled {
   text-decoration: none;
 }
 
+.nvd3 rect[height="1"] {
+  display: none !important;
+}
+
+.nvd3 rect[height="1"]+text {
+  display: none !important;
+}
+
+.nvd3 rect+text {
+  font-size: 10px!important;
+  color: grey!important;
+}
+
 
 /*************/
 

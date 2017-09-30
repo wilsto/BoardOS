@@ -26,5 +26,11 @@ angular.module('boardOsApp')
             squash: true
           }
         }
+      })
+      .state('recurrentTask', {
+        url: '/recurrentTask/:id',
+        templateUrl: 'app/task/task.html',
+        controller: 'TaskCtrl',
+        authenticate: true
       });
   });

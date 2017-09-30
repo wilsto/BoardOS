@@ -23,9 +23,9 @@ angular.module('boardOsApp')
       if (typeof $scope.allTasks !== 'undefined') {
         $scope.alltasksToNotify = $scope.allTasks.length;
         $scope.myTasks = $scope.filterTask($scope.allTasks, $scope.filterNotification);
-        
+
         if ($scope.filterNotification === 'Only For Me') {
-          
+
           $scope.tasksToNotify = $scope.myTasks;
         } else {
           $scope.tasksToNotify = $scope.allTasks;
@@ -34,19 +34,35 @@ angular.module('boardOsApp')
 
         $scope.events = [];
         _.each($scope.myTasks, function(task) {
-          $scope.events.push({
-            title: '<i class="fa fa-wrench" aria-hidden="true"></i>&nbsp;&nbsp; ' + task.name + '<i class="fa fa-circle-thin pull-right" style="margin-top:7px;" aria-hidden="true"></i> ',
-            eventType: 'task',
-            eventId: task._id,
-            displayEventTimes: false, // Indicates whether need to show time or not.
-            startsAt: moment(task.metrics[task.metrics.length - 1].startDate || task.metrics[task.metrics.length - 1].targetstartDate).toDate(),
-            endsAt: moment(task.metrics[task.metrics.length - 1].endDate || task.metrics[task.metrics.length - 1].targetEndDate).toDate()
-          });
+          if (task.metrics[task.metrics.length - 1].status !== 'Finished') {
+
+            $scope.events.push({
+              title: '<i class="fa fa-wrench" aria-hidden="true"></i>&nbsp;&nbsp; ' + task.name,
+              eventType: 'task',
+              eventId: task._id,
+              displayEventTimes: false, // Indicates whether need to show time or not.
+              startsAt: moment(task.metrics[task.metrics.length - 1].startDate || task.metrics[task.metrics.length - 1].targetstartDate).toDate(),
+              endsAt: moment(task.metrics[task.metrics.length - 1].endDate || task.metrics[task.metrics.length - 1].targetEndDate).toDate(),
+              draggable: true
+            });
+          } else {
+
+            $scope.events.push({
+              title: '<i class="fa fa-wrench" aria-hidden="true"></i>&nbsp;&nbsp; ' + task.name,
+              eventType: 'task',
+              eventId: task._id,
+              displayEventTimes: false, // Indicates whether need to show time or not.
+              startsAt: moment(task.metrics[task.metrics.length - 1].startDate || task.metrics[task.metrics.length - 1].targetstartDate).toDate(),
+              endsAt: moment(task.metrics[task.metrics.length - 1].endDate || task.metrics[task.metrics.length - 1].targetEndDate).toDate(),
+              color: calendarConfig.colorTypes.success,
+              draggable: true
+            });
+          }
         });
 
         _.each($scope.myAnomalies, function(anomalie) {
           $scope.events.push({
-            title: '<i class="fa fa-bell-o" aria-hidden="true"></i>&nbsp;&nbsp; ' + anomalie.name + '<i class="fa fa-circle-thin pull-right" style="margin-top:7px;" aria-hidden="true"></i> ', // The title of the event
+            title: '<i class="fa fa-bell-o" aria-hidden="true"></i>&nbsp;&nbsp; ' + anomalie.name, // The title of the event
             eventType: 'anomalie',
             eventId: anomalie._id,
             startsAt: moment(anomalie.date).toDate(),
@@ -99,7 +115,7 @@ angular.module('boardOsApp')
 
       $http.get('/api/anomalies/', myparams).success(function(anomalies) {
         $scope.myAnomalies = anomalies;
-        
+
       });
     };
 

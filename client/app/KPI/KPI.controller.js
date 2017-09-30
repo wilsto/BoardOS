@@ -19,8 +19,8 @@ angular.module('boardOsApp')
 
     $scope.load = function() {
       if ($stateParams.id) {
-        
-        
+
+
 
         var query = ($location.search().type === 'task') ? {
           params: {
@@ -29,8 +29,7 @@ angular.module('boardOsApp')
           }
         } : {
           params: {
-            activity: $rootScope.perimeter.activity,
-            context: $rootScope.perimeter.context,
+            dashboardFilter: $location.search().typeid,
             rangedate: $location.search().rangedate
           }
         };
@@ -52,7 +51,7 @@ angular.module('boardOsApp')
           $scope.nbKPI = 0;
           $scope.lastmetricDate = '';
 
-          
+
           _.forEach($scope.tasksList, function(task) {
             if (task.metrics[task.metrics.length - 1].status === 'Finished' && $scope.KPI.category === 'Goal') {
               $scope.sumKPI += (!task.KPI && isNaN(parseFloat(task.KPI))) ? 0 : parseFloat(task.KPI);

@@ -177,6 +177,14 @@ angular.module('boardOsApp')
       $scope.task.reviewTask = !$scope.task.reviewTask;
     };
 
+    $scope.markAsDone = function() {
+      $scope.task.metrics[0].startDate = $scope.task.metrics[0].targetstartDate;
+      $scope.task.metrics[0].endDate = $scope.task.metrics[0].targetEndDate;
+      $scope.task.metrics[0].timeSpent = $scope.task.metrics[0].targetLoad;
+      $scope.task.metrics[0].progress = 100;
+
+    };
+
     $scope.$watch('task.metrics', function(newVal, oldVal) {
       if (!initializing) {
         _.each(newVal, function(metric) {
@@ -201,6 +209,7 @@ angular.module('boardOsApp')
     }, true);
 
     $scope.$watch('task', function(newMap, previousMap) {
+      
       $scope.needToSave = !angular.equals($scope.currentTask, $scope.task);
       if (initializing) {
         $timeout(function() {
@@ -380,6 +389,64 @@ angular.module('boardOsApp')
     });
 
 
+    $scope.repeats = [{
+        value: 1,
+        text: 'Daily (Monday to Friday)',
+        label: 'day(s)'
+      },
+      {
+        value: 2,
+        text: 'Weekly',
+        label: 'week(s)'
+      },
+      {
+        value: 3,
+        text: 'Monthly',
+        label: 'month(s)'
+      },
+      {
+        value: 4,
+        text: 'Yearly',
+        label: 'year(s)'
+      }
+    ];
+    $scope.repeatOn = [{
+        value: 1,
+        text: 'MO',
+        label: 'Monday'
+      },
+      {
+        value: 2,
+        text: 'TU',
+        label: 'Tuesday'
+      },
+      {
+        value: 3,
+        text: 'WE',
+        label: 'Wednesday'
+      },
+      {
+        value: 4,
+        text: 'TH',
+        label: 'Thursday'
+      },
+      {
+        value: 5,
+        text: 'FR',
+        label: 'Friday'
+      }
+    ];
+
+    $scope.showRepeatOn = function() {
+      var selected = [];
+      _.each($scope.repeatOn, function(s) {
+        if ($scope.task.repeatOn && $scope.task.repeatOn.indexOf(s.value) >= 0) {
+          selected.push(s.label);
+        }
+      });
+      return selected.length ? selected.join(', ') : 'Not set';
+    };
+
 
     // *******************
     // Load a task
@@ -400,60 +467,78 @@ angular.module('boardOsApp')
       $scope.blnAssignSubtaskActor = false;
       $scope.OptionIsExpanded = (taskId === undefined);
       $scope.CommentIsExpanded = (taskId !== undefined);
+      $scope.blnRecurrence = $location.path().indexOf('/recurrentTask/') >= 0;
+
       if (taskId) {
-        $scope.myPromise = $http.get('/api/taskFulls/' + taskId).success(function(task) {
+        if (!$scope.blnRecurrence) {
 
-          blnexecuteDashboard = false;
-          $scope.task = task;
-          $timeout(function() {
-            initializing = false;
-            $('#inactive').bootstrapToggle();
-            $('#inactive').change(function() {
-              $scope.task.active = !$scope.task.active;
-              $scope.autoComment('set active to ' + !$scope.task.active);
+          $scope.myPromise = $http.get('/api/taskFulls/' + taskId).success(function(task) {
+
+            blnexecuteDashboard = false;
+            $scope.task = task;
+            $timeout(function() {
+              initializing = false;
+              $('#inactive').bootstrapToggle();
+              $('#inactive').change(function() {
+                $scope.task.active = !$scope.task.active;
+                $scope.autoComment('set active to ' + !$scope.task.active);
+              });
+            }, 5);
+            //detect if late
+            $scope.task.metrics.forEach(function(metric) {
+              metric.lateStart = new Date(metric.startDate).setHours(0, 0, 0, 0) > new Date(metric.targetstartDate).setHours(0, 0, 0, 0);
+              metric.lateEnd = new Date(metric.endDate).setHours(0, 0, 0, 0) > new Date(metric.targetEndDate).setHours(0, 0, 0, 0);
             });
-          }, 5);
-          //detect if late
-          $scope.task.metrics.forEach(function(metric) {
-            metric.lateStart = new Date(metric.startDate).setHours(0, 0, 0, 0) > new Date(metric.targetstartDate).setHours(0, 0, 0, 0);
-            metric.lateEnd = new Date(metric.endDate).setHours(0, 0, 0, 0) > new Date(metric.targetEndDate).setHours(0, 0, 0, 0);
+            if ($scope.task.active === undefined) {
+              $scope.task.active = false;
+            }
+
+            $scope.currentTask = _.cloneDeep($scope.task);
+            $rootScope.currentTaskName = {
+              name: $scope.task.name,
+              activity: $scope.task.activity,
+              context: $scope.task.context
+            };
+
+            $scope.mePresentInActors = _.filter($scope.task.actors, function(actor) {
+              return actor._id === $scope.currentUser._id;
+            }).length > 0;
+
+            $scope.mePresentInFollowers = _.filter($scope.task.followers, function(actor) {
+              return actor._id === $scope.currentUser._id;
+            }).length > 0;
+
+            $scope.KPIIsExpanded = (task.metrics[0].status === 'Finished' || task.metrics[0].status === 'Withdrawn');
+            $scope.ReviewIsExpanded = (task.metrics[0].status === 'Finished' || task.metrics[0].status === 'Withdrawn');
+            $scope.ActionPlanIsExpanded = (task.metrics[0].status === 'Finished' || task.metrics[0].status === 'Withdrawn');
+
+            $scope.manualComments = _.filter($scope.task.comments, function(comment) {
+              return ($scope.filterCommentType.manual === true && comment.auto === false);
+            });
+
           });
-          if ($scope.task.active === undefined) {
-            $scope.task.active = false;
-          }
+        } else {
+          // Recurrent task to load
+          $scope.myPromise = $http.get('/api/recurrentTasks/' + taskId).success(function(task) {
+            $scope.task = task;
+            $scope.currentTask = _.cloneDeep($scope.task);
 
-          $scope.currentTask = _.cloneDeep($scope.task);
-          $rootScope.currentTaskName = {
-            name: $scope.task.name,
-            activity: $scope.task.activity,
-            context: $scope.task.context
-          };
-
-          $scope.mePresentInActors = _.filter($scope.task.actors, function(actor) {
-            return actor._id === $scope.currentUser._id;
-          }).length > 0;
-
-          $scope.mePresentInFollowers = _.filter($scope.task.followers, function(actor) {
-            return actor._id === $scope.currentUser._id;
-          }).length > 0;
-
-          $scope.KPIIsExpanded = (task.metrics[0].status === 'Finished' || task.metrics[0].status === 'Withdrawn');
-          $scope.ReviewIsExpanded = (task.metrics[0].status === 'Finished' || task.metrics[0].status === 'Withdrawn');
-          $scope.ActionPlanIsExpanded = (task.metrics[0].status === 'Finished' || task.metrics[0].status === 'Withdrawn');
-
-          $scope.manualComments = _.filter($scope.task.comments, function(comment) {
-            return ($scope.filterCommentType.manual === true && comment.auto === false);
           });
-
-        });
+        }
       } else {
         $timeout(function() {
           // si cela n'existe pas
           $scope.task.context = $stateParams.context;
           $scope.task.activity = $stateParams.activity;
-          $scope.task.actionPlan = $stateParams.actionPlan !== null;
-          
-          
+          $scope.task.actionPlan = $stateParams.actionPlan !== null && $stateParams.actionPlan !== undefined;
+
+          if ($scope.blnRecurrence) {
+            $scope.task.repeats = $scope.repeats[1];
+            $scope.task.repeatEvery = 1;
+            $scope.task.repeatOn = [1];
+            $scope.task.repeatEndAfter = 0;
+          }
+
           $scope.task.previousTasks = [];
           $scope.task.anomalies = [];
           if ($stateParams.actionPlan === 'task') {
@@ -462,7 +547,7 @@ angular.module('boardOsApp')
           if ($stateParams.actionPlan === 'anomaly') {
             $scope.task.anomalies.push($stateParams.previousId);
           }
-          
+
           $scope.task.nextTasks = [];
           $scope.task.date = Date.now();
           $scope.task.comments = [{
@@ -506,41 +591,68 @@ angular.module('boardOsApp')
     // create a new task
     // *******************
     $scope.create = function() {
-      // Nouvelle tache
-      $scope.myPromise = $http.get('/api/taskFulls/search', {
-        params: {
-          activity: $scope.task.activity,
-          context: $scope.task.context
-        }
-      }).success(function(alreadyExit) {
-        if (alreadyExit.length === 0) {
-          $scope.myPromise = $http.post('/api/taskFulls', $scope.task).success(function(data) {
-            var logInfo = 'Task "' + $scope.task.name + '" was created';
-            blnexecuteDashboard = false;
-            Notification.success(logInfo);
-            $location.path('/task/' + data._id);
-          });
-        } else {
-          $scope.taskAlreadyExist.id = alreadyExit[0]._id;
-          $scope.taskAlreadyExist.name = alreadyExit[0].name;
-          $scope.messageCreation = 'This task (WBS) already exist, you must change either the activity or the context';
-        }
-      });
+      if ($scope.blnRecurrence === false) {
+
+        // Nouvelle tache
+        $scope.myPromise = $http.get('/api/taskFulls/search', {
+          params: {
+            activity: $scope.task.activity,
+            context: $scope.task.context
+          }
+        }).success(function(alreadyExit) {
+          if (alreadyExit.length === 0) {
+            $scope.myPromise = $http.post('/api/taskFulls', $scope.task).success(function(data) {
+              var logInfo = 'Task "' + $scope.task.name + '" was created';
+              blnexecuteDashboard = false;
+              Notification.success(logInfo);
+              $location.path('/task/' + data._id);
+            });
+          } else {
+            $scope.taskAlreadyExist.id = alreadyExit[0]._id;
+            $scope.taskAlreadyExist.name = alreadyExit[0].name;
+            $scope.messageCreation = 'This task (WBS) already exist, you must change either the activity or the context';
+          }
+        });
+      } else {
+        // Nouvelle recurrence de tache
+
+        $scope.myPromise = $http.post('/api/recurrentTasks', $scope.task).success(function(data) {
+          var logInfo = 'Recurring Task "' + $scope.task.name + '" was created';
+          blnexecuteDashboard = false;
+          Notification.success(logInfo);
+          $location.path('/recurrentTask/' + data._id);
+        });
+
+      }
+
     };
 
     // *******************
     // update a task
     // *******************
     $scope.update = function() {
-      $scope.myPromise = $http.put('/api/taskFulls/' + $scope.task._id + '/' + blnexecuteDashboard, $scope.task).success(function(data) {
-        var logInfo = 'Task "' + $scope.task.name + '" was updated';
-        $timeout(function() {
-          initializing = true;
-          blnexecuteDashboard = false;
-          $scope.loadTask();
-        }, 100);
-        Notification.success(logInfo);
-      });
+      if (!$scope.blnRecurrence) {
+
+        $scope.myPromise = $http.put('/api/taskFulls/' + $scope.task._id + '/' + blnexecuteDashboard, $scope.task).success(function(data) {
+          var logInfo = 'Task "' + $scope.task.name + '" was updated';
+          $timeout(function() {
+            initializing = true;
+            blnexecuteDashboard = false;
+            $scope.loadTask();
+          }, 100);
+          Notification.success(logInfo);
+        });
+      } else {
+        $scope.myPromise = $http.put('/api/recurrentTasks/' + $scope.task._id, $scope.task).success(function(data) {
+          var logInfo = 'Recurring Task "' + $scope.task.name + '" was updated';
+          $timeout(function() {
+            initializing = true;
+            blnexecuteDashboard = false;
+            $scope.loadTask();
+          }, 100);
+          Notification.success(logInfo);
+        });
+      }
     };
 
     $scope.refreshTask = function() {

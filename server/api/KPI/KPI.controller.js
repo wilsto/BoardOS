@@ -97,6 +97,9 @@ exports.show = function(req, res) {
 
 // Get a single kpi
 exports.tasksList = function(req, res) {
+  var taskFilter = {
+    $or: []
+  };
   Q()
     .then(function() {
       // Get a single kpi
@@ -112,7 +115,17 @@ exports.tasksList = function(req, res) {
           mKPI.activity = (typeof req.query.activity === 'undefined') ? '' : req.query.activity;
           mKPI.originalActivity = ''
         }
-        console.log('mKPI', mKPI);
+        deferred.resolve(mKPI);
+      })
+      return deferred.promise;
+    })
+    .then(function() {
+      // Get related dashboards
+      var deferred = Q.defer();
+      Dashboard.find({
+        _id: req.query.dashboardFilter
+      }, function(err, dashboard) {
+        _.each(dashboard, function(rowdata, index) {});
         deferred.resolve(mKPI);
       })
       return deferred.promise;
@@ -120,8 +133,8 @@ exports.tasksList = function(req, res) {
     .then(function() {
       // Get related tasks
       var deferred = Q.defer();
+      console.log('req.query', req.query);
 
-      var taskFilter = {};
       var cutoff = new Date();
       if (typeof req.query.rangedate === 'undefined') {
         req.query.rangedate = 1;
@@ -146,12 +159,10 @@ exports.tasksList = function(req, res) {
         }
       } else {
         if (req.query.rangedate !== 1) {
-          taskFilter = {
-            'metrics': {
-              $elemMatch: {
-                endDate: {
-                  $gte: cutoff
-                }
+          taskFilter.metrics = {
+            $elemMatch: {
+              endDate: {
+                $gte: cutoff
               }
             }
           }

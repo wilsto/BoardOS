@@ -18,6 +18,7 @@ var DashboardCompleteSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'TaskFull'
   }],
+  sublist: Schema.Types.Mixed,
   tasksNb: Number,
   openTasksNb: Number,
   toFeedTasksNb: Number,

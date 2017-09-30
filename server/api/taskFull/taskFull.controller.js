@@ -1,3 +1,4 @@
+/*jshint sub:true*/
 'use strict';
 
 var _ = require('lodash');
@@ -183,9 +184,9 @@ exports.show = function(req, res) {
 exports.countByMonth = function(req, res) {
   var o = {};
   o.map = function() {
-    emit((new Date(this.date)).getFullYear() + '.' + ((new Date(this.date)).getMonth() + 1), {
+    emit((new Date(this.metrics[0].targetEndDate)).getFullYear() + '.' + ((new Date(this.metrics[0].targetEndDate)).getMonth() + 1), {
       count: 1,
-      qty: (this.comments) ? this.comments.length : 0
+      qty: this.metrics[0].projectedWorkload || this.metrics[0].targetLoad
     });
   };
   o.reduce = function(k, values) {
@@ -200,10 +201,8 @@ exports.countByMonth = function(req, res) {
 
     return total;
   };
-  o.query = {
-    activity: new RegExp(req.query.activity),
-    context: new RegExp(req.query.context)
-  };
+
+  o.query = JSON.parse(req.query.filterPerimeter.toString().replace('?', '\?'));
   TaskFull.mapReduce(o, function(err, results) {
     if (err) {
       return handleError(res, err);
@@ -323,7 +322,6 @@ exports.exportXLS = function(req, res) {
     .populate('actors', 'name')
     .lean().exec(function(err, taskFulls) {
 
-      console.log('taskFulls', taskFulls.length);
       _.each(taskFulls, function(taskFull) {
         if (taskFull.actors.length > 0) {
           taskFull.firstActor = taskFull.actors[0].name;
@@ -456,6 +454,10 @@ exports.update = function(req, res) {
       return res.status(404).send('Not Found');
     }
 
+    // date de modification
+    task.modifdate = Date();
+    console.log('task.modifdate', task.modifdate);
+
     var actors = [];
     _.each(task.actors, function(actor) {
       actors.push(actor._id);
@@ -529,10 +531,10 @@ exports.update = function(req, res) {
       var endDate = (metric.endDate) ? metric.endDate : (metric.startDate && index > 0) ? metric.startDate : metric.targetEndDate;
       metric.endDate = endDate;
 
-      metric.targetstartDate = moment(metric.targetstartDate).add(3, 'hours').hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
-      metric.targetEndDate = moment(metric.targetEndDate).add(3, 'hours').hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
-      metric.startDate = moment(metric.startDate).add(3, 'hours').hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
-      metric.endDate = moment(metric.endDate).add(3, 'hours').hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
+      metric.targetstartDate = moment(metric.targetstartDate).hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
+      metric.targetEndDate = moment(metric.targetEndDate).hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
+      metric.startDate = moment(metric.startDate).hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
+      metric.endDate = moment(metric.endDate).hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
 
       if (index === 0) {
         mainstart = metric.startDate;
@@ -718,10 +720,10 @@ exports.updateAllTask = function(req, res) {
       var dateNow = new Date();
       _.each(task.metrics, function(metric, index) { // pour chaque metric
 
-        metric.targetstartDate = moment(metric.targetstartDate).add(3, 'hours').hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
-        metric.targetEndDate = moment(metric.targetEndDate).add(3, 'hours').hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
-        metric.startDate = moment(metric.startDate).add(3, 'hours').hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
-        metric.endDate = moment(metric.endDate).add(3, 'hours').hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
+        metric.targetstartDate = moment(metric.targetstartDate).hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
+        metric.targetEndDate = moment(metric.targetEndDate).hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
+        metric.startDate = moment(metric.startDate).hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
+        metric.endDate = moment(metric.endDate).hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
 
         var startDate = (metric.startDate) ? metric.startDate : metric.targetstartDate;
         var endDate = (metric.endDate) ? metric.endDate : (metric.startDate && index > 0) ? metric.startDate : metric.targetEndDate;

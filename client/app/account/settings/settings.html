@@ -4,25 +4,31 @@
     <div class="row ">
         <div class="col-md-12">
             <!--BEGIN TABS-->
-            <tabset>
-                <tab active="true">
-                    <tab-heading>
-                        <i class="fa fa-user"></i> My Profil
-                    </tab-heading>
+            <h3>
+                My Profil
+                <div class="pull-right">
+                  <button class="btn btn-primary " ng-click="editMode(true)" ng-show="editInProgress === false"><i class="glyphicon glyphicon-pencil"></i> Edit my profile</button>
+                  <button class="btn btn-success " ng-click="saveAvatar()" ng-show="editInProgress === true"><i class="glyphicon glyphicon-save"></i> Save my profile</button>
+                </div>
+            </h3>
+            <hr>
                     <div class="row">
                         <div class="col-md-3">
                             <ul class="list-unstyled profile-nav">
-                                <li>
-                                    <img src="{{currentUser.avatar || 'assets/images/avatars/' + currentUser._id+ '.png'}} " class="img-responsive" style="width:100%" alt="" err-src="assets/images/avatars/avatar.jpg" />
+                                <li style="text-align:center">
+                                    <img src="{{currentUser.avatar || 'assets/images/avatars/' + currentUser._id+ '.png'}} " class="img-circle" style="width:175px;height:175px" alt="" err-src="assets/images/avatars/avatar.jpg" />
                                 </li>
                             </ul>
                         </div>
                         <div class="col-md-9">
                             <div class="row">
-                                <button class="btn btn-default pull-right" ng-click="editMode(true)" ng-show="editInProgress === false"><i class="glyphicon glyphicon-pencil"></i> Edit my profile</button>
-                                <button class="btn btn-primary pull-right" ng-click="saveAvatar()" ng-show="editInProgress === true"><i class="glyphicon glyphicon-save"></i> Save my profile</button>
-                                <h1>{{currentUser.name}} </h1>
-                                <ul class="list-group" style="padding-top:15px;">
+                                <ul class="list-group" >
+                                    <li class="list-group-item">
+                                        <label for="avatar" class="list-user-property text-muted "><i class="fa fa-2x fa-user"></i> Name</label>
+                                        <span style="font-size:24px" >{{currentUser.name}} </span>
+                                    </li>
+                                </ul>
+                                <ul class="list-group" >
                                     <li class="list-group-item">
                                         <label ng-class="{'bg-info':editInProgress}" for="avatar" class="list-user-property text-muted "><i class="fa fa-2x fa-map-marker"></i> Place</label>
                                         <span ng-show="editInProgress === false"> {{currentUser.location}} </span>
@@ -53,52 +59,55 @@
                             </tabset>
                         </div>
                     </div>
-                </tab>
-                <tab>
-                    <tab-heading>
-                        <i class="fa fa-dashboard"></i> My Personal Dashboards
-                    </tab-heading>
-                    <div>
+                      <h3>
+                        My Recurring Tasks
                         <div class="pull-right">
-                            <a class="btn btn-primary" href="/dashboards">Add one</a>
+                          <a class="btn btn-primary" href="/recurrentTask/">   <i class="fa fa-plus"></i> Add one</a>
                         </div>
+                      </h3>
+                      <hr>
+                    <div>
                         <table class="table table-striped table-bordered table-advance table-hover">
                             <thead>
                                 <tr>
-                                    <th style="width:60%">
-                                        Dashboard Name
+                                    <th>
+                                      <i class="fa fa-refresh"></i>   Reccurents Tasks
                                     </th>
-                                    <th class="hidden-xs" style="width:20%">
+                                    <th class="hidden-xs" >
                                         <i class="fa fa-question-sign"></i> Activity
                                     </th>
-                                    <th class="hidden-xs" style="width:20%">
+                                    <th class="hidden-xs" >
                                         <i class="fa fa-question-sign"></i> Context
                                     </th>
-                                    <th>
-                                        <i class="fa fa-delete"></i>
+                                    <th class="hidden-xs" >
+                                        <i class="fa fa-question-sign"></i> Frequency
+                                    </th>
+                                    <th class="hidden-xs" >
+                                        <i class="fa fa-question-sign"></i> Workload
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="dashboard in dashboards track by $index ">
+                                <tr ng-repeat="recurrentTask in recurrentTasks | orderBy:'repeats' track by $index ">
                                     <td>
-                                        <a href="/dashboard/{{dashboard._id}}">{{dashboard.name}}</a>
+                                        <a href="/recurrentTask/{{recurrentTask._id}}">{{recurrentTask.name}}</a>
                                     </td>
                                     <td class="hidden-xs">
-                                        {{dashboard.activity || 'ALL'}}
+                                        {{recurrentTask.activity || 'ALL'}}
                                     </td>
                                     <td class="hidden-xs">
-                                        {{dashboard.context || 'ALL'}}
+                                        {{recurrentTask.context || 'ALL'}}
                                     </td>
-                                    <td>
-                                        <button class="btn btn-danger" ng-click="deleteDashboard(dashboard,$index)">Delete</button>
+                                    <td class="hidden-xs">
+                                        Every {{recurrentTask.repeats.label.replace('(s)','') }} <span class="text-muted">, on {{ showRepeatOn(recurrentTask) }}</span>
+                                    </td>
+                                    <td class="hidden-xs">
+                                      <small class="text-muted">   {{recurrentTask.metrics[0].targetLoad || 'empty' }}</small>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                </tab>
-            </tabset>
             <!--END TABS-->
         </div>
     </div>

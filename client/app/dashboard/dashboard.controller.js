@@ -1,10 +1,12 @@
+/*jshint sub:true*/
 'use strict';
 
 angular.module('boardOsApp')
   .controller('DashboardCtrl', function($scope, $rootScope, $http, $stateParams, myLibrary, $cookieStore, $location, Notification, $timeout, dateRangeService) {
-
+    $scope.Math = window.Math;
     var initializing = true;
     $scope.newPerimeterValue = {};
+
 
     function average(arr) {
       return _.reduce(arr, function(memo, num) {
@@ -14,10 +16,196 @@ angular.module('boardOsApp')
 
     $scope.refreshDashboard = function() {
       $scope.myPromise = $http.get('/api/dashboardCompletes/executeId/' + $stateParams.id).success(function(response) {
+        $scope.checked = !$scope.checked;
         $scope.loadCompleteDashboard();
       });
     };
 
+
+    $scope.checked = false;
+    $scope.size = '100px';
+    $scope.dashboardSlide = 'Home';
+    $scope.blnshowConfig = false;
+
+    $scope.toggle = function() {
+      $scope.checked = !$scope.checked;
+    };
+
+    $scope.showConfig = function() {
+      $scope.blnshowConfig = !$scope.blnshowConfig;
+      $scope.checked = !$scope.checked;
+    };
+
+    $scope.showHome = function() {
+      $scope.dashboardSlide = 'Home';
+      $scope.checked = !$scope.checked;
+    };
+
+    $scope.showHistory = function() {
+      $scope.dashboardSlide = 'History';
+      $scope.checked = !$scope.checked;
+
+
+      $http.get('/api/taskFulls/countByMonth', {
+        params: {
+          filterPerimeter: $scope.filterPerimeter
+        }
+      }).success(function(tasks) {
+        $scope.dataTasks = [{
+          values: []
+        }];
+
+        $scope.dataMetrics = [{
+          values: []
+        }];
+        $scope.dataCost = [{
+          values: []
+        }];
+        $scope.dataQuality = [{
+          values: []
+        }];
+        $scope.dataTime = [{
+          values: []
+        }];
+        $scope.metricsNb = parseInt(tasks.reduce(function(pv, cv) {
+          return pv + cv.value.qty;
+        }, 0));
+
+        $scope.dataTasks[0].values = myLibrary.displayLastYear(tasks, '_id', 'count', true);
+        $scope.dataMetrics[0].values = myLibrary.displayLastYear(tasks, '_id', 'qty', true);
+        $scope.dataCost[0].values = myLibrary.displayLastYearKPI($scope.dashboard.tasks, '_id', 'kpis', 'Cost');
+        $scope.dataQuality[0].values = myLibrary.displayLastYearKPI($scope.dashboard.tasks, '_id', 'kpis', 'Quality');
+        $scope.dataTime[0].values = myLibrary.displayLastYearKPI($scope.dashboard.tasks, '_id', 'kpis', 'Time');
+
+      });
+
+      $http.get('/api/hierarchies/sublist/Activity/dashboard/' + $scope.dashboard._id).success(function(activities) {
+
+        $scope.subActivities = _.sortBy(activities, ['root', 'name']);
+
+        $scope.dataTasksSub = [];
+        $scope.dataMetricsSub = [];
+        $scope.dataCostSub = [];
+        $scope.dataQualitySub = [];
+        $scope.dataTimeSub = [];
+        $scope.tasksNbSub = [];
+        $scope.metricsNbSub = [];
+        $scope.subTasks = [];
+        $scope.blnShowTasks = [];
+        $scope.blnShowKpis = [];
+        $scope.dataKpis = [];
+        _.each($scope.subActivities, function(subActivity) {
+
+          var subActivityFilter = (subActivity.name === '.') ? subActivity.root.replace('$.', '$') : subActivity.root + subActivity.name;
+          $http.get('/api/taskFulls/countByMonth', {
+            params: {
+              filterPerimeter: {
+                activity: {
+                  '$regex': subActivityFilter,
+                  $options: '-i'
+                }
+              }
+            }
+          }).success(function(tasks) {
+            $scope.dataTasksSub[subActivity.root + subActivity.name] = [{
+              values: []
+            }];
+
+            $scope.dataMetricsSub[subActivity.root + subActivity.name] = [{
+              values: []
+            }];
+
+            $scope.dataCostSub[subActivity.root + subActivity.name] = [{
+              values: []
+            }];
+
+            $scope.dataQualitySub[subActivity.root + subActivity.name] = [{
+              values: []
+            }];
+
+            $scope.dataTimeSub[subActivity.root + subActivity.name] = [{
+              values: []
+            }];
+
+            $scope.dataKpis[subActivity.root + subActivity.name] = [{
+              values: []
+            }];
+
+            $scope.tasksNbSub[subActivity.root + subActivity.name] = parseInt(tasks.reduce(function(pv, cv) {
+              return pv + cv.value.count;
+            }, 0));
+
+            $scope.metricsNbSub[subActivity.root + subActivity.name] = parseInt(tasks.reduce(function(pv, cv) {
+              return pv + cv.value.qty;
+            }, 0));
+
+            $scope.dataTasksSub[subActivity.root + subActivity.name][0].values = myLibrary.displayLastYear(tasks, '_id', 'count', true);
+            $scope.dataMetricsSub[subActivity.root + subActivity.name][0].values = myLibrary.displayLastYear(tasks, '_id', 'qty', true);
+
+            $scope.subTasks[subActivity.root + subActivity.name] = _.filter($scope.dashboard.tasks, function(task) {
+              return ((task.activity.indexOf(subActivityFilter) > -1 || task.activity + '$' === subActivityFilter) && task.metrics[task.metrics.length - 1].status === 'Finished');
+            });
+
+            $scope.dataKpis[subActivity.root + subActivity.name] = _.filter($scope.dashboard.tasks, function(task) {
+              return ((task.activity.indexOf(subActivityFilter) > -1 || task.activity + '$' === subActivityFilter) && task.metrics[task.metrics.length - 1].status === 'Finished');
+            });
+
+            $scope.blnShowTasks[subActivity.root + subActivity.name] = false;
+            $scope.blnShowKpis[subActivity.root + subActivity.name] = false;
+
+            $scope.dataCostSub[subActivity.root + subActivity.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subActivity.root + subActivity.name], '_id', 'kpis', 'Cost');
+            $scope.dataQualitySub[subActivity.root + subActivity.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subActivity.root + subActivity.name], '_id', 'kpis', 'Quality');
+            $scope.dataTimeSub[subActivity.root + subActivity.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subActivity.root + subActivity.name], '_id', 'kpis', 'Time');
+
+          });
+        });
+
+      });
+
+      $scope.options = {
+        chart: {
+          type: 'discreteBarChart',
+          height: 40,
+          margin: {
+            top: 0,
+            right: 0,
+            bottom: 2,
+            left: 0
+          },
+          showYAxis: false,
+          showXAxis: false,
+          color: [
+            '#1f77b4'
+          ],
+          x: function(d) {
+            return d.label;
+          },
+          y: function(d) {
+            return d.count;
+          },
+          showValues: true,
+          valueFormat: function(d) {
+            return d3.format('.0f')(d);
+          },
+          transitionDuration: 500
+        }
+      };
+
+      $scope.optionsTasks = angular.copy($scope.options);
+      $scope.optionsTasks.chart.color = ['#9467bd'];
+
+      $scope.optionsLoad = angular.copy($scope.options);
+      $scope.optionsLoad.chart.color = ['#87CEEB'];
+
+      $scope.optionsCosts = angular.copy($scope.options);
+      $scope.optionsCosts.chart.color = ['#2ecc71'];
+
+    };
+
+    $scope.showRevieuw = function() {
+      $scope.dashboardSlide = 'Review';
+      $scope.checked = !$scope.checked;
+    };
 
     $scope.createNewTask = function(data) {
 
@@ -35,28 +223,41 @@ angular.module('boardOsApp')
     };
 
     $scope.loadTasks = function() {
-      $http.get('/api/taskFulls/countByMonth', {
-        params: {
-          activity: $rootScope.perimeter.activity,
-          context: $rootScope.perimeter.context
+      var filterPerimeter = {
+        $or: []
+      };
+      _.each($scope.dashboard.perimeter, function(perimeter) {
+        if (perimeter.activity && perimeter.context) {
+          filterPerimeter['$or'].push({
+            activity: {
+              '$regex': perimeter.activity || '',
+              $options: '-i'
+            },
+            context: {
+              '$regex': perimeter.context || '',
+              $options: '-i'
+            }
+          });
+        } else if (!perimeter.context) {
+          filterPerimeter['$or'].push({
+            activity: {
+              '$regex': perimeter.activity || '',
+              $options: '-i'
+            }
+          });
+        } else if (!perimeter.activity) {
+          filterPerimeter['$or'].push({
+            context: {
+              '$regex': perimeter.context || '',
+              $options: '-i'
+            }
+          });
         }
-      }).success(function(tasks) {
-        $scope.dataTasks = [{
-          values: []
-        }];
-
-        $scope.dataMetrics = [{
-          values: []
-        }];
-
-        $scope.metricsNb = tasks.reduce(function(pv, cv) {
-          return pv + cv.value.qty;
-        }, 0);
-
-        $scope.dataTasks[0].values = myLibrary.displayLastYear(tasks, '_id', 'count', true);
-        $scope.dataMetrics[0].values = myLibrary.displayLastYear(tasks, '_id', 'qty', true);
+        $scope.filterPerimeter = filterPerimeter;
 
       });
+
+
     };
 
     $scope.giveMeMyColor = function(value, category) {
@@ -433,40 +634,8 @@ angular.module('boardOsApp')
     }, true);
 
     $scope.removePerimeter = function(data, index) {
-
-
       $scope.dashboard.perimeter.splice(index, 1);
     };
 
 
-    $scope.options = {
-      chart: {
-        type: 'discreteBarChart',
-        height: 40,
-        margin: {
-          top: 0,
-          right: 0,
-          bottom: 2,
-          left: 0
-        },
-        showYAxis: false,
-        color: [
-          '#1f77b4'
-        ],
-        x: function(d) {
-          return d.label;
-        },
-        y: function(d) {
-          return parseInt(d.count);
-        },
-        showValues: false,
-        transitionDuration: 500
-      }
-    };
-
-    $scope.optionsTasks = angular.copy($scope.options);
-    $scope.optionsTasks.chart.color = ['#9467bd'];
-
-    $scope.optionsMetrics = angular.copy($scope.options);
-    $scope.optionsMetrics.chart.color = ['#87CEEB'];
   });

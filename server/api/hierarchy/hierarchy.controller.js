@@ -1,3 +1,4 @@
+/*jshint sub:true*/
 /**
  * Using Rails-like standard naming convention for endpoints.
  * GET     /hierarchies              ->  index
@@ -10,8 +11,12 @@
 'use strict';
 
 var _ = require('lodash');
+var Q = require('q');
+
 var Hierarchy = require('./hierarchy.model');
 var TaskFull = require('../taskFull/taskFull.model');
+var DashboardComplete = require('../dashboardComplete/dashboardComplete.model');
+
 var tools = require('../../config/tools');
 
 // Get list of hierarchies
@@ -51,6 +56,156 @@ exports.list = function(req, res) {
     //if(hierarchy[0]) {tools.buildHierarchy(hierarchy[0].list,'list')}
     return res.json(hierarchy[0]);
   });
+};
+
+// Get a single hierarchy
+exports.sublist = function(req, res) {
+
+  function getPosition(string, subString, index) {
+    return string.split(subString, index).join(subString).length;
+  }
+
+  function findWithAttr(array, attr, value) {
+    for (var i = 0; i < array.length; i += 1) {
+      if (array[i][attr] === value) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  var filterPerimeter = [];
+  var sublist = []
+  var filterTaskPerimeter = {
+    $or: [],
+    metrics: {
+      $elemMatch: {
+        status: 'Finished'
+      }
+    }
+  };
+
+  Q()
+    // Get dashboards
+    .then(function() {
+      var deferred = Q.defer();
+
+      DashboardComplete.findById(req.params.dashboardId, {
+        __v: false
+      }).lean().exec(function(err, dashboard) {
+        if (dashboard.perimeter.length > 0) {
+
+          _.each(dashboard.perimeter, function(perimeter) {
+            if (req.params.id === 'Activity') {
+              filterPerimeter.push(perimeter.activity);
+            } else {
+              filterPerimeter.push(perimeter.context);
+            }
+
+            filterTaskPerimeter['$or'].push({
+              activity: {
+                '$regex': perimeter.activity || '',
+                $options: '-im'
+              },
+              context: {
+                '$regex': perimeter.context || '',
+                $options: '-im'
+              }
+            });
+          });
+
+          console.log('filterTaskPerimeter', filterTaskPerimeter);
+          deferred.resolve(filterTaskPerimeter);
+        }
+      });
+
+      return deferred.promise;
+
+    })
+    // Get hierarchy
+    .then(function() {
+      var deferred = Q.defer();
+
+      Hierarchy.find({
+          name: req.params.id
+        },
+        function(err, hierarchy) {
+          if (err) {
+            return handleError(res, err);
+          }
+          if (!hierarchy) {
+            return res.send(404)
+          }
+
+          _.each(filterPerimeter, function(regexFilter, index) {
+            var filter = regexFilter.replace('^', '');
+            _.each(hierarchy[0].list, function(activity) {
+              var posFilter = activity.longname.indexOf(filter);
+              if (posFilter > -1) {
+                // position du prochain point post root
+                var position = getPosition(activity.longname.substring(posFilter + filter.length + 1), '.', 1);
+                var subactivity = activity.longname.substring(posFilter + filter.length + 1, posFilter + filter.length + position + 1);
+                if (findWithAttr(sublist, 'name', subactivity) === -1) {
+                  sublist.push({
+                    name: subactivity,
+                    root: activity.longname.substring(0, posFilter + filter.length + 1),
+                    abs: true
+                  });
+                }
+              }
+            });
+            if (index === filterPerimeter.length - 1) {
+              deferred.resolve(sublist);
+            }
+          });
+          return deferred.promise;
+
+        });
+    })
+    // Get Tasks
+    .then(function() {
+      var deferred = Q.defer();
+
+      TaskFull.find(filterTaskPerimeter, 'activity context metrics needToFeed kpis alerts').sort({
+        date: 'asc'
+      }).lean().exec(function(err, findtasks) {
+        console.log('findtasks', findtasks.length);
+        _.each(filterPerimeter, function(perimeter, index2) {
+          perimeter = perimeter.replace('^', '');
+
+          _.each(findtasks, function(task, index) {
+            console.log('task.activity', task.activity);
+            console.log('perimeter', perimeter);
+            var posFilter = task.activity.indexOf(perimeter);
+            console.log('posFilter', posFilter);
+            if (posFilter > -1) {
+              // position du prochain point post root
+              var position = getPosition(task.activity.substring(posFilter + perimeter.length + 1), '.', 1);
+              var subactivity = task.activity.substring(posFilter + perimeter.length + 1, posFilter + perimeter.length + position + 1);
+              if (subactivity === '') {
+                subactivity = '$';
+              }
+              if (findWithAttr(sublist, 'name', subactivity) === -1) {
+                sublist.push({
+                  name: subactivity,
+                  root: task.activity.substring(0, posFilter + perimeter.length + 1),
+                  abs: false
+                });
+              }
+            }
+            if (index === findtasks.length - 1 && index2 === filterPerimeter.length - 1) {
+              deferred.resolve(sublist);
+              return res.json(sublist);
+
+            }
+          });
+          ///
+
+        });
+      });
+      return deferred.promise;
+
+    });
 };
 
 

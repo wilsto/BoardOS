@@ -245,7 +245,8 @@
               <!-- DASHBOARD -->
               <li ng-show="perimeter.name && showArianeDashboard" class="hidden-xs">
                 <i class="fa fa-angle-right"></i>
-                <i class="fa fa-dashboard"></i> <span style="color:lightgrey"> Dashboard  </span>  {{perimeter.name}}
+              <img src="assets/images/dashboard-icon.png" alt="" style="padding-right:5px"> <span class="text-muted"> Dashboard  </span> <strong style="font-size:18px;padding-left:10px;"> {{perimeter.name}}</strong>
+
               </li>
               <!-- <li ng-show="perimeter.name && showArianeDashboard">
                 <i class="fa fa-angle-right"></i>
@@ -258,7 +259,8 @@
               <!-- DASHBOARD -->
               <li ng-show="currentTaskName.name && showArianeTask"  class="hidden-xs">
                 <i class="fa fa-angle-right"></i>
-                <i class="fa fa-tasks"></i> <span style="color:lightgrey">Task  </span>  {{currentTaskName.name}}
+                <img src="assets/images/task-icon.png" alt="" style="padding-right:5px"> <span class="text-muted"> Task  </span> <strong style="font-size:18px;padding-left:10px;"> {{currentTaskName.name}}</strong>
+
               </li>
               <!-- <li ng-show="currentTaskName.name && showArianeTask">
                 <i class="fa fa-angle-right"></i>
@@ -353,6 +355,9 @@
     <script src="bower_components/ng-infinite-scroll/ng-infinite-scroll.js"></script>
     <script src="bower_components/angular-advanced-searchbox/dist/angular-advanced-searchbox-tpls.js"></script>
     <script src="bower_components/angular-bootstrap-calendar/dist/js/angular-bootstrap-calendar-tpls.js"></script>
+    <script src="bower_components/checklist-model/checklist-model.js"></script>
+    <script src="bower_components/interactjs/interact.js"></script>
+    <script src="bower_components/angular-pageslide-directive/dist/angular-pageslide-directive.js"></script>
     <!-- endbower -->
     <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
@@ -484,7 +489,7 @@
                       <div  ng-bind-html="info.resumeHtml" class="dont-break-out"></div>
                       <br>
                       <a class="pull-right btn btn-outline btn-primary" ng-click="showDetails(info)">
-                          Learn More about this {{info.type}} >
+                          Learn More about this {{info.type}} &gt.
                       </a>
                   </td>
                 </tr>
@@ -508,7 +513,7 @@
               <img src="assets/images/Boss_ReleaseNote.png" style="width:680px;" alt="">
             </div>
                     <a class="btn btn-outline btn-primary" ng-click="unshowDetails()">
-                      < Go back to list of news
+                      &lt. Go back to list of news
                     </a>
                     <small class="pull-right">
                       {{info.date | date:'mediumDate'}}

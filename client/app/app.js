@@ -24,7 +24,9 @@ angular.module('boardOsApp', [
     'infinite-scroll',
     'ngTagsInput',
     'angular-advanced-searchbox',
-    'mwl.calendar'
+    'mwl.calendar',
+    'checklist-model',
+    'pageslide-directive'
   ])
   .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, NotificationProvider) {
     $urlRouterProvider.otherwise('/');

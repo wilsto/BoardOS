@@ -1,5 +1,20 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.118...HEAD)
+
+**Closed issues:**
+
+- Dans les graphique de décomptes, remplacer le nombre de métrics par la charge réelle [\#308](https://github.com/wilsto/BoardOS/issues/308)
+- Les graphiques des décomptes de nombre de taches et leur métrics des dashboards sont erronés depuis le multi activty/context [\#307](https://github.com/wilsto/BoardOS/issues/307)
+- Des calculs de dashboards sont lancés alors que la tache n'appartient pas au périmètre [\#306](https://github.com/wilsto/BoardOS/issues/306)
+- Référencer des anomalies [\#286](https://github.com/wilsto/BoardOS/issues/286)
+- Ajouter la création de taches récurrentes [\#214](https://github.com/wilsto/BoardOS/issues/214)
+
+## [v1.6.118](https://github.com/wilsto/boardos/tree/v1.6.118) (2017-09-06)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.117...v1.6.118)
+
 ## [v1.6.117](https://github.com/wilsto/boardos/tree/v1.6.117) (2017-09-06)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.116...v1.6.117)
 
