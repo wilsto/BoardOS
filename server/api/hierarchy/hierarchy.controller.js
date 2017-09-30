@@ -95,13 +95,16 @@ exports.sublist = function(req, res) {
       }).lean().exec(function(err, dashboard) {
         if (dashboard.perimeter.length > 0) {
 
-          _.each(dashboard.perimeter, function(perimeter) {
-            if (req.params.id === 'Activity') {
-              filterPerimeter.push(perimeter.activity);
-            } else {
-              filterPerimeter.push(perimeter.context);
-            }
+          filterPerimeter = dashboard.perimeter;
+          console.log('filterPerimeter', filterPerimeter);
 
+          _.each(filterPerimeter, function(perimeter) {
+            if (perimeter.activity === null) {
+              delete perimeter.activity
+            }
+            if (perimeter.context === null) {
+              delete perimeter.context
+            }
             filterTaskPerimeter['$or'].push({
               activity: {
                 '$regex': perimeter.activity || '',
@@ -114,7 +117,6 @@ exports.sublist = function(req, res) {
             });
           });
 
-          console.log('filterTaskPerimeter', filterTaskPerimeter);
           deferred.resolve(filterTaskPerimeter);
         }
       });
@@ -137,23 +139,30 @@ exports.sublist = function(req, res) {
             return res.send(404)
           }
 
-          _.each(filterPerimeter, function(regexFilter, index) {
-            var filter = regexFilter.replace('^', '');
-            _.each(hierarchy[0].list, function(activity) {
-              var posFilter = activity.longname.indexOf(filter);
-              if (posFilter > -1) {
-                // position du prochain point post root
-                var position = getPosition(activity.longname.substring(posFilter + filter.length + 1), '.', 1);
-                var subactivity = activity.longname.substring(posFilter + filter.length + 1, posFilter + filter.length + position + 1);
-                if (findWithAttr(sublist, 'name', subactivity) === -1) {
-                  sublist.push({
-                    name: subactivity,
-                    root: activity.longname.substring(0, posFilter + filter.length + 1),
-                    abs: true
-                  });
+          _.each(filterPerimeter, function(perimeter, index) {
+
+            if (req.params.id === 'Activity') {
+
+              var filter = perimeter.activity.replace('^', '');
+              console.log('filter', filter);
+
+              _.each(hierarchy[0].list, function(activity) {
+                var posFilter = activity.longname.indexOf(filter);
+                if (posFilter > -1) {
+                  // position du prochain point post root
+                  var position = getPosition(activity.longname.substring(posFilter + filter.length + 1), '.', 1);
+                  var subactivity = activity.longname.substring(posFilter + filter.length + 1, posFilter + filter.length + position + 1);
+                  if (findWithAttr(sublist, 'name', subactivity) === -1) {
+                    sublist.push({
+                      name: subactivity,
+                      root: activity.longname.substring(0, posFilter + filter.length + 1),
+                      abs: true
+                    });
+                  }
                 }
-              }
-            });
+              });
+            }
+
             if (index === filterPerimeter.length - 1) {
               deferred.resolve(sublist);
             }
@@ -170,29 +179,38 @@ exports.sublist = function(req, res) {
         date: 'asc'
       }).lean().exec(function(err, findtasks) {
         console.log('findtasks', findtasks.length);
+
         _.each(filterPerimeter, function(perimeter, index2) {
-          perimeter = perimeter.replace('^', '');
+
+          perimeter.activity = perimeter.activity.replace('^', '');
+          //perimeter.context = perimeter.context.replace('^', '');
 
           _.each(findtasks, function(task, index) {
-            console.log('task.activity', task.activity);
-            console.log('perimeter', perimeter);
-            var posFilter = task.activity.indexOf(perimeter);
-            console.log('posFilter', posFilter);
-            if (posFilter > -1) {
-              // position du prochain point post root
-              var position = getPosition(task.activity.substring(posFilter + perimeter.length + 1), '.', 1);
-              var subactivity = task.activity.substring(posFilter + perimeter.length + 1, posFilter + perimeter.length + position + 1);
-              if (subactivity === '') {
-                subactivity = '$';
+            var posFilter, position, subactivity;
+
+            if (req.params.id === 'Activity') {
+
+              // si l'activité est dans la liste
+              posFilter = task.activity.indexOf(perimeter.activity);
+
+              if (posFilter > -1) {
+                // position du prochain point post root
+                position = getPosition(task.activity.substring(posFilter + perimeter.activity.length + 1), '.', 1);
+                subactivity = task.activity.substring(posFilter + perimeter.activity.length + 1, posFilter + perimeter.activity.length + position + 1);
+                if (subactivity === '') {
+                  subactivity = '$';
+                }
+                if (findWithAttr(sublist, 'name', subactivity) === -1) {
+                  sublist.push({
+                    name: subactivity,
+                    root: task.activity.substring(0, posFilter + perimeter.activity.length + 1),
+                    abs: false
+                  });
+                }
               }
-              if (findWithAttr(sublist, 'name', subactivity) === -1) {
-                sublist.push({
-                  name: subactivity,
-                  root: task.activity.substring(0, posFilter + perimeter.length + 1),
-                  abs: false
-                });
-              }
+
             }
+
             if (index === findtasks.length - 1 && index2 === filterPerimeter.length - 1) {
               deferred.resolve(sublist);
               return res.json(sublist);

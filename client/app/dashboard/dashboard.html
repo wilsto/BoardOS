@@ -617,7 +617,7 @@
         <div class="stats-overview stat-block">
           <div class="details">
             <div class="title">
-              <a href="/tasks">
+              <a href="#" ng-click="blnShowAllTasks=!blnShowAllTasks">
                 <span style="font-weight:bold;color:#9467bd">{{tasksNb}}</span>
                 Tasks</a>
             </div>
@@ -629,7 +629,7 @@
         <div class="stats-overview stat-block">
           <div class="details">
             <div class="title">
-              <a href="/metrics">
+              <a href="#" ng-click="blnShowAllTasks=!blnShowAllTasks">
                 <span style="font-weight:bold;color:#87CEEB">{{metricsNb}}</span>
                 Men Days</a>
             </div>
@@ -641,7 +641,7 @@
       <div class="stats-overview stat-block">
         <div class="details">
           <div class="title">
-            <a href="/metrics">
+            <a href="#">
               <span style="font-weight:bold;color:#87CEEB">{{metricsNb}}</span>
               Delivery</a>
           </div>
@@ -653,7 +653,7 @@
     <div class="stats-overview stat-block">
       <div class="details">
         <div class="title">
-          <a href="/metrics">
+          <a href="#">
             <span style="font-weight:bold;color:#87CEEB">{{costNb}}</span>
             Costs</a>
         </div>
@@ -665,7 +665,7 @@
   <div class="stats-overview stat-block">
     <div class="details">
       <div class="title">
-        <a href="/metrics">
+        <a href="#">
           <span style="font-weight:bold;color:#87CEEB">{{metricsNb}}</span>
           Time</a>
       </div>
@@ -675,13 +675,121 @@
 </div>
     </div>
     <!-- END OVERVIEW STATISTIC BARS-->
+
+
+    <!--  DEBUT LISTE TACHES
+    ******************************-->
+    <div class="row" style="border:1px grey dashed;padding:5px" ng-if="blnShowAllTasks===true">
+    <div class="col-md-11 portlet-body" style="margin-left:35px;margin-top:15px">
+          <table class="table table-striped table-bordered table-hover" id="sample_4">
+            <thead>
+              <tr>
+                <th class="hidden-xs">
+                  <a style="text-decoration: none" href="#" ng-click="orderByField='actors[0].name'; reverseSort = !reverseSort">
+                    Owner <span ng-show="orderByField === 'actors[0].name'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
+                  </a>
+                </th>
+                <th style="min-width:300px;max-width:500px;">
+                  <a style="text-decoration: none" href="#" ng-click="orderByField='Name'; reverseSort = !reverseSort">
+                    Name <span ng-show="orderByField === 'Name'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
+                  </a>
+                </th>
+                <th style="width:250px;">
+                  <a style="text-decoration: none" href="#" ng-click="orderByField='activity'; reverseSort = !reverseSort">
+                    Activity <span ng-show="orderByField === 'activity'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
+                  </a>
+                </th>
+                <th style="width:250px;">
+                  <a style="text-decoration: none" href="#" ng-click="orderByField='context'; reverseSort = !reverseSort">
+                    Contexte <span ng-show="orderByField === 'context'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
+                  </a>
+                </th>
+                <th style="max-width:50px;width:auto;min-width:20px;">
+                  <a style="text-decoration: none" href="#" ng-click="orderByField='metrics[task.metrics.length - 1].startDate'; reverseSort = !reverseSort">
+                    Start <span ng-show="orderByField === 'metrics[task.metrics.length - 1].startDate'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
+                  </a>
+                </th>
+                <th style="max-width:50px;width:auto;width:150px;">
+                  <a style="text-decoration: none" href="#" ng-click="orderByField='metrics[task.metrics.length - 1].load'; reverseSort = !reverseSort">
+                    Load <span ng-show="orderByField === 'metrics[task.metrics.length - 1].load'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
+                  </a>
+                </th>
+                <th style="max-width:50px;width:auto;min-width:20px;">
+                  <a style="text-decoration: none" href="#" ng-click="orderByField='metrics[task.metrics.length - 1].endDate'; reverseSort = !reverseSort">
+                    End <span ng-show="orderByField === 'metrics[task.metrics.length - 1].endDate'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
+                  </a>
+                </th>
+              </tr>
+            </thead>
+            <tbody infinite-scroll="getMoreData()" infinite-scroll-distance="3">
+              <tr ng-repeat="task in dashboard.tasks | orderBy:orderByField:reverseSort">
+                <td style="text-align: left">
+                  <div >
+                  <!-- <div uib-tooltip-html="'Name : <b>{{task.actors[0].name}}</b>'" tooltip-placement="top"> -->
+                    <img alt="" ng-src="{{ task.actors[0].avatar || 'assets/images/avatars/' + task.actors[0]._id + '.png'}} " class="img-circle" err-src="assets/images/avatars/avatar.png"/> <small class="text-muted">{{task.actors[0].name}}</small>
+                  </div>
+                </td>
+                <td >
+                  <a href="/task/{{task._id}}">
+                    <div class="desc">{{task.name}}
+                    </div>
+                  </a>
+                </td>
+                <td >
+                    <small class="dont-break-out" style="font-size:11px"> {{task.activity}}</small>
+
+                </td>
+                <td >
+                    <small class="dont-break-out" style="font-size:11px"> {{task.context}}</small>
+
+                </td>
+                <td class="hidden-xs">
+                  {{task.metrics[task.metrics.length - 1].targetstartDate | date:'mediumDate'}}<br/>
+
+
+                  <span class="label label-sm label-lightinfo" ng-if="task.metrics[task.metrics.length - 1].startDate > task.metrics[task.metrics.length - 1].targetstartDate " >&nbsp;&nbsp;{{task.metrics[task.metrics.length - 1].startDate | date:'mediumDate'}}</span>
+                </td>
+                <td class="hidden-xs">
+
+                <span ng-if="task.metrics[task.metrics.length - 1].status ==='Not Started' "
+                  class="label label-sm"
+                  ng-class="{'label-info':task.metrics[task.metrics.length - 1].status ==='In Progress','label-success':task.metrics[task.metrics.length - 1].status ==='Finished','label-default':task.metrics[task.metrics.length - 1].status ==='Not Started','label-lightgrey':task.metrics[task.metrics.length - 1].status =='Withdrawn','label-warning':task.metrics[task.metrics.length - 1].startDate < today}">
+                  {{task.metrics[task.metrics.length - 1].status}}
+                </span>
+                <span ng-if="task.metrics[task.metrics.length - 1].status !=='Not Started'"
+                  class="label label-sm"
+                  ng-class="{'label-info':task.metrics[task.metrics.length - 1].status ==='In Progress','label-success':task.metrics[task.metrics.length - 1].status ==='Finished','label-default':task.metrics[task.metrics.length - 1].status ==='Not Started','label-lightgrey':task.metrics[task.metrics.length - 1].status =='Withdrawn'}">
+                  {{task.metrics[task.metrics.length - 1].status}}
+                </span>
+              <small class="text-muted " ng-if="task.metrics[task.metrics.length - 1].status ==='In Progress'"><i>&nbsp;&nbsp;{{task.metrics[task.metrics.length - 1].progress}}%</i></small>
+              <br>
+                  <span>{{task.metrics[task.metrics.length - 1].targetLoad}} </span>
+                    <span  ng-if="task.metrics[task.metrics.length - 1].projectedWorkload > task.metrics[task.metrics.length - 1].targetLoad">
+                      &gt;&gt; <span class="label label-sm label-danger "> {{task.metrics[task.metrics.length - 1].projectedWorkload}}</span>
+                    </span>
+                    <span  ng-if="task.metrics[task.metrics.length - 1].projectedWorkload < task.metrics[task.metrics.length - 1].targetLoad">
+                      &gt;&gt; <span class="label label-sm label-lightwarning "> {{task.metrics[task.metrics.length - 1].projectedWorkload}}</span>
+                    </span>
+                </td>
+                <td class="hidden-xs">
+                  {{task.metrics[task.metrics.length - 1].targetEndDate | date:'mediumDate'}}<br/>
+
+                  <span class="label label-sm label-danger"  ng-if="task.metrics[task.metrics.length - 1].endDate > task.metrics[task.metrics.length - 1].targetEndDate">&nbsp;&nbsp;{{task.metrics[task.metrics.length - 1].endDate | date:'mediumDate'}}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+    </div>
+
   </div>
   <div class="col-md-12 col-sm-12 ">
-    <b>Sub Activities</b>
+    <b>Sub Activities</b> <small class="label label-default" style ="font-size:10px" ng-click="showEmptyRow=!showEmptyRow">Show all</small>
     <hr style="margin-top:5px">
     <!-- BEGIN OVERVIEW STATISTIC BARS-->
     <!-- BEGIN OVERVIEW STATISTIC BARS-->
-    <div class="row stats-overview-cont" ng-repeat="subActivity in subActivities">
+    <div class="row stats-overview-cont" ng-repeat="subActivity in subActivities"  ng-if="dataTasksSubNb[subActivity.root + subActivity.name]>0 || showEmptyRow">
+      <!-- -->
       <div class="col-md-2 col-sm-12">
         <div class="stats-overview stat-block">
           <div class="details">
@@ -690,7 +798,7 @@
               {{subActivity.name}}
               </b>
               <br>
-            <small class="label label-primary"> {{(metricsNbSub[subActivity.root + subActivity.name]/metricsNb *100)| number:0}}%</small>
+            <small class="label label-primary"> {{(dataMetricsSubNb[subActivity.root + subActivity.name]/metricsNb *100)| number:0}}%</small>
             <small class="label label-default"> Contexts</small>
             </div>
           </div>
@@ -701,7 +809,7 @@
           <div class="details">
             <div class="title">
               <a href="#" ng-click="blnShowTasks[subActivity.root + subActivity.name]=!blnShowTasks[subActivity.root + subActivity.name]">
-                <span style="font-weight:bold;color:#9467bd">{{tasksNbSub[subActivity.root + subActivity.name]}}</span>
+                <span style="font-weight:bold;color:#9467bd">{{dataTasksSubNb[subActivity.root + subActivity.name]| number:0}}</span>
                 Tasks</a>
             </div>
             <nvd3 options="optionsTasks" data="dataTasksSub[subActivity.root + subActivity.name]" ng-if="dashboardSlide==='History'"></nvd3>
@@ -712,8 +820,8 @@
         <div class="stats-overview stat-block">
           <div class="details">
             <div class="title">
-              <a href="/metrics">
-                <span style="font-weight:bold;color:#87CEEB">{{metricsNbSub[subActivity.root + subActivity.name]}}</span>
+              <a href="#" ng-click="blnShowTasks[subActivity.root + subActivity.name]=!blnShowTasks[subActivity.root + subActivity.name]">
+                <span style="font-weight:bold;color:#87CEEB">{{dataMetricsSubNb[subActivity.root + subActivity.name]| number:0}}</span>
                 Men Days</a>
             </div>
             <nvd3 options="optionsLoad" data="dataMetricsSub[subActivity.root + subActivity.name]" ng-if="dashboardSlide==='History'"></nvd3>
@@ -725,7 +833,7 @@
         <div class="details">
           <div class="title">
             <a href="#" ng-click="blnShowKpis[subActivity.root + subActivity.name]=!blnShowKpis[subActivity.root + subActivity.name]">
-              <span style="font-weight:bold;color:#87CEEB"></span>
+              <span style="font-weight:bold;color:#87CEEB">{{dataQualitySubNb[subActivity.root + subActivity.name] | number:0}}% </span>
               Delivery</a>
           </div>
           <nvd3 options="optionsCosts" data="dataQualitySub[subActivity.root + subActivity.name]" ng-if="dashboardSlide==='History'"></nvd3>
@@ -737,7 +845,7 @@
       <div class="details">
         <div class="title">
           <a href="#" ng-click="blnShowKpis[subActivity.root + subActivity.name]=!blnShowKpis[subActivity.root + subActivity.name]">
-            <span style="font-weight:bold;color:#87CEEB">{{metricsNbSub[subActivity.root + subActivity.name]}}</span>
+            <span style="font-weight:bold;color:#87CEEB">{{dataCostSubNb[subActivity.root + subActivity.name] | number:0}}% </span>
             Costs</a>
         </div>
         <nvd3 options="optionsCosts" data="dataCostSub[subActivity.root + subActivity.name]" ng-if="dashboardSlide==='History'"></nvd3>
@@ -749,7 +857,7 @@
     <div class="details">
       <div class="title">
         <a href="#" ng-click="blnShowKpis[subActivity.root + subActivity.name]=!blnShowKpis[subActivity.root + subActivity.name]">
-          <span style="font-weight:bold;color:#87CEEB"></span>
+          <span style="font-weight:bold;color:#87CEEB">{{dataTimeSubNb[subActivity.root + subActivity.name] | number:0}}% </span>
           Time</a>
       </div>
       <nvd3 options="optionsCosts" data="dataTimeSub[subActivity.root + subActivity.name]" ng-if="dashboardSlide==='History'"></nvd3>
@@ -759,7 +867,7 @@
 
 <!--  DEBUT LISTE TACHES
 ******************************-->
-<div class="row" ng-if="blnShowTasks[subActivity.root + subActivity.name]===true">
+<div class="row" style="border:1px grey dashed;padding:5px" ng-if="blnShowTasks[subActivity.root + subActivity.name]===true">
 <div class="col-md-11 portlet-body" style="margin-left:35px;margin-top:15px">
       <table class="table table-striped table-bordered table-hover" id="sample_4">
         <thead>
@@ -874,39 +982,42 @@
   </div>
 
 
-<div class="col-md-2 col-sm-12">
-<div class="stats-overview stat-block">
+<div class="col-md-2 col-sm-12" style="border:1px grey dashed;padding:5px">
+  <div class="">
+<div class="stats-overview stat-block" ng-repeat="kpi in dashboard.kpis | filter:{constraint:'Quality'}">
   <div class="details">
     <div class="title">
-      <a href="/metrics">
+      <a href="#">
         <span style="font-weight:bold;color:#87CEEB"></span>
-        KPI NAME</a>
+        {{kpi.name}}</a>
+
     </div>
-    <nvd3 options="optionsCosts" data="dataTimeSub[subActivity.root + subActivity.name]" ng-if="dashboardSlide==='History'"></nvd3>
+    <nvd3 options="optionsCosts" data="dataSubKPIs[subActivity.root + subActivity.name]['Quality'][kpi.name]" ng-if="dashboardSlide==='History'"></nvd3>
   </div>
 </div>
 </div>
-<div class="col-md-2 col-sm-12">
-<div class="stats-overview stat-block">
+</div>
+<div class="col-md-2 col-sm-12" style="border:1px grey dashed;padding:5px">
+<div class="stats-overview stat-block" ng-repeat="kpi in dashboard.kpis | filter:{constraint:'Cost'}">
   <div class="details">
     <div class="title">
-      <a href="/metrics">
+      <a href="#">
         <span style="font-weight:bold;color:#87CEEB"></span>
-        Time</a>
+        {{kpi.name}}</a>
     </div>
-    <nvd3 options="optionsCosts" data="dataTimeSub[subActivity.root + subActivity.name]" ng-if="dashboardSlide==='History'"></nvd3>
+    <nvd3 options="optionsCosts" data="dataSubKPIs[subActivity.root + subActivity.name]['Cost'][kpi.name]" ng-if="dashboardSlide==='History'"></nvd3>
   </div>
 </div>
 </div>
-<div class="col-md-2 col-sm-12">
-<div class="stats-overview stat-block">
+<div class="col-md-2 col-sm-12" style="border:1px grey dashed;padding:5px">
+<div class="stats-overview stat-block" ng-repeat="kpi in dashboard.kpis | filter:{constraint:'Time'}">
   <div class="details">
     <div class="title">
-      <a href="/metrics">
+      <a href="#">
         <span style="font-weight:bold;color:#87CEEB"></span>
-        Time</a>
+        {{kpi.name}}</a>
     </div>
-    <nvd3 options="optionsCosts" data="dataTimeSub[subActivity.root + subActivity.name]" ng-if="dashboardSlide==='History'"></nvd3>
+    <nvd3 options="optionsCosts" data="dataSubKPIs[subActivity.root + subActivity.name]['Time'][kpi.name]" ng-if="dashboardSlide==='History'"></nvd3>
   </div>
 </div>
 </div>

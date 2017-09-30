@@ -4,15 +4,23 @@
 angular.module('boardOsApp')
   .controller('DashboardCtrl', function($scope, $rootScope, $http, $stateParams, myLibrary, $cookieStore, $location, Notification, $timeout, dateRangeService) {
     $scope.Math = window.Math;
+
+    function arrayAverage(arr) {
+      return _.reduce(arr, function(memo, num) {
+        return memo + num;
+      }, null) / (arr.length === 0 ? 1 : arr.length);
+    }
+
+    function arraySum(arr) {
+      return _.reduce(arr, function(memo, num) {
+        return memo + num;
+      }, 0);
+    }
+
+
     var initializing = true;
     $scope.newPerimeterValue = {};
 
-
-    function average(arr) {
-      return _.reduce(arr, function(memo, num) {
-        return memo + num;
-      }, 0) / arr.length;
-    }
 
     $scope.refreshDashboard = function() {
       $scope.myPromise = $http.get('/api/dashboardCompletes/executeId/' + $stateParams.id).success(function(response) {
@@ -88,76 +96,106 @@ angular.module('boardOsApp')
         $scope.dataCostSub = [];
         $scope.dataQualitySub = [];
         $scope.dataTimeSub = [];
-        $scope.tasksNbSub = [];
-        $scope.metricsNbSub = [];
+
+        $scope.dataTasksSubNb = [];
+        $scope.dataMetricsSubNb = [];
+        $scope.dataQualitySubNb = [];
+        $scope.dataCostSubNb = [];
+        $scope.dataTimeSubNb = [];
+
+        $scope.dataSubKPIs = [];
+
         $scope.subTasks = [];
         $scope.blnShowTasks = [];
         $scope.blnShowKpis = [];
         $scope.dataKpis = [];
+        $scope.blnShowAllTasks = false;
+        $scope.showEmptyRow = false;
+        $scope.dataQualitySubKPIs = [];
+
         _.each($scope.subActivities, function(subActivity) {
 
-          var subActivityFilter = (subActivity.name === '.') ? subActivity.root.replace('$.', '$') : subActivity.root + subActivity.name;
-          $http.get('/api/taskFulls/countByMonth', {
-            params: {
-              filterPerimeter: {
-                activity: {
-                  '$regex': subActivityFilter,
-                  $options: '-i'
+          $scope.dataTasksSub[subActivity.root + subActivity.name] = [{
+            values: []
+          }];
+
+          $scope.dataMetricsSub[subActivity.root + subActivity.name] = [{
+            values: []
+          }];
+
+          $scope.dataCostSub[subActivity.root + subActivity.name] = [{
+            values: []
+          }];
+
+          $scope.dataQualitySub[subActivity.root + subActivity.name] = [{
+            values: []
+          }];
+
+          $scope.dataTimeSub[subActivity.root + subActivity.name] = [{
+            values: []
+          }];
+
+          $scope.dataTimeSub[subActivity.root + subActivity.name] = [{
+            values: []
+          }];
+
+          $scope.dataKpis[subActivity.root + subActivity.name] = [{
+            values: []
+          }];
+
+          $scope.dataSubKPIs[subActivity.root + subActivity.name] = {
+            'Cost': [],
+            'Quality': [],
+            'Time': []
+          };
+
+          $scope.subTasks[subActivity.root + subActivity.name] = _.sortBy(_.filter($scope.dashboard.tasks, function(task) {
+            var blnReturn = false;
+
+            _.each($scope.dashboard.perimeter, function(perimeter) {
+              var subActivityFilter = perimeter.activity || '';
+              var subContextFilter = perimeter.context || '';
+
+              subActivityFilter = subActivityFilter.replace('^', '');
+              subContextFilter = subContextFilter.replace('^', '');
+
+              if ((subActivity.root + subActivity.name).indexOf(subActivityFilter) > -1) {
+                if (!blnReturn) {
+                  blnReturn = ((subActivity.root + subActivity.name) !== subActivityFilter && (task.activity.indexOf(subActivityFilter) > -1 && task.activity.indexOf(subActivity.root + subActivity.name) > -1 || task.activity + '$' === subActivity.root + subActivity.name) && task.context.indexOf(subContextFilter) > -1 && task.metrics[task.metrics.length - 1].status === 'Finished');
                 }
               }
-            }
-          }).success(function(tasks) {
-            $scope.dataTasksSub[subActivity.root + subActivity.name] = [{
-              values: []
-            }];
-
-            $scope.dataMetricsSub[subActivity.root + subActivity.name] = [{
-              values: []
-            }];
-
-            $scope.dataCostSub[subActivity.root + subActivity.name] = [{
-              values: []
-            }];
-
-            $scope.dataQualitySub[subActivity.root + subActivity.name] = [{
-              values: []
-            }];
-
-            $scope.dataTimeSub[subActivity.root + subActivity.name] = [{
-              values: []
-            }];
-
-            $scope.dataKpis[subActivity.root + subActivity.name] = [{
-              values: []
-            }];
-
-            $scope.tasksNbSub[subActivity.root + subActivity.name] = parseInt(tasks.reduce(function(pv, cv) {
-              return pv + cv.value.count;
-            }, 0));
-
-            $scope.metricsNbSub[subActivity.root + subActivity.name] = parseInt(tasks.reduce(function(pv, cv) {
-              return pv + cv.value.qty;
-            }, 0));
-
-            $scope.dataTasksSub[subActivity.root + subActivity.name][0].values = myLibrary.displayLastYear(tasks, '_id', 'count', true);
-            $scope.dataMetricsSub[subActivity.root + subActivity.name][0].values = myLibrary.displayLastYear(tasks, '_id', 'qty', true);
-
-            $scope.subTasks[subActivity.root + subActivity.name] = _.filter($scope.dashboard.tasks, function(task) {
-              return ((task.activity.indexOf(subActivityFilter) > -1 || task.activity + '$' === subActivityFilter) && task.metrics[task.metrics.length - 1].status === 'Finished');
             });
 
-            $scope.dataKpis[subActivity.root + subActivity.name] = _.filter($scope.dashboard.tasks, function(task) {
-              return ((task.activity.indexOf(subActivityFilter) > -1 || task.activity + '$' === subActivityFilter) && task.metrics[task.metrics.length - 1].status === 'Finished');
-            });
+            return blnReturn;
+          }), function(task) {
+            return task.metrics[0].targetEndDate;
+          }).reverse();
 
-            $scope.blnShowTasks[subActivity.root + subActivity.name] = false;
-            $scope.blnShowKpis[subActivity.root + subActivity.name] = false;
+          $scope.blnShowTasks[subActivity.root + subActivity.name] = false;
+          $scope.blnShowKpis[subActivity.root + subActivity.name] = false;
 
-            $scope.dataCostSub[subActivity.root + subActivity.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subActivity.root + subActivity.name], '_id', 'kpis', 'Cost');
-            $scope.dataQualitySub[subActivity.root + subActivity.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subActivity.root + subActivity.name], '_id', 'kpis', 'Quality');
-            $scope.dataTimeSub[subActivity.root + subActivity.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subActivity.root + subActivity.name], '_id', 'kpis', 'Time');
+          $scope.dataTasksSub[subActivity.root + subActivity.name][0].values = myLibrary.displayLastYearTask($scope.subTasks[subActivity.root + subActivity.name], 'targetEndDate', 'count');
+          $scope.dataMetricsSub[subActivity.root + subActivity.name][0].values = myLibrary.displayLastYearTask($scope.subTasks[subActivity.root + subActivity.name], 'targetEndDate', 'qty');
 
+          $scope.dataCostSub[subActivity.root + subActivity.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subActivity.root + subActivity.name], 'targetEndDate', 'kpis', 'Cost');
+          $scope.dataQualitySub[subActivity.root + subActivity.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subActivity.root + subActivity.name], 'targetEndDate', 'kpis', 'Quality');
+          $scope.dataTimeSub[subActivity.root + subActivity.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subActivity.root + subActivity.name], 'targetEndDate', 'kpis', 'Time');
+
+          $scope.dataQualitySubKPIs[subActivity.root + subActivity.name] = [];
+          _.each($scope.dashboard.kpis, function(kpi) {
+            $scope.dataSubKPIs[subActivity.root + subActivity.name][kpi.constraint][kpi.name] = [{
+              values: []
+            }];
+            $scope.dataSubKPIs[subActivity.root + subActivity.name][kpi.constraint][kpi.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subActivity.root + subActivity.name], 'targetEndDate', 'kpis', kpi.constraint, kpi.name);
           });
+          
+
+          $scope.dataTasksSubNb[subActivity.root + subActivity.name] = arraySum(_.compact(_.map($scope.dataTasksSub[subActivity.root + subActivity.name][0].values, 'value')));
+          $scope.dataMetricsSubNb[subActivity.root + subActivity.name] = arraySum(_.compact(_.map($scope.dataMetricsSub[subActivity.root + subActivity.name][0].values, 'value')));
+          $scope.dataCostSubNb[subActivity.root + subActivity.name] = arrayAverage(_.compact(_.map($scope.dataCostSub[subActivity.root + subActivity.name][0].values, 'value')));
+          $scope.dataQualitySubNb[subActivity.root + subActivity.name] = arrayAverage(_.compact(_.map($scope.dataQualitySub[subActivity.root + subActivity.name][0].values, 'value')));
+          $scope.dataTimeSubNb[subActivity.root + subActivity.name] = arrayAverage(_.compact(_.map($scope.dataTimeSub[subActivity.root + subActivity.name][0].values, 'value')));
+
         });
 
       });
@@ -224,7 +262,12 @@ angular.module('boardOsApp')
 
     $scope.loadTasks = function() {
       var filterPerimeter = {
-        $or: []
+        $or: [],
+        metrics: {
+          $elemMatch: {
+            status: 'Finished'
+          }
+        }
       };
       _.each($scope.dashboard.perimeter, function(perimeter) {
         if (perimeter.activity && perimeter.context) {
@@ -439,7 +482,7 @@ angular.module('boardOsApp')
           })[0] || {
             value: 0
           };
-          $scope.goalsNb = parseInt(average(_.compact(dataAllGoals)));
+          $scope.goalsNb = parseInt(arrayAverage(_.compact(dataAllGoals)));
           // $scope.lastgoalsNb = _.last($scope.dataGoals[0].values).mean;
           // $scope.lastalertsNb = _.last($scope.dataAlerts[0].values).sum;
 
