@@ -7,7 +7,6 @@ angular.module('boardOsApp', [
     'ui.router',
     'ui.bootstrap',
     'btford.socket-io',
-    'ngJsTree',
     'ngDialog',
     'nvd3',
     'ng.confirmField',
