@@ -20,10 +20,8 @@ angular.module('boardOsApp', [
     'angular.filter',
     'mdPickers',
     'ng-mfb',
-    'DlhSoft.Kanban.Angular.Components',
     'infinite-scroll',
     'ngTagsInput',
-    'angular-advanced-searchbox',
     'mwl.calendar',
     'checklist-model',
     'pageslide-directive'
