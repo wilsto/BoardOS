@@ -49,10 +49,14 @@ angular.module('boardOsApp')
       $scope.checked = !$scope.checked;
     };
 
-    $scope.showHistory = function() {
+    $scope.showHistory = function(subs) {
+      $scope.subHierarchies = [];
+      if (!subs) {
+        subs = 'Activity';
+      }
+      $scope.subs = subs;
       $scope.dashboardSlide = 'History';
-      $scope.checked = !$scope.checked;
-
+      $scope.checked = false;
 
       $http.get('/api/taskFulls/countByMonth', {
         params: {
@@ -75,7 +79,7 @@ angular.module('boardOsApp')
         $scope.dataTime = [{
           values: []
         }];
-        $scope.metricsNb = parseInt(tasks.reduce(function(pv, cv) {
+        $scope.allmetricsNb = parseInt(tasks.reduce(function(pv, cv) {
           return pv + cv.value.qty;
         }, 0));
 
@@ -85,11 +89,17 @@ angular.module('boardOsApp')
         $scope.dataQuality[0].values = myLibrary.displayLastYearKPI($scope.dashboard.tasks, '_id', 'kpis', 'Quality');
         $scope.dataTime[0].values = myLibrary.displayLastYearKPI($scope.dashboard.tasks, '_id', 'kpis', 'Time');
 
+
+        $scope.tasksNb = arraySum(_.compact(_.map($scope.dataTasks[0].values, 'value')));
+        $scope.metricsNb = arraySum(_.compact(_.map($scope.dataMetrics[0].values, 'value')));
+        $scope.costNb = arrayAverage(_.compact(_.map($scope.dataCost[0].values, 'value')));
+        $scope.qualityNb = arrayAverage(_.compact(_.map($scope.dataQuality[0].values, 'value')));
+        $scope.timeNb = arrayAverage(_.compact(_.map($scope.dataTime[0].values, 'value')));
       });
 
-      $http.get('/api/hierarchies/sublist/Activity/dashboard/' + $scope.dashboard._id).success(function(activities) {
+      $http.get('/api/hierarchies/sublist/' + $scope.subs + '/dashboard/' + $scope.dashboard._id).success(function(hierarchies) {
 
-        $scope.subActivities = _.sortBy(activities, ['root', 'name']);
+        $scope.subHierarchies = _.sortBy(hierarchies, ['root', 'name']);
 
         $scope.dataTasksSub = [];
         $scope.dataMetricsSub = [];
@@ -113,55 +123,62 @@ angular.module('boardOsApp')
         $scope.showEmptyRow = false;
         $scope.dataQualitySubKPIs = [];
 
-        _.each($scope.subActivities, function(subActivity) {
+        _.each($scope.subHierarchies, function(subHierarchy) {
 
-          $scope.dataTasksSub[subActivity.root + subActivity.name] = [{
+          $scope.dataTasksSub[subHierarchy.root + subHierarchy.name] = [{
             values: []
           }];
 
-          $scope.dataMetricsSub[subActivity.root + subActivity.name] = [{
+          $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name] = [{
             values: []
           }];
 
-          $scope.dataCostSub[subActivity.root + subActivity.name] = [{
+          $scope.dataCostSub[subHierarchy.root + subHierarchy.name] = [{
             values: []
           }];
 
-          $scope.dataQualitySub[subActivity.root + subActivity.name] = [{
+          $scope.dataQualitySub[subHierarchy.root + subHierarchy.name] = [{
             values: []
           }];
 
-          $scope.dataTimeSub[subActivity.root + subActivity.name] = [{
+          $scope.dataTimeSub[subHierarchy.root + subHierarchy.name] = [{
             values: []
           }];
 
-          $scope.dataTimeSub[subActivity.root + subActivity.name] = [{
+          $scope.dataTimeSub[subHierarchy.root + subHierarchy.name] = [{
             values: []
           }];
 
-          $scope.dataKpis[subActivity.root + subActivity.name] = [{
+          $scope.dataKpis[subHierarchy.root + subHierarchy.name] = [{
             values: []
           }];
 
-          $scope.dataSubKPIs[subActivity.root + subActivity.name] = {
+          $scope.dataSubKPIs[subHierarchy.root + subHierarchy.name] = {
             'Cost': [],
             'Quality': [],
             'Time': []
           };
 
-          $scope.subTasks[subActivity.root + subActivity.name] = _.sortBy(_.filter($scope.dashboard.tasks, function(task) {
+          $scope.subTasks[subHierarchy.root + subHierarchy.name] = _.sortBy(_.filter($scope.dashboard.tasks, function(task) {
             var blnReturn = false;
 
             _.each($scope.dashboard.perimeter, function(perimeter) {
+
               var subActivityFilter = perimeter.activity || '';
               var subContextFilter = perimeter.context || '';
 
               subActivityFilter = subActivityFilter.replace('^', '');
               subContextFilter = subContextFilter.replace('^', '');
 
-              if ((subActivity.root + subActivity.name).indexOf(subActivityFilter) > -1) {
+              if ($scope.subs === 'Activity' && (subHierarchy.root + subHierarchy.name).indexOf(subActivityFilter) > -1) {
                 if (!blnReturn) {
-                  blnReturn = ((subActivity.root + subActivity.name) !== subActivityFilter && (task.activity.indexOf(subActivityFilter) > -1 && task.activity.indexOf(subActivity.root + subActivity.name) > -1 || task.activity + '$' === subActivity.root + subActivity.name) && task.context.indexOf(subContextFilter) > -1 && task.metrics[task.metrics.length - 1].status === 'Finished');
+                  blnReturn = ((subHierarchy.root + subHierarchy.name) !== subActivityFilter && (task.activity.indexOf(subActivityFilter) === 0 && task.activity.indexOf(subHierarchy.root + subHierarchy.name) === 0 || task.activity + '$' === subHierarchy.root + subHierarchy.name) && task.context.indexOf(subContextFilter) === 0 && task.metrics[task.metrics.length - 1].status === 'Finished');
+                }
+              }
+
+              if ($scope.subs === 'Context' && (subHierarchy.root + subHierarchy.name).indexOf(subContextFilter) === 0) {
+                if (!blnReturn) {
+                  blnReturn = ((subHierarchy.root + subHierarchy.name) !== subContextFilter && (task.context.indexOf(subContextFilter) === 0 && task.context.indexOf(subHierarchy.root + subHierarchy.name) === 0 || task.context + '$' === subHierarchy.root + subHierarchy.name) && task.activity.indexOf(subActivityFilter) > -1 && task.metrics[task.metrics.length - 1].status === 'Finished');
                 }
               }
             });
@@ -171,30 +188,30 @@ angular.module('boardOsApp')
             return task.metrics[0].targetEndDate;
           }).reverse();
 
-          $scope.blnShowTasks[subActivity.root + subActivity.name] = false;
-          $scope.blnShowKpis[subActivity.root + subActivity.name] = false;
+          $scope.blnShowTasks[subHierarchy.root + subHierarchy.name] = false;
+          $scope.blnShowKpis[subHierarchy.root + subHierarchy.name] = false;
 
-          $scope.dataTasksSub[subActivity.root + subActivity.name][0].values = myLibrary.displayLastYearTask($scope.subTasks[subActivity.root + subActivity.name], 'targetEndDate', 'count');
-          $scope.dataMetricsSub[subActivity.root + subActivity.name][0].values = myLibrary.displayLastYearTask($scope.subTasks[subActivity.root + subActivity.name], 'targetEndDate', 'qty');
+          $scope.dataTasksSub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearTask($scope.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'count');
+          $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearTask($scope.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'qty');
 
-          $scope.dataCostSub[subActivity.root + subActivity.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subActivity.root + subActivity.name], 'targetEndDate', 'kpis', 'Cost');
-          $scope.dataQualitySub[subActivity.root + subActivity.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subActivity.root + subActivity.name], 'targetEndDate', 'kpis', 'Quality');
-          $scope.dataTimeSub[subActivity.root + subActivity.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subActivity.root + subActivity.name], 'targetEndDate', 'kpis', 'Time');
+          $scope.dataCostSub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'kpis', 'Cost');
+          $scope.dataQualitySub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'kpis', 'Quality');
+          $scope.dataTimeSub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'kpis', 'Time');
 
-          $scope.dataQualitySubKPIs[subActivity.root + subActivity.name] = [];
+          $scope.dataQualitySubKPIs[subHierarchy.root + subHierarchy.name] = [];
           _.each($scope.dashboard.kpis, function(kpi) {
-            $scope.dataSubKPIs[subActivity.root + subActivity.name][kpi.constraint][kpi.name] = [{
+            $scope.dataSubKPIs[subHierarchy.root + subHierarchy.name][kpi.constraint][kpi.name] = [{
               values: []
             }];
-            $scope.dataSubKPIs[subActivity.root + subActivity.name][kpi.constraint][kpi.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subActivity.root + subActivity.name], 'targetEndDate', 'kpis', kpi.constraint, kpi.name);
+            $scope.dataSubKPIs[subHierarchy.root + subHierarchy.name][kpi.constraint][kpi.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'kpis', kpi.constraint, kpi.name);
           });
-          
 
-          $scope.dataTasksSubNb[subActivity.root + subActivity.name] = arraySum(_.compact(_.map($scope.dataTasksSub[subActivity.root + subActivity.name][0].values, 'value')));
-          $scope.dataMetricsSubNb[subActivity.root + subActivity.name] = arraySum(_.compact(_.map($scope.dataMetricsSub[subActivity.root + subActivity.name][0].values, 'value')));
-          $scope.dataCostSubNb[subActivity.root + subActivity.name] = arrayAverage(_.compact(_.map($scope.dataCostSub[subActivity.root + subActivity.name][0].values, 'value')));
-          $scope.dataQualitySubNb[subActivity.root + subActivity.name] = arrayAverage(_.compact(_.map($scope.dataQualitySub[subActivity.root + subActivity.name][0].values, 'value')));
-          $scope.dataTimeSubNb[subActivity.root + subActivity.name] = arrayAverage(_.compact(_.map($scope.dataTimeSub[subActivity.root + subActivity.name][0].values, 'value')));
+
+          $scope.dataTasksSubNb[subHierarchy.root + subHierarchy.name] = arraySum(_.compact(_.map($scope.dataTasksSub[subHierarchy.root + subHierarchy.name][0].values, 'value')));
+          $scope.dataMetricsSubNb[subHierarchy.root + subHierarchy.name] = arraySum(_.compact(_.map($scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values, 'value')));
+          $scope.dataCostSubNb[subHierarchy.root + subHierarchy.name] = arrayAverage(_.compact(_.map($scope.dataCostSub[subHierarchy.root + subHierarchy.name][0].values, 'value')));
+          $scope.dataQualitySubNb[subHierarchy.root + subHierarchy.name] = arrayAverage(_.compact(_.map($scope.dataQualitySub[subHierarchy.root + subHierarchy.name][0].values, 'value')));
+          $scope.dataTimeSubNb[subHierarchy.root + subHierarchy.name] = arrayAverage(_.compact(_.map($scope.dataTimeSub[subHierarchy.root + subHierarchy.name][0].values, 'value')));
 
         });
 
@@ -225,7 +242,17 @@ angular.module('boardOsApp')
           valueFormat: function(d) {
             return d3.format('.0f')(d);
           },
-          transitionDuration: 500
+          transitionDuration: 500,
+          discretebar: {
+            dispatch: {
+              chartClick: function(e) {
+                
+              },
+              elementClick: function(e) {
+                
+              }
+            }
+          }
         }
       };
 
@@ -425,7 +452,7 @@ angular.module('boardOsApp')
           $cookieStore.put('perimeter', $rootScope.perimeter);
 
           if (dashboard.tasks) {
-            $scope.tasksNb = dashboard.tasks.length;
+            $scope.alltasksNb = dashboard.tasks.length;
           }
 
           $rootScope.$broadcast('dateRangeService:updated', dateRangeService.rangeDateTxt);

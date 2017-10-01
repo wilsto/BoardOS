@@ -608,7 +608,12 @@
         <div class="stats-overview stat-block">
           <div class="details">
             <div class="title" style="height:61px">
-                  {{dashboard.name}}
+                  <b> {{dashboard.name}}</b>
+                  <br>
+                  All Tasks Nb : <span style="color:#9467bd">{{alltasksNb}}</span>
+                  <br>
+                  All Workload : <span style="color:#9467bd">{{allmetricsNb}}</span>
+
             </div>
           </div>
         </div>
@@ -618,7 +623,7 @@
           <div class="details">
             <div class="title">
               <a href="#" ng-click="blnShowAllTasks=!blnShowAllTasks">
-                <span style="font-weight:bold;color:#9467bd">{{tasksNb}}</span>
+                <span style="font-weight:bold;color:#9467bd">{{tasksNb | number:0}}</span>
                 Tasks</a>
             </div>
             <nvd3 options="optionsTasks" data="dataTasks" ng-if="dashboardSlide==='History'"></nvd3>
@@ -630,7 +635,7 @@
           <div class="details">
             <div class="title">
               <a href="#" ng-click="blnShowAllTasks=!blnShowAllTasks">
-                <span style="font-weight:bold;color:#87CEEB">{{metricsNb}}</span>
+                <span style="font-weight:bold;color:#87CEEB">{{metricsNb | number:0}}</span>
                 Men Days</a>
             </div>
             <nvd3 options="optionsLoad" data="dataMetrics" ng-if="dashboardSlide==='History'"></nvd3>
@@ -642,7 +647,7 @@
         <div class="details">
           <div class="title">
             <a href="#">
-              <span style="font-weight:bold;color:#87CEEB">{{metricsNb}}</span>
+              <span style="font-weight:bold;color:#87CEEB">{{qualityNb | number:0}}%</span>
               Delivery</a>
           </div>
           <nvd3 options="optionsCosts" data="dataQuality" ng-if="dashboardSlide==='History'"></nvd3>
@@ -654,7 +659,7 @@
       <div class="details">
         <div class="title">
           <a href="#">
-            <span style="font-weight:bold;color:#87CEEB">{{costNb}}</span>
+            <span style="font-weight:bold;color:#87CEEB">{{costNb | number:0}}%</span>
             Costs</a>
         </div>
         <nvd3 options="optionsCosts" data="dataCost" ng-if="dashboardSlide==='History'"></nvd3>
@@ -666,7 +671,7 @@
     <div class="details">
       <div class="title">
         <a href="#">
-          <span style="font-weight:bold;color:#87CEEB">{{metricsNb}}</span>
+          <span style="font-weight:bold;color:#87CEEB">{{timeNb | number:0}}%</span>
           Time</a>
       </div>
       <nvd3 options="optionsCosts" data="dataTime" ng-if="dashboardSlide==='History'"></nvd3>
@@ -679,7 +684,7 @@
 
     <!--  DEBUT LISTE TACHES
     ******************************-->
-    <div class="row" style="border:1px grey dashed;padding:5px" ng-if="blnShowAllTasks===true">
+    <div class="row" ng-if="blnShowAllTasks===true">
     <div class="col-md-11 portlet-body" style="margin-left:35px;margin-top:15px">
           <table class="table table-striped table-bordered table-hover" id="sample_4">
             <thead>
@@ -784,22 +789,23 @@
 
   </div>
   <div class="col-md-12 col-sm-12 ">
-    <b>Sub Activities</b> <small class="label label-default" style ="font-size:10px" ng-click="showEmptyRow=!showEmptyRow">Show all</small>
+    <div class="label" ng-class="subs ==='Activity' ? 'label-primary':'label-default'" ng-click="showHistory('Activity')" ><span ng-if="subs ==='Activity'">{{subHierarchies.length}}</span> Sub Activities</div>
+    <div class="label" ng-class="subs ==='Context' ? 'label-primary':'label-default'" ng-click="showHistory('Context')"><span ng-if="subs ==='Context'">{{subHierarchies.length}}</span> Sub Context</div>
+    <small class="label label-default pull-right" style ="font-size:10px" ng-click="showEmptyRow=!showEmptyRow">Show all</small>
     <hr style="margin-top:5px">
     <!-- BEGIN OVERVIEW STATISTIC BARS-->
     <!-- BEGIN OVERVIEW STATISTIC BARS-->
-    <div class="row stats-overview-cont" ng-repeat="subActivity in subActivities"  ng-if="dataTasksSubNb[subActivity.root + subActivity.name]>0 || showEmptyRow">
+    <div class="row stats-overview-cont" ng-repeat="subHierarchy in subHierarchies"  ng-if="dataTasksSubNb[subHierarchy.root + subHierarchy.name]>0 || showEmptyRow">
       <!-- -->
       <div class="col-md-2 col-sm-12">
         <div class="stats-overview stat-block">
           <div class="details">
             <div class="title" style="height:61px">
-              <small class="text-muted" style="font-size:10px">{{subActivity.root}}</small><b ng-class="{'text-danger':!subActivity.abs,'text-success':subActivity.abs}">
-              {{subActivity.name}}
+              <small class="text-muted" style="font-size:10px">{{subHierarchy.root}}</small><b ng-class="{'text-danger':!subHierarchy.abs,'text-success':subHierarchy.abs}">
+              {{subHierarchy.name}}
               </b>
               <br>
-            <small class="label label-primary"> {{(dataMetricsSubNb[subActivity.root + subActivity.name]/metricsNb *100)| number:0}}%</small>
-            <small class="label label-default"> Contexts</small>
+            <small class="label label-primary"> {{(dataMetricsSubNb[subHierarchy.root + subHierarchy.name]/metricsNb *100)| number:0}}%</small>
             </div>
           </div>
         </div>
@@ -808,11 +814,11 @@
         <div class="stats-overview stat-block">
           <div class="details">
             <div class="title">
-              <a href="#" ng-click="blnShowTasks[subActivity.root + subActivity.name]=!blnShowTasks[subActivity.root + subActivity.name]">
-                <span style="font-weight:bold;color:#9467bd">{{dataTasksSubNb[subActivity.root + subActivity.name]| number:0}}</span>
+              <a href="#" ng-click="blnShowTasks[subHierarchy.root + subHierarchy.name]=!blnShowTasks[subHierarchy.root + subHierarchy.name]">
+                <span style="font-weight:bold;color:#9467bd">{{dataTasksSubNb[subHierarchy.root + subHierarchy.name]| number:0}}</span>
                 Tasks</a>
             </div>
-            <nvd3 options="optionsTasks" data="dataTasksSub[subActivity.root + subActivity.name]" ng-if="dashboardSlide==='History'"></nvd3>
+            <nvd3 options="optionsTasks" data="dataTasksSub[subHierarchy.root + subHierarchy.name]" ng-if="dashboardSlide==='History'"></nvd3>
           </div>
         </div>
       </div>
@@ -820,11 +826,11 @@
         <div class="stats-overview stat-block">
           <div class="details">
             <div class="title">
-              <a href="#" ng-click="blnShowTasks[subActivity.root + subActivity.name]=!blnShowTasks[subActivity.root + subActivity.name]">
-                <span style="font-weight:bold;color:#87CEEB">{{dataMetricsSubNb[subActivity.root + subActivity.name]| number:0}}</span>
+              <a href="#" ng-click="blnShowTasks[subHierarchy.root + subHierarchy.name]=!blnShowTasks[subHierarchy.root + subHierarchy.name]">
+                <span style="font-weight:bold;color:#87CEEB">{{dataMetricsSubNb[subHierarchy.root + subHierarchy.name]| number:0}}</span>
                 Men Days</a>
             </div>
-            <nvd3 options="optionsLoad" data="dataMetricsSub[subActivity.root + subActivity.name]" ng-if="dashboardSlide==='History'"></nvd3>
+            <nvd3 options="optionsLoad" data="dataMetricsSub[subHierarchy.root + subHierarchy.name]" ng-if="dashboardSlide==='History'"></nvd3>
           </div>
         </div>
       </div>
@@ -832,11 +838,11 @@
       <div class="stats-overview stat-block">
         <div class="details">
           <div class="title">
-            <a href="#" ng-click="blnShowKpis[subActivity.root + subActivity.name]=!blnShowKpis[subActivity.root + subActivity.name]">
-              <span style="font-weight:bold;color:#87CEEB">{{dataQualitySubNb[subActivity.root + subActivity.name] | number:0}}% </span>
+            <a href="#" ng-click="blnShowKpis[subHierarchy.root + subHierarchy.name]=!blnShowKpis[subHierarchy.root + subHierarchy.name]">
+              <span style="font-weight:bold;color:#87CEEB">{{dataQualitySubNb[subHierarchy.root + subHierarchy.name] | number:0}}% </span>
               Delivery</a>
           </div>
-          <nvd3 options="optionsCosts" data="dataQualitySub[subActivity.root + subActivity.name]" ng-if="dashboardSlide==='History'"></nvd3>
+          <nvd3 options="optionsCosts" data="dataQualitySub[subHierarchy.root + subHierarchy.name]" ng-if="dashboardSlide==='History'"></nvd3>
         </div>
       </div>
     </div>
@@ -844,11 +850,11 @@
     <div class="stats-overview stat-block">
       <div class="details">
         <div class="title">
-          <a href="#" ng-click="blnShowKpis[subActivity.root + subActivity.name]=!blnShowKpis[subActivity.root + subActivity.name]">
-            <span style="font-weight:bold;color:#87CEEB">{{dataCostSubNb[subActivity.root + subActivity.name] | number:0}}% </span>
+          <a href="#" ng-click="blnShowKpis[subHierarchy.root + subHierarchy.name]=!blnShowKpis[subHierarchy.root + subHierarchy.name]">
+            <span style="font-weight:bold;color:#87CEEB">{{dataCostSubNb[subHierarchy.root + subHierarchy.name] | number:0}}% </span>
             Costs</a>
         </div>
-        <nvd3 options="optionsCosts" data="dataCostSub[subActivity.root + subActivity.name]" ng-if="dashboardSlide==='History'"></nvd3>
+        <nvd3 options="optionsCosts" data="dataCostSub[subHierarchy.root + subHierarchy.name]" ng-if="dashboardSlide==='History'"></nvd3>
       </div>
     </div>
   </div>
@@ -856,20 +862,20 @@
   <div class="stats-overview stat-block">
     <div class="details">
       <div class="title">
-        <a href="#" ng-click="blnShowKpis[subActivity.root + subActivity.name]=!blnShowKpis[subActivity.root + subActivity.name]">
-          <span style="font-weight:bold;color:#87CEEB">{{dataTimeSubNb[subActivity.root + subActivity.name] | number:0}}% </span>
+        <a href="#" ng-click="blnShowKpis[subHierarchy.root + subHierarchy.name]=!blnShowKpis[subHierarchy.root + subHierarchy.name]">
+          <span style="font-weight:bold;color:#87CEEB">{{dataTimeSubNb[subHierarchy.root + subHierarchy.name] | number:0}}% </span>
           Time</a>
       </div>
-      <nvd3 options="optionsCosts" data="dataTimeSub[subActivity.root + subActivity.name]" ng-if="dashboardSlide==='History'"></nvd3>
+      <nvd3 options="optionsCosts" data="dataTimeSub[subHierarchy.root + subHierarchy.name]" ng-if="dashboardSlide==='History'"></nvd3>
     </div>
   </div>
 </div>
 
 <!--  DEBUT LISTE TACHES
 ******************************-->
-<div class="row" style="border:1px grey dashed;padding:5px" ng-if="blnShowTasks[subActivity.root + subActivity.name]===true">
+<div class="row" ng-if="blnShowTasks[subHierarchy.root + subHierarchy.name]===true">
 <div class="col-md-11 portlet-body" style="margin-left:35px;margin-top:15px">
-      <table class="table table-striped table-bordered table-hover" id="sample_4">
+      <table class="table table-striped table-bordered table-hover">
         <thead>
           <tr>
             <th class="hidden-xs">
@@ -910,7 +916,7 @@
           </tr>
         </thead>
         <tbody infinite-scroll="getMoreData()" infinite-scroll-distance="3">
-          <tr ng-repeat="task in subTasks[subActivity.root + subActivity.name] | orderBy:orderByField:reverseSort">
+          <tr ng-repeat="task in subTasks[subHierarchy.root + subHierarchy.name] | orderBy:orderByField:reverseSort">
             <td style="text-align: left">
               <div >
               <!-- <div uib-tooltip-html="'Name : <b>{{task.actors[0].name}}</b>'" tooltip-placement="top"> -->
@@ -918,7 +924,7 @@
               </div>
             </td>
             <td >
-              <a href="/task/{{task._id}}">
+              <a href="/task/{{task._id}}" target="_blank">
                 <div class="desc">{{task.name}}
                 </div>
               </a>
@@ -973,7 +979,7 @@
 <!--  DEBUT LISTE KPIS
 ******************************-->
 
-<div class="row" ng-if="blnShowKpis[subActivity.root + subActivity.name]===true">
+<div class="row" ng-if="blnShowKpis[subHierarchy.root + subHierarchy.name]===true">
 <div class="col-md-12">
   <hr>
   <div class="row" >
@@ -992,7 +998,7 @@
         {{kpi.name}}</a>
 
     </div>
-    <nvd3 options="optionsCosts" data="dataSubKPIs[subActivity.root + subActivity.name]['Quality'][kpi.name]" ng-if="dashboardSlide==='History'"></nvd3>
+    <nvd3 options="optionsCosts" data="dataSubKPIs[subHierarchy.root + subHierarchy.name]['Quality'][kpi.name]" ng-if="dashboardSlide==='History'"></nvd3>
   </div>
 </div>
 </div>
@@ -1005,7 +1011,7 @@
         <span style="font-weight:bold;color:#87CEEB"></span>
         {{kpi.name}}</a>
     </div>
-    <nvd3 options="optionsCosts" data="dataSubKPIs[subActivity.root + subActivity.name]['Cost'][kpi.name]" ng-if="dashboardSlide==='History'"></nvd3>
+    <nvd3 options="optionsCosts" data="dataSubKPIs[subHierarchy.root + subHierarchy.name]['Cost'][kpi.name]" ng-if="dashboardSlide==='History'"></nvd3>
   </div>
 </div>
 </div>
@@ -1017,7 +1023,7 @@
         <span style="font-weight:bold;color:#87CEEB"></span>
         {{kpi.name}}</a>
     </div>
-    <nvd3 options="optionsCosts" data="dataSubKPIs[subActivity.root + subActivity.name]['Time'][kpi.name]" ng-if="dashboardSlide==='History'"></nvd3>
+    <nvd3 options="optionsCosts" data="dataSubKPIs[subHierarchy.root + subHierarchy.name]['Time'][kpi.name]" ng-if="dashboardSlide==='History'"></nvd3>
   </div>
 </div>
 </div>
