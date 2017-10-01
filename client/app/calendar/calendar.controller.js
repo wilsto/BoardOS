@@ -5,20 +5,6 @@ angular.module('boardOsApp')
     $scope.eventSources = [];
     $scope.filterNotification = 'Only For Me';
 
-    $scope.uiConfig = {
-      calendar: {
-        height: 450,
-        editable: false,
-        header: {
-          left: 'month basicWeek basicDay',
-          center: 'title',
-          right: 'today prev,next'
-        },
-        eventLimit: true,
-        firstDay: 1
-      }
-    };
-
     $scope.loadTaskToNotify = function() {
       if (typeof $scope.allTasks !== 'undefined') {
         $scope.alltasksToNotify = $scope.allTasks.length;
@@ -125,9 +111,15 @@ angular.module('boardOsApp')
     // **********
     //
     $scope.viewDate = new Date();
-    $scope.calendarView = 'week';
+    $scope.calendarView = 'month';
     $scope.eventClicked = function(calendarEvent) {
       $location.path('/' + calendarEvent.eventType + '/' + calendarEvent.eventId);
+    };
+
+    $scope.eventTimesChanged = function(calendarEvent, calendarNewEventStart, calendarNewEventEnd) {
+      
+      
+      
     };
 
   });

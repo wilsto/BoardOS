@@ -1,11 +1,7 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
-<nav mfb-menu position="br" effect="slidein" label="Duplicate task with same"
-     active-icon="ion-edit" resting-icon="ion-plus-round"
-     toggling-method="click">
-     <a mfb-button label="context" icon="ion-android-pin" ng-click="createNewTask('context')"></a>
-     <a mfb-button label="activity" icon="ion-ios-gear" ng-click="createNewTask('activity')"></a>
-     <a mfb-button label="both" icon="ion-fork-repo" ng-click="createNewTask('both')"></a>
-  </nav>
+<div ng-click="toggle()" style="z-index:999;position:absolute;right:-35px;top:35% ;background-color:#222222;width:70px;height:70px;  border-radius: 35px;    -webkit-transform:rotate(-90deg);   -ms-transform:rotate(-90deg);    -moz-transform:rotate(-90deg);    -webkit-transform:rotate(-90deg);    -o-transform:rotate(-90deg);">
+<div style="font-size:14px;color:#FFF;width:70px;height:70px;text-align:center;padding-top:10px; ">Menu</div>
+</div>
 <!-- BEGIN PAGE CONTENT-->
 <div class="" cg-busy="myPromise">
   <script type="text/ng-template" id="memberTemplate.html">
@@ -1287,3 +1283,72 @@ Please report with maximum of accucracy your problem to be able to correct it an
 </footer>
 
 <!-- END PAGE CONTENT-->
+
+
+<!-- *************** -->
+<!-- MENU DROIT      -->
+<!-- *************** -->
+<div pageslide ps-open="checked" ps-speed="1" ps-push="true" class="ng-isolate-scope ng-pageslide" style="z-index: 1000; position: fixed; transition-duration: 1s; height: 100%; transition-property: top, bottom, left, right; width: 300px; top: 0px; bottom: 0px; right: -300px;background-color:#eee">
+                        <div style="padding:20px;margin-top:20px;" id="demo-right">
+                            <h3 style="width:100%;text-align:center">Actions on Task</h3>
+                            <a class="btn btn-primary" style="width:100%" ng-click="toggle()">Close</a>
+                            <hr>
+
+
+                            <div style="width:100%;  display: inline-block;"   ng-click="createAnomaly()" ng-class="{'activeActionMenu':dashboardSlide === 'History'}">
+                              <div style="width:29%;height:70px;float:left">
+                                <img src="assets/images/problem.jpg" style="width:60px;" alt="">
+                              </div>
+                              <div style="width:69%;height:70px;table-cell;   vertical-align: middle; float:left;padding-left:5px" >
+                                <p> Report an <u style="font-weight:bold">anomaly</u> that affects your activity </p>
+                              </div>
+                            </div>
+                            <hr>
+
+
+
+                            <div style="width:100%;  display: inline-block;"   ng-click="showReview()" ng-class="{'activeActionMenu':dashboardSlide === 'Review'}">
+                              <div style="width:29%;height:70px;float:left">
+                                <img src="assets/images/coming-soon.png" style="width:70px;z-index:99999" alt="">
+                                <img src="assets/images/futur-icon.png" style="width:60px;z-index:99998;float:left;margin-top:-70px;" alt="">
+                              </div>
+                              <div style="width:69%;height:70px;table-cell;   vertical-align: middle; float:left;padding-left:5px" >
+                                <p> Anticipate <u style="font-weight:bold">future</u> tasks and performance of your perimeter</p>
+                              </div>
+                            </div>
+                            <hr>
+
+                            <br><br>
+                            <div style="width:100%;  display: inline-block;"   ng-click="refreshTask()">
+                              <div style="width:29%;height:70px;float:left">
+                                <img src="assets/images/refresh-icon.png" style="width:60px;" alt="">
+                              </div>
+                              <div style="width:69%;height:70px;table-cell;   vertical-align: middle; float:left;padding-left:5px">
+                                <p>Resfresh will operate again all calculations</p>
+                              </div>
+                            </div>
+                            <hr>
+                            <div style="width:100%;  display: inline-block;"   ng-click="createNewTask('both')" ng-class="{'activeActionMenu':dashboardSlide === 'Home'}">
+                              <div style="width:29%;height:70px;float:left" >
+                                <img src="assets/images/Copy.png" style="width:60px;" alt="">
+                              </div>
+                              <div style="width:69%;height:70px;table-cell;   vertical-align: middle; float:left;padding-left:5px" >
+                                <p><u style="font-weight:bold">Clone</u> this tasks to create a new one with one or more similar properties</p>
+                              </div>
+                            </div>
+                            <hr>
+                            <div style="width:100%;  display: inline-block;"   ng-click="delete()">
+                              <div style="width:29%;height:70px;float:left">
+                                <img src="assets/images/delete.png" style="width:60px;" alt="">
+                              </div>
+                              <div style="width:69%;height:70px; display: table-cell;   vertical-align: middle; float:left;padding-left:5px">
+                                <p>Delete <u style="font-weight:bold">forever</u> this task</p>
+                              </div>
+                            </div>
+                            <hr>
+
+
+
+
+                        </div>
+                    </div>

@@ -5,6 +5,7 @@ angular.module('boardOsApp', [
     'ngResource',
     'ngSanitize',
     'ui.router',
+    'mwl.calendar',
     'ui.bootstrap',
     'btford.socket-io',
     'ngDialog',
@@ -20,9 +21,9 @@ angular.module('boardOsApp', [
     'ng-mfb',
     'infinite-scroll',
     'ngTagsInput',
-    'mwl.calendar',
     'checklist-model',
-    'pageslide-directive'
+    'pageslide-directive',
+    'ngEmbed'
   ])
   .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, NotificationProvider) {
     $urlRouterProvider.otherwise('/');

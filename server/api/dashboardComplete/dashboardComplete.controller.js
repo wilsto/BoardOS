@@ -63,6 +63,7 @@ process.on('taskChanged', function(task) {
           _.each(dashboard.perimeter, function(perimeter) {
             if ((perimeter.context === undefined || task.context.indexOf(perimeter.context) >= 0) && (perimeter.activity === undefined || task.activity.indexOf(perimeter.activity) >= 0)) {
               createCompleteDashboard(dashboard._id, function(data) {});
+              console.log('dashboard._id', dashboard._id + ' - ' + dashboard.name + ' - ' + perimeter.context + ' - ' + perimeter.activity);
             }
           })
           deferred.resolve(dashboard);

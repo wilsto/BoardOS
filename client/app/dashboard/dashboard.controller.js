@@ -246,10 +246,10 @@ angular.module('boardOsApp')
           discretebar: {
             dispatch: {
               chartClick: function(e) {
-                
+
               },
               elementClick: function(e) {
-                
+
               }
             }
           }
@@ -591,12 +591,6 @@ angular.module('boardOsApp')
           };
 
           setTimeout(function() {
-            zingchart.render({
-              id: 'myChartQCT',
-              data: mydata,
-              height: 135,
-              width: '100%'
-            });
             $scope.errors = null;
             $('#context').focusout(function() {
               $scope.contextErrorNotAll = ($scope.dashboard.context.toLowerCase() === 'all');
@@ -608,7 +602,6 @@ angular.module('boardOsApp')
             $scope.loadTasks();
             initializing = false;
             $scope.needToSave = false;
-
           });
         });
       } else {

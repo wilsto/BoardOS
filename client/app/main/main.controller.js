@@ -84,13 +84,26 @@ angular.module('boardOsApp')
           _.each($scope.myTasks, function(task) {
             if (task.metrics[task.metrics.length - 1].status !== 'Finished') {
 
+              
+              
+              
               $scope.events.push({
                 title: '<i class="fa fa-wrench" aria-hidden="true"></i>&nbsp;&nbsp; ' + task.name,
                 eventType: 'task',
                 eventId: task._id,
                 displayEventTimes: false, // Indicates whether need to show time or not.
-                startsAt: moment(task.metrics[task.metrics.length - 1].startDate || task.metrics[task.metrics.length - 1].targetstartDate).toDate(),
-                endsAt: moment(task.metrics[task.metrics.length - 1].endDate || task.metrics[task.metrics.length - 1].targetEndDate).toDate(),
+                startsAt: moment(task.metrics[task.metrics.length - 1].startDate || task.metrics[task.metrics.length - 1].targetstartDate).set({
+                  hour: 0,
+                  minute: 0,
+                  second: 0,
+                  millisecond: 0
+                }).toDate(),
+                endsAt: moment(task.metrics[task.metrics.length - 1].endDate || task.metrics[task.metrics.length - 1].targetEndDate).set({
+                  hour: 2,
+                  minute: 0,
+                  second: 0,
+                  millisecond: 0
+                }).toDate(),
                 draggable: true
               });
             } else {
@@ -100,8 +113,18 @@ angular.module('boardOsApp')
                 eventType: 'task',
                 eventId: task._id,
                 displayEventTimes: false, // Indicates whether need to show time or not.
-                startsAt: moment(task.metrics[task.metrics.length - 1].startDate || task.metrics[task.metrics.length - 1].targetstartDate).toDate(),
-                endsAt: moment(task.metrics[task.metrics.length - 1].endDate || task.metrics[task.metrics.length - 1].targetEndDate).toDate(),
+                startsAt: moment(task.metrics[task.metrics.length - 1].startDate || task.metrics[task.metrics.length - 1].targetstartDate).set({
+                  hour: 0,
+                  minute: 0,
+                  second: 0,
+                  millisecond: 0
+                }).toDate(),
+                endsAt: moment(task.metrics[task.metrics.length - 1].endDate || task.metrics[task.metrics.length - 1].targetEndDate).set({
+                  hour: 2,
+                  minute: 0,
+                  second: 0,
+                  millisecond: 0
+                }).toDate(),
                 color: calendarConfig.colorTypes.success,
                 draggable: true
               });

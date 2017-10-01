@@ -27,6 +27,14 @@ angular.module('boardOsApp')
       }
     };
 
+
+    $scope.checked = false;
+    $scope.size = '100px';
+
+    $scope.toggle = function() {
+      $scope.checked = !$scope.checked;
+    };
+
     $scope.parseFloat = parseFloat;
     $scope.forceExit = false;
 
@@ -209,7 +217,7 @@ angular.module('boardOsApp')
     }, true);
 
     $scope.$watch('task', function(newMap, previousMap) {
-      
+
       $scope.needToSave = !angular.equals($scope.currentTask, $scope.task);
       if (initializing) {
         $timeout(function() {
@@ -668,6 +676,7 @@ angular.module('boardOsApp')
     };
 
     $scope.delete = function() {
+      $scope.checked = false;
       bootbox.confirm('Are you sure to delete this task ? It can NOT be undone.', function(result) {
         if (result) {
           $scope.myPromise = $http.delete('/api/taskFulls/' + $scope.task._id).success(function() {
