@@ -15,7 +15,6 @@ angular.module('boardOsApp', [
     'ui-notification',
     'cgBusy',
     'xeditable',
-    'ngEmbed',
     'ui.sortable',
     'angular.filter',
     'mdPickers',
