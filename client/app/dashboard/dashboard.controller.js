@@ -2,8 +2,23 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('DashboardCtrl', function($scope, $rootScope, $http, $stateParams, myLibrary, $cookieStore, $location, Notification, $timeout, dateRangeService) {
+  .controller('DashboardCtrl', function($scope, $rootScope, $http, $stateParams, myLibrary, $cookieStore, $location, Notification, $timeout, dateRangeService, $window, VisDataSet) {
     $scope.Math = window.Math;
+
+    // create visualization
+    $scope.timelineOptions = {
+      orientation: 'top',
+      autoResize: true,
+      showCurrentTime: true,
+      zoomKey: 'ctrlKey',
+      groupOrder: 'content' // groupOrder can be a property name or a sorting function
+    };
+
+    $scope.timelineLoaded = true;
+
+    $scope.onRangeChanged = function(period) {
+      
+    };
 
     function arrayAverage(arr) {
       return _.reduce(arr, function(memo, num) {
@@ -272,18 +287,30 @@ angular.module('boardOsApp')
       $scope.checked = !$scope.checked;
     };
 
-    $scope.createNewTask = function(data) {
+    $scope.showTimeline = function() {
+      $scope.dashboardSlide = 'Timeline';
+      $scope.checked = !$scope.checked;
+    };
 
+
+    $scope.createNewTask = function(data) {
+      var path;
       switch (data) {
         case 'context':
-          $location.path('/task//' + $scope.dashboard.context);
+          path = '/task//' + $scope.dashboard.context;
           break;
         case 'activity':
-          $location.path('/task///' + $scope.dashboard.activity);
+          path = '/task///' + $scope.dashboard.activity;
           break;
         case 'both':
-          $location.path('/task//' + $scope.dashboard.context + '/' + $scope.dashboard.activity);
+          path = '/task//' + $scope.dashboard.context + '/' + $scope.dashboard.activity;
           break;
+        case 'actionplan':
+          path = $location.protocol() + '://' + location.host + '/task////dashboard/' + $scope.dashboard._id;
+          break;
+      }
+      if (path) {
+        $window.open(path, '_blank');
       }
     };
 
@@ -377,6 +404,11 @@ angular.module('boardOsApp')
       }
       $scope.rangeDate = dateRangeService.rangeDate;
       $timeout(function() {
+        var items = new VisDataSet();
+        var arrGroups = [];
+        var arrSubGroups = [];
+        var groups = new VisDataSet();
+
         $scope.$apply(function() {
           $scope.filteredPlanTasks = _.filter($scope.dashboard.tasks, function(task) {
             return task.metrics[task.metrics.length - 1].status === 'Not Started';
@@ -415,7 +447,146 @@ angular.module('boardOsApp')
             return s + parseFloat(task.metrics[task.metrics.length - 1].projectedWorkload || task.metrics[task.metrics.length - 1].targetLoad);
           }, 0).toFixed(1);
         });
+        _.each($scope.filteredPlanTasks, function(task) {
+          var level0 = task.context.substring(0, task.context.indexOf('.'));
+          var suffixe = task.context.substring(task.context.indexOf('.') + 1);
+          var level1 = suffixe.substring(0, suffixe.indexOf('.'));
+          if (arrGroups.indexOf(level0) === -1) {
+            arrGroups.push(level0);
+            arrSubGroups[level0] = {
+              subgroup: []
+            };
+          }
+          if (arrSubGroups[level0].subgroup.indexOf(level1) === -1) {
+            arrSubGroups[level0].subgroup.push(level0 + '.' + level1);
+          }
+
+
+          items.add({
+            id: task._id,
+            group: level0 + '.' + level1,
+            content: '<a href="/task/' + task._id + '"">' + '<img alt="" src="' + (task.actors[0].avatar || 'assets/images/avatars/avatar.png') + '" class="img-circle" style="width:25px;height:25px;" err-src="assets/images/avatars/avatar.png"/> ' + task.name + '</a>',
+            start: new Date(task.metrics[task.metrics.length - 1].startDate || task.metrics[0].targetstartDate),
+            end: new Date(task.metrics[task.metrics.length - 1].endDate || task.metrics[0].targetEndDate),
+            className: 'label label-default'
+          });
+        });
+
+        _.each($scope.filteredInProgressTasks, function(task) {
+          var level0 = task.context.substring(0, task.context.indexOf('.'));
+          var suffixe = task.context.substring(task.context.indexOf('.') + 1);
+          var level1 = suffixe.substring(0, suffixe.indexOf('.'));
+          if (arrGroups.indexOf(level0) === -1) {
+            arrGroups.push(level0);
+            arrSubGroups[level0] = {
+              subgroup: []
+            };
+          }
+          if (arrSubGroups[level0].subgroup.indexOf(level1) === -1) {
+            arrSubGroups[level0].subgroup.push(level0 + '.' + level1);
+          }
+
+          items.add({
+            id: task._id,
+            group: level0 + '.' + level1,
+            content: '<a href="/task/' + task._id + '"">' + '<img alt="" src="' + (task.actors[0].avatar || 'assets/images/avatars/avatar.png') + '" class="img-circle" style="width:25px;height:25px;" err-src="assets/images/avatars/avatar.png"/> ' + task.name + '</a>',
+            start: new Date(task.metrics[task.metrics.length - 1].startDate || task.metrics[0].targetstartDate),
+            end: new Date(task.metrics[task.metrics.length - 1].endDate || task.metrics[0].targetEndDate),
+            className: 'label label-info '
+          });
+        });
+
+        _.each($scope.filteredFinishedTasks, function(task) {
+          var level0 = task.context.substring(0, task.context.indexOf('.'));
+          var suffixe = task.context.substring(task.context.indexOf('.') + 1);
+          var level1 = suffixe.substring(0, suffixe.indexOf('.'));
+          if (arrGroups.indexOf(level0) === -1) {
+            arrGroups.push(level0);
+            arrSubGroups[level0] = {
+              subgroup: []
+            };
+          }
+          if (arrSubGroups[level0].subgroup.indexOf(level1) === -1) {
+            arrSubGroups[level0].subgroup.push(level0 + '.' + level1);
+          }
+
+          items.add({
+            id: task._id,
+            group: level0 + '.' + level1,
+            content: '<a href="/task/' + task._id + '"">' + '<img alt="" src="' + (task.actors[0].avatar || 'assets/images/avatars/avatar.png') + '" class="img-circle" style="width:25px;height:25px;" err-src="assets/images/avatars/avatar.png"/> ' + task.name + '</a>',
+            start: new Date(task.metrics[task.metrics.length - 1].startDate || task.metrics[0].targetstartDate),
+            end: new Date(task.metrics[task.metrics.length - 1].endDate || task.metrics[0].targetEndDate),
+            className: 'label label-success '
+          });
+        });
+
+        _.each($scope.filteredReviewedTasks, function(task) {
+          var level0 = task.context.substring(0, task.context.indexOf('.'));
+          var suffixe = task.context.substring(task.context.indexOf('.') + 1);
+          var level1 = suffixe.substring(0, suffixe.indexOf('.'));
+          if (arrGroups.indexOf(level0) === -1) {
+            arrGroups.push(level0);
+            arrSubGroups[level0] = {
+              subgroup: []
+            };
+          }
+          if (arrSubGroups[level0].subgroup.indexOf(level1) === -1) {
+            arrSubGroups[level0].subgroup.push(level0 + '.' + level1);
+          }
+
+          items.add({
+            id: task._id,
+            group: level0 + '.' + level1,
+            content: '<a href="/task/' + task._id + '"">' + '<img alt="" src="' + (task.actors[0].avatar || 'assets/images/avatars/avatar.png') + '" class="img-circle" style="width:25px;height:25px;" err-src="assets/images/avatars/avatar.png"/> ' + task.name + '</a>',
+            start: new Date(task.metrics[task.metrics.length - 1].startDate || task.metrics[0].targetstartDate),
+            end: new Date(task.metrics[task.metrics.length - 1].endDate || task.metrics[0].targetEndDate),
+            className: 'label label-success '
+          });
+        });
+
+        // pour chaque groupe de level0
+        _.each(arrGroups, function(group) {
+
+          _.each(arrSubGroups[group], function(subgroups) {
+
+            subgroups = _.compact(_.uniq(subgroups));
+
+            if (subgroups.length === 0) {
+              groups.add({
+                id: group,
+                content: group
+              });
+            } else {
+
+              // on ajoute les subgroups à la liste des groupes
+              _.each(subgroups, function(subgroup) {
+                groups.add({
+                  id: subgroup,
+                  content: subgroup.split('.')[1]
+                });
+              });
+
+              groups.add({
+                id: group,
+                content: group,
+                nestedGroups: subgroups
+              });
+            }
+
+          });
+
+
+        });
+
+        
+        $scope.timelineData = {
+          items: items,
+          groups: groups
+        };
+
       });
+
+
     });
 
     $scope.loadCompleteDashboard = function() {

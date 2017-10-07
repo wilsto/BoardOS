@@ -187,7 +187,6 @@ exports.update = function(req, res) {
   if (blnRCATaskEnd === true && blnRCATaskNotStarted === false && blnRCATaskIP === false) {
     newAno.statusRCA = 'Finished';
   }
-  console.log('newAno.statusRCA', newAno.statusRCA);
 
   var preventiveActions = [];
   var blnPATaskNotStarted = false;
@@ -223,7 +222,9 @@ exports.update = function(req, res) {
     newAno.statusPA = 'Finished';
   }
 
-  newAno.actor = newAno.actor._id;
+  if (newAno.actor) {
+    newAno.actor = newAno.actor._id;
+  }
 
   Anomalie.findById(req.params.id, function(err, anomalie) {
     if (err) {
@@ -233,7 +234,10 @@ exports.update = function(req, res) {
       return res.send(404);
     }
 
+    console.log('anomalie', anomalie);
+    console.log('newAno', newAno);
     var updated = _.merge(anomalie, newAno);
+    console.log('updated', updated);
     updated.markModified('fiveWhy');
     updated.markModified('sourceTasks');
     updated.markModified('correctiveActions');
@@ -242,12 +246,13 @@ exports.update = function(req, res) {
     updated.preventiveActions = newAno.preventiveActions;
     updated.markModified('rootCauseAnalysisTasks');
     updated.rootCauseAnalysisTasks = newAno.rootCauseAnalysisTasks;
-
+    updated.markModified('category');
+    updated.category = newAno.category;
     updated.save(function(err) {
       if (err) {
         return handleError(res, err);
       }
-      return res.json(200, anomalie);
+      return res.json(200, updated);
     });
   });
 };

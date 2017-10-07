@@ -138,10 +138,22 @@ exports.show = function(req, res) {
       if (!taskFulls) {
         return res.status(404).send('Not Found');
       }
-      TaskFull.populate(taskFulls, {
+      TaskFull.populate(taskFulls, [{
           path: 'nextTasks.actors',
           model: 'User'
-        },
+        }, {
+          path: 'anomalies.correctiveActions',
+          model: 'TaskFull',
+          select: '_id name metrics'
+        }, {
+          path: 'anomalies.preventiveActions',
+          model: 'TaskFull',
+          select: '_id name metrics'
+        }, {
+          path: 'anomalies.sourceTasks',
+          model: 'TaskFull',
+          select: '_id name metrics'
+        }],
         function(err, taskFull) {
           if (err) return console.log(err);
           _.each(taskFull.kpis, function(kpi) {
@@ -607,11 +619,14 @@ exports.update = function(req, res) {
       if (err) {
         return handleError(res, err);
       }
-      var anomalies = findAnomalies;
+      var anomalies = _.map(findAnomalies, function(ano) {
+        return ano._id.toString();
+      });
       _.each(task.anomalies, function(anomalie) {
-        anomalies.push(anomalie._id);
+        anomalies.push(anomalie._id.toString());
       });
       task.anomalies = _.compact(_.uniq(anomalies));
+      console.log('anomalies', anomalies);
 
       var updated = _.merge(taskFull, task);
       taskFull.actors = task.actors;

@@ -357,10 +357,12 @@ angular.module('boardOsApp')
       modalInstance.result.then(function(result) {
         var anomalie = {
           name: result.name,
+          category: result.category,
+          categoryDetails: result.categoryDetails,
           impact: result.impact,
           impactWorkload: result.impactWorkload,
-          category: result.category,
-          categoryDetails: result.categoryDetails
+          details: result.details,
+          dueDate: result.dueDate
         };
 
         anomalie.sourceTasks = [];
@@ -553,6 +555,9 @@ angular.module('boardOsApp')
             $scope.task.previousTasks.push($stateParams.previousId);
           }
           if ($stateParams.actionPlan === 'anomaly') {
+            $scope.task.anomalies.push($stateParams.previousId);
+          }
+          if ($stateParams.actionPlan === 'dashboard') {
             $scope.task.anomalies.push($stateParams.previousId);
           }
 
@@ -1022,10 +1027,13 @@ angular.module('boardOsApp')
     ];
 
     $scope.showCategories = function() {
-      var selected = $filter('filter')($scope.categories, {
-        value: $scope.selected.category
+      var checklist = [];
+      _.each($scope.categories, function(s) {
+        if ($scope.selected.category && $scope.selected.category.indexOf(s.value) >= 0) {
+          checklist.push(s.text);
+        }
       });
-      return ($scope.selected.category && selected.length) ? selected[0].text : 'Not set';
+      return checklist.length ? checklist.join(', ') : 'Not set';
     };
 
   });

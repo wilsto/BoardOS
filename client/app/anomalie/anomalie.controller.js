@@ -26,10 +26,24 @@ angular.module('boardOsApp')
       $http.get('/api/anomalies/exportFiveWhyXml/' + $scope.anomalie._id, {
         timeout: 60000
       }).success(function(data) {
-        
+
 
       });
     };
+
+    // *******************
+    // update a task
+    // *******************
+    $scope.updateAnomalie = function() {
+
+      $scope.myPromise = $http.put('/api/anomalies/' + $scope.anomalie._id, $scope.anomalie).success(function(data) {
+        var logInfo = 'Anomaly "' + $scope.anomalie.name + '" was updated';
+        Notification.success(logInfo);
+        $scope.loadAnomalie();
+      });
+
+    };
+
 
     $scope.loadAnomalie = function() {
 
@@ -37,16 +51,16 @@ angular.module('boardOsApp')
         $scope.anomalie = anomalie;
 
         $scope.impacts = [{
-            value: 1,
+            value: 'Blocking',
             text: 'Blocking'
           },
           {
-            value: 2,
+            value: 'Critic',
             text: 'Critic'
           },
           {
-            value: 3,
-            text: 'Irritant'
+            value: 'Irritating',
+            text: 'Irritating'
           }
         ];
 
@@ -58,32 +72,35 @@ angular.module('boardOsApp')
         };
 
         $scope.categories = [{
-            value: 1,
+            value: 'Process',
             text: 'Process'
           },
           {
-            value: 2,
+            value: 'RACI',
             text: 'RACI'
           },
           {
-            value: 3,
+            value: 'Tools',
             text: 'Tools'
           },
           {
-            value: 4,
+            value: 'Competencies',
             text: 'Competencies'
           },
           {
-            value: 5,
+            value: 'Communication',
             text: 'Communication'
           }
         ];
 
         $scope.showCategories = function() {
-          var selected = $filter('filter')($scope.categories, {
-            value: $scope.anomalie.category
+          var checklist = [];
+          _.each($scope.categories, function(s) {
+            if ($scope.anomalie.category && $scope.anomalie.category.indexOf(s.value) >= 0) {
+              checklist.push(s.text);
+            }
           });
-          return ($scope.anomalie.category && selected.length) ? selected[0].text : 'Not set';
+          return checklist.length ? checklist.join(', ') : 'Not set';
         };
 
 
@@ -95,8 +112,8 @@ angular.module('boardOsApp')
               }
               if (typeTask === 'RCA') {
                 $scope.anomalie.rootCauseAnalysisTasks.splice(index, 1);
-                
-                
+
+
               }
               if (typeTask === 'PA') {
                 $scope.anomalie.preventiveActions.splice(index, 1);
@@ -356,7 +373,7 @@ angular.module('boardOsApp')
         keyboard: false
       });
       modalInstance.result.then(function(result) {
-        
+
         var task = {};
         if (result.blnSelect === 'Select') {
           //----------------------
@@ -438,11 +455,11 @@ angular.module('boardOsApp')
 
           task.previousAnomalies = [];
           task.previousAnomalies.push($scope.anomalie._id);
-          
+
 
           //create task
           $scope.myPromise = $http.post('/api/taskFulls', task).success(function(data) {
-            
+
             $timeout(function() {
               var logInfo = $scope.typeTaskText + ' Task "' + task.name + '" was created';
               Notification.success(logInfo);
@@ -473,7 +490,7 @@ angular.module('boardOsApp')
 
         }
 
-        
+
       });
     };
   })

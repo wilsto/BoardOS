@@ -162,8 +162,8 @@
 
 <div class="row anomalie-top">
   <div class="col-md-2" >
-    <img style="height:60px;margin-bottom:3px;" src="assets/images/ProblemLogo.jpg" alt="">
-
+    <img src="assets/images/anomaly.png" style="width:60px;height:60px;" alt="">
+    <span class="text-danger" style="font-weight:bold;font-size:24px;padding-left:8px;">Anomaly</span>
   </div>
   <div class="col-md-5" >
     <ul>
@@ -199,7 +199,7 @@
   </div>
   <div class="col-md-3">
 <div class="bg-danger" style="padding:8px;">
-  <h2 style="margin:0">Problem</h2>
+  <h2 style="margin:0">Describe and correct</h2>
   Capture specifics about the problem as well as the impact to each of the organization's overall Goals.<br>
   <ul>
       <li>Answer each question in the Outline.</li>
@@ -235,10 +235,9 @@
                             </span>
                         </td>
                         <td style="text-align:right">
-                          <a href="#" editable-select="anomalie.category" e-ng-options="c.value as c.text for c in categories" buttons="no" blur="submit">
+                          <a href="#" editable-checklist="anomalie.category" e-ng-options="c.value as c.text for c in categories" buttons="no" blur="submit">
                             {{ showCategories() }}
                           </a>
-                          <a href="#" ng-show="anomalie.category" style="margin-left:10px"   e-style="resize:vertical;" editable-textarea="anomalie.categoryDetails" buttons="right">{{ anomalie.categoryDetails || ' Give Details' }}</a>
                         </td>
                     </tr>
                     <tr>
@@ -299,7 +298,7 @@
                         </td>
                         <td style="text-align:right">
                           <md-button class="md-button-slim" ng-click="showDatePicker(anomalie,'dueDate', $event)" aria-label="none" >
-                              <span style="color:red">{{ (anomalie.dueDate | date:'mediumDate') || 'empty' }}</span>
+                              <span >{{ (anomalie.dueDate | date:'mediumDate') || 'empty' }}</span>
                           </md-button>
                         </td>
                     </tr>
@@ -656,7 +655,7 @@ Select the solutions            </div>
       ng-click="refreshAnomalie()" ng-if="anomalie._id" ng-cloak
       uib-tooltip-html="'Resfresh will operate again all calculations'" tooltip-placement="top" >Refresh </button>
     <button type="button" name="button" style="margin-top:2px;margin-right:10px;width:100px;" class="btn btn-primary pull-right hidden-xs"
-        ng-click="update()"
+        ng-click="updateAnomalie()"
         uib-tooltip-html="'Save will  copy data to a permanent storage'" tooltip-placement="left" >Save </button>
   </div>
 </footer>

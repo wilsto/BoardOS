@@ -146,11 +146,8 @@ Please report with maximum of accucracy your problem to be able to correct it an
                     </span>
                 </td>
                 <td style="text-align:right">
-                  <a href="#" editable-select="selected.category" e-ng-options="c.value as c.text for c in categories" buttons="no" blur="submit">
+                  <a href="#" editable-checklist="selected.category" e-ng-options="c.value as c.text for c in categories" buttons="no" blur="submit">
                     {{ showCategories() }}
-                  </a>
-                  <a ng-show="selected.category"  style="display:inline-block; " href="#" editable-text="task.activity" e-style="width: 500px;display:inline-block;" e-uib-typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:50" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
-                    {{task.activity || 'Give Details' }}
                   </a>
                 </td>
             </tr>
@@ -724,7 +721,7 @@ Please report with maximum of accucracy your problem to be able to correct it an
                             </tr>
                             <tr ng-if="task._id  && !blnRecurrence">
                                 <td style="text-align:left">
-                                    <span class="text-muted"><a href="#" ng-click="markAsDone()">Progress</a>
+                                    <span class="text-muted"><a href="#" ng-click="markAsDone()">Progress <img ng-if="currentMetric.progress === 0" src="assets/images/animated-check.gif" style="width:25px;height:25px;" alt=""></a>
                                   </span>
                                 </td>
                                 <td style="text-align:right;">
@@ -914,13 +911,20 @@ Please report with maximum of accucracy your problem to be able to correct it an
                           <tr ng-repeat="anomalie in task.anomalies | orderBy:'date'">
                               <td >
                                   <a href="/anomalie/{{anomalie._id}}">
-                                    <i class="fa fa-exclamation-circle" style="color:rgb(167, 65, 15)" aria-hidden="true"></i> <small class="dont-break-out"> {{anomalie.name}}</small>
+                                    <img src="assets/images/anomaly.png" style="width:20px;height:20px;" alt="">
+                                    <small class="dont-break-out"> {{anomalie.name}}</small>
                                   </a >
                               </td>
                               <td style="min-width:70px">
                                   <span class="pull-right text-info">
-                                    <span class="btn btn-outline  btn-danger btn-xs" aria-hidden="false">CA</span>
-                                    <span class="btn  btn-outline btn-success btn-xs" aria-hidden="false">PA</span>
+                                    <a href="task/{{anomalie.correctiveActions[0]._id}}" target="_blank">
+                                    <span class="btn btn-outline btn-xs" aria-hidden="false" ng-class="{'btn-info ':anomalie.correctiveActions[0].metrics[0].status === 'In Progress',' btn-default ':anomalie.correctiveActions[0].metrics[0].status === 'Not Started',' btn-danger ':anomalie.correctiveActions.length === 0,' btn-success':anomalie.correctiveActions[0].metrics[0].status === 'Finished'}">CA</span>
+                                  </a>
+                                  <a href="task/{{anomalie.preventiveActions[0]._id}}" target="_blank">
+
+                                    <span class="btn btn-outline btn-xs" aria-hidden="false" ng-class="{'btn-info ':anomalie.preventiveActions[0].metrics[0].status === 'In Progress',' btn-default ':anomalie.preventiveActions[0].metrics[0].status === 'Not Started',' btn-danger ':anomalie.preventiveActions.length === 0,' btn-success':anomalie.preventiveActions[0].metrics[0].status === 'Finished'}">PA</span>
+                                  </a>
+
                                   </span>
                               </td>
                           </tr>
@@ -1245,40 +1249,10 @@ Please report with maximum of accucracy your problem to be able to correct it an
 <footer class="navbar-fixed-bottom footer-task-boss">
   <div class="container">
     <!-- big screen -->
-    <button type="button" name="button" style="margin-top:2px;margin-left:40%;margin-right:10px;width:100px;" class="btn btn-xs btn-outline btn-info hidden-xs"
-      ng-click="refreshTask()" ng-if="task._id" ng-cloak
-      uib-tooltip-html="'Resfresh will operate again all calculations'" tooltip-placement="top" >Refresh </button>
-      <button  type="button" name="button" style="margin-top:2px;margin-right:10px;width:100px;" class="btn btn-xs btn-outline btn-danger hidden-xs "
-      ng-click="withdraw()" ng-if="task._id && (task.metrics[task.metrics.length-1].status ==='In Progress' || task.metrics[task.metrics.length-1].status ==='Not Started' )"
-      uib-tooltip-html="'Withdraw will remove this task and its metrics from dashboards'" tooltip-placement="top" >Withdraw</button>
-      <button type="button" name="button" style="margin-left:5px;width:100px;" class="btn btn-xs btn-outline btn-warning"
-      ng-click="reopen()" ng-if="task.metrics[task.metrics.length-1].status ==='Finished' "
-      uib-tooltip-html="'Reopen will engage new delivery of the same deliverables of this task'" tooltip-placement="top">ReOpen</button>
-      <!-- <button ng-if="task._id" type="button" name="button"  style="margin-top:2px;margin-right:10px;width:100px;" class="btn btn-xs btn-outline btn-danger hidden-xs" ng-click="delete()">Delete</button> -->
-    <button type="button" name="button" style="margin-top:2px;margin-right:10px;width:100px;" class="btn btn-primary pull-right hidden-xs"
+    <button type="button" name="button" style="margin-top:2px;margin-right:10px;width:100px;" class="btn btn-primary pull-right"
         ng-if="needToSave && task._id" ng-cloak ng-click="update()"
         ng-disabled="!(task.name && task.context && task.activity && ((task.metrics[task.metrics.length-1].targetstartDate && task.metrics[task.metrics.length-1].targetEndDate) || task.repeats ) && task.metrics[task.metrics.length-1].targetLoad && task.metrics[task.metrics.length-1].trust)"
         uib-tooltip-html="'Save will  copy data to a permanent storage'" tooltip-placement="top" >Save Task</button>
-    <button type="button" name="button" style="margin-top:2px;margin-left:10px;width:140px;" class="btn btn-xs btn-outline btn-danger hidden-xs"
-      ng-click="createAnomaly()" ng-if="task._id" ng-cloak
-      uib-tooltip-html="'Click here to declare any anomaly (difference between the current situation and ideal situation) about this task'" tooltip-placement="top" >
-       Declare an anomaly </button>
-
-    <!-- small screen -->
-    <button type="button" name="button" style="margin-top:5px;margin-right:5px;float:left" class="btn btn-xs btn-outline btn-info visible-xs"
-      ng-click="refreshTask()" ng-if="task._id" ng-cloak
-      uib-tooltip-html="'Resfresh will operate again all calculations'" tooltip-placement="top" >Refresh</button>
-      <button type="button" name="button" style="margin-top:5px;margin-right:5px;float:left" class="btn btn-xs btn-outline btn-danger visible-xs "
-      ng-click="withdraw()" ng-if="task._id && (task.metrics[task.metrics.length-1].status ==='In Progress' || task.metrics[task.metrics.length-1].status ==='Not Started' )"
-      uib-tooltip-html="'Withdraw will remove this task and its metrics from dashboards'" tooltip-placement="top" >Withdraw</button>
-      <button type="button" name="button" style="margin-top:5px;margin-right:5px;float:left" class="btn btn-xs btn-outline btn-warning visible-xs "
-      ng-click="reopen()" ng-if="task.metrics[task.metrics.length-1].status ==='Finished' "
-      uib-tooltip-html="'Reopen will engage new delivery of the same deliverables of this task'" tooltip-placement="top">ReOpen</button>
-      <!-- <button ng-if="task._id" type="button" name="button"  style="margin-top:5px;margin-right:5px;float:left" class="btn btn-xs btn-outline btn-danger visible-xs" ng-click="delete()">Delete</button> -->
-    <button type="button" name="button" style="margin-top:2px;margin-right:40px;width:100px;float:left" class="btn btn-primary pull-right visible-xs"
-      ng-if="needToSave && task._id" ng-cloak ng-click="update()"
-      ng-disabled="!(task.name && task.context && task.activity && task.metrics[task.metrics.length-1].targetstartDate && task.metrics[task.metrics.length-1].targetEndDate && task.metrics[task.metrics.length-1].targetLoad && task.metrics[task.metrics.length-1].trust)"
-      uib-tooltip-html="'Save will  copy data to a  permanent storage'" tooltip-placement="top" >Save Task</button>
   </div>
 </footer>
 
@@ -1295,7 +1269,7 @@ Please report with maximum of accucracy your problem to be able to correct it an
                             <hr>
 
 
-                            <div style="width:100%;  display: inline-block;"   ng-click="createAnomaly()" ng-class="{'activeActionMenu':dashboardSlide === 'History'}">
+                            <div style="width:100%;  display: inline-block;" ng-click="createAnomaly()">
                               <div style="width:29%;height:70px;float:left">
                                 <img src="assets/images/problem.jpg" style="width:60px;" alt="">
                               </div>
@@ -1307,16 +1281,15 @@ Please report with maximum of accucracy your problem to be able to correct it an
 
 
 
-                            <div style="width:100%;  display: inline-block;"   ng-click="showReview()" ng-class="{'activeActionMenu':dashboardSlide === 'Review'}">
+                            <div style="width:100%;  display: inline-block;"   ng-click="reopen()" ng-if="task.metrics[task.metrics.length-1].status === 'Finished'">
                               <div style="width:29%;height:70px;float:left">
-                                <img src="assets/images/coming-soon.png" style="width:70px;z-index:99999" alt="">
-                                <img src="assets/images/futur-icon.png" style="width:60px;z-index:99998;float:left;margin-top:-70px;" alt="">
+                                <img src="assets/images/rework.png" style="width:60px;z-index:99999" alt="">
                               </div>
                               <div style="width:69%;height:70px;table-cell;   vertical-align: middle; float:left;padding-left:5px" >
-                                <p> Anticipate <u style="font-weight:bold">future</u> tasks and performance of your perimeter</p>
+                                <p><u style="font-weight:bold">ReOpen</u> a finished tasks to redo something</p>
                               </div>
                             </div>
-                            <hr>
+                            <hr ng-if="task.metrics[task.metrics.length-1].status === 'Finished'">
 
                             <br><br>
                             <div style="width:100%;  display: inline-block;"   ng-click="refreshTask()">

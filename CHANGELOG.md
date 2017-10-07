@@ -1,5 +1,26 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.127...HEAD)
+
+**Implemented enhancements:**
+
+- split KPI by Axe [\#5](https://github.com/wilsto/BoardOS/issues/5)
+
+**Closed issues:**
+
+- Save ne fonctionne pas correctement  pour les anomalies [\#313](https://github.com/wilsto/BoardOS/issues/313)
+- Ajouter un icone pour marquer la tache comme done rapidement [\#312](https://github.com/wilsto/BoardOS/issues/312)
+- \[BOSS REC\] - Action plan [\#311](https://github.com/wilsto/BoardOS/issues/311)
+- Rework [\#309](https://github.com/wilsto/BoardOS/issues/309)
+- My Personnal dashboards ne marche pas dans mon porfil [\#304](https://github.com/wilsto/BoardOS/issues/304)
+- Cliquer sur une KPI pour voir la liste des taches concernées sur la meme période [\#299](https://github.com/wilsto/BoardOS/issues/299)
+- Détails des KPIs ramène tous les KPIs [\#290](https://github.com/wilsto/BoardOS/issues/290)
+
+## [v1.6.127](https://github.com/wilsto/boardos/tree/v1.6.127) (2017-10-01)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.126...v1.6.127)
+
 ## [v1.6.126](https://github.com/wilsto/boardos/tree/v1.6.126) (2017-10-01)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.125...v1.6.126)
 

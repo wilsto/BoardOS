@@ -39,10 +39,9 @@ var AnomalieSchema = new Schema({
   /** Problem **/
   name: String,
   details: String,
+  category: Schema.Types.Mixed,
   impact: String,
   impactWorkload: Number,
-  category: String,
-  categoryDetails: String,
   facts: String,
   targets: [String],
 

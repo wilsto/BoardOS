@@ -49,7 +49,8 @@
     "interactjs": "^1.2.9",
     "angular-pageslide-directive": "^2.1.4",
     "ngEmbed": "ng-embed#^2.1.1",
-    "angular-bootstrap-calendar": "^0.30.0"
+    "angular-bootstrap-calendar": "^0.30.0",
+    "vis": "^4.20.1"
   },
   "devDependencies": {
     "angular-mocks": "~1.4.x",
