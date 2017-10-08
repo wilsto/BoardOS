@@ -431,6 +431,7 @@ exports.create = function(req, res) {
 };
 
 process.on('PrevTaskToUpdate', function(links) {
+  console.log('links', links);
   TaskFull.update({
       _id: links.current
     }, {
@@ -545,11 +546,16 @@ exports.update = function(req, res) {
 
       metric.targetstartDate = moment(metric.targetstartDate).hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
       metric.targetEndDate = moment(metric.targetEndDate).hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
-      metric.startDate = moment(metric.startDate).hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
-      metric.endDate = moment(metric.endDate).hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
+
+      if (metric.startDate) {
+        metric.startDate = moment(metric.startDate).hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
+      }
+      if (metric.endDate) {
+        metric.endDate = moment(metric.endDate).hours(0).minutes(0).seconds(0).milliseconds(0).toISOString();
+      }
 
       if (index === 0) {
-        mainstart = metric.startDate;
+        mainstart = startDate;
         targetEndDate = metric.targetEndDate;
       }
 
@@ -674,9 +680,19 @@ exports.update = function(req, res) {
               current: req.params.id,
               next: taskWithPrevious._id
             });
+            if (updated.nextTasks.indexOf(taskWithPrevious._id.toString()) === -1) {
+              updated.nextTasks.push(taskWithPrevious._id.toString());
+            }
+          });
+          updated.nextTasks = _.compact(_.uniq(updated.nextTasks));
+          updated.markModified('nextTasks');
+          updated.save(function(err) {
+            if (err) {
+              return handleError(res, err);
+            }
+            return res.status(200).json(updated);
           });
         });
-        return res.status(200).json(taskFull);
       });
     });
 

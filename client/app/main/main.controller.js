@@ -47,6 +47,59 @@ angular.module('boardOsApp')
       $scope.rangeDate = dateRangeService.rangeDate;
       $timeout(function() {
         $scope.$apply(function() {
+
+
+
+          $scope.events = [];
+
+          _.each($scope.myTasks, function(task) {
+            task.taskSuffIcon = '';
+            switch (task.metrics[task.metrics.length - 1].status) {
+              case 'In Progress':
+                task.taskIcon = '<i class="fa fa-spinner" aria-hidden="true"></i>&nbsp;&nbsp; ';
+                task.taskColor = calendarConfig.colorTypes.info;
+                break;
+              case 'Finished':
+                if (task.reviewTask === true) {
+                  task.taskIcon = '<i class="fa fa-bookmark-o text-success" aria-hidden="true"></i>&nbsp;&nbsp; ';
+                  task.taskColor = calendarConfig.colorTypes.success;
+
+                } else {
+                  task.taskIcon = '<i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;&nbsp; ';
+                  task.taskColor = calendarConfig.colorTypes.success;
+                }
+                if (task.metrics[task.metrics.length - 1].userSatisfaction === undefined || task.metrics[task.metrics.length - 1].deliverableStatus === undefined || task.metrics[task.metrics.length - 1].actorSatisfaction === undefined) {
+                  task.taskSuffIcon = ' <i class="fa fa-question-circle-o text-danger" aria-hidden="true"></i>&nbsp;&nbsp;';
+                }
+                break;
+              default:
+                task.taskIcon = '<i class="fa fa-square-o " aria-hidden="true"></i>&nbsp;&nbsp; ';
+                task.taskColor = '';
+            }
+
+            $scope.events.push({
+              title: task.taskIcon + task.taskSuffIcon + task.name,
+              eventType: 'task',
+              eventId: task._id,
+              displayEventTimes: false, // Indicates whether need to show time or not.
+              startsAt: moment(task.metrics[task.metrics.length - 1].startDate || task.metrics[task.metrics.length - 1].targetstartDate).set({
+                hour: 0,
+                minute: 0,
+                second: 0,
+                millisecond: 0
+              }).toDate(),
+              endsAt: moment(task.metrics[task.metrics.length - 1].endDate || task.metrics[task.metrics.length - 1].targetEndDate).set({
+                hour: 2,
+                minute: 0,
+                second: 0,
+                millisecond: 0
+              }).toDate(),
+              color: task.taskColor,
+              draggable: true
+            });
+          });
+
+
           $scope.filteredPlanTasks = _.filter($scope.myTasks, function(task) {
             var a = moment(new Date()).add($scope.datediff, 'days');
             var b = moment(new Date(task.metrics[task.metrics.length - 1].targetstartDate));
@@ -80,56 +133,6 @@ angular.module('boardOsApp')
             return s + parseFloat(task.metrics[task.metrics.length - 1].projectedWorkload || task.metrics[task.metrics.length - 1].targetLoad);
           }, 0).toFixed(1);
 
-          $scope.events = [];
-          _.each($scope.myTasks, function(task) {
-            if (task.metrics[task.metrics.length - 1].status !== 'Finished') {
-
-              
-              
-              
-              $scope.events.push({
-                title: '<i class="fa fa-wrench" aria-hidden="true"></i>&nbsp;&nbsp; ' + task.name,
-                eventType: 'task',
-                eventId: task._id,
-                displayEventTimes: false, // Indicates whether need to show time or not.
-                startsAt: moment(task.metrics[task.metrics.length - 1].startDate || task.metrics[task.metrics.length - 1].targetstartDate).set({
-                  hour: 0,
-                  minute: 0,
-                  second: 0,
-                  millisecond: 0
-                }).toDate(),
-                endsAt: moment(task.metrics[task.metrics.length - 1].endDate || task.metrics[task.metrics.length - 1].targetEndDate).set({
-                  hour: 2,
-                  minute: 0,
-                  second: 0,
-                  millisecond: 0
-                }).toDate(),
-                draggable: true
-              });
-            } else {
-
-              $scope.events.push({
-                title: '<i class="fa fa-wrench" aria-hidden="true"></i>&nbsp;&nbsp; ' + task.name,
-                eventType: 'task',
-                eventId: task._id,
-                displayEventTimes: false, // Indicates whether need to show time or not.
-                startsAt: moment(task.metrics[task.metrics.length - 1].startDate || task.metrics[task.metrics.length - 1].targetstartDate).set({
-                  hour: 0,
-                  minute: 0,
-                  second: 0,
-                  millisecond: 0
-                }).toDate(),
-                endsAt: moment(task.metrics[task.metrics.length - 1].endDate || task.metrics[task.metrics.length - 1].targetEndDate).set({
-                  hour: 2,
-                  minute: 0,
-                  second: 0,
-                  millisecond: 0
-                }).toDate(),
-                color: calendarConfig.colorTypes.success,
-                draggable: true
-              });
-            }
-          });
 
           _.each($scope.myAnomalies, function(anomalie) {
             $scope.events.push({

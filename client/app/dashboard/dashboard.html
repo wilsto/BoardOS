@@ -369,7 +369,7 @@
                           </td>
                             <td>
                               <a href="/task/{{task._id}}">
-                                <small class="dont-break-out"> {{task.name}}</small>
+                                <small class="dont-break-out"><span  ng-bind-html="task.taskSuffIcon"></span> {{task.name}}</small>
 
                               </a >
                             </td>
@@ -453,7 +453,7 @@
                           </td>
                             <td>
                               <a href="/task/{{task._id}}">
-                                <small class="dont-break-out"> {{task.name}}</small>
+                                <small class="dont-break-out"><span  ng-bind-html="task.taskSuffIcon"></span> {{task.name}}</small>
 
                               </a >
                             </td>

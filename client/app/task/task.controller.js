@@ -477,6 +477,7 @@ angular.module('boardOsApp')
       $scope.blnAssignSubtaskActor = false;
       $scope.OptionIsExpanded = (taskId === undefined);
       $scope.CommentIsExpanded = (taskId !== undefined);
+      $scope.ActionPlanIsExpanded = (taskId !== undefined);
       $scope.blnRecurrence = $location.path().indexOf('/recurrentTask/') >= 0;
 
       if (taskId) {
@@ -520,7 +521,6 @@ angular.module('boardOsApp')
 
             $scope.KPIIsExpanded = (task.metrics[0].status === 'Finished' || task.metrics[0].status === 'Withdrawn');
             $scope.ReviewIsExpanded = (task.metrics[0].status === 'Finished' || task.metrics[0].status === 'Withdrawn');
-            $scope.ActionPlanIsExpanded = (task.metrics[0].status === 'Finished' || task.metrics[0].status === 'Withdrawn');
 
             $scope.manualComments = _.filter($scope.task.comments, function(comment) {
               return ($scope.filterCommentType.manual === true && comment.auto === false);

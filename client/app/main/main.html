@@ -229,8 +229,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-12" ng-class="{'label-success':task.metrics[0].status ==='Finished','label-lightgrey':task.metrics[0].status =='Withdrawn'}" style="padding-bottom:20px;">
-            <div class="pdcaCol" ng-class="{'label-success':task.metrics[0].status ==='Finished','label-lightgrey':task.metrics[0].status =='Withdrawn'}">
+        <div class="col-lg-3 col-md-6 col-sm-12" ng-class="{'label-success':task.metrics[0].status ==='Finished','label-lightgrey':task.metrics[0].status ==='Withdrawn'}" style="padding-bottom:20px;">
+            <div class="pdcaCol" ng-class="{'label-success':task.metrics[0].status ==='Finished','label-lightgrey':task.metrics[0].status ==='Withdrawn'}">
                 CHECK
             </div>
             <!-- KPIs -->
@@ -289,7 +289,7 @@
                               </td>
                                 <td style="min-width:60%">
                                   <a href="/task/{{task._id}}">
-                                    <small class="dont-break-out"> {{task.name}}</small>
+                                    <small class="dont-break-out"><span  ng-bind-html="task.taskSuffIcon"></span>{{task.name}}</small>
 
                                   </a >
                                 </td>
@@ -331,7 +331,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-12" ng-class="{'label-success':task.metrics[0].status ==='Finished','label-lightgrey':task.metrics[0].status =='Withdrawn'}" style="padding-bottom:20px;">
+        <div class="col-lg-3 col-md-6 col-sm-12" ng-class="{'label-success':task.metrics[0].status ==='Finished','label-lightgrey':task.metrics[0].status ==='Withdrawn'}" style="padding-bottom:20px;">
             <div class="pdcaCol">
                 ACT
             </div>
@@ -359,7 +359,7 @@
                               </td>
                                 <td style="min-width:60%">
                                   <a href="/task/{{task._id}}">
-                                    <small class="dont-break-out"> {{task.name}}</small>
+                                    <small class="dont-break-out"><span  ng-bind-html="task.taskSuffIcon"></span> {{task.name}}</small>
 
                                   </a >
                                 </td>

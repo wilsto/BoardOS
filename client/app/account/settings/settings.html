@@ -85,6 +85,9 @@
                                     <th class="hidden-xs" >
                                         <i class="fa fa-question-sign"></i> Workload
                                     </th>
+                                    <th class="hidden-xs" >
+                                        <i class="fa fa-question-sign"></i> Confidence
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -103,6 +106,9 @@
                                     </td>
                                     <td class="hidden-xs">
                                       <small class="text-muted">   {{recurrentTask.metrics[0].targetLoad || 'empty' }}</small>
+                                    </td>
+                                    <td class="hidden-xs">
+                                      <small class="text-muted">   {{recurrentTask.metrics[0].trust || 'empty' }}</small>
                                     </td>
                                 </tr>
                             </tbody>

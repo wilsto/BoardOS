@@ -2,7 +2,16 @@
 
 ## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
 
-[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.129...HEAD)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.130...HEAD)
+
+**Closed issues:**
+
+- Bug d'ajout d'une date de début réelle lors de la modification d'une tache non commencée [\#320](https://github.com/wilsto/BoardOS/issues/320)
+- Afficher l'actionplan sur une tache [\#316](https://github.com/wilsto/BoardOS/issues/316)
+- Enregistrement date de fin d'une tâche [\#305](https://github.com/wilsto/BoardOS/issues/305)
+
+## [v1.6.130](https://github.com/wilsto/boardos/tree/v1.6.130) (2017-10-08)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.129...v1.6.130)
 
 **Closed issues:**
 

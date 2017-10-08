@@ -17,7 +17,7 @@ angular.module('boardOsApp')
     $scope.timelineLoaded = true;
 
     $scope.onRangeChanged = function(period) {
-      
+
     };
 
     function arrayAverage(arr) {
@@ -410,6 +410,13 @@ angular.module('boardOsApp')
         var groups = new VisDataSet();
 
         $scope.$apply(function() {
+
+          _.each($scope.dashboard.tasks, function(task) {
+            task.taskSuffIcon = '';
+            if (task.metrics[task.metrics.length - 1].userSatisfaction === undefined || task.metrics[task.metrics.length - 1].deliverableStatus === undefined || task.metrics[task.metrics.length - 1].actorSatisfaction === undefined) {
+              task.taskSuffIcon = ' <i class="fa fa-question-circle-o text-danger" aria-hidden="true"></i>&nbsp;&nbsp;';
+            }
+          });
           $scope.filteredPlanTasks = _.filter($scope.dashboard.tasks, function(task) {
             return task.metrics[task.metrics.length - 1].status === 'Not Started';
           });
@@ -578,7 +585,7 @@ angular.module('boardOsApp')
 
         });
 
-        
+
         $scope.timelineData = {
           items: items,
           groups: groups
