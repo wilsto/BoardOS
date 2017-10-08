@@ -1,5 +1,20 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.129...HEAD)
+
+**Closed issues:**
+
+- Mettre les couleurs du CA PA sur la page des anos [\#319](https://github.com/wilsto/BoardOS/issues/319)
+- Ajout le filtre et le tri par la date dans la page des anos [\#318](https://github.com/wilsto/BoardOS/issues/318)
+- Filtre de la page anomalie ne fonctionne pas [\#317](https://github.com/wilsto/BoardOS/issues/317)
+- Afficher le statut des anomalies sur les dashboards [\#315](https://github.com/wilsto/BoardOS/issues/315)
+- Afficher le statut des anomalies sur les taches [\#314](https://github.com/wilsto/BoardOS/issues/314)
+
+## [v1.6.129](https://github.com/wilsto/boardos/tree/v1.6.129) (2017-10-07)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.128...v1.6.129)
+
 ## [v1.6.128](https://github.com/wilsto/boardos/tree/v1.6.128) (2017-10-07)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.127...v1.6.128)
 
