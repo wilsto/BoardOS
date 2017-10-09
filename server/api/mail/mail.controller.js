@@ -34,7 +34,6 @@ function SendMails(callback) {
           $ne: false
         }
       }, '-salt -hashedPassword', function(err, user) {
-        console.log('user', user);
         usersList = user;
         deferred.resolve(usersList);
       })
@@ -59,7 +58,6 @@ function SendMails(callback) {
       }).sort({
         endDate: 'asc'
       }).lean().exec(function(err, myTasks) {
-        console.log('myTasks', myTasks.length);
         deferred.resolve(myTasks);
       });
       return deferred.promise;
@@ -75,28 +73,23 @@ function SendMails(callback) {
         _.each(myTasks, function(task) {
           _.each(task.actors, function(actor) {
             if (actor.toString() === user._id.toString()) {
-              console.log(task.name);
 
               var filteredPlanTasks = _.filter([task], function(task) {
                 return task.metrics[task.metrics.length - 1].status === 'Not Started';
               });
-              console.log('filteredPlanTasks', filteredPlanTasks);
               var filteredInProgressTasks = _.filter([task], function(task) {
                 return task.metrics[task.metrics.length - 1].status === 'In Progress';
               });
-              console.log('filteredInProgressTasks', filteredInProgressTasks);
               var filteredFinishedTasks = _.filter([task], function(task) {
                 var a = moment(new Date());
                 var b = moment(new Date(task.metrics[task.metrics.length - 1].endDate));
                 return (7 >= a.diff(b, 'days')) && (task.metrics[task.metrics.length - 1].status === 'Finished') && (task.reviewTask === undefined || task.reviewTask === false);
               });
-              console.log('filteredFinishedTasks', filteredFinishedTasks);
               var filteredReviewedTasks = _.filter([task], function(task) {
                 var a = moment(new Date());
                 var b = moment(new Date(task.metrics[task.metrics.length - 1].endDate));
                 return (7 >= a.diff(b, 'days')) && (task.metrics[task.metrics.length - 1].status === 'Finished') && (task.reviewTask === true);
               });
-              console.log('filteredReviewedTasks', filteredReviewedTasks);
             }
           });
         });
@@ -112,7 +105,6 @@ function SendMails(callback) {
           text: 'BOSS Reminder',
           html: textUser,
         });
-        console.log('email', email);
         email.setFilters({
           'templates': {
             'settings': {
@@ -137,9 +129,7 @@ function SendMails(callback) {
 
 // Get list of mails
 exports.index = function(req, res) {
-  console.log('Send Mail Start');
   SendMails(function(json) {
-    console.log('Send Mail End');
     return res.json(json);
   });
 };

@@ -234,10 +234,7 @@ exports.update = function(req, res) {
       return res.send(404);
     }
 
-    console.log('anomalie', anomalie);
-    console.log('newAno', newAno);
     var updated = _.merge(anomalie, newAno);
-    console.log('updated', updated);
     updated.markModified('fiveWhy');
     updated.markModified('sourceTasks');
     updated.markModified('correctiveActions');

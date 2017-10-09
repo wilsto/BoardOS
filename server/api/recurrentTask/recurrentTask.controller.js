@@ -61,14 +61,11 @@ function createTaskFromRecurrent(startSundayDate) {
             newTask = _.clone(recurrentTask);
             delete newTask._id;
             delete newTask._v;
-            console.log('startSundayDate', startSundayDate);
             newTask.metrics[0].targetstartDate = moment(startSundayDate).add(workday, 'days').hours(0).minutes(0).seconds(0);
             newTask.metrics[0].targetEndDate = moment(startSundayDate).add(workday + recurrentTask.repeatEndAfter, 'days').hours(0).minutes(0).seconds(1);
             newTask.name = newTask.name + ' - ' + moment(newTask.metrics[0].targetstartDate).format('YYYY.MM.DD');
             newTask.context = newTask.context + '.' + moment(newTask.metrics[0].targetstartDate).format('YYYY.MM.DD');
             newTask.comments = [];
-            console.log('newTask', newTask.name);
-            console.log('newTask', newTask.metrics[0].targetstartDate);
 
             TaskFull.update({
               activity: newTask.activity,
@@ -99,7 +96,6 @@ function createTaskFromRecurrent(startSundayDate) {
               newTask.name = newTask.name + ' - ' + moment(newTask.metrics[0].targetstartDate).format('YYYY.MM.DD');
               newTask.context = newTask.context + '.' + moment(newTask.metrics[0].targetstartDate).format('YYYY.MM.DD');
               newTask.comments = [];
-              console.log('newTask', newTask);
 
               TaskFull.update({
                 activity: newTask.activity,
@@ -108,7 +104,6 @@ function createTaskFromRecurrent(startSundayDate) {
                 overwrite: true,
                 upsert: true
               }, function(err, tasks) {
-                console.log('tasks', tasks);
                 if (err) {
                   console.log('err', err);
                   return err;
@@ -479,7 +474,6 @@ exports.destroy = function(req, res) {
 
 // Get list of recurring tasks
 exports.search = function(req, res) {
-  console.log('req.query', req.query);
   RecurrentTask.find({
     activity: req.query.activity,
     context: req.query.context

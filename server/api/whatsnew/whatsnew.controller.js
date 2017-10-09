@@ -50,7 +50,6 @@ exports.create = function(req, res) {
 
 // Updates an existing info in the DB.
 exports.updateViewer = function(req, res) {
-  console.log('req.params.id', req.params.id);
   Whatsnew.find({}, function(err, infos) {
     if (err) {
       return handleError(res, err);
@@ -83,7 +82,6 @@ exports.updateViewer = function(req, res) {
 
 // Updates an existing info in the DB.
 exports.update = function(req, res) {
-  console.log('req.body.resume', req.body.resume);
   if (req.body._id) {
     delete req.body._id;
   }

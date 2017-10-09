@@ -98,7 +98,6 @@ exports.sublist = function(req, res) {
         if (dashboard.perimeter.length > 0) {
 
           filterPerimeter = dashboard.perimeter;
-          console.log('filterPerimeter', filterPerimeter);
 
           _.each(filterPerimeter, function(perimeter) {
             if (perimeter.activity === null || perimeter.activity === undefined) {
@@ -210,9 +209,6 @@ exports.sublist = function(req, res) {
       TaskFull.find(filterTaskPerimeter, 'activity context metrics needToFeed kpis alerts').sort({
         date: 'asc'
       }).lean().exec(function(err, findtasks) {
-        console.log('findtasks', findtasks.length);
-        console.log('filterTaskPerimeter', filterTaskPerimeter);
-        console.log('filterPerimeter', filterPerimeter);
 
         _.each(filterPerimeter, function(perimeter, index2) {
 
@@ -280,7 +276,6 @@ exports.sublist = function(req, res) {
             }
 
             if (index === findtasks.length - 1 && index2 === filterPerimeter.length - 1) {
-              console.log('sublist', sublist);
               deferred.resolve(sublist);
               return res.json(sublist);
 

@@ -184,7 +184,6 @@ exports.tasksList = function(req, res) {
       TaskFull.find(filterPerimeter)
         .populate('actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
         .lean().exec(function(err, tasks) {
-          console.log('tasks', tasks.length);
           mTasks = [];
           _.each(tasks, function(rowdata, index) {
 

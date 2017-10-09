@@ -155,7 +155,6 @@ exports.show = function(req, res) {
           select: '_id name metrics'
         }],
         function(err, taskFull) {
-          if (err) return console.log(err);
           _.each(taskFull.kpis, function(kpi) {
             var completekpi = _.filter(kpis, function(thiskpi) {
               return thiskpi._id.toString() === kpi._id.toString();
@@ -359,7 +358,6 @@ exports.exportXLS = function(req, res) {
       json2csv({
         data: taskFulls
       }, function(err, csv) {
-        console.log('csv', csv);
         res.setHeader('Content-disposition', 'attachment; filename=data.csv');
         res.set('Content-Type', 'text/csv');
         return res.status(200).send(csv);
@@ -431,7 +429,6 @@ exports.create = function(req, res) {
 };
 
 process.on('PrevTaskToUpdate', function(links) {
-  console.log('links', links);
   TaskFull.update({
       _id: links.current
     }, {
@@ -469,7 +466,6 @@ exports.update = function(req, res) {
 
     // date de modification
     task.modifdate = Date();
-    console.log('task.modifdate', task.modifdate);
 
     var actors = [];
     _.each(task.actors, function(actor) {
@@ -632,7 +628,6 @@ exports.update = function(req, res) {
         anomalies.push(anomalie._id.toString());
       });
       task.anomalies = _.compact(_.uniq(anomalies));
-      console.log('anomalies', anomalies);
 
       var updated = _.merge(taskFull, task);
       taskFull.actors = task.actors;
