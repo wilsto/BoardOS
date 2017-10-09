@@ -1,0 +1,151 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+
+  <!-- Script pour le template du search -->
+  <script type="text/ng-template" id="myTooltipActorTemplate.html">
+    <a  href="#">
+        <img ng-src="{{anomalie.actor.avatar}}" class="img-circle" err-src="assets/images/avatars/avatar.png" />
+        <br />
+        <b style="color:white">{{anomalie.actor.name}}</b>
+     </a>
+  </script>
+
+<div class="row">
+  <div class="portlet">
+    <div class="portlet-title">
+      <div class="caption">
+        <i class="fa fa-anomalie"></i>Anomalies List
+      </div>
+    </div>
+    <div class="portlet-body">
+
+      <!-- <nit-advanced-searchbox
+      	ng-model="searchParams"
+      	parameters="availableSearchParams"
+      	placeholder="Search...">
+      </nit-advanced-searchbox> -->
+
+      <table class="table table-striped table-bordered table-hover" style="max-width:100%" id="sample_4">
+        <thead>
+          <tr>
+            <th class="hidden-xs" ng-click="orderByField='date'; reverseSort = !reverseSort">
+              <a href="#" ng-click="orderByField='date'; reverseSort = !reverseSort">
+                <i class="fa fa-calendar"></i> Date
+              </a>
+            </th>
+            <th style="max-width:60px;text-align:center" class="hidden-xs" ng-click="orderByField='actor.groups'; reverseSort = !reverseSort">
+
+              <a href="#" ng-click="orderByField='actor.groups'; reverseSort = !reverseSort">
+                <i class="fa fa-users"></i> From
+              </a>
+
+            </th>
+            <th >
+              <a href="#" ng-click="orderByField='name'; reverseSort = !reverseSort">
+                <i class="fa fa-briefcase"></i> Name
+              </a>
+              <small class="pull-right">
+
+              <a href="#" ng-click="orderByField='activity'; reverseSort = !reverseSort">
+                <i class="fa fa-flash"></i>    Activity
+              </a>
+            </small>
+            </th>
+            <th class="hidden-xs" ng-click="orderByField='context'; reverseSort = !reverseSort">
+              <a href="#" ng-click="orderByField='context'; reverseSort = !reverseSort">
+                <i class="fa fa-map-marker"></i> Context
+              </a>
+
+            </th>
+            <th style="max-width:65px;text-align:center" class="hidden-xs" ng-click="orderByField='category'; reverseSort = !reverseSort">
+              <a href="#" ng-click="orderByField='category'; reverseSort = !reverseSort">
+                <small>Category</small>
+              </a>
+            </th>
+            <th style="max-width:65px;text-align:center" class="hidden-xs" ng-click="orderByField='impact'; reverseSort = !reverseSort">
+              <a href="#" ng-click="orderByField='impact'; reverseSort = !reverseSort">
+                <small>Impact</small>
+
+              </a>
+            </th>
+            <th style="width:60px;text-align:center" class="hidden-xs" ng-click="orderByField='correctiveActions[0].metrics[0].status'; reverseSort = !reverseSort">
+              <a href="#">
+                <span uib-tooltip-html="'Corrective Actions'">C.A.</span>
+              </a>
+            </th>
+            <th style="width:60px;text-align:center" class="hidden-xs" ng-click="orderByField='preventiveActions[0].metrics[0].status'; reverseSort = !reverseSort">
+              <a href="#">
+                <span uib-tooltip-html="'Preventive Actions'">P.A.</span>
+              </a>
+            </th>
+          </tr>
+          <tr>
+            <th class="hidden-xs" >
+            </th>
+            <th class="hidden-xs">
+              <input style="width:100%" ng-model="searchActor">
+            </th>
+            <th style="width:30%">
+              <input style="width:100%" ng-model="searchName">
+            </th>
+            <th class="hidden-xs" style="max-width:25%">
+              <input style="width:100%" ng-model="searchContext">
+            </th>
+            <th style="max-width:60px" class="hidden-xs">
+              <input style="width:100%" ng-model="searchCategory">
+
+            </th>
+            <th style="max-width:60px" class="hidden-xs">
+              <input style="width:100%" ng-model="searchImpact">
+
+            </th>
+            <th style="width:60px" class="hidden-xs">
+            </th>
+            <th style="width:60px" class="hidden-xs">
+            </th>
+            <th style="width:60px" class="hidden-xs">
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="anomalie in anomalies|orderBy:orderByField:reverseSort track by $index">
+
+            <td class="dont-break-out hidden-xs">
+              <small class="text-muted">  {{anomalie.date | date:'mediumDate'}}</small>
+            </td>
+            <td class="hidden-xs" style="text-align:center">
+              <div uib-tooltip-template="'myTooltipActorTemplate.html'" tooltip-placement="right">
+                <small class="badge badge-default"> {{anomalie.actor.groups[0]}}</small>
+              </div>
+            </td>
+            <td >
+              <a href="/anomalie/{{anomalie._id}}">{{anomalie.name}}</a><br>
+              <small style="font-size:11px" class="text-muted">  {{anomalie.activity || 'ALL'}} <br /></small>
+            </td>
+            <td class="dont-break-out  hidden-xs">
+            <small style="font-size:11px" class="text-muted">  {{anomalie.context || 'ALL'}} <br /> </small>
+            </td>
+            <td class="hidden-xs">
+              <span  >{{showCategories(anomalie.category)}}</span>
+            </td>
+            <td class="hidden-xs">
+              <span  >{{anomalie.impact}}</span>
+            </td>
+            <td class="hidden-xs" style="text-align:center">
+              <a href="task/{{anomalie.correctiveActions[0]._id}}" target="_blank">
+              <span class="btn btn-outline btn-xs" aria-hidden="false" ng-class="{'btn-info ':anomalie.correctiveActions[0].metrics[0].status === 'In Progress',' btn-default ':anomalie.correctiveActions[0].metrics[0].status === 'Not Started',' btn-danger ':anomalie.correctiveActions.length === 0,' btn-success':anomalie.correctiveActions[0].metrics[0].status === 'Finished'}">CA</span>
+            </a>
+            </td>
+                      <td class="hidden-xs" style="text-align:center">
+            <a href="task/{{anomalie.preventiveActions[0]._id}}" target="_blank">
+
+              <span class="btn btn-outline btn-xs" aria-hidden="false" ng-class="{'btn-info ':anomalie.preventiveActions[0].metrics[0].status === 'In Progress',' btn-default ':anomalie.preventiveActions[0].metrics[0].status === 'Not Started',' btn-danger ':anomalie.preventiveActions.length === 0,' btn-success':anomalie.preventiveActions[0].metrics[0].status === 'Finished'}">PA</span>
+            </a>
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
