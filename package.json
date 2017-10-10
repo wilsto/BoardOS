@@ -1,11 +1,10 @@
 {
   "name": "board-os",
-  "version": "1.6.135",
+  "version": "1.6.136",
   "main": "server/app.js",
   "dependencies": {
     "async": "^2.1.4",
     "body-parser": "^1.14.1",
-    "bson": "^0.5.7",
     "composable-middleware": "^0.3.0",
     "compression": "^1.6.0",
     "connect-mongo": "^0.8.2",
@@ -25,7 +24,7 @@
     "method-override": "~1.0.0",
     "mocha-lcov-reporter": "0.0.1",
     "moment": "^2.8.4",
-    "mongoose": "^3.8.23",
+    "mongoose": "^4.12.1",
     "morgan": "~1.0.0",
     "newrelic": "^1.16.2",
     "node-excel-export": "^1.4.1",
