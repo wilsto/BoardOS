@@ -1,5 +1,17 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.136...HEAD)
+
+**Closed issues:**
+
+- Problème de dimensionnement des champs dans la fenêtre de saisie Anomalie [\#322](https://github.com/wilsto/BoardOS/issues/322)
+- Bug de Mise à jour de la tâche \(ajout de métriques\) [\#321](https://github.com/wilsto/BoardOS/issues/321)
+
+## [v1.6.136](https://github.com/wilsto/boardos/tree/v1.6.136) (2017-10-10)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.135...v1.6.136)
+
 ## [v1.6.135](https://github.com/wilsto/boardos/tree/v1.6.135) (2017-10-09)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.134...v1.6.135)
 

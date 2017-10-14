@@ -102,7 +102,7 @@
                   </span>
                 </td>
                 <td style="text-align:right" >
-                  <a href="#" editable-text="selected.context" e-style="width: 500px" e-uib-typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:50">
+                  <a href="#" editable-text="selected.context" e-style="width: 80%;display:inline-block;" e-uib-typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:50">
                   {{selected.context || 'Please give context' }}
                 </a>
                 </td>
@@ -144,7 +144,7 @@
       <tr uib-tooltip-html="'Give maximum of details to describe the problem with facts : Timeline, KPIs, Process, ... <br /> <br /> You need to be sure that all people who will work on this problem have the same understanding<br /> <br /> Text Area can be enlarge'" tooltip-placement="left">
       <td style="text-align:left">
         <span class="text-muted" >
-          Confidence to succeed<small></small>
+          Confidence <br>to succeed<small></small>
         </span>
       </td>
       <td style="text-align:right">
