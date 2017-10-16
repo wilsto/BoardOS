@@ -65,13 +65,19 @@ var TaskFullSchema = new Schema({
     ref: 'Anomalie'
   }],
   comments: [{
-    text: String,
-    date: Date,
+    text: {
+      type: String
+    },
+    date: {
+      type: Date
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
     },
-    auto: Boolean
+    auto: {
+      type: Boolean
+    }
   }],
   actors: [{
     type: mongoose.Schema.Types.ObjectId,
