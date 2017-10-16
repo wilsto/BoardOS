@@ -45,24 +45,24 @@ function calcBusinessDays(dDate1, dDate2) { // input given as Date objects
   return (iDateDiff + 1); // add 1 because dates are inclusive
 }
 
-//createTaskFromRecurrent('2017-10-08');
+//createTaskFromRecurrent('2017-10-15');
 
 function createTaskFromRecurrent(startSundayDate) {
   var workday;
-  var newTask;
 
   RecurrentTask.find({})
     .lean().exec(function(err, recurrentTasks) {
       _.each(recurrentTasks, function(recurrentTask) {
-
         // daily
         if (recurrentTask.repeats.value === 1) {
           for (workday = 1; workday < 6; workday++) {
-            newTask = _.clone(recurrentTask);
+            var newTask = _.clone(recurrentTask);
             delete newTask._id;
             delete newTask._v;
-            newTask.metrics[0].targetstartDate = moment(startSundayDate).add(workday, 'days').hours(0).minutes(0).seconds(0);
-            newTask.metrics[0].targetEndDate = moment(startSundayDate).add(workday + recurrentTask.repeatEndAfter, 'days').hours(0).minutes(0).seconds(1);
+            newTask.date = new Date();
+            newTask.auto = true;
+            newTask.metrics[0].targetstartDate = moment(startSundayDate).add(workday, 'days').hours(0).minutes(0).seconds(0).toDate();
+            newTask.metrics[0].targetEndDate = moment(startSundayDate).add(workday + recurrentTask.repeatEndAfter, 'days').hours(0).minutes(0).seconds(1).toDate();
             newTask.name = newTask.name + ' - ' + moment(newTask.metrics[0].targetstartDate).format('YYYY.MM.DD');
             newTask.context = newTask.context + '.' + moment(newTask.metrics[0].targetstartDate).format('YYYY.MM.DD');
             newTask.comments = [];
@@ -84,23 +84,23 @@ function createTaskFromRecurrent(startSundayDate) {
 
         // weekly
         if (recurrentTask.repeats.value === 2) {
-          newTask = _.clone(recurrentTask);
           for (workday = 1; workday < 6; workday++) {
-            if (newTask.repeatOn.indexOf(workday) >= 0) {
-
-              newTask = _.clone(recurrentTask);
-              delete newTask._id;
-              delete newTask._v;
-              newTask.metrics[0].targetstartDate = moment(startSundayDate).add(workday, 'days').hours(0).minutes(0).seconds(0);
-              newTask.metrics[0].targetEndDate = moment(startSundayDate).add(workday + recurrentTask.repeatEndAfter, 'days').hours(0).minutes(0).seconds(1);
-              newTask.name = newTask.name + ' - ' + moment(newTask.metrics[0].targetstartDate).format('YYYY.MM.DD');
-              newTask.context = newTask.context + '.' + moment(newTask.metrics[0].targetstartDate).format('YYYY.MM.DD');
-              newTask.comments = [];
+            var newTaskWeek = _.clone(recurrentTask);
+            if (newTaskWeek.repeatOn.indexOf(workday) >= 0) {
+              delete newTaskWeek._id;
+              delete newTaskWeek._v;
+              newTaskWeek.date = new Date();
+              newTaskWeek.auto = true;
+              newTaskWeek.metrics[0].targetstartDate = moment(startSundayDate).add(workday, 'days').hours(0).minutes(0).seconds(0).toDate();
+              newTaskWeek.metrics[0].targetEndDate = moment(startSundayDate).add(workday + recurrentTask.repeatEndAfter, 'days').hours(0).minutes(0).seconds(1).toDate();
+              newTaskWeek.name = newTaskWeek.name + ' - ' + moment(newTaskWeek.metrics[0].targetstartDate).format('YYYY.MM.DD');
+              newTaskWeek.context = newTaskWeek.context + '.' + moment(newTaskWeek.metrics[0].targetstartDate).format('YYYY.MM.DD');
+              newTaskWeek.comments = [];
 
               TaskFull.update({
-                activity: newTask.activity,
-                context: newTask.context
-              }, newTask, {
+                activity: newTaskWeek.activity,
+                context: newTaskWeek.context
+              }, newTaskWeek, {
                 overwrite: true,
                 upsert: true
               }, function(err, tasks) {

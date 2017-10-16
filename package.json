@@ -1,6 +1,6 @@
 {
   "name": "board-os",
-  "version": "1.6.137",
+  "version": "1.6.138",
   "main": "server/app.js",
   "dependencies": {
     "async": "^2.1.4",
@@ -24,7 +24,8 @@
     "method-override": "~1.0.0",
     "mocha-lcov-reporter": "0.0.1",
     "moment": "^2.8.4",
-    "mongoose": "^4.0.3",
+    "mongodb": "^2.2.33",
+    "mongoose": "^4.5.10",
     "morgan": "~1.0.0",
     "newrelic": "^1.16.2",
     "node-excel-export": "^1.4.1",
