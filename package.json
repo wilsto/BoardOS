@@ -1,6 +1,6 @@
 {
   "name": "board-os",
-  "version": "1.6.138",
+  "version": "1.6.139",
   "main": "server/app.js",
   "dependencies": {
     "async": "^2.1.4",
@@ -27,7 +27,6 @@
     "mongodb": "^2.2.33",
     "mongoose": "^4.5.10",
     "morgan": "~1.0.0",
-    "newrelic": "^1.16.2",
     "node-excel-export": "^1.4.1",
     "node-schedule": "^1.2.0",
     "passport": "~0.2.0",
