@@ -413,6 +413,7 @@ exports.create = function(req, res) {
 
   TaskFull.create(task, function(err, taskFull) {
     if (err) {
+      console.log('err', err);
       return handleError(res, err);
     }
     if (task.previousTasks.length > 0) {
@@ -656,6 +657,7 @@ exports.update = function(req, res) {
       updated.markModified('previousAnomalies');
       updated.save(function(err) {
         if (err) {
+          console.log('err', err);
           return handleError(res, err);
         }
         if (blnexecuteDashboard === true) {
