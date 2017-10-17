@@ -2220,7 +2220,7 @@ Dashboard stats
 ***/
 
   .stats-overview-cont {
-    padding-top: 0px;
+    padding-top: 0;
     margin-bottom: 15px;
   }
 
@@ -2452,7 +2452,7 @@ Theme Panel
 
   .theme-panel>.theme-options {
     top: 3px;
-    right: 0px;
+    right: 0;
     display: none;
     position: absolute;
     background-color: #fff;
@@ -4852,7 +4852,7 @@ From Medium Devices Up To Larger Devices
     }
     .page-content {
       margin-left: 215px;
-      margin-top: 0px;
+      margin-top: 0;
       min-height: 760px;
       padding: 25px 20px 20px 20px;
     }
@@ -4919,7 +4919,7 @@ From Medium Devices Up To Larger Devices
     ***/
     .page-content {
       margin-left: 215px;
-      margin-top: 0px;
+      margin-top: 0;
       min-height: 760px;
       padding: 25px 20px 20px 20px;
     }
@@ -5093,11 +5093,11 @@ Up To Medium Devices
       display: inline-block;
       position: relative;
       top: 1px;
-      right: 0px;
+      right: 0;
     }
     .header .navbar-nav {
       display: block;
-      margin-bottom: 0px !important;
+      margin-bottom: 0 !important;
     }
     .header .navbar-nav .open .dropdown-menu {
       position: absolute;
@@ -5111,7 +5111,7 @@ Up To Medium Devices
       float: left;
     }
     .header .page-logo {
-      margin-left: 0px !important;
+      margin-left: 0 !important;
       padding-left: 4px !important;
     }
     /***
@@ -5125,7 +5125,7 @@ Up To Medium Devices
     Page content
     ***/
     .page-content {
-      margin: 0px !important;
+      margin: 0 !important;
       padding: 20px 20px 20px 20px !important;
       min-height: 280px;
       border-radius: 0;
@@ -5153,7 +5153,7 @@ Up To Medium Devices
       display: none;
     }
     .page-sidebar ul {
-      margin-top: 0px;
+      margin-top: 0;
       width: 100%;
     }
     .page-sidebar .selected {
@@ -5187,7 +5187,7 @@ From Small Devices Up To Medium Devices
   Body
   ***/
     body {
-      padding-top: 0px;
+      padding-top: 0;
     }
     /***
   Page sidebar
@@ -5232,7 +5232,7 @@ Extra Small Devices Only
       padding: 0 10px 0 10px;
     }
     .header .top-nav .nav {
-      margin-top: 0px;
+      margin-top: 0;
       margin-right: 5px;
     }
     .header .nav>li>.dropdown-menu.notification:after, .header .nav>li>.dropdown-menu.notification:before {
@@ -5255,7 +5255,7 @@ Extra Small Devices Only
     }
     /* Header logo */
     .header .page-logo {
-      margin-left: 0px !important;
+      margin-left: 0 !important;
       width: 110px;
     }
     .page-sidebar.navbar-collapse, .page-sidebar.navbar-collapse.in {
@@ -5324,7 +5324,7 @@ Extra Small Devices Only
     .footer .go-top {
       float: right;
       display: block;
-      margin-right: 0px;
+      margin-right: 0;
     }
     /***
   Vertical inline menu
@@ -5953,7 +5953,7 @@ Profile Page
     display: inline-block;
     font-weight: 300;
     font-size: 22px;
-    margin-top: 0px;
+    margin-top: 0;
   }
 
   .add-portfolio .btn {
@@ -6015,7 +6015,7 @@ Profile Page
     display: block;
     font-size: 28px;
     line-height: 28px;
-    margin-top: 0px;
+    margin-top: 0;
     font-weight: 200;
     text-transform: uppercase;
   }
@@ -6090,7 +6090,7 @@ Profile Page
     background: #febb4a!important;
     border-color: #f5b74e #e5a73e #d6982f;
     box-shadow: 0 1px 1px #d3d3d3, inset 0 1px 0 #fee395;
-    padding: 0px 80px 0px 10px;
+    padding: 0 80px 0 10px;
     height: 38px;
     display: inline-block;
     text-decoration: none;
@@ -6115,10 +6115,10 @@ Profile Page
   .anim-btn-slide-text {
     position: absolute;
     top: 35px;
-    left: 0px;
+    left: 0;
     width: auto;
     right: 52px;
-    height: 0px;
+    height: 0;
     background: #fff;
     color: #996633;
     font-size: 13px;
@@ -6128,18 +6128,18 @@ Profile Page
     text-indent: 15px;
     overflow: hidden;
     line-height: 30px;
-    box-shadow: -1px 0px 1px rgba(255, 255, 255, 0.4), 1px 1px 1px rgba(0, 0, 0, 0.5) inset;
+    box-shadow: -1px 0 1px rgba(255, 255, 255, 0.4), 1px 1px 1px rgba(0, 0, 0, 0.5) inset;
     transition: height 0.3s linear;
   }
 
   .anim-btn-icon-right {
     position: absolute;
-    right: 0px;
-    top: 0px;
+    right: 0;
+    top: 0;
     height: 100%;
     width: 52px;
     border-left: 1px solid #f5b74e;
-    box-shadow: 1px 0px 1px rgba(255, 255, 255, 0.4) inset;
+    box-shadow: 1px 0 1px rgba(255, 255, 255, 0.4) inset;
   }
 
   .anim-btn-icon-right span {
@@ -6149,7 +6149,7 @@ Profile Page
     position: absolute;
     left: 50%;
     top: 50%;
-    margin: -20px 0px 0px -20px;
+    margin: -20px 0 0 -20px;
     transition: all 0.3s linear;
   }
 
@@ -6163,7 +6163,7 @@ Profile Page
   .anim-btn:hover {
     height: 65px;
     text-decoration: none;
-    box-shadow: 0px 1px 1px rgba(255, 255, 255, 0.8) inset, 1px 1px 5px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 1px 1px rgba(255, 255, 255, 0.8) inset, 1px 1px 5px rgba(0, 0, 0, 0.4);
   }
 
   .anim-btn:hover .anim-btn-text {
@@ -6274,8 +6274,8 @@ Profile Page
   }
 
   .navbar-brand {
-    padding-top: 0px;
-    padding-left: 0px;
+    padding-top: 0;
+    padding-left: 0;
   }
 
   .navbar-brand>img {
@@ -6363,7 +6363,7 @@ TASK
     line-height: 1.42857143;
     word-break: break-all;
     word-wrap: break-word;
-    border: 0px solid #ccc;
+    border: 0 solid #ccc;
     border-radius: 4px;
   }
 
@@ -6400,9 +6400,9 @@ TASK
     border: 1px solid transparent;
     background-color: transparent;
     background-image: none;
-    box-shadow: inset 0px 1px transparent;
-    -moz-box-shadow: inset 0px 1px transparent;
-    -webkit-box-shadow: inset 0px 1px transparent
+    box-shadow: inset 0 1px transparent;
+    -moz-box-shadow: inset 0 1px transparent;
+    -webkit-box-shadow: inset 0 1px transparent
   }
 
   .details-followers .followers.token-area {
@@ -6820,7 +6820,7 @@ TASK
   .sortTrash>.todoTask {
     text-align: left;
     margin-left: -40px;
-    margin-right: 0px!important;
+    margin-right: 0!important;
     width: 110%;
   }
 
@@ -7203,95 +7203,21 @@ TASK
   /*************/
   /* The element to hover over */
 
-  .qs {
-    .popover {
-      background-color: rgba(0, 0, 0, 0.85);
-      border-radius: 5px;
-      bottom: 42px;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
-      color: #fff;
-      display: none;
-      font-size: 12px;
-      font-family: 'Helvetica', sans-serif;
-      left: -95px;
-      padding: 7px 10px;
-      position: absolute;
-      width: 200px;
-      z-index: 4;
-      &:before {
-        border-top: 7px solid rgba(0, 0, 0, 0.85);
-        border-right: 7px solid transparent;
-        border-left: 7px solid transparent;
-        bottom: -7px;
-        content: '';
-        display: block;
-        left: 50%;
-        margin-left: -7px;
-        position: absolute;
-      }
-    }
-    &:hover {
-      .popover {
-        display: block;
-        -webkit-animation: fade-in .3s linear 1, move-up .3s linear 1;
-        -moz-animation: fade-in .3s linear 1, move-up .3s linear 1;
-        -ms-animation: fade-in .3s linear 1, move-up .3s linear 1;
-      }
-    }
+  .vis-item .vis-item-overflow {
+    overflow: visible!important;
   }
 
-  @-webkit-keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+  .nvd3 rect[height="1"] {
+    display: none !important;
   }
 
-  @-moz-keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+  .nvd3 rect[height="1"]+text {
+    display: none !important;
   }
 
-  @-ms-keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  @-webkit-keyframes move-up {
-    from {
-      bottom: 30px;
-    }
-    to {
-      bottom: 42px;
-    }
-  }
-
-  @-moz-keyframes move-up {
-    from {
-      bottom: 30px;
-    }
-    to {
-      bottom: 42px;
-    }
-  }
-
-  @-ms-keyframes move-up {
-    from {
-      bottom: 30px;
-    }
-    to {
-      bottom: 42px;
-    }
+  .nvd3 rect+text {
+    font-size: 10px!important;
+    color: grey!important;
   }
 
   .dropdown-menu>li {
@@ -7382,7 +7308,7 @@ TASK
     background-color: #fff;
     width: 360px;
     margin: 0 auto;
-    margin-bottom: 0px;
+    margin-bottom: 0;
     padding: 30px;
     padding-top: 20px;
     padding-bottom: 15px;
@@ -7398,8 +7324,8 @@ TASK
   }
 
   .login .content .login-form, .login .content .forget-form {
-    padding: 0px;
-    margin: 0px;
+    padding: 0;
+    margin: 0;
   }
 
   .login .content .forget-form {
@@ -7418,9 +7344,9 @@ TASK
   .login .content .form-actions {
     background-color: #fff;
     clear: both;
-    border: 0px;
+    border: 0;
     border-bottom: 1px solid #eee;
-    padding: 0px 30px 25px 30px;
+    padding: 0 30px 25px 30px;
     margin-left: -30px;
     margin-right: -30px;
   }
@@ -7439,7 +7365,7 @@ TASK
   .login .content .register-form .form-actions {
     border: 0;
     margin-bottom: 0;
-    padding-bottom: 0px;
+    padding-bottom: 0;
   }
 
   .login .content .form-actions .checkbox {
@@ -7473,7 +7399,7 @@ TASK
     color: #ccc;
     z-index: 1;
     top: 1px;
-    margin: 4px 4px 0px 3px;
+    margin: 4px 4px 0 3px;
     width: 16px;
     height: 16px;
     font-size: 16px;
@@ -7509,7 +7435,7 @@ TASK
       margin-top: 10px;
     }
     .login .content {
-      padding1: 20px;
+      padding: 20px;
       width: 85%;
     }
     .login .content h3 {
@@ -7519,8 +7445,7 @@ TASK
       font-size: 13px;
     }
   }
-  /***
-WHATSNEW  ***/
+  /*** WHATSNEW  ***/
 
   .modal-news {
     top: 100px;

@@ -23,7 +23,8 @@ angular.module('boardOsApp', [
     'ngTagsInput',
     'checklist-model',
     'pageslide-directive',
-    'ngEmbed', 'ngVis'
+    'ngEmbed',
+    'ngVis'
   ])
   .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, NotificationProvider) {
     $urlRouterProvider.otherwise('/');

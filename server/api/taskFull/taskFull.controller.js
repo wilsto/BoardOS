@@ -562,7 +562,7 @@ exports.update = function(req, res) {
 
       // predictedCharge
       metric.projectedWorkload = (metric.progress > 0) ? reworkspent + Math.round(1000 * metric.timeSpent * 100 / parseFloat(metric.progress)) / 1000 : metric.targetLoad;
-      if (metric.duration === 1) {
+      if (metric.duration === 1 && metric.projectedWorkload <= 1) {
         metric.duration = metric.projectedWorkload;
       }
 
@@ -641,10 +641,8 @@ exports.update = function(req, res) {
       updated.markModified('anomalies');
       updated.markModified('previousTasks');
       updated.markModified('previousAnomalies');
-      console.log('updated', updated);
 
       updated.save(function(err) {
-        console.log('err', err);
         if (err) {
           console.log('err', err);
           return handleError(res, err);

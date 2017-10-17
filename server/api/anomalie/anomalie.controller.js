@@ -82,12 +82,7 @@ exports.exportFiveWhyXml = function(req, res) {
         return res.send(404);
       }
 
-      // var xml = anomalie.fiveWhy;
-      var xml = '<?xml version="1.0" encoding="UTF-8"?><to></to></xml>';
-      res.set({
-        'Content-Disposition': 'attachment; filename=data.xml',
-        'Content-Type': 'application/xml'
-      });
+      var xml = anomalie.fiveWhy;
       return res.status(200).send(xml);
 
     });

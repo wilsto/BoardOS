@@ -1,5 +1,20 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.145...HEAD)
+
+**Closed issues:**
+
+- Calcul incorrect de la KPI Effective Cycle Time si tache inférieur à 1 jour mais charge supérieur à 1 jour [\#327](https://github.com/wilsto/BoardOS/issues/327)
+- Possibilité de créer une ano sans tache [\#326](https://github.com/wilsto/BoardOS/issues/326)
+- Pour le RCA, impossible de voir le fichier BPMN loadé pour voir la root cause. \(si je clique sur « click to enlarge » il ne se passe rien…\) [\#325](https://github.com/wilsto/BoardOS/issues/325)
+- Passage de Nodejs version 5.7.1 à 6.11.1 \(breaking changes\) du à une vulnérabilité server [\#297](https://github.com/wilsto/BoardOS/issues/297)
+- Page des KPIs détaillés est longue à  s'afficher [\#158](https://github.com/wilsto/BoardOS/issues/158)
+
+## [v1.6.145](https://github.com/wilsto/boardos/tree/v1.6.145) (2017-10-17)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.144...v1.6.145)
+
 ## [v1.6.144](https://github.com/wilsto/boardos/tree/v1.6.144) (2017-10-17)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.143...v1.6.144)
 

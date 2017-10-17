@@ -463,27 +463,21 @@
         </div>
         <div class="portlet-body" style="padding:0!important" >
           <div class="row">
-                        <div class="col-md-6" style="text-align:center">
-              <img style="width:100%;margin-left:auto;margin-right:auto;display: block;" src="assets/images/BPMN.IO.gif" alt="">
-            </div>
-            <div class="col-md-6" style="text-align:center">
-              <small class="text-muted">Click to enlarge</small>
-              <div id="canvas" ng-init="blnEnlarge=false" ng-click="blnEnlarge=!blnEnlarge" ></div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6" style="text-align:center">
-              <a href="http://demo.bpmn.io/" target="_blank"  class="btn btn-primary btn-outline  btn-xs" >Create a new map</a>
-        </div>
-            <div class="col-md-6" style="text-align:center">
-              <label class="btn btn-primary btn-outline btn-xs pull-left" style="margin-left:15px;">
+            <div class="col-md-3" style="text-align:center">
+              <br>
+              <a href="http://demo.bpmn.io/" target="_blank"  class="btn btn-primary btn-outline btn-xs" style="width:100%" >Create a new map</a><br><br>
+              <label class="btn btn-primary btn-outline btn-xs" style="width:100%" >
                 Load a map
                 <input type="file" id="importFile" onchange="angular.element(this).scope().uploadXmlFile()"  style="display: none;"/>
-              </label>
-              <span class="btn btn-primary btn-outline  btn-xs pull-right" style="margin-right:15px;" ng-click="exportXML()"> Export</span>
-
-        </div>
-        </div>
+              </label><br><br>
+              <span class="btn btn-primary btn-outline  btn-xs " style="width:100%" ng-click="exportXML()" ng-if="anomalie.fiveWhy"> Export</span>
+            </div>
+            <div class="col-md-9" style="text-align:center">
+              <img style="width:100%;margin-left:auto;margin-right:auto;display: block;" src="assets/images/BPMN.IO.gif" alt="" ng-if="!anomalie.fiveWhy">
+              <small  ng-if="anomalie.fiveWhy" class="text-muted">Click to enlarge</small>
+              <div  ng-show="anomalie.fiveWhy" id="canvas" ng-init="blnEnlarge=false" ng-click="blnEnlarge=!blnEnlarge" ></div>
+            </div>
+          </div>
         </div>
     </div>
     </div>

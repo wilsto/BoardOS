@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('DashboardCtrl', function($scope, $rootScope, $http, $stateParams, myLibrary, $cookieStore, $location, Notification, $timeout, dateRangeService, $window, VisDataSet) {
+  .controller('DashboardCtrl', function($scope, $rootScope, $http, $stateParams, myLibrary, $cookieStore, $location, Notification, $timeout, dateRangeService, $window, VisDataSet, $uibModal) {
     $scope.Math = window.Math;
 
     // create visualization
@@ -878,5 +878,38 @@ angular.module('boardOsApp')
       $scope.dashboard.perimeter.splice(index, 1);
     };
 
+
+
+    $scope.createAnomaly = function() {
+      var modalInstance = $uibModal.open({
+        templateUrl: 'reOpenAnomaly.html',
+        controller: 'ModalAnoInstanceCtrl',
+        backdrop: 'static',
+        keyboard: false
+      });
+
+      modalInstance.result.then(function(result) {
+        var anomalie = {
+          name: result.name,
+          category: result.category,
+          categoryDetails: result.categoryDetails,
+          impact: result.impact,
+          impactWorkload: result.impactWorkload,
+          details: result.details,
+          dueDate: result.dueDate
+        };
+
+        anomalie.sourceTasks = [];
+        anomalie.context = $scope.dashboard.context;
+        anomalie.activity = $scope.dashboard.activity;
+
+        anomalie.actor = $scope.currentUser._id;
+
+        $scope.myPromise = $http.post('/api/anomalies', anomalie).success(function(data) {
+          $scope.loadCompleteDashboard();
+        });
+      });
+
+    };
 
   });
