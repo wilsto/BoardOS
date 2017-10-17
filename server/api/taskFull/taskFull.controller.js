@@ -614,7 +614,6 @@ exports.update = function(req, res) {
         task.kpis.push(mKPI);
       }
     });
-
     //cumul des anomalies
     Anomalie.find({
       sourceTasks: req.params.id
@@ -629,33 +628,23 @@ exports.update = function(req, res) {
         anomalies.push(anomalie._id.toString());
       });
       task.anomalies = _.compact(_.uniq(anomalies));
-
+      delete taskFull.comments;
+      delete task.comments;
       var updated = _.merge(taskFull, task);
-      updated.actors = task.actors;
-      updated.followers = task.followers;
-      updated.metrics = task.metrics;
-      updated.comments = [];
-      updated.todos = task.todos;
-      updated.kpis = task.kpis;
-      updated.alerts = task.alerts;
-      updated.dashboards = task.dashboards;
-      updated.reviewTask = task.reviewTask;
-      updated.anomalies = task.anomalies;
-      updated.previousAnomalies = task.previousAnomalies;
-      updated.previousTasks = task.previousTasks;
       updated.markModified('actors');
       updated.markModified('followers');
       updated.markModified('metrics');
-      updated.markModified('comments');
       updated.markModified('todos');
       updated.markModified('kpis');
       updated.markModified('alerts');
-      updated.markModified('dashboards');
       updated.markModified('reviewTask');
       updated.markModified('anomalies');
       updated.markModified('previousTasks');
       updated.markModified('previousAnomalies');
+      console.log('updated', updated);
+
       updated.save(function(err) {
+        console.log('err', err);
         if (err) {
           console.log('err', err);
           return handleError(res, err);
