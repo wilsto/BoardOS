@@ -2,7 +2,17 @@
 
 ## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
 
-[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.145...HEAD)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.146...HEAD)
+
+**Closed issues:**
+
+- Dans ano, simplifier les KPIs par du texte [\#334](https://github.com/wilsto/BoardOS/issues/334)
+- les anomalies ne sont pas filtrés sur l'agenda [\#333](https://github.com/wilsto/BoardOS/issues/333)
+- lors de l'ajout d'une anomalie elle n'apparait pas directement dans l'écran et plusieurs demande de sauvegarde sont affichées, on peut la revoir en retournant à l'accueil et raffraichissant [\#331](https://github.com/wilsto/BoardOS/issues/331)
+- Après la création d'une tache si je clique sur l'icone à coté de progress il me renvoie sur le dashboard, si je clique sur le lien progress cela fonctionne bien [\#329](https://github.com/wilsto/BoardOS/issues/329)
+
+## [v1.6.146](https://github.com/wilsto/boardos/tree/v1.6.146) (2017-10-17)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.145...v1.6.146)
 
 **Closed issues:**
 

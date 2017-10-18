@@ -63,7 +63,8 @@ var AnomalieSchema = new Schema({
   preventiveActions: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'TaskFull'
-  }]
+  }],
+  textEffect: String
 }, {
   strict: false
 });

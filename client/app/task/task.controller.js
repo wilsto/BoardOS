@@ -376,15 +376,15 @@ angular.module('boardOsApp')
           if (!$scope.task.anomalies) {
             $scope.task.anomalies = [];
           }
+          $scope.AnomalyIsExpanded = true;
+          $scope.task.anomalies.push(data);
 
-          $scope.task.anomalies.push(data._id);
-
-          $scope.myPromise = $http.put('/api/taskFulls/' + $scope.task._id + '/false', $scope.task).success(function(data) {
+          $scope.myPromise = $http.put('/api/taskFulls/' + $scope.task._id + '/false', $scope.task).success(function(dataTask) {
             $timeout(function() {
               initializing = true;
               blnexecuteDashboard = false;
               $scope.loadTask();
-              var logInfo = 'Anomalie "' + $scope.task.name + '" was created';
+              var logInfo = 'Anomalie "' + data.name + '" was created';
               Notification.success(logInfo);
 
             }, 100);

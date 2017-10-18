@@ -135,13 +135,15 @@ angular.module('boardOsApp')
 
 
           _.each($scope.myAnomalies, function(anomalie) {
-            $scope.events.push({
-              title: '<i class="fa fa-bell-o" aria-hidden="true"></i>&nbsp;&nbsp; ' + anomalie.name, // The title of the event
-              eventType: 'anomalie',
-              eventId: anomalie._id,
-              startsAt: moment(anomalie.date).toDate(),
-              color: calendarConfig.colorTypes.important,
-            });
+            if (anomalie.actor._id === $scope.currentUser._id) {
+              $scope.events.push({
+                title: '<i class="fa fa-bell-o" aria-hidden="true"></i>&nbsp;&nbsp; ' + anomalie.name, // The title of the event
+                eventType: 'anomalie',
+                eventId: anomalie._id,
+                startsAt: moment(anomalie.date).toDate(),
+                color: calendarConfig.colorTypes.important,
+              });
+            }
           });
         });
       });
