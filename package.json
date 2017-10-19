@@ -1,6 +1,6 @@
 {
   "name": "board-os",
-  "version": "1.6.148",
+  "version": "1.6.149",
   "main": "server/app.js",
   "dependencies": {
     "async": "^2.1.4",
@@ -66,6 +66,7 @@
     "grunt-google-cdn": "~0.4.0",
     "grunt-karma": "~0.8.2",
     "grunt-karma-coveralls": "^2.5.3",
+    "grunt-lineending": "^1.0.0",
     "grunt-mocha-test": "~0.10.2",
     "grunt-newer": "~0.7.0",
     "grunt-ng-annotate": "^0.2.3",

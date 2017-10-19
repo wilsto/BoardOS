@@ -12,6 +12,7 @@ module.exports = function(grunt) {
 
   // Load grunt tasks automatically, when needed
   require('jit-grunt')(grunt, {
+    lineending: 'grunt-lineending',
     express: 'grunt-express-server',
     useminPrepare: 'grunt-usemin',
     ngtemplates: 'grunt-angular-templates',
@@ -570,6 +571,16 @@ module.exports = function(grunt) {
         }
       }
     },
+    lineending: {
+      dist: {
+        options: {
+          overwrite: true
+        },
+        files: {
+          '': ['<%= yeoman.client %>/index.html']
+        }
+      }
+    }
   });
 
   // Used for delaying livereload until after server has restarted
@@ -676,6 +687,7 @@ module.exports = function(grunt) {
       'removelogging',
       'injector',
       'wiredep',
+      'lineending',
       'useminPrepare',
       'autoprefixer',
       'ngtemplates',
