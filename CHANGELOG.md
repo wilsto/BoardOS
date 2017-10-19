@@ -1,5 +1,12 @@
 # Change Log
 
+## [v1.6.149](https://github.com/wilsto/boardos/tree/v1.6.149) (2017-10-19)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.148...v1.6.149)
+
+**Closed issues:**
+
+- les liens des js et css non compilés sont toujours présents en prod [\#337](https://github.com/wilsto/BoardOS/issues/337)
+
 ## [v1.6.148](https://github.com/wilsto/boardos/tree/v1.6.148) (2017-10-18)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.147...v1.6.148)
 
