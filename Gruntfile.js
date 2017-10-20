@@ -308,6 +308,14 @@ module.exports = function(grunt) {
       }
     },
 
+    uglify: {
+      options: {
+        mangle: {
+          reserved: ['BpmnViewer']
+        }
+      }
+    },
+
     // Package all the html partials into a single javascript payload
     ngtemplates: {
       options: {
@@ -675,6 +683,28 @@ module.exports = function(grunt) {
       'test:server',
       'test:client'
     ]);
+  });
+
+  grunt.registerTask('buildfast', function(target) {
+    grunt.task.run([
+      'clean:dist',
+      'concurrent:dist',
+      'injector',
+      'wiredep',
+      'lineending',
+      'useminPrepare',
+      'autoprefixer',
+      'ngtemplates',
+      'concat',
+      'ngAnnotate',
+      'copy:dist',
+      'cdnify',
+      'cssmin',
+      'uglify',
+      'rev',
+      'usemin'
+    ]);
+
   });
 
   grunt.registerTask('build', function(target) {
