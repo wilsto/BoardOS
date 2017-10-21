@@ -109,7 +109,7 @@ exports.list = function(req, res) {
           if (typeof req.query.userId !== 'undefined') {
             userFilter = false;
             if (rowdata.actors) {
-              rowdata.actors_id = _.pluck(rowdata.actors, '_id');
+              rowdata.actors_id = _.map(rowdata.actors, '_id');
             }
             //               owner                                                     watchers
             if ((rowdata.actors_id && rowdata.actors_id.indexOf(req.query.userId) !== -1) || (rowdata.watchers && rowdata.watchers.indexOf(req.query.userId) !== -1)) {
@@ -174,7 +174,7 @@ exports.watch = function(req, res) {
     if (typeof task.watchers === 'undefined') {
       task.watchers = [];
     }
-    if (_.contains(task.watchers, req.params.userId)) {
+    if (_.includes(task.watchers, req.params.userId)) {
       task.watchers = _.xor(task.watchers, [req.params.userId]);
     } else {
       task.watchers.push(req.params.userId);
@@ -396,7 +396,7 @@ exports.show2 = function(req, res) {
         return {
           _id: key,
           count: value,
-          name: _.pluck(_.filter(usersList, function(user) {
+          name: _.map(_.filter(usersList, function(user) {
             return (key === user._id.toString())
           }), 'name').toString()
         };

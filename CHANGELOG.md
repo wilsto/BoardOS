@@ -6,6 +6,8 @@
 
 **Closed issues:**
 
+- Ano mineure : bouton qui permet de replier anomalie dans dashboard [\#352](https://github.com/wilsto/BoardOS/issues/352)
+- Ajout anomalie depuis dashboard \(menu droit\) ne fonctionne pas [\#348](https://github.com/wilsto/BoardOS/issues/348)
 - \[BOSS REC\] - Saisie RCA [\#328](https://github.com/wilsto/BoardOS/issues/328)
 - J’ai un problème avec la tache suivante dans boss, impossible de l’ouvrir, tu peux la supprimer stp ? [\#296](https://github.com/wilsto/BoardOS/issues/296)
 - dans un dashboards, les histogrammes ne se mettent pas à jour [\#295](https://github.com/wilsto/BoardOS/issues/295)
