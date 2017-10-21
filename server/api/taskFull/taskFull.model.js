@@ -27,15 +27,7 @@ var TaskFullSchema = new Schema({
   alerts: Schema.Types.Mixed,
   kpis: Schema.Types.Mixed,
   dashboards: Schema.Types.Mixed,
-  todos: [{
-    text: String,
-    date: Date,
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    },
-    isDone: Boolean
-  }],
+  todos: Schema.Types.Mixed,
   reviewTask: {
     type: Boolean,
     default: false
@@ -64,15 +56,7 @@ var TaskFullSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Anomalie'
   }],
-  comments: [{
-    text: String,
-    date: Date,
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    },
-    auto: Boolean
-  }],
+  comments: Schema.Types.Mixed,
   actors: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'

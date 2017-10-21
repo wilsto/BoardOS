@@ -2,12 +2,18 @@
 
 angular.module('boardOsApp')
   .controller('NavbarCtrl', function($scope, $rootScope, $location, Auth, $http) {
-    Auth.getCurrentUser(function(data) {
-      $scope.currentUser = data;
-      $rootScope.thisUser = $scope.currentUser;
-      $scope.load();
-      $scope.loadDashBoards();
-    });
+
+    while ($scope.currentUser._id === undefined) {
+      Auth.getCurrentUser(function(data) {
+        $scope.currentUser = data;
+        $rootScope.thisUser = $scope.currentUser;
+      });
+      if ($scope.currentUser._id) {
+        $scope.load();
+        $scope.loadDashBoards();
+        break;
+      }
+    }
 
     $rootScope.openNav = function() {
       $rootScope.loadNews();
@@ -115,4 +121,9 @@ angular.module('boardOsApp')
       });
       return filtertasks;
     };
+
+    if ($scope.currentUser._id) {
+      $scope.load();
+      $scope.loadDashBoards();
+    }
   });

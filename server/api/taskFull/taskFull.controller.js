@@ -513,14 +513,14 @@ exports.update = function(req, res) {
     task.previousAnomalies = _.compact(_.uniq(previousAnomalies));
 
     // Suppression des commentaires incomplets
-    var commentsOk = [];
-    _.each(task.comments, function(comment) {
-      if (comment.user !== null) {
-        comment.user = comment.user._id;
-        commentsOk.push(comment);
-      }
-    });
-    task.comments = commentsOk;
+    // var commentsOk = [];
+    // _.each(task.comments, function(comment) {
+    //   if (comment.user !== null) {
+    //     comment.user = comment.user._id;
+    //     commentsOk.push(comment);
+    //   }
+    // });
+    // task.comments = commentsOk;
 
     /** Mise en majuscule des axes */
     if (task.activity) {
@@ -628,13 +628,12 @@ exports.update = function(req, res) {
         anomalies.push(anomalie._id.toString());
       });
       task.anomalies = _.compact(_.uniq(anomalies));
-      delete taskFull.comments;
-      delete task.comments;
       var updated = _.merge(taskFull, task);
       updated.markModified('actors');
       updated.markModified('followers');
       updated.markModified('metrics');
       updated.markModified('todos');
+      updated.markModified('comments');
       updated.markModified('kpis');
       updated.markModified('alerts');
       updated.markModified('reviewTask');

@@ -6,6 +6,9 @@
 
 **Closed issues:**
 
+- cleaning - suppression de veilles références à des fichiers js ou images obsolètes [\#346](https://github.com/wilsto/BoardOS/issues/346)
+- navbar - F5 pour faire afficher le dropdown du calendar - TypeError: Cannot read property 'toString' of undefined [\#345](https://github.com/wilsto/BoardOS/issues/345)
+- Comments non sauvegardés [\#343](https://github.com/wilsto/BoardOS/issues/343)
 - Amélioration picker range [\#342](https://github.com/wilsto/BoardOS/issues/342)
 - ng-infinite-scroll.js:42 Uncaught ReferenceError: app is not defined [\#341](https://github.com/wilsto/BoardOS/issues/341)
 - Suppression de ng-mfb \(bouton rouge flottant\) [\#339](https://github.com/wilsto/BoardOS/issues/339)
