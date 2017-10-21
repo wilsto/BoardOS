@@ -290,7 +290,7 @@ module.exports = {
           taskdata.actors = _.map(actorsObject, function(value, key) {
             return {
               _id: key,
-              name: _.pluck(_.filter(usersList, function(user) {
+              name: _.map(_.filter(usersList, function(user) {
                 return (key === user._id.toString())
               }), 'name').toString()
             };
@@ -299,7 +299,7 @@ module.exports = {
             return {
               _id: value,
               count: 1,
-              name: _.pluck(_.filter(usersList, function(user) {
+              name: _.map(_.filter(usersList, function(user) {
                 return (value === user._id.toString())
               }), 'name').toString()
             };
@@ -546,7 +546,7 @@ module.exports = {
           taskdata.actors = _.map(actorsObject, function(value, key) {
             return {
               _id: key,
-              name: _.pluck(_.filter(usersList, function(user) {
+              name: _.map(_.filter(usersList, function(user) {
                 return (key === user._id.toString())
               }), 'name').toString()
             };
@@ -555,7 +555,7 @@ module.exports = {
             return {
               _id: value,
               count: 1,
-              name: _.pluck(_.filter(usersList, function(user) {
+              name: _.map(_.filter(usersList, function(user) {
                 return (value === user._id.toString())
               }), 'name').toString()
             };
@@ -810,12 +810,12 @@ module.exports = {
     //##############################################
     _.each(kpis, function(kpi, index) {
       kpi.calcul = {};
-      kpi.calcul.details = _.pluck(tasks, function(task) {
+      kpi.calcul.details = _.map(tasks, function(task) {
         return task.kpis[index].calcul;
       });
 
       // calcul par tache
-      var kpicalculValues = _.filter(_.pluck(kpi.calcul.details, function(calcul) {
+      var kpicalculValues = _.filter(_.map(kpi.calcul.details, function(calcul) {
         return calcul.task;
       }), function(data) {
         return !isNaN(parseInt(data));
@@ -826,7 +826,7 @@ module.exports = {
       kpi.calcul.task = (kpi.category === 'Alert') ? sum : parseInt(sum / kpicalculValues.length);
 
       // calcul par tache et temps
-      kpicalculValues = _.filter(_.pluck(kpi.calcul.details, function(calcul) {
+      kpicalculValues = _.filter(_.map(kpi.calcul.details, function(calcul) {
         return calcul.taskTime;
       }), function(data) {
         return (data[0]) ? !isNaN(parseInt(data[0].valueKPI)) : true;
@@ -835,10 +835,10 @@ module.exports = {
         return data.month;
       });
       kpi.calcul.taskTime = _.map(kpiValuesByMonth, function(data) {
-        sum = _.reduce(_.pluck(data, 'valueKPI'), function(sum, kpicalcul) { // sum
+        sum = _.reduce(_.map(data, 'valueKPI'), function(sum, kpicalcul) { // sum
           return sum + kpicalcul;
         });
-        var number = _.pluck(_.pick(_.pluck(data, 'valueKPI'), _.isNumber)).length;
+        var number = _.map(_.pick(_.map(data, 'valueKPI'), _.isNumber)).length;
         return {
           month: data[0].month,
           sum: sum,

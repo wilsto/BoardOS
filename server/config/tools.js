@@ -73,12 +73,12 @@ module.exports = {
         _.forEach(mKPI.metricsGroupBy.oldTime, function(item, key) {
           mySeries.push({
             "text": key,
-            "values": _.pluck(item, 'count'),
-            "background-color": _.compact(_.uniq(_.pluck(item, 'color'))),
+            "values": _.map(item, 'count'),
+            "background-color": _.compact(_.uniq(_.map(item, 'color'))),
             "alpha": "0.7",
             "description": "<= Scheduled deadline"
           })
-          var myLabels = _.pluck(item, 'label');
+          var myLabels = _.map(item, 'label');
         });
 
         myChart = {
@@ -429,18 +429,18 @@ module.exports = {
           }
           break;
         case 'comparedate':
-          var dateValue = _.pluck(filteredMetrics, field);
-          var dateRefValue = _.pluck(filteredRefMetrics, refField)[0];
+          var dateValue = _.map(filteredMetrics, field);
+          var dateRefValue = _.map(filteredRefMetrics, refField)[0];
 
           calculMain = new Date(dateValue);
           calculRef = new Date(dateRefValue);
           break;
         case 'mean':
-          var arrayValues = _.compact(_.pluck(filteredMetrics, field).map(Number));
+          var arrayValues = _.compact(_.map(filteredMetrics, field).map(Number));
           if (arrayValues.length) {
             calculMain = math.mean(arrayValues)
           }
-          var arrayRefValues = _.compact(_.pluck(filteredRefMetrics, refField).map(Number));
+          var arrayRefValues = _.compact(_.map(filteredRefMetrics, refField).map(Number));
 
           if (arrayRefValues.length) {
             calculRef = math.mean(arrayRefValues)

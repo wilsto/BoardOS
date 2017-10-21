@@ -134,7 +134,7 @@ function createCompleteTask(taskId, refreshDashboard, callback) {
             _id: task.actor._id
           });
           _.each(task.watchersId, function(watcher) {
-            var name = _.pluck(_.filter(usersList, function(user) {
+            var name = _.map(_.filter(usersList, function(user) {
               return (watcher === user._id.toString())
             }), 'name').toString()
             // ajout des metrics

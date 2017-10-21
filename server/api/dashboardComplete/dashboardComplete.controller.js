@@ -555,7 +555,7 @@ exports.create = function(req, res) {
       var updated = dashboardCompletes[0];
       // on ajoute le user au dashboard déjà existant
       var users = updated.users || [];
-      var userlist = _.pluck(users, '_id');
+      var userlist = _.map(users, '_id');
       var userindex = -1;
       _.each(userlist, function(data, idx) {
         // égalité imparfaite car id
@@ -662,7 +662,7 @@ exports.unsubscribe = function(req, res) {
     }
     var userindex = -1;
     var users = dashboardComplete.users || [];
-    var userlist = _.pluck(users, '_id');
+    var userlist = _.map(users, '_id');
     _.each(userlist, function(data, idx) {
       // égalité imparfaite car id
       if (data.toString() === req.body._id.toString()) {
