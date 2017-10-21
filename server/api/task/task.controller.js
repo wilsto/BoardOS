@@ -174,7 +174,7 @@ exports.watch = function(req, res) {
     if (typeof task.watchers === 'undefined') {
       task.watchers = [];
     }
-    if (_.contains(task.watchers, req.params.userId)) {
+    if (_.includes(task.watchers, req.params.userId)) {
       task.watchers = _.xor(task.watchers, [req.params.userId]);
     } else {
       task.watchers.push(req.params.userId);

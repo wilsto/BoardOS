@@ -398,7 +398,7 @@ module.exports = {
       // filtrer par valeur
       filteredMetrics = _.filter(filteredMetrics, function(metric) {
         var metricFieldValue = (metric[field] === undefined || metric[field] === null || metric[field].length === 0) ? 'toto' : metric[field];
-        var response = (typeof values === 'undefined' || values.length === 0) ? 1 : _.contains(values, metricFieldValue);
+        var response = (typeof values === 'undefined' || values.length === 0) ? 1 : _.includes(values, metricFieldValue);
         // if (kpi.name === 'Internal Defect Prevention') {
         //   console.log('filteredMetrics', filteredMetrics);
         //   console.log('metric[field]', metric[field]);
@@ -409,7 +409,7 @@ module.exports = {
         return response;
       });
       filteredRefMetrics = (refField.toLowerCase() === 'constant') ? refValues : _.filter(filteredRefMetrics, function(metric) {
-        return (typeof refValues === 'undefined' || refValues.length === 0 || typeof metric[refField] === 'undefined') ? 1 : _.contains(refValues, metric[refField]);
+        return (typeof refValues === 'undefined' || refValues.length === 0 || typeof metric[refField] === 'undefined') ? 1 : _.includes(refValues, metric[refField]);
       });
 
 
