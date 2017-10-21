@@ -18,6 +18,6 @@ module.exports = {
     uri: process.env.MONGOLAB_URI ||
       process.env.MONGODB_URI ||
       process.env.OPENSHIFT_MONGODB_DB_URL + process.env.OPENSHIFT_APP_NAME ||
-      'mongodb://localhost/boardos'
+      'mongodb://localhost/boardos-dev'
   }
 };

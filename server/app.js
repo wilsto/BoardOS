@@ -15,6 +15,7 @@ var config = require('./config/environment');
 
 // Connect to database
 mongoose.connect(config.mongo.uri, config.mongo.options);
+console.log('config.mongo.uri', config.mongo.uri);
 
 //Mongoose: default lean to true (always on)
 var __setOptions = mongoose.Query.prototype.setOptions;
