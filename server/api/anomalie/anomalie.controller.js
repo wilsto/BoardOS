@@ -3,7 +3,6 @@
 'use strict';
 
 var _ = require('lodash');
-var x2js = require('x2js');
 
 
 var Anomalie = require('./anomalie.model');

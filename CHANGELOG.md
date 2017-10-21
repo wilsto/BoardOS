@@ -1,5 +1,26 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.156...HEAD)
+
+**Closed issues:**
+
+- \[BOSS REC\] - Saisie RCA [\#328](https://github.com/wilsto/BoardOS/issues/328)
+- J’ai un problème avec la tache suivante dans boss, impossible de l’ouvrir, tu peux la supprimer stp ? [\#296](https://github.com/wilsto/BoardOS/issues/296)
+- dans un dashboards, les histogrammes ne se mettent pas à jour [\#295](https://github.com/wilsto/BoardOS/issues/295)
+- My settings : gestion dashboard  [\#294](https://github.com/wilsto/BoardOS/issues/294)
+- Dupliquer tâche, icônes absents [\#293](https://github.com/wilsto/BoardOS/issues/293)
+- Passer un dashboard en mode review [\#256](https://github.com/wilsto/BoardOS/issues/256)
+- Ajouter la possibilité de voir l'historique des KPIs dans un dashboard [\#255](https://github.com/wilsto/BoardOS/issues/255)
+- Mettre le mail quotidien en mode PDCA [\#198](https://github.com/wilsto/BoardOS/issues/198)
+- perimeter review [\#164](https://github.com/wilsto/BoardOS/issues/164)
+- Ajouter un visuel par Gantt [\#160](https://github.com/wilsto/BoardOS/issues/160)
+
+**Merged pull requests:**
+
+- Update dependencies to enable Greenkeeper 🌴 [\#338](https://github.com/wilsto/BoardOS/pull/338) ([greenkeeper[bot]](https://github.com/apps/greenkeeper))
+
 ## [v1.6.156](https://github.com/wilsto/boardos/tree/v1.6.156) (2017-10-21)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.155...v1.6.156)
 
