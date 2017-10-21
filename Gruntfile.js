@@ -410,7 +410,7 @@ module.exports = function(grunt) {
       recette: {
         options: {
           remote: 'boardos-rec',
-          branch: 'master'
+          branch: 'develop'
         }
       },
       test: {
@@ -449,7 +449,7 @@ module.exports = function(grunt) {
         updateConfigs: [],
         commit: true,
         commitMessage: 'Release v%VERSION%',
-        commitFiles: ['-a'], // all files
+        commitFiles: ['-am'], // all files
         createTag: true,
         tagName: 'v%VERSION%',
         tagMessage: 'Version %VERSION%',
