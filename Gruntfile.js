@@ -309,11 +309,7 @@ module.exports = function(grunt) {
     },
 
     uglify: {
-      options: {
-        mangle: {
-          reserved: ['BpmnViewer']
-        }
-      }
+      options: {}
     },
 
     // Package all the html partials into a single javascript payload
@@ -610,7 +606,7 @@ module.exports = function(grunt) {
   grunt.registerTask('serve', function(target) {
     if (target === 'dist') {
       return grunt.task.run([
-        'build',
+        'buildfast',
         'env:all',
         'env:prod',
         'express:prod',

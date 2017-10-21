@@ -33,8 +33,6 @@
 <link rel="stylesheet" href="bower_components/bootstrap-toggle/css/bootstrap-toggle.min.css" />
 <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
 <link rel="stylesheet" href="bower_components/mdPickers/dist/mdPickers.min.css" />
-<link rel="stylesheet" href="bower_components/ng-material-floating-button/mfb/dist/mfb.css" />
-<link rel="stylesheet" href="bower_components/Feedback-Bot/src/feedback.css" />
 <link rel="stylesheet" href="bower_components/ng-tags-input/ng-tags-input.css" />
 <link rel="stylesheet" href="bower_components/ngEmbed/src/ng-embed.css" />
 <link rel="stylesheet" href="bower_components/angular-bootstrap-calendar/dist/css/angular-bootstrap-calendar.css" />
@@ -308,12 +306,14 @@
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-aria/angular-aria.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/lodash/dist/lodash.compat.js"></script>
     <script src="bower_components/angular-confirm-field/app/package/js/angular-confirm-field.min.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script src="bower_components/angular-filter/dist/angular-filter.js"></script>
+    <script src="bower_components/angular-messages/angular-messages.js"></script>
     <script src="bower_components/d3/d3.js"></script>
     <script src="bower_components/nvd3/nv.d3.js"></script>
     <script src="bower_components/angular-nvd3/dist/angular-nvd3.min.js"></script>
@@ -345,13 +345,12 @@
     <script src="bower_components/angular-ui-sortable/sortable.js"></script>
     <script src="bower_components/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
     <script src="bower_components/angular-material/angular-material.js"></script>
-    <script src="bower_components/ng-infinite-scroll/ng-infinite-scroll.js"></script>
-    <script src="bower_components/bpmn-js/dist/bpmn-viewer.js"></script>
     <!-- endbower -->
     <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
-    <script src="bower_components/angular-aria/angular-aria.js"></script>
-    <script src="bower_components/angular-messages/angular-messages.js"></script>
+    <script src="bower_components/bpmn-js/dist/bpmn-viewer.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.0/angular-aria.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.0/angular-messages.min.js"></script>
     <script src="bower_components/ng-material-floating-button/src/mfb-directive.js"></script>
     <script src="bower_components/mdPickers/dist/mdPickers.min.js"></script>
     <script src="bower_components/Feedback-Bot/dist/feedback.0.3.1.js"></script>
@@ -433,25 +432,6 @@
     <script src="components/socket/socket.service.js"></script>
     <!-- endinjector -->
     <!-- endbuild -->
-    <script type="text/javascript">
-    $(function() {
-
-      function isMobile() {
-      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      }
-
-      if (!isMobile() && $(window).width() > 739 ) {
-        //place script you don't want to run on mobile here
-        $.feedback({
-          html2canvasURL: 'src/html2canvas.js',
-          githubpath: 'wilsto/BoardOS', // CHANGE THIS TO YOUR PATH
-          serverURL: 'http://feedbackbot.herokuapp.com', // YOU CAN HOST YOUR OWN GITHUB BOT IF YOU WANT
-          placement: 'bottom'
-        });
-      }
-
-    });
-    </script>
     <div class="page-loading-overlay">
       <div class="loader-2"></div>
     </div>

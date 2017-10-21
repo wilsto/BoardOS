@@ -1,5 +1,22 @@
 # Change Log
 
+## [Unreleased](https://github.com/wilsto/boardos/tree/HEAD)
+
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.152...HEAD)
+
+**Closed issues:**
+
+- Amélioration picker range [\#342](https://github.com/wilsto/BoardOS/issues/342)
+- ng-infinite-scroll.js:42 Uncaught ReferenceError: app is not defined [\#341](https://github.com/wilsto/BoardOS/issues/341)
+- Suppression de ng-mfb \(bouton rouge flottant\) [\#339](https://github.com/wilsto/BoardOS/issues/339)
+- Problème de filtre de la page des anos list lorsque js compilé [\#336](https://github.com/wilsto/BoardOS/issues/336)
+- Problème de chargement de bpmn dans BOSS si js compilé [\#335](https://github.com/wilsto/BoardOS/issues/335)
+- Calendrier :  SI on glisse et dépose une tâche, les dates d’engagements ne se mettent pas à jour [\#323](https://github.com/wilsto/BoardOS/issues/323)
+- Feedback: le dropdown avec les [\#210](https://github.com/wilsto/BoardOS/issues/210)
+
+## [v1.6.152](https://github.com/wilsto/boardos/tree/v1.6.152) (2017-10-21)
+[Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.151...v1.6.152)
+
 ## [v1.6.151](https://github.com/wilsto/boardos/tree/v1.6.151) (2017-10-20)
 [Full Changelog](https://github.com/wilsto/boardos/compare/v1.6.150...v1.6.151)
 

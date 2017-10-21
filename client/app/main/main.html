@@ -52,6 +52,8 @@
           events="events"
           view-title="calendarTitle"
           cell-is-open="true"
+          excluded-days= "[0,6]"
+          on-event-times-changed="eventTimesChanged(calendarEvent, calendarNewEventStart, calendarNewEventEnd); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
           on-event-click="eventClicked(calendarEvent);">
 
       </mwl-calendar>

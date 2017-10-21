@@ -58,7 +58,7 @@ angular.module('boardOsApp')
 
         var blnName = ($scope.searchName.length === 0) ? true : (anomalie.name.toLowerCase().indexOf($scope.searchName.toLowerCase()) >= 0 || anomalie.activity.toLowerCase().indexOf($scope.searchName.toLowerCase()) >= 0);
         var blnActor = ($scope.searchActor.length === 0) ? true : false;
-        if (anomalie.actor.groups[0].toLowerCase().indexOf($scope.searchActor.toLowerCase()) >= 0) {
+        if (anomalie.actor && anomalie.actor.groups && anomalie.actor.groups[0].toLowerCase().indexOf($scope.searchActor.toLowerCase()) >= 0) {
           blnActor = true;
         }
         var blnContext = ($scope.searchContext.length === 0) ? true : false;
