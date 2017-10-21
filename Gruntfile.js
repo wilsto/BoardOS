@@ -410,7 +410,7 @@ module.exports = function(grunt) {
       recette: {
         options: {
           remote: 'boardos-rec',
-          branch: 'develop'
+          branch: 'master'
         }
       },
       test: {
