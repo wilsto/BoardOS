@@ -5,9 +5,9 @@ angular.module('boardOsApp', [
     'ngResource',
     'ngSanitize',
     'ui.router',
+    'mwl.calendar',
     'ui.bootstrap',
     'btford.socket-io',
-    'ngJsTree',
     'ngDialog',
     'nvd3',
     'ng.confirmField',
@@ -15,8 +15,15 @@ angular.module('boardOsApp', [
     'ui-notification',
     'cgBusy',
     'xeditable',
+    'ui.sortable',
+    'angular.filter',
+    'mdPickers',
+    'infinite-scroll',
+    'ngTagsInput',
+    'checklist-model',
+    'pageslide-directive',
     'ngEmbed',
-    'ui.sortable'
+    'ngVis'
   ])
   .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, NotificationProvider) {
     $urlRouterProvider.otherwise('/');
@@ -39,24 +46,39 @@ angular.module('boardOsApp', [
     });
   })
 
-  /*  .config(function ($httpProvider) {
-          $httpProvider.requestInterceptors.push('httpRequestInterceptorIECacheSlayer');
-      })
-      // IE 8 cache problem - Request Interceptor - https://github.com/angular/angular.js/issues/1418#issuecomment-11750815
-      .factory('httpRequestInterceptorIECacheSlayer', function($log) {
-          return function(promise) {
-              return promise.then(function(request) {
-                  // If not a partial, append timestamp query string
-                  if(request.url.indexOf("partials/") === -1) {
-                      var d = new Date();
-                      request.url = request.url + '?cacheSlayer=' + d.getTime();
-                  }
-                  $log.info('request.url = ' + request.url);
-                  // return the config object to pass it on to the next interceptor
-                  return request;
-              });
-          };
-      });*/
+  .config(['calendarConfig', function(calendarConfig) {
+
+    // View all available config
+
+
+    // Change the month view template globally to a custom template
+    //calendarConfig.templates.calendarMonthView = 'path/to/custom/template.html';
+
+    // Use either moment or angular to format dates on the calendar. Default angular. Setting this will override any date formats you have already set.
+    calendarConfig.dateFormatter = 'moment';
+
+    moment.locale('en_gb', {
+      week: {
+        dow: 1 // Monday is the first day of the week
+      }
+    });
+
+    // This will configure times on the day view to display in 24 hour format rather than the default of 12 hour
+    //calendarConfig.allDateFormats.moment.date.hour = 'HH:mm';
+
+    // This will configure the day view title to be shorter
+    calendarConfig.allDateFormats.moment.title.day = 'ddd D MMM';
+
+    // This will set the week number hover label on the month view
+    calendarConfig.i18nStrings.weekNumber = 'Week {week}';
+
+    // This will display all events on a month view even if they're not in the current month. Default false.
+    //calendarConfig.displayAllMonthEvents = true;
+
+    // Make the week view more like the day view, ***with the caveat that event end times are ignored***.
+    calendarConfig.showTimesOnWeekView = false;
+
+  }])
 
   .factory('authInterceptor', function($rootScope, $q, $cookieStore, $location) {
     return {
@@ -84,7 +106,8 @@ angular.module('boardOsApp', [
   })
 
   .value('cgBusyDefaults', {
-    message: 'Please wait, Processing calculation...'
+    message: 'Please wait, Processing calculation...',
+    wrapperClass: 'loadingboss'
   })
 
   .constant('progressStatusTask', [{
@@ -232,9 +255,13 @@ angular.module('boardOsApp', [
 
   ])
 
-  .run(function($rootScope, $location, Auth, $http, progressStatusTask, statusTask, metricTaskFields, categoryKPI, actionKPI, groupByKPI, $cookieStore, $timeout, editableOptions) {
+  .run(function($rootScope, $location, Auth, $http, progressStatusTask, statusTask, metricTaskFields, categoryKPI, actionKPI, groupByKPI, $cookieStore, $timeout, editableOptions, dateRangeService) {
+
+    $rootScope.showHideWhatsNew = false;
 
     editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
+    editableOptions.blurElem = 'submit';
+    editableOptions.blurForm = 'submit';
 
     $rootScope.perimeter = $cookieStore.get('perimeter');
     if (typeof $rootScope.perimeter === 'undefined') {
@@ -257,8 +284,13 @@ angular.module('boardOsApp', [
     $rootScope.constant.groupByKPI = groupByKPI;
 
     // Mettre les informations transversales en mémoire
-    $http.get('/api/hierarchies/list/Context').success(function(contexts) {
-      $rootScope.contexts = contexts.list;
+    $http.get('/api/hierarchies/listContext').success(function(contexts) {
+      $rootScope.contexts = [];
+      _.each(contexts, function(context) {
+        $rootScope.contexts.push({
+          longname: context
+        });
+      });
     });
 
     $http.get('/api/hierarchies/list/Activity').success(function(activities) {
@@ -268,10 +300,16 @@ angular.module('boardOsApp', [
     $http.get('/api/hierarchies/list/Axis').success(function(axes) {
       $rootScope.axes = axes.list;
     });
+    $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+      $rootScope.showArianeMain = ($location.path() === '/');
+      $rootScope.showArianeDashboard = ($location.path().indexOf('dashboard/') > 0);
+      $rootScope.showArianeTask = ($location.path().indexOf('task/') > 0);
+      $rootScope.showArianeKPI = ($location.path().indexOf('KPI/') > 0);
+      $rootScope.showArianeAno = ($location.path().indexOf('anomalies') > 0);
+    });
 
     // Redirect to login if route requires auth and you're not logged in
-    $rootScope.$on('$stateChangeStart', function(event, next) {
-      $rootScope.showAriane = ($location.path().indexOf('dashboard/') > 0 || $location.path().indexOf('KPI/') > 0);
+    $rootScope.$on('$stateChangeSuccess', function(event, next) {
 
       Auth.isLoggedIn(function(loggedIn) {
         if (next.authenticate && !loggedIn) {
@@ -280,17 +318,15 @@ angular.module('boardOsApp', [
       });
     });
 
+    function cb(start, end) {
+      $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+    }
+    cb(dateRangeService.startRange, dateRangeService.endRange);
+
     $timeout(function() {
-      $rootScope.startRange = moment().subtract(365, 'days');
-      $rootScope.endRange = moment();
-
-      function cb(start, end) {
-        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-      }
-
       $('#reportrange').daterangepicker({
-        startDate: $rootScope.startRange,
-        endDate: $rootScope.endRange,
+        startDate: dateRangeService.startRange,
+        endDate: dateRangeService.endRange,
         ranges: {
           'Last 7 Days': [moment().subtract(7, 'days'), moment()],
           'Last 14 Days': [moment().subtract(14, 'days'), moment()],
@@ -298,18 +334,31 @@ angular.module('boardOsApp', [
           'Last 90 Days': [moment().subtract(90, 'days'), moment()],
           'Last 180 Days': [moment().subtract(180, 'days'), moment()],
           'Last 365 Days': [moment().subtract(365, 'days'), moment()],
-          'All': [moment().subtract(1462, 'days'), moment()],
+          'All': [moment().subtract(5000, 'days'), moment()],
         },
         showCustomRangeLabel: false,
         autoApply: true
       }, cb);
 
-      cb($rootScope.startRange, $rootScope.endRange);
-
       $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
-        $rootScope.startRange = picker.startDate;
-        $rootScope.endRange = picker.endDate;
+        $rootScope.$broadcast('dateRangeService:updated', picker.chosenLabel);
+        dateRangeService.startRange = picker.startDate;
+        dateRangeService.endRange = picker.endDate;
       });
-    }, 500);
+    }, 2000);
 
+  })
+
+  .factory('dateRangeService', function() {
+
+    var rangeDate = 'last7';
+    var startRange = moment().subtract(7, 'days');
+    var endRange = moment();
+
+    // this is simplified for illustration, see edit below
+    return {
+      rangeDate: rangeDate,
+      startRange: startRange,
+      endRange: endRange,
+    };
   });

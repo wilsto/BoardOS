@@ -9,3 +9,7 @@ coverage-results
 newrelic_agent.log
 /server/config/local.env.js
 client/bower_components_2/
+
+client/bower_components_3/
+
+server/config/environment/test\.js

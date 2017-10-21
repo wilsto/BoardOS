@@ -14,7 +14,7 @@ angular.module('boardOsApp')
         scope.filterStatus = 'Not Finished';
         scope.filterProgressStatus = 'All';
         scope.searchText = '';
-        scope.orderByField = 'lastmetric.date';
+        scope.orderByField = 'metrics[task.metrics.length - 1].date';
         scope.reverseSort = true;
         scope.page = $location.path().split('/')[1];
 
@@ -24,14 +24,14 @@ angular.module('boardOsApp')
 
         scope.sortByDate = function(task) {
 
-          return (task.lastmetric) ? task.lastmetric.endDate : -1;
+          return (task.metrics[task.metrics.length - 1]) ? task.metrics[task.metrics.length - 1].endDate : -1;
         };
 
         scope.filterTasks = function() {
           scope.tasks = _.filter(scope.alltasks, function(task) {
             var blnSearchText = (scope.searchText.length === 0) ? true : task.name.toLowerCase().indexOf(scope.searchText.toLowerCase()) >= 0 || task.activity.toLowerCase().indexOf(scope.searchText.toLowerCase()) >= 0 || task.context.toLowerCase().indexOf(scope.searchText.toLowerCase()) >= 0;
-            var blnStatus = (typeof task.lastmetric === 'undefined') ? true : task.lastmetric.status.toLowerCase().indexOf(scope.filterStatus.replace('All', '').replace('Not Finished', 'o').toLowerCase()) >= 0;
-            var blnProgressStatus = (typeof task.lastmetric === 'undefined' || typeof task.lastmetric.progressStatus === 'undefined') ? true : task.lastmetric.progressStatus.toLowerCase().indexOf(scope.filterProgressStatus.replace('All', '').toLowerCase()) >= 0;
+            var blnStatus = (typeof task.metrics[task.metrics.length - 1] === 'undefined') ? true : task.metrics[task.metrics.length - 1].status.toLowerCase().indexOf(scope.filterStatus.replace('All', '').replace('Not Finished', 'o').toLowerCase()) >= 0;
+            var blnProgressStatus = (typeof task.metrics[task.metrics.length - 1] === 'undefined' || typeof task.metrics[task.metrics.length - 1].progressStatus === 'undefined') ? true : task.metrics[task.metrics.length - 1].progressStatus.toLowerCase().indexOf(scope.filterProgressStatus.replace('All', '').toLowerCase()) >= 0;
             return blnSearchText && blnProgressStatus && blnStatus;
           });
         };

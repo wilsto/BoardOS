@@ -1,3 +1,5 @@
+/*jshint sub:true*/
+
 /**
  * Using Rails-like standard naming convention for endpoints.
  * GET     /KPIs              ->  index
@@ -13,10 +15,10 @@ var _ = require('lodash');
 var moment = require('moment');
 var Q = require('q');
 
-var Dashboard = require('../dashboard/dashboard.model');
+var DashboardComplete = require('../dashboardComplete/dashboardComplete.model');
 var KPI = require('./KPI.model');
 var Task = require('../task/task.model');
-var TaskComplete = require('../taskComplete/taskComplete.model');
+var TaskFull = require('../taskFull/taskFull.model');
 var Metric = require('../metric/metric.model');
 var Hierarchies = require('../hierarchy/hierarchy.model');
 var getData = require('../../config/getData');
@@ -97,6 +99,9 @@ exports.show = function(req, res) {
 
 // Get a single kpi
 exports.tasksList = function(req, res) {
+  var filterPerimeter = {
+    $or: []
+  };
   Q()
     .then(function() {
       // Get a single kpi
@@ -117,21 +122,81 @@ exports.tasksList = function(req, res) {
       return deferred.promise;
     })
     .then(function() {
+      // Get related dashboards
+      var deferred = Q.defer();
+      DashboardComplete.find({
+        _id: req.query.dashboardFilter
+      }, function(err, dashboard) {
+
+        _.each(dashboard[0].perimeter, function(perimeter) {
+          filterPerimeter['$or'].push({
+            activity: {
+              '$regex': perimeter.activity || '',
+              $options: '-im'
+            },
+            context: {
+              '$regex': perimeter.context || '',
+              $options: '-im'
+            }
+          });
+        });
+        deferred.resolve(mKPI);
+      })
+      return deferred.promise;
+    })
+    .then(function() {
       // Get related tasks
       var deferred = Q.defer();
-      var taskFilter = (typeof req.query.taskFilter === 'undefined') ? {} : {
-        _id: req.query.taskFilter
-      };
-      TaskComplete.find(taskFilter).lean().exec(function(err, tasks) {
-        mTasks = [];
-        _.each(tasks, function(rowdata, index) {
 
-          if (rowdata.context.indexOf(mKPI.context) >= 0 && rowdata.activity.indexOf(mKPI.activity) >= 0) {
-            mTasks.push(rowdata);
+      var cutoff = new Date();
+      if (typeof req.query.rangedate === 'undefined') {
+        req.query.rangedate = 1;
+      }
+      cutoff = new Date(cutoff.setDate(cutoff.getDate() - req.query.rangedate - 1)).toISOString();
+      if (typeof req.query.taskFilter !== 'undefined') {
+        if (req.query.rangedate !== 1) {
+          filterPerimeter = {
+            _id: req.query.taskFilter,
+            'metrics': {
+              $elemMatch: {
+                endDate: {
+                  $gte: cutoff
+                }
+              }
+            }
           }
+        } else {
+          filterPerimeter = {
+            _id: req.query.taskFilter
+          }
+        }
+      } else {
+        if (req.query.rangedate !== 1) {
+          filterPerimeter.metrics = {
+            $elemMatch: {
+              endDate: {
+                $gte: cutoff
+              }
+            }
+          }
+        }
+      }
+      TaskFull.find(filterPerimeter)
+        .populate('actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
+        .lean().exec(function(err, tasks) {
+          mTasks = [];
+          _.each(tasks, function(rowdata, index) {
+
+            if (rowdata.context.indexOf(mKPI.context) >= 0 && rowdata.activity.indexOf(mKPI.activity) >= 0) {
+              mTasks.push(rowdata);
+            }
+            _.each(rowdata.actors, function(actor) {
+              actor.avatar = (actor.avatar) ? actor.avatar : 'assets/images/avatars/' + actor._id + '.png';
+            });
+
+          });
+          deferred.resolve(mTasks);
         });
-        deferred.resolve(mTasks);
-      });
       return deferred.promise;
     })
     .then(function() {
@@ -215,7 +280,7 @@ exports.show33 = function(req, res) {
       // Get related dashboards
       var deferred = Q.defer();
       mKPI.dashboards = [];
-      Dashboard.find({}, function(err, dashboard) {
+      DashboardComplete.find({}, function(err, dashboard) {
         _.each(dashboard, function(rowdata, index) {
           if (typeof rowdata.context === 'undefined' || rowdata.context === '') {
             rowdata.context = mKPI.context

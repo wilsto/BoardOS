@@ -456,7 +456,6 @@ exports.update = function(req, res) {
     delete req.body.activity_old;
     delete req.body.context_old;
     var updated = _.merge(task, req.body);
-    console.log('updated', updated);
     updated.save(function(err) {
       if (err) {
         return handleError(res, err);

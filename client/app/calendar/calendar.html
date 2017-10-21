@@ -1,7 +1,7 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 <!--* Modal Part-->
 <div class="col-md-12">
-<div class="actions" style="margin-left:auto;margin-right:auto;width:200px">
+<!-- <div class="actions" style="margin-left:auto;margin-right:auto;width:200px">
                         <div class="btn-group">
                             <a class="btn btn-default dropdown-toggle" href="#" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">  Show Events : {{filterNotification}} <i class="fa fa-angle-down"></i></a>
                             <ul class="dropdown-menu pull-right">
@@ -13,7 +13,75 @@
                                 </li>
                             </ul>
                         </div>
+                    </div> -->
+                    <div class="row text-center">
+                                            <h2> {{ calendarTitle }}</h2>
                     </div>
-<div ui-calendar="uiConfig.calendar" ng-model="eventSources" ></div>
+
+                    <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                      <div class="portlet">
+                        <div class="portlet-title">
+                          <div class="caption">
+                            <i class="fa fa-tasks"></i>My Calendar
+
+                          </div>
+                          <div class="tools">
+                            <div class="btn-group">
+
+                              <button
+                                class="btn btn-xs btn-primary"
+                                mwl-date-modifier
+                                date="viewDate"
+                                decrement="calendarView"
+                                ng-click="cellIsOpen = false">
+                                Previous
+                              </button>
+                              <button
+                                class="btn btn-xs btn-default"
+                                mwl-date-modifier
+                                date="viewDate"
+                                set-to-today
+                                ng-click="cellIsOpen = false">
+                                Today
+                              </button>
+                              <button
+                                class="btn btn-xs btn-primary"
+                                mwl-date-modifier
+                                date="viewDate"
+                                increment="calendarView"
+                                ng-click="cellIsOpen = false">
+                                Next
+                              </button>
+                            </div>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              <div class="btn-group">
+                                <label class="btn btn-xs btn-primary" ng-model="calendarView" uib-btn-radio="'year'" ng-click="cellIsOpen = false">Year</label>
+                                <label class="btn btn-xs btn-primary" ng-model="calendarView" uib-btn-radio="'month'" ng-click="cellIsOpen = false">Month</label>
+                                <label class="btn btn-xs btn-primary" ng-model="calendarView" uib-btn-radio="'week'" ng-click="cellIsOpen = false">Week</label>
+                              </div>
+                          </div>
+                        </div>
+                        <div class="portlet-body">
+                        <div class="row">
+                          <div class="col-md-12 col-sm-12">
+
+                          <mwl-calendar
+                            view="calendarView"
+                            view-date="viewDate"
+                            events="events"
+                            view-title="calendarTitle"
+                            cell-is-open="true"
+                            on-event-times-changed="eventTimesChanged(calendarEvent, calendarNewEventStart, calendarNewEventEnd); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
+                            on-event-click="eventClicked(calendarEvent);">
+                        </mwl-calendar>
+                        </div>
+                        </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    </div>
 
 </div>

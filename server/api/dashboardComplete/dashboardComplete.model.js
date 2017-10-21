@@ -7,6 +7,7 @@ var DashboardCompleteSchema = new Schema({
   name: String,
   activity: String,
   context: String,
+  perimeter: Schema.Types.Mixed,
   axis: String,
   categories: Schema.Types.Mixed,
   kpis: Schema.Types.Mixed,
@@ -15,8 +16,9 @@ var DashboardCompleteSchema = new Schema({
   alertsValue: Number,
   tasks: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'TaskComplete'
+    ref: 'TaskFull'
   }],
+  sublist: Schema.Types.Mixed,
   tasksNb: Number,
   openTasksNb: Number,
   toFeedTasksNb: Number,
@@ -24,6 +26,13 @@ var DashboardCompleteSchema = new Schema({
   tags: String,
   owner: Schema.Types.Mixed,
   actors: Schema.Types.Mixed,
+  users: [{
+    dashboardName: String,
+    _id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    }
+  }],
   date: {
     type: Date,
     default: Date.now

@@ -12,6 +12,7 @@ module.exports = function(grunt) {
 
   // Load grunt tasks automatically, when needed
   require('jit-grunt')(grunt, {
+    lineending: 'grunt-lineending',
     express: 'grunt-express-server',
     useminPrepare: 'grunt-usemin',
     ngtemplates: 'grunt-angular-templates',
@@ -39,8 +40,7 @@ module.exports = function(grunt) {
     },
     express: {
       options: {
-        port: process.env.PORT || 9000,
-        'trace-gc': true
+        port: process.env.PORT || 9000
       },
       dev: {
         options: {
@@ -84,20 +84,20 @@ module.exports = function(grunt) {
           '<%= yeoman.client %>/{app,components}/**/*.spec.js',
           '<%= yeoman.client %>/{app,components}/**/*.mock.js'
         ],
-        tasks: ['newer:jshint:all', 'karma']
+        tasks: ['newer:jshint:all']
       },
       gruntfile: {
         files: ['Gruntfile.js']
       },
       livereload: {
         files: [
-          '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.css',
-          '{.tmp,<%= yeoman.client %>}/app/app.css',
-          '{.tmp,<%= yeoman.client %>}/app/app.html',
-          '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.html',
-          '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.js',
-          '{.tmp,<%= yeoman.client %>}{app,components}/**/*.spec.js',
-          '!{.tmp,<%= yeoman.client %>}/{app,components}/**/*.mock.js',
+          '{<%= yeoman.client %>}/{app,components}/**/*.css',
+          '{<%= yeoman.client %>}/app/app.css',
+          '{<%= yeoman.client %>}/app/app.html',
+          '{<%= yeoman.client %>}/{app,components}/**/*.html',
+          '{<%= yeoman.client %>}/{app,components}/**/*.js',
+          '{<%= yeoman.client %>}{app,components}/**/*.spec.js',
+          '!{<%= yeoman.client %>}/{app,components}/**/*.mock.js',
           '<%= yeoman.client %>/assets/images/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}'
         ],
         options: {
@@ -196,7 +196,7 @@ module.exports = function(grunt) {
       debug: {
         script: 'server/app.js',
         options: {
-          nodeArgs: ['--debug'],
+          nodeArgs: ['--debug-brk'],
           env: {
             PORT: process.env.PORT || 9000
           },
@@ -308,6 +308,10 @@ module.exports = function(grunt) {
       }
     },
 
+    uglify: {
+      options: {}
+    },
+
     // Package all the html partials into a single javascript payload
     ngtemplates: {
       options: {
@@ -356,6 +360,7 @@ module.exports = function(grunt) {
             '.htaccess',
             'bower_components/**/*',
             'assets/images/{,*/}*.{webp}',
+            'assets/ReleaseNotes/{,*/}*.*',
             'assets/fonts/**/*',
             'index.html'
           ]
@@ -402,6 +407,18 @@ module.exports = function(grunt) {
           branch: 'master'
         }
       },
+      recette: {
+        options: {
+          remote: 'boardos-rec',
+          branch: 'master'
+        }
+      },
+      test: {
+        options: {
+          remote: 'heroku-test',
+          branch: 'master'
+        }
+      },
       openshift: {
         options: {
           remote: 'openshift',
@@ -437,7 +454,7 @@ module.exports = function(grunt) {
         tagName: 'v%VERSION%',
         tagMessage: 'Version %VERSION%',
         push: true,
-        pushTo: 'origin master',
+        pushTo: 'origin',
         gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d',
         globalReplace: false
       }
@@ -558,6 +575,16 @@ module.exports = function(grunt) {
         }
       }
     },
+    lineending: {
+      dist: {
+        options: {
+          overwrite: true
+        },
+        files: {
+          '': ['<%= yeoman.client %>/index.html']
+        }
+      }
+    }
   });
 
   // Used for delaying livereload until after server has restarted
@@ -579,7 +606,7 @@ module.exports = function(grunt) {
   grunt.registerTask('serve', function(target) {
     if (target === 'dist') {
       return grunt.task.run([
-        'build',
+        'buildfast',
         'env:all',
         'env:prod',
         'express:prod',
@@ -654,6 +681,28 @@ module.exports = function(grunt) {
     ]);
   });
 
+  grunt.registerTask('buildfast', function(target) {
+    grunt.task.run([
+      'clean:dist',
+      'concurrent:dist',
+      'injector',
+      'wiredep',
+      'lineending',
+      'useminPrepare',
+      'autoprefixer',
+      'ngtemplates',
+      'concat',
+      'ngAnnotate',
+      'copy:dist',
+      'cdnify',
+      'cssmin',
+      'uglify',
+      'rev',
+      'usemin'
+    ]);
+
+  });
+
   grunt.registerTask('build', function(target) {
     grunt.task.run([
       'newer:jshint',
@@ -664,6 +713,7 @@ module.exports = function(grunt) {
       'removelogging',
       'injector',
       'wiredep',
+      'lineending',
       'useminPrepare',
       'autoprefixer',
       'ngtemplates',

@@ -25,11 +25,47 @@ angular.module('boardOsApp')
       value: 'Boulogne',
       text: 'Boulogne'
     }, ];
+    $scope.repeatOn = [{
+        value: 1,
+        text: 'MO',
+        label: 'Monday'
+      },
+      {
+        value: 2,
+        text: 'TU',
+        label: 'Tuesday'
+      },
+      {
+        value: 3,
+        text: 'WE',
+        label: 'Wednesday'
+      },
+      {
+        value: 4,
+        text: 'TH',
+        label: 'Thursday'
+      },
+      {
+        value: 5,
+        text: 'FR',
+        label: 'Friday'
+      }
+    ];
+    $scope.showRepeatOn = function(task) {
+      var selected = [];
+      _.each($scope.repeatOn, function(s) {
+        if (task.repeatOn && task.repeatOn.indexOf(s.value) >= 0) {
+          selected.push(s.label);
+        }
+      });
+      return selected.length ? selected.join(', ') : 'Not set';
+    };
+
     $scope.editInProgress = false;
 
     $scope.load = function() {
-      $http.get('/api/dashboards/list/' + $scope.currentUser._id).success(function(dashboards) {
-        $scope.dashboards = dashboards;
+      $http.get('/api/recurrentTasks/list/' + $scope.currentUser._id).success(function(recurrentTasks) {
+        $scope.recurrentTasks = recurrentTasks;
       });
     };
 

@@ -1,85 +1,164 @@
 'use strict';
 
 angular.module('boardOsApp')
-    .controller('CalendarCtrl', function($scope, $http, $rootScope) {
-        $scope.eventSources = [];
-        $scope.filterNotification = 'Only For Me';
+  .controller('CalendarCtrl', function($scope, $http, $rootScope, $location, calendarConfig, Notification) {
+    $scope.eventSources = [];
+    $scope.filterNotification = 'Only For Me';
 
-        $scope.uiConfig = {
-            calendar: {
-                height: 450,
-                editable: false,
-                header: {
-                    left: 'month basicWeek basicDay',
-                    center: 'title',
-                    right: 'today prev,next'
-                },
-                eventLimit: true,
-                firstDay: 1
-            }
-        };
+    $scope.loadTaskToNotify = function() {
+      if (typeof $scope.allTasks !== 'undefined') {
+        $scope.alltasksToNotify = $scope.allTasks.length;
+        $scope.myTasks = $scope.filterTask($scope.allTasks, $scope.filterNotification);
 
-        $scope.loadTaskToNotify = function() {
-            if (typeof $scope.allTasks !== 'undefined') {
-                $scope.alltasksToNotify = $scope.allTasks.length;
-                $scope.myTasks = $scope.filterTask($scope.allTasks, $scope.filterNotification);
-                if ($scope.filterNotification === 'Only For Me') {
-                    $scope.tasksToNotify = $scope.myTasks;
-                } else {
-                    $scope.tasksToNotify = $scope.allTasks;
-                }
-                $scope.mytasksToNotify = $scope.myTasks.length;
+        if ($scope.filterNotification === 'Only For Me') {
 
-                $scope.events = _.map($scope.tasksToNotify, function(task) {
-                    return {
-                        allDay: true,
-                        title: task.name,
-                        start: task.startDate,
-                        end: task.endDate,
-                        url: '/task/' + task._id,
-                        color: '#69a4e0'
-                    };
-                });
-                $scope.eventSources.push($scope.events);
-            }
-        };
+          $scope.tasksToNotify = $scope.myTasks;
+        } else {
+          $scope.tasksToNotify = $scope.allTasks;
+        }
+        $scope.mytasksToNotify = $scope.myTasks.length;
 
-        $scope.$watch('filterNotification', function() {
-            $scope.eventSources.splice(0, $scope.eventSources.length);
-            $scope.loadTaskToNotify();
+        $scope.events = [];
+        _.each($scope.myTasks, function(task) {
+          task.taskSuffIcon = '';
+          switch (task.metrics[task.metrics.length - 1].status) {
+            case 'In Progress':
+              task.taskIcon = '<i class="fa fa-spinner" aria-hidden="true"></i>&nbsp;&nbsp; ';
+              task.taskColor = calendarConfig.colorTypes.info;
+              break;
+            case 'Finished':
+              if (task.reviewTask === true) {
+                task.taskIcon = '<i class="fa fa-bookmark-o text-success" aria-hidden="true"></i>&nbsp;&nbsp; ';
+                task.taskColor = calendarConfig.colorTypes.success;
+
+              } else {
+                task.taskIcon = '<i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;&nbsp; ';
+                task.taskColor = calendarConfig.colorTypes.success;
+              }
+              if (task.metrics[task.metrics.length - 1].userSatisfaction === undefined || task.metrics[task.metrics.length - 1].deliverableStatus === undefined || task.metrics[task.metrics.length - 1].actorSatisfaction === undefined) {
+                task.taskSuffIcon = ' <i class="fa fa-question-circle-o text-danger" aria-hidden="true"></i>&nbsp;&nbsp;';
+              }
+              break;
+            default:
+              task.taskIcon = '<i class="fa fa-square-o " aria-hidden="true"></i>&nbsp;&nbsp; ';
+              task.taskColor = '';
+          }
+
+          $scope.events.push({
+            title: task.taskIcon + task.taskSuffIcon + task.name,
+            eventType: 'task',
+            eventId: task._id,
+            displayEventTimes: false, // Indicates whether need to show time or not.
+            startsAt: moment(task.metrics[task.metrics.length - 1].startDate || task.metrics[task.metrics.length - 1].targetstartDate).set({
+              hour: 0,
+              minute: 0,
+              second: 0,
+              millisecond: 0
+            }).toDate(),
+            endsAt: moment(task.metrics[task.metrics.length - 1].endDate || task.metrics[task.metrics.length - 1].targetEndDate).set({
+              hour: 2,
+              minute: 0,
+              second: 0,
+              millisecond: 0
+            }).toDate(),
+            color: task.taskColor,
+            draggable: (task.metrics[task.metrics.length - 1].status !== 'Finished')
+          });
         });
 
-
-        $scope.filterTask = function(tasks, filter) {
-            var filtertasks;
-            // si pas de filtrer alors on retourne le tout
-            if (typeof filter === 'undefined') {
-                return tasks;
-            }
-            
-            filtertasks = _.filter(tasks, function(task) {
-                // si owner
-                if (task.actor._id === $scope.currentUser._id) {
-                    return true;
-                }
-                // si actor (metrics)
-                if (typeof task.lastmetric !== 'undefined') {
-                    if ($scope.currentUser._id === task.lastmetric.actor._id) {
-                        return true;
-                    }
-                }
-                // si watcher
-                if (_.intersection([$scope.currentUser._id], _.pluck(task.watchers, '_id')).length > 0) {
-                    return true;
-                }
-
+        _.each($scope.myAnomalies, function(anomalie) {
+          if (anomalie.actor._id === $scope.currentUser._id) {
+            $scope.events.push({
+              title: '<i class="fa fa-bell-o" aria-hidden="true"></i>&nbsp;&nbsp; ' + anomalie.name, // The title of the event
+              eventType: 'anomalie',
+              eventId: anomalie._id,
+              startsAt: moment(anomalie.date).toDate(),
+              color: calendarConfig.colorTypes.important,
             });
-            return filtertasks;
-        };
+          }
+        });
+        $scope.eventSources.push($scope.events);
+      }
+    };
 
-        $http.get('/api/tasks').success(function(tasks) {
-            $scope.allTasks = tasks.tasks;
-            $scope.loadTaskToNotify();
+    $scope.$watch('filterNotification', function() {
+      $scope.eventSources.splice(0, $scope.eventSources.length);
+      $scope.loadTaskToNotify();
+    });
+
+
+    $scope.filterTask = function(tasks, filter) {
+      var filtertasks;
+      // si pas de filtrer alors on retourne le tout
+      if (typeof filter === 'undefined') {
+        return tasks;
+      }
+
+      filtertasks = _.filter(tasks, function(task) {
+        // si actor (metrics)
+        if (typeof task.actors !== 'undefined') {
+          var actors = _.pluck(task.actors, '_id');
+          if (actors.indexOf($scope.currentUser._id) > -1) {
+            return true;
+          }
+        }
+      });
+      return filtertasks;
+    };
+
+    $http.get('/api/taskFulls').success(function(tasks) {
+      $scope.allTasks = tasks;
+      $scope.loadTaskToNotify();
+    });
+
+
+    // Charger les anomalies
+    // ------------------
+    $scope.loadAnomalies = function() {
+      var myparams = {
+        params: {
+          userId: $scope.currentUser._id
+        }
+      };
+
+      $http.get('/api/anomalies/', myparams).success(function(anomalies) {
+        $scope.myAnomalies = anomalies;
+
+      });
+    };
+
+    $scope.loadAnomalies();
+
+    // calendar
+    // **********
+    //
+    $scope.viewDate = new Date();
+    $scope.calendarView = 'month';
+    $scope.eventClicked = function(calendarEvent) {
+      $location.path('/' + calendarEvent.eventType + '/' + calendarEvent.eventId);
+    };
+
+    $scope.eventTimesChanged = function(calendarEvent, calendarNewEventStart, calendarNewEventEnd) {
+      var updatedEvent = _.filter($scope.myTasks, function(task) {
+        return task._id === calendarEvent.eventId;
+      });
+      if (updatedEvent.length > 0) {
+        
+        
+        var dayDiff = moment(calendarNewEventStart).diff(moment(updatedEvent[0].metrics[0].targetstartDate), 'days');
+        
+        updatedEvent[0].metrics[0].targetstartDate = moment(updatedEvent[0].metrics[0].targetstartDate).add(dayDiff, 'days').toDate();
+        updatedEvent[0].metrics[0].targetEndDate = moment(updatedEvent[0].metrics[0].targetEndDate).add(dayDiff, 'days').toDate();
+        
+        
+
+        $scope.myPromise = $http.put('/api/taskFulls/' + calendarEvent.eventId + '/' + false, updatedEvent[0]).success(function(data) {
+          
+          var logInfo = 'Task "' + updatedEvent[0].name + '" was updated';
+          Notification.success(logInfo);
         });
 
-    });
+      }
+    };
+
+  });

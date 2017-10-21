@@ -7,12 +7,29 @@
 var Mail = require('./mail.model');
 
 exports.register = function(socket) {
-  Mail.schema.post('save', function (doc) {
+  Mail.schema.post('save', function(doc) {
     onSave(socket, doc);
   });
-  Mail.schema.post('remove', function (doc) {
+  Mail.schema.post('remove', function(doc) {
     onRemove(socket, doc);
   });
+
+  process.on('taskFullstart', function(data) {
+    socket.emit('taskFull:start', data);
+  });
+
+  process.on('taskFullrun', function(data) {
+    socket.emit('taskFull:run', data);
+  });
+
+  process.on('dashboardCompletestart', function(data) {
+    socket.emit('dashboardComplete:start', data);
+  });
+
+  process.on('dashboardCompleterun', function(data) {
+    socket.emit('dashboardComplete:run', data);
+  });
+
 }
 
 function onSave(socket, doc, cb) {

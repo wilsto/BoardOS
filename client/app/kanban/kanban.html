@@ -1,0 +1,114 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="">
+  <div class="bosskb" >
+      <table class="bosskb-container">
+          <thead>
+              <tr class="bosskb-row bosskb-states-row">
+                  <td class="bosskb-cell bosskb-header bosskb-row-header bosskb-column-header bosskb-toggle-button-area"></td>
+                  <td ng-if="!hideGroups" class="bosskb-cell bosskb-header bosskb-row-header bosskb-column-header bosskb-content" ng-style="{ width: groupWidth }" ></td>
+                  <td ng-repeat="state in states" class="bosskb-cell bosskb-header bosskb-column-header bosskb-state-header" ng-style="{ width: state.width ? state.width : stateWidth }">
+                    <div class="bosskb-state">
+                        {{ state.name }}
+                    </div>
+                  </td>
+              </tr>
+          </thead>
+          <tbody>
+              <tr ng-if="!groups.length" class="bosskb-group-collapsed">
+                  <td colspan="2" class="bosskb-cell bosskb-header bosskb-row-header bosskb-no-items-label">
+                      {{ noItemsLabel }}
+                  </td>
+                  <td ng-repeat="state in states" class="bosskb-cell bosskb-header bosskb-column-header bosskb-state-header" ng-style="{ width: state.width ? state.width : stateWidth }"></td>
+              </tr>
+              <tr ng-repeat="group in groups" class="bosskb-row bosskb-group-row" ng-class="group.isCollapsed ? 'bosskb-group-collapsed' : null">
+                  <td class="bosskb-cell bosskb-header bosskb-row-header bosskb-toggle-button-area" ng-click="group.isCollapsed = !group.isCollapsed">
+                      <svg ng-if="!group.isCollapsed" class="bosskb-toggle-button" width="8" height="8">
+                          <polygon points="1,7 7,7 7,1" class="bosskb-toggle-button-expanded"/>
+                      </svg>
+                      <svg ng-if="group.isCollapsed" class="bosskb-toggle-button" width="8" height="8">
+                          <polygon points="0,0 6,4 0,8" class="bosskb-toggle-button-collapsed"/>
+                      </svg>
+                  </td>
+                  <td ng-if="!hideGroups" class="bosskb-cell bosskb-header bosskb-row-header bosskb-group-container">
+                      <div ng-style="{ height: (!group.isCollapsed ? groupHeight : collapsedGroupHeight) + 'px' }" class="bosskb-content-box" ds:kanban-item-drop-zone can-drop="canDropGroup(type, index, groups.indexOf(group))" on-drop="onGroupDrop(type, index, groups.indexOf(group))">
+                        <div ng-mouseenter="isHovered = true" ng-mouseleave="isHovered = false">
+                            <div class="bosskb-group" ds:kanban-draggable-item drag-type="groupType" drag-index="groups.indexOf(group)" is-dragging-parent="true" ng-style="{ backgroundColor: group.backgroundColor ? group.backgroundColor : (group.itemType && group.itemType.backgroundColor ? group.itemType.backgroundColor : defaultGroupType.backgroundColor) }">
+                                <table>
+                                    <tr>
+                                        <td class="bosskb-gripper" ng-style="{ backgroundColor: group.color ? group.color : (group.itemType ? group.itemType.color : defaultGroupType.color) }">&nbsp;</td>
+                                        <td class="bosskb-group-content">
+                                            <div class="bosskb-property bosskb-property-editor">
+                                                <input type="text" ng-model="group[groupNameField]" readonly="readonly"/>
+                                            </div>
+                                            <table ng-hide="group.isCollapsed" class="bosskb-property bosskb-property-editor bosskb-property-table">
+                                                <tr>
+                                                    <td>
+                                                        <img ng-if="assignableResources && group.assignedResource.imageUrl" ng-src="{{ group.assignedResource.imageUrl }}" class="bosskb-property-image"/>
+                                                    </td>
+                                                    <td class="bosskb-property-table">
+                                                        <input ng-model="assignableResources ? group.assignedResource.name : null" ng-model-options="{ getterSetter: true }" readonly="readonly" class="bosskb-property-secondary bosskb-select-replacement"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table ng-hide="group.isCollapsed" class="bosskb-property bosskb-property-editor bosskb-property-table">
+                                                <tr>
+                                                    <td>
+                                                        <span class="bosskb-property-label">{{ stateLabel }}:</span>
+                                                    </td>
+                                                    <td class="bosskb-property-table">
+                                                        <input ng-model="group.state.name" readonly="readonly" class="bosskb-select-replacement"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </div>
+                      </div>
+                  </td>
+                  <td ng-repeat="state in states" class="bosskb-cell bosskb-items-container">
+                      <div ng-hide="group.isCollapsed" ng-style="{ height: ((!group.isCollapsed ? getItemsInGroupAndState(group, getMaxStateInGroup(group)).length : 1) * itemHeight + (!isReadOnly && !areNewItemButtonsHidden && !getMaxStateInGroup(group).isReadOnly && !getMaxStateInGroup(group).areNewItemButtonsHidden && !group.isReadOnly ? 26 : 0)) + 'px' }">
+                          <div ng-repeat="item in getItemsInGroupAndState(group, state)" ds:kanban-item-drop-zone can-drop="canDropItem(type, index, group, state, items.indexOf(item))" on-drop="onItemDrop(type, index, group, state, items.indexOf(item))">
+                              <div ng-style="{ height: itemHeight + 'px' }" class="bosskb-content-box">
+                                <div ng-mouseenter="isHovered = true" ng-mouseleave="isHovered = false" class="bosskb-item-container">
+                                    <div class="bosskb-item" ds-kanban-draggable-item drag-type="itemType" drag-index="items.indexOf(item)" is-dragging-parent="true" ng-style="{ backgroundColor: item.backgroundColor ? item.backgroundColor : (item.itemType && item.itemType.backgroundColor ? item.itemType.backgroundColor : defaultItemType.backgroundColor) }">
+                                        <table>
+                                            <tr>
+                                                <td class="bosskb-gripper" ng-style="{ backgroundColor: item.color ? item.color : (item.itemType ? item.itemType.color : defaultItemType.color) }">&nbsp;</td>
+                                                <td class="bosskb-item-content">
+                                                    <div class="bosskb-property bosskb-property-editor">
+                                                        <input type="text" ng-model="item[itemNameField]" readonly="readonly"/>
+                                                    </div>
+                                                    <table class="bosskb-property bosskb-property-editor bosskb-property-table">
+                                                        <tr>
+                                                            <td>
+                                                                <!-- <img ng-if="assignableResources && item.assignedResource.imageUrl" ng-src="{{ item.assignedResource.imageUrl }}" class="bosskb-property-image"/> -->
+                                                            </td>
+                                                            <td class="bosskb-property-table">
+                                                                <!-- <input ng-model="assignableResources ? item.assignedResource.name : null" ng-model-options="{ getterSetter: true }" readonly="readonly" class="bosskb-property-secondary bosskb-select-replacement"/> -->
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                              </div>
+                          </div>
+                          <div class="bosskb-commands-container" ng-style="{ height: ((getItemsInGroupAndState(group, getMaxStateInGroup(group)).length - getItemsInGroupAndState(group, state).length) * itemHeight + (!isReadOnly && !areNewItemButtonsHidden && !getMaxStateInGroup(group).isReadOnly && !getMaxStateInGroup(group).areNewItemButtonsHidden && !group.IsReadOnly ? 26 : 0)) + 'px' }" ds:kanban-item-drop-zone can-drop="canDropItem(type, index, group, state)" on-drop="onItemDrop(type, index, group, state)">
+                              <a href="#" ng-hide="isReadOnly || areNewItemButtonsHidden || state.isReadOnly || state.areNewItemButtonsHidden || group.isReadOnly || group.areNewItemButtonsHidden" class="bosskb-button bosskb-new-item-command" ng-click="addNewItem(group, state)" title="{{ newItemButtonToolTip }}">
+                                  {{ newItemButtonText }}
+                              </a>
+                          </div>
+                      </div>
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+  </div>
+
+</div>

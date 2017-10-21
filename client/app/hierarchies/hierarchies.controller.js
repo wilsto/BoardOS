@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('hierarchiesCtrl', function($scope, $http, Notification) {
+  .controller('hierarchiesCtrl', function($scope, $http, Notification, $rootScope) {
     $scope.hierarchies = [];
     $scope.Hierarchy = {};
     $scope.config = {
@@ -41,13 +41,42 @@ angular.module('boardOsApp')
       plugins: ['wholerow', 'types', 'contextmenu', 'dnd', 'search', 'unique', 'themes', 'ui']
     };
 
+    function verboseHierarchy(data) {
+      angular.forEach($scope.hierarchies, function(obj, key) {
+        // on recherche les parents et on les concatène.
+        var parentPath = _.compact(_.map(data.instance._model.data[obj.id].parents.reverse(), function(parent) {
+          return data.instance._model.data[parent].text;
+        })).join('.');
+
+        $scope.hierarchies[key].longname = (parentPath.length > 0) ? parentPath + '.' + obj.text : obj.text;
+
+      });
+    }
+
+    $scope.nodes = [{
+        'id': 1,
+        'title': 'node 1'
+      },
+      {
+        'id': 2,
+        'title': 'node 2'
+      },
+      {
+        'id': 3,
+        'title': 'node 3'
+      }
+    ];
     $scope.load = function() {
       $http.get('/api/hierarchies/list/' + $scope.HierarchyType).success(function(hierarchies) {
-        $scope.hierarchies = hierarchies.list;
-        $scope.treeConfig.version++;
+        $scope.hierarchies = _.sortBy(hierarchies.list, 'longname');
+        _.each($scope.hierarchies, function(hierarchy) {
+          hierarchy.longname = hierarchy.longname.toUpperCase();
+        });
         $scope.selectedNode = null;
       });
     };
+
+    $scope.load();
 
     $scope.loadMe = function(HierarchyType) {
       $scope.HierarchyType = HierarchyType;
@@ -55,27 +84,34 @@ angular.module('boardOsApp')
     };
 
 
-    $scope.create = function() {
-      $scope.hierarchies.push({
-        id: 'ajson' + (Math.round(Math.random() * 100000)).toString(),
-        parent: '#',
-        text: 'new Node'
+    $scope.newSubItem = function(hierarchy, index) {
+      bootbox.prompt({
+        title: 'Please Enter Name of this hierarchy',
+        value: hierarchy.longname,
+        callback: function(result) {
+          if (result) {
+            $scope.hierarchies.push({
+              id: 'ajson' + (Math.round(Math.random() * 100000)).toString(),
+              parent: hierarchy.id,
+              text: result,
+              longname: result
+            });
+            $scope.hierarchies = _.sortBy($scope.hierarchies, 'longname');
+            $scope.$apply();
+          }
+        }
       });
-      $scope.treeConfig.version++;
-
     };
 
     $scope.save = function() {
       if (typeof $scope.HierarchyType !== 'undefined') {
-        $scope.treeData = angular.copy($scope.hierarchies);
-        $scope.treeData.forEach(function(v) {
-          delete v.__uiNodeId;
-        });
 
-        $http.put('/api/hierarchies/' + $scope.HierarchyType, $scope.treeData);
-        Notification.success('Hierarchy "' + $scope.HierarchyType + '" was updated');
+        
+        $http.put('/api/hierarchies/' + $scope.HierarchyType, $scope.hierarchies).success(function(hierarchies) {
+          Notification.success('Hierarchy "' + $scope.HierarchyType + '" was updated');
+          $scope.load();
+        });
       }
-      //$scope.load();
     };
 
     $scope.edit = function(Hierarchy) {
@@ -86,41 +122,41 @@ angular.module('boardOsApp')
       $scope.Hierarchy = {};
     };
 
-    $scope.delete = function(Hierarchy, index) {
-      bootbox.confirm('Are you sure?', function(result) {
+    $scope.delete = function(hierarchy, index) {
+      bootbox.confirm('Are you sure to remove "' + hierarchy.longname + '" ?', function(result) {
         if (result) {
-          $http.delete('/api/hierarchies/' + Hierarchy._id).success(function() {
-            $scope.hierarchies.splice(index, 1);
-            Notification.success('Hierarchy "' + Hierarchy.name + '" was deleted');
-          });
+          $scope.hierarchies.splice(index, 1);
+          Notification.success('Hierarchy "' + hierarchy.longname + '" was deleted');
         }
       });
     };
 
-    $scope.load();
 
-    $scope.selectNode = function(e, data) {
-      if (data && data.selected && data.selected.length) {
-        $scope.$apply( // ?? workaround avec apply, à chercher pourquoi
-          $scope.selectedNode = $scope.hierarchies.filter(function(obj) {
-            return obj.id === data.node.id;
-          })[0]
-        );
-        var parents = [];
-        _.each(data.node.parents, function(thisNode) {
-          parents.push(thisNode);
-        });
+    $scope.selectNode = function(data) {
+      
+      if (data) {
+        $scope.selectedNode = $scope.hierarchies.filter(function(obj) {
+          return obj.id === data.id;
+        })[0];
       }
-
     };
 
-    $scope.createNode = function(e, data) {
-      $scope.hierarchies.push({
-        id: data.node.id,
-        parent: data.node.parent,
-        text: data.node.text
+    $scope.createNode = function(data) {
+      bootbox.prompt({
+        title: 'Please Enter Name of this hierarchy',
+        callback: function(result) {
+          if (result) {
+            $scope.hierarchies.push({
+              id: 'ajson' + (Math.round(Math.random() * 100000)).toString(),
+              parent: '#',
+              text: result,
+              longname: result
+            });
+            $scope.hierarchies = _.sortBy($scope.hierarchies, 'longname');
+            $scope.$apply();
+          }
+        }
       });
-      verboseHierarchy(data);
     };
 
     $scope.deleteNode = function(e, data) {
@@ -147,16 +183,5 @@ angular.module('boardOsApp')
     };
 
 
-    function verboseHierarchy(data) {
-      angular.forEach($scope.hierarchies, function(obj, key) {
-        // on recherche les parents et on les concatène.
-        var parentPath = _.compact(_.map(data.instance._model.data[obj.id].parents.reverse(), function(parent) {
-          return data.instance._model.data[parent].text;
-        })).join('.');
-
-        $scope.hierarchies[key].longname = (parentPath.length > 0) ? parentPath + '.' + obj.text : obj.text;
-
-      });
-    }
 
   });

@@ -11,36 +11,52 @@ var TaskFullSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  modifdate: {
+    type: Date,
+    default: Date.now
+  },
+  active: {
+    type: Boolean,
+    default: false
+  },
   description: String,
   hypothesis: String,
   risks: String,
   metrics: Schema.Types.Mixed,
   rework: Schema.Types.Mixed,
-  previous: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'fulltask'
-  },
   alerts: Schema.Types.Mixed,
   kpis: Schema.Types.Mixed,
   dashboards: Schema.Types.Mixed,
-  todos: [{
-    text: String,
-    date: Date,
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    },
-    isDone: Boolean
+  todos: Schema.Types.Mixed,
+  reviewTask: {
+    type: Boolean,
+    default: false
+  },
+  reviewPeriodic: {
+    type: Boolean,
+    default: false
+  },
+  nextTasks: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'TaskFull'
   }],
-  comments: [{
-    text: String,
-    date: Date,
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    },
-    auto: Boolean
+  actionPlan: {
+    type: Boolean,
+    default: false
+  },
+  previousTasks: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'TaskFull'
   }],
+  previousAnomalies: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Anomalie'
+  }],
+  anomalies: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Anomalie'
+  }],
+  comments: Schema.Types.Mixed,
   actors: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'

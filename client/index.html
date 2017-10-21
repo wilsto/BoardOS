@@ -21,7 +21,6 @@
 <link rel="stylesheet" href="bower_components/fullcalendar/fullcalendar.css" />
 <link rel="stylesheet" href="bower_components/bootstrap-markdown/css/bootstrap-markdown.min.css" />
 <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
-<link rel="stylesheet" href="bower_components/jstree/dist/themes/default/style.css" />
 <link rel="stylesheet" href="bower_components/ng-table/ng-table.css" />
 <link rel="stylesheet" href="bower_components/ngDialog/css/ngDialog.css" />
 <link rel="stylesheet" href="bower_components/ngDialog/css/ngDialog-theme-default.css" />
@@ -31,9 +30,15 @@
 <link rel="stylesheet" href="bower_components/bootstrap-daterangepicker/daterangepicker.css" />
 <link rel="stylesheet" href="bower_components/vis/dist/vis.css" />
 <link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.css" />
+<link rel="stylesheet" href="bower_components/bootstrap-toggle/css/bootstrap-toggle.min.css" />
+<link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
+<link rel="stylesheet" href="bower_components/mdPickers/dist/mdPickers.min.css" />
+<link rel="stylesheet" href="bower_components/ng-tags-input/ng-tags-input.css" />
 <link rel="stylesheet" href="bower_components/ngEmbed/src/ng-embed.css" />
+<link rel="stylesheet" href="bower_components/angular-bootstrap-calendar/dist/css/angular-bootstrap-calendar.css" />
 <!-- endbower -->
 <!-- endbuild -->
+<link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
 <!-- build:css({.tmp,client}) app/app.css -->
 <link rel="stylesheet" href="app/app.css">
 <!-- injector:css -->
@@ -43,6 +48,8 @@
 <link rel="stylesheet" href="app/account/login/login.css">
 <link rel="stylesheet" href="app/account/settings/setting.css">
 <link rel="stylesheet" href="app/admin/admin.css">
+<link rel="stylesheet" href="app/anomalie/anomalie.css">
+<link rel="stylesheet" href="app/anomalies/anomalies.css">
 <link rel="stylesheet" href="app/app.css">
 <link rel="stylesheet" href="app/calendar/calendar.css">
 <link rel="stylesheet" href="app/dashboard/dashboard.css">
@@ -53,6 +60,7 @@
 <link rel="stylesheet" href="app/help/help.css">
 <link rel="stylesheet" href="app/hierarchies/hierarchies.css">
 <link rel="stylesheet" href="app/journallog/journallog.css">
+<link rel="stylesheet" href="app/kanban/kanban.css">
 <link rel="stylesheet" href="app/mail/mail.css">
 <link rel="stylesheet" href="app/main/main.css">
 <link rel="stylesheet" href="app/process/process.css">
@@ -62,12 +70,13 @@
 <link rel="stylesheet" href="app/tabTask/tabTask.css">
 <link rel="stylesheet" href="app/task/task.css">
 <link rel="stylesheet" href="app/tasks/tasks.css">
+<link rel="stylesheet" href="app/whatsnew/whatsnew.css">
 <link rel="stylesheet" href="components/modal/modal.css">
 <!-- endinjector -->
 <!-- endbuild -->
 </head>
 <body ng-app="boardOsApp" class="page-header-fixed page-sidebar-closed">
-  <div ng-controller="GlobalCtrl" ng-cloak >
+  <div id="main" ng-controller="GlobalCtrl" ng-cloak >
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
       <![endif]-->
@@ -80,27 +89,11 @@
             <!-- BEGIN SIDEBAR MENU -->
             <!-- DOC: for circle icon style menu apply page-sidebar-menu-circle-icons class right after sidebar-toggler-wrapper -->
             <ul class="page-sidebar-menu" >
-              <li class="sidebar-toggler-wrapper">
-                <!-- BEGIN SIDEBAR TOGGLER BUTTON                 <div class="sidebar-toggler">
-              </div>-->
-
-              <div class="clearfix">
-              </div>
-              <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
-            </li>
-            <li class="sidebar-search-wrapper">
-              <form class="search-form" role="form" action="index.html" method="get">
-                <div class="input-icon right">
-                  <i class="fa fa-search"></i>
-                  <input type="text" class="form-control" name="query" placeholder="Rechercher...">
-                </div>
-              </form>
-            </li>
-            <li class="start active ">
-              <a href="/">
+            <li  class="start active ">
+              <a href="#">
                 <i class="fa fa-dashboard"></i>
-                <span class="title">Dashboard</span>
-                <span class="selected"></span>
+                <span class="title">Information</span>
+                <span class="arrow "></span>
               </a>
               <ul class="sub-menu">
                 <li>
@@ -112,28 +105,25 @@
                 <li>
                   <a href="/dashboards">
                     <i class="fa fa-list"></i>
-                    List
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li >
-              <a href="/calendar">
-                <i class="fa fa-calendar"></i>
-                <span class="title">Information</span>
-                <span class="arrow "></span>
-              </a>
-              <ul class="sub-menu">
-                <li>
-                  <a href="/KPIs">
-                    <i class="fa fa-tasks"></i>
-                    KPIs
+                    Dashboards
                   </a>
                 </li>
                 <li>
                   <a href="/tasks">
                     <i class="fa fa-check-square-o "></i>
                     Tasks
+                  </a>
+                </li>
+                <li>
+                  <a href="/anomalies">
+                    <i class="fa fa-exclamation-circle "></i>
+                    Anomalies
+                  </a>
+                </li>
+                <li>
+                  <a href="/KPIs">
+                    <i class="fa fa-tasks"></i>
+                    KPIs
                   </a>
                 </li>
                 <li>
@@ -163,6 +153,12 @@
                 <span class="arrow "></span>
               </a>
               <ul class="sub-menu">
+                <li ng-if="isAdmin">
+                  <a href="/whatsnew">
+                    <i class="fa fa-newspaper-o"></i>
+                    what's New
+                  </a>
+                </li>
                 <li>
                   <a href="/hierarchies">
                     <i class="fa fa-gear"></i>
@@ -232,39 +228,46 @@
       <!-- END SIDEBAR -->
       <!-- BEGIN CONTENT -->
       <div class="page-content-wrapper">
-        <div class="page-content" style="padding-top:0;">
+        <div class="page-content full-height" style="padding-top:0;">
           <!-- END BEGIN STYLE CUSTOMIZER -->
           <!-- BEGIN PAGE HEADER-->
-          <div class="page-bar" ng-cloak ng-if="currentUser.name" style="top:45px;position:fixed;width:99%;z-index:9">
+          <div class="page-bar" ng-cloak ng-if="currentUser.name" >
             <ul class="page-breadcrumb" style="margin-top:10px">
               <li>
                 <i class="fa fa-home"></i>
                 <a href="/">Home</a>
               </li>
-              <li ng-show="perimeter.name && showAriane">
+              <!-- DASHBOARD -->
+              <li ng-show="perimeter.name && showArianeDashboard" class="hidden-xs">
                 <i class="fa fa-angle-right"></i>
-                <i class="fa fa-dashboard"></i> <span style="color:lightgrey"> Dashboard  </span><a href="/dashboard/{{perimeter.id}}">  {{perimeter.name}}</a>
-                <button type="button" class="btn btn-xs btn-warning" ng-show="perimeter.name !==perimeter.name">Restore</button>
+              <img src="assets/images/dashboard-icon.png" alt="" style="padding-right:5px"> <span class="text-muted"> Dashboard  </span> <strong style="font-size:18px;padding-left:10px;"> {{perimeter.name}}</strong>
+
               </li>
-              <li ng-show="perimeter.name && showAriane">
+              <!-- <li ng-show="perimeter.name && showArianeDashboard">
                 <i class="fa fa-angle-right"></i>
-                <span style="color:lightgrey"><i class="fa fa-calendar"></i> Activity </span><a href="/dashboard/{{perimeter._id}}"> {{perimeter.activity || 'All'}}</a>
+                <span style="color:lightgrey"><i class="fa fa-calendar"></i> Activity </span> {{perimeter.activity || 'All'}}
               </li>
-              <li ng-show="perimeter.name && showAriane">
+              <li ng-show="perimeter.name && showArianeDashboard">
                 <i class="fa fa-angle-right"></i>
-                <span style="color:lightgrey"><i class="fa fa-map-marker"></i> Context </span><a href="/dash/{{perimeter._id}}"> {{perimeter.context || 'All'}}</a>
-              </li>
-              <li ng-show="perimeter.name === '#hide' && showAriane">
+                <span style="color:lightgrey"><i class="fa fa-map-marker"></i> Context </span> {{perimeter.context || 'All'}}
+              </li> -->
+              <!-- DASHBOARD -->
+              <li ng-show="currentTaskName.name && showArianeTask"  class="hidden-xs">
                 <i class="fa fa-angle-right"></i>
-                <span style="color:lightgrey"><i class="fa fa-crosshairs"></i> Axis </span><a href="/dash/{{perimeter._id}}"> {{perimeter.axe || 'All'}}</a>
+                <img src="assets/images/task-icon.png" alt="" style="padding-right:5px"> <span class="text-muted"> Task  </span> <strong style="font-size:18px;padding-left:10px;"> {{currentTaskName.name}}</strong>
+
               </li>
-              <li ng-show="perimeter.name === '#hide' && showAriane">
+              <!-- <li ng-show="currentTaskName.name && showArianeTask">
                 <i class="fa fa-angle-right"></i>
-                <span style="color:lightgrey"><i class="icon-cursor"></i> Categories </span><a href="/dash/{{perimeter._id}}"> {{perimeter.category || 'All'}}</a>
+                <span style="color:lightgrey"><i class="fa fa-calendar"></i> Activity </span>{{currentTaskName.activity || 'All'}}
               </li>
+              <li ng-show="currentTaskName.name && showArianeTask">
+                <i class="fa fa-angle-right"></i>
+                <span style="color:lightgrey"><i class="fa fa-map-marker"></i> Context </span> {{currentTaskName.context || 'All'}}
+              </li> -->
             </ul>
-            <ul class="page-breadcrumb pull-right" >
-              <div id="reportrange" class="pull-right btn btn-primary btn-fit-height" style="width: 100%">
+            <ul class="page-breadcrumb pull-right"  ng-show="showArianeMain || showArianeDashboard  || showArianeKPI  || showArianeAno ">
+              <div id="reportrange" class="pull-right btn btn-primary btn-fit-height" style="width: 100%;">
                   <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
                   <span></span> <b class="caret"></b>
               </div>
@@ -273,14 +276,14 @@
 
           <!-- END PAGE HEADER-->
           <!-- Add your site or application content here -->
-          <div class="container-fluid" style="margin:20px;padding-top:30px" ui-view=""></div>
+          <div class="container-fluid container-boss"  ui-view=""></div>
         </div>
       </div>
 
       <!-- BEGIN FOOTER -->
-      <div class="footer">
+      <!-- <div class="footer">
         <div class="container"></div>
-      </div>
+      </div> -->
       <!-- END FOOTER -->
 
       <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
@@ -303,16 +306,20 @@
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-aria/angular-aria.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/lodash/dist/lodash.compat.js"></script>
     <script src="bower_components/angular-confirm-field/app/package/js/angular-confirm-field.min.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-filter/dist/angular-filter.js"></script>
+    <script src="bower_components/angular-messages/angular-messages.js"></script>
     <script src="bower_components/d3/d3.js"></script>
     <script src="bower_components/nvd3/nv.d3.js"></script>
     <script src="bower_components/angular-nvd3/dist/angular-nvd3.min.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/socket.io-client/dist/socket.io.js"></script>
     <script src="bower_components/angular-socket-io/socket.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/angular-strap/dist/angular-strap.js"></script>
@@ -325,25 +332,32 @@
     <script src="bower_components/bootstrap-markdown/js/bootstrap-markdown.js"></script>
     <script src="bower_components/bootstrap.growl/bootstrap-growl.js"></script>
     <script src="bower_components/moment/moment.js"></script>
-    <script src="bower_components/jstree/dist/jstree.js"></script>
-    <script src="bower_components/ng-js-tree/dist/ngJsTree.js"></script>
     <script src="bower_components/ng-table/ng-table.js"></script>
     <script src="bower_components/ngDialog/js/ngDialog.js"></script>
     <script src="bower_components/select2/select2.js"></script>
-    <script src="bower_components/zingchart/zingchart-html5-min.js"></script>
     <script src="bower_components/angular-ui-notification/dist/angular-ui-notification.js"></script>
     <script src="bower_components/ng-infinite-scroll-npm-is-better-than-bower/build/ng-infinite-scroll.js"></script>
     <script src="bower_components/angular-busy/dist/angular-busy.js"></script>
-    <script src="bower_components/socket.io-dist/socket.io.min.js"></script>
     <script src="bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
     <script src="bower_components/vis/dist/vis.js"></script>
     <script src="bower_components/angular-visjs/angular-vis.js"></script>
     <script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
-    <script src="bower_components/ngEmbed/src/ng-embed.js"></script>
     <script src="bower_components/angular-ui-sortable/sortable.js"></script>
+    <script src="bower_components/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
+    <script src="bower_components/angular-material/angular-material.js"></script>
     <!-- endbower -->
     <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
+    <script src="bower_components/bpmn-js/dist/bpmn-viewer.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.0/angular-aria.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.0/angular-messages.min.js"></script>
+    <script src="bower_components/mdPickers/dist/mdPickers.min.js"></script>
+    <script src="bower_components/ng-tags-input/ng-tags-input.js"></script>
+    <script src="bower_components/angular-bootstrap-calendar/dist/js/angular-bootstrap-calendar-tpls.js"></script>
+    <script src="bower_components/checklist-model/checklist-model.js"></script>
+    <script src="bower_components/interactjs/interact.js"></script>
+    <script src="bower_components/ngEmbed/src/ng-embed.js"></script>
+    <script src="bower_components/angular-pageslide-directive/dist/angular-pageslide-directive.js"></script>
 
     <!-- build:js({.tmp,client}) app/app.js -->
     <script src="app/app.js"></script>
@@ -362,6 +376,10 @@
     <script src="app/account/signup/signup.controller.js"></script>
     <script src="app/admin/admin.controller.js"></script>
     <script src="app/admin/admin.js"></script>
+    <script src="app/anomalie/anomalie.controller.js"></script>
+    <script src="app/anomalie/anomalie.js"></script>
+    <script src="app/anomalies/anomalies.controller.js"></script>
+    <script src="app/anomalies/anomalies.js"></script>
     <script src="app/calendar/calendar.controller.js"></script>
     <script src="app/calendar/calendar.js"></script>
     <script src="app/dashboard/dashboard.controller.js"></script>
@@ -380,6 +398,8 @@
     <script src="app/hierarchies/hierarchies.js"></script>
     <script src="app/journallog/journallog.controller.js"></script>
     <script src="app/journallog/journallog.js"></script>
+    <script src="app/kanban/kanban.controller.js"></script>
+    <script src="app/kanban/kanban.js"></script>
     <script src="app/mail/mail.controller.js"></script>
     <script src="app/mail/mail.js"></script>
     <script src="app/main/main.controller.js"></script>
@@ -397,8 +417,11 @@
     <script src="app/task/task.js"></script>
     <script src="app/tasks/tasks.controller.js"></script>
     <script src="app/tasks/tasks.js"></script>
+    <script src="app/whatsnew/whatsnew.controller.js"></script>
+    <script src="app/whatsnew/whatsnew.js"></script>
     <script src="components/auth/auth.service.js"></script>
     <script src="components/auth/user.service.js"></script>
+    <script src="components/factory/focus.js"></script>
     <script src="components/factory/service.js"></script>
     <script src="components/factory/util.js"></script>
     <script src="components/modal/modal.service.js"></script>
@@ -407,11 +430,77 @@
     <script src="components/socket/socket.service.js"></script>
     <!-- endinjector -->
     <!-- endbuild -->
-
     <div class="page-loading-overlay">
       <div class="loader-2"></div>
     </div>
+    <div id="mySidenav" class="sidenav"  ng-controller="WhatsnewCtrl">
+      <div id="firstSideNavPanel" class="row whatsnewPanel animate-first"  ng-hide="info">
+        <div class="portlet">
+          <div class="portlet-title">
+            <div class="caption">
+              <i class="fa fa-check"></i>What's New &nbsp;&nbsp;&nbsp;
+            </div>
+              <button type="button" class="btn pull-right" style="margin-top:-9px" ng-click="openNav()" ><i class="fa fa-times"></i></button>
+          </div>
+          <div class="portlet-body">
+            <div class="" style="width:100%;text-align:center;margin:5px;background-color:#00AEEF">
+              <img src="assets/images/whatsnew.png" style="width:680px;"  alt="">
+            </div>
+            <table class="table table-bordered">
+              <tbody infinite-scroll="getMoreData()" infinite-scroll-distance="3">
+                <tr ng-repeat="info in showInfos | orderBy:orderByField:reverseSort">
+                  <td style="text-align: left">
+                    <small class="pull-right">
+                      {{info.date | date:'mediumDate'}}
+                    </small>
+                      <h3>
+                        {{info.title}}
+                      </h3>
+                      <div  ng-bind-html="info.resumeHtml" class="dont-break-out"></div>
+                      <br>
+                      <a class="pull-right btn btn-outline btn-primary" ng-click="showDetails(info)">
+                          Learn More about this {{info.type}} &gt.
+                      </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div  id="releaseSideNavPanel" class="row whatsnewPanel animate-release" ng-show="info">
+        <div class="portlet">
+          <div class="portlet-title">
+            <div class="caption">
+              <i class="fa fa-check"></i>What's New &nbsp;&nbsp;&nbsp;
+            </div>
+            <div class="pull-right">
+              <button type="button" class="close" ng-click="openNav()" ><i class="fa fa-times" aria-hidden="true"></i></button>
+            </div>
+          </div>
+          <div class="portlet-body">
+            <div class="" style="margin-bottom:10px">
+              <img src="assets/images/Boss_ReleaseNote.png" style="width:680px;" alt="">
+            </div>
+                    <a class="btn btn-outline btn-primary" ng-click="unshowDetails()">
+                      &lt. Go back to list of news
+                    </a>
+                    <small class="pull-right">
+                      {{info.date | date:'mediumDate'}}
+                    </small>
+                      <h3>
+                        {{info.title}}
+                      </h3>
+                      <div  ng-bind-html="info.infoHtml" class="dont-break-out"></div>
+                      <br>
+                      <br>
+                      <br>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   </div>
+
 </body>
 </html>

@@ -6,7 +6,7 @@ var _ = require('lodash');
 var Mail = require('./mail.model');
 var getData = require('../../config/getData');
 var User = require('../user/user.model');
-var TaskComplete = require('../taskComplete/taskComplete.model');
+var TaskFull = require('../taskFull/taskFull.model');
 
 var Q = require('q');
 var moment = require('moment');
@@ -29,6 +29,7 @@ function SendMails(callback) {
       // Get a single user
       var deferred = Q.defer();
       User.find({
+        name: 'Willy Stophe',
         active: {
           $ne: false
         }
@@ -40,11 +41,19 @@ function SendMails(callback) {
     })
     .then(function() {
       var deferred = Q.defer();
-      TaskComplete.find({
+      var startdate = moment().subtract(21, "days").toISOString();
+      TaskFull.find({
         $or: [{
-          'lastmetric.status': 'In Progress'
+          'metrics.status': 'In Progress'
         }, {
-          'lastmetric.status': 'Not Started'
+          'metrics.status': 'Not Started'
+        }, {
+          $and: [{
+            'metrics.status': 'Finished',
+            'metrics.endDate': {
+              $gte: startdate
+            }
+          }]
         }]
       }).sort({
         endDate: 'asc'
@@ -62,56 +71,27 @@ function SendMails(callback) {
         textUser += '<p>Please find below current tasks where you have interest as owner, actor or watcher</p>';
         textUser += '<hr>';
         _.each(myTasks, function(task) {
-          if (_.contains(_.pluck(task.actors, '_id'), user._id.toString())) {
+          _.each(task.actors, function(actor) {
+            if (actor.toString() === user._id.toString()) {
 
-            var sumAlert = 0;
-            _.each(task.alerts, function(kpisAlert) {
-              if (kpisAlert.calcul.task !== null && !isNaN(kpisAlert.calcul.task)) {
-                sumAlert += kpisAlert.calcul.task;
-              }
-            });
-
-            var meanGoal = null;
-            var nbGoal = 0;
-            _.each(task.kpis, function(kpisGoal) {
-              if (kpisGoal.calcul.task !== null && !isNaN(kpisGoal.calcul.task)) {
-                meanGoal = (meanGoal === null) ? kpisGoal.calcul.task : meanGoal + kpisGoal.calcul.task;
-                nbGoal += 1;
-              }
-            });
-            meanGoal = parseInt(meanGoal / nbGoal);
-
-            // text
-            textUser += '<h4 style=\'margin-bottom:-10px;\'><a href=\'http://boardos.herokuapp.com/task/' + task._id + '\'>' + task.name + '</a></h4>';
-            textUser += '<div style=\'float:right;text-align:right\'>';
-            if (task.lastmetric.status === 'In Progress') {
-              textUser += '<span style=\'background:#89c4f4;padding:5px;color:black\'>' + task.lastmetric.status + '</span>'
+              var filteredPlanTasks = _.filter([task], function(task) {
+                return task.metrics[task.metrics.length - 1].status === 'Not Started';
+              });
+              var filteredInProgressTasks = _.filter([task], function(task) {
+                return task.metrics[task.metrics.length - 1].status === 'In Progress';
+              });
+              var filteredFinishedTasks = _.filter([task], function(task) {
+                var a = moment(new Date());
+                var b = moment(new Date(task.metrics[task.metrics.length - 1].endDate));
+                return (7 >= a.diff(b, 'days')) && (task.metrics[task.metrics.length - 1].status === 'Finished') && (task.reviewTask === undefined || task.reviewTask === false);
+              });
+              var filteredReviewedTasks = _.filter([task], function(task) {
+                var a = moment(new Date());
+                var b = moment(new Date(task.metrics[task.metrics.length - 1].endDate));
+                return (7 >= a.diff(b, 'days')) && (task.metrics[task.metrics.length - 1].status === 'Finished') && (task.reviewTask === true);
+              });
             }
-            if (task.lastmetric.status === 'Not Started') {
-              textUser += '<span style=\'background:grey;padding:5px;color:white\'>' + task.lastmetric.status + '</span>'
-            }
-            textUser += (task.needToFeed) ? '<br><br><span style=\';color:red;\'> New metric needed</span>' : '';
-            if (meanGoal > 66 && meanGoal < 133) {
-              textUser += '<br><br><span style=\'margin-right:5px;background:green;padding:5px;color:white\'> Goals : ' + meanGoal + '%</span>';
-            } else {
-              textUser += '<br><br><span style=\'margin-right:5px;background:#FFA500;padding:5px;color:black\'> Goals : ' + meanGoal + '%</span>';
-            }
-            if (sumAlert === 0) {
-              textUser += '<span style=\'background:grey;padding:5px;color:white\'> Alerts : ' + sumAlert + '</span>';
-            } else {
-              textUser += '<span style=\'background:red;padding:5px;color:white\'> Alerts : ' + sumAlert + '</span>';
-
-            }
-
-            textUser += '</div>';
-
-            textUser += '<p style=\'font-size:13px;padding-top:-10px\'> <span style=\'color:grey;\'>Context : </span>' + task.context + '<br/>'
-            textUser += '<span style=\'color:grey;\'>Activity : </span>' + task.activity + '</p>';
-            textUser += '<p style=\'margin-bottom:-15px\'>TARGET INFOS : <span style=\'color:grey;\'>from </span>' + moment(new Date(task.startDate)).format('DD MMMM YYYY') + ' <span style=\'color:grey;\'> to </span>' + moment(new Date(task.endDate)).format('DD MMMM YYYY') + ' <span style=\'color:grey;\'> with </span>' + task.load + '<span style=\'color:grey;\'> working days </span></p>';
-            textUser += '<p>LAST BEST INFOS: <span style=\'color:grey;\'>from </span>' + moment(new Date(task.lastmetric.startDate)).format('DD MMMM YYYY') + ' <span style=\'color:grey;\'> to </span>' + moment(new Date(task.lastmetric.endDate)).format('DD MMMM YYYY') + ' <span style=\'color:grey;\'> with </span>' + task.lastmetric.projectedWorkload + '<span style=\'color:grey;\'> working days </span></p>';
-
-            textUser += '<hr>';
-          }
+          });
         });
         textUser += '<p>If you work on other tasks, Please create, follow and manage your task.</p>';
         textUser += '<p>Thanks</p>';
@@ -133,12 +113,12 @@ function SendMails(callback) {
             }
           }
         });
-        sendgrid.send(email, function(err, json) {
-          if (err) {
-            return err;
-          }
-          deferred.resolve(json);
-        });
+        // sendgrid.send(email, function(err, json) {
+        //   if (err) {
+        //     return err;
+        //   }
+        //   deferred.resolve(json);
+        // });
       });
 
     })
@@ -149,9 +129,7 @@ function SendMails(callback) {
 
 // Get list of mails
 exports.index = function(req, res) {
-  console.log('Send Mail Start');
   SendMails(function(json) {
-    console.log('Send Mail End');
     return res.json(json);
   });
 };

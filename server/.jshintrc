@@ -13,6 +13,7 @@
   "asi": true,
   "debug": true,
   "globals": {
-    "emit":true
+    "emit": true,
+    "X2JS": true
   }
 }

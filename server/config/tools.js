@@ -9,8 +9,15 @@ var moment = require('moment');
 var math = require('mathjs');
 
 var Hierarchies = require('../api/hierarchy/hierarchy.model');
+var KPI = require('../api/KPI/KPI.model');
 var events = require('events');
 var hierarchyEmitter = new events.EventEmitter();
+var hierarchyValues = {};
+var kpis = {};
+
+KPI.find({}, '-__v').lean().exec(function(err, mKPI) {
+  kpis = mKPI;
+})
 
 function groupByMulti(obj, values, context) {
   if (!values.length)
@@ -293,9 +300,9 @@ module.exports = {
       return {
         "label": moment(item).format("YYYY.MM"),
         "count": null
-          //,
-          //"sum": null,
-          //"mean":null
+        //,
+        //"sum": null,
+        //"mean":null
       };
     });
 
@@ -334,21 +341,28 @@ module.exports = {
   },
   calculKPI: function(metrics, kpi) {
 
+    var completekpi = _.filter(kpis, function(thiskpi) {
+      return thiskpi._id.toString() === kpi._id.toString();
+    })[0];
+
     var calcul = null;
     var calculMain, calculRef, filteredMetrics, filteredRefMetrics;
-    var action = kpi.action.toLowerCase();
-    var values = kpi.metricTaskValues && kpi.metricTaskValues.split(' + ');
-    var refValues = kpi.refMetricTaskValues && kpi.refMetricTaskValues.split(' + ');
-    var field = kpi.metricTaskField;
-    var refField = kpi.refMetricTaskField;
-    var listValues = kpi.listValues;
-    var refListValues = kpi.refListValues;
+    var action = completekpi.action.toLowerCase();
+    var values = completekpi.metricTaskValues && completekpi.metricTaskValues.split(' + ');
+    var refValues = completekpi.refMetricTaskValues && completekpi.refMetricTaskValues.split(' + ');
+    var field = completekpi.metricTaskField;
+    var refField = completekpi.refMetricTaskField;
+    var listValues = completekpi.listValues;
+    var refListValues = completekpi.refListValues;
+    //console.log('completekpi', completekpi.name);
 
     if (metrics.length > 0) { // si metric existe
 
       // filtrer par Liste (first, last, all)
       switch (listValues) {
         case 'AllValues':
+          filteredMetrics = metrics;
+          break;
         case 'UniqueValues':
         case 'LastValue':
           filteredMetrics = [_.last(metrics)];
@@ -372,6 +386,7 @@ module.exports = {
         case 'ValuesLessThan':
         case 'ValuesMoreThan':
       }
+
       // filtrer par where
       if (kpi.whereField) {
         filteredMetrics = _.filter(filteredMetrics, function(metric) {
@@ -379,10 +394,19 @@ module.exports = {
         })
       }
 
+      //console.log('filteredMetricsbefore', filteredMetrics);
       // filtrer par valeur
       filteredMetrics = _.filter(filteredMetrics, function(metric) {
-        var metricFieldValue = (typeof metric[field] === 'undefined' || metric[field].length === 0) ? 'null' : metric[field];
-        return (typeof values === 'undefined' || values.length === 0 || typeof metric[field] === 'undefined') ? 1 : _.contains(values, metricFieldValue);
+        var metricFieldValue = (metric[field] === undefined || metric[field] === null || metric[field].length === 0) ? 'toto' : metric[field];
+        var response = (typeof values === 'undefined' || values.length === 0) ? 1 : _.contains(values, metricFieldValue);
+        // if (kpi.name === 'Internal Defect Prevention') {
+        //   console.log('filteredMetrics', filteredMetrics);
+        //   console.log('metric[field]', metric[field]);
+        //   console.log('metricFieldValue', metricFieldValue);
+        //   console.log('values', values);
+        //   console.log('response', response);
+        // }
+        return response;
       });
       filteredRefMetrics = (refField.toLowerCase() === 'constant') ? refValues : _.filter(filteredRefMetrics, function(metric) {
         return (typeof refValues === 'undefined' || refValues.length === 0 || typeof metric[refField] === 'undefined') ? 1 : _.contains(refValues, metric[refField]);
@@ -394,6 +418,22 @@ module.exports = {
         case 'count':
           calculMain = filteredMetrics.length;
           calculRef = (refField.toLowerCase() === 'constant') ? metrics.length : filteredRefMetrics.length;
+          break;
+        case 'absence':
+          calculMain = filteredMetrics.length;
+          calculRef = (refField.toLowerCase() === 'constant') ? metrics.length : filteredRefMetrics.length;
+          if (calculMain === 0) {
+            calculMain = calculRef;
+          } else {
+            calculMain = 0;
+          }
+          break;
+        case 'comparedate':
+          var dateValue = _.pluck(filteredMetrics, field);
+          var dateRefValue = _.pluck(filteredRefMetrics, refField)[0];
+
+          calculMain = new Date(dateValue);
+          calculRef = new Date(dateRefValue);
           break;
         case 'mean':
           var arrayValues = _.compact(_.pluck(filteredMetrics, field).map(Number));
@@ -413,7 +453,14 @@ module.exports = {
       }
       switch (kpi.category) {
         case 'Goal':
+          if (kpi.name === 'Deliver On Time') {
+            // console.log('calculMain', calculMain);
+            // console.log('calculRef', calculRef);
+          }
           calcul = parseInt((calculMain / calculRef) * 100);
+          if (kpi.name === 'Deliver On Time') {
+            // console.log('calcul', calcul);
+          }
           break;
         case 'Alert':
           calcul = (calculMain - calculRef > 0) ? 1 : 0;

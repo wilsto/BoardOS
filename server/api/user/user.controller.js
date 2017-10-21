@@ -7,7 +7,7 @@ var Dashboard = require('../dashboard/dashboard.model');
 var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
-var postmark = require('postmark')('308974d8-3847-4675-8666-9dd2feadcfc4');
+var sendgrid = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
 var _ = require('lodash');
 
 var validationError = function(res, err) {
@@ -22,6 +22,32 @@ exports.index = function(req, res) {
   User.find({}, '-salt -hashedPassword').sort({
     name: 1
   }).exec().then(function(users) {
+
+    _.each(users, function(user) {
+      user.avatar = (user.avatar) ? user.avatar : 'assets/images/avatars/' + user._id + '.png';
+    });
+
+    res.json(200, users);
+  });
+};
+
+/**
+ * Get list of members
+ * restriction: 'none'
+ */
+exports.members = function(req, res) {
+  User.find({
+    active: {
+      $ne: false
+    }
+  }, '_id name avatar').sort({
+    name: 1
+  }).exec().then(function(users) {
+
+    _.each(users, function(user) {
+      user.avatar = (user.avatar) ? user.avatar : 'assets/images/avatars/' + user._id + '.png';
+    });
+
     res.json(200, users);
   });
 };
@@ -41,21 +67,25 @@ exports.create = function(req, res, next) {
       expiresInMinutes: 60 * 5
     });
 
-    postmark.send({
-      'From': 'willy' + '@' + 'stophe' + '.' + 'fr',
-      'To': user.email,
-      'Subject': 'Registration to BOSS',
-      'TextBody': 'Hello ' + user.name + ', Thanks to your registration to BOSS.',
-      'HtmlBody': 'Hello ' + user.name + ', <br/> Thanks to your registration to BOSS.'
+    var email = new sendgrid.Email({
+      to: user.email,
+      from: 'willy' + '@' + 'stophe' + '.' + 'fr',
+      fromname: 'BOSS',
+      subject: 'Registration to BOSS',
+      text: 'Registration to BOSS',
+      html: 'Hello ' + user.name + ', <br/> Thanks to your registration to BOSS.',
     });
+    sendgrid.send(email);
 
-    postmark.send({
-      'From': 'willy' + '@' + 'stophe' + '.' + 'fr',
-      'To': 'willy' + '.' + 'stophe' + '@' + 'fr' + '.' + 'netgrs' + '.' + 'com',
-      'Subject': 'New Registration to BOSS',
-      'TextBody': 'A new user [' + user.name + '] (' + user.email + ') has registered to BOSS',
-      'HtmlBody': 'A new user [' + user.name + '] (' + user.email + ') has registered to BOSS'
+    var emailAdmin = new sendgrid.Email({
+      to: 'willy' + '.' + 'stophe' + '@' + 'fr' + '.' + 'netgrs' + '.' + 'com',
+      from: 'willy' + '@' + 'stophe' + '.' + 'fr',
+      fromname: 'BOSS',
+      subject: 'New Registration to BOSS',
+      text: 'New Registration to BOSS',
+      html: 'A new user [' + user.name + '] (' + user.email + ') has registered to BOSS'
     });
+    sendgrid.send(emailAdmin);
 
     res.json({
       token: token
@@ -116,6 +146,21 @@ exports.changeRole = function(req, res, next) {
   var newRole = String(req.body.newRole);
   User.findById(userId, function(err, user) {
     user.role = newRole;
+    user.save(function(err) {
+      if (err) return validationError(res, err);
+      res.send(200);
+    });
+  });
+};
+
+/**
+ * Change a users role
+ */
+exports.changeGroups = function(req, res, next) {
+  var userId = String(req.body.userId);
+  var newGroups = req.body.newGroups;
+  User.findById(userId, function(err, user) {
+    user.groups = newGroups;
     user.save(function(err) {
       if (err) return validationError(res, err);
       res.send(200);
@@ -192,6 +237,7 @@ exports.me = function(req, res, next) {
   }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
     if (err) return next(err);
     if (!user) return res.json(401);
+    user.avatar = (user.avatar) ? user.avatar : 'assets/images/avatars/' + user._id + '.png';
     res.json(user);
   });
 };

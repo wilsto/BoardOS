@@ -2,27 +2,48 @@
 
 angular.module('boardOsApp')
   .controller('NavbarCtrl', function($scope, $rootScope, $location, Auth, $http) {
-    Auth.getCurrentUser(function(data) {
-      $scope.currentUser = data;
-      $scope.load();
-      $scope.loadDashBoards();
-    });
+
+    while (typeof $scope.currentUser === 'undefined' || typeof $scope.currentUser._id === 'undefined') {
+      Auth.getCurrentUser(function(data) {
+        $scope.currentUser = data;
+        $rootScope.thisUser = $scope.currentUser;
+      });
+      if ($scope.currentUser && $scope.currentUser._id) {
+        $scope.load();
+        $scope.loadDashBoards();
+        break;
+      }
+    }
+
+    $rootScope.openNav = function() {
+      $rootScope.loadNews();
+      $http.get('/api/Whatsnews/updateViewer/' + $scope.currentUser._id).success(function(infos) {
+        $rootScope.alreadyviewed = true;
+      });
+      if ($('#mySidenav').css('width') === '4px') {
+        $('#mySidenav').css('width', '755px');
+      } else {
+        $('#mySidenav').css('width', '4px');
+      }
+    };
 
     $scope.load = function() {
       var myparams = {
         params: {
-          userId: $scope.currentUser._id
+          userId: $scope.currentUser._id,
+          status: ['Not Started', 'In Progress']
         }
       };
 
-      $http.get('/api/taskCompletes/', myparams).success(function(tasks) {
-        $scope.navBarTasks = _.filter(tasks, function(task) {
-          if (typeof task.lastmetric === 'undefined' || task.lastmetric.status === 'In Progress' || task.lastmetric.status === 'Not Started') {
-            return true;
-          }
-        });
+      $http.get('/api/taskFulls/', myparams).success(function(tasks) {
+        $scope.navBarTasks = tasks;
       });
     };
+
+    /** SearhBar **/
+    $http.get('/api/taskFulls/').success(function(objects) {
+      $scope.mySearchTasks = objects;
+    });
 
     $scope.loadDashBoards = function() {
       var myparams = {
@@ -32,7 +53,37 @@ angular.module('boardOsApp')
         }
       };
       $http.get('/api/dashboardCompletes/', myparams).success(function(dashboards) {
+        _.each(dashboards, function(dashboard) {
+          dashboard.subscribed = false;
+          var userlist = _.pluck(dashboard.users, '_id');
+          var userindex = userlist.indexOf($scope.currentUser._id.toString());
+          if (userindex >= 0 && dashboard.users[userindex] && dashboard.users[userindex].dashboardName && dashboard.users[userindex].dashboardName.length > 0) {
+            dashboard.name = dashboard.users[userindex].dashboardName;
+            dashboard.subscribed = true;
+          }
+        });
+        dashboards = _.sortBy(dashboards, ['activity', 'context']);
+
         $scope.dashboards = dashboards;
+        $rootScope.dashboards = dashboards;
+      });
+    };
+    $scope.quickSearchTxt = '';
+
+    $scope.onSelect = function($item, $model, $label) {
+      $scope.$item = $item;
+      $scope.$model = $model;
+      $scope.$label = $label;
+    };
+
+    $scope.updateMySearch = function(typed) {
+
+      $scope.mySearch = [];
+      $http.get('/api/taskFulls/').success(function(objects) {
+        _.each(objects, function(object) {
+          $scope.mySearch.push(object.name);
+        });
+        $scope.mySearch = _.uniq($scope.mySearch);
       });
     };
 
@@ -58,8 +109,8 @@ angular.module('boardOsApp')
           return true;
         }
         // si actor (metrics)
-        if (typeof task.lastmetric !== 'undefined') {
-          if ($scope.currentUser._id === task.lastmetric.actor._id) {
+        if (typeof task.metrics[task.metrics.length - 1] !== 'undefined') {
+          if ($scope.currentUser._id === task.metrics[task.metrics.length - 1].actor._id) {
             return true;
           }
         }
@@ -67,17 +118,12 @@ angular.module('boardOsApp')
         if (_.intersection([$scope.currentUser._id], _.pluck(task.watchers, '_id')).length > 0) {
           return true;
         }
-
       });
       return filtertasks;
     };
-    /*        jQuery(document).ready(function($) {
-        $('#header_notification_bar').on('show.bs.dropdown', function() {
 
-        });
-
-        $('.dropdown').on('show.bs.dropdown', function() {
-
-        });
-    });*/
+    if ($scope.currentUser && $scope.currentUser._id) {
+      $scope.load();
+      $scope.loadDashBoards();
+    }
   });
