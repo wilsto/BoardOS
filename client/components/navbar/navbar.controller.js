@@ -3,12 +3,12 @@
 angular.module('boardOsApp')
   .controller('NavbarCtrl', function($scope, $rootScope, $location, Auth, $http) {
 
-    while ($scope.currentUser._id === undefined) {
+    while (typeof $scope.currentUser._id === 'undefined') {
       Auth.getCurrentUser(function(data) {
         $scope.currentUser = data;
         $rootScope.thisUser = $scope.currentUser;
       });
-      if ($scope.currentUser._id) {
+      if ($scope.currentUser && $scope.currentUser._id) {
         $scope.load();
         $scope.loadDashBoards();
         break;
@@ -122,7 +122,7 @@ angular.module('boardOsApp')
       return filtertasks;
     };
 
-    if ($scope.currentUser._id) {
+    if ($scope.currentUser && $scope.currentUser._id) {
       $scope.load();
       $scope.loadDashBoards();
     }
