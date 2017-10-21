@@ -1,14 +1,16 @@
+
+BoardOS
+====
 [![Build Status](https://travis-ci.org/wilsto/BoardOS.svg)](https://travis-ci.org/wilsto/BoardOS)
+[![Greenkeeper badge](https://badges.greenkeeper.io/wilsto/BoardOS.svg)](https://greenkeeper.io/)
+[![Dependency Status](https://img.shields.io/david/wilsto/BoardOS.svg)](https://david-dm.org/wilsto/BoardOS)
+[![Dev-Dependency Status](https://img.shields.io/david/dev/wilsto/BoardOS.svg)](https://david-dm.org/wilsto/BoardOS#info=devDependencies)
 [![Coverage Status](https://coveralls.io/repos/wilsto/BoardOS/badge.svg)](https://coveralls.io/r/wilsto/BoardOS)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/wilsto/boardos.svg)](http://isitmaintained.com/project/wilsto/boardos "Average time to resolve an issue")
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/wilsto/boardos.svg)](http://isitmaintained.com/project/wilsto/boardos "Percentage of issues still open")
 
-BoardOS
-====
-
-Board Of Supervision 
+Board Of Supervision
 (Operational Dashboarding)
-
 
 ###Technos
 
@@ -16,8 +18,6 @@ BOSS utilise les technos suivantes pour fonctionner correctement :
 
 BackEnd
 * [node.js] - evented I/O for the backend
-* [Express] - fast node.js network app framework
-* [Passport] - Simple, unobtrusive authentication for Node.js.
 * [MongoDB] -  open-source document database, and the leading NoSQL database
 
 FontEnd
@@ -28,10 +28,10 @@ FontEnd
 
 ###Installation au niveau système
 A faire une fois par PC
- 
+
 * Installer [Node.js]
 * Installer [MongoDB]
-* Installer [Grunt] sur le système (-g) via une fenetre DOS 
+* Installer [Grunt] sur le système (-g) via une fenetre DOS
 
 ```sh
 npm install -g grunt-cli
@@ -51,7 +51,7 @@ npm install -g bower
 ```sh
 npm install
 ```
-Cela va créer un repertoire node_modules et télécharger tous les modules dont nous avons besoin. Cela marche grace au fichier *package.json* 
+Cela va créer un repertoire node_modules et télécharger tous les modules dont nous avons besoin. Cela marche grace au fichier *package.json*
 
 * Installer en local (donc pas de -g dans les lignes de commandes) les dépendances référencées grace à bower. Cela marche grace au fichier _bower.json_
 
@@ -78,7 +78,7 @@ Il s'agit d'une application basée sur [AngularJS Full Stack] : Yeoman generator
 * Livereload of client and server files - _toute modification sur un fichier recharge la page web instantanément_
 * Support for Jade and CoffeeScript
 * Easy deployment workflow.
-* Optional MongoDB integration 
+* Optional MongoDB integration
 * Optional Passport integration for adding user accounts
 
 #####Vidéos de formations:
@@ -87,24 +87,22 @@ Retrouver des vidéos de formation super bien faites et en francais sous [Graphi
 * [Nodejs chat](http://www.grafikart.fr/tutoriels/nodejs/nodejs-socketio-tchat-366)
 * [Bower](http://www.grafikart.fr/tutoriels/javascript/bower-474)
 * [Grunt](http://www.grafikart.fr/tutoriels/grunt/grunt-introduction-470)
-* [Yeoman](http://www.grafikart.fr/tutoriels/internet/yeoman-475) _que vous pouvez (devez ?! ;-b) installer si vous souhaitez créer une autre appli en partant de zéro_
+* [Yeoman](http://www.grafikart.fr/tutoriels/internet/yeoman-475)
 
 #####Editeur de code html/js/css:
-* [Sublime Text 3] pour coder avec plein de plugins, très sympa. 
+* [Atom] pour coder avec plein de plugins, très sympa.
 
 ---
 
 ** Have fun!**
 
-[john gruber]:http://daringfireball.net/
+[AngularJS Full Stack]:https://github.com/DaftMonk/generator-angular-fullstack
+
 [Node.js]:http://nodejs.org
-[Twitter Bootstrap]:http://twitter.github.com/bootstrap/
-[jQuery]:http://jquery.com
-[express]:http://expressjs.com
+[MongoDB]:http://www.mongodb.org/
+
+[AngularJS]:http://gruntjs.com/
+[Bootstrap]:http://getbootstrap.com//
 [Grunt]:http://gruntjs.com/
 [Bower]:http://bower.io/
-[AngularJS]:http://gruntjs.com/
-[Passport]:http://passportjs.org/
-[MongoDB]:http://www.mongodb.org/
-[AngularJS Full Stack]:https://github.com/DaftMonk/generator-angular-fullstack
-[Sublime Text 3]:http://www.sublimetext.com/
+[Atom]:https://atom.io/
