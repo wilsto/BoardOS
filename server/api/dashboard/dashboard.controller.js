@@ -12,7 +12,6 @@
 var _ = require('lodash');
 var Q = require('q');
 var moment = require('moment');
-var log4js = require('log4js');
 
 var Dashboard = require('./dashboard.model');
 var KPI = require('../KPI/KPI.model');

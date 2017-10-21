@@ -8,7 +8,6 @@ var _ = require('lodash');
 var moment = require('moment');
 var math = require('mathjs');
 var Q = require('q');
-var log4js = require('log4js');
 
 var KPI = require('../api/KPI/KPI.model');
 var Dashboard = require('../api/dashboard/dashboard.model');
