@@ -726,24 +726,24 @@ module.exports = function(grunt) {
       'rev',
       'usemin'
     ]);
-
-    if (typeof target === 'undefined') {
-      grunt.task.run([
-        'bump'
-      ]);
-    }
-
-    if (target === 'minor') {
-      grunt.task.run([
-        'bump:minor'
-      ]);
-    }
-
-    if (target === 'major') {
-      grunt.task.run([
-        'bump:major'
-      ]);
-    }
+    //
+    // if (typeof target === 'undefined') {
+    //   grunt.task.run([
+    //     'bump'
+    //   ]);
+    // }
+    //
+    // if (target === 'minor') {
+    //   grunt.task.run([
+    //     'bump:minor'
+    //   ]);
+    // }
+    //
+    // if (target === 'major') {
+    //   grunt.task.run([
+    //     'bump:major'
+    //   ]);
+    // }
   });
 
   grunt.registerTask('default', [

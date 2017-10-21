@@ -9,8 +9,6 @@ var moment = require('moment');
 var math = require('mathjs');
 var Q = require('q');
 var log4js = require('log4js');
-var logger = log4js.getLogger();
-logger.setLevel('TRACE');
 
 var KPI = require('../api/KPI/KPI.model');
 var Dashboard = require('../api/dashboard/dashboard.model');
@@ -68,7 +66,6 @@ module.exports = {
     if (taskquery.status === 'All') {
       taskquery.status = ['Not Started', 'In Progress', 'Finished', 'Withdrawn']
     }
-    //logger.trace("Start getdata.fromTask");
     Q()
       .then(function() {
         // Get a single task
@@ -139,8 +136,6 @@ module.exports = {
         return deferred.promise;
       })
       .then(function() {
-        //logger.trace("Start metrics");
-        //
         var dateNow = new Date();
         //var dateNow = d2.toISOString();
         // Get related metrics
@@ -242,7 +237,6 @@ module.exports = {
         return deferred.promise;
       })
       .then(function() {
-        //logger.trace("Filtrer les taches");
         var deferred = Q.defer();
         // pour chaque tache
         mTask.tasks = _.filter(mTask.tasks, function(taskdata) {
@@ -252,7 +246,6 @@ module.exports = {
         return deferred.promise;
       })
       .then(function() {
-        //logger.trace("Start Calculer les KPI par taches");
         // Calculer les KPI par taches
         var deferred = Q.defer();
         if (taskquery.simple !== true) {
@@ -350,7 +343,6 @@ module.exports = {
       .then(null, console.error);
   },
   fromTasks: function(tasks, callback) {
-    //logger.trace("Start getdata.fromTask");
     Q()
       .then(function() {
         // Get a single task
@@ -416,7 +408,6 @@ module.exports = {
         return deferred.promise;
       })
       .then(function() {
-        //logger.trace("Start metrics");
         //
         var d2 = new Date();
         var dateNow = d2.toISOString();
@@ -511,7 +502,6 @@ module.exports = {
         return deferred.promise;
       })
       .then(function() {
-        //logger.trace("Start Calculer les KPI par taches");
         // Calculer les KPI par taches
         var deferred = Q.defer();
 

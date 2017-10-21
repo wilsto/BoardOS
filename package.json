@@ -19,7 +19,6 @@
     "json2csv": "^3.7.3",
     "jsonwebtoken": "^8.1.0",
     "lodash": "^4.17.4",
-    "log4js": "^2.3.7",
     "mathjs": "^3.16.5",
     "method-override": "~2.3.10",
     "mocha": "^4.0.1",
@@ -38,8 +37,7 @@
     "serve-favicon": "~2.4.5",
     "socket.io": "^2.0.3",
     "socket.io-client": "^2.0.3",
-    "socketio-jwt": "^4.5.0",
-    "x2js": "^3.1.1"
+    "socketio-jwt": "^4.5.0"
   },
   "devDependencies": {
     "connect-livereload": "~0.6.0",
