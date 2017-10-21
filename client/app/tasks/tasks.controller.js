@@ -18,17 +18,11 @@ angular.module('boardOsApp')
     $rootScope.taskStatus = statusTask;
     $rootScope.progressStatus = progressStatusTask;
 
-    var searchTxt = $scope.searchText.toLowerCase();
-    var filterStatusTxt = $scope.filterStatus.replace('All', '').replace('Not Finished', '').toLowerCase();
-    var filterProgressStatusTxt = $scope.filterProgressStatus.replace('All', '').toLowerCase();
     var filterTasks = function(data) {
       return _.filter(data, function(task) {
-        var lasMetric = task.metrics[task.metrics.length - 1];
-
-        var blnSearchText = (searchTxt === 0) ? true : (task.name && task.name.toLowerCase().indexOf(searchTxt) >= 0) || (task.activity && task.activity.toLowerCase().indexOf(searchTxt) >= 0) || (task.context && task.context.toLowerCase().indexOf(searchTxt) >= 0);
-        var blnStatus = (typeof task.metrics === 'undefined') ? false : lasMetric.status && lasMetric.status.toLowerCase().indexOf(filterStatusTxt) >= 0;
-        var blnProgressStatus = (typeof task.metrics === 'undefined') ? false : lasMetric.progressStatus && lasMetric.progressStatus.toLowerCase().indexOf(filterProgressStatusTxt) >= 0;
-
+        var blnSearchText = ($scope.searchText.length === 0) ? true : task.name.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0 || task.activity.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0 || task.context.toLowerCase().indexOf($scope.searchText.toLowerCase()) >= 0;
+        var blnStatus = (typeof task.metrics === 'undefined') ? false : task.metrics[task.metrics.length - 1].status.toLowerCase().indexOf($scope.filterStatus.replace('All', '').replace('Not Finished', 'o').toLowerCase()) >= 0;
+        var blnProgressStatus = (typeof task.metrics === 'undefined') ? false : task.metrics[task.metrics.length - 1].progressStatus && task.metrics[task.metrics.length - 1].progressStatus.toLowerCase().indexOf($scope.filterProgressStatus.replace('All', '').toLowerCase()) >= 0;
         var blnActors;
         if ($scope.filterActors === 'All') {
           blnActors = true;
