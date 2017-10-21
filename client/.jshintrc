@@ -20,6 +20,7 @@
   "trailing": true,
   "smarttabs": true,
   "jasmine": true,
+  "loopfunc": true,
   "globals": {
     "jQuery": true,
     "angular": true,

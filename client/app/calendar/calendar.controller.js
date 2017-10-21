@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('CalendarCtrl', function($scope, $http, $rootScope, $location, calendarConfig) {
+  .controller('CalendarCtrl', function($scope, $http, $rootScope, $location, calendarConfig, Notification) {
     $scope.eventSources = [];
     $scope.filterNotification = 'Only For Me';
 
@@ -20,30 +20,50 @@ angular.module('boardOsApp')
 
         $scope.events = [];
         _.each($scope.myTasks, function(task) {
-          if (task.metrics[task.metrics.length - 1].status !== 'Finished') {
+          task.taskSuffIcon = '';
+          switch (task.metrics[task.metrics.length - 1].status) {
+            case 'In Progress':
+              task.taskIcon = '<i class="fa fa-spinner" aria-hidden="true"></i>&nbsp;&nbsp; ';
+              task.taskColor = calendarConfig.colorTypes.info;
+              break;
+            case 'Finished':
+              if (task.reviewTask === true) {
+                task.taskIcon = '<i class="fa fa-bookmark-o text-success" aria-hidden="true"></i>&nbsp;&nbsp; ';
+                task.taskColor = calendarConfig.colorTypes.success;
 
-            $scope.events.push({
-              title: '<i class="fa fa-wrench" aria-hidden="true"></i>&nbsp;&nbsp; ' + task.name,
-              eventType: 'task',
-              eventId: task._id,
-              displayEventTimes: false, // Indicates whether need to show time or not.
-              startsAt: moment(task.metrics[task.metrics.length - 1].startDate || task.metrics[task.metrics.length - 1].targetstartDate).toDate(),
-              endsAt: moment(task.metrics[task.metrics.length - 1].endDate || task.metrics[task.metrics.length - 1].targetEndDate).toDate(),
-              draggable: true
-            });
-          } else {
-
-            $scope.events.push({
-              title: '<i class="fa fa-wrench" aria-hidden="true"></i>&nbsp;&nbsp; ' + task.name,
-              eventType: 'task',
-              eventId: task._id,
-              displayEventTimes: false, // Indicates whether need to show time or not.
-              startsAt: moment(task.metrics[task.metrics.length - 1].startDate || task.metrics[task.metrics.length - 1].targetstartDate).toDate(),
-              endsAt: moment(task.metrics[task.metrics.length - 1].endDate || task.metrics[task.metrics.length - 1].targetEndDate).toDate(),
-              color: calendarConfig.colorTypes.success,
-              draggable: true
-            });
+              } else {
+                task.taskIcon = '<i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;&nbsp; ';
+                task.taskColor = calendarConfig.colorTypes.success;
+              }
+              if (task.metrics[task.metrics.length - 1].userSatisfaction === undefined || task.metrics[task.metrics.length - 1].deliverableStatus === undefined || task.metrics[task.metrics.length - 1].actorSatisfaction === undefined) {
+                task.taskSuffIcon = ' <i class="fa fa-question-circle-o text-danger" aria-hidden="true"></i>&nbsp;&nbsp;';
+              }
+              break;
+            default:
+              task.taskIcon = '<i class="fa fa-square-o " aria-hidden="true"></i>&nbsp;&nbsp; ';
+              task.taskColor = '';
           }
+
+          $scope.events.push({
+            title: task.taskIcon + task.taskSuffIcon + task.name,
+            eventType: 'task',
+            eventId: task._id,
+            displayEventTimes: false, // Indicates whether need to show time or not.
+            startsAt: moment(task.metrics[task.metrics.length - 1].startDate || task.metrics[task.metrics.length - 1].targetstartDate).set({
+              hour: 0,
+              minute: 0,
+              second: 0,
+              millisecond: 0
+            }).toDate(),
+            endsAt: moment(task.metrics[task.metrics.length - 1].endDate || task.metrics[task.metrics.length - 1].targetEndDate).set({
+              hour: 2,
+              minute: 0,
+              second: 0,
+              millisecond: 0
+            }).toDate(),
+            color: task.taskColor,
+            draggable: (task.metrics[task.metrics.length - 1].status !== 'Finished')
+          });
         });
 
         _.each($scope.myAnomalies, function(anomalie) {
@@ -119,9 +139,26 @@ angular.module('boardOsApp')
     };
 
     $scope.eventTimesChanged = function(calendarEvent, calendarNewEventStart, calendarNewEventEnd) {
+      var updatedEvent = _.filter($scope.myTasks, function(task) {
+        return task._id === calendarEvent.eventId;
+      });
+      if (updatedEvent.length > 0) {
+        
+        
+        var dayDiff = moment(calendarNewEventStart).diff(moment(updatedEvent[0].metrics[0].targetstartDate), 'days');
+        
+        updatedEvent[0].metrics[0].targetstartDate = moment(updatedEvent[0].metrics[0].targetstartDate).add(dayDiff, 'days').toDate();
+        updatedEvent[0].metrics[0].targetEndDate = moment(updatedEvent[0].metrics[0].targetEndDate).add(dayDiff, 'days').toDate();
+        
+        
 
+        $scope.myPromise = $http.put('/api/taskFulls/' + calendarEvent.eventId + '/' + false, updatedEvent[0]).success(function(data) {
+          
+          var logInfo = 'Task "' + updatedEvent[0].name + '" was updated';
+          Notification.success(logInfo);
+        });
 
-
+      }
     };
 
   });

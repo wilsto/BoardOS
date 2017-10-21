@@ -863,14 +863,15 @@ angular.module('boardOsApp')
       if (initializing) {
         $timeout(function() {
           //initializing = true;
-          if ($scope.dashboard) {
+          if ($scope.dashboard && $scope.dashboard.users && $scope.dashboard.users[$scope.userindex]) {
             $scope.dashboard.users[$scope.userindex].dashboardName = $scope.dashboard.name;
           }
           //
         });
       } else {
-        $scope.dashboard.users[$scope.userindex].dashboardName = $scope.dashboard.name;
-        $scope.needToSave = true;
+        if ($scope.dashboard && $scope.dashboard.users && $scope.dashboard.users[$scope.userindex]) {
+          $scope.dashboard.users[$scope.userindex].dashboardName = $scope.dashboard.name;
+        }
       }
     }, true);
 

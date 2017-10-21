@@ -309,11 +309,7 @@ module.exports = function(grunt) {
     },
 
     uglify: {
-      options: {
-        mangle: {
-          reserved: ['BpmnViewer']
-        }
-      }
+      options: {}
     },
 
     // Package all the html partials into a single javascript payload
@@ -453,7 +449,7 @@ module.exports = function(grunt) {
         updateConfigs: [],
         commit: true,
         commitMessage: 'Release v%VERSION%',
-        commitFiles: ['-a'], // all files
+        commitFiles: ['-am'], // all files
         createTag: true,
         tagName: 'v%VERSION%',
         tagMessage: 'Version %VERSION%',
@@ -610,7 +606,7 @@ module.exports = function(grunt) {
   grunt.registerTask('serve', function(target) {
     if (target === 'dist') {
       return grunt.task.run([
-        'build',
+        'buildfast',
         'env:all',
         'env:prod',
         'express:prod',

@@ -2,11 +2,14 @@
 
 angular.module('boardOsApp')
   .controller('NavbarCtrl', function($scope, $rootScope, $location, Auth, $http) {
+
     Auth.getCurrentUser(function(data) {
       $scope.currentUser = data;
       $rootScope.thisUser = $scope.currentUser;
-      $scope.load();
-      $scope.loadDashBoards();
+      if ($scope.currentUser && $scope.currentUser._id) {
+        $scope.load();
+        $scope.loadDashBoards();
+      }
     });
 
     $rootScope.openNav = function() {
@@ -115,4 +118,9 @@ angular.module('boardOsApp')
       });
       return filtertasks;
     };
+
+    if ($scope.currentUser && $scope.currentUser._id) {
+      $scope.load();
+      $scope.loadDashBoards();
+    }
   });

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('MainCtrl', function($scope, $rootScope, $http, myLibrary, Auth, $timeout, dateRangeService, $location, calendarConfig) {
+  .controller('MainCtrl', function($scope, $rootScope, $http, myLibrary, Auth, $timeout, dateRangeService, $location, calendarConfig, Notification) {
 
     $scope.Math = window.Math;
     Auth.getCurrentUser(function(data) {
@@ -95,7 +95,7 @@ angular.module('boardOsApp')
                 millisecond: 0
               }).toDate(),
               color: task.taskColor,
-              draggable: true
+              draggable: false
             });
           });
 
@@ -148,6 +148,31 @@ angular.module('boardOsApp')
         });
       });
     });
+
+
+
+    $scope.eventTimesChanged = function(calendarEvent, calendarNewEventStart, calendarNewEventEnd) {
+      var updatedEvent = _.filter($scope.myTasks, function(task) {
+        return task._id === calendarEvent.eventId;
+      });
+      if (updatedEvent.length > 0) {
+        
+        
+        var dayDiff = moment(calendarNewEventStart).diff(moment(updatedEvent[0].metrics[0].targetstartDate), 'days');
+        
+        updatedEvent[0].metrics[0].targetstartDate = moment(updatedEvent[0].metrics[0].targetstartDate).add(dayDiff, 'days').toDate();
+        updatedEvent[0].metrics[0].targetEndDate = moment(updatedEvent[0].metrics[0].targetEndDate).add(dayDiff, 'days').toDate();
+        
+        
+
+        $scope.myPromise = $http.put('/api/taskFulls/' + calendarEvent.eventId + '/' + false, updatedEvent[0]).success(function(data) {
+          var logInfo = 'Task "' + updatedEvent[0].name + '" was updated';
+          Notification.success(logInfo);
+        });
+
+      }
+    };
+
 
     // Charger les taches
     // ------------------

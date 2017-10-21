@@ -6268,9 +6268,14 @@ Profile Page
   }
 
   .daterangepicker.dropdown-menu.ltr.opensleft {
-    margin-top: 40px!important;
+    margin-top: 5px;
     right: 5px!important;
+    width: 285px;
     position: fixed;
+  }
+
+  .daterangepicker.dropdown-menu.ltr.opensleft li {
+    width: 250px;
   }
 
   .navbar-brand {

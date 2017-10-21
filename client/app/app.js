@@ -18,7 +18,6 @@ angular.module('boardOsApp', [
     'ui.sortable',
     'angular.filter',
     'mdPickers',
-    'ng-mfb',
     'infinite-scroll',
     'ngTagsInput',
     'checklist-model',

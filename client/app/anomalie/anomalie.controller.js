@@ -128,13 +128,10 @@ angular.module('boardOsApp')
 
         };
 
-        //var x2js = new X2JS();
-        //var fiveWhy;
-        var BpmnViewer = $window.BpmnJS;
         var fiveWhyDiagram = $scope.anomalie.fiveWhy;
 
         $('#canvas').empty();
-        var viewer = new BpmnViewer({
+        var viewer = new $window.BpmnJS({
           container: '#canvas'
         });
 
@@ -147,7 +144,7 @@ angular.module('boardOsApp')
           }
         });
         $('#canvas_large').empty();
-        var viewer_large = new BpmnViewer({
+        var viewer_large = new $window.BpmnJS({
           container: '#canvas_large'
         });
 
@@ -159,17 +156,13 @@ angular.module('boardOsApp')
 
           }
         });
-
-
       });
     };
     $scope.loadAnomalie();
     $scope.uploadXmlFile = function() {
-      //var x2js = new X2JS();
       var file = document.getElementById('importFile').files[0],
         reader = new FileReader();
       reader.onloadend = function(e) {
-        //$scope.anomalie.fiveWhy = x2js.xml_str2json(e.target.result);
         $scope.anomalie.fiveWhy = e.target.result;
         $scope.refreshAnomalie();
 
