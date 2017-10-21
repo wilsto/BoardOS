@@ -901,8 +901,8 @@ angular.module('boardOsApp')
         };
 
         anomalie.sourceTasks = [];
-        anomalie.context = $scope.dashboard.context;
-        anomalie.activity = $scope.dashboard.activity;
+        anomalie.context = $scope.dashboard.perimeter[0].context;
+        anomalie.activity = $scope.dashboard.perimeter[0].activity;
 
         anomalie.actor = $scope.currentUser._id;
 
