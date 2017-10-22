@@ -18,13 +18,13 @@ exports.index = function(req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, things);
+    return res.status(200).json( things);
   });
 };
 
 // Get a single thing
 exports.show = function(req, res) {
-  return res.json('thing');
+  return res.status(200).json('thing');
 };
 
 // Get a single thing
@@ -36,7 +36,7 @@ exports.show2 = function(req, res) {
     if (!thing) {
       return res.send(404);
     }
-    return res.json(thing);
+    return res.status(200).json(thing);
   });
 };
 
@@ -46,7 +46,7 @@ exports.create = function(req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(201, thing);
+    return res.status(201).json( thing);
   });
 };
 
@@ -67,7 +67,7 @@ exports.update = function(req, res) {
       if (err) {
         return handleError(res, err);
       }
-      return res.json(200, thing);
+      return res.status(200).json( thing);
     });
   });
 };

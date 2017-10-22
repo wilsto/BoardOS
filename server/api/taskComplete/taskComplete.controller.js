@@ -451,7 +451,7 @@ exports.show = function(req, res) {
     if (!taskComplete) {
       return res.status(404).send('Not Found');
     }
-    return res.json(taskComplete);
+    return res.status(200).json(taskComplete);
   });
 };
 

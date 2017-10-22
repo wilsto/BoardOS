@@ -185,7 +185,7 @@ exports.show = function(req, res) {
               comment.user.avatar = (comment.user.avatar) ? comment.user.avatar : 'assets/images/avatars/' + comment.user._id + '.png';
             }
           });
-          return res.json(taskFull);
+          return res.status(200).json(taskFull);
         });
     });
 };
@@ -857,7 +857,7 @@ exports.search = function(req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, tasks);
+    return res.status(200).json( tasks);
   });
 };
 
@@ -896,7 +896,7 @@ exports.standardPERT = function(req, res) {
       if (err) {
         return handleError(res, err);
       }
-      return res.json(200, tasks);
+      return res.status(200).json( tasks);
     });
 };
 

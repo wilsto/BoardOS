@@ -21,7 +21,7 @@ exports.index = function(req, res) {
       if (err) {
         return handleError(res, err);
       }
-      return res.json(200, infos);
+      return res.status(200).json( infos);
     });
 };
 
@@ -34,7 +34,7 @@ exports.show = function(req, res) {
     if (!info) {
       return res.send(404);
     }
-    return res.json(info);
+    return res.status(200).json(info);
   });
 };
 
@@ -44,7 +44,7 @@ exports.create = function(req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(201, info);
+    return res.status(201).json( info);
   });
 };
 
@@ -76,7 +76,7 @@ exports.updateViewer = function(req, res) {
 
       });
     });
-    return res.json(200, infos);
+    return res.status(200).json( infos);
   });
 };
 
@@ -99,7 +99,7 @@ exports.update = function(req, res) {
       if (err) {
         return handleError(res, err);
       }
-      return res.json(200, info);
+      return res.status(200).json( info);
     });
   });
 };

@@ -7,7 +7,7 @@ var Dqm = require('./dqm.model');
 exports.index = function(req, res) {
   Dqm.find(function (err, dqms) {
     if(err) { return handleError(res, err); }
-    return res.json(200, dqms);
+    return res.status(200).json( dqms);
   });
 };
 
@@ -16,7 +16,7 @@ exports.show = function(req, res) {
   Dqm.findById(req.params.id, function (err, dqm) {
     if(err) { return handleError(res, err); }
     if(!dqm) { return res.send(404); }
-    return res.json(dqm);
+    return res.status(200).json(dqm);
   });
 };
 
@@ -24,7 +24,7 @@ exports.show = function(req, res) {
 exports.create = function(req, res) {
   Dqm.create(req.body, function(err, dqm) {
     if(err) { return handleError(res, err); }
-    return res.json(201, dqm);
+    return res.status(201).json( dqm);
   });
 };
 
@@ -37,7 +37,7 @@ exports.update = function(req, res) {
     var updated = _.merge(dqm, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
-      return res.json(200, dqm);
+      return res.status(200).json( dqm);
     });
   });
 };

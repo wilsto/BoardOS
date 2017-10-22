@@ -537,7 +537,7 @@ exports.show = function(req, res) {
       if (!dashboardComplete) {
         return res.status(404).send('Not Found');
       }
-      return res.json(dashboardComplete);
+      return res.status(200).json(dashboardComplete);
     });
 };
 

@@ -11,7 +11,7 @@ var sendgrid = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SE
 var _ = require('lodash');
 
 var validationError = function(res, err) {
-  return res.json(422, err);
+  return res.status(422).json(err);
 };
 
 /**
@@ -27,7 +27,7 @@ exports.index = function(req, res) {
       user.avatar = (user.avatar) ? user.avatar : 'assets/images/avatars/' + user._id + '.png';
     });
 
-    res.json(200, users);
+    res.status(200).json(users);
   });
 };
 
@@ -48,7 +48,7 @@ exports.members = function(req, res) {
       user.avatar = (user.avatar) ? user.avatar : 'assets/images/avatars/' + user._id + '.png';
     });
 
-    res.json(200, users);
+    res.status(200).json(users);
   });
 };
 
@@ -64,7 +64,7 @@ exports.create = function(req, res, next) {
     var token = jwt.sign({
       _id: user._id
     }, config.secrets.session, {
-      expiresInMinutes: 60 * 5
+      expiresIn: '24h'
     });
 
     var email = new sendgrid.Email({
@@ -87,7 +87,7 @@ exports.create = function(req, res, next) {
     });
     sendgrid.send(emailAdmin);
 
-    res.json({
+    res.status(200).json({
       token: token
     });
   });
@@ -102,7 +102,7 @@ exports.show = function(req, res, next) {
   User.findById(userId, function(err, user) {
     if (err) return next(err);
     if (!user) return res.send(401);
-    res.json(user.profile);
+    res.status(200).json(user.profile);
   });
 };
 
@@ -221,7 +221,7 @@ exports.update = function(req, res) {
       if (err) {
         return handleError(res, err);
       }
-      return res.json(200, user);
+      return res.status(200).json(user);
     });
   });
 };
@@ -236,9 +236,11 @@ exports.me = function(req, res, next) {
     _id: userId
   }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
     if (err) return next(err);
-    if (!user) return res.json(401);
+    if (!user) return res.status(401).json({
+      err: 'No User'
+    });
     user.avatar = (user.avatar) ? user.avatar : 'assets/images/avatars/' + user._id + '.png';
-    res.json(user);
+    res.status(200).json(user);
   });
 };
 
@@ -246,7 +248,7 @@ exports.me = function(req, res, next) {
  * Get roles
  */
 exports.getRoles = function(req, res, next) {
-  res.json(config.userRoles);
+  res.status(200).json(config.userRoles);
 };
 
 /**
