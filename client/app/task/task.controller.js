@@ -185,6 +185,25 @@ angular.module('boardOsApp')
       $scope.task.reviewTask = !$scope.task.reviewTask;
     };
 
+    $scope.markTaskAsSuccess = function() {
+      if ($scope.task.success) {
+        $scope.task.success = '';
+      } else {
+        bootbox.prompt({
+          title: 'Please Enter a short sentence of this success',
+          callback: function(result) {
+            console.log('result', result);
+            if (result) {
+              $scope.task.success = result;
+              $scope.$apply();
+
+            }
+          }
+        });
+      }
+    };
+
+
     $scope.markAsDone = function() {
       $scope.task.metrics[0].startDate = $scope.task.metrics[0].targetstartDate;
       $scope.task.metrics[0].endDate = $scope.task.metrics[0].targetEndDate;
