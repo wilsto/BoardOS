@@ -48,6 +48,25 @@ angular.module('boardOsApp')
     $scope.Load = function() {
       $http.get('/api/taskFulls').success(function(data) {
         $scope.alltasks = _.sortBy(data, 'date').reverse();
+
+        _.each($scope.alltasks, function(task) {
+          task.taskSuffIcon = '';
+          task.taskIcon = '';
+          switch (task.metrics[task.metrics.length - 1].status) {
+            case 'Finished':
+              if (task.reviewTask === true) {
+                task.taskIcon = '<i class="fa fa-bookmark-o text-success" aria-hidden="true"></i>&nbsp;&nbsp; ';
+              }
+              if (task.metrics[task.metrics.length - 1].userSatisfaction === undefined || task.metrics[task.metrics.length - 1].deliverableStatus === undefined || task.metrics[task.metrics.length - 1].actorSatisfaction === undefined) {
+                task.taskSuffIcon = ' <i class="fa fa-question-circle-o text-danger" aria-hidden="true"></i>&nbsp;&nbsp;';
+              }
+              break;
+            default:
+              task.taskIcon = '';
+          }
+          task.icons = task.taskIcon + task.taskSuffIcon;
+        });
+
         $scope.tasks = filterTasks($scope.alltasks);
         $scope.showTasks = $scope.tasks.slice(0, 15);
       });

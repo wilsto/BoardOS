@@ -88,7 +88,8 @@ exports.index = function(req, res) {
       __v: false,
       alerts: false,
       kpis: false,
-      comments: false
+      comments: false,
+      todos: false
     })
     .populate('actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
     .lean().exec(function(err, taskFulls) {
@@ -100,7 +101,6 @@ exports.index = function(req, res) {
           actor.avatar = (actor.avatar) ? actor.avatar : 'assets/images/avatars/' + actor._id + '.png';
         });
       });
-      //console.log('taskFulls', taskFulls);
       return res.status(200).json(taskFulls);
     });
 };
