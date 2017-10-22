@@ -91,8 +91,6 @@ exports.index = function(req, res) {
       comments: false
     })
     .populate('actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
-    //.populate('followers', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
-    //.populate('comments.user', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
     .lean().exec(function(err, taskFulls) {
       if (err) {
         return handleError(res, err);

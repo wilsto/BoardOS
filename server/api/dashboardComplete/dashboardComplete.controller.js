@@ -490,13 +490,14 @@ exports.index = function(req, res) {
 
 // Get a single dashboardComplete
 exports.show = function(req, res) {
-  DashboardComplete.findById(req.params.id)
-    //.populate('users.user', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
-    .populate('tasks', ' -watchers -dashboards -alerts -comments -todos -followers -version')
-    .populate('tasks.actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
+  DashboardComplete.findById(req.params.id, '-tasks')
     .lean().exec(function(err, dashboardComplete) {
       if (err) {
         return handleError(res, err);
+      }
+
+      if (!dashboardComplete) {
+        return res.status(404).send('Not Found');
       }
 
       var actors = [];
@@ -517,6 +518,22 @@ exports.show = function(req, res) {
       }
       dashboardComplete.users = actors;
 
+      return res.status(200).json(dashboardComplete);
+    });
+};
+
+// Get a single dashboardComplete
+exports.showTasks = function(req, res) {
+  DashboardComplete.findById(req.params.id)
+    .populate('tasks', ' -watchers -dashboards -alerts -comments -todos -followers -version')
+    .populate('tasks.actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
+    .lean().exec(function(err, dashboardComplete) {
+      if (err) {
+        return handleError(res, err);
+      }
+      if (!dashboardComplete) {
+        return res.status(404).send('Not Found');
+      }
       _.each(dashboardComplete.tasks, function(task) {
         var actors = [];
         _.each(_.compact(task.actors), function(actor) {
@@ -534,12 +551,11 @@ exports.show = function(req, res) {
         task.actors = actors;
       });
 
-      if (!dashboardComplete) {
-        return res.status(404).send('Not Found');
-      }
-      return res.status(200).json(dashboardComplete);
+      return res.status(200).json(dashboardComplete.tasks);
     });
 };
+
+
 
 // Creates a new dashboardComplete in the DB.
 exports.create = function(req, res) {

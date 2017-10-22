@@ -581,24 +581,24 @@ angular.module('boardOsApp')
             }
 
           });
-
-
         });
-
 
         $scope.timelineData = {
           items: items,
           groups: groups
         };
-
       });
-
-
     });
 
     $scope.loadCompleteDashboard = function() {
       if ($stateParams.id) {
         $scope.myPromise = $http.get('/api/dashboardCompletes/' + $stateParams.id).success(function(dashboard) {
+
+          $http.get('/api/dashboardCompletes/showTasks/' + $stateParams.id).success(function(tasks) {
+            dashboard.tasks = tasks;
+            $scope.alltasksNb = dashboard.tasks.length;
+            $rootScope.$broadcast('dateRangeService:updated', dateRangeService.rangeDateTxt);
+          });
 
           $http.get('/api/anomalies', {
             params: {
@@ -608,6 +608,7 @@ angular.module('boardOsApp')
           }).success(function(anomalies) {
             $scope.anomalies = anomalies;
           });
+
 
           dashboard.subscribed = false;
           var userlist = _.pluck(dashboard.users, '_id');
@@ -629,11 +630,6 @@ angular.module('boardOsApp')
           $rootScope.perimeter.category = dashboard.category;
           $cookieStore.put('perimeter', $rootScope.perimeter);
 
-          if (dashboard.tasks) {
-            $scope.alltasksNb = dashboard.tasks.length;
-          }
-
-          $rootScope.$broadcast('dateRangeService:updated', dateRangeService.rangeDateTxt);
 
           var dataGoals = [];
           var dataAllGoals = [];
