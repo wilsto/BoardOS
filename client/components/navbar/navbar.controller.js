@@ -37,10 +37,6 @@ angular.module('boardOsApp')
       });
     };
 
-    /** SearhBar **/
-    $http.get('/api/taskFulls/').success(function(objects) {
-      $scope.mySearchTasks = objects;
-    });
 
     $scope.loadDashBoards = function() {
       var myparams = {
@@ -73,14 +69,15 @@ angular.module('boardOsApp')
       $scope.$label = $label;
     };
 
-    $scope.updateMySearch = function(typed) {
-
-      $scope.mySearch = [];
-      $http.get('/api/taskFulls/').success(function(objects) {
-        _.each(objects, function(object) {
-          $scope.mySearch.push(object.name);
-        });
-        $scope.mySearch = _.uniq($scope.mySearch);
+    /** SearhBar **/
+    $scope.searchTasks = function(typed) {
+      return $http.get('/api/taskFulls/search/', {
+        params: {
+          search: typed,
+        }
+      }).then(function(response) {
+        $scope.mySearchTxt = null;
+        return response.data;
       });
     };
 
@@ -92,31 +89,6 @@ angular.module('boardOsApp')
 
     $scope.isActive = function(route) {
       return route === $location.path();
-    };
-
-    $scope.filterTask = function(tasks, filter) {
-      var filtertasks;
-      // si pas de filtrer alors on retourne le tout
-      if (typeof filter === 'undefined') {
-        return tasks;
-      }
-      filtertasks = _.filter(tasks, function(task) {
-        // si owner
-        if (task.actor._id === $scope.currentUser._id) {
-          return true;
-        }
-        // si actor (metrics)
-        if (typeof task.metrics[task.metrics.length - 1] !== 'undefined') {
-          if ($scope.currentUser._id === task.metrics[task.metrics.length - 1].actor._id) {
-            return true;
-          }
-        }
-        // si watcher
-        if (_.intersection([$scope.currentUser._id], _.pluck(task.watchers, '_id')).length > 0) {
-          return true;
-        }
-      });
-      return filtertasks;
     };
 
     if ($scope.currentUser && $scope.currentUser._id) {

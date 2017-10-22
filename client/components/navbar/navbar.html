@@ -94,8 +94,14 @@
         </ul>
 
         <form class="navbar-form navbar-left">
-          <input  class="mysearchname" type="text" placeholder="Quick Search ..." ng-model="mySearchTxt" uib-typeahead="mySearchTask as mySearchTask.name for mySearchTask in mySearchTasks | filter:$viewValue:namesWith | orderBy:'-date' | limitTo:50"
-            typeahead-min-length="0" typeahead-template-url="searchBarTemplate.html">
+          <input  class="mysearchname" type="text" placeholder="Quick Search ..." ng-model="mySearchTxt" uib-typeahead="mySearchTask for mySearchTask in searchTasks($viewValue)" typeahead-loading="loadingTasks" typeahead-no-results="noResults" typeahead-template-url="searchBarTemplate.html">
+          <img ng-show="loadingTasks && mySearchTxt.length>2" src="assets/images/ajax-loader-blue.gif" style="width:30px;height:30px"/>
+          <div ng-show="mySearchTxt.length<3" class="pull-right" style="color:lightgrey;margin:5px">
+            <i class="fa fa-question"></i> Minimum of 3 caracters
+          </div>
+          <div ng-show="noResults && mySearchTxt.length>2" class="pull-right" style="color:lightgrey;margin:5px">
+            <i class="fa fa-remove"></i> No Results Found
+          </div>
         </form>
 
         <ul class="nav navbar-nav navbar-right">
