@@ -67,7 +67,7 @@ module.exports = function(grunt) {
           '!<%= yeoman.client %>/{app,components}/**/*.mock.js',
           '!<%= yeoman.client %>/app/app.js'
         ],
-        tasks: ['injector:scripts', 'newer:jshint:all']
+        tasks: ['injector:scripts', 'newer:jshint:all', 'karma']
       },
       injectCss: {
         files: [
@@ -84,7 +84,7 @@ module.exports = function(grunt) {
           '<%= yeoman.client %>/{app,components}/**/*.spec.js',
           '<%= yeoman.client %>/{app,components}/**/*.mock.js'
         ],
-        tasks: ['newer:jshint:all']
+        tasks: ['newer:jshint:all', 'karma']
       },
       gruntfile: {
         files: ['Gruntfile.js']
@@ -661,7 +661,8 @@ module.exports = function(grunt) {
         'env:all',
         'concurrent:test',
         'injector',
-        'autoprefixer'
+        'autoprefixer',
+        'karma'
       ]);
     } else if (target === 'e2e') {
       return grunt.task.run([

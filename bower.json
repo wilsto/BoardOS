@@ -47,7 +47,8 @@
     "angular-bootstrap-calendar": "^0.30.0",
     "vis": "^4.20.1",
     "angular-pageslide-directive": "^2.1.4",
-    "lodash": "2.4"
+    "lodash": "2.4",
+    "angular-mocks": "^1.6.6"
   },
   "devDependencies": {
     "angular-mocks": "~1.4.x",
