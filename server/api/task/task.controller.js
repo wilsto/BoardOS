@@ -57,7 +57,7 @@ exports.index = function(req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, tasks);
+    return res.status(200).json( tasks);
   });
 };
 
@@ -161,7 +161,7 @@ exports.search = function(req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, tasks);
+    return res.status(200).json( tasks);
   });
 };
 
@@ -185,7 +185,7 @@ exports.watch = function(req, res) {
         return handleError(res, err);
       }
       process.emit('metricChanged', task._id, false);
-      return res.json(200, task);
+      return res.status(200).json( task);
     });
   });
 };
@@ -195,7 +195,7 @@ exports.show = function(req, res) {
   getData.fromTask(req, function(myTasks) {
     getData.addCalculToKPI(myTasks.kpis, myTasks.tasks, function(kpis) {
       myTasks.kpis = kpis;
-      return res.json(200, myTasks);
+      return res.status(200).json( myTasks);
     });
 
   });
@@ -221,7 +221,7 @@ exports.showList = function(req, res) {
         delete rowtask.lastmetric.taskname;
       }
     });
-    return res.json(200, myTasks.tasks);
+    return res.status(200).json( myTasks.tasks);
   });
 };
 
@@ -401,7 +401,7 @@ exports.show2 = function(req, res) {
           }), 'name').toString()
         };
       });
-      return res.json(mTask);
+      return res.status(200).json(mTask);
     });
 };
 

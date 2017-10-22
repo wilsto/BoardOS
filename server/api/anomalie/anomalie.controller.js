@@ -46,7 +46,7 @@ exports.index = function(req, res) {
       _.each(anomalies, function(rowdata, index) {
         rowdata.moment = moment(rowdata.date).fromNow();
       });
-      return res.json(200, anomalies);
+      return res.status(200).json( anomalies);
     });
 };
 
@@ -65,7 +65,7 @@ exports.show = function(req, res) {
       if (!anomalie) {
         return res.send(404);
       }
-      return res.json(anomalie);
+      return res.status(200).json(anomalie);
     });
 };
 
@@ -93,7 +93,7 @@ exports.create = function(req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(201, anomalie);
+    return res.status(201).json( anomalie);
   });
 };
 
@@ -243,7 +243,7 @@ exports.update = function(req, res) {
       if (err) {
         return handleError(res, err);
       }
-      return res.json(200, updated);
+      return res.status(200).json( updated);
     });
   });
 };

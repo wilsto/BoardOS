@@ -130,7 +130,7 @@ function SendMails(callback) {
 // Get list of mails
 exports.index = function(req, res) {
   SendMails(function(json) {
-    return res.json(json);
+    return res.status(200).json(json);
   });
 };
 
@@ -143,7 +143,7 @@ exports.show = function(req, res) {
     if (!mail) {
       return res.send(404);
     }
-    return res.json(mail);
+    return res.status(200).json(mail);
   });
 };
 
@@ -153,7 +153,7 @@ exports.create = function(req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(201, mail);
+    return res.status(201).json( mail);
   });
 };
 
@@ -174,7 +174,7 @@ exports.update = function(req, res) {
       if (err) {
         return handleError(res, err);
       }
-      return res.json(200, mail);
+      return res.status(200).json( mail);
     });
   });
 };

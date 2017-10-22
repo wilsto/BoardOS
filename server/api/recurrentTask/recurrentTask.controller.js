@@ -191,7 +191,7 @@ exports.show = function(req, res) {
       _.each(recurrentTask.followers, function(follower) {
         follower.avatar = (follower.avatar) ? follower.avatar : 'assets/images/avatars/' + follower._id + '.png';
       });
-      return res.json(recurrentTask);
+      return res.status(200).json(recurrentTask);
     });
 };
 
@@ -482,7 +482,7 @@ exports.search = function(req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, tasks);
+    return res.status(200).json( tasks);
   });
 };
 
@@ -521,7 +521,7 @@ exports.standardPERT = function(req, res) {
       if (err) {
         return handleError(res, err);
       }
-      return res.json(200, tasks);
+      return res.status(200).json( tasks);
     });
 };
 

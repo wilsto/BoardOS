@@ -23,7 +23,7 @@ exports.index = function(req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, metrics);
+    return res.status(200).json( metrics);
   });
 };
 
@@ -83,7 +83,7 @@ exports.list = function(req, res) {
       return deferred.promise;
     })
     .then(function() {
-      return res.json(200, metrics);
+      return res.status(200).json( metrics);
     });
 };
 
@@ -96,7 +96,7 @@ exports.show = function(req, res) {
     if (!metric) {
       return res.send(404);
     }
-    return res.json(metric);
+    return res.status(200).json(metric);
   });
 };
 
@@ -130,7 +130,7 @@ exports.update = function(req, res) {
       if (err) {
         return handleError(res, err);
       }
-      return res.json(200, metric);
+      return res.status(200).json( metric);
     });
   });
 };

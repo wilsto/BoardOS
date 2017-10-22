@@ -7,7 +7,7 @@ var Help = require('./help.model');
 exports.index = function(req, res) {
   Help.find(function (err, helps) {
     if(err) { return handleError(res, err); }
-    return res.json(200, helps);
+    return res.status(200).json( helps);
   });
 };
 
@@ -16,7 +16,7 @@ exports.show = function(req, res) {
   Help.findById(req.params.id, function (err, help) {
     if(err) { return handleError(res, err); }
     if(!help) { return res.send(404); }
-    return res.json(help);
+    return res.status(200).json(help);
   });
 };
 
@@ -24,7 +24,7 @@ exports.show = function(req, res) {
 exports.create = function(req, res) {
   Help.create(req.body, function(err, help) {
     if(err) { return handleError(res, err); }
-    return res.json(201, help);
+    return res.status(201).json( help);
   });
 };
 
@@ -37,7 +37,7 @@ exports.update = function(req, res) {
     var updated = _.merge(help, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
-      return res.json(200, help);
+      return res.status(200).json( help);
     });
   });
 };

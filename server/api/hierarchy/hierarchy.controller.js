@@ -25,7 +25,7 @@ exports.index = function(req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, hierarchies);
+    return res.status(200).json( hierarchies);
   });
 };
 
@@ -38,7 +38,7 @@ exports.show = function(req, res) {
     if (!hierarchy) {
       return res.send(404);
     }
-    return res.json(hierarchy);
+    return res.status(200).json(hierarchy);
   });
 };
 
@@ -54,7 +54,7 @@ exports.list = function(req, res) {
       return res.send(404)
     }
     //if(hierarchy[0]) {tools.buildHierarchy(hierarchy[0].list,'list')}
-    return res.json(hierarchy[0]);
+    return res.status(200).json(hierarchy[0]);
   });
 };
 
@@ -277,7 +277,7 @@ exports.sublist = function(req, res) {
 
             if (index === findtasks.length - 1 && index2 === filterPerimeter.length - 1) {
               deferred.resolve(sublist);
-              return res.json(sublist);
+              return res.status(200).json(sublist);
 
             }
           });
@@ -300,7 +300,7 @@ exports.listContext = function(req, res) {
     if (!hierarchy) {
       return res.send(404)
     }
-    return res.json(_.sortBy(hierarchy));
+    return res.status(200).json(_.sortBy(hierarchy));
   });
 };
 

@@ -15,7 +15,7 @@ exports.index = function(req, res) {
         _.each(logs, function(rowdata, index) {
             rowdata.moment = moment(rowdata.date).fromNow();
         });
-        return res.json(200, logs);
+        return res.status(200).json( logs);
     });
 };
 
@@ -28,7 +28,7 @@ exports.show = function(req, res) {
         if (!log) {
             return res.send(404);
         }
-        return res.json(log);
+        return res.status(200).json(log);
     });
 };
 
@@ -38,7 +38,7 @@ exports.create = function(req, res) {
         if (err) {
             return handleError(res, err);
         }
-        return res.json(201, log);
+        return res.status(201).json( log);
     });
 };
 
@@ -59,7 +59,7 @@ exports.update = function(req, res) {
             if (err) {
                 return handleError(res, err);
             }
-            return res.json(200, log);
+            return res.status(200).json( log);
         });
     });
 };

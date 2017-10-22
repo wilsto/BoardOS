@@ -19,7 +19,7 @@ function forgotPassword(req, res) {
       var token = jwt.sign({
         email: email
       }, config.secrets.session, {
-        expiresInMinutes: 60 * 1
+        expiresIn: '1h'
       });
 
       var uri = url.parse('http://' + req.headers.host + '/reset/' + token);
