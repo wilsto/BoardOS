@@ -45,7 +45,7 @@ function calcBusinessDays(dDate1, dDate2) { // input given as Date objects
   return (iDateDiff + 1); // add 1 because dates are inclusive
 }
 
-//createTaskFromRecurrent('2017-10-15');
+//createTaskFromRecurrent('2017-10-22');
 
 function createTaskFromRecurrent(startSundayDate) {
   var workday;
@@ -482,7 +482,7 @@ exports.search = function(req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.status(200).json( tasks);
+    return res.status(200).json(tasks);
   });
 };
 
@@ -521,7 +521,7 @@ exports.standardPERT = function(req, res) {
       if (err) {
         return handleError(res, err);
       }
-      return res.status(200).json( tasks);
+      return res.status(200).json(tasks);
     });
 };
 
