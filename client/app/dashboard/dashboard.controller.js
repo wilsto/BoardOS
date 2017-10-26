@@ -2,8 +2,12 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('DashboardCtrl', function($scope, $rootScope, $http, $stateParams, myLibrary, $cookieStore, $location, Notification, $timeout, dateRangeService, $window, VisDataSet, $uibModal) {
+  .controller('DashboardCtrl', function($scope, $rootScope, $http, $stateParams, myLibrary, $cookieStore, $location, Notification, $timeout, dateRangeService, $window, VisDataSet, $uibModal, Auth) {
     $scope.Math = window.Math;
+
+    Auth.getCurrentUser(function(data) {
+      $scope.currentUser = Auth.getCurrentUser();
+    });
 
     // create visualization
     $scope.timelineOptions = {
@@ -781,6 +785,14 @@ angular.module('boardOsApp')
       } else {
         $scope.userindex = 0;
         $scope.PerimetersIsExpanded = true;
+        $scope.blnshowConfig = true;
+
+        $rootScope.perimeter.name = null;
+        $rootScope.perimeter.id = null;
+        $rootScope.perimeter.activity = null;
+        $rootScope.perimeter.context = null;
+        $rootScope.perimeter.axis = null;
+        $rootScope.perimeter.category = null;
 
         $scope.dashboard = {
           name: '',
@@ -868,6 +880,7 @@ angular.module('boardOsApp')
         if ($scope.dashboard && $scope.dashboard.users && $scope.dashboard.users[$scope.userindex]) {
           $scope.dashboard.users[$scope.userindex].dashboardName = $scope.dashboard.name;
         }
+        $scope.needToSave = true;
       }
     }, true);
 

@@ -638,7 +638,13 @@ exports.update = function(req, res) {
       updated.markModified('anomalies');
       updated.markModified('previousTasks');
       updated.markModified('previousAnomalies');
-
+      updated.todos = task.todos;
+      updated.actors = task.actors;
+      updated.anomalies = task.anomalies;
+      updated.previousTasks = task.previousTasks;
+      updated.previousAnomalies = task.previousAnomalies;
+      updated.followers = task.followers;
+      updated.metrics = task.metrics;
       updated.save(function(err) {
         if (err) {
           console.log('err', err);

@@ -85,7 +85,7 @@ Please report with maximum of accucracy your problem to be able to correct it an
 <!-- *************** -->
 <!-- FIRST PAGE      -->
 <!-- *************** -->
-<div  class="row"   ng-cloak ng-show="dashboardSlide==='Home'" cg-busy="myPromise">
+<div  class="row"   ng-cloak ng-show="dashboardSlide==='Home' || !dashboard.id" cg-busy="myPromise">
 <div class="col-md-12">
   <div class="row ">
     <div class="col-md-1" ng-show="blnshowConfig">
@@ -403,13 +403,13 @@ Please report with maximum of accucracy your problem to be able to correct it an
                               </td>
                               <td style="min-width:70px">
                                   <span class="pull-right text-info">
-                                    <a href="task/{{anomalie.correctiveActions[0]._id}}" target="_blank">
+                                    <!-- <a href="task/{{anomalie.correctiveActions[0]._id}}" target="_blank"> -->
                                     <span class="btn btn-outline btn-xs" aria-hidden="false" ng-class="{'btn-info ':anomalie.correctiveActions[0].metrics[0].status === 'In Progress',' btn-default ':anomalie.correctiveActions[0].metrics[0].status === 'Not Started',' btn-danger ':anomalie.correctiveActions.length === 0,' btn-success':anomalie.correctiveActions[0].metrics[0].status === 'Finished'}">CA</span>
-                                  </a>
-                                  <a href="task/{{anomalie.preventiveActions[0]._id}}" target="_blank">
+                                  <!-- </a> -->
+                                  <!-- <a href="task/{{anomalie.preventiveActions[0]._id}}" target="_blank"> -->
 
                                     <span class="btn btn-outline btn-xs" aria-hidden="false" ng-class="{'btn-info ':anomalie.preventiveActions[0].metrics[0].status === 'In Progress',' btn-default ':anomalie.preventiveActions[0].metrics[0].status === 'Not Started',' btn-danger ':anomalie.preventiveActions.length === 0,' btn-success':anomalie.preventiveActions[0].metrics[0].status === 'Finished'}">PA</span>
-                                  </a>
+                                  <!-- </a> -->
                                   </span>
                               </td>
                           </tr>

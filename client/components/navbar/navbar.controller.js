@@ -6,9 +6,12 @@ angular.module('boardOsApp')
     Auth.getCurrentUser(function(data) {
       $scope.currentUser = data;
       $rootScope.thisUser = $scope.currentUser;
-      if ($scope.currentUser && $scope.currentUser._id) {
-        $scope.load();
-        $scope.loadDashBoards();
+      if ($scope.currentUser) {
+        if ($scope.currentUser._id) {
+
+          $scope.load();
+          $scope.loadDashBoards();
+        }
       }
     });
 

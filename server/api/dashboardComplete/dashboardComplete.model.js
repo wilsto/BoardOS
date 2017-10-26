@@ -26,13 +26,7 @@ var DashboardCompleteSchema = new Schema({
   tags: String,
   owner: Schema.Types.Mixed,
   actors: Schema.Types.Mixed,
-  users: [{
-    dashboardName: String,
-    _id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    }
-  }],
+  users: Schema.Types.Mixed,
   date: {
     type: Date,
     default: Date.now
