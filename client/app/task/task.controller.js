@@ -182,7 +182,7 @@ angular.module('boardOsApp')
         bootbox.prompt({
           title: 'Please Enter a short sentence of this success',
           callback: function(result) {
-            console.log('result', result);
+            
             if (result) {
               $scope.task.success = result;
               $scope.$apply();

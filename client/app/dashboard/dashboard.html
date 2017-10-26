@@ -202,7 +202,7 @@ Please report with maximum of accucracy your problem to be able to correct it an
                                   uib-tooltip-html="'Save will  copy data to a permanent storage'" tooltip-placement="top" >Save</button>
 </div>
 
-<div class="row" ng-if="dashboard._id">
+<div class="row" ng-if="dashboardSlide==='Home' && dashboard._id">
     <!--############### PLAN ############  -->
 
     <div class="col-lg-3 col-md-6 col-sm-12" ng-class="{'label-default':task.metrics[0].status ==='Not Started'}" style="padding-bottom:10px;">
