@@ -10,7 +10,14 @@ angular.module('boardOsApp')
     $scope.filterStatus = 'Not Finished';
     $scope.filterProgressStatus = 'All';
     $scope.filterActors = 'All';
-    $scope.searchText = '';
+    $scope.searchName = '';
+    $scope.searchActor = '';
+    $scope.searchContext = '';
+    $scope.searchStatus = '';
+    $scope.searchStart = '';
+    $scope.searchEnd = '';
+    $scope.blnReview = '';
+    $scope.blnSuffix = '';
     $scope.orderByField = 'date';
     $scope.reverseSort = true;
     $scope.today = new Date().toISOString();
@@ -18,69 +25,110 @@ angular.module('boardOsApp')
     $rootScope.taskStatus = statusTask;
     $rootScope.progressStatus = progressStatusTask;
 
-    var searchTxt = $scope.searchText.toLowerCase();
-    var filterStatusTxt = $scope.filterStatus.replace('All', '').replace('Not Finished', '').toLowerCase();
-    var filterProgressStatusTxt = $scope.filterProgressStatus.replace('All', '').toLowerCase();
+
     var filterTasks = function(data) {
+      var searchName = ($scope.searchName) ? $scope.searchName.toLowerCase() : '';
+      var searchActor = ($scope.searchActor) ? $scope.searchActor.toLowerCase() : '';
+      var searchContext = ($scope.searchContext) ? $scope.searchContext.toLowerCase() : '';
+      var searchStatus = ($scope.searchStatus) ? $scope.searchStatus.toLowerCase() : '';
+
       return _.filter(data, function(task) {
-        var lasMetric = task.metrics[task.metrics.length - 1];
+        var lastMetric = task.metrics[task.metrics.length - 1];
 
-        var blnSearchText = (searchTxt === 0) ? true : (task.name && task.name.toLowerCase().indexOf(searchTxt) >= 0) || (task.activity && task.activity.toLowerCase().indexOf(searchTxt) >= 0) || (task.context && task.context.toLowerCase().indexOf(searchTxt) >= 0);
-        var blnStatus = (typeof task.metrics === 'undefined') ? false : lasMetric.status && lasMetric.status.toLowerCase().indexOf(filterStatusTxt) >= 0;
-        var blnProgressStatus = (typeof task.metrics === 'undefined') ? false : lasMetric.progressStatus && lasMetric.progressStatus.toLowerCase().indexOf(filterProgressStatusTxt) >= 0;
+        var blnActor = (searchActor.length === 0) ? true : false;
+        _.each(task.actors, function(actor) {
+          if (actor.name.toLowerCase().indexOf(searchActor) >= 0) {
+            blnActor = true;
+          }
+        });
 
-        var blnActors;
-        if ($scope.filterActors === 'All') {
-          blnActors = true;
-        } else {
-          blnActors = false;
-          _.each(task.actors, function(actor) {
-            if (actor._id.toString() === $scope.currentUser._id.toString()) {
-              blnActors = true;
-            }
-          });
-        }
+        var blnName = (searchName.length === 0) ? true : (task.name.toLowerCase().indexOf(searchName) >= 0) || (task.activity.toLowerCase().indexOf(searchName) >= 0);
 
-        return blnSearchText && blnProgressStatus && blnStatus && blnActors;
+        var blnContext = (searchContext.length === 0) ? true : (task.context && task.context.toLowerCase().indexOf(searchContext) >= 0);
+
+        var blnStart = (typeof task.metrics === 'undefined') ? false : lastMetric.targetstartDate && lastMetric.targetstartDate.toString().indexOf($scope.searchStart) >= 0;
+
+        var blnEnd = (typeof task.metrics === 'undefined') ? false : lastMetric.targetEndDate && lastMetric.targetEndDate.toString().indexOf($scope.searchEnd) >= 0;
+
+        var blnStatus = (typeof task.metrics === 'undefined') ? false : lastMetric.status && lastMetric.status.toLowerCase().indexOf(searchStatus) >= 0;
+
+        var blnReview = ($scope.blnReview.length > 0) ? task.taskIcon : true;
+        var blnMissing = ($scope.blnSuffix.length > 0) ? task.taskSuffIcon : true;
+
+        return blnName && blnActor && blnStatus && blnContext && blnStart && blnEnd && blnMissing && blnReview;
       });
     };
 
+    $scope.$watchGroup(['searchName', 'searchActor', 'searchStart', 'searchEnd', 'searchStatus', 'searchContext', 'reverseSort', 'blnSuffix', 'blnReview'], function(newValues, oldValues) {
+      $scope.reloadTasks();
+    });
+
     $scope.Load = function() {
       $http.get('/api/taskFulls').success(function(data) {
-        $scope.alltasks = _.sortBy(data, 'date').reverse();
-
-        _.each($scope.alltasks, function(task) {
-          task.taskSuffIcon = '';
-          task.taskIcon = '';
-          switch (task.metrics[task.metrics.length - 1].status) {
-            case 'Finished':
-              if (task.reviewTask === true) {
-                task.taskIcon = '<i class="fa fa-bookmark-o text-success" aria-hidden="true"></i>&nbsp;&nbsp; ';
-              }
-              if (task.metrics[task.metrics.length - 1].userSatisfaction === undefined || task.metrics[task.metrics.length - 1].deliverableStatus === undefined || task.metrics[task.metrics.length - 1].actorSatisfaction === undefined) {
-                task.taskSuffIcon = ' <i class="fa fa-question-circle-o text-danger" aria-hidden="true"></i>&nbsp;&nbsp;';
-              }
-              break;
-            default:
-              task.taskIcon = '';
-          }
-          task.icons = task.taskIcon + task.taskSuffIcon;
-        });
-
-        $scope.tasks = filterTasks($scope.alltasks);
-        $scope.showTasks = $scope.tasks.slice(0, 15);
+        $scope.alltasks = data;
+        $scope.suffixTask($scope.alltasks);
+        $scope.reloadTasks();
       });
     };
 
     $scope.reloadTasks = function() {
       $scope.tasks = filterTasks($scope.alltasks);
+      $scope.tasks = _.sortBy($scope.tasks, function(task) {
+        switch ($scope.orderByField) {
+          case 'date':
+            return task.date;
+          case 'actor':
+            return task.actors[0].name;
+          case 'name':
+            return task.name;
+          case 'activity':
+            return task.activity;
+          case 'context':
+            return task.context;
+          case 'startDate':
+            return task.metrics[task.metrics.length - 1].targetstartDate;
+          case 'endDate':
+            return task.metrics[task.metrics.length - 1].targetEndDate;
+          case 'status':
+            return task.metrics[task.metrics.length - 1].status;
+        }
+      });
+
+      if ($scope.reverseSort) {
+        $scope.tasks.reverse();
+      }
       $scope.showTasks = $scope.tasks.slice(0, 15);
+    };
+
+    $scope.suffixTask = function(tasks) {
+      _.each(tasks, function(task) {
+        task.taskSuffIcon = '';
+        task.taskIcon = '';
+        switch (task.metrics[task.metrics.length - 1].status) {
+          case 'Finished':
+            if (task.reviewTask === true) {
+              task.taskIcon = '<i class="fa fa-bookmark-o text-success" aria-hidden="true"></i>&nbsp;&nbsp; ';
+            }
+            if (task.metrics[task.metrics.length - 1].userSatisfaction === undefined || task.metrics[task.metrics.length - 1].deliverableStatus === undefined || task.metrics[task.metrics.length - 1].actorSatisfaction === undefined) {
+              task.taskSuffIcon = ' <i class="fa fa-question-circle-o text-danger" aria-hidden="true"></i>&nbsp;&nbsp;';
+            }
+            break;
+          default:
+            task.taskIcon = '';
+        }
+        task.icons = task.taskIcon + task.taskSuffIcon;
+      });
     };
 
 
     $scope.getMoreData = function() {
       var tasks = filterTasks($scope.alltasks);
+      tasks = _.sortBy(tasks, $scope.orderByField);
+      if ($scope.reverseSort) {
+        tasks.reverse();
+      }
       $scope.showTasks = tasks.slice(0, $scope.showTasks.length + 15);
+      $scope.suffixTask($scope.showTasks);
     };
 
     $scope.save = function() {
@@ -118,38 +166,5 @@ angular.module('boardOsApp')
     };
 
     $scope.Load();
-
-    $scope.$watch('searchText', function() {
-      $scope.reloadTasks();
-    });
-
-    $scope.$watch('filterStatus', function() {
-      $scope.reloadTasks();
-    });
-
-    $scope.$watch('filterProgressStatus', function() {
-      $scope.reloadTasks();
-    });
-
-    $scope.$watch('filterActors', function() {
-      $scope.reloadTasks();
-    });
-
-    $scope.watchTask = function(task) {
-      bootbox.confirm('Are you sure to watch this task?', function(result) {
-        if (result) {
-          $http.post('/api/tasks/watch/' + task._id + '/' + $scope.currentUser._id).success(function(data) {
-            $scope.Load();
-
-            var logInfo = 'Task watch "' + task.name + '" was updated by ' + $scope.currentUser.name;
-            $http.post('/api/logs', {
-              info: logInfo,
-              actor: $scope.currentUser
-            });
-            Notification.success(logInfo);
-          });
-        }
-      });
-    };
 
   });

@@ -3,7 +3,7 @@
   <div class="portlet">
     <div class="portlet-title">
       <div class="caption">
-        <i class="fa fa-check"></i>Task List &nbsp;&nbsp;&nbsp;
+        <i class="fa fa-check"></i>Task List &nbsp;&nbsp;&nbsp; <small>Show {{showTasks.length}} tasks of {{tasks.length}}</small>
       </div>
       <small class="text-muted pull-right"><i>Ordered By: {{orderByField}}, Reverse Sort: {{reverseSort}}</i></small>
 
@@ -13,13 +13,13 @@
         <thead>
           <tr>
             <th style="max-width:125px;width:125px;min-width:20px;">
-              <a style="text-decoration: none" href="#" ng-click="orderByField='actors[0].name'; reverseSort = !reverseSort">
-                <i class="fa fa-users"></i> From <span ng-show="orderByField === 'actors[0].name'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
+              <a style="text-decoration: none" href="#" ng-click="orderByField='actor'; reverseSort = !reverseSort">
+                <i class="fa fa-users"></i> From <span ng-show="orderByField === 'actor'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
               </a>
             </th>
             <th style="max-width:650px;width:auto">
-              <a style="text-decoration: none" href="#" ng-click="orderByField='Name'; reverseSort = !reverseSort">
-                <i class="fa fa-tasks"></i>  Name <span ng-show="orderByField === 'Name'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
+              <a style="text-decoration: none" href="#" ng-click="orderByField='name'; reverseSort = !reverseSort">
+                <i class="fa fa-tasks"></i>  Name <span ng-show="orderByField === 'name'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
               </a>
               <small class="pull-right">
 
@@ -34,30 +34,29 @@
               </a>
             </th>
             <th style="max-width:125px;width:125px;min-width:20px;">
-              <a style="text-decoration: none" href="#" ng-click="orderByField='metrics[task.metrics.length - 1].startDate'; reverseSort = !reverseSort">
-                Start <span ng-show="orderByField === 'metrics[task.metrics.length - 1].startDate'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
+              <a style="text-decoration: none" href="#" ng-click="orderByField='startDate'; reverseSort = !reverseSort">
+                Start <span ng-show="orderByField === 'startDate'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
               </a>
             </th>
             <th style="max-width:125px;width:125px;min-width:20px;">
-              <a style="text-decoration: none" href="#" ng-click="orderByField='metrics[task.metrics.length - 1].endDate'; reverseSort = !reverseSort">
-                End <span ng-show="orderByField === 'metrics[task.metrics.length - 1].endDate'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
+              <a style="text-decoration: none" href="#" ng-click="orderByField='endDate'; reverseSort = !reverseSort">
+                End <span ng-show="orderByField === 'endDate'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
               </a>
             </th>
             <th style="max-width:125px;width:125px;width:150px;">
-              <a style="text-decoration: none" href="#" ng-click="orderByField='metrics[task.metrics.length - 1].load'; reverseSort = !reverseSort">
-                Load <span ng-show="orderByField === 'metrics[task.metrics.length - 1].load'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
+              <a style="text-decoration: none" href="#" ng-click="orderByField='status'; reverseSort = !reverseSort">
+                Status <span ng-show="orderByField === 'status'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
               </a>
               <small class="pull-right">
-<i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;&nbsp;
-              <i class="fa fa-bookmark-o text-success" aria-hidden="true"></i>&nbsp;&nbsp;
-              <i class="fa fa-question-circle-o text-danger" aria-hidden="true"></i>&nbsp;&nbsp;
+              <i class="fa fa-bookmark-o text-success" aria-hidden="true"  ng-click="blnReview = (blnReview)? '':'Review'"></i>&nbsp;&nbsp;
+              <i class="fa fa-question-circle-o text-danger" aria-hidden="true" ng-click="blnSuffix = (blnSuffix)? '':'Missing'"></i>&nbsp;&nbsp;
             </small>
 
             </th>
           </tr>
           <tr>
             <th style="max-width:125px;width:125px;min-width:20px;">
-              <input style="width:100%" ng-model="searchActor">
+              <input style="width:100%" ng-model="searchActor" placeholder="Actor name">
             </th>
             <th style="max-width:650px;width:auto">
               <input style="width:100%" ng-model="searchName">
@@ -66,25 +65,25 @@
               <input style="width:100%" ng-model="searchContext">
             </th>
             <th style="max-width:125px;width:125px;min-width:20px;">
-              <input style="width:100%" ng-model="searchCategory">
+              <input style="width:100%" ng-model="searchStart" placeholder="YYYY-MM-DD">
             </th>
             <th style="max-width:125px;width:125px;min-width:20px;">
-              <input style="width:100%" ng-model="searchCategory">
+              <input style="width:100%" ng-model="searchEnd" placeholder="YYYY-MM-DD">
             </th>
             <th style="max-width:125px;width:125px;width:150px;">
-              <input style="width:100%" ng-model="searchCategory">
+              <input style="width:100%" ng-model="searchStatus" >
             </th>
           </tr>
         </thead>
         <tbody infinite-scroll="getMoreData()" infinite-scroll-distance="3">
-          <tr ng-repeat="task in showTasks | orderBy:orderByField:reverseSort">
+          <tr ng-repeat="task in showTasks">
             <td style="text-align: left">
               <div >
               <!-- <div uib-tooltip-html="'Name : <b>{{task.actors[0].name}}</b>'" tooltip-placement="top"> -->
                 <img alt="" ng-src="{{ task.actors[0].avatar || 'assets/images/avatars/' + task.actors[0]._id + '.png'}} " class="img-circle" err-src="assets/images/avatars/avatar.png"/>
-                <small class="text-muted">{{task.actors[0].name}}</small><br>
-                <small class="badge badge-default"> {{task.actors[0].groups[0]}}</small>
-
+                <span class="text-muted" ng-if="task.actors.length===1"> {{task.actors[0].name.split(' ')[0] }}</span>
+                <span class="text-muted" ng-if="task.actors.length>1">+{{task.actors.length -1 }}</span>
+<img  ng-if="task.actors.length>1" src="assets/images/avatars/avatar.png" class="img-circle" alt="">
               </div>
             </td>
             <td >
