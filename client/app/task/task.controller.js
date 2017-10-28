@@ -182,7 +182,7 @@ angular.module('boardOsApp')
         bootbox.prompt({
           title: 'Please Enter a short sentence of this success',
           callback: function(result) {
-            
+
             if (result) {
               $scope.task.success = result;
               $scope.$apply();
@@ -567,7 +567,7 @@ angular.module('boardOsApp')
             $scope.task.anomalies.push($stateParams.previousId);
           }
           if ($stateParams.actionPlan === 'dashboard') {
-            $scope.task.anomalies.push($stateParams.previousId);
+            // nothing
           }
 
           $scope.task.nextTasks = [];

@@ -6,6 +6,7 @@
 
 **Closed issues:**
 
+- BOSS REC - La modification d'un dashboard n'est pas enregistrée [\#370](https://github.com/wilsto/BoardOS/issues/370)
 - BOSS Rec - Impossible de sauvegarder les modifications d'un dashboard [\#368](https://github.com/wilsto/BoardOS/issues/368)
 - BOSS Rec - création dashboard  [\#367](https://github.com/wilsto/BoardOS/issues/367)
 - BOSS REC - Trash todo [\#366](https://github.com/wilsto/BoardOS/issues/366)

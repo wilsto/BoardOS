@@ -301,16 +301,24 @@ angular.module('boardOsApp')
       var path;
       switch (data) {
         case 'context':
-          path = '/task//' + $scope.dashboard.context;
+          path = '/task//' + $scope.dashboard.perimeter[0].context;
           break;
         case 'activity':
-          path = '/task///' + $scope.dashboard.activity;
+          path = '/task///' + $scope.dashboard.perimeter[0].activity;
           break;
         case 'both':
-          path = '/task//' + $scope.dashboard.context + '/' + $scope.dashboard.activity;
+          path = '/task//' + $scope.dashboard.perimeter[0].context + '/' + $scope.dashboard.perimeter[0].activity;
           break;
         case 'actionplan':
-          path = $location.protocol() + '://' + location.host + '/task////dashboard/' + $scope.dashboard._id;
+          if ($scope.dashboard.perimeter[0].context && $scope.dashboard.perimeter[0].activity) {
+            path = '/task//' + $scope.dashboard.perimeter[0].context + '/' + $scope.dashboard.perimeter[0].activity;
+          }
+          if ($scope.dashboard.perimeter[0].context && !$scope.dashboard.perimeter[0].activity) {
+            path = '/task//' + $scope.dashboard.perimeter[0].context;
+          }
+          if (!$scope.dashboard.perimeter[0].context && $scope.dashboard.perimeter[0].activity) {
+            path = '/task///' + $scope.dashboard.perimeter[0].activity;
+          }
           break;
       }
       if (path) {
