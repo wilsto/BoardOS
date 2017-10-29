@@ -42,8 +42,6 @@
 <!-- build:css({.tmp,client}) app/app.css -->
 <link rel="stylesheet" href="app/app.css">
 <!-- injector:css -->
-<link rel="stylesheet" href="app/KPI/KPI.css">
-<link rel="stylesheet" href="app/KPIs/KPIs.css">
 <link rel="stylesheet" href="app/about/about.css">
 <link rel="stylesheet" href="app/account/login/login.css">
 <link rel="stylesheet" href="app/account/settings/setting.css">
@@ -58,6 +56,8 @@
 <link rel="stylesheet" href="app/help/help.css">
 <link rel="stylesheet" href="app/hierarchies/hierarchies.css">
 <link rel="stylesheet" href="app/journallog/journallog.css">
+<link rel="stylesheet" href="app/KPI/KPI.css">
+<link rel="stylesheet" href="app/KPIs/KPIs.css">
 <link rel="stylesheet" href="app/mail/mail.css">
 <link rel="stylesheet" href="app/main/main.css">
 <link rel="stylesheet" href="app/process/process.css">
@@ -312,7 +312,6 @@
     <script src="bower_components/angular-nvd3/dist/angular-nvd3.min.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-    <script src="bower_components/socket.io-client/dist/socket.io.js"></script>
     <script src="bower_components/angular-socket-io/socket.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="bower_components/angular-strap/dist/angular-strap.js"></script>
@@ -338,6 +337,14 @@
     <script src="bower_components/angular-ui-sortable/sortable.js"></script>
     <script src="bower_components/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
     <script src="bower_components/angular-material/angular-material.js"></script>
+    <script src="bower_components/mdPickers/dist/mdPickers.min.js"></script>
+    <script src="bower_components/bpmn-js/dist/bpmn-viewer.js"></script>
+    <script src="bower_components/ng-tags-input/ng-tags-input.js"></script>
+    <script src="bower_components/checklist-model/checklist-model.js"></script>
+    <script src="bower_components/interactjs/interact.js"></script>
+    <script src="bower_components/ngEmbed/src/ng-embed.js"></script>
+    <script src="bower_components/angular-bootstrap-calendar/dist/js/angular-bootstrap-calendar-tpls.js"></script>
+    <script src="bower_components/angular-pageslide-directive/dist/angular-pageslide-directive.js"></script>
     <script src="bower_components/angular-mocks/angular-mocks.js"></script>
     <!-- endbower -->
     <script src="socket.io-client/socket.io.js"></script>
@@ -356,10 +363,6 @@
     <!-- build:js({.tmp,client}) app/app.js -->
     <script src="app/app.js"></script>
     <!-- injector:js -->
-    <script src="app/KPI/KPI.controller.js"></script>
-    <script src="app/KPI/KPI.js"></script>
-    <script src="app/KPIs/KPIs.controller.js"></script>
-    <script src="app/KPIs/KPIs.js"></script>
     <script src="app/about/about.controller.js"></script>
     <script src="app/about/about.js"></script>
     <script src="app/account/account.js"></script>
@@ -390,6 +393,10 @@
     <script src="app/hierarchies/hierarchies.js"></script>
     <script src="app/journallog/journallog.controller.js"></script>
     <script src="app/journallog/journallog.js"></script>
+    <script src="app/KPI/KPI.controller.js"></script>
+    <script src="app/KPI/KPI.js"></script>
+    <script src="app/KPIs/KPIs.controller.js"></script>
+    <script src="app/KPIs/KPIs.js"></script>
     <script src="app/mail/mail.controller.js"></script>
     <script src="app/mail/mail.js"></script>
     <script src="app/main/main.controller.js"></script>

@@ -2,6 +2,7 @@
   "name": "board-os",
   "version": "0.0.0",
   "dependencies": {
+    "jquery": "~1.11.0",
     "angular": "~1.4.x",
     "angular-aria": "~1.4.x",
     "angular-animate": "~1.4.x",
@@ -24,7 +25,6 @@
     "bootstrap.growl": "~2.0.1",
     "es5-shim": "~3.0.1",
     "font-awesome": ">=4.1.0",
-    "jquery": "~1.11.0",
     "json3": "~3.3.1",
     "moment": "^2.19.1",
     "ng-table": "~0.3.3",
