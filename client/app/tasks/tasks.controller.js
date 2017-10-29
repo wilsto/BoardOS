@@ -43,15 +43,10 @@ angular.module('boardOsApp')
         });
 
         var blnName = (searchName.length === 0) ? true : (task.name.toLowerCase().indexOf(searchName) >= 0) || (task.activity.toLowerCase().indexOf(searchName) >= 0);
-
         var blnContext = (searchContext.length === 0) ? true : (task.context && task.context.toLowerCase().indexOf(searchContext) >= 0);
-
         var blnStart = (typeof task.metrics === 'undefined') ? false : lastMetric.targetstartDate && lastMetric.targetstartDate.toString().indexOf($scope.searchStart) >= 0;
-
         var blnEnd = (typeof task.metrics === 'undefined') ? false : lastMetric.targetEndDate && lastMetric.targetEndDate.toString().indexOf($scope.searchEnd) >= 0;
-
         var blnStatus = (typeof task.metrics === 'undefined') ? false : lastMetric.status && lastMetric.status.toLowerCase().indexOf(searchStatus) >= 0;
-
         var blnReview = ($scope.blnReview.length > 0) ? task.taskIcon : true;
         var blnMissing = ($scope.blnSuffix.length > 0) ? task.taskSuffIcon : true;
 

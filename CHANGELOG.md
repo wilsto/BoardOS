@@ -6,6 +6,7 @@
 
 **Closed issues:**
 
+- Time displayed wrongly on Heroku but correctly on localhost using moment [\#371](https://github.com/wilsto/BoardOS/issues/371)
 - BOSS REC - La modification d'un dashboard n'est pas enregistrée [\#370](https://github.com/wilsto/BoardOS/issues/370)
 - BOSS Rec - Impossible de sauvegarder les modifications d'un dashboard [\#368](https://github.com/wilsto/BoardOS/issues/368)
 - BOSS Rec - création dashboard  [\#367](https://github.com/wilsto/BoardOS/issues/367)
