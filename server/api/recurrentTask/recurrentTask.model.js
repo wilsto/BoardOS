@@ -19,24 +19,8 @@ var RecurrentTaskSchema = new Schema({
   hypothesis: String,
   risks: String,
   metrics: Schema.Types.Mixed,
-  todos: [{
-    text: String,
-    date: Date,
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    },
-    isDone: Boolean
-  }],
-  comments: [{
-    text: String,
-    date: Date,
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    },
-    auto: Boolean
-  }],
+  todos: Schema.Types.Mixed,
+  comments: Schema.Types.Mixed,
   actors: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
