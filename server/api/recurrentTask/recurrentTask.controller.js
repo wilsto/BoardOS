@@ -45,9 +45,9 @@ function calcBusinessDays(dDate1, dDate2) { // input given as Date objects
   return (iDateDiff + 1); // add 1 because dates are inclusive
 }
 
-//createTaskFromRecurrent('2017-10-15');
 
 function createTaskFromRecurrent(startSundayDate) {
+  console.log('startSundayDate', startSundayDate);
   var workday;
 
   RecurrentTask.find({})
@@ -114,8 +114,17 @@ function createTaskFromRecurrent(startSundayDate) {
         }
       });
     });
-
 }
+
+var j = schedule.scheduleJob({
+  dayOfWeek: 0,
+  hour: 6,
+  minute: 30
+}, function() {
+  createTaskFromRecurrent(new Date());
+});
+//createTaskFromRecurrent('2017-10-22');
+
 
 // Get list of recurrentTasks
 exports.index = function(req, res) {
@@ -321,28 +330,9 @@ exports.updateAllTask = function(req, res) {
 
     _.each(recurrentTasks, function(task) {
 
-      // var actors = [];
-      // _.each(task.actors, function(actor) {
-      //   actors.push(actor._id);
-      // });
-      // _.each(task.todos, function(todo) {
-      //   if (todo.actor) {
-      //     actors.push(todo.actor._id);
-      //   }
-      // });
       if (task.actors) {
         task.actors = _.compact(task.actors);
       }
-      //
-      // var followers = [];
-      // _.each(task.followers, function(follower) {
-      //   followers.push(follower._id);
-      // });
-      // task.followers = followers;
-      //
-      // _.each(task.comments, function(comment) {
-      //   comment.user = comment.user._id;
-      // });
 
       /** Mise en majuscule des axes */
       if (task.activity) {
@@ -482,7 +472,7 @@ exports.search = function(req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.status(200).json( tasks);
+    return res.status(200).json(tasks);
   });
 };
 
@@ -521,7 +511,7 @@ exports.standardPERT = function(req, res) {
       if (err) {
         return handleError(res, err);
       }
-      return res.status(200).json( tasks);
+      return res.status(200).json(tasks);
     });
 };
 

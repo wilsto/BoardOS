@@ -6,6 +6,17 @@
 
 **Closed issues:**
 
+- Time displayed wrongly on Heroku but correctly on localhost using moment [\#371](https://github.com/wilsto/BoardOS/issues/371)
+- BOSS REC - La modification d'un dashboard n'est pas enregistrée [\#370](https://github.com/wilsto/BoardOS/issues/370)
+- BOSS Rec - Impossible de sauvegarder les modifications d'un dashboard [\#368](https://github.com/wilsto/BoardOS/issues/368)
+- BOSS Rec - création dashboard  [\#367](https://github.com/wilsto/BoardOS/issues/367)
+- BOSS REC - Trash todo [\#366](https://github.com/wilsto/BoardOS/issues/366)
+- BOSS REC - Rattacher anomalie à une tâche corrective [\#365](https://github.com/wilsto/BoardOS/issues/365)
+- Activate Karma [\#360](https://github.com/wilsto/BoardOS/issues/360)
+- Mark task as success [\#359](https://github.com/wilsto/BoardOS/issues/359)
+- OPtimize Dashboard ajax request [\#357](https://github.com/wilsto/BoardOS/issues/357)
+- OPtimize searchbar and ajax request [\#356](https://github.com/wilsto/BoardOS/issues/356)
+- Mail de recup mot de passe non valide [\#355](https://github.com/wilsto/BoardOS/issues/355)
 - Ano mineure : bouton qui permet de replier anomalie dans dashboard [\#352](https://github.com/wilsto/BoardOS/issues/352)
 - Ajout anomalie depuis dashboard \(menu droit\) ne fonctionne pas [\#348](https://github.com/wilsto/BoardOS/issues/348)
 - \[BOSS REC\] - Saisie RCA [\#328](https://github.com/wilsto/BoardOS/issues/328)

@@ -7,6 +7,7 @@ var router = express.Router();
 
 router.get('/', controller.index);
 router.get('/execute', controller.execute);
+router.get('/showTasks/:id', controller.showTasks);
 router.get('/:id', controller.show);
 router.get('/executeId/:dashboardId', controller.executeId);
 router.post('/', controller.create);

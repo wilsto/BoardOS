@@ -1,21 +1,25 @@
 'use strict';
 
 describe('Controller: CalendarCtrl', function() {
+  var httpBackend, $rootScope, createController, httpResponse;
+  var HierarchyOnStart, hierarchiesCtrl, scope;
 
-    // load the controller's module
-    beforeEach(module('boardOsApp'));
+  // load the controller's module
+  beforeEach(module('boardOsApp'));
 
-    var CalendarCtrl, scope;
+  // Initialize the controller and a mock scope
+  beforeEach(inject(function($controller, $rootScope, $location, calendarConfig, Notification) {
+    scope = $rootScope.$new();
+    createController = function() {
+      return $controller('CalendarCtrl', {
+        '$scope': scope
+      });
+    };
+  }));
 
-    // Initialize the controller and a mock scope
-    beforeEach(inject(function($controller, $rootScope) {
-        scope = $rootScope.$new();
-        CalendarCtrl = $controller('CalendarCtrl', {
-            $scope: scope
-        });
-    }));
+  xit('should ...', function() {
+    var controller = createController();
 
-    it('should ...', function() {
-        expect(1).toEqual(1);
-    });
+    expect(1).toEqual(1);
+  });
 });

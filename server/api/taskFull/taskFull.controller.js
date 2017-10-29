@@ -88,11 +88,10 @@ exports.index = function(req, res) {
       __v: false,
       alerts: false,
       kpis: false,
-      comments: false
+      comments: false,
+      todos: false
     })
     .populate('actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
-    //.populate('followers', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
-    //.populate('comments.user', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
     .lean().exec(function(err, taskFulls) {
       if (err) {
         return handleError(res, err);
@@ -102,7 +101,6 @@ exports.index = function(req, res) {
           actor.avatar = (actor.avatar) ? actor.avatar : 'assets/images/avatars/' + actor._id + '.png';
         });
       });
-      //console.log('taskFulls', taskFulls);
       return res.status(200).json(taskFulls);
     });
 };
@@ -640,7 +638,13 @@ exports.update = function(req, res) {
       updated.markModified('anomalies');
       updated.markModified('previousTasks');
       updated.markModified('previousAnomalies');
-
+      updated.todos = task.todos;
+      updated.actors = task.actors;
+      updated.anomalies = task.anomalies;
+      updated.previousTasks = task.previousTasks;
+      updated.previousAnomalies = task.previousAnomalies;
+      updated.followers = task.followers;
+      updated.metrics = task.metrics;
       updated.save(function(err) {
         if (err) {
           console.log('err', err);
@@ -849,16 +853,39 @@ exports.destroy = function(req, res) {
 
 // Get list of tasks
 exports.search = function(req, res) {
-  TaskFull.find({
-    activity: req.query.activity,
-    context: req.query.context
-  }, function(err, tasks) {
-    console.log('err', err);
-    if (err) {
-      return handleError(res, err);
+  var thisFilter = {
+    name: 'NoSearch'
+  };
+  if (typeof req.query.search !== 'undefined') {
+    if (req.query.search.length > 2) {
+      thisFilter = {
+        name: {
+          '$regex': req.query.search || '',
+          $options: '-i'
+        }
+      }
     }
-    return res.status(200).json( tasks);
-  });
+  } else {
+    thisFilter = {
+      activity: req.query.activity,
+      context: req.query.context
+    }
+  }
+  TaskFull.find(thisFilter, '_id context activity actors name metrics').sort({
+      date: 'desc'
+    })
+    .populate('actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
+    .lean().exec(function(err, tasks) {
+      if (err) {
+        return handleError(res, err);
+      }
+      _.each(tasks, function(task) {
+        _.each(task.actors, function(actor) {
+          actor.avatar = (actor.avatar) ? actor.avatar : 'assets/images/avatars/' + actor._id + '.png';
+        });
+      });
+      return res.status(200).json(tasks);
+    });
 };
 
 // Get list of tasks
@@ -896,7 +923,7 @@ exports.standardPERT = function(req, res) {
       if (err) {
         return handleError(res, err);
       }
-      return res.status(200).json( tasks);
+      return res.status(200).json(tasks);
     });
 };
 

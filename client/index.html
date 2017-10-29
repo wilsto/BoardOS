@@ -53,21 +53,14 @@
 <link rel="stylesheet" href="app/app.css">
 <link rel="stylesheet" href="app/calendar/calendar.css">
 <link rel="stylesheet" href="app/dashboard/dashboard.css">
-<link rel="stylesheet" href="app/dashboardTab/dashboardTab.css">
-<link rel="stylesheet" href="app/dashboardWidget/dashboardWidget.css">
 <link rel="stylesheet" href="app/dashboards/dashboards.css">
 <link rel="stylesheet" href="app/dqm/dqm.css">
 <link rel="stylesheet" href="app/help/help.css">
 <link rel="stylesheet" href="app/hierarchies/hierarchies.css">
 <link rel="stylesheet" href="app/journallog/journallog.css">
-<link rel="stylesheet" href="app/kanban/kanban.css">
 <link rel="stylesheet" href="app/mail/mail.css">
 <link rel="stylesheet" href="app/main/main.css">
 <link rel="stylesheet" href="app/process/process.css">
-<link rel="stylesheet" href="app/tabActor/tabActor.css">
-<link rel="stylesheet" href="app/tabDashboard/tabDashboard.css">
-<link rel="stylesheet" href="app/tabKPI/tabKPI.css">
-<link rel="stylesheet" href="app/tabTask/tabTask.css">
 <link rel="stylesheet" href="app/task/task.css">
 <link rel="stylesheet" href="app/tasks/tasks.css">
 <link rel="stylesheet" href="app/whatsnew/whatsnew.css">
@@ -345,6 +338,7 @@
     <script src="bower_components/angular-ui-sortable/sortable.js"></script>
     <script src="bower_components/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
     <script src="bower_components/angular-material/angular-material.js"></script>
+    <script src="bower_components/angular-mocks/angular-mocks.js"></script>
     <!-- endbower -->
     <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
@@ -384,8 +378,6 @@
     <script src="app/calendar/calendar.js"></script>
     <script src="app/dashboard/dashboard.controller.js"></script>
     <script src="app/dashboard/dashboard.js"></script>
-    <script src="app/dashboardTab/dashboardTab.directive.js"></script>
-    <script src="app/dashboardWidget/dashboardWidget.directive.js"></script>
     <script src="app/dashboards/dashboards.controller.js"></script>
     <script src="app/dashboards/dashboards.js"></script>
     <script src="app/dqm/dqm.controller.js"></script>
@@ -398,8 +390,6 @@
     <script src="app/hierarchies/hierarchies.js"></script>
     <script src="app/journallog/journallog.controller.js"></script>
     <script src="app/journallog/journallog.js"></script>
-    <script src="app/kanban/kanban.controller.js"></script>
-    <script src="app/kanban/kanban.js"></script>
     <script src="app/mail/mail.controller.js"></script>
     <script src="app/mail/mail.js"></script>
     <script src="app/main/main.controller.js"></script>
@@ -409,10 +399,6 @@
     <script src="app/popoverHtmlUnsafePopup/popoverHtmlUnsafePopup.directive.js"></script>
     <script src="app/process/process.controller.js"></script>
     <script src="app/process/process.js"></script>
-    <script src="app/tabActor/tabActor.directive.js"></script>
-    <script src="app/tabDashboard/tabDashboard.directive.js"></script>
-    <script src="app/tabKPI/tabKPI.directive.js"></script>
-    <script src="app/tabTask/tabTask.directive.js"></script>
     <script src="app/task/task.controller.js"></script>
     <script src="app/task/task.js"></script>
     <script src="app/tasks/tasks.controller.js"></script>

@@ -156,14 +156,14 @@ angular.module('boardOsApp')
         return task._id === calendarEvent.eventId;
       });
       if (updatedEvent.length > 0) {
-        
-        
+
+
         var dayDiff = moment(calendarNewEventStart).diff(moment(updatedEvent[0].metrics[0].targetstartDate), 'days');
-        
+
         updatedEvent[0].metrics[0].targetstartDate = moment(updatedEvent[0].metrics[0].targetstartDate).add(dayDiff, 'days').toDate();
         updatedEvent[0].metrics[0].targetEndDate = moment(updatedEvent[0].metrics[0].targetEndDate).add(dayDiff, 'days').toDate();
-        
-        
+
+
 
         $scope.myPromise = $http.put('/api/taskFulls/' + calendarEvent.eventId + '/' + false, updatedEvent[0]).success(function(data) {
           var logInfo = 'Task "' + updatedEvent[0].name + '" was updated';

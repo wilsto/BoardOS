@@ -4,6 +4,24 @@
 angular.module('boardOsApp')
   .controller('TaskCtrl', function($rootScope, $scope, $http, $state, $stateParams, $location, $window, Auth, Notification, myLibrary, $filter, $timeout, $mdpDatePicker, $uibModal, focus) {
 
+    // initializing
+    var initializing = true;
+    $scope.checked = false;
+    $scope.size = '100px';
+    $scope.parseFloat = parseFloat;
+    $scope.forceExit = false;
+
+    $scope.opened = {};
+
+
+    Auth.getCurrentUser(function(data) {
+      $scope.currentUser = Auth.getCurrentUser();
+    });
+
+    $scope.toggle = function() {
+      $scope.checked = !$scope.checked;
+    };
+
     $scope.sortme = {
       snap: true,
       revert: true,
@@ -20,28 +38,13 @@ angular.module('boardOsApp')
       sort: function(e) {},
       connectWith: '#trash-can'
     };
+
     $scope.trashcan = {
       update: function(event, ui) {
         //
         //$(ui.draggable).fadeOut(1000);
       }
     };
-
-
-    $scope.checked = false;
-    $scope.size = '100px';
-
-    $scope.toggle = function() {
-      $scope.checked = !$scope.checked;
-    };
-
-    $scope.parseFloat = parseFloat;
-    $scope.forceExit = false;
-
-    var initializing = true;
-    Auth.getCurrentUser(function(data) {
-      $scope.currentUser = Auth.getCurrentUser();
-    });
 
     // Mettre les informations transversales en mémoire
     $http.get('/api/hierarchies/listContext').success(function(contexts) {
@@ -84,19 +87,6 @@ angular.module('boardOsApp')
     $http.get('/api/users/members').success(function(members) {
       $scope.members = members;
     });
-
-
-    $scope.isAdmin = false;
-    Auth.isAdmin(function(data) {
-      $scope.isAdmin = data;
-    });
-
-    $scope.isManager = false;
-    Auth.isManager(function(data) {
-      $scope.isManager = data;
-    });
-
-    $scope.opened = {};
 
     $scope.createNewTask = function(data) {
       switch (data) {
@@ -184,6 +174,25 @@ angular.module('boardOsApp')
     $scope.changeStatusReviewTask = function() {
       $scope.task.reviewTask = !$scope.task.reviewTask;
     };
+
+    $scope.markTaskAsSuccess = function() {
+      if ($scope.task.success) {
+        $scope.task.success = '';
+      } else {
+        bootbox.prompt({
+          title: 'Please Enter a short sentence of this success',
+          callback: function(result) {
+
+            if (result) {
+              $scope.task.success = result;
+              $scope.$apply();
+
+            }
+          }
+        });
+      }
+    };
+
 
     $scope.markAsDone = function() {
       $scope.task.metrics[0].startDate = $scope.task.metrics[0].targetstartDate;
@@ -558,7 +567,7 @@ angular.module('boardOsApp')
             $scope.task.anomalies.push($stateParams.previousId);
           }
           if ($stateParams.actionPlan === 'dashboard') {
-            $scope.task.anomalies.push($stateParams.previousId);
+            // nothing
           }
 
           $scope.task.nextTasks = [];

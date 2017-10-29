@@ -22,6 +22,7 @@ var TaskFullSchema = new Schema({
   description: String,
   hypothesis: String,
   risks: String,
+  success: String,
   metrics: Schema.Types.Mixed,
   rework: Schema.Types.Mixed,
   alerts: Schema.Types.Mixed,

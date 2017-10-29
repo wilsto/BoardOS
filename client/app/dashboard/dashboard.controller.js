@@ -2,8 +2,12 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('DashboardCtrl', function($scope, $rootScope, $http, $stateParams, myLibrary, $cookieStore, $location, Notification, $timeout, dateRangeService, $window, VisDataSet, $uibModal) {
+  .controller('DashboardCtrl', function($scope, $rootScope, $http, $stateParams, myLibrary, $cookieStore, $location, Notification, $timeout, dateRangeService, $window, VisDataSet, $uibModal, Auth) {
     $scope.Math = window.Math;
+
+    Auth.getCurrentUser(function(data) {
+      $scope.currentUser = Auth.getCurrentUser();
+    });
 
     // create visualization
     $scope.timelineOptions = {
@@ -297,16 +301,24 @@ angular.module('boardOsApp')
       var path;
       switch (data) {
         case 'context':
-          path = '/task//' + $scope.dashboard.context;
+          path = '/task//' + $scope.dashboard.perimeter[0].context;
           break;
         case 'activity':
-          path = '/task///' + $scope.dashboard.activity;
+          path = '/task///' + $scope.dashboard.perimeter[0].activity;
           break;
         case 'both':
-          path = '/task//' + $scope.dashboard.context + '/' + $scope.dashboard.activity;
+          path = '/task//' + $scope.dashboard.perimeter[0].context + '/' + $scope.dashboard.perimeter[0].activity;
           break;
         case 'actionplan':
-          path = $location.protocol() + '://' + location.host + '/task////dashboard/' + $scope.dashboard._id;
+          if ($scope.dashboard.perimeter[0].context && $scope.dashboard.perimeter[0].activity) {
+            path = '/task//' + $scope.dashboard.perimeter[0].context + '/' + $scope.dashboard.perimeter[0].activity;
+          }
+          if ($scope.dashboard.perimeter[0].context && !$scope.dashboard.perimeter[0].activity) {
+            path = '/task//' + $scope.dashboard.perimeter[0].context;
+          }
+          if (!$scope.dashboard.perimeter[0].context && $scope.dashboard.perimeter[0].activity) {
+            path = '/task///' + $scope.dashboard.perimeter[0].activity;
+          }
           break;
       }
       if (path) {
@@ -581,24 +593,24 @@ angular.module('boardOsApp')
             }
 
           });
-
-
         });
-
 
         $scope.timelineData = {
           items: items,
           groups: groups
         };
-
       });
-
-
     });
 
     $scope.loadCompleteDashboard = function() {
       if ($stateParams.id) {
         $scope.myPromise = $http.get('/api/dashboardCompletes/' + $stateParams.id).success(function(dashboard) {
+
+          $http.get('/api/dashboardCompletes/showTasks/' + $stateParams.id).success(function(tasks) {
+            dashboard.tasks = tasks;
+            $scope.alltasksNb = dashboard.tasks.length;
+            $rootScope.$broadcast('dateRangeService:updated', dateRangeService.rangeDateTxt);
+          });
 
           $http.get('/api/anomalies', {
             params: {
@@ -608,6 +620,7 @@ angular.module('boardOsApp')
           }).success(function(anomalies) {
             $scope.anomalies = anomalies;
           });
+
 
           dashboard.subscribed = false;
           var userlist = _.pluck(dashboard.users, '_id');
@@ -629,11 +642,6 @@ angular.module('boardOsApp')
           $rootScope.perimeter.category = dashboard.category;
           $cookieStore.put('perimeter', $rootScope.perimeter);
 
-          if (dashboard.tasks) {
-            $scope.alltasksNb = dashboard.tasks.length;
-          }
-
-          $rootScope.$broadcast('dateRangeService:updated', dateRangeService.rangeDateTxt);
 
           var dataGoals = [];
           var dataAllGoals = [];
@@ -785,6 +793,14 @@ angular.module('boardOsApp')
       } else {
         $scope.userindex = 0;
         $scope.PerimetersIsExpanded = true;
+        $scope.blnshowConfig = true;
+
+        $rootScope.perimeter.name = null;
+        $rootScope.perimeter.id = null;
+        $rootScope.perimeter.activity = null;
+        $rootScope.perimeter.context = null;
+        $rootScope.perimeter.axis = null;
+        $rootScope.perimeter.category = null;
 
         $scope.dashboard = {
           name: '',
@@ -872,6 +888,7 @@ angular.module('boardOsApp')
         if ($scope.dashboard && $scope.dashboard.users && $scope.dashboard.users[$scope.userindex]) {
           $scope.dashboard.users[$scope.userindex].dashboardName = $scope.dashboard.name;
         }
+        $scope.needToSave = true;
       }
     }, true);
 
