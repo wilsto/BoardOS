@@ -9,11 +9,8 @@ var schedule = require('node-schedule');
 var json2csv = require('json2csv');
 
 var TaskFull = require('./taskFull.model');
-var Task = require('../task/task.model');
-var Metric = require('../metric/metric.model');
 var Hierarchies = require('../hierarchy/hierarchy.model');
 var KPI = require('../KPI/KPI.model');
-var Dashboard = require('../dashboard/dashboard.model');
 var User = require('../user/user.model');
 var Anomalie = require('../anomalie/anomalie.model');
 

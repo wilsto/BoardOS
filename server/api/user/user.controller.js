@@ -1,7 +1,7 @@
 'use strict';
 
 var User = require('./user.model');
-var Dashboard = require('../dashboard/dashboard.model');
+var DashboardComplete = require('../dashboardComplete/dashboardComplete.model');
 
 
 var passport = require('passport');
@@ -180,7 +180,7 @@ exports.desactivate = function(req, res, next) {
     user.save(function(err) {
       if (err) return validationError(res, err);
 
-      Dashboard.find({
+      DashboardComplete.find({
         'owner._id': userId
       }, function(err, dashboards) {
         if (err) {

@@ -17,3 +17,7 @@ server/config/environment/test\.js
 client/bower_components2/
 
 node_modules2/
+
+server/debug\.log
+
+*.log
