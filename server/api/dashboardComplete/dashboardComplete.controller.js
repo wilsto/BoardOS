@@ -653,6 +653,7 @@ exports.subscribe = function(req, res) {
     });
     dashboardComplete.users = users;
     var updated = dashboardComplete;
+    updated.markModified('users');
     updated.save(function(err) {
       if (err) {
         return handleError(res, err);
