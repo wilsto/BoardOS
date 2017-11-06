@@ -6,6 +6,11 @@
 
 **Closed issues:**
 
+- la suppression d’une tâche récurrente à partir du profil ne fonctionne pas [\#379](https://github.com/wilsto/BoardOS/issues/379)
+- Subscribe à un dashboard ne fonctionne plus [\#378](https://github.com/wilsto/BoardOS/issues/378)
+- Tache clonée sans acteur ne s'affiche pas  : actors \[null\] [\#377](https://github.com/wilsto/BoardOS/issues/377)
+- \(node:10444\) UnhandledPromiseRejectionWarning: Unhandled promise rejection \(rejection id: 1\): MongoError: failed to connect to server \[localhost:27017\] on first connect \[MongoError: connection 0 to localhost:27017 timed out\] [\#375](https://github.com/wilsto/BoardOS/issues/375)
+- \(node:11136\) DeprecationWarning: Implicit async custom validators \(custom validators that take 2 arguments\) are deprecated in mongoose \>= 4.9.0. [\#374](https://github.com/wilsto/BoardOS/issues/374)
 - MIse à jour des données de production suite au passage de la version 2.1 [\#372](https://github.com/wilsto/BoardOS/issues/372)
 - Time displayed wrongly on Heroku but correctly on localhost using moment [\#371](https://github.com/wilsto/BoardOS/issues/371)
 - BOSS REC - La modification d'un dashboard n'est pas enregistrée [\#370](https://github.com/wilsto/BoardOS/issues/370)
