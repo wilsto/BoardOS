@@ -102,38 +102,6 @@ angular.module('boardOsApp')
       }
     };
 
-    function calcBusinessDays(dDate1, dDate2) { // input given as Date objects
-      dDate1 = new Date(dDate1);
-      dDate2 = new Date(dDate2);
-
-      var iWeeks, iDateDiff, iAdjust = 0;
-      if (dDate2 < dDate1) {
-        return -1;
-      } // error code if dates transposed
-      var iWeekday1 = dDate1.getDay(); // day of week
-      var iWeekday2 = dDate2.getDay();
-      iWeekday1 = (iWeekday1 === 0) ? 7 : iWeekday1; // change Sunday from 0 to 7
-      iWeekday2 = (iWeekday2 === 0) ? 7 : iWeekday2;
-      if ((iWeekday1 > 5) && (iWeekday2 > 5)) {
-        iAdjust = 1; // adjustment if both days on weekend
-      }
-      iWeekday1 = (iWeekday1 > 5) ? 5 : iWeekday1; // only count weekdays
-      iWeekday2 = (iWeekday2 > 5) ? 5 : iWeekday2;
-
-      // calculate differnece in weeks (1000mS * 60sec * 60min * 24hrs * 7 days = 604800000)
-      iWeeks = Math.floor((dDate2.getTime() - dDate1.getTime()) / 604800000);
-
-      if (iWeekday1 <= iWeekday2) {
-        iDateDiff = (iWeeks * 5) + (iWeekday2 - iWeekday1);
-      } else {
-        iDateDiff = ((iWeeks + 1) * 5) - (iWeekday1 - iWeekday2);
-      }
-
-      iDateDiff -= iAdjust; // take into account both days on weekend
-
-      return (iDateDiff + 1); // add 1 because dates are inclusive
-    }
-
     //todoList
     //***************
     $scope.show = 'All';
@@ -205,11 +173,6 @@ angular.module('boardOsApp')
     $scope.$watch('task.metrics', function(newVal, oldVal) {
       if (!initializing) {
         _.each(newVal, function(metric) {
-
-          // // reestimated workload
-          // metric.projectedWorkload = (metric.progress > 0) ? Math.round(1000 * metric.timeSpent * 100 / parseFloat(metric.progress)) / 1000 : metric.targetLoad;
-          // metric.duration = calcBusinessDays(metric.startDate || metric.targetstartDate, metric.endDate || metric.targetEndDate);
-
           // status
           if (metric.progress >= 100) {
             metric.status = 'Finished';
@@ -654,7 +617,6 @@ angular.module('boardOsApp')
     // *******************
     $scope.update = function() {
       if (!$scope.blnRecurrence) {
-
         $scope.myPromise = $http.put('/api/taskFulls/' + $scope.task._id + '/' + blnexecuteDashboard, $scope.task).success(function(data) {
           var logInfo = 'Task "' + $scope.task.name + '" was updated';
           $timeout(function() {
@@ -691,15 +653,29 @@ angular.module('boardOsApp')
 
     $scope.delete = function() {
       $scope.checked = false;
-      bootbox.confirm('Are you sure to delete this task ? It can NOT be undone.', function(result) {
-        if (result) {
-          $scope.myPromise = $http.delete('/api/taskFulls/' + $scope.task._id).success(function() {
-            var logInfo = 'Task "' + $scope.task.name + '" was deleted';
-            Notification.success(logInfo);
-            $location.path('/');
-          });
-        }
-      });
+      if (!$scope.blnRecurrence) {
+
+        bootbox.confirm('Are you sure to delete this task ? It can NOT be undone.', function(result) {
+          if (result) {
+            $scope.myPromise = $http.delete('/api/taskFulls/' + $scope.task._id).success(function() {
+              var logInfo = 'Task "' + $scope.task.name + '" was deleted';
+              Notification.success(logInfo);
+              $location.path('/');
+            });
+          }
+        });
+      } else {
+        // Nouvelle recurrence de tache
+        bootbox.confirm('Are you sure to delete this recurring task ? It can NOT be undone.', function(result) {
+          if (result) {
+            $scope.myPromise = $http.delete('/api/recurrentTasks/' + $scope.task._id).success(function() {
+              var logInfo = 'Recurring Task "' + $scope.task.name + '" was deleted';
+              Notification.success(logInfo);
+              $location.path('/settings');
+            });
+          }
+        });
+      }
     };
 
     $scope.withdraw = function() {
