@@ -711,7 +711,6 @@ Please report with maximum of accucracy your problem to be able to correct it an
 
   <div class="col-md-12 col-sm-12 ">
     <!-- BEGIN OVERVIEW STATISTIC BARS-->
-    <!-- BEGIN OVERVIEW STATISTIC BARS-->
     <div class="row stats-overview-cont" >
       <div class="col-md-2 col-sm-12">
         <div class="stats-overview stat-block">
@@ -756,10 +755,10 @@ Please report with maximum of accucracy your problem to be able to correct it an
           <div class="details">
             <div class="title">
               <a href="#" ng-click="blnShowAllTasks=!blnShowAllTasks">
-                <span style="font-weight:bold;color:#87CEEB">{{metricsUONb | number:0}}</span>
+                <span style="font-weight:bold;color:#87CEEB">{{dataUOMetricsNb | number:0}}</span>
                 Men Days UO</a>
               </div>
-              <nvd3 options="optionsLoad" data="dataMetricsUO" ng-if="dashboardSlide==='History'"></nvd3>
+              <nvd3 options="optionsUOLoad" data="dataUOMetrics" ng-if="dashboardSlide==='History'"></nvd3>
             </div>
           </div>
         </div>
@@ -768,10 +767,10 @@ Please report with maximum of accucracy your problem to be able to correct it an
             <div class="details">
               <div class="title">
                 <a href="#" ng-click="blnShowAllTasks=!blnShowAllTasks">
-                  <span style="font-weight:bold;color:#87CEEB">{{metricsUONb | number:0}}</span>
+                  <span style="font-weight:bold;color:#87CEEB">{{dataUODiffMetricsNb | number:0}}</span>
                   Diff UO</a>
                 </div>
-                <nvd3 options="optionsLoad" data="dataMetricsUO" ng-if="dashboardSlide==='History'"></nvd3>
+                <nvd3 options="optionsUODiff" data="dataUODiffMetrics" ng-if="dashboardSlide==='History'"></nvd3>
               </div>
             </div>
           </div>
@@ -780,10 +779,10 @@ Please report with maximum of accucracy your problem to be able to correct it an
               <div class="details">
                 <div class="title">
                   <a href="#" ng-click="blnShowAllTasks=!blnShowAllTasks">
-                    <span style="font-weight:bold;color:#87CEEB">{{metricsUONb | number:0}}</span>
+                    <span style="font-weight:bold;color:#87CEEB">{{dataUOPerfMetricsNb | number:0}}</span>
                     Perf UO</a>
                   </div>
-                  <nvd3 options="optionsLoad" data="dataMetricsUO" ng-if="dashboardSlide==='History'"></nvd3>
+                  <nvd3 options="optionsCosts" data="dataUOPerfMetrics" ng-if="dashboardSlide==='History'"></nvd3>
                 </div>
               </div>
             </div>
@@ -938,7 +937,6 @@ Please report with maximum of accucracy your problem to be able to correct it an
     <div class="label" ng-class="subs ==='Context' ? 'label-primary':'label-default'" ng-click="showHistory('Context')"><span ng-if="subs ==='Context'">{{subHierarchies.length}}</span> Sub Context</div>
     <small class="label label-default pull-right" style ="font-size:10px" ng-click="showEmptyRow=!showEmptyRow">Show all</small>
     <hr style="margin-top:5px">
-    <!-- BEGIN OVERVIEW STATISTIC BARS-->
     <!-- BEGIN OVERVIEW STATISTIC BARS-->
     <div class="row stats-overview-cont" ng-repeat="subHierarchy in subHierarchies"  ng-if="dataTasksSubNb[subHierarchy.root + subHierarchy.name]>0 || showEmptyRow">
       <!-- -->

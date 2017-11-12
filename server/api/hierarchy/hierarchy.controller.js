@@ -141,8 +141,10 @@ exports.sublist = function(req, res) {
           }
 
           _.each(filterPerimeter, function(perimeter, index) {
-            var filter, filterlength;
+            var filter, filterlength, posFilter, subactivity;
+
             if (req.params.id === 'Activity') {
+
 
               filter = perimeter.activity.replace('^', '');
               if (filter.charAt(filter.length - 1) === '.') {
@@ -150,14 +152,19 @@ exports.sublist = function(req, res) {
               }
 
               _.each(hierarchy[0].list, function(activity) {
-                var posFilter = activity.longname.indexOf(filter);
+                posFilter = activity.longname.indexOf(filter);
                 filterlength = (filter.length === 0) ? -1 : filter.length;
-
 
                 if (posFilter > -1) {
                   // position du prochain point post root
-                  var position = getPosition(activity.longname.substring(posFilter + filterlength + 1), '.', 1);
-                  var subactivity = activity.longname.substring(posFilter + filterlength + 1, posFilter + filterlength + position + 1);
+                  // si c'est la liste -1 que l'on récupère
+                  if (req.params.modePerf === 'true') {
+                    var position = getPosition(activity.longname.substring(posFilter + filterlength + 1), '.', 1);
+                    subactivity = activity.longname.substring(posFilter + filterlength + 1, posFilter + filterlength + position + 1);
+                  } else {
+
+                    subactivity = activity.longname.substring(posFilter + filterlength + 1);
+                  }
                   if (findWithAttr(sublist, 'root', activity.longname.substring(0, posFilter + filterlength + 1), 'name', subactivity) === -1) {
                     sublist.push({
                       name: subactivity,
@@ -236,9 +243,15 @@ exports.sublist = function(req, res) {
               filterlength = (perimeter.activity.length === 0) ? -1 : perimeter.activity.length;
 
               if (posFilter > -1) {
-                // position du prochain point post root
-                position = getPosition(task.activity.substring(posFilter + filterlength + 1), '.', 1);
-                subactivity = task.activity.substring(posFilter + filterlength + 1, posFilter + filterlength + position + 1);
+                // si c'est la liste -1 que l'on récupère
+                if (req.params.modePerf === 'true') {
+                  // position du prochain point post root
+                  position = getPosition(task.activity.substring(posFilter + filterlength + 1), '.', 1);
+                  subactivity = task.activity.substring(posFilter + filterlength + 1, posFilter + filterlength + position + 1);
+                } else {
+                  subactivity = task.activity.substring(posFilter + filterlength + 1);
+
+                }
                 if (subactivity === '') {
                   subactivity = '$';
                 }
@@ -250,7 +263,6 @@ exports.sublist = function(req, res) {
                   });
                 }
               }
-
             }
 
             if (req.params.id === 'Context') {
