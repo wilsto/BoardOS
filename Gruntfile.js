@@ -67,7 +67,7 @@ module.exports = function(grunt) {
           '!<%= yeoman.client %>/{app,components}/**/*.mock.js',
           '!<%= yeoman.client %>/app/app.js'
         ],
-        tasks: ['injector:scripts', 'newer:jshint:all', 'karma']
+        tasks: ['injector:scripts', 'newer:jshint:all']
       },
       injectCss: {
         files: [
