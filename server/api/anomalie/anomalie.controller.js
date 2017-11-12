@@ -1,5 +1,6 @@
 /*jshint multistr: true */
 /*jshint sub:true*/
+/*jshint -W075 */
 'use strict';
 
 var _ = require('lodash');
@@ -10,34 +11,11 @@ var moment = require('moment');
 
 // Get list of anomalies
 exports.index = function(req, res) {
-  var filterPerimeter = {
-    $or: []
-  };
+  var filterPerimeter = {};
 
-  /* jshint ignore:start */
-  filterPerimeter['$or'].push({
-    $or: [{
-        activity: {
-          '$regex': req.query.activity || '',
-          $options: '-im'
-        }
-      },
-      {
-        activity: null
-      }
-    ],
-    $or: [{
-        context: {
-          '$regex': req.query.context || '',
-          $options: '-im'
-        }
-      },
-      {
-        context: null
-      }
-    ]
-  });
-  /* jshint ignore:end */
+  if (req.query.filterPerimeter) {
+    filterPerimeter = JSON.parse(req.query.filterPerimeter.toString().replace('?', '\?'));
+  }
 
   Anomalie.find(filterPerimeter).sort({
       date: 'desc'
@@ -150,7 +128,10 @@ exports.update = function(req, res) {
     }
   });
   newAno.correctiveActions = _.compact(_.uniq(correctiveActions));
+  console.log('blnCATaskIP', blnCATaskIP);
+  console.log('blnCATaskEnd', blnCATaskEnd);
   if (blnCATaskIP === false && blnCATaskEnd === false) {
+    console.log('CONDITION PASSED');
     newAno.statusCA = 'Not Started';
   }
   if (blnCATaskIP === true || (blnCATaskNotStarted === true && (blnCATaskIP === true || blnCATaskEnd === true))) {
@@ -159,7 +140,6 @@ exports.update = function(req, res) {
   if (blnCATaskEnd === true && blnCATaskNotStarted === false && blnCATaskIP === false) {
     newAno.statusCA = 'Finished';
   }
-
 
   var rootCauseAnalysisTasks = [];
   var blnRCATaskNotStarted = false;
@@ -226,6 +206,16 @@ exports.update = function(req, res) {
   }
   if (blnPATaskEnd === true && blnPATaskNotStarted === false && blnPATaskIP === false) {
     newAno.statusPA = 'Finished';
+  }
+
+  if (newAno.statusCA === 'Not Started' && newAno.statusPA === 'Not Started') {
+    newAno.status = 'Not Started';
+  }
+  if (newAno.statusCA !== 'Not Started' || newAno.statusPA !== 'Not Started') {
+    newAno.status = 'In Progress';
+  }
+  if (newAno.statusCA === 'Finished' && newAno.statusPA === 'Finished') {
+    newAno.status = 'Finished';
   }
 
   if (newAno.actor) {

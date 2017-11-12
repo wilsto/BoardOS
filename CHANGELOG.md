@@ -6,6 +6,9 @@
 
 **Closed issues:**
 
+- Mise à jour automatique des statut des anomalies [\#390](https://github.com/wilsto/BoardOS/issues/390)
+- Anomalies apparaissent sur des dashboards de amnière non pertinentes [\#388](https://github.com/wilsto/BoardOS/issues/388)
+- Affichage du gantt incorrecte à la première visibilité [\#387](https://github.com/wilsto/BoardOS/issues/387)
 - Ajout d'un menu à la page anomalie [\#386](https://github.com/wilsto/BoardOS/issues/386)
 - Des anos ne sont pas visibles dans la liste anos [\#384](https://github.com/wilsto/BoardOS/issues/384)
 - Problème design modification catégorie anomalie [\#382](https://github.com/wilsto/BoardOS/issues/382)

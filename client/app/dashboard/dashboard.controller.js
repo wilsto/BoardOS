@@ -234,7 +234,7 @@ angular.module('boardOsApp')
 
           $scope.dataTasksSub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearTask($scope.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'count');
           $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearTask($scope.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'qty');
-          
+
           $scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values = _.map(_.cloneDeep($scope.dataTasksSub[subHierarchy.root + subHierarchy.name][0].values), function(v) {
             v.value = v.count * (subHierarchy.value || 0);
             v.count = v.count * subHierarchy.value;
@@ -371,6 +371,51 @@ angular.module('boardOsApp')
       }
     };
 
+    $scope.loadAnos = function() {
+      var filterAnoPerimeter = {
+        $or: [],
+        status: {
+          $ne: 'Finished'
+        }
+      };
+      _.each($scope.dashboard.perimeter, function(perimeter) {
+        if (perimeter.activity && perimeter.context) {
+          filterAnoPerimeter['$or'].push({
+            activity: {
+              '$regex': perimeter.activity || '',
+              $options: '-i'
+            },
+            context: {
+              '$regex': perimeter.context || '',
+              $options: '-i'
+            }
+          });
+        } else if (!perimeter.context) {
+          filterAnoPerimeter['$or'].push({
+            activity: {
+              '$regex': perimeter.activity || '',
+              $options: '-i'
+            }
+          });
+        } else if (!perimeter.activity) {
+          filterAnoPerimeter['$or'].push({
+            context: {
+              '$regex': perimeter.context || '',
+              $options: '-i'
+            }
+          });
+        }
+      });
+
+      $http.get('/api/anomalies', {
+        params: {
+          filterPerimeter: filterAnoPerimeter
+        }
+      }).success(function(anomalies) {
+        $scope.anomalies = anomalies;
+      });
+    };
+
     $scope.loadTasks = function() {
       var filterPerimeter = {
         $or: [],
@@ -408,10 +453,7 @@ angular.module('boardOsApp')
           });
         }
         $scope.filterPerimeter = filterPerimeter;
-
       });
-
-
     };
 
     $scope.giveMeMyColor = function(value, category) {
@@ -659,16 +701,6 @@ angular.module('boardOsApp')
             $rootScope.$broadcast('dateRangeService:updated', dateRangeService.rangeDateTxt);
           });
 
-          $http.get('/api/anomalies', {
-            params: {
-              activity: dashboard.activity,
-              context: dashboard.context
-            }
-          }).success(function(anomalies) {
-            $scope.anomalies = anomalies;
-          });
-
-
           dashboard.subscribed = false;
           var userlist = _.pluck(dashboard.users, '_id');
           $scope.userindex = userlist.indexOf($scope.currentUser._id.toString());
@@ -833,6 +865,7 @@ angular.module('boardOsApp')
             });
 
             $scope.loadTasks();
+            $scope.loadAnos();
             initializing = false;
             $scope.needToSave = false;
           });
