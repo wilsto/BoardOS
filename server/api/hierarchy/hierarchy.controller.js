@@ -67,9 +67,9 @@ exports.sublist = function(req, res) {
     return string.split(subString, index).join(subString).length;
   }
 
-  function findWithAttr(array, attr, value) {
+  function findWithAttr(array, attr, value, attr2, value2) {
     for (var i = 0; i < array.length; i += 1) {
-      if (array[i][attr] === value) {
+      if (array[i][attr2] === value2 && array[i][attr] === value) {
         return i;
       }
     }
@@ -158,10 +158,12 @@ exports.sublist = function(req, res) {
                   // position du prochain point post root
                   var position = getPosition(activity.longname.substring(posFilter + filterlength + 1), '.', 1);
                   var subactivity = activity.longname.substring(posFilter + filterlength + 1, posFilter + filterlength + position + 1);
-                  if (findWithAttr(sublist, 'name', subactivity) === -1) {
+                  if (findWithAttr(sublist, 'root', activity.longname.substring(0, posFilter + filterlength + 1), 'name', subactivity) === -1) {
                     sublist.push({
                       name: subactivity,
                       root: activity.longname.substring(0, posFilter + filterlength + 1),
+                      code: activity.description,
+                      value: activity.value,
                       abs: true
                     });
                   }
@@ -183,7 +185,7 @@ exports.sublist = function(req, res) {
                   // position du prochain point post root
                   var position = getPosition(context.longname.substring(posFilter + filterlength + 1), '.', 1);
                   var subcontext = context.longname.substring(posFilter + filterlength + 1, posFilter + filterlength + position + 1);
-                  if (findWithAttr(sublist, 'name', subcontext) === -1) {
+                  if (findWithAttr(sublist, 'root', context.longname.substring(0, posFilter + filterlength + 1), 'name', subcontext) === -1) {
                     sublist.push({
                       name: subcontext,
                       root: context.longname.substring(0, posFilter + filterlength + 1),
@@ -240,7 +242,7 @@ exports.sublist = function(req, res) {
                 if (subactivity === '') {
                   subactivity = '$';
                 }
-                if (findWithAttr(sublist, 'name', subactivity) === -1) {
+                if (findWithAttr(sublist, 'root', task.activity.substring(0, posFilter + filterlength + 1), 'name', subactivity) === -1) {
                   sublist.push({
                     name: subactivity,
                     root: task.activity.substring(0, posFilter + filterlength + 1),
@@ -264,7 +266,7 @@ exports.sublist = function(req, res) {
                 if (subcontext === '') {
                   subcontext = '$';
                 }
-                if (findWithAttr(sublist, 'name', subcontext) === -1) {
+                if (findWithAttr(sublist, 'root', task.context.substring(0, posFilter + filterlength + 1), 'name', subcontext) === -1) {
                   sublist.push({
                     name: subcontext,
                     root: task.context.substring(0, posFilter + filterlength + 1),

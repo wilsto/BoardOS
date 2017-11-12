@@ -6,6 +6,12 @@
 
 **Closed issues:**
 
+- Ajout d'un menu à la page anomalie [\#386](https://github.com/wilsto/BoardOS/issues/386)
+- Des anos ne sont pas visibles dans la liste anos [\#384](https://github.com/wilsto/BoardOS/issues/384)
+- Problème design modification catégorie anomalie [\#382](https://github.com/wilsto/BoardOS/issues/382)
+- Possibilité de supprimer ou invalider une anomalie [\#381](https://github.com/wilsto/BoardOS/issues/381)
+- Un sous processus avec le meme nom mais deux racines différentes n'est présentés qu'une fois dans la revue passé \(Exemple : DEV dans ANA et VIZ\) [\#380](https://github.com/wilsto/BoardOS/issues/380)
+- la suppression d’une tâche récurrente à partir du profil ne fonctionne pas [\#379](https://github.com/wilsto/BoardOS/issues/379)
 - Subscribe à un dashboard ne fonctionne plus [\#378](https://github.com/wilsto/BoardOS/issues/378)
 - Tache clonée sans acteur ne s'affiche pas  : actors \[null\] [\#377](https://github.com/wilsto/BoardOS/issues/377)
 - \(node:10444\) UnhandledPromiseRejectionWarning: Unhandled promise rejection \(rejection id: 1\): MongoError: failed to connect to server \[localhost:27017\] on first connect \[MongoError: connection 0 to localhost:27017 timed out\] [\#375](https://github.com/wilsto/BoardOS/issues/375)

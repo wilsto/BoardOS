@@ -693,7 +693,17 @@ Please report with maximum of accucracy your problem to be able to correct it an
         <hr style="margin:7px">
       </div>
       <div class="col-md-6 col-sm-12 align-center">
+        <span ng-if="viewMode.blnPerf">
         Quality Trends <small class="text-muted"> (KPIs)</small>
+        </span>
+        <span ng-if="!viewMode.blnPerf">
+        Contract  <small class="text-muted"> (UO)</small>
+        </span>
+        <div class="pull-right" ng-if="currentUser.role==='manager' || currentUser.role==='admin'" ng-click="viewMode.blnPerf = !viewMode.blnPerf">
+  <button type="button" class="btn btn-toggle" data-toggle="button" aria-pressed="false" autocomplete="off" >
+    <div class="handle"></div>
+  </button>
+</div>
         <hr style="margin:7px">
       </div>
 
@@ -741,7 +751,43 @@ Please report with maximum of accucracy your problem to be able to correct it an
           </div>
         </div>
       </div>
-      <div class="col-md-2 col-sm-12">
+      <div class="col-md-2 col-sm-12" ng-if="!viewMode.blnPerf">
+        <div class="stats-overview stat-block">
+          <div class="details">
+            <div class="title">
+              <a href="#" ng-click="blnShowAllTasks=!blnShowAllTasks">
+                <span style="font-weight:bold;color:#87CEEB">{{metricsUONb | number:0}}</span>
+                Men Days UO</a>
+              </div>
+              <nvd3 options="optionsLoad" data="dataMetricsUO" ng-if="dashboardSlide==='History'"></nvd3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2 col-sm-12" ng-if="!viewMode.blnPerf">
+          <div class="stats-overview stat-block">
+            <div class="details">
+              <div class="title">
+                <a href="#" ng-click="blnShowAllTasks=!blnShowAllTasks">
+                  <span style="font-weight:bold;color:#87CEEB">{{metricsUONb | number:0}}</span>
+                  Diff UO</a>
+                </div>
+                <nvd3 options="optionsLoad" data="dataMetricsUO" ng-if="dashboardSlide==='History'"></nvd3>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2 col-sm-12" ng-if="!viewMode.blnPerf">
+            <div class="stats-overview stat-block">
+              <div class="details">
+                <div class="title">
+                  <a href="#" ng-click="blnShowAllTasks=!blnShowAllTasks">
+                    <span style="font-weight:bold;color:#87CEEB">{{metricsUONb | number:0}}</span>
+                    Perf UO</a>
+                  </div>
+                  <nvd3 options="optionsLoad" data="dataMetricsUO" ng-if="dashboardSlide==='History'"></nvd3>
+                </div>
+              </div>
+            </div>
+      <div class="col-md-2 col-sm-12" ng-if="viewMode.blnPerf">
       <div class="stats-overview stat-block">
         <div class="details">
           <div class="title">
@@ -753,7 +799,7 @@ Please report with maximum of accucracy your problem to be able to correct it an
         </div>
       </div>
     </div>
-    <div class="col-md-2 col-sm-12">
+    <div class="col-md-2 col-sm-12" ng-if="viewMode.blnPerf">
     <div class="stats-overview stat-block">
       <div class="details">
         <div class="title">
@@ -765,7 +811,7 @@ Please report with maximum of accucracy your problem to be able to correct it an
       </div>
     </div>
   </div>
-  <div class="col-md-2 col-sm-12">
+  <div class="col-md-2 col-sm-12" ng-if="viewMode.blnPerf">
   <div class="stats-overview stat-block">
     <div class="details">
       <div class="title">
@@ -905,6 +951,7 @@ Please report with maximum of accucracy your problem to be able to correct it an
               </b>
               <br>
             <small class="label label-primary"> {{(dataMetricsSubNb[subHierarchy.root + subHierarchy.name]/metricsNb *100)| number:0}}%</small>
+            <small ng-if="subHierarchy.code" class="label label-default" style="color:#000000"> {{subHierarchy.code}} </small>
             </div>
           </div>
         </div>
@@ -933,7 +980,43 @@ Please report with maximum of accucracy your problem to be able to correct it an
           </div>
         </div>
       </div>
-      <div class="col-md-2 col-sm-12">
+      <div class="col-md-2 col-sm-12" ng-if="!viewMode.blnPerf">
+        <div class="stats-overview stat-block"  ng-if="dataUOMetricsSubNb[subHierarchy.root + subHierarchy.name]>0">
+          <div class="details">
+            <div class="title">
+              <a href="#" ng-click="blnShowTasks[subHierarchy.root + subHierarchy.name]=!blnShowTasks[subHierarchy.root + subHierarchy.name]">
+                <span style="font-weight:bold;color:#87CEEB">{{dataUOMetricsSubNb[subHierarchy.root + subHierarchy.name]| number:0}}</span>
+                Men Days UO</a>  <small class="label label-default" style="color:#555555">{{subHierarchy.value}} MD</small>
+              </div>
+              <nvd3 options="optionsUOLoad" data="dataUOMetricsSub[subHierarchy.root + subHierarchy.name]" ng-if="dashboardSlide==='History'"></nvd3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2 col-sm-12" ng-if="!viewMode.blnPerf">
+          <div class="stats-overview stat-block"  ng-if="dataUOMetricsSubNb[subHierarchy.root + subHierarchy.name]>0">
+            <div class="details">
+              <div class="title">
+                <a href="#" ng-click="blnShowTasks[subHierarchy.root + subHierarchy.name]=!blnShowTasks[subHierarchy.root + subHierarchy.name]">
+                  <span style="font-weight:bold;color:#87CEEB">{{dataUODiffMetricsSubNb[subHierarchy.root + subHierarchy.name]| number:0}}</span>
+                  Diff UO</a>
+                </div>
+                <nvd3 options="optionsUODiff" data="dataUODiffMetricsSub[subHierarchy.root + subHierarchy.name]" ng-if="dashboardSlide==='History'"></nvd3>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2 col-sm-12" ng-if="!viewMode.blnPerf">
+            <div class="stats-overview stat-block"  ng-if="dataUOMetricsSubNb[subHierarchy.root + subHierarchy.name]>0">
+              <div class="details">
+                <div class="title">
+                  <a href="#" ng-click="blnShowTasks[subHierarchy.root + subHierarchy.name]=!blnShowTasks[subHierarchy.root + subHierarchy.name]">
+                    <span style="font-weight:bold;color:#87CEEB">{{dataUOPerfMetricsSubNb[subHierarchy.root + subHierarchy.name]| number:0}}</span>
+                    Perf UO</a>
+                  </div>
+                  <nvd3 options="optionsCosts" data="dataUOPerfMetricsSub[subHierarchy.root + subHierarchy.name]" ng-if="dashboardSlide==='History'"></nvd3>
+                </div>
+              </div>
+            </div>
+      <div class="col-md-2 col-sm-12" ng-if="viewMode.blnPerf">
       <div class="stats-overview stat-block">
         <div class="details">
           <div class="title">
@@ -945,7 +1028,7 @@ Please report with maximum of accucracy your problem to be able to correct it an
         </div>
       </div>
     </div>
-    <div class="col-md-2 col-sm-12">
+    <div class="col-md-2 col-sm-12" ng-if="viewMode.blnPerf">
     <div class="stats-overview stat-block">
       <div class="details">
         <div class="title">
@@ -957,7 +1040,7 @@ Please report with maximum of accucracy your problem to be able to correct it an
       </div>
     </div>
   </div>
-  <div class="col-md-2 col-sm-12">
+  <div class="col-md-2 col-sm-12" ng-if="viewMode.blnPerf">
   <div class="stats-overview stat-block">
     <div class="details">
       <div class="title">

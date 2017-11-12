@@ -4,28 +4,40 @@
 
 var _ = require('lodash');
 
-
 var Anomalie = require('./anomalie.model');
 var TaskFull = require('../taskFull/taskFull.model');
 var moment = require('moment');
 
 // Get list of anomalies
 exports.index = function(req, res) {
-
   var filterPerimeter = {
     $or: []
   };
 
+  /* jshint ignore:start */
   filterPerimeter['$or'].push({
-    activity: {
-      '$regex': req.query.activity || '',
-      $options: '-im'
-    },
-    context: {
-      '$regex': req.query.context || '',
-      $options: '-im'
-    }
+    $or: [{
+        activity: {
+          '$regex': req.query.activity || '',
+          $options: '-im'
+        }
+      },
+      {
+        activity: null
+      }
+    ],
+    $or: [{
+        context: {
+          '$regex': req.query.context || '',
+          $options: '-im'
+        }
+      },
+      {
+        context: null
+      }
+    ]
   });
+  /* jshint ignore:end */
 
   Anomalie.find(filterPerimeter).sort({
       date: 'desc'
@@ -46,7 +58,7 @@ exports.index = function(req, res) {
       _.each(anomalies, function(rowdata, index) {
         rowdata.moment = moment(rowdata.date).fromNow();
       });
-      return res.status(200).json( anomalies);
+      return res.status(200).json(anomalies);
     });
 };
 
@@ -93,7 +105,7 @@ exports.create = function(req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.status(201).json( anomalie);
+    return res.status(201).json(anomalie);
   });
 };
 
@@ -243,7 +255,7 @@ exports.update = function(req, res) {
       if (err) {
         return handleError(res, err);
       }
-      return res.status(200).json( updated);
+      return res.status(200).json(updated);
     });
   });
 };

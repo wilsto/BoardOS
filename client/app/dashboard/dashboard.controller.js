@@ -53,6 +53,9 @@ angular.module('boardOsApp')
     $scope.size = '100px';
     $scope.dashboardSlide = 'Home';
     $scope.blnshowConfig = false;
+    $scope.viewMode = {
+      blnPerf: true
+    };
 
     $scope.toggle = function() {
       $scope.checked = !$scope.checked;
@@ -121,12 +124,18 @@ angular.module('boardOsApp')
         $scope.subHierarchies = _.sortBy(hierarchies, ['root', 'name']);
 
         $scope.dataTasksSub = [];
+        $scope.dataUOMetricsSub = [];
+        $scope.dataUODiffMetricsSub = [];
+        $scope.dataUOPerfMetricsSub = [];
         $scope.dataMetricsSub = [];
         $scope.dataCostSub = [];
         $scope.dataQualitySub = [];
         $scope.dataTimeSub = [];
 
         $scope.dataTasksSubNb = [];
+        $scope.dataUOMetricsSubNb = [];
+        $scope.dataUODiffMetricsSubNb = [];
+        $scope.dataUOPerfMetricsSubNb = [];
         $scope.dataMetricsSubNb = [];
         $scope.dataQualitySubNb = [];
         $scope.dataCostSubNb = [];
@@ -145,6 +154,18 @@ angular.module('boardOsApp')
         _.each($scope.subHierarchies, function(subHierarchy) {
 
           $scope.dataTasksSub[subHierarchy.root + subHierarchy.name] = [{
+            values: []
+          }];
+
+          $scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name] = [{
+            values: []
+          }];
+
+          $scope.dataUODiffMetricsSub[subHierarchy.root + subHierarchy.name] = [{
+            values: []
+          }];
+
+          $scope.dataUOPerfMetricsSub[subHierarchy.root + subHierarchy.name] = [{
             values: []
           }];
 
@@ -212,7 +233,22 @@ angular.module('boardOsApp')
 
           $scope.dataTasksSub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearTask($scope.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'count');
           $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearTask($scope.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'qty');
-
+          
+          $scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values = _.map(_.cloneDeep($scope.dataTasksSub[subHierarchy.root + subHierarchy.name][0].values), function(v) {
+            v.value = v.count * (subHierarchy.value || 0);
+            v.count = v.count * subHierarchy.value;
+            return v;
+          });
+          $scope.dataUODiffMetricsSub[subHierarchy.root + subHierarchy.name][0].values = _.map(_.cloneDeep($scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values), function(v, k) {
+            v.value = v.count - $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values[k].count;
+            v.count = v.count - $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values[k].count;
+            return v;
+          });
+          $scope.dataUOPerfMetricsSub[subHierarchy.root + subHierarchy.name][0].values = _.map(_.cloneDeep($scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values), function(v, k) {
+            v.value = v.count / $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values[k].count * 100;
+            v.count = v.count / $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values[k].count * 100;
+            return v;
+          });
           $scope.dataCostSub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'kpis', 'Cost');
           $scope.dataQualitySub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'kpis', 'Quality');
           $scope.dataTimeSub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'kpis', 'Time');
@@ -225,8 +261,9 @@ angular.module('boardOsApp')
             $scope.dataSubKPIs[subHierarchy.root + subHierarchy.name][kpi.constraint][kpi.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'kpis', kpi.constraint, kpi.name);
           });
 
-
           $scope.dataTasksSubNb[subHierarchy.root + subHierarchy.name] = arraySum(_.compact(_.map($scope.dataTasksSub[subHierarchy.root + subHierarchy.name][0].values, 'value')));
+          $scope.dataUOMetricsSubNb[subHierarchy.root + subHierarchy.name] = arraySum(_.compact(_.map($scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values, 'value')));
+          $scope.dataUODiffMetricsSubNb[subHierarchy.root + subHierarchy.name] = arraySum(_.compact(_.map($scope.dataUODiffMetricsSub[subHierarchy.root + subHierarchy.name][0].values, 'value')));
           $scope.dataMetricsSubNb[subHierarchy.root + subHierarchy.name] = arraySum(_.compact(_.map($scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values, 'value')));
           $scope.dataCostSubNb[subHierarchy.root + subHierarchy.name] = arrayAverage(_.compact(_.map($scope.dataCostSub[subHierarchy.root + subHierarchy.name][0].values, 'value')));
           $scope.dataQualitySubNb[subHierarchy.root + subHierarchy.name] = arrayAverage(_.compact(_.map($scope.dataQualitySub[subHierarchy.root + subHierarchy.name][0].values, 'value')));
@@ -277,6 +314,12 @@ angular.module('boardOsApp')
 
       $scope.optionsTasks = angular.copy($scope.options);
       $scope.optionsTasks.chart.color = ['#9467bd'];
+
+      $scope.optionsUOLoad = angular.copy($scope.options);
+      $scope.optionsUOLoad.chart.color = ['#2e5463'];
+
+      $scope.optionsUODiff = angular.copy($scope.options);
+      $scope.optionsUOLoad.chart.color = ['#2cece6'];
 
       $scope.optionsLoad = angular.copy($scope.options);
       $scope.optionsLoad.chart.color = ['#87CEEB'];
@@ -874,6 +917,7 @@ angular.module('boardOsApp')
         $scope.needToSave = true;
       }
     }, true);
+
 
     $scope.$watch('dashboard.perimeter', function(newMap, previousMap) {
       if (initializing) {

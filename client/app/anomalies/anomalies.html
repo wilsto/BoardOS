@@ -1,5 +1,7 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
-
+<!-- <div ng-click="toggle()" style="z-index:999;position:absolute;right:-35px;top:35% ;background-color:#222222;width:70px;height:70px;  border-radius: 35px;    -webkit-transform:rotate(-90deg);   -ms-transform:rotate(-90deg);    -moz-transform:rotate(-90deg);    -webkit-transform:rotate(-90deg);    -o-transform:rotate(-90deg);">
+<div style="font-size:14px;color:#FFF;width:70px;height:70px;text-align:center;padding-top:10px; ">Menu</div>
+</div> -->
 
   <!-- Script pour le template du search -->
   <script type="text/ng-template" id="myTooltipActorTemplate.html">
@@ -149,3 +151,89 @@
     </div>
   </div>
 </div>
+
+<!-- *************** -->
+<!-- MENU DROIT      -->
+<!-- *************** -->
+<div pageslide ps-open="checked" ps-speed="1" ps-push="true" class="ng-isolate-scope ng-pageslide" style="z-index: 1000; position: fixed; overflow:auto;transition-duration: 1s; height: 100%; transition-property: top, bottom, left, right; width: 300px; top: 0px; bottom: 0px; right: -300px;background-color:#eee">
+                        <div style="padding:20px;margin-top:20px;" id="demo-right">
+                            <h3 style="width:100%;text-align:center">Actions on Dashboard</h3>
+                            <a class="btn btn-primary" style="width:100%" ng-click="toggle()">Close</a>
+                            <hr>
+
+                            <div style="width:100%;  display: inline-block;" ng-click="createAnomaly()">
+                              <div style="width:29%;height:70px;float:left">
+                                <img src="assets/images/problem.jpg" style="width:60px;" alt="">
+                              </div>
+                              <div style="width:69%;height:70px;table-cell;   vertical-align: middle; float:left;padding-left:5px" >
+                                <p> Report an <u style="font-weight:bold">anomaly</u> that affects your activity </p>
+                              </div>
+                            </div>
+                            <hr>
+
+                            <div style="width:100%;  display: inline-block;"   ng-click="showHistory()" ng-class="{'activeActionMenu':dashboardSlide === 'History'}">
+                              <div style="width:29%;height:70px;float:left">
+                                <img src="assets/images/history-icon.png" style="width:60px;" alt="">
+                              </div>
+                              <div style="width:69%;height:70px;table-cell;   vertical-align: middle; float:left;padding-left:5px" >
+                                <p> Understand <u style="font-weight:bold">past</u> metrics and performance of your perimeter</p>
+                              </div>
+                            </div>
+                            <hr>
+
+                            <div style="width:100%;  display: inline-block;"   ng-click="showHome()" ng-class="{'activeActionMenu':dashboardSlide === 'Home'}">
+                              <div style="width:29%;height:70px;float:left" >
+                                <img src="assets/images/performance-icon.png" style="width:60px;" alt="">
+                              </div>
+                              <div style="width:69%;height:70px;table-cell;   vertical-align: middle; float:left;padding-left:5px" >
+                                <p> Action <u style="font-weight:bold">present</u> tasks and performance of your perimeter</p>
+                              </div>
+                            </div>
+                            <hr>
+
+                            <div style="width:100%;  display: inline-block;"   ng-click="showReview()" ng-class="{'activeActionMenu':dashboardSlide === 'Review'}">
+                              <div style="width:29%;height:70px;float:left">
+                                <img src="assets/images/coming-soon.png" style="width:70px;z-index:99999" alt="">
+                                <img src="assets/images/futur-icon.png" style="width:60px;z-index:99998;float:left;margin-top:-70px;" alt="">
+                              </div>
+                              <div style="width:69%;height:70px;table-cell;   vertical-align: middle; float:left;padding-left:5px" >
+                                <p> Anticipate <u style="font-weight:bold">future</u> tasks and performance of your perimeter</p>
+                              </div>
+                            </div>
+                            <hr>
+
+                            <div style="width:100%;  display: inline-block;"   ng-click="showTimeline()" ng-class="{'activeActionMenu':dashboardSlide === 'Timeline'}">
+                              <div style="width:29%;height:70px;float:left">
+                                <img src="assets/images/timeline.png" style="width:60px;" alt="">
+                              </div>
+                              <div style="width:69%;height:70px;table-cell;   vertical-align: middle; float:left;padding-left:5px" >
+                                <p> View task in a <u style="font-weight:bold">Timeline</u></p>
+                              </div>
+                            </div>
+                            <hr>
+
+<br><br>
+                            <div style="width:100%;  display: inline-block;"   ng-click="refreshDashboard()">
+                              <div style="width:29%;height:70px;float:left">
+                                <img src="assets/images/refresh-icon.png" style="width:60px;" alt="">
+                              </div>
+                              <div style="width:69%;height:70px;table-cell;   vertical-align: middle; float:left;padding-left:5px">
+                                <p>Resfresh will operate again all calculations</p>
+                              </div>
+                            </div>
+                            <hr>
+                                                        <div style="width:100%;  display: inline-block;"   ng-click="showConfig()">
+                                                          <div style="width:29%;height:70px;float:left">
+                                                            <img src="assets/images/settings.png" style="width:70px;" alt="">
+                                                          </div>
+                                                          <div style="width:69%;height:70px; display: table-cell;   vertical-align: middle; float:left;padding-left:5px">
+                                                            <p>Show and/or modify dashboard informations and subscription</p>
+                                                          </div>
+                                                        </div>
+                                                        <hr>
+
+
+
+
+                        </div>
+                    </div>

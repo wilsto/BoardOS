@@ -5,6 +5,12 @@ angular.module('boardOsApp')
   .controller('AnomalieCtrl', function($scope, $filter, $stateParams, $http, $location, $window, $timeout, Notification, $uibModal, $mdpDatePicker) {
 
     var anomalieId = $stateParams.id || $scope.anomalie._id;
+    $scope.checked = false;
+
+    $scope.toggle = function() {
+      $scope.checked = !$scope.checked;
+    };
+
 
     $scope.createActionPlan = function() {
       var path = $location.protocol() + '://' + location.host + '/task////anomaly/' + $scope.anomalie._id;
@@ -170,6 +176,20 @@ angular.module('boardOsApp')
       reader.readAsBinaryString(file);
     };
 
+
+    $scope.delete = function() {
+      $scope.checked = false;
+      bootbox.confirm('Are you sure to delete this anomaly ? It can NOT be undone.', function(result) {
+        if (result) {
+          $scope.myPromise = $http.delete('/api/anomalies/' + $scope.anomalie._id).success(function() {
+            var logInfo = 'Anomalie "' + $scope.anomalie.name + '" was deleted';
+            Notification.success(logInfo);
+            $location.path('/');
+          });
+        }
+      });
+
+    };
 
 
     $scope.showDatePicker = function(item, datename, ev) {
