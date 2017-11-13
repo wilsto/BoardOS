@@ -626,7 +626,9 @@ exports.update = function(req, res) {
         return ano._id.toString();
       });
       _.each(task.anomalies, function(anomalie) {
-        anomalies.push(anomalie._id.toString());
+        if (anomalie._id) {
+          anomalies.push(anomalie._id.toString());
+        }
       });
       task.anomalies = _.compact(_.uniq(anomalies));
       var updated = _.merge(taskFull, task);
