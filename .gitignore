@@ -20,10 +20,6 @@ node_modules2/
 
 server/debug\.log
 
-server/exceptions\.log
-
-server/config/debug\.log
-
-server/config/exceptions\.log
-
 *.log
+
+\.coveralls\.yml

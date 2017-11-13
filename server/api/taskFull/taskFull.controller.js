@@ -9,16 +9,14 @@ var schedule = require('node-schedule');
 var json2csv = require('json2csv');
 
 var TaskFull = require('./taskFull.model');
-var Task = require('../task/task.model');
-var Metric = require('../metric/metric.model');
 var Hierarchies = require('../hierarchy/hierarchy.model');
 var KPI = require('../KPI/KPI.model');
-var Dashboard = require('../dashboard/dashboard.model');
 var User = require('../user/user.model');
 var Anomalie = require('../anomalie/anomalie.model');
 
 var getData = require('../../config/getData');
 var tools = require('../../config/tools');
+var logger = require('../../config/logger');
 
 var hierarchyValues = {};
 var kpis = {};
@@ -118,7 +116,10 @@ exports.listHierarchies = function(req, res) {
     return res.status(200).json(taskFulls);
   });
 };
-
+// process.on('unhandledRejection', (reason, p) => {
+//   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+//   // application specific logging, throwing an error, or other logic here
+// });
 // Get a single taskFull
 exports.show = function(req, res) {
   TaskFull.findById(req.params.id)
@@ -173,7 +174,9 @@ exports.show = function(req, res) {
             });
           });
           _.each(taskFull.actors, function(actor) {
-            actor.avatar = (actor.avatar) ? actor.avatar : 'assets/images/avatars/' + actor._id + '.png';
+            if (actor) {
+              actor.avatar = (actor.avatar) ? actor.avatar : 'assets/images/avatars/' + actor._id + '.png';
+            }
           });
           _.each(taskFull.followers, function(follower) {
             follower.avatar = (follower.avatar) ? follower.avatar : 'assets/images/avatars/' + follower._id + '.png';
@@ -623,7 +626,9 @@ exports.update = function(req, res) {
         return ano._id.toString();
       });
       _.each(task.anomalies, function(anomalie) {
-        anomalies.push(anomalie._id.toString());
+        if (anomalie._id) {
+          anomalies.push(anomalie._id.toString());
+        }
       });
       task.anomalies = _.compact(_.uniq(anomalies));
       var updated = _.merge(taskFull, task);

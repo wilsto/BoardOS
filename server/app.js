@@ -8,26 +8,14 @@
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 //var newrelic = require('newrelic');
+var logger = require('./config/logger');
+
+
 var express = require('express');
 var mongoose = require('mongoose');
-mongoose.Promise = Promise;
+mongoose.Promise = global.Promise;
+
 var config = require('./config/environment');
-
-// Connect to database
-mongoose.connect(config.mongo.uri, config.mongo.options);
-
-//Mongoose: default lean to true (always on)
-var __setOptions = mongoose.Query.prototype.setOptions;
-mongoose.Query.prototype.setOptions = function(options, overwrite) {
-  __setOptions.apply(this, arguments);
-  if (this.options.lean === null) this.options.lean = true;
-  return this;
-};
-
-// Populate DB with sample data
-if (config.seedDB) {
-  require('./config/seed');
-}
 
 // Setup server
 var app = express();
@@ -40,15 +28,47 @@ require('./config/socketio')(socketio);
 require('./config/express')(app);
 require('./routes')(app);
 
-// Start server
-server.listen(config.port, config.ip, function() {
+mongoose.connection.once('open', function() {
+  logger.info('MongoDB event open');
+  logger.debug('MongoDB connected [%s]', config.mongo.uri);
 
+  mongoose.connection.on('connected', function() {
+    logger.info('MongoDB event connected');
+  });
+
+  mongoose.connection.on('disconnected', function() {
+    logger.warn('MongoDB event disconnected');
+  });
+
+  mongoose.connection.on('reconnected', function() {
+    logger.info('MongoDB event reconnected');
+  });
+
+  mongoose.connection.on('error', function(err) {
+    logger.error('MongoDB event error: ' + err);
+  });
+
+  // Start server
+  server.listen(config.port, config.ip, function() {
+    logger.info('Server started on ' + config.ip + ':' + config.port);
+  });
 });
-process.on('uncaughtException', function(exception) {
-  // to see your exception details in the console
-  // if you are on production, maybe you can send the exception details to your
-  // email as well ?
+
+mongoose.connect(config.mongo.uri, config.mongo.options, function(err) {
+  if (err) {
+    logger.error('MongoDB connection error: ' + err);
+    // return reject(err);
+    process.exit(1);
+  }
 });
+
+//Mongoose: default lean to true (always on)
+// var __setOptions = mongoose.Query.prototype.setOptions;
+// mongoose.Query.prototype.setOptions = function(options, overwrite) {
+//   __setOptions.apply(this, arguments);
+//   if (this.options.lean === null) this.options.lean = true;
+//   return this;
+// };
 
 // Expose app
 exports = module.exports = app;

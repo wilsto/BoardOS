@@ -15,6 +15,7 @@ angular.module('boardOsApp')
     $scope.searchContext = '';
     $scope.searchCategory = '';
     $scope.searchImpact = '';
+    $scope.searchStatus = '';
     $scope.searchParams = {};
     $scope.availableSearchParams = [{
       key: 'group',
@@ -81,7 +82,13 @@ angular.module('boardOsApp')
           blnImpact = true;
         }
 
-        var blnSearchText = blnName && blnActor && blnContext && blnCategory && blnImpact;
+        var blnStatus = ($scope.searchStatus.length === 0) ? true : false;
+        if (anomalie.status.toLowerCase().indexOf($scope.searchStatus.toLowerCase()) >= 0) {
+          blnStatus = true;
+        }
+
+
+        var blnSearchText = blnName && blnActor && blnContext && blnCategory && blnImpact && blnStatus;
         return blnSearchText;
       });
     };
@@ -117,7 +124,7 @@ angular.module('boardOsApp')
       $scope.anomalies = filterDashboards($scope.allanomalies);
     };
 
-    $scope.$watchGroup(['searchName', 'searchActor', 'searchActivity', 'searchContext', 'searchCategory', 'searchImpact'], function(newValues, oldValues) {
+    $scope.$watchGroup(['searchName', 'searchActor', 'searchActivity', 'searchContext', 'searchCategory', 'searchImpact', 'searchStatus'], function(newValues, oldValues) {
       $scope.reloadDashboards();
     });
 

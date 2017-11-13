@@ -1,9 +1,9 @@
 /*jshint multistr: true */
 /*jshint sub:true*/
+/*jshint -W075 */
 'use strict';
 
 var _ = require('lodash');
-
 
 var Anomalie = require('./anomalie.model');
 var TaskFull = require('../taskFull/taskFull.model');
@@ -11,21 +11,11 @@ var moment = require('moment');
 
 // Get list of anomalies
 exports.index = function(req, res) {
+  var filterPerimeter = {};
 
-  var filterPerimeter = {
-    $or: []
-  };
-
-  filterPerimeter['$or'].push({
-    activity: {
-      '$regex': req.query.activity || '',
-      $options: '-im'
-    },
-    context: {
-      '$regex': req.query.context || '',
-      $options: '-im'
-    }
-  });
+  if (req.query.filterPerimeter) {
+    filterPerimeter = JSON.parse(req.query.filterPerimeter.toString().replace('?', '\?'));
+  }
 
   Anomalie.find(filterPerimeter).sort({
       date: 'desc'
@@ -46,7 +36,7 @@ exports.index = function(req, res) {
       _.each(anomalies, function(rowdata, index) {
         rowdata.moment = moment(rowdata.date).fromNow();
       });
-      return res.status(200).json( anomalies);
+      return res.status(200).json(anomalies);
     });
 };
 
@@ -93,7 +83,7 @@ exports.create = function(req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.status(201).json( anomalie);
+    return res.status(201).json(anomalie);
   });
 };
 
@@ -138,7 +128,10 @@ exports.update = function(req, res) {
     }
   });
   newAno.correctiveActions = _.compact(_.uniq(correctiveActions));
+  console.log('blnCATaskIP', blnCATaskIP);
+  console.log('blnCATaskEnd', blnCATaskEnd);
   if (blnCATaskIP === false && blnCATaskEnd === false) {
+    console.log('CONDITION PASSED');
     newAno.statusCA = 'Not Started';
   }
   if (blnCATaskIP === true || (blnCATaskNotStarted === true && (blnCATaskIP === true || blnCATaskEnd === true))) {
@@ -147,7 +140,6 @@ exports.update = function(req, res) {
   if (blnCATaskEnd === true && blnCATaskNotStarted === false && blnCATaskIP === false) {
     newAno.statusCA = 'Finished';
   }
-
 
   var rootCauseAnalysisTasks = [];
   var blnRCATaskNotStarted = false;
@@ -216,6 +208,16 @@ exports.update = function(req, res) {
     newAno.statusPA = 'Finished';
   }
 
+  if (newAno.statusCA === 'Not Started' && newAno.statusPA === 'Not Started') {
+    newAno.status = 'Not Started';
+  }
+  if (newAno.statusCA !== 'Not Started' || newAno.statusPA !== 'Not Started') {
+    newAno.status = 'In Progress';
+  }
+  if (newAno.statusCA === 'Finished' && newAno.statusPA === 'Finished') {
+    newAno.status = 'Finished';
+  }
+
   if (newAno.actor) {
     newAno.actor = newAno.actor._id;
   }
@@ -243,7 +245,7 @@ exports.update = function(req, res) {
       if (err) {
         return handleError(res, err);
       }
-      return res.status(200).json( updated);
+      return res.status(200).json(updated);
     });
   });
 };

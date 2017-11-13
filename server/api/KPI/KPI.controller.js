@@ -17,9 +17,7 @@ var Q = require('q');
 
 var DashboardComplete = require('../dashboardComplete/dashboardComplete.model');
 var KPI = require('./KPI.model');
-var Task = require('../task/task.model');
 var TaskFull = require('../taskFull/taskFull.model');
-var Metric = require('../metric/metric.model');
 var Hierarchies = require('../hierarchy/hierarchy.model');
 var getData = require('../../config/getData');
 var tools = require('../../config/tools');

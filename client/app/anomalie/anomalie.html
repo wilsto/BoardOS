@@ -1,4 +1,7 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
+<div ng-click="toggle()" style="z-index:999;position:absolute;right:-35px;top:35% ;background-color:#222222;width:70px;height:70px;  border-radius: 35px;    -webkit-transform:rotate(-90deg);   -ms-transform:rotate(-90deg);    -moz-transform:rotate(-90deg);    -webkit-transform:rotate(-90deg);    -o-transform:rotate(-90deg);">
+<div style="font-size:14px;color:#FFF;width:70px;height:70px;text-align:center;padding-top:10px; ">Menu</div>
+</div>
 
 <div class="img-overlay" ng-show="blnEnlarge===true" ng-click="blnEnlarge=!blnEnlarge" >
   <h3 class="pull-left" style="padding:8px;margin-top:0">Root Cause Map</h3>
@@ -656,12 +659,53 @@ Select the solutions            </div>
 <br>
 <footer class="navbar-fixed-bottom footer-task-boss">
   <div class="container">
-    <!-- big screen -->
-    <button type="button" name="button" style="margin-top:2px;margin-left:40%;margin-right:10px;width:100px;" class="btn btn-xs btn-outline btn-info hidden-xs"
-      ng-click="refreshAnomalie()" ng-if="anomalie._id" ng-cloak
-      uib-tooltip-html="'Resfresh will operate again all calculations'" tooltip-placement="top" >Refresh </button>
     <button type="button" name="button" style="margin-top:2px;margin-right:10px;width:100px;" class="btn btn-primary pull-right hidden-xs"
         ng-click="updateAnomalie()"
         uib-tooltip-html="'Save will  copy data to a permanent storage'" tooltip-placement="left" >Save </button>
   </div>
 </footer>
+
+<!-- *************** -->
+<!-- MENU DROIT      -->
+<!-- *************** -->
+<div pageslide ps-open="checked" ps-speed="1" ps-push="true" class="ng-isolate-scope ng-pageslide" style="z-index: 1000; position: fixed;overflow:auto;  transition-duration: 1s; height: 100%; transition-property: top, bottom, left, right; width: 300px; top: 0px; bottom: 0px; right: -300px;background-color:#eee">
+                        <div style="padding:20px;margin-top:20px;" id="demo-right">
+                            <h3 style="width:100%;text-align:center">Actions on Anomaly</h3>
+                            <a class="btn btn-primary" style="width:100%" ng-click="toggle()">Close</a>
+                            <hr>
+
+                            <br><br>
+                            <div style="width:100%;  display: inline-block;"   ng-click="refreshAnomalie()">
+                              <div style="width:29%;height:70px;float:left">
+                                <img src="assets/images/refresh-icon.png" style="width:60px;" alt="">
+                              </div>
+                              <div style="width:69%;height:70px;table-cell;   vertical-align: middle; float:left;padding-left:5px">
+                                <p>Resfresh will operate again all calculations</p>
+                              </div>
+                            </div>
+                            <hr>
+                            <div style="width:100%;  display: inline-block;"   ng-click="anoPlusOne()" ng-class="{'activeActionMenu':dashboardSlide === 'Home'}">
+                              <div style="width:29%;height:70px;float:left">
+                                <img src="assets/images/coming-soon.png" style="width:70px;z-index:99999" alt="">
+                                <img src="assets/images/plus1.png" style="width:60px;z-index:99998;float:left;margin-top:-70px;" alt="">
+                              </div>
+                              <div style="width:69%;height:70px;table-cell;   vertical-align: middle; float:left;padding-left:5px" >
+                                <p>It <u style="font-weight:bold">happens again</u> ! Please count one more incident.</p>
+                              </div>
+                            </div>
+                            <hr>
+                            <div style="width:100%;  display: inline-block;"   ng-click="delete()">
+                              <div style="width:29%;height:70px;float:left">
+                                <img src="assets/images/delete.png" style="width:60px;" alt="">
+                              </div>
+                              <div style="width:69%;height:70px; display: table-cell;   vertical-align: middle; float:left;padding-left:5px">
+                                <p>Delete <u style="font-weight:bold">forever</u> this anomaly</p>
+                              </div>
+                            </div>
+                            <hr>
+
+
+
+
+                        </div>
+                    </div>

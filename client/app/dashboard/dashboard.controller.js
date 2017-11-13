@@ -54,6 +54,9 @@ angular.module('boardOsApp')
     $scope.size = '100px';
     $scope.dashboardSlide = 'Home';
     $scope.blnshowConfig = false;
+    $scope.viewMode = {
+      blnPerf: true
+    };
 
     $scope.toggle = function() {
       $scope.checked = !$scope.checked;
@@ -90,6 +93,7 @@ angular.module('boardOsApp')
         $scope.dataMetrics = [{
           values: []
         }];
+
         $scope.dataCost = [{
           values: []
         }];
@@ -117,17 +121,23 @@ angular.module('boardOsApp')
         $scope.timeNb = arrayAverage(_.compact(_.map($scope.dataTime[0].values, 'value')));
       });
 
-      $http.get('/api/hierarchies/sublist/' + $scope.subs + '/dashboard/' + $scope.dashboard._id).success(function(hierarchies) {
+      $http.get('/api/hierarchies/sublist/' + $scope.subs + '/dashboard/' + $scope.dashboard._id + '/' + $scope.viewMode.blnPerf).success(function(hierarchies) {
 
         $scope.subHierarchies = _.sortBy(hierarchies, ['root', 'name']);
 
         $scope.dataTasksSub = [];
+        $scope.dataUOMetricsSub = [];
+        $scope.dataUODiffMetricsSub = [];
+        $scope.dataUOPerfMetricsSub = [];
         $scope.dataMetricsSub = [];
         $scope.dataCostSub = [];
         $scope.dataQualitySub = [];
         $scope.dataTimeSub = [];
 
         $scope.dataTasksSubNb = [];
+        $scope.dataUOMetricsSubNb = [];
+        $scope.dataUODiffMetricsSubNb = [];
+        $scope.dataUOPerfMetricsSubNb = [];
         $scope.dataMetricsSubNb = [];
         $scope.dataQualitySubNb = [];
         $scope.dataCostSubNb = [];
@@ -143,9 +153,45 @@ angular.module('boardOsApp')
         $scope.showEmptyRow = false;
         $scope.dataQualitySubKPIs = [];
 
+
+        $scope.dataUOMetrics = [{
+          values: []
+        }];
+        $scope.dataUODiffMetrics = [{
+          values: []
+        }];
+        $scope.dataUOPerfMetrics = [{
+          values: []
+        }];
+
+        var iMonth = 0;
+        while (iMonth < 12) {
+          $scope.dataUOMetrics[0].values.push({
+            label: '',
+            month: '',
+            month2: iMonth,
+            total: 0,
+            value: 0,
+            count: 0
+          });
+          iMonth = iMonth + 1;
+        }
+
         _.each($scope.subHierarchies, function(subHierarchy) {
 
           $scope.dataTasksSub[subHierarchy.root + subHierarchy.name] = [{
+            values: []
+          }];
+
+          $scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name] = [{
+            values: []
+          }];
+
+          $scope.dataUODiffMetricsSub[subHierarchy.root + subHierarchy.name] = [{
+            values: []
+          }];
+
+          $scope.dataUOPerfMetricsSub[subHierarchy.root + subHierarchy.name] = [{
             values: []
           }];
 
@@ -214,6 +260,22 @@ angular.module('boardOsApp')
           $scope.dataTasksSub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearTask($scope.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'count');
           $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearTask($scope.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'qty');
 
+          $scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values = _.map(_.cloneDeep($scope.dataTasksSub[subHierarchy.root + subHierarchy.name][0].values), function(v) {
+            v.value = v.count * (subHierarchy.value || 0);
+            v.count = v.count * subHierarchy.value;
+            return v;
+          });
+          $scope.dataUODiffMetricsSub[subHierarchy.root + subHierarchy.name][0].values = _.map(_.cloneDeep($scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values), function(v, k) {
+            v.value = v.count - $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values[k].count;
+            v.count = v.count - $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values[k].count;
+            return v;
+          });
+          $scope.dataUOPerfMetricsSub[subHierarchy.root + subHierarchy.name][0].values = _.map(_.cloneDeep($scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values), function(v, k) {
+            v.value = v.count / $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values[k].count * 100;
+            v.count = v.count / $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values[k].count * 100;
+            v.color = $scope.giveMeMyColor(v.count);
+            return v;
+          });
           $scope.dataCostSub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'kpis', 'Cost');
           $scope.dataQualitySub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'kpis', 'Quality');
           $scope.dataTimeSub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'kpis', 'Time');
@@ -226,15 +288,42 @@ angular.module('boardOsApp')
             $scope.dataSubKPIs[subHierarchy.root + subHierarchy.name][kpi.constraint][kpi.name][0].values = myLibrary.displayLastYearKPI($scope.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'kpis', kpi.constraint, kpi.name);
           });
 
+          $scope.dataTasksSubNb[subHierarchy.root + subHierarchy.name] = arraySum(_.compact(_.map($scope.dataTasksSub[subHierarchy.root + subHierarchy.name][0].values, 'count')));
+          $scope.dataUOMetricsSubNb[subHierarchy.root + subHierarchy.name] = arraySum(_.compact(_.map($scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values, 'count')));
+          $scope.dataUODiffMetricsSubNb[subHierarchy.root + subHierarchy.name] = arraySum(_.compact(_.map($scope.dataUODiffMetricsSub[subHierarchy.root + subHierarchy.name][0].values, 'count')));
+          $scope.dataMetricsSubNb[subHierarchy.root + subHierarchy.name] = arraySum(_.compact(_.map($scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values, 'count')));
+          $scope.dataCostSubNb[subHierarchy.root + subHierarchy.name] = arrayAverage(_.compact(_.map($scope.dataCostSub[subHierarchy.root + subHierarchy.name][0].values, 'count')));
+          $scope.dataQualitySubNb[subHierarchy.root + subHierarchy.name] = arrayAverage(_.compact(_.map($scope.dataQualitySub[subHierarchy.root + subHierarchy.name][0].values, 'count')));
+          $scope.dataTimeSubNb[subHierarchy.root + subHierarchy.name] = arrayAverage(_.compact(_.map($scope.dataTimeSub[subHierarchy.root + subHierarchy.name][0].values, 'count')));
 
-          $scope.dataTasksSubNb[subHierarchy.root + subHierarchy.name] = arraySum(_.compact(_.map($scope.dataTasksSub[subHierarchy.root + subHierarchy.name][0].values, 'value')));
-          $scope.dataMetricsSubNb[subHierarchy.root + subHierarchy.name] = arraySum(_.compact(_.map($scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values, 'value')));
-          $scope.dataCostSubNb[subHierarchy.root + subHierarchy.name] = arrayAverage(_.compact(_.map($scope.dataCostSub[subHierarchy.root + subHierarchy.name][0].values, 'value')));
-          $scope.dataQualitySubNb[subHierarchy.root + subHierarchy.name] = arrayAverage(_.compact(_.map($scope.dataQualitySub[subHierarchy.root + subHierarchy.name][0].values, 'value')));
-          $scope.dataTimeSubNb[subHierarchy.root + subHierarchy.name] = arrayAverage(_.compact(_.map($scope.dataTimeSub[subHierarchy.root + subHierarchy.name][0].values, 'value')));
+          var iMonth2 = 0;
+          while (iMonth2 < 12) {
+            $scope.dataUOMetrics[0].values[iMonth2].label = $scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values[iMonth2].label;
+            $scope.dataUOMetrics[0].values[iMonth2].month = $scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values[iMonth2].month;
+            $scope.dataUOMetrics[0].values[iMonth2].month2 = $scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values[iMonth2].month2;
+            $scope.dataUOMetrics[0].values[iMonth2].total += $scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values[iMonth2].total;
+            $scope.dataUOMetrics[0].values[iMonth2].value += isNaN($scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values[iMonth2].value) ? 0 : $scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values[iMonth2].value;
+            $scope.dataUOMetrics[0].values[iMonth2].count += isNaN($scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values[iMonth2].count) ? 0 : $scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values[iMonth2].count;
+            iMonth2 = iMonth2 + 1;
+          }
 
         });
 
+        $scope.dataUODiffMetrics[0].values = _.map(_.cloneDeep($scope.dataUOMetrics[0].values), function(v, k) {
+          v.value = v.count - $scope.dataMetrics[0].values[k].count;
+          v.count = v.count - $scope.dataMetrics[0].values[k].count;
+          return v;
+        });
+        $scope.dataUOPerfMetrics[0].values = _.map(_.cloneDeep($scope.dataUOMetrics[0].values), function(v, k) {
+          v.value = v.count / $scope.dataMetrics[0].values[k].count * 100;
+          v.count = v.count / $scope.dataMetrics[0].values[k].count * 100;
+          v.color = $scope.giveMeMyColor(v.count);
+          return v;
+        });
+
+        $scope.dataUOMetricsNb = arraySum(_.compact(_.map($scope.dataUOMetrics[0].values, 'count')));
+        $scope.dataUODiffMetricsNb = arraySum(_.compact(_.map($scope.dataUODiffMetrics[0].values, 'count')));
+        $scope.dataUOPerfMetricsNb = arrayAverage(_.compact(_.map($scope.dataUOPerfMetrics[0].values, 'count')));
       });
 
       $scope.options = {
@@ -278,6 +367,12 @@ angular.module('boardOsApp')
 
       $scope.optionsTasks = angular.copy($scope.options);
       $scope.optionsTasks.chart.color = ['#9467bd'];
+
+      $scope.optionsUOLoad = angular.copy($scope.options);
+      $scope.optionsUOLoad.chart.color = ['#2e5463'];
+
+      $scope.optionsUODiff = angular.copy($scope.options);
+      $scope.optionsUOLoad.chart.color = ['#2cece6'];
 
       $scope.optionsLoad = angular.copy($scope.options);
       $scope.optionsLoad.chart.color = ['#87CEEB'];
@@ -328,6 +423,51 @@ angular.module('boardOsApp')
       }
     };
 
+    $scope.loadAnos = function() {
+      var filterAnoPerimeter = {
+        $or: [],
+        status: {
+          $ne: 'Finished'
+        }
+      };
+      _.each($scope.dashboard.perimeter, function(perimeter) {
+        if (perimeter.activity && perimeter.context) {
+          filterAnoPerimeter['$or'].push({
+            activity: {
+              '$regex': perimeter.activity || '',
+              $options: '-i'
+            },
+            context: {
+              '$regex': perimeter.context || '',
+              $options: '-i'
+            }
+          });
+        } else if (!perimeter.context) {
+          filterAnoPerimeter['$or'].push({
+            activity: {
+              '$regex': perimeter.activity || '',
+              $options: '-i'
+            }
+          });
+        } else if (!perimeter.activity) {
+          filterAnoPerimeter['$or'].push({
+            context: {
+              '$regex': perimeter.context || '',
+              $options: '-i'
+            }
+          });
+        }
+      });
+
+      $http.get('/api/anomalies', {
+        params: {
+          filterPerimeter: filterAnoPerimeter
+        }
+      }).success(function(anomalies) {
+        $scope.anomalies = anomalies;
+      });
+    };
+
     $scope.loadTasks = function() {
       var filterPerimeter = {
         $or: [],
@@ -365,10 +505,7 @@ angular.module('boardOsApp')
           });
         }
         $scope.filterPerimeter = filterPerimeter;
-
       });
-
-
     };
 
     $scope.giveMeMyColor = function(value, category) {
@@ -616,16 +753,6 @@ angular.module('boardOsApp')
             $rootScope.$broadcast('dateRangeService:updated', dateRangeService.rangeDateTxt);
           });
 
-          $http.get('/api/anomalies', {
-            params: {
-              activity: dashboard.activity,
-              context: dashboard.context
-            }
-          }).success(function(anomalies) {
-            $scope.anomalies = anomalies;
-          });
-
-
           dashboard.subscribed = false;
           var userlist = _.pluck(dashboard.users, '_id');
           $scope.userindex = userlist.indexOf($scope.currentUser._id.toString());
@@ -790,6 +917,7 @@ angular.module('boardOsApp')
             });
 
             $scope.loadTasks();
+            $scope.loadAnos();
             initializing = false;
             $scope.needToSave = false;
           });
@@ -879,6 +1007,7 @@ angular.module('boardOsApp')
       }
     }, true);
 
+
     $scope.$watch('dashboard.perimeter', function(newMap, previousMap) {
       if (initializing) {
         $timeout(function() {
@@ -895,6 +1024,13 @@ angular.module('boardOsApp')
         $scope.needToSave = true;
       }
     }, true);
+
+    $scope.$watch('viewMode', function(newMap, previousMap) {
+      if (!initializing) {
+        $scope.showHistory('Activity');
+      }
+    }, true);
+
 
     $scope.removePerimeter = function(data, index) {
       $scope.dashboard.perimeter.splice(index, 1);

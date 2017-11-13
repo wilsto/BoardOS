@@ -12,6 +12,7 @@ var TaskFull = require('../taskFull/taskFull.model');
 
 var getData = require('../../config/getData');
 var tools = require('../../config/tools');
+var logger = require('../../config/logger');
 
 var hierarchyValues = {};
 var kpis = {};
@@ -121,9 +122,9 @@ var j = schedule.scheduleJob({
   hour: 6,
   minute: 30
 }, function() {
+  logger.info('+recurrentTask: scheduled task : ' + new Date());
   createTaskFromRecurrent(new Date());
 });
-//createTaskFromRecurrent('2017-10-22');
 
 
 // Get list of recurrentTasks

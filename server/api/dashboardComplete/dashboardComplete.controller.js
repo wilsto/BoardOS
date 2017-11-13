@@ -15,6 +15,7 @@ var User = require('../user/user.model');
 
 var tools = require('../../config/tools');
 var getData = require('../../config/getData');
+var logger = require('../../config/logger');
 
 var hierarchyValues = {};
 var usersList = {};
@@ -28,6 +29,7 @@ Hierarchies.find({
 }, '-__v', function(err, hierarchy) {
   if (hierarchy[0]) {
     hierarchyValues = hierarchy[0].list;
+    logger.info('+dashboardComplete: Hierachies cached : ' + hierarchyValues.length);
   }
 });
 
@@ -38,10 +40,14 @@ KPI.find({}, '-__v').lean().exec(function(err, mKPI) {
   alerts = _.where(mKPI, {
     category: 'Alert'
   });
+  logger.info('+dashboardComplete: Goal cached : ' + kpis.length);
+  logger.info('+dashboardComplete: Alert cached : ' + alerts.length);
+
 })
 
 User.find({}, '-salt -hashedPassword', function(err, user) {
   usersList = user;
+  logger.info('+dashboardComplete: Users cached : ' + usersList.length);
 })
 
 process.on('taskChanged', function(task) {
@@ -62,6 +68,7 @@ process.on('taskChanged', function(task) {
         _.each(alldashboards, function(dashboard, index) {
           _.each(dashboard.perimeter, function(perimeter) {
             if ((perimeter.context === undefined || task.context.indexOf(perimeter.context) >= 0) && (perimeter.activity === undefined || task.activity.indexOf(perimeter.activity) >= 0)) {
+              logger.info('+dashboardComplete: createCompleteDashboard : ' + dashboard._id);
               createCompleteDashboard(dashboard._id, function(data) {});
             }
           })
@@ -73,6 +80,7 @@ process.on('taskChanged', function(task) {
 });
 
 process.on('dashboardChanged', function(dashboard) {
+  logger.info('+dashboardComplete: On dashboardChanged : ' + dashboard._id);
   createCompleteDashboard(dashboard._id, function(data) {});
 });
 
@@ -83,9 +91,8 @@ var j = schedule.scheduleJob({
   createAllCompleteDashboard();
 });
 
-//createAllCompleteDashboard();
-
 function createAllCompleteDashboard() {
+  logger.info('+dashboardComplete: createAllCompleteDashboard');
 
   var alldashboards;
   Q()
@@ -108,20 +115,15 @@ function createAllCompleteDashboard() {
         });
       }, function(err) {
         if (err) {
-          console.log('A file failed to process');
+          logger.error('-dashboardComplete: A file failed to process : ' + err);
         } else {
-          console.log('All files have been processed successfully');
+          logger.info('+dashboardComplete: All files have been processed successfully');
         }
       });
       deferred.resolve(alldashboards);
       return deferred.promise;
     });
 }
-
-// createCompleteDashboard('59229550349959a8807aa2be', function() {
-//   console.log('end dashboard 59229550349959a8807aa2be');
-// });
-//createAllCompleteDashboard()
 
 function createCompleteDashboard(dashboardId, callback) {
 
@@ -137,6 +139,7 @@ function createCompleteDashboard(dashboardId, callback) {
     }
     return -1;
   }
+
   Q()
     // Get a single task
     .then(function() {
@@ -300,10 +303,6 @@ function createCompleteDashboard(dashboardId, callback) {
                 kpisSum += parseInt(kpi.calcul.task || 0);
                 kpisNb += (kpi.calcul.task !== null && kpi.calcul.task !== undefined && !isNaN(kpi.calcul.task)) ? 1 : 0;
               }
-              // if (kpi.name === 'Deliver On Time') {
-              //   console.log('task', task.metrics[task.metrics.length - 1].startDate);
-              //   console.log('kpi.calcul.task', kpi.calcul.task);
-              // }
             })
             _.each(task.alerts, function(alert, index2) { // list alert
               if (!alertsSumBy[alert._id]) {
@@ -348,13 +347,7 @@ function createCompleteDashboard(dashboardId, callback) {
                 var mKPI = _.filter(kpis, function(kpi) {
                   return kpi._id.toString() === key;
                 })[0];
-                // if (mKPI.name === 'Deliver On Time') {
-                //   console.log('dashboard.name', dashboard.name);
-                //   console.log('kpi.name', mKPI.name);
-                //   console.log('value', value);
-                //   console.log('kpisNbBy[key]', kpisNbBy[key]);
-                //   console.log('parseInt(value / kpisNbBy[key]', parseInt(value / kpisNbBy[key]));
-                // }
+
                 dashboard.kpis.push({
                   kpiId: key,
                   name: mKPI.name,
@@ -439,17 +432,18 @@ function createCompleteDashboard(dashboardId, callback) {
           });
         }
       });
-
     })
 }
 
 // Get list of dashboardCompletes
 exports.execute = function(req, res) {
-  createAllCompleteDashboard();
+  logger.info('+dashboardComplete: execute all dashboard : ');
+  return res.status(200).json(createAllCompleteDashboard());
 };
 
 // Get list of dashboardCompletes
 exports.executeId = function(req, res) {
+  logger.info('+dashboardComplete: executeId : ' + req.params.dashboardId);
   createCompleteDashboard(req.params.dashboardId, function(callbackDashboard) {
     return res.status(200).json(callbackDashboard);
   });
@@ -659,6 +653,7 @@ exports.subscribe = function(req, res) {
     });
     dashboardComplete.users = users;
     var updated = dashboardComplete;
+    updated.markModified('users');
     updated.save(function(err) {
       if (err) {
         return handleError(res, err);

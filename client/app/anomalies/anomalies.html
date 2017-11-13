@@ -1,5 +1,7 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
-
+<!-- <div ng-click="toggle()" style="z-index:999;position:absolute;right:-35px;top:35% ;background-color:#222222;width:70px;height:70px;  border-radius: 35px;    -webkit-transform:rotate(-90deg);   -ms-transform:rotate(-90deg);    -moz-transform:rotate(-90deg);    -webkit-transform:rotate(-90deg);    -o-transform:rotate(-90deg);">
+<div style="font-size:14px;color:#FFF;width:70px;height:70px;text-align:center;padding-top:10px; ">Menu</div>
+</div> -->
 
   <!-- Script pour le template du search -->
   <script type="text/ng-template" id="myTooltipActorTemplate.html">
@@ -28,12 +30,12 @@
       <table class="table table-striped table-bordered table-hover" style="max-width:100%" id="sample_4">
         <thead>
           <tr>
-            <th class="hidden-xs" ng-click="orderByField='date'; reverseSort = !reverseSort">
+            <th  ng-click="orderByField='date'; reverseSort = !reverseSort">
               <a href="#" ng-click="orderByField='date'; reverseSort = !reverseSort">
                 <i class="fa fa-calendar"></i> Date
               </a>
             </th>
-            <th style="max-width:60px;text-align:center" class="hidden-xs" ng-click="orderByField='actor.groups'; reverseSort = !reverseSort">
+            <th style="max-width:60px;text-align:center"  ng-click="orderByField='actor.groups'; reverseSort = !reverseSort">
 
               <a href="#" ng-click="orderByField='actor.groups'; reverseSort = !reverseSort">
                 <i class="fa fa-users"></i> From
@@ -51,59 +53,65 @@
               </a>
             </small>
             </th>
-            <th class="hidden-xs" ng-click="orderByField='context'; reverseSort = !reverseSort">
+            <th  ng-click="orderByField='context'; reverseSort = !reverseSort">
               <a href="#" ng-click="orderByField='context'; reverseSort = !reverseSort">
                 <i class="fa fa-map-marker"></i> Context
               </a>
 
             </th>
-            <th style="max-width:65px;text-align:center" class="hidden-xs" ng-click="orderByField='category'; reverseSort = !reverseSort">
+            <th style="max-width:65px;text-align:center"  ng-click="orderByField='category'; reverseSort = !reverseSort">
               <a href="#" ng-click="orderByField='category'; reverseSort = !reverseSort">
                 <small>Category</small>
               </a>
             </th>
-            <th style="max-width:65px;text-align:center" class="hidden-xs" ng-click="orderByField='impact'; reverseSort = !reverseSort">
+            <th style="max-width:65px;text-align:center"  ng-click="orderByField='impact'; reverseSort = !reverseSort">
               <a href="#" ng-click="orderByField='impact'; reverseSort = !reverseSort">
                 <small>Impact</small>
 
               </a>
             </th>
-            <th style="width:60px;text-align:center" class="hidden-xs" ng-click="orderByField='correctiveActions[0].metrics[0].status'; reverseSort = !reverseSort">
+            <th style="width:60px;text-align:center"  ng-click="orderByField='correctiveActions[0].metrics[0].status'; reverseSort = !reverseSort">
               <a href="#">
                 <span uib-tooltip-html="'Corrective Actions'">C.A.</span>
               </a>
             </th>
-            <th style="width:60px;text-align:center" class="hidden-xs" ng-click="orderByField='preventiveActions[0].metrics[0].status'; reverseSort = !reverseSort">
+            <th style="width:60px;text-align:center"  ng-click="orderByField='preventiveActions[0].metrics[0].status'; reverseSort = !reverseSort">
               <a href="#">
                 <span uib-tooltip-html="'Preventive Actions'">P.A.</span>
               </a>
             </th>
+            <th style="width:60px;text-align:center"  ng-click="orderByField='status'; reverseSort = !reverseSort">
+              <a href="#">
+                <span uib-tooltip-html="'Status'">Status</span>
+              </a>
+            </th>
           </tr>
           <tr>
-            <th class="hidden-xs" >
+            <th  >
             </th>
-            <th class="hidden-xs">
+            <th >
               <input style="width:100%" ng-model="searchActor">
             </th>
             <th style="width:30%">
               <input style="width:100%" ng-model="searchName">
             </th>
-            <th class="hidden-xs" style="max-width:25%">
+            <th  style="max-width:25%">
               <input style="width:100%" ng-model="searchContext">
             </th>
-            <th style="max-width:60px" class="hidden-xs">
+            <th style="max-width:60px" >
               <input style="width:100%" ng-model="searchCategory">
 
             </th>
-            <th style="max-width:60px" class="hidden-xs">
+            <th style="max-width:60px" >
               <input style="width:100%" ng-model="searchImpact">
 
             </th>
-            <th style="width:60px" class="hidden-xs">
+            <th style="width:60px" >
             </th>
-            <th style="width:60px" class="hidden-xs">
+            <th style="width:60px" >
             </th>
-            <th style="width:60px" class="hidden-xs">
+            <th style="width:60px" >
+              <input style="width:100%" ng-model="searchStatus">
             </th>
           </tr>
         </thead>
@@ -113,7 +121,7 @@
             <td class="dont-break-out hidden-xs">
               <small class="text-muted">  {{anomalie.date | date:'mediumDate'}}</small>
             </td>
-            <td class="hidden-xs" style="text-align:center">
+            <td  style="text-align:center">
               <div uib-tooltip-template="'myTooltipActorTemplate.html'" tooltip-placement="right">
                 <small class="badge badge-default"> {{anomalie.actor.groups[0]}}</small>
               </div>
@@ -125,27 +133,124 @@
             <td class="dont-break-out  hidden-xs">
             <small style="font-size:11px" class="text-muted">  {{anomalie.context || 'ALL'}} <br /> </small>
             </td>
-            <td class="hidden-xs">
+            <td >
               <span  >{{showCategories(anomalie.category)}}</span>
             </td>
-            <td class="hidden-xs">
+            <td >
               <span  >{{anomalie.impact}}</span>
             </td>
-            <td class="hidden-xs" style="text-align:center">
+            <td  style="text-align:center">
               <a href="task/{{anomalie.correctiveActions[0]._id}}" target="_blank">
               <span class="btn btn-outline btn-xs" aria-hidden="false" ng-class="{'btn-info ':anomalie.correctiveActions[0].metrics[0].status === 'In Progress',' btn-default ':anomalie.correctiveActions[0].metrics[0].status === 'Not Started',' btn-danger ':anomalie.correctiveActions.length === 0,' btn-success':anomalie.correctiveActions[0].metrics[0].status === 'Finished'}">CA</span>
             </a>
             </td>
-                      <td class="hidden-xs" style="text-align:center">
+                      <td  style="text-align:center">
             <a href="task/{{anomalie.preventiveActions[0]._id}}" target="_blank">
 
               <span class="btn btn-outline btn-xs" aria-hidden="false" ng-class="{'btn-info ':anomalie.preventiveActions[0].metrics[0].status === 'In Progress',' btn-default ':anomalie.preventiveActions[0].metrics[0].status === 'Not Started',' btn-danger ':anomalie.preventiveActions.length === 0,' btn-success':anomalie.preventiveActions[0].metrics[0].status === 'Finished'}">PA</span>
             </a>
             </td>
-
+<td>
+  <span ng-if="anomalie.status ==='Not Started' "
+    class="label label-sm"
+    ng-class="{'label-info':anomalie.status ==='In Progress','label-success':anomalie.status ==='Finished','label-default':anomalie.status ==='Not Started','label-lightgrey':anomalie.status =='Withdrawn','label-warning':anomalie.startDate < today}">
+    {{anomalie.status}}
+  </span>
+  <span ng-if="anomalie.status !=='Not Started'"
+    class="label label-sm"
+    ng-class="{'label-info':anomalie.status ==='In Progress','label-success':anomalie.status ==='Finished','label-default':anomalie.status ==='Not Started','label-lightgrey':anomalie.status =='Withdrawn'}">
+    {{anomalie.status}}
+  </span>
+</td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
 </div>
+
+<!-- *************** -->
+<!-- MENU DROIT      -->
+<!-- *************** -->
+<div pageslide ps-open="checked" ps-speed="1" ps-push="true" class="ng-isolate-scope ng-pageslide" style="z-index: 1000; position: fixed; overflow:auto;transition-duration: 1s; height: 100%; transition-property: top, bottom, left, right; width: 300px; top: 0px; bottom: 0px; right: -300px;background-color:#eee">
+                        <div style="padding:20px;margin-top:20px;" id="demo-right">
+                            <h3 style="width:100%;text-align:center">Actions on Dashboard</h3>
+                            <a class="btn btn-primary" style="width:100%" ng-click="toggle()">Close</a>
+                            <hr>
+
+                            <div style="width:100%;  display: inline-block;" ng-click="createAnomaly()">
+                              <div style="width:29%;height:70px;float:left">
+                                <img src="assets/images/problem.jpg" style="width:60px;" alt="">
+                              </div>
+                              <div style="width:69%;height:70px;table-cell;   vertical-align: middle; float:left;padding-left:5px" >
+                                <p> Report an <u style="font-weight:bold">anomaly</u> that affects your activity </p>
+                              </div>
+                            </div>
+                            <hr>
+
+                            <div style="width:100%;  display: inline-block;"   ng-click="showHistory()" ng-class="{'activeActionMenu':dashboardSlide === 'History'}">
+                              <div style="width:29%;height:70px;float:left">
+                                <img src="assets/images/history-icon.png" style="width:60px;" alt="">
+                              </div>
+                              <div style="width:69%;height:70px;table-cell;   vertical-align: middle; float:left;padding-left:5px" >
+                                <p> Understand <u style="font-weight:bold">past</u> metrics and performance of your perimeter</p>
+                              </div>
+                            </div>
+                            <hr>
+
+                            <div style="width:100%;  display: inline-block;"   ng-click="showHome()" ng-class="{'activeActionMenu':dashboardSlide === 'Home'}">
+                              <div style="width:29%;height:70px;float:left" >
+                                <img src="assets/images/performance-icon.png" style="width:60px;" alt="">
+                              </div>
+                              <div style="width:69%;height:70px;table-cell;   vertical-align: middle; float:left;padding-left:5px" >
+                                <p> Action <u style="font-weight:bold">present</u> tasks and performance of your perimeter</p>
+                              </div>
+                            </div>
+                            <hr>
+
+                            <div style="width:100%;  display: inline-block;"   ng-click="showReview()" ng-class="{'activeActionMenu':dashboardSlide === 'Review'}">
+                              <div style="width:29%;height:70px;float:left">
+                                <img src="assets/images/coming-soon.png" style="width:70px;z-index:99999" alt="">
+                                <img src="assets/images/futur-icon.png" style="width:60px;z-index:99998;float:left;margin-top:-70px;" alt="">
+                              </div>
+                              <div style="width:69%;height:70px;table-cell;   vertical-align: middle; float:left;padding-left:5px" >
+                                <p> Anticipate <u style="font-weight:bold">future</u> tasks and performance of your perimeter</p>
+                              </div>
+                            </div>
+                            <hr>
+
+                            <div style="width:100%;  display: inline-block;"   ng-click="showTimeline()" ng-class="{'activeActionMenu':dashboardSlide === 'Timeline'}">
+                              <div style="width:29%;height:70px;float:left">
+                                <img src="assets/images/timeline.png" style="width:60px;" alt="">
+                              </div>
+                              <div style="width:69%;height:70px;table-cell;   vertical-align: middle; float:left;padding-left:5px" >
+                                <p> View task in a <u style="font-weight:bold">Timeline</u></p>
+                              </div>
+                            </div>
+                            <hr>
+
+<br><br>
+                            <div style="width:100%;  display: inline-block;"   ng-click="refreshDashboard()">
+                              <div style="width:29%;height:70px;float:left">
+                                <img src="assets/images/refresh-icon.png" style="width:60px;" alt="">
+                              </div>
+                              <div style="width:69%;height:70px;table-cell;   vertical-align: middle; float:left;padding-left:5px">
+                                <p>Resfresh will operate again all calculations</p>
+                              </div>
+                            </div>
+                            <hr>
+                                                        <div style="width:100%;  display: inline-block;"   ng-click="showConfig()">
+                                                          <div style="width:29%;height:70px;float:left">
+                                                            <img src="assets/images/settings.png" style="width:70px;" alt="">
+                                                          </div>
+                                                          <div style="width:69%;height:70px; display: table-cell;   vertical-align: middle; float:left;padding-left:5px">
+                                                            <p>Show and/or modify dashboard informations and subscription</p>
+                                                          </div>
+                                                        </div>
+                                                        <hr>
+
+
+
+
+                        </div>
+                    </div>

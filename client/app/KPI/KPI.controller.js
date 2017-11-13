@@ -126,10 +126,6 @@ angular.module('boardOsApp')
       if (typeof $scope.KPI._id === 'undefined') {
         $http.post('/api/KPIs', $scope.KPI).success(function(data) {
           var logInfo = 'KPI "' + $scope.KPI.name + '" was created';
-          $http.post('/api/logs', {
-            info: logInfo,
-            actor: $scope.currentUser
-          });
           Notification.success(logInfo);
           $location.path('/KPI/' + data._id);
         });
@@ -137,10 +133,6 @@ angular.module('boardOsApp')
       } else {
         $http.put('/api/KPIs/' + $scope.KPI._id, $scope.KPI).success(function() {
           var logInfo = 'KPI "' + $scope.KPI.name + '" was updated';
-          $http.post('/api/logs', {
-            info: logInfo,
-            actor: $scope.currentUser
-          });
           Notification.success(logInfo);
         });
 
