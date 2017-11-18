@@ -6,7 +6,7 @@ BoardOS
 [![Dependency Status](https://img.shields.io/david/wilsto/BoardOS.svg)](https://david-dm.org/wilsto/BoardOS)
 [![Dev-Dependency Status](https://img.shields.io/david/dev/wilsto/BoardOS.svg)](https://david-dm.org/wilsto/BoardOS#info=devDependencies)
 [![Coverage Status](https://coveralls.io/repos/wilsto/BoardOS/badge.svg)](https://coveralls.io/r/wilsto/BoardOS)
-[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/wilsto/boardos.svg)](http://isitmaintained.com/project/wilsto/boardos "Average time to resolve an issue")
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/wilsto/boardos.svg?branch=develop)](http://isitmaintained.com/project/wilsto/boardos "Average time to resolve an issue")
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/wilsto/boardos.svg)](http://isitmaintained.com/project/wilsto/boardos "Percentage of issues still open")
 
 Board Of Supervision
