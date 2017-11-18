@@ -755,7 +755,8 @@ angular.module('boardOsApp')
 
           dashboard.subscribed = false;
           var userlist = _.pluck(dashboard.users, '_id');
-          $scope.userindex = userlist.indexOf($scope.currentUser._id.toString());
+
+          $scope.userindex = ($scope.currentUser) ? userlist.indexOf($scope.currentUser._id.toString()) : 0;
 
           if ($scope.userindex >= 0 && dashboard.users[$scope.userindex] && dashboard.users[$scope.userindex].dashboardName && dashboard.users[$scope.userindex].dashboardName.length > 0) {
             dashboard.name = dashboard.users[$scope.userindex].dashboardName;
@@ -934,11 +935,12 @@ angular.module('boardOsApp')
         $rootScope.perimeter.axis = null;
         $rootScope.perimeter.category = null;
 
+        var currentUser_id = ($scope.currentUser) ? $scope.currentUser._id : undefined;
         $scope.dashboard = {
           name: '',
           paramId: $stateParams.id,
           users: [{
-            _id: $scope.currentUser._id,
+            _id: currentUser_id,
             dashboardName: ''
           }],
           perimeter: [{
@@ -1061,7 +1063,9 @@ angular.module('boardOsApp')
         anomalie.context = $scope.dashboard.perimeter[0].context;
         anomalie.activity = $scope.dashboard.perimeter[0].activity;
 
-        anomalie.actor = $scope.currentUser._id;
+        if ($scope.currentUser) {
+          anomalie.actor = $scope.currentUser._id;
+        }
 
         $scope.myPromise = $http.post('/api/anomalies', anomalie).success(function(data) {
           $scope.loadCompleteDashboard();

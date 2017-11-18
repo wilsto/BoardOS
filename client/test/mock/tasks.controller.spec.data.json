@@ -1,0 +1,308 @@
+[{
+    "_id": "5a0b1e8627eb280004c097f5"
+  }, {
+    "_id": "5a0b1e8627eb280004c097f5",
+    "context": "TOOLS.SAS.2017.11.16",
+    "activity": "DCLIC.CBI.SM.MAINTENANCE.GOUV",
+    "metrics": [{
+      "trust": 100,
+      "targetLoad": 0.15,
+      "targetEndDate": "2017-11-16T16:48:23.075Z",
+      "targetstartDate": "2017-11-16T16:48:19.498Z",
+      "status": "Not Started",
+      "timeSpent": 0,
+      "progress": 0
+    }],
+    "name": "Café CBI - SI R&D Clinical & Regulatory",
+    "followers": [],
+    "actors": [{
+        "_id": "54f4507e8f4ed61100e8c859",
+        "name": "Benoît ",
+        "groups": [
+          "CBI-SM"
+        ],
+        "avatar": "assets/images/avatars/54f4507e8f4ed61100e8c859.png"
+      },
+      {
+        "_id": "549800f633fca76c16fca2af",
+        "name": "Willy",
+        "groups": [
+          "CBI-PMO"
+        ],
+        "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png"
+      }
+    ],
+    "anomalies": [],
+    "previousAnomalies": [],
+    "previousTasks": [],
+    "actionPlan": false,
+    "nextTasks": [],
+    "reviewPeriodic": false,
+    "reviewTask": false,
+    "active": false,
+    "modifdate": "2017-11-14T16:49:10.739Z",
+    "date": "2017-11-14T16:48:02.202Z"
+  },
+  {
+    "_id": "59fea1dae1f187dd89edb730",
+    "modifdate": "2017-11-07T10:30:56.000Z",
+    "reviewTask": false,
+    "reviewPeriodic": false,
+    "previousAnomalies": [],
+    "context": "FONCTIONNEMENT.CBI.PMO.2017.11.07",
+    "activity": "DCLIC.CBI.MANAGEMENT.COMPETENCES.COACHING",
+    "actionPlan": false,
+    "repeats": {
+      "label": "week(s)",
+      "text": "Weekly",
+      "value": 2
+    },
+    "repeatEvery": 1,
+    "repeatOn": [
+      3,
+      5,
+      2
+    ],
+    "repeatEndAfter": 0,
+    "previousTasks": [],
+    "anomalies": [],
+    "nextTasks": [],
+    "metrics": [{
+      "progressStatus": "On Time",
+      "projectedWorkload": 0.3,
+      "delay": 0,
+      "duration": 0.3,
+      "endDate": "2017-11-06T23:00:00.000Z",
+      "lateEnd": false,
+      "lateStart": false,
+      "trust": 100,
+      "targetLoad": 0.3,
+      "status": "Finished",
+      "timeSpent": 0,
+      "progress": 0,
+      "targetstartDate": "2017-11-07T23:00:00.000Z",
+      "targetEndDate": "2017-11-07T23:00:00.000Z"
+    }],
+    "name": "Coaching - Sylviane - 2017.11.07",
+    "followers": [],
+    "actors": [{
+        "_id": "549800f633fca76c16fca2af",
+        "name": "Willy",
+        "groups": [
+          "CBI-PMO"
+        ],
+        "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png"
+      },
+      {
+        "_id": "59ba4884b0576004006255a9",
+        "name": "Sylviane ",
+        "avatar": "assets/images/avatars/59ba4884b0576004006255a9.png"
+      }
+    ],
+    "active": false,
+    "date": "2017-11-05T05:30:00.239Z",
+    "auto": true
+  },
+  {
+    "_id": "5a046bf65d891a0004430fb1",
+    "name": "REX Feedback Sitin",
+    "description": "Corrective Action was created from anomaly ",
+    "activity": "DCLIC.CBI.MANAGEMENT.PERFORMANCE.KAIZEN.PLAN",
+    "context": "FONCTIONNEMENT.CBI.PMO.SITIN.2017.09.07",
+    "metrics": [{
+      "progressStatus": "On Time",
+      "projectedWorkload": 0.15,
+      "delay": 0,
+      "duration": 0.15,
+      "endDate": "2017-12-07T23:00:00.000Z",
+      "lateEnd": false,
+      "lateStart": false,
+      "targetstartDate": "2017-12-07T23:00:00.000Z",
+      "targetEndDate": "2017-12-07T23:00:00.000Z",
+      "targetLoad": 0.15,
+      "trust": 100,
+      "progress": 0,
+      "timeSpent": 0,
+      "status": "Not Started"
+    }],
+    "followers": [],
+    "actors": [{
+        "_id": "549800f633fca76c16fca2af",
+        "name": "Willy",
+        "groups": [
+          "CBI-PMO"
+        ],
+        "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png"
+      },
+      {
+        "_id": "577a1b5737756a1100f52141",
+        "name": "Marie ",
+        "groups": [
+          "CBI-CM"
+        ],
+        "avatar": "assets/images/avatars/577a1b5737756a1100f52141.png"
+      },
+      {
+        "_id": "54f47f3c8f4ed61100e8c86e",
+        "name": "Florence ",
+        "groups": [
+          "CBI-DD"
+        ],
+        "avatar": "assets/images/avatars/54f47f3c8f4ed61100e8c86e.png"
+      }
+    ],
+    "anomalies": [],
+    "previousAnomalies": [
+      "5a046a545d891a0004430fb0"
+    ],
+    "previousTasks": [],
+    "actionPlan": false,
+    "nextTasks": [],
+    "reviewPeriodic": false,
+    "reviewTask": false,
+    "active": false,
+    "modifdate": "2017-11-09T14:54:06.000Z",
+    "date": "2017-11-09T14:53:41.917Z"
+  },
+  {
+    "_id": "5a07dc5be1f187dd8946e36f",
+    "modifdate": "2017-11-12T05:30:01.645Z",
+    "reviewTask": false,
+    "reviewPeriodic": false,
+    "previousAnomalies": [],
+    "context": "FONCTIONNEMENT.CBI.PMO.2017.11.17",
+    "activity": "DCLIC.CBI.MANAGEMENT",
+    "actionPlan": false,
+    "repeats": {
+      "label": "week(s)",
+      "text": "Weekly",
+      "value": 2
+    },
+    "repeatEvery": 1,
+    "repeatOn": [
+      2,
+      3,
+      5
+    ],
+    "repeatEndAfter": 0,
+    "previousTasks": [],
+    "anomalies": [],
+    "nextTasks": [],
+    "metrics": [{
+      "targetEndDate": "2017-11-16T23:00:01.110Z",
+      "targetstartDate": "2017-11-16T23:00:00.110Z",
+      "progress": 0,
+      "timeSpent": 0,
+      "status": "Not Started",
+      "targetLoad": 0.3,
+      "trust": 100
+    }],
+    "name": "Management CBI PMO -2h - 2017.11.17",
+    "description": "Ressources, Budget, Performances, Méthodes, Qualité, Organisation, Logistique, Communication",
+    "followers": [],
+    "actors": [{
+      "_id": "549800f633fca76c16fca2af",
+      "name": "Willy",
+      "groups": [
+        "CBI-PMO"
+      ],
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png"
+    }],
+    "active": false,
+    "date": "2017-11-12T05:30:00.705Z",
+    "auto": true
+  },
+  {
+    "_id": "5a07dc5be1f187dd8946e37e",
+    "modifdate": "2017-11-12T05:30:01.686Z",
+    "reviewTask": false,
+    "reviewPeriodic": false,
+    "previousAnomalies": [],
+    "context": "FONCTIONNEMENT.CBI.PMO.2017.11.17",
+    "activity": "DCLIC.CBI.LEADERSHIP.VISION.SENS",
+    "actionPlan": false,
+    "repeats": {
+      "label": "week(s)",
+      "text": "Weekly",
+      "value": 2
+    },
+    "repeatEvery": 1,
+    "repeatOn": [
+      3,
+      5,
+      2
+    ],
+    "repeatEndAfter": 0,
+    "previousTasks": [],
+    "anomalies": [],
+    "nextTasks": [],
+    "metrics": [{
+      "targetEndDate": "2017-11-16T23:00:01.110Z",
+      "targetstartDate": "2017-11-16T23:00:00.110Z",
+      "progress": 0,
+      "timeSpent": 0,
+      "status": "Not Started",
+      "targetLoad": 0.3,
+      "trust": 100
+    }],
+    "name": "Mentoring - xxxxx - 2017.11.17",
+    "followers": [],
+    "actors": [{
+      "_id": "549800f633fca76c16fca2af",
+      "name": "Willy",
+      "groups": [
+        "CBI-PMO"
+      ],
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png"
+    }],
+    "active": false,
+    "date": "2017-11-12T05:30:00.770Z",
+    "auto": true
+  },
+  {
+    "_id": "5a07dc5be1f187dd8946e380",
+    "modifdate": "2017-11-12T05:30:01.678Z",
+    "reviewTask": false,
+    "reviewPeriodic": false,
+    "previousAnomalies": [],
+    "context": "FONCTIONNEMENT.DCLIC.2017.11.17",
+    "activity": "DCLIC.CBI.MANAGEMENT.PERFORMANCE.RCA",
+    "actionPlan": false,
+    "repeats": {
+      "value": 2,
+      "text": "Weekly",
+      "label": "week(s)"
+    },
+    "repeatEvery": 1,
+    "repeatOn": [
+      3,
+      5
+    ],
+    "repeatEndAfter": 0,
+    "previousTasks": [],
+    "anomalies": [],
+    "nextTasks": [],
+    "metrics": [{
+      "targetEndDate": "2017-11-16T23:00:01.110Z",
+      "targetstartDate": "2017-11-16T23:00:00.110Z",
+      "trust": 100,
+      "targetLoad": 0.15,
+      "status": "Not Started",
+      "timeSpent": 0,
+      "progress": 0
+    }],
+    "name": "RCA - DCLIC - 2017.11.17",
+    "followers": [],
+    "actors": [{
+      "_id": "549800f633fca76c16fca2af",
+      "name": "Willy",
+      "groups": [
+        "CBI-PMO"
+      ],
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png"
+    }],
+    "active": false,
+    "date": "2017-11-12T05:30:00.743Z",
+    "auto": true
+  }
+]

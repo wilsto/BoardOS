@@ -8,7 +8,7 @@ describe('Controller: DashboardCtrl', function() {
   beforeEach(module('boardOsApp'));
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function($controller, $rootScope, $location, Notification) {
+  beforeEach(inject(function($controller, $rootScope) {
     scope = $rootScope.$new();
     createController = function() {
       return $controller('DashboardCtrl', {
@@ -19,10 +19,8 @@ describe('Controller: DashboardCtrl', function() {
 
   describe('New Dashboard', function() {
 
-
-    xit('should be visible', function() {
+    it('should be visible', function() {
       var controller = createController();
-
       expect(scope.blnshowConfig).toBeTruthy();
     });
   });

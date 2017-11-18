@@ -26,13 +26,16 @@ angular.module('boardOsApp')
     $rootScope.progressStatus = progressStatusTask;
 
 
-    var filterTasks = function(data) {
+    $scope.filterTasks = function(data) {
       var searchName = ($scope.searchName) ? $scope.searchName.toLowerCase() : '';
       var searchActor = ($scope.searchActor) ? $scope.searchActor.toLowerCase() : '';
       var searchContext = ($scope.searchContext) ? $scope.searchContext.toLowerCase() : '';
       var searchStatus = ($scope.searchStatus) ? $scope.searchStatus.toLowerCase() : '';
 
       return _.filter(data, function(task) {
+        if (task.name === 'No Name Defined - This is an Error') {
+          console.log('task', task);
+        }
         var lastMetric = task.metrics[task.metrics.length - 1];
 
         var blnActor = (searchActor.length === 0) ? true : false;
@@ -41,16 +44,26 @@ angular.module('boardOsApp')
             blnActor = true;
           }
         });
-
-        var blnName = (searchName.length === 0) ? true : (task.name.toLowerCase().indexOf(searchName) >= 0) || (task.activity.toLowerCase().indexOf(searchName) >= 0);
+        var blnName = (searchName.length === 0) ? true : (task.name && task.name.toLowerCase().indexOf(searchName) >= 0) || (task.activity && task.activity.toLowerCase().indexOf(searchName) >= 0);
         var blnContext = (searchContext.length === 0) ? true : (task.context && task.context.toLowerCase().indexOf(searchContext) >= 0);
-        var blnStart = (typeof task.metrics === 'undefined') ? false : lastMetric.targetstartDate && lastMetric.targetstartDate.toString().indexOf($scope.searchStart) >= 0;
-        var blnEnd = (typeof task.metrics === 'undefined') ? false : lastMetric.targetEndDate && lastMetric.targetEndDate.toString().indexOf($scope.searchEnd) >= 0;
-        var blnStatus = (typeof task.metrics === 'undefined') ? false : lastMetric.status && lastMetric.status.toLowerCase().indexOf(searchStatus) >= 0;
+        var blnStart = ($scope.searchStart.length === 0) ? true : (typeof task.metrics === 'undefined') ? false : lastMetric.targetstartDate && lastMetric.targetstartDate.toString().indexOf($scope.searchStart) >= 0;
+        var blnEnd = ($scope.searchEnd.length === 0) ? true : (typeof task.metrics === 'undefined') ? false : lastMetric.targetEndDate && lastMetric.targetEndDate.toString().indexOf($scope.searchEnd) >= 0;
+        var blnStatus = ($scope.searchStatus.length === 0) ? true : (typeof task.metrics === 'undefined') ? false : lastMetric.status && lastMetric.status.toLowerCase().indexOf(searchStatus) >= 0;
         var blnReview = ($scope.blnReview.length > 0) ? task.taskIcon : true;
         var blnMissing = ($scope.blnSuffix.length > 0) ? task.taskSuffIcon : true;
-
-        return blnName && blnActor && blnStatus && blnContext && blnStart && blnEnd && blnMissing && blnReview;
+        var blnReturn = blnName && blnActor && blnStatus && blnContext && blnStart && blnEnd && blnMissing && blnReview;
+        if (task.name === 'No Name Defined - This is an Error') {
+          console.log('blnName', blnName);
+          console.log('blnActor', blnActor);
+          console.log('blnStatus', blnStatus);
+          console.log('blnContext', blnContext);
+          console.log('blnStart', blnStart);
+          console.log('blnEnd', blnEnd);
+          console.log('blnMissing', blnMissing);
+          console.log('blnReview', blnReview);
+          console.log('blnReturn', blnReturn);
+        }
+        return blnReturn;
       });
     };
 
@@ -61,13 +74,39 @@ angular.module('boardOsApp')
     $scope.Load = function() {
       $http.get('/api/taskFulls').success(function(data) {
         $scope.alltasks = data;
+
+        // Cleaning Tasks once
+        _.each($scope.alltasks, function(task) {
+          if (typeof task.name === 'undefined') {
+            task.name = 'No Name Defined - This is an Error';
+          }
+          if (typeof task.activity === 'undefined') {
+            task.activity = undefined;
+          }
+          if (typeof task.context === 'undefined') {
+            task.context = undefined;
+          }
+          if (typeof task.metrics === 'undefined') {
+            task.metrics = [{
+              targetstartDate: undefined,
+              targetEndDate: undefined,
+              status: undefined
+            }];
+          }
+        });
+
+        // Suffix task once
         $scope.suffixTask($scope.alltasks);
+        console.log('$scope.alltasks', $scope.alltasks.length);
+
+        //Filter and Order
         $scope.reloadTasks();
       });
     };
 
     $scope.reloadTasks = function() {
-      $scope.tasks = filterTasks($scope.alltasks);
+      $scope.tasks = $scope.filterTasks($scope.alltasks);
+      console.log('$scope.tasks', $scope.tasks.length);
       $scope.tasks = _.sortBy($scope.tasks, function(task) {
         switch ($scope.orderByField) {
           case 'date':
@@ -117,7 +156,7 @@ angular.module('boardOsApp')
 
 
     $scope.getMoreData = function() {
-      var tasks = filterTasks($scope.alltasks);
+      var tasks = $scope.filterTasks($scope.alltasks);
       tasks = _.sortBy(tasks, $scope.orderByField);
       if ($scope.reverseSort) {
         tasks.reverse();

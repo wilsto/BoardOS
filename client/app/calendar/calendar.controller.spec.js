@@ -17,7 +17,7 @@ describe('Controller: CalendarCtrl', function() {
     };
   }));
 
-  xit('should ...', function() {
+  it('should ...', function() {
     var controller = createController();
 
     expect(1).toEqual(1);
