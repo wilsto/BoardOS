@@ -120,42 +120,62 @@ exports.tasksList = function(req, res) {
       return deferred.promise;
     })
     .then(function() {
-      // Get related dashboards
-      var deferred = Q.defer();
-      DashboardComplete.find({
-        _id: req.query.dashboardFilter
-      }, function(err, dashboard) {
+      if (req.query.dashboardFilter) {
 
-        _.each(dashboard[0].perimeter, function(perimeter) {
-          filterPerimeter['$or'].push({
-            activity: {
-              '$regex': perimeter.activity || '',
-              $options: '-im'
-            },
-            context: {
-              '$regex': perimeter.context || '',
-              $options: '-im'
-            }
+        // Get related dashboards
+        var deferred = Q.defer();
+        DashboardComplete.find({
+          _id: req.query.dashboardFilter
+        }, function(err, dashboard) {
+
+          _.each(dashboard[0].perimeter, function(perimeter) {
+            filterPerimeter['$or'].push({
+              activity: {
+                '$regex': perimeter.activity || '',
+                $options: '-im'
+              },
+              context: {
+                '$regex': perimeter.context || '',
+                $options: '-im'
+              }
+            });
           });
-        });
-        deferred.resolve(mKPI);
-      })
-      return deferred.promise;
+          deferred.resolve(mKPI);
+        })
+        return deferred.promise;
+      }
     })
     .then(function() {
-      // Get related tasks
-      var deferred = Q.defer();
+      if (req.query.dashboardFilter) {
 
-      var cutoff = new Date();
-      if (typeof req.query.rangedate === 'undefined') {
-        req.query.rangedate = 1;
-      }
-      cutoff = new Date(cutoff.setDate(cutoff.getDate() - req.query.rangedate - 1)).toISOString();
-      if (typeof req.query.taskFilter !== 'undefined') {
-        if (req.query.rangedate !== 1) {
-          filterPerimeter = {
-            _id: req.query.taskFilter,
-            'metrics': {
+        // Get related tasks
+        var deferred = Q.defer();
+
+        var cutoff = new Date();
+        if (typeof req.query.rangedate === 'undefined') {
+          req.query.rangedate = 1;
+        }
+        cutoff = new Date(cutoff.setDate(cutoff.getDate() - req.query.rangedate - 1)).toISOString();
+        if (typeof req.query.taskFilter !== 'undefined') {
+          if (req.query.rangedate !== 1) {
+            filterPerimeter = {
+              _id: req.query.taskFilter,
+              'metrics': {
+                $elemMatch: {
+                  endDate: {
+                    $gte: cutoff
+                  }
+                }
+              }
+            }
+          } else {
+            filterPerimeter = {
+              _id: req.query.taskFilter
+            }
+          }
+        } else {
+          if (req.query.rangedate !== 1) {
+            filterPerimeter.metrics = {
               $elemMatch: {
                 endDate: {
                   $gte: cutoff
@@ -163,39 +183,25 @@ exports.tasksList = function(req, res) {
               }
             }
           }
-        } else {
-          filterPerimeter = {
-            _id: req.query.taskFilter
-          }
         }
-      } else {
-        if (req.query.rangedate !== 1) {
-          filterPerimeter.metrics = {
-            $elemMatch: {
-              endDate: {
-                $gte: cutoff
+        TaskFull.find(filterPerimeter)
+          .populate('actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
+          .lean().exec(function(err, tasks) {
+            mTasks = [];
+            _.each(tasks, function(rowdata, index) {
+
+              if (rowdata.context.indexOf(mKPI.context) >= 0 && rowdata.activity.indexOf(mKPI.activity) >= 0) {
+                mTasks.push(rowdata);
               }
-            }
-          }
-        }
-      }
-      TaskFull.find(filterPerimeter)
-        .populate('actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
-        .lean().exec(function(err, tasks) {
-          mTasks = [];
-          _.each(tasks, function(rowdata, index) {
+              _.each(rowdata.actors, function(actor) {
+                actor.avatar = (actor.avatar) ? actor.avatar : 'assets/images/avatars/' + actor._id + '.png';
+              });
 
-            if (rowdata.context.indexOf(mKPI.context) >= 0 && rowdata.activity.indexOf(mKPI.activity) >= 0) {
-              mTasks.push(rowdata);
-            }
-            _.each(rowdata.actors, function(actor) {
-              actor.avatar = (actor.avatar) ? actor.avatar : 'assets/images/avatars/' + actor._id + '.png';
             });
-
+            deferred.resolve(mTasks);
           });
-          deferred.resolve(mTasks);
-        });
-      return deferred.promise;
+        return deferred.promise;
+      }
     })
     .then(function() {
       var deferred = Q.defer();

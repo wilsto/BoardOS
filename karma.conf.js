@@ -9,7 +9,7 @@ module.exports = function(config) {
     // testing framework to use (jasmine/mocha/qunit/...)
     frameworks: ['jasmine'],
 
-    reporters: ['progress', 'growl', 'html', 'coverage'],
+    reporters: ['progress', 'growl', 'html', 'coverage', 'coveralls'],
 
     // the default configuration
     htmlReporter: {
@@ -22,6 +22,8 @@ module.exports = function(config) {
       'client/bower_components/jquery/dist/jquery.js',
       'client/bower_components/angular/angular.js',
       'client/bower_components/angular-mocks/angular-mocks.js',
+      'client/bower_components/jasmine/lib/jasmine-core/jasmine.js',
+      'client/bower_components/jasmine-jquery/lib/jasmine-jquery.js',
       'client/bower_components/angular-aria/angular-aria.js',
       'client/bower_components/angular-animate/angular-animate.js',
       'client/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
@@ -75,7 +77,15 @@ module.exports = function(config) {
       'client/app/**/*.js',
       'client/components/**/*.js',
       'client/app/**/*.html',
-      'client/components/**/*.html'
+      'client/components/**/*.html',
+
+      // fixtures
+      {
+        pattern: 'client/test/mock/*.json',
+        watched: true,
+        served: true,
+        included: false
+      }
     ],
 
     preprocessors: {
@@ -83,7 +93,15 @@ module.exports = function(config) {
       'client/app/**/*.js': 'coverage',
       'client/components/**/*.js': 'coverage'
     },
-
+    plugins: [
+      'karma-jasmine',
+      'karma-html2js-preprocessor',
+      'karma-coverage',
+      'karma-coveralls',
+      'karma-phantomjs-launcher',
+      'karma-growl-reporter',
+      'karma-html-reporter'
+    ],
     coverageReporter: {
       reporters: [{
         type: 'html',

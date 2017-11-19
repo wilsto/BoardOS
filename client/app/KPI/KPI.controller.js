@@ -14,8 +14,9 @@ angular.module('boardOsApp')
     $scope.metricTaskFields = metricTaskFields;
     $scope.listValuesKPI = listValuesKPI;
 
-    $scope.type = $stateParams.type;
-    $scope.typeid = $stateParams.typeid;
+    $scope.type = $location.search().type;
+    console.log('$scope.type', $scope.type);
+    $scope.typeid = $location.search().typeid;
 
     $scope.load = function() {
       if ($stateParams.id) {

@@ -1,0 +1,818 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for app\KPIs\KPIs.controller.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">app/KPIs/</a> KPIs.controller.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">1.45% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>1/69</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/10</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/26</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">1.45% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>1/69</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*global bootbox:false */
+'use strict';
+&nbsp;
+angular.module('boardOsApp')
+  .controller('KPIsCtrl', <span class="fstat-no" title="function not covered" >function($scope, $http, Auth, actionKPI, categoryKPI, groupByKPI, metricTaskFields, Notification) {</span>
+<span class="cstat-no" title="statement not covered" >    $scope.KPIs = [];</span>
+<span class="cstat-no" title="statement not covered" >    $scope.KPI = {};</span>
+<span class="cstat-no" title="statement not covered" >    $scope.config = {</span>
+      tab1: true,
+      tab2: false
+    };
+<span class="cstat-no" title="statement not covered" >    $scope.isAdmin = Auth.isAdmin();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.load = <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >      $http.get('/api/KPIs').success(<span class="fstat-no" title="function not covered" >function(KPIs) {</span></span>
+<span class="cstat-no" title="statement not covered" >        $scope.KPIs = KPIs;</span>
+      });
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.save = <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >      delete $scope.KPI.__v;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      if (typeof $scope.KPI._id === 'undefined') {</span>
+<span class="cstat-no" title="statement not covered" >        $http.post('/api/KPIs', $scope.KPI);</span>
+<span class="cstat-no" title="statement not covered" >        Notification.success('KPI "' + $scope.KPI.name + '" was created');</span>
+      } else {
+<span class="cstat-no" title="statement not covered" >        $http.put('/api/KPIs/' + $scope.KPI._id, $scope.KPI);</span>
+<span class="cstat-no" title="statement not covered" >        Notification.success('KPI "' + $scope.KPI.name + '" was updated');</span>
+&nbsp;
+      }
+<span class="cstat-no" title="statement not covered" >      $scope.load();</span>
+<span class="cstat-no" title="statement not covered" >      $scope.config = {</span>
+        tab1: true,
+        tab2: false
+      };
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.edit = <span class="fstat-no" title="function not covered" >function(KPI) {</span></span>
+<span class="cstat-no" title="statement not covered" >      $scope.KPI = {};</span>
+<span class="cstat-no" title="statement not covered" >      $scope.KPI = KPI;</span>
+<span class="cstat-no" title="statement not covered" >      $scope.config = {</span>
+        tab1: false,
+        tab2: true
+      };
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.reset = <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >      $scope.KPI = {};</span>
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.delete = <span class="fstat-no" title="function not covered" >function(KPI, index) {</span></span>
+<span class="cstat-no" title="statement not covered" >      bootbox.confirm('Are you sure?', <span class="fstat-no" title="function not covered" >function(result) {</span></span>
+<span class="cstat-no" title="statement not covered" >        if (result) {</span>
+<span class="cstat-no" title="statement not covered" >          $http.delete('/api/KPIs/' + KPI._id).success(<span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >            $scope.KPIs.splice(index, 1);</span>
+<span class="cstat-no" title="statement not covered" >            Notification.success('KPI "' + $scope.KPI.name + '" was deleted');</span>
+&nbsp;
+          });
+        }
+      });
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.load();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.loadXEditable = <span class="fstat-no" title="function not covered" >function() {</span></span>
+&nbsp;
+      //toggle `popup` / `inline` mode
+<span class="cstat-no" title="statement not covered" >      $.fn.editable.defaults.mode = 'popup';</span>
+&nbsp;
+      //make username editable
+<span class="cstat-no" title="statement not covered" >      $('#name').editable({</span>
+        success: <span class="fstat-no" title="function not covered" >function(response, newValue) {</span>
+<span class="cstat-no" title="statement not covered" >          $scope.KPI.name = newValue;</span>
+        }
+      });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      var countries = [];</span>
+<span class="cstat-no" title="statement not covered" >      $.each({</span>
+        'BD': 'Bangladesh',
+        'BE': 'Belgium'
+      }, <span class="fstat-no" title="function not covered" >function(k, v) {</span>
+<span class="cstat-no" title="statement not covered" >        countries.push({</span>
+          id: k,
+          text: v
+        });
+      });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      $('#Activity').editable({</span>
+        title: 'Select activity',
+        source: '/api/hierarchies/list/Activity',
+        type: 'select2',
+        select2: {
+          width: 300,
+          placeholder: 'Select activity',
+          allowClear: true,
+          sortResults: <span class="fstat-no" title="function not covered" >function(results, container, query) {</span>
+<span class="cstat-no" title="statement not covered" >            if (query.term) {</span>
+              // use the built in javascript sort function
+<span class="cstat-no" title="statement not covered" >              return results.sort(<span class="fstat-no" title="function not covered" >function(a, b) {</span></span>
+<span class="cstat-no" title="statement not covered" >                if (a.text.length &gt; b.text.length) {</span>
+<span class="cstat-no" title="statement not covered" >                  return 1;</span>
+                } else <span class="cstat-no" title="statement not covered" >if (a.text.length &lt; b.text.length) {</span>
+<span class="cstat-no" title="statement not covered" >                  return -1;</span>
+                } else {
+<span class="cstat-no" title="statement not covered" >                  return 0;</span>
+                }
+              });
+            }
+<span class="cstat-no" title="statement not covered" >            return results;</span>
+          }
+        },
+        success: <span class="fstat-no" title="function not covered" >function(response, newValue) {</span>
+<span class="cstat-no" title="statement not covered" >          $scope.KPI.activity = newValue;</span>
+&nbsp;
+&nbsp;
+        }
+      });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      $('#Context').editable({</span>
+        title: 'Select context',
+        source: '/api/hierarchies/list/Context',
+        type: 'select2',
+        select2: {
+          width: 300,
+          placeholder: 'Select context',
+          allowClear: true
+        },
+        success: <span class="fstat-no" title="function not covered" >function(response, newValue) {</span>
+<span class="cstat-no" title="statement not covered" >          $scope.KPI.context = newValue;</span>
+&nbsp;
+&nbsp;
+        }
+      });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      $('#Axe').editable({</span>
+        title: 'Select axe',
+        source: countries,
+        type: 'select2',
+        select2: {
+          width: 300,
+          placeholder: 'Select axe',
+          allowClear: true
+        },
+        success: <span class="fstat-no" title="function not covered" >function(response, newValue) {</span>
+<span class="cstat-no" title="statement not covered" >          $scope.KPI.axe = newValue;</span>
+&nbsp;
+&nbsp;
+        }
+      });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      $('#Category').editable({</span>
+        title: 'Select Category',
+        type: 'checklist',
+        placement: 'right',
+        limit: 1,
+        source: categoryKPI,
+        success: <span class="fstat-no" title="function not covered" >function(response, newValue) {</span>
+<span class="cstat-no" title="statement not covered" >          $scope.KPI.category = newValue;</span>
+        }
+      });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      $('#Tags').editable({</span>
+        title: 'Select tags',
+        type: 'select2',
+        select2: {
+          tags: ['html', 'javascript', 'css', 'ajax'],
+          tokenSeparators: [',', ' ']
+        },
+        inputclass: 'input-large',
+        success: <span class="fstat-no" title="function not covered" >function(response, newValue) {</span>
+<span class="cstat-no" title="statement not covered" >          $scope.KPI.tags = newValue;</span>
+        }
+      });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      $('#Action').editable({</span>
+        title: 'Select action',
+        type: 'checklist',
+        placement: 'right',
+        limit: 1,
+        source: actionKPI,
+        success: <span class="fstat-no" title="function not covered" >function(response, newValue) {</span>
+<span class="cstat-no" title="statement not covered" >          $scope.KPI.action = newValue;</span>
+        }
+      });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      $('#metricTaskField').editable({</span>
+        title: 'Select field of task',
+        type: 'checklist',
+        placement: 'right',
+        limit: 1,
+        source: metricTaskFields,
+        success: <span class="fstat-no" title="function not covered" >function(response, newValue) {</span>
+<span class="cstat-no" title="statement not covered" >          $scope.KPI.metricTaskField = newValue;</span>
+        }
+      });
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      $('#refMetricTaskField').editable({</span>
+        title: 'Select field of task for reference',
+        type: 'checklist',
+        placement: 'right',
+        limit: 1,
+        source: metricTaskFields,
+        success: <span class="fstat-no" title="function not covered" >function(response, newValue) {</span>
+<span class="cstat-no" title="statement not covered" >          $scope.KPI.refMetricTaskField = newValue;</span>
+        }
+      });
+&nbsp;
+      //make username editable
+<span class="cstat-no" title="statement not covered" >      $('#metricTaskValues').editable({</span>
+        success: <span class="fstat-no" title="function not covered" >function(response, newValue) {</span>
+<span class="cstat-no" title="statement not covered" >          $scope.KPI.metricTaskValues = newValue;</span>
+        }
+      });
+&nbsp;
+&nbsp;
+      //make username editable
+<span class="cstat-no" title="statement not covered" >      $('#refMetricTaskValues').editable({</span>
+        success: <span class="fstat-no" title="function not covered" >function(response, newValue) {</span>
+<span class="cstat-no" title="statement not covered" >          $scope.KPI.refMetricTaskValues = newValue;</span>
+        }
+      });
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      $('#groupBy').editable({</span>
+        title: 'Select groupBy',
+        type: 'checklist',
+        placement: 'right',
+        limit: 1,
+        source: groupByKPI,
+        success: <span class="fstat-no" title="function not covered" >function(response, newValue) {</span>
+<span class="cstat-no" title="statement not covered" >          $scope.KPI.groupBy = newValue;</span>
+        }
+      });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      $('#refresh').editable({</span>
+        title: 'Select refresh interval (days)',
+        type: 'number',
+        inputclass: 'input-small',
+        success: <span class="fstat-no" title="function not covered" >function(response, newValue) {</span>
+<span class="cstat-no" title="statement not covered" >          $scope.KPI.refresh = newValue;</span>
+        }
+      });
+&nbsp;
+    };
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+  });
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Nov 19 2017 16:56:34 GMT+0100 (Paris, Madrid)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

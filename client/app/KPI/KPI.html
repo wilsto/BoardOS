@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-md-3">
                 <img src="assets/images/kpi.jpg" class="img-responsive" alt="" />
-                <div class="portlet sale-summary">
+                <div class="portlet sale-summary"  ng-if="type">
                     <div class="portlet-body" style="padding-bottom:0">
                         <ul class="list-unstyled" style="padding-bottom:0">
                             <li style="padding-top:10px;padding-bottom:0">
@@ -35,7 +35,7 @@
                 </div>
             </div>
             <div class="col-md-9">
-                <h1 style="margin-top:-2px;margin-bottom:15px">{{KPI.name}} <a href="/{{type}}/{{typeid}}"><small class="text-primary" style="padding-left:35px;font-size:13px"> Go Back to your {{type}}</small></a></h1>
+                <h1 style="margin-top:-2px;margin-bottom:15px">{{KPI.name}} <a href="/{{type}}/{{typeid}}"><small class="text-primary" style="padding-left:35px;font-size:13px" ng-if="type"> Go Back to your {{type}}</small></a></h1>
                 <div class="row">
                     <div class="col-md-8 profile-info">
                         <ul class="list list-inline">
@@ -50,7 +50,7 @@
                                 <br/>
                                 <b class="text-primary">KPI = </b><span ng-bind-html="calculation"></span>
                                 <br/>
-                                <b class="text-warning" ng-if='where'> only for </b><span ng-bind-html="where"></span>
+                                <b class="text-warning" ng-if="where"> only for </b><span ng-bind-html="where"></span>
                             </li>
                         </ul>
                     </div>
@@ -64,13 +64,16 @@
                 <!--end row-->
             </div>
         </div>
-        <tabset>
+        <tabset ng-if="type">
             <!--tab Tasks-->
             <tab ng-if="KPI._id" active="true">
                 <tab-heading>
                     Tasks
                     <span class="badge badge-default"> {{tasksList.length}}</span>
                 </tab-heading>
+                <div class="isloading" ng-if="!tasksList">
+                  <br/><img src="assets/images/horizontal-loader.gif">
+                </div>
                 <div ng-if="tasksList">
                   <div class="actions pull-right" style="padding-right:15px">
                       <div class="btn-group">
@@ -117,6 +120,7 @@
                       Filter :
                       <input style="width:100%" ng-model="filters.searchText"  class="form-control">
                   </div>
+
                   <table class="table table-striped table-bordered table-hover" id="sample_4">
                       <thead>
                           <tr>
@@ -220,8 +224,8 @@
                               </td>
                               <td style="text-align:right" ng-if="KPI.action!=='comparedate'" >{{task.metrics[task.metrics.length - 1][KPI.metricTaskField] }}</td>
                               <td style="text-align:right"  ng-if="KPI.action==='comparedate'">{{task.metrics[task.metrics.length - 1][KPI.metricTaskField] | date:'mediumDate'}}</td>
-                              <td style="text-align:right"  ng-if="KPI.action!=='comparedate'">{{task.metrics[task.metrics.length - 1][KPI.refMetricTaskField] }}</tdstyle>
-                              <td style="text-align:right"  ng-if="KPI.action==='comparedate'">{{task.metrics[task.metrics.length - 1][KPI.refMetricTaskField] | date:'mediumDate'}}</tdstyle>
+                              <td style="text-align:right"  ng-if="KPI.action!=='comparedate'">{{task.metrics[task.metrics.length - 1][KPI.refMetricTaskField] }}</td>
+                              <td style="text-align:right"  ng-if="KPI.action==='comparedate'">{{task.metrics[task.metrics.length - 1][KPI.refMetricTaskField] | date:'mediumDate'}}</td>
                               <!-- <td ng-if="page === 'dashboard'" >Goals </td>
                           <td ng-if="page === 'dashboard'" >Alerts </td> -->
                           </tr>
@@ -231,31 +235,6 @@
 
                 </div>
             </tab>
-            <!--tab Dashboard
-            <tab ng-if="KPI._id">
-                <tab-heading>
-                    Dashboards
-                    <span class="badge badge-default"> {{KPI.dashboards.length}}</span>
-                </tab-heading>
-                <div dashboard-tab dashboard-type="dashboards" dashboard-data="KPI" ng-if="KPI"></div>
-            </tab>
-            tab Metrics
-            <tab ng-if="KPI._id">
-                <tab-heading>
-                    Metrics
-                    <span class="badge badge-default"> {{KPI.metrics.length}}</span>
-                </tab-heading>
-                <div dashboard-tab dashboard-type="metrics" dashboard-data="KPI" ng-if="KPI"></div>
-            </tab>
-            tab Actors
-            <tab ng-if="KPI._id">
-                <tab-heading>
-                    Actors
-                    <span class="badge badge-default">{{KPI.actors.length}}</span>
-                </tab-heading>
-                <div dashboard-tab dashboard-type="actors" dashboard-data="KPI" ng-if="KPI"></div>
-            </tab>
-            tab Help-->
             <tab ng-if="KPI._id">
                 <tab-heading>
                     Help

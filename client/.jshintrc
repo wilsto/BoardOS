@@ -40,6 +40,7 @@
     "zingchart": true,
     "d3": true,
     "X2JS": true,
-    "bootbox": true
+    "bootbox": true,
+    "getJSONFixture": true
   }
 }

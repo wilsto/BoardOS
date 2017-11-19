@@ -1,0 +1,466 @@
+{
+  "_id": "5a0da5df40576e0004cad609",
+  "context": "FONCTIONNEMENT.CBI.PMO.2017.11.16",
+  "activity": "DCLIC.CBI.MANAGEMENT.ORGANISATION.ABS",
+  "comments": [{
+    "auto": true,
+    "user": null,
+    "date": 1510843726261,
+    "text": "create task"
+  }, {
+    "user": null,
+    "date": "2017-11-16T14:49:08.089Z",
+    "auto": true,
+    "text": "set name to Mise à jour ABS MAANGEMENT.RESSOURCES.EAD"
+  }, {
+    "user": null,
+    "date": "2017-11-16T14:50:02.639Z",
+    "auto": true,
+    "text": "set activity to DCLIC.CBI.MANAGEMENT.PROCESS"
+  }, {
+    "user": null,
+    "date": "2017-11-16T14:50:22.563Z",
+    "auto": true,
+    "text": "set name to Mise à jour ABS MANAGEMENT.RESSOURCES.EAD"
+  }, {
+    "user": null,
+    "date": "2017-11-16T14:50:45.197Z",
+    "auto": true,
+    "text": "set context to FONCTIONNEMENT.CBI.PMO.2017.11.16"
+  }, {
+    "user": null,
+    "date": "2017-11-16T14:50:53.976Z",
+    "auto": true,
+    "text": "set name to Mise à jour ABS PMO"
+  }, {
+    "user": null,
+    "date": "2017-11-16T14:50:59.960Z",
+    "auto": true,
+    "text": "set targetstartDate to Nov 16, 2017              [metrics:0]"
+  }, {
+    "user": null,
+    "date": "2017-11-16T14:51:01.919Z",
+    "auto": true,
+    "text": "set targetEndDate to Nov 16, 2017              [metrics:0]"
+  }, {
+    "user": null,
+    "date": "2017-11-16T14:51:07.570Z",
+    "auto": true,
+    "text": "set targetLoad to 0.1              [metrics:0]"
+  }, {
+    "user": null,
+    "date": "2017-11-16T14:51:09.816Z",
+    "auto": true,
+    "text": "set trust to 100              [metrics:0]"
+  }, {
+    "user": {
+      "_id": "549800f633fca76c16fca2af",
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png"
+    },
+    "date": "2017-11-16T16:01:31.642Z",
+    "auto": true,
+    "text": "set userSatisfaction to 100              [metrics:0]"
+  }, {
+    "user": {
+      "_id": "549800f633fca76c16fca2af",
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png"
+    },
+    "date": "2017-11-16T16:01:33.136Z",
+    "auto": true,
+    "text": "set actorSatisfaction to 100              [metrics:0]"
+  }, {
+    "user": {
+      "_id": "549800f633fca76c16fca2af",
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png"
+    },
+    "date": "2017-11-16T16:01:38.300Z",
+    "auto": true,
+    "text": "set deliverableStatus to 100              [metrics:0]"
+  }, {
+    "text": "fdg",
+    "auto": false,
+    "date": "2017-11-19T15:43:38.243Z",
+    "user": {
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png",
+      "_id": "549800f633fca76c16fca2af"
+    }
+  }, {
+    "text": "set reworkReason to Internal              [metrics:1]",
+    "auto": true,
+    "date": "2017-11-19T15:43:38.244Z",
+    "user": {
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png",
+      "_id": "549800f633fca76c16fca2af"
+    }
+  }, {
+    "text": "set targetstartDate to Nov 19, 2017              [metrics:1]",
+    "auto": true,
+    "date": "2017-11-19T15:43:38.244Z",
+    "user": {
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png",
+      "_id": "549800f633fca76c16fca2af"
+    }
+  }, {
+    "text": "set targetEndDate to Nov 19, 2017              [metrics:1]",
+    "auto": true,
+    "date": "2017-11-19T15:43:38.244Z",
+    "user": {
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png",
+      "_id": "549800f633fca76c16fca2af"
+    }
+  }, {
+    "text": "set targetLoad to 1              [metrics:1]",
+    "auto": true,
+    "date": "2017-11-19T15:43:38.244Z",
+    "user": {
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png",
+      "_id": "549800f633fca76c16fca2af"
+    }
+  }, {
+    "text": "set trust to undefined              [metrics:1]",
+    "auto": true,
+    "date": "2017-11-19T15:43:38.244Z",
+    "user": {
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png",
+      "_id": "549800f633fca76c16fca2af"
+    }
+  }, {
+    "text": "set progress to 0              [metrics:1]",
+    "auto": true,
+    "date": "2017-11-19T15:43:38.244Z",
+    "user": {
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png",
+      "_id": "549800f633fca76c16fca2af"
+    }
+  }, {
+    "text": "set status to Not Started              [metrics:1]",
+    "auto": true,
+    "date": "2017-11-19T15:43:38.244Z",
+    "user": {
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png",
+      "_id": "549800f633fca76c16fca2af"
+    }
+  }, {
+    "text": "set trust to 1              [metrics:1]",
+    "auto": true,
+    "date": "2017-11-19T15:43:57.187Z",
+    "user": {
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png",
+      "_id": "549800f633fca76c16fca2af"
+    }
+  }, {
+    "user": {
+      "_id": "549800f633fca76c16fca2af",
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png"
+    },
+    "date": "2017-11-19T15:44:09.074Z",
+    "auto": true,
+    "text": "set status to Finished              [metrics:1]"
+  }, {
+    "user": {
+      "_id": "549800f633fca76c16fca2af",
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png"
+    },
+    "date": "2017-11-19T15:44:09.074Z",
+    "auto": true,
+    "text": "set progress to 100              [metrics:1]"
+  }, {
+    "user": {
+      "_id": "549800f633fca76c16fca2af",
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png"
+    },
+    "date": "2017-11-19T15:44:09.074Z",
+    "auto": true,
+    "text": "set startDate to Nov 19, 2017              [metrics:1]"
+  }, {
+    "user": {
+      "_id": "549800f633fca76c16fca2af",
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png"
+    },
+    "date": "2017-11-19T15:44:09.074Z",
+    "auto": true,
+    "text": "set timeSpent to 1              [metrics:1]"
+  }, {
+    "text": "0",
+    "auto": false,
+    "date": "2017-11-19T15:47:26.408Z",
+    "user": {
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png",
+      "_id": "549800f633fca76c16fca2af"
+    }
+  }, {
+    "text": "set reworkReason to External              [metrics:2]",
+    "auto": true,
+    "date": "2017-11-19T15:47:26.408Z",
+    "user": {
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png",
+      "_id": "549800f633fca76c16fca2af"
+    }
+  }, {
+    "text": "set targetstartDate to Nov 19, 2017              [metrics:2]",
+    "auto": true,
+    "date": "2017-11-19T15:47:26.408Z",
+    "user": {
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png",
+      "_id": "549800f633fca76c16fca2af"
+    }
+  }, {
+    "text": "set targetEndDate to Nov 19, 2017              [metrics:2]",
+    "auto": true,
+    "date": "2017-11-19T15:47:26.408Z",
+    "user": {
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png",
+      "_id": "549800f633fca76c16fca2af"
+    }
+  }, {
+    "text": "set targetLoad to 100              [metrics:2]",
+    "auto": true,
+    "date": "2017-11-19T15:47:26.408Z",
+    "user": {
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png",
+      "_id": "549800f633fca76c16fca2af"
+    }
+  }, {
+    "text": "set trust to 100              [metrics:2]",
+    "auto": true,
+    "date": "2017-11-19T15:47:26.408Z",
+    "user": {
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png",
+      "_id": "549800f633fca76c16fca2af"
+    }
+  }, {
+    "text": "set progress to 0              [metrics:2]",
+    "auto": true,
+    "date": "2017-11-19T15:47:26.408Z",
+    "user": {
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png",
+      "_id": "549800f633fca76c16fca2af"
+    }
+  }, {
+    "text": "set status to Not Started              [metrics:2]",
+    "auto": true,
+    "date": "2017-11-19T15:47:26.408Z",
+    "user": {
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png",
+      "_id": "549800f633fca76c16fca2af"
+    }
+  }, {
+    "user": {
+      "_id": "549800f633fca76c16fca2af",
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png"
+    },
+    "date": "2017-11-19T15:47:35.382Z",
+    "auto": true,
+    "text": "set status to Finished              [metrics:2]"
+  }, {
+    "user": {
+      "_id": "549800f633fca76c16fca2af",
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png"
+    },
+    "date": "2017-11-19T15:47:35.382Z",
+    "auto": true,
+    "text": "set progress to 100              [metrics:2]"
+  }, {
+    "user": {
+      "_id": "549800f633fca76c16fca2af",
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png"
+    },
+    "date": "2017-11-19T15:47:35.382Z",
+    "auto": true,
+    "text": "set startDate to Nov 19, 2017              [metrics:2]"
+  }, {
+    "user": {
+      "_id": "549800f633fca76c16fca2af",
+      "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png"
+    },
+    "date": "2017-11-19T15:47:35.382Z",
+    "auto": true,
+    "text": "set timeSpent to 100              [metrics:2]"
+  }],
+  "metrics": [{
+    "deliverableStatus": 100,
+    "actorSatisfaction": 100,
+    "userSatisfaction": 100,
+    "trust": 100,
+    "targetLoad": 0.15,
+    "targetEndDate": "2017-11-15T23:00:00.000Z",
+    "targetstartDate": "2017-11-15T23:00:00.000Z",
+    "status": "Finished",
+    "timeSpent": 0.15,
+    "progress": 100,
+    "lateStart": false,
+    "lateEnd": false,
+    "startDate": "2017-11-15T23:00:00.000Z",
+    "endDate": "2017-11-15T23:00:00.000Z",
+    "duration": 0.15,
+    "delay": 0,
+    "projectedWorkload": 0.15,
+    "progressStatus": "On Time"
+  }, {
+    "timeSpent": 1,
+    "startDate": "2017-11-18T23:00:00.000Z",
+    "lateEnd": false,
+    "lateStart": false,
+    "reworkReason": "Internal",
+    "targetstartDate": "2017-11-18T23:00:00.000Z",
+    "targetEndDate": "2017-11-18T23:00:00.000Z",
+    "targetLoad": 1,
+    "trust": 1,
+    "progress": 100,
+    "status": "Finished",
+    "endDate": "2017-11-18T23:00:00.000Z",
+    "duration": 2,
+    "delay": 1,
+    "projectedWorkload": 1.15,
+    "progressStatus": "Late"
+  }, {
+    "timeSpent": 100,
+    "startDate": "2017-11-18T23:00:00.000Z",
+    "lateEnd": false,
+    "lateStart": false,
+    "reworkReason": "External",
+    "targetstartDate": "2017-11-18T23:00:00.000Z",
+    "targetEndDate": "2017-11-18T23:00:00.000Z",
+    "targetLoad": 100,
+    "trust": 100,
+    "progress": 100,
+    "status": "Finished",
+    "endDate": "2017-11-18T23:00:00.000Z",
+    "duration": 2,
+    "delay": 1,
+    "projectedWorkload": 101.15,
+    "progressStatus": "Late"
+  }],
+  "todos": [],
+  "name": "Mise à jour ABS PMO",
+  "kpis": [{
+    "constraint": "Cost",
+    "category": "Goal",
+    "name": "Deliver On Budget",
+    "_id": "54bd884f65068d8c1d0f24f2",
+    "calcul": {
+      "task": 0
+    },
+    "description": "<p>This indicator shows us our performance to be in our budget engagement. It is the proportion of previsionnal workload on real workload. <strong class=\"text-primary\">Value of 100% is better.</strong></p>\n<ul>\n    <li>Lower means overcost <span class=\"text-danger\"><i class=\"fa fa-frown-o\" ></i> </span>or underestimation of budget <span class=\"text-danger\"><i class=\"fa fa-frown-o\" ></i></span></li>\n    <li>Higher means undercost <span class=\"text-success\"><i class=\"fa fa-smile-o\" ></i> </span>or overestimation of budget <span class=\"text-danger\"><i class=\"fa fa-frown-o\" ></i></span></li>\n</ul>",
+    "suggestion": "<p>Assess if the number of task is meaningfull (if not, do nothing), if yes, please :</p>\n<ul>\n    <li>Determinate accurately the affected peremiter</li>\n    <li>Review the root causes that affects your budget</li>\n</ul>"
+  }, {
+    "constraint": "Quality",
+    "category": "Goal",
+    "name": "Actor Satisfaction",
+    "_id": "25c68de0e39744701ae1d721",
+    "calcul": {
+      "task": 100
+    },
+    "description": "Understanding actors about motivation and job satisfaction will help us offer better deliverables and services every day. Are you satisfied with yout daily task envirnoment ? Do you enjoy the workplace culture and feel aligned with your organization’s goals? <strong class=\"text-primary\">Higher value is better.</strong>",
+    "suggestion": "<p>Assess if the value is low and meaningfull (if not, do nothing), if yes, please :</p>\n<ul>\n    <li>Review with the actor what were his expectations to realize his task </li>\n    <li>Review with the actor how to better define and explicit these expectations for next deliverables </li>\n</ul>"
+  }, {
+    "constraint": "Quality",
+    "category": "Goal",
+    "name": "Confidence Overview",
+    "_id": "59314d7c8d885816b8a7901a",
+    "calcul": {
+      "task": 67
+    },
+    "description": "Percentage of confidence to execute task with respect in terms of quality, cost, time. <strong class=\"text-primary\">Higher value is better.</strong>",
+    "suggestion": "<p>Assess if the value is low and meaningfull (if not, do nothing), if yes, please :</p>\n<ul>\n    <li>Review with the customer what were his expectations in quality, cost or schedule </li>\n    <li>Review with the customer how to better define and explicit these expectations for next deliverables </li>\n</ul>"
+  }, {
+    "constraint": "Quality",
+    "category": "Goal",
+    "name": "Deliver In Full",
+    "_id": "58f3aa75fcb29c379c3937ad",
+    "calcul": {
+      "task": 100
+    },
+    "description": "Percentage of orders which all of the items are received by customer in the quantities committed. <strong class=\"text-primary\">Higher value is better.</strong>",
+    "suggestion": "<p>Assess if the value is low and meaningfull (if not, do nothing), if yes, please :</p>\n<ul>\n    <li>Review with the customer what were his expectations in quality, cost or schedule </li>\n    <li>Review with the customer how to better define and explicit these expectations for next deliverables </li>\n</ul>"
+  }, {
+    "constraint": "Quality",
+    "category": "Goal",
+    "name": "External Defect Prevention",
+    "_id": "26c3aaa21a1edf0c1d54ddb9",
+    "calcul": {
+      "task": 0
+    },
+    "description": "<p>To err is human but defect prevention practices enhance the ability to learn from those errors and, in this case, learn from the <u>mistakes of external actors</u>. <strong class=\"text-primary\">Higher value is better.</strong> <span class=\"text-warning\">See full description on Help tab & KPI Section</span> </p>",
+    "suggestion": "<p>Assess if the value is low and meaningfull (if not, do nothing), if yes, please :</p>\n<ul>\n    <li>Review the communication with the project team and upper management to be sure to be agree on the same deliverable</li>\n    <li>Review the preparation phase to be sure to not forget things that force you to rework the task (prerequisite list)</li>\n</ul>"
+  }, {
+    "constraint": "Quality",
+    "category": "Goal",
+    "name": "Internal Defect Prevention",
+    "_id": "54c3aaa37a1edf0c1d60ddb2",
+    "calcul": {
+      "task": 0
+    },
+    "description": "<p>To err is human but defect prevention practices enhance the ability to learn from those errors and, in this case, learn from <u> our internal mistakes </u>. <strong class=\"text-primary\">Higher value is better.</strong> <span class=\"text-warning\">See full description on Help tab & KPI Section</span> </p>",
+    "suggestion": "<p>Assess if the value is low and meaningfull (if not, do nothing), if yes, please :</p>\n<ul>\n    <li>Review the validation phase to be sure of the quality of the deliverable (Quality Checks)</li>\n</ul>"
+  }, {
+    "constraint": "Quality",
+    "category": "Goal",
+    "name": "User Satisfaction",
+    "_id": "54c39de0e39744701ae1d709",
+    "calcul": {
+      "task": 100
+    },
+    "description": "Understanding our customers and clients will help us offer better deliverables and services every day. Do customers feel like you offer value and quality? <strong class=\"text-primary\">Higher value is better.</strong>",
+    "suggestion": "<p>Assess if the value is low and meaningfull (if not, do nothing), if yes, please :</p>\n<ul>\n    <li>Review with the customer what were his expectations in quality, cost or schedule </li>\n    <li>Review with the customer how to better define and explicit these expectations for next deliverables </li>\n</ul>"
+  }, {
+    "constraint": "Time",
+    "category": "Goal",
+    "name": "Deliver On Time",
+    "_id": "5471fa36f54c90d408453560",
+    "calcul": {
+      "task": 0
+    },
+    "description": "<p>This indicator shows us our performance to be on time about our engagement and prevision about timeline. It is the proportion of tasks that has been delivered on time. <span class=\"text-primary\"><strong>Higher value is better.</strong></span></p>",
+    "suggestion": "<p>Assess if the number of delayed task is meaningfull (if not, do nothing), if yes, please :</p>\n<ul>\n    <li>Determinate accurately the affected peremiter&nbsp;</li>\n    <li>Review the root causes that affects your delivery timing</li>\n</ul>"
+  }, {
+    "constraint": "Time",
+    "category": "Goal",
+    "name": "Effective Cycle Time",
+    "_id": "54c3cad886548f700ba51199",
+    "calcul": {
+      "task": 5057
+    },
+    "description": "<p>Production Time adjusted for all the factors that reduce Work Time Available and Productivity : Interruptions, Multi-tasking, Task zapping.  <span class=\"text-primary\"><strong>Higher value is better.</strong></span></p>\n<ul>\n    <li>Lower means Interruptions, Multi-tasking, Task zapping for actors <span class=\"text-danger\"><i class=\"fa fa-frown-o\" ></i> </span>\n</li>\n    <li>Higher means capacity to put multiple actors in parallel on a same task <span class=\"text-success\"><i class=\"fa fa-smile-o\" ></i> </span></li>\n</ul>",
+    "suggestion": "<p>Assess if the value is low and meaningfull (if not, do nothing), if yes, please :</p>\n<ul>\n    <li>Review the planning to reduce the number of multiple tasks to an actor</li>\n    <li>Review the preparation phase to be sure to not forget things that force you to interrupt the task (prerequisite list)</li>\n</ul>"
+  }],
+  "alerts": [{
+    "constraint": "Cost",
+    "category": "Alert",
+    "name": "Predicted OverCharge",
+    "_id": "54c3d210fb9b4ec40ba9422f",
+    "calcul": {
+      "task": 1
+    },
+    "description": "This alert indicates that if the dynamic of the task remains the same, the final workload will be superior as target one.<strong class=\"text-primary\">Value 0 is better.</strong>",
+    "suggestion": "<p>Assess if the delta is meaningfull (if not, do nothing), if yes, please :</p>\n<ul>\n    <li>Review if the new workload is compatible with your planning</li>\n    <li>Review if the new workload is compatible with the planning or budget of the project</li>\n    <li>Assess if the new workload is acceptable (if not, review acceptables deliverables), if yes, adjust budget planning of project and yours</li>\n</ul>"
+  }, {
+    "constraint": "Time",
+    "category": "Alert",
+    "name": "Delivery Overdue",
+    "_id": "58f38c38fcb29c379c3937ac",
+    "calcul": {
+      "task": 1
+    },
+    "description": "This alert indicates that if the dynamic of the task remains the same, the final workload will be superior as target one.<strong class=\"text-primary\">Value 0 is better.</strong>",
+    "suggestion": "<p>Assess if the delta is meaningfull (if not, do nothing), if yes, please :</p>\n<ul>\n    <li>Review if the new workload is compatible with your planning</li>\n    <li>Review if the new workload is compatible with the planning or budget of the project</li>\n    <li>Assess if the new workload is acceptable (if not, review acceptables deliverables), if yes, adjust budget planning of project and yours</li>\n</ul>"
+  }],
+  "followers": [],
+  "actors": [{
+    "_id": "549800f633fca76c16fca2af",
+    "name": "Willy Stophe",
+    "groups": ["CBI-PMO"],
+    "avatar": "assets/images/avatars/549800f633fca76c16fca2af.png"
+  }],
+  "anomalies": [],
+  "previousAnomalies": [],
+  "previousTasks": [],
+  "actionPlan": false,
+  "nextTasks": [],
+  "reviewPeriodic": false,
+  "reviewTask": false,
+  "active": false,
+  "modifdate": "2017-11-19T15:47:45.000Z",
+  "date": "2017-11-16T14:48:46.261Z",
+  "__v": 12
+}
