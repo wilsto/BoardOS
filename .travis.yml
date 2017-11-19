@@ -7,5 +7,3 @@ before_script:
 services: mongodb
 notifications:
     slack: boardos:p9RZPB3AkqM7N5TfAlHqQpTl
-after_success:
-  - coveralls
