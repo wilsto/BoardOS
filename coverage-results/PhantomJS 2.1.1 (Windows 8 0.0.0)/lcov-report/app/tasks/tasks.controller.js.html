@@ -20,14 +20,14 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">76.8% </span>
+        <span class="strong">73.87% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>96/125</span>
+        <span class='fraction'>82/111</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">74.16% </span>
+        <span class="strong">72.94% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>66/89</span>
+        <span class='fraction'>62/85</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">63.16% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>12/19</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">76.8% </span>
+        <span class="strong">73.87% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>96/125</span>
+        <span class='fraction'>82/111</span>
       </div>
     </div>
   </div>
@@ -231,23 +231,7 @@
 186
 187
 188
-189
-190
-191
-192
-193
-194
-195
-196
-197
-198
-199
-200
-201
-202
-203
-204
-205</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+189</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
@@ -283,9 +267,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">74×</span>
 <span class="cline-any cline-yes">413×</span>
-<span class="cline-any cline-yes">59×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">413×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">413×</span>
 <span class="cline-any cline-yes">413×</span>
@@ -301,17 +282,6 @@
 <span class="cline-any cline-yes">413×</span>
 <span class="cline-any cline-yes">413×</span>
 <span class="cline-any cline-yes">413×</span>
-<span class="cline-any cline-yes">413×</span>
-<span class="cline-any cline-yes">59×</span>
-<span class="cline-any cline-yes">59×</span>
-<span class="cline-any cline-yes">59×</span>
-<span class="cline-any cline-yes">59×</span>
-<span class="cline-any cline-yes">59×</span>
-<span class="cline-any cline-yes">59×</span>
-<span class="cline-any cline-yes">59×</span>
-<span class="cline-any cline-yes">59×</span>
-<span class="cline-any cline-yes">59×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">413×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -346,7 +316,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">30×</span>
-<span class="cline-any cline-yes">30×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">30×</span>
@@ -354,7 +323,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15×</span>
-<span class="cline-any cline-yes">59×</span>
 <span class="cline-any cline-yes">59×</span>
 <span class="cline-any cline-yes">59×</span>
 <span class="cline-any cline-yes">229×</span>
@@ -486,9 +454,6 @@ angular.module('boardOsApp')
       var searchStatus = ($scope.searchStatus) ? $scope.searchStatus.toLowerCase() : '';
 &nbsp;
       return _.filter(data, function(task) {
-        if (task.name === 'No Name Defined - This is an Error') {
-          console.log('task', task);
-        }
         var lastMetric = task.metrics[task.metrics.length - 1];
 &nbsp;
         var blnActor = (searchActor.length === 0) ? true : false;
@@ -505,17 +470,6 @@ angular.module('boardOsApp')
         var blnReview = ($scope.blnReview.length &gt; 0) ? <span class="branch-0 cbranch-no" title="branch not covered" >task.taskIcon </span>: true;
         var blnMissing = ($scope.blnSuffix.length &gt; 0) ? <span class="branch-0 cbranch-no" title="branch not covered" >task.taskSuffIcon </span>: true;
         var blnReturn = blnName &amp;&amp; blnActor &amp;&amp; blnStatus &amp;&amp; blnContext &amp;&amp; blnStart &amp;&amp; blnEnd &amp;&amp; blnMissing &amp;&amp; blnReview;
-        if (task.name === 'No Name Defined - This is an Error') {
-          console.log('blnName', blnName);
-          console.log('blnActor', blnActor);
-          console.log('blnStatus', blnStatus);
-          console.log('blnContext', blnContext);
-          console.log('blnStart', blnStart);
-          console.log('blnEnd', blnEnd);
-          console.log('blnMissing', blnMissing);
-          console.log('blnReview', blnReview);
-          console.log('blnReturn', blnReturn);
-        }
         return blnReturn;
       });
     };
@@ -550,7 +504,6 @@ angular.module('boardOsApp')
 &nbsp;
         // Suffix task once
         $scope.suffixTask($scope.alltasks);
-        console.log('$scope.alltasks', $scope.alltasks.length);
 &nbsp;
         //Filter and Order
         $scope.reloadTasks();
@@ -559,7 +512,6 @@ angular.module('boardOsApp')
 &nbsp;
     $scope.reloadTasks = function() {
       $scope.tasks = $scope.filterTasks($scope.alltasks);
-      console.log('$scope.tasks', $scope.tasks.length);
       $scope.tasks = _.sortBy($scope.tasks, function(task) {
         switch ($scope.orderByField) {
           case 'date':
@@ -661,7 +613,7 @@ angular.module('boardOsApp')
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sat Nov 18 2017 14:30:14 GMT+0100 (Paris, Madrid)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Nov 19 2017 15:20:08 GMT+0100 (Paris, Madrid)
 </div>
 </div>
 <script src="../../prettify.js"></script>

@@ -9,7 +9,7 @@ module.exports = function(config) {
     // testing framework to use (jasmine/mocha/qunit/...)
     frameworks: ['jasmine'],
 
-    reporters: ['progress', 'growl', 'html', 'coverage'],
+    reporters: ['progress', 'growl', 'html', 'coverage', 'coveralls'],
 
     // the default configuration
     htmlReporter: {
@@ -93,7 +93,15 @@ module.exports = function(config) {
       'client/app/**/*.js': 'coverage',
       'client/components/**/*.js': 'coverage'
     },
-
+    plugins: [
+      'karma-jasmine',
+      'karma-html2js-preprocessor',
+      'karma-coverage',
+      'karma-coveralls',
+      'karma-phantomjs-launcher',
+      'karma-growl-reporter',
+      'karma-html-reporter'
+    ],
     coverageReporter: {
       reporters: [{
         type: 'html',

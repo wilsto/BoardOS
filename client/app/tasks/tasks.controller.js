@@ -33,9 +33,6 @@ angular.module('boardOsApp')
       var searchStatus = ($scope.searchStatus) ? $scope.searchStatus.toLowerCase() : '';
 
       return _.filter(data, function(task) {
-        if (task.name === 'No Name Defined - This is an Error') {
-          console.log('task', task);
-        }
         var lastMetric = task.metrics[task.metrics.length - 1];
 
         var blnActor = (searchActor.length === 0) ? true : false;
@@ -52,17 +49,6 @@ angular.module('boardOsApp')
         var blnReview = ($scope.blnReview.length > 0) ? task.taskIcon : true;
         var blnMissing = ($scope.blnSuffix.length > 0) ? task.taskSuffIcon : true;
         var blnReturn = blnName && blnActor && blnStatus && blnContext && blnStart && blnEnd && blnMissing && blnReview;
-        if (task.name === 'No Name Defined - This is an Error') {
-          console.log('blnName', blnName);
-          console.log('blnActor', blnActor);
-          console.log('blnStatus', blnStatus);
-          console.log('blnContext', blnContext);
-          console.log('blnStart', blnStart);
-          console.log('blnEnd', blnEnd);
-          console.log('blnMissing', blnMissing);
-          console.log('blnReview', blnReview);
-          console.log('blnReturn', blnReturn);
-        }
         return blnReturn;
       });
     };
@@ -97,7 +83,6 @@ angular.module('boardOsApp')
 
         // Suffix task once
         $scope.suffixTask($scope.alltasks);
-        console.log('$scope.alltasks', $scope.alltasks.length);
 
         //Filter and Order
         $scope.reloadTasks();
@@ -106,7 +91,6 @@ angular.module('boardOsApp')
 
     $scope.reloadTasks = function() {
       $scope.tasks = $scope.filterTasks($scope.alltasks);
-      console.log('$scope.tasks', $scope.tasks.length);
       $scope.tasks = _.sortBy($scope.tasks, function(task) {
         switch ($scope.orderByField) {
           case 'date':
