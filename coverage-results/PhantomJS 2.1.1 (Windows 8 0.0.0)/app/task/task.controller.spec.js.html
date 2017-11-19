@@ -22,7 +22,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>34/34</span>
+        <span class='fraction'>46/46</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -37,7 +37,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>34/34</span>
+        <span class='fraction'>46/46</span>
       </div>
     </div>
   </div>
@@ -105,7 +105,46 @@
 60
 61
 62
-63</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
@@ -118,6 +157,25 @@
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">7×</span>
 <span class="cline-any cline-yes">7×</span>
 <span class="cline-any cline-yes">7×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -151,7 +209,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
@@ -163,6 +223,24 @@
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -170,15 +248,34 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use strict';
 &nbsp;
 describe('Controller: TaskCtrl', function() {
-  var httpBackend, $rootScope, createController, httpResponse;
+  var httpBackend, $rootScope, createController, httpResponse, httpResponseHierarchy, httpResponseMembers;
   var scope;
 &nbsp;
   // load the controller's module
   beforeEach(module('boardOsApp'));
 &nbsp;
   // Initialize the controller and a mock scope
-  beforeEach(inject(function($controller, $rootScope) {
+  beforeEach(inject(function($controller, $rootScope, $httpBackend) {
+    // Set up the mock http service responses
+    httpBackend = $httpBackend;
+    // backend definition common for all tests
+    jasmine.getJSONFixtures().fixturesPath = 'base/client/test/mock';
+    var taskfull = getJSONFixture('tasks.controller.spec.data.json');
+    httpBackend.when('GET', '/api/taskFulls/5a0da5df40576e0004cad609').respond(taskfull);
 &nbsp;
+    httpResponseMembers = [{
+      name: 'Member1'
+    }];
+    httpBackend.when('GET', '/api/users/members').respond(httpResponseMembers);
+&nbsp;
+    httpResponseHierarchy = {
+      list: ['hierarchyX']
+    };
+    httpBackend.when('GET', '/api/hierarchies/list/Context').respond(httpResponseHierarchy);
+    httpBackend.when('GET', '/api/hierarchies/listContext').respond(httpResponseHierarchy);
+    httpBackend.when('GET', '/api/hierarchies/list/Activity').respond(httpResponseHierarchy);
+    httpBackend.when('GET', '/api/hierarchies/listActivity').respond(httpResponseHierarchy);
+    httpBackend.when('GET', '/api/hierarchies/list/Axis').respond(httpResponseHierarchy);
     scope = $rootScope.$new();
     createController = function() {
       return $controller('TaskCtrl', {
@@ -213,7 +310,9 @@ describe('Controller: TaskCtrl', function() {
     });
   });
 &nbsp;
+&nbsp;
   describe('function toggle checked', function() {
+&nbsp;
     it('should reverse "checked"', function() {
       var controller = createController();
       scope.toggle();
@@ -228,6 +327,24 @@ describe('Controller: TaskCtrl', function() {
     });
   });
 &nbsp;
+&nbsp;
+&nbsp;
+  // describe('function markAsDone', function() {
+  //
+  //   it('should change real data by engagement', function() {
+  //     var controller = createController();
+  //     httpBackend.flush();
+  //     scope.markAsDone(0);
+  //     expect(scope.checked).toBeTruthy();
+  //   });
+  //
+  //   it('should take account rework phase', function() {
+  //     var controller = createController();
+  //     scope.markAsDone(1);
+  //     expect(scope.checked).toBeFalsy();
+  //   });
+  // });
+&nbsp;
 });
 &nbsp;</pre></td></tr>
 </table></pre>
@@ -235,7 +352,7 @@ describe('Controller: TaskCtrl', function() {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Nov 19 2017 15:20:08 GMT+0100 (Paris, Madrid)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Nov 19 2017 16:56:34 GMT+0100 (Paris, Madrid)
 </div>
 </div>
 <script src="../../prettify.js"></script>

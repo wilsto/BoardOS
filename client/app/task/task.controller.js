@@ -162,11 +162,11 @@ angular.module('boardOsApp')
     };
 
 
-    $scope.markAsDone = function() {
-      $scope.task.metrics[0].startDate = $scope.task.metrics[0].targetstartDate;
-      $scope.task.metrics[0].endDate = $scope.task.metrics[0].targetEndDate;
-      $scope.task.metrics[0].timeSpent = $scope.task.metrics[0].targetLoad;
-      $scope.task.metrics[0].progress = 100;
+    $scope.markAsDone = function(key) {
+      $scope.task.metrics[key].startDate = $scope.task.metrics[key].targetstartDate;
+      $scope.task.metrics[key].endDate = $scope.task.metrics[key].targetEndDate;
+      $scope.task.metrics[key].timeSpent = $scope.task.metrics[key].targetLoad;
+      $scope.task.metrics[key].progress = 100;
 
     };
 
