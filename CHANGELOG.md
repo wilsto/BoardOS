@@ -6,11 +6,19 @@
 
 **Closed issues:**
 
+- Ajout d'un "Is loading" dsur la page de KPI pendant le chargement [\#402](https://github.com/wilsto/BoardOS/issues/402)
+- le filtre name dans tasks ne fonctionne pas [\#401](https://github.com/wilsto/BoardOS/issues/401)
+- Depuis la liste des KPIs, un KPI ne s'affiche plus pour comprendre le détail et le calcul [\#400](https://github.com/wilsto/BoardOS/issues/400)
+- Le glisser déposer des tâches sur le calendrier ne fonctionne plus [\#397](https://github.com/wilsto/BoardOS/issues/397)
 - BOSS a planté [\#396](https://github.com/wilsto/BoardOS/issues/396)
+- Afficher le stautut des anos sur la page anolist [\#395](https://github.com/wilsto/BoardOS/issues/395)
+- Le clic progress 100% ne fonctionne pas pour les rework [\#394](https://github.com/wilsto/BoardOS/issues/394)
+- Calcul de la confiance  [\#392](https://github.com/wilsto/BoardOS/issues/392)
 - Mise à jour automatique des statut des anomalies [\#390](https://github.com/wilsto/BoardOS/issues/390)
 - Anomalies apparaissent sur des dashboards de manière non pertinentes [\#388](https://github.com/wilsto/BoardOS/issues/388)
 - Affichage du gantt incorrecte à la première visibilité [\#387](https://github.com/wilsto/BoardOS/issues/387)
 - Ajout d'un menu à la page anomalie [\#386](https://github.com/wilsto/BoardOS/issues/386)
+- Sur les téléphone le menu droit n'apparait pas [\#385](https://github.com/wilsto/BoardOS/issues/385)
 - Des anos ne sont pas visibles dans la liste anos [\#384](https://github.com/wilsto/BoardOS/issues/384)
 - Problème design modification catégorie anomalie [\#382](https://github.com/wilsto/BoardOS/issues/382)
 - Possibilité de supprimer ou invalider une anomalie [\#381](https://github.com/wilsto/BoardOS/issues/381)

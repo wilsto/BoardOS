@@ -15,7 +15,7 @@ angular.module('boardOsApp')
     $scope.listValuesKPI = listValuesKPI;
 
     $scope.type = $location.search().type;
-    console.log('$scope.type', $scope.type);
+    
     $scope.typeid = $location.search().typeid;
 
     $scope.load = function() {
