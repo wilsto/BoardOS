@@ -1,127 +1,213 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 <!--* Modal Part-->
-<div id="all" class="">
+<div id="all">
 
-<div class="row bg-gray">
-  <div class="col-md-4">
-    <div class="obeya-pane obeya-pane-darkgray">
-      PEOPLE
-
-
-      <hr style="margin-top:0;margin-bottom:10px;">
-      <div class="obeya-body">
-        <div class="row">
-          <div class="col-md-6 text-center">
-            MOOD
+  <div class="row">
+    <div class="col-md-3">
+      <div class="obeya-pane obeya-pane-darkgray">
+        NAME
+        <hr style="margin-top:0;margin-bottom:10px;">
+        <div class="obeya-body">
+          <div class="row">
+            <div class="col-lg-6 col-md-12 col-xs-12">
+              {{obeya.name}}
+            </div>
+            <div class="col-lg-6 col-md-12 col-xs-12">
+{{obeyaMOde}}
+            </div>
           </div>
-          <div class="col-md-6 text-center">
-            WORKLOAD
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="obeya-pane obeya-pane-darkgray">
+        PEOPLE
+
+
+        <hr style="margin-top:0;margin-bottom:10px;">
+        <div class="obeya-body">
+          <div class="row">
+            <div class="col-lg-6 col-md-12 col-xs-12">
+              <span class="card-title">
+                <img src="assets/images/mood.png" style="width:100px;height:60px;" alt="" >
+                MOOD
+              </span>
+              <ul class="list-group card-list">
+                <li class="list-group-item">
+                  <i class="fa fa-smile-o green"></i> Smile
+                  <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+                </li>
+                <li class="list-group-item">
+                  <i class="fa fa-meh-o orange"></i> Neutral
+                  <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+                </li>
+                <li class="list-group-item">
+                  <i class="fa fa-frown-o red"></i> Unamused
+                  <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+                </li>
+              </ul>
+            </div>
+            <div class="col-lg-6 col-md-12 col-xs-12">
+              <span class="card-title">
+                <img src="assets/images/businessman300x300.png" style="width:60px;height:60px;" alt="" >
+                WORKLOAD
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="obeya-pane obeya-pane-gray">
+        FOCUS
+
+
+        <hr style="margin-top:0;margin-bottom:10px;">
+        <div class="obeya-body">
+          <div class="row">
+            <div class="col-lg-6 col-md-12 col-xs-12">
+              NEWS
+            </div>
+            <div class="col-lg-6 col-md-12 col-xs-12">
+              TASKS & ANOS
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="obeya-pane obeya-pane-gray">
+        FOCUS
+
+
+        <hr style="margin-top:0;margin-bottom:10px;">
+        <div class="obeya-body">
+          <div class="row">
+            <div class="col-lg-6 col-md-12 col-xs-12">
+              PROCESS
+            </div>
+            <div class="col-lg-6 col-md-12 col-xs-12">
+              <span class="card-title">
+                <img src="assets/images/skills.png" style="width:60px;height:60px;" alt="" >
+                COMPETENCES
+              </span>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="col-md-4">
-    <div class="obeya-pane obeya-pane-blue">
-      ACT
+  <br>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="obeya-pane obeya-pane-red">
+        PLAN
 
 
-      <hr style="margin-top:0;margin-bottom:10px;">
-      <div class="obeya-body">
-        <div class="row">
-          <div class="col-md-6 text-center">
-            ACTION PLAN
+        <hr style="margin-top:0;margin-bottom:10px;">
+        <div class="obeya-body">
+          <div class="row">
+            <div class="col-lg-6 col-md-12 col-xs-12">
+              <span class="card-title">
+                <img src="assets/images/workload.png" style="width:60px;height:60px;" alt="" >
+                PLANNING
+              </span>
+            </div>
+            <div class="col-lg-6 col-md-12 col-xs-12">
+              <span class="card-title">
+                <img src="assets/images/savings300x300.png" style="width:60px;height:60px;" alt="" >
+                CAPACITY
+              </span>
+            </div>
           </div>
-          <div class="col-md-6 text-center">
-            PROMOTION
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-md-3">
+      <div class="obeya-pane obeya-pane-orange">
+        DO
+        <hr style="margin-top:0;margin-bottom:10px;">
+        <div class="obeya-body">
+          <div class="row">
+            <div class="col-lg-6 col-md-12 col-xs-12 ">
+
+              <div class="obeya-cards">
+                <span class="card-title">
+                  <img src="assets/images/todo.png" style="width:60px;height:60px;" alt="" >
+                  TASKS
+                </span>
+                <ul class="list-group card-list">
+                  <li class="list-group-item">
+                    <i class="fa fa-tasks orange"></i> In Progress
+                    <span class="badge badge-gray">{{obeya.openTasksNb}}</span>
+                  </li>
+                  <li class="list-group-item">
+                    <i class="fa fa-bell orange"></i> With alerts
+                    <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-12 col-xs-12 ">
+              <div class="obeya-cards">
+                <span class="card-title">
+                  <img src="assets/images/anomaly.png" style="width:60px;height:60px;" alt="">
+                  ANOMALIES
+                </span>
+                <ul class="list-group card-list">
+                  <li class="list-group-item">
+                    <i class="fa fa-bug orange"></i> To Correct
+                    <span class="badge  badge-gray">{{obeya.alertsValue}}</span>
+                  </li>
+                  <li class="list-group-item">
+                    <i class="fa fa-medkit orange"></i> Corrected
+                    <span class="badge  badge-gray">{{obeya.alertsValue}}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="obeya-pane obeya-pane-darkblue">
+        CHECK
+
+
+        <hr style="margin-top:0;margin-bottom:10px;">
+        <div class="obeya-body">
+          <div class="row">
+            <div class="col-lg-6 col-md-12 col-xs-12">
+              KPIS
+            </div>
+            <div class="col-lg-6 col-md-12 col-xs-12">
+              ROOT CAUSE ANALYSIS
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="obeya-pane obeya-pane-blue">
+        ACT
+
+
+        <hr style="margin-top:0;margin-bottom:10px;">
+        <div class="obeya-body">
+          <div class="row">
+            <div class="col-lg-6 col-md-12 col-xs-12">
+              ACTION PLAN
+            </div>
+            <div class="col-lg-6 col-md-12 col-xs-12">
+              PROMOTION
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="col-md-4">
-    <div class="obeya-pane obeya-pane-red">
-      PLAN
-
-
-      <hr style="margin-top:0;margin-bottom:10px;">
-      <div class="obeya-body">
-        <div class="row">
-          <div class="col-md-6 text-center">
-            PLANNING
-          </div>
-          <div class="col-md-6 text-center">
-            CAPACITY
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6 text-center">
-            PROCESS
-          </div>
-          <div class="col-md-6 text-center">
-            COMPETENCES
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<br>
-<div class="row">
-  <div class="col-md-4">
-    <div class="obeya-pane obeya-pane-gray">
-      FOCUS
-
-
-      <hr style="margin-top:0;margin-bottom:10px;">
-      <div class="obeya-body">
-        <div class="row">
-          <div class="col-md-6 text-center">
-            NEWS
-          </div>
-          <div class="col-md-6 text-center">
-            TASKS & ANOS
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="obeya-pane obeya-pane-darkblue">
-      CHECK
-
-
-      <hr style="margin-top:0;margin-bottom:10px;">
-      <div class="obeya-body">
-        <div class="row">
-          <div class="col-md-6 text-center">
-            KPIS
-          </div>
-          <div class="col-md-6 text-center">
-            ROOT CAUSE ANALYSIS
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <div class="obeya-pane obeya-pane-orange">
-      DO
-
-
-      <hr style="margin-top:0;margin-bottom:10px;">
-      <div class="obeya-body">
-        <div class="row">
-          <div class="col-md-6 text-center">
-            TASKS
-          </div>
-          <div class="col-md-6 text-center">
-            ANOMALIES
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
 </div>

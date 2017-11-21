@@ -16,6 +16,7 @@ module.exports = function(app) {
   app.use('/api/hierarchies', require('./api/hierarchy'));
   app.use('/api/KPIs', require('./api/KPI'));
   app.use('/api/mails', require('./api/mail'));
+  app.use('/api/obeyas', require('./api/obeya'));
   app.use('/api/recurrentTasks', require('./api/recurrentTask'));
   app.use('/api/taskFulls', require('./api/taskFull'));
   app.use('/api/things', require('./api/thing'));

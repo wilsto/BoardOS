@@ -3,7 +3,7 @@
 }
 
 .obeya-pane {
-  height: 250px;
+  height: 300px;
   border-radius: 5px;
   padding: 10px;
   color: #FFFFFF;
@@ -17,7 +17,7 @@
 .obeya-body {
   background-color: #FFFFFF;
   border-radius: 5px;
-  height: 200px;
+  height: 250px;
   color: #000000;
   padding: 10px;
 }
@@ -48,4 +48,26 @@
 
 .obeya-pane-gray {
   background-color: #BDC3C7;
+}
+
+.card-list {
+  margin-top: 15px;
+  width: 100%
+}
+
+.green {
+  color: #24751d;
+}
+
+.orange {
+  color: #F89406;
+}
+
+.red {
+  color: #f90606;
+}
+
+.badge-gray {
+  background-color: #BDC3C7;
+  color: #000000;
 }
