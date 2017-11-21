@@ -1,8 +1,10 @@
 var url = require('url');
 var jwt = require('jsonwebtoken');
-var sendgrid = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
 var config = require('../../config/environment');
 var User = require('../../api/user/user.model');
+
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_APIKEY);
 
 function resetPassword(req, res) {
   var token = req.query.token;
@@ -24,12 +26,12 @@ function resetPassword(req, res) {
       email: email
     }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
       if (user === null) {
-        res.send(200, 'User not found. Please retry or contact admin.');
+        res.status(200).send('User not found. Please retry or contact admin.');
       } else {
         user.password = password;
         user.save(function(err) {
 
-          var emailReset = new sendgrid.Email({
+          const msg = {
             to: email,
             from: 'willy' + '@' + 'stophe' + '.' + 'fr',
             fromname: 'BOSS',
@@ -37,12 +39,12 @@ function resetPassword(req, res) {
             text: 'BOSS Changed Password Confirmation',
             html: 'Hello ' + user.name + ', <br/><br/> The password for your BOSS account was recently changed.<br/><br/> If you made this change, then we\'re all set!<br/><br/> If not, please contact me at admin.boardos@free.fr ' +
               '<br><br>BOSS'
-          });
-          sendgrid.send(emailReset, function(err, json) {
+          };
+          sgMail.send(msg, function(err, json) {
             if (err) {
-              res.send(200, err);
+              res.status(200).send(err);
             } else {
-              res.send(200, 'Your password has been updated, please login.');
+              res.status(200).send('Your password has been updated, please login.');
             }
           });
         });
