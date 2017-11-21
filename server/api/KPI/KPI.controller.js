@@ -346,7 +346,7 @@ exports.show33 = function(req, res) {
 exports.create = function(req, res) {
   var newKPI = new KPI(req.body, false);
   newKPI.save(function(err, doc) {
-    res.send(200, doc);
+    res.status(200).send(doc);
   });
 };
 

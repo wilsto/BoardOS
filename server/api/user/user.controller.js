@@ -7,8 +7,10 @@ var DashboardComplete = require('../dashboardComplete/dashboardComplete.model');
 var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
-var sendgrid = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
 var _ = require('lodash');
+
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_APIKEY);
 
 var validationError = function(res, err) {
   return res.status(422).json(err);
@@ -67,25 +69,25 @@ exports.create = function(req, res, next) {
       expiresIn: '24h'
     });
 
-    var email = new sendgrid.Email({
+    var email = {
       to: user.email,
       from: 'willy' + '@' + 'stophe' + '.' + 'fr',
       fromname: 'BOSS',
       subject: 'Registration to BOSS',
       text: 'Registration to BOSS',
       html: 'Hello ' + user.name + ', <br/> Thanks to your registration to BOSS.',
-    });
-    sendgrid.send(email);
+    };
+    sgMail.send(email);
 
-    var emailAdmin = new sendgrid.Email({
+    var emailAdmin = {
       to: 'willy' + '.' + 'stophe' + '@' + 'fr' + '.' + 'netgrs' + '.' + 'com',
       from: 'willy' + '@' + 'stophe' + '.' + 'fr',
       fromname: 'BOSS',
       subject: 'New Registration to BOSS',
       text: 'New Registration to BOSS',
       html: 'A new user [' + user.name + '] (' + user.email + ') has registered to BOSS'
-    });
-    sendgrid.send(emailAdmin);
+    };
+    sgMail.send(emailAdmin);
 
     res.status(200).json({
       token: token
@@ -130,7 +132,7 @@ exports.changePassword = function(req, res, next) {
       user.password = newPass;
       user.save(function(err) {
         if (err) return validationError(res, err);
-        res.send(200);
+        res.status(200).send('User Change password');
       });
     } else {
       res.send(403);
@@ -148,7 +150,7 @@ exports.changeRole = function(req, res, next) {
     user.role = newRole;
     user.save(function(err) {
       if (err) return validationError(res, err);
-      res.send(200);
+      res.status(200).send('User Change role');
     });
   });
 };
@@ -163,7 +165,7 @@ exports.changeGroups = function(req, res, next) {
     user.groups = newGroups;
     user.save(function(err) {
       if (err) return validationError(res, err);
-      res.send(200);
+      res.status(200).send('User Change group');
     });
   });
 };
@@ -195,7 +197,7 @@ exports.desactivate = function(req, res, next) {
           });
         });
       });
-      res.send(200);
+      res.status(200).send('User desactivate');
     });
   });
 };

@@ -1,6 +1,8 @@
 'use strict';
 
-var sendgrid = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_APIKEY);
+
 var schedule = require('node-schedule');
 var _ = require('lodash');
 var Mail = require('./mail.model');
@@ -97,14 +99,14 @@ function SendMails(callback) {
         textUser += '<p>Thanks</p>';
         textUser += '<p>BOSS</p>';
 
-        var email = new sendgrid.Email({
+        var email = {
           to: user.email,
           from: 'willy' + '@' + 'stophe' + '.' + 'fr',
           fromname: 'BOSS',
           subject: moment().format('DD MMMM YYYY'),
           text: 'BOSS Reminder',
           html: textUser,
-        });
+        };
         email.setFilters({
           'templates': {
             'settings': {
@@ -153,7 +155,7 @@ exports.create = function(req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.status(201).json( mail);
+    return res.status(201).json(mail);
   });
 };
 
@@ -174,7 +176,7 @@ exports.update = function(req, res) {
       if (err) {
         return handleError(res, err);
       }
-      return res.status(200).json( mail);
+      return res.status(200).json(mail);
     });
   });
 };

@@ -323,7 +323,7 @@ exports.listContext = function(req, res) {
 exports.create = function(req, res) {
   var newHierarchy = new Hierarchy(req.body, false);
   newHierarchy.save(function(err, doc) {
-    res.send(200, doc);
+    res.status(200).send(doc);
   });
 };
 
