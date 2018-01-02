@@ -464,7 +464,7 @@ exports.index = function(req, res) {
       var actors = [];
       _.each(dashboard.users, function(actor) {
         var thisuser = _.filter(usersList, function(user) {
-          return actor && user._id.toString() === actor._id.toString();
+          return actor && actor._id && user._id.toString() === actor._id.toString();
         });
         if (thisuser.length > 0 && thisuser[0].active) {
           actors.push({
