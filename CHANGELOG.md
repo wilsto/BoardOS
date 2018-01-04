@@ -6,6 +6,12 @@
 
 **Closed issues:**
 
+- Plantage BOSS :  TypeError: Cannot read property 'toString' of undefined /app/server/api/dashboardComplete/dashboardComplete.controller.js:467:60 [\#419](https://github.com/wilsto/BoardOS/issues/419)
+- Possibilité de se connecter avec le visa et non plus juste l'email [\#416](https://github.com/wilsto/BoardOS/issues/416)
+- Ajouter visa et possibilité de changer de nom dans le profil [\#415](https://github.com/wilsto/BoardOS/issues/415)
+- Possibilité de mettre les taches récurrentes en pause [\#414](https://github.com/wilsto/BoardOS/issues/414)
+- Tache récurrente modifiables uniquement par le proprietaire [\#411](https://github.com/wilsto/BoardOS/issues/411)
+- Le mail de recover password ne fonctionne pas et fait planter BOSS [\#406](https://github.com/wilsto/BoardOS/issues/406)
 - Ajout d'un "Is loading" dsur la page de KPI pendant le chargement [\#402](https://github.com/wilsto/BoardOS/issues/402)
 - le filtre name dans tasks ne fonctionne pas [\#401](https://github.com/wilsto/BoardOS/issues/401)
 - Depuis la liste des KPIs, un KPI ne s'affiche plus pour comprendre le détail et le calcul [\#400](https://github.com/wilsto/BoardOS/issues/400)
