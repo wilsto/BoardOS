@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for app\calendar\calendar.controller.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">app/calendar/</a> calendar.controller.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">23.19% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>16/69</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">2.94% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>1/34</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">14.29% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>2/14</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">23.19% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>16/69</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use strict';
+&nbsp;
+angular.module('boardOsApp')
+  .controller('CalendarCtrl', function($scope, $http, $rootScope, $location, calendarConfig, Notification) {
+    $scope.eventSources = [];
+    $scope.filterNotification = 'Only For Me';
+&nbsp;
+    $scope.loadTaskToNotify = <span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >      if (typeof $scope.allTasks !== 'undefined') {</span>
+<span class="cstat-no" title="statement not covered" >        $scope.alltasksToNotify = $scope.allTasks.length;</span>
+<span class="cstat-no" title="statement not covered" >        $scope.myTasks = $scope.filterTask($scope.allTasks, $scope.filterNotification);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if ($scope.filterNotification === 'Only For Me') {</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >          $scope.tasksToNotify = $scope.myTasks;</span>
+        } else {
+<span class="cstat-no" title="statement not covered" >          $scope.tasksToNotify = $scope.allTasks;</span>
+        }
+<span class="cstat-no" title="statement not covered" >        $scope.mytasksToNotify = $scope.myTasks.length;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        $scope.events = [];</span>
+<span class="cstat-no" title="statement not covered" >        _.each($scope.myTasks, <span class="fstat-no" title="function not covered" >function(task) {</span></span>
+<span class="cstat-no" title="statement not covered" >          task.taskSuffIcon = '';</span>
+<span class="cstat-no" title="statement not covered" >          switch (task.metrics[task.metrics.length - 1].status) {</span>
+            case 'In Progress':
+<span class="cstat-no" title="statement not covered" >              task.taskIcon = '&lt;i class="fa fa-spinner" aria-hidden="true"&gt;&lt;/i&gt;&amp;nbsp;&amp;nbsp; ';</span>
+<span class="cstat-no" title="statement not covered" >              task.taskColor = calendarConfig.colorTypes.info;</span>
+<span class="cstat-no" title="statement not covered" >              break;</span>
+            case 'Finished':
+<span class="cstat-no" title="statement not covered" >              if (task.reviewTask === true) {</span>
+<span class="cstat-no" title="statement not covered" >                task.taskIcon = '&lt;i class="fa fa-bookmark-o text-success" aria-hidden="true"&gt;&lt;/i&gt;&amp;nbsp;&amp;nbsp; ';</span>
+<span class="cstat-no" title="statement not covered" >                task.taskColor = calendarConfig.colorTypes.success;</span>
+&nbsp;
+              } else {
+<span class="cstat-no" title="statement not covered" >                task.taskIcon = '&lt;i class="fa fa-check-square-o" aria-hidden="true"&gt;&lt;/i&gt;&amp;nbsp;&amp;nbsp; ';</span>
+<span class="cstat-no" title="statement not covered" >                task.taskColor = calendarConfig.colorTypes.success;</span>
+              }
+<span class="cstat-no" title="statement not covered" >              if (task.metrics[task.metrics.length - 1].userSatisfaction === undefined || task.metrics[task.metrics.length - 1].deliverableStatus === undefined || task.metrics[task.metrics.length - 1].actorSatisfaction === undefined) {</span>
+<span class="cstat-no" title="statement not covered" >                task.taskSuffIcon = ' &lt;i class="fa fa-question-circle-o text-danger" aria-hidden="true"&gt;&lt;/i&gt;&amp;nbsp;&amp;nbsp;';</span>
+              }
+<span class="cstat-no" title="statement not covered" >              break;</span>
+            default:
+<span class="cstat-no" title="statement not covered" >              task.taskIcon = '&lt;i class="fa fa-square-o " aria-hidden="true"&gt;&lt;/i&gt;&amp;nbsp;&amp;nbsp; ';</span>
+<span class="cstat-no" title="statement not covered" >              task.taskColor = '';</span>
+          }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >          $scope.events.push({</span>
+            title: task.taskIcon + task.taskSuffIcon + task.name,
+            eventType: 'task',
+            eventId: task._id,
+            displayEventTimes: false, // Indicates whether need to show time or not.
+            startsAt: moment(task.metrics[task.metrics.length - 1].startDate || task.metrics[task.metrics.length - 1].targetstartDate).set({
+              hour: 0,
+              minute: 0,
+              second: 0,
+              millisecond: 0
+            }).toDate(),
+            endsAt: moment(task.metrics[task.metrics.length - 1].endDate || task.metrics[task.metrics.length - 1].targetEndDate).set({
+              hour: 2,
+              minute: 0,
+              second: 0,
+              millisecond: 0
+            }).toDate(),
+            color: task.taskColor,
+            draggable: (task.metrics[task.metrics.length - 1].status !== 'Finished')
+          });
+        });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        _.each($scope.myAnomalies, <span class="fstat-no" title="function not covered" >function(anomalie) {</span></span>
+<span class="cstat-no" title="statement not covered" >          if ($scope.currentUser &amp;&amp; anomalie.actor._id === $scope.currentUser._id) {</span>
+<span class="cstat-no" title="statement not covered" >            $scope.events.push({</span>
+              title: '&lt;i class="fa fa-bell-o" aria-hidden="true"&gt;&lt;/i&gt;&amp;nbsp;&amp;nbsp; ' + anomalie.name, // The title of the event
+              eventType: 'anomalie',
+              eventId: anomalie._id,
+              startsAt: moment(anomalie.date).toDate(),
+              color: calendarConfig.colorTypes.important,
+            });
+          }
+        });
+<span class="cstat-no" title="statement not covered" >        $scope.eventSources.push($scope.events);</span>
+      }
+    };
+&nbsp;
+    $scope.$watch('filterNotification', <span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >      $scope.eventSources.splice(0, $scope.eventSources.length);</span>
+<span class="cstat-no" title="statement not covered" >      $scope.loadTaskToNotify();</span>
+    });
+&nbsp;
+&nbsp;
+    $scope.filterTask = <span class="fstat-no" title="function not covered" >function(tasks, filter) {</span>
+<span class="cstat-no" title="statement not covered" >      var filtertasks;</span>
+      // si pas de filtrer alors on retourne le tout
+<span class="cstat-no" title="statement not covered" >      if (typeof filter === 'undefined') {</span>
+<span class="cstat-no" title="statement not covered" >        return tasks;</span>
+      }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      filtertasks = _.filter(tasks, <span class="fstat-no" title="function not covered" >function(task) {</span></span>
+        // si actor (metrics)
+<span class="cstat-no" title="statement not covered" >        if (typeof task.actors !== 'undefined') {</span>
+<span class="cstat-no" title="statement not covered" >          var actors = _.pluck(task.actors, '_id');</span>
+<span class="cstat-no" title="statement not covered" >          if ($scope.currentUser &amp;&amp; actors.indexOf($scope.currentUser._id) &gt; -1) {</span>
+<span class="cstat-no" title="statement not covered" >            return true;</span>
+          }
+        }
+      });
+<span class="cstat-no" title="statement not covered" >      return filtertasks;</span>
+    };
+&nbsp;
+    $http.get('/api/taskFulls').success(<span class="fstat-no" title="function not covered" >function(tasks) {</span>
+<span class="cstat-no" title="statement not covered" >      $scope.allTasks = tasks;</span>
+<span class="cstat-no" title="statement not covered" >      $scope.loadTaskToNotify();</span>
+    });
+&nbsp;
+&nbsp;
+    // Charger les anomalies
+    // ------------------
+    $scope.loadAnomalies = function() {
+      var currentUser_id = ($scope.currentUser) ? <span class="branch-0 cbranch-no" title="branch not covered" >$scope.currentUser._id </span>: undefined;
+&nbsp;
+      var myparams = {
+        params: {
+          userId: currentUser_id
+        }
+      };
+&nbsp;
+      $http.get('/api/anomalies/', myparams).success(<span class="fstat-no" title="function not covered" >function(anomalies) {</span>
+<span class="cstat-no" title="statement not covered" >        $scope.myAnomalies = anomalies;</span>
+&nbsp;
+      });
+    };
+&nbsp;
+    $scope.loadAnomalies();
+&nbsp;
+    // calendar
+    // **********
+    //
+    $scope.viewDate = new Date();
+    $scope.calendarView = 'month';
+    $scope.eventClicked = <span class="fstat-no" title="function not covered" >function(calendarEvent) {</span>
+<span class="cstat-no" title="statement not covered" >      $location.path('/' + calendarEvent.eventType + '/' + calendarEvent.eventId);</span>
+    };
+&nbsp;
+    $scope.eventTimesChanged = <span class="fstat-no" title="function not covered" >function(calendarEvent, calendarNewEventStart, calendarNewEventEnd) {</span>
+<span class="cstat-no" title="statement not covered" >      var updatedEvent = _.filter($scope.myTasks, <span class="fstat-no" title="function not covered" >function(task) {</span></span>
+<span class="cstat-no" title="statement not covered" >        return task._id === calendarEvent.eventId;</span>
+      });
+<span class="cstat-no" title="statement not covered" >      if (updatedEvent.length &gt; 0) {</span>
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        var dayDiff = moment(calendarNewEventStart).diff(moment(updatedEvent[0].metrics[0].targetstartDate), 'days');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        updatedEvent[0].metrics[0].targetstartDate = moment(updatedEvent[0].metrics[0].targetstartDate).add(dayDiff, 'days').toDate();</span>
+<span class="cstat-no" title="statement not covered" >        updatedEvent[0].metrics[0].targetEndDate = moment(updatedEvent[0].metrics[0].targetEndDate).add(dayDiff, 'days').toDate();</span>
+&nbsp;
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        $scope.myPromise = $http.put('/api/taskFulls/' + calendarEvent.eventId + '/' + false, updatedEvent[0]).success(<span class="fstat-no" title="function not covered" >function(data) {</span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >          var logInfo = 'Task "' + updatedEvent[0].name + '" was updated';</span>
+<span class="cstat-no" title="statement not covered" >          Notification.success(logInfo);</span>
+        });
+&nbsp;
+      }
+    };
+&nbsp;
+  });
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Nov 30 2017 21:27:04 GMT+0100 (Paris, Madrid)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

@@ -105,9 +105,14 @@
         </form>
 
         <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+            <a href="/calendar">
+              <img src="assets/images/help.png" alt="" style="padding-left:3px;padding-right:3px;"> Explain to me
+            </a>
+          </li>
           <li class="dropdown user">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                        <img alt="" ng-src="{{currentUser.avatar || 'assets/images/avatars/' + currentUser._id+ '.png'}} " style="width:29px;height:29px" err-src="assets/images/avatars/avatar_small.png" />
+                        <img alt="" class="img-circle" ng-src="{{currentUser.avatar || 'assets/images/avatars/' + currentUser._id+ '.png'}} " style="width:29px;height:29px" err-src="assets/images/avatars/avatar_small.png" />
                         <span class="username username-hide-on-mobile">{{currentUser.name}} </span>
                         <i class="fa fa-angle-down"></i>
                     </a>
@@ -121,16 +126,16 @@
               <li class="divider">
               </li>
               <li>
+                <a href="/calendar">
+                    <img src="assets/images/help.png" alt="" style="padding-left:3px;padding-right:3px;"> Explain to me
+                </a>
+              </li>
+              <li class="divider">
+              </li>
+              <li>
                 <a href="#0" ng-click="logout()"><i class="fa fa-key"></i> Log Out</a>
               </li>
             </ul>
-          </li>
-          <li class="dropdown">
-            <a class="dropdown-toggle" href="#" ng-click="openNav()" style="color:white">
-                    <i class="fa fa-newspaper-o"></i>
-                    <span class="badge badge-danger" style="color:black;margin-left:30px" ng-cloak ng-hide="alreadyviewed">
-                1 </span>
-                  </a>
           </li>
         </ul>
 

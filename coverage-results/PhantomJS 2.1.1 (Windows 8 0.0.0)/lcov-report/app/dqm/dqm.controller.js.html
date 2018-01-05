@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for app\dqm\dqm.controller.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">app/dqm/</a> dqm.controller.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">1.75% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>1/57</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/20</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/18</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">1.75% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>1/57</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use strict';
+&nbsp;
+angular.module('boardOsApp')
+  .controller('DqmCtrl', <span class="fstat-no" title="function not covered" >function($scope, $http) {</span>
+<span class="cstat-no" title="statement not covered" >    $scope.HierarchyType = 'Context';</span>
+<span class="cstat-no" title="statement not covered" >    $scope.filterUsed = 'All';</span>
+<span class="cstat-no" title="statement not covered" >    $scope.filterValid = 'All';</span>
+<span class="cstat-no" title="statement not covered" >    var alltasks = {};</span>
+<span class="cstat-no" title="statement not covered" >    var allhierarchies = {};</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    var filterTasks = <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >      var allTaskHierachies = _.pluck(_.sortBy(alltasks, $scope.HierarchyType.toLowerCase()), $scope.HierarchyType.toLowerCase());</span>
+<span class="cstat-no" title="statement not covered" >      var paths = [];</span>
+<span class="cstat-no" title="statement not covered" >      _.each(allhierarchies, <span class="fstat-no" title="function not covered" >function(hierarchy) {</span></span>
+<span class="cstat-no" title="statement not covered" >        hierarchy.isValidPath = true;</span>
+<span class="cstat-no" title="statement not covered" >        hierarchy.isUsedPath = (_.indexOf(allTaskHierachies, hierarchy.longname) &gt; 0);</span>
+<span class="cstat-no" title="statement not covered" >        if ((hierarchy.isUsedPath === $scope.filterUsed || $scope.filterUsed === 'All') &amp;&amp; (hierarchy.isValidPath === $scope.filterValid || $scope.filterValid === 'All')) {</span>
+<span class="cstat-no" title="statement not covered" >          paths.push(hierarchy);</span>
+        }
+      });
+<span class="cstat-no" title="statement not covered" >      var joinAllTasks = _.map(allTaskHierachies, <span class="fstat-no" title="function not covered" >function(taskHierarchie) {</span></span>
+<span class="cstat-no" title="statement not covered" >        return {</span>
+          longname: taskHierarchie,
+          type: 'task'
+        };
+      });
+<span class="cstat-no" title="statement not covered" >      _.each(joinAllTasks, <span class="fstat-no" title="function not covered" >function(taskHierarchie) {</span></span>
+<span class="cstat-no" title="statement not covered" >        taskHierarchie.isUsedPath = true;</span>
+<span class="cstat-no" title="statement not covered" >        taskHierarchie.isValidPath = (_.indexOf(_.pluck(allhierarchies, 'longname'), taskHierarchie) &gt; 0);</span>
+<span class="cstat-no" title="statement not covered" >        if ((taskHierarchie.isUsedPath === $scope.filterUsed || $scope.filterUsed === 'All') &amp;&amp; (taskHierarchie.isValidPath === $scope.filterValid || $scope.filterValid === 'All')) {</span>
+<span class="cstat-no" title="statement not covered" >          paths.push(taskHierarchie);</span>
+        }
+      });
+<span class="cstat-no" title="statement not covered" >      paths = _.sortBy(paths, 'longname');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      $scope.paths = _.uniq(paths, true, <span class="fstat-no" title="function not covered" >function(x) {</span></span>
+<span class="cstat-no" title="statement not covered" >        return x.longname;</span>
+      });
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.load = <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >      $http.get('/api/hierarchies/list/' + $scope.HierarchyType).success(<span class="fstat-no" title="function not covered" >function(hierarchies) {</span></span>
+<span class="cstat-no" title="statement not covered" >        allhierarchies = _.sortBy(hierarchies.list, 'longname');</span>
+<span class="cstat-no" title="statement not covered" >        $http.get('/api/taskFulls/list/hierarchies').success(<span class="fstat-no" title="function not covered" >function(tasks) {</span></span>
+<span class="cstat-no" title="statement not covered" >          alltasks = tasks;</span>
+<span class="cstat-no" title="statement not covered" >          filterTasks();</span>
+        });
+      });
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.$watch('filterUsed', <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >      filterTasks();</span>
+    });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.$watch('filterValid', <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >      filterTasks();</span>
+    });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.loadMe = <span class="fstat-no" title="function not covered" >function(HierarchyType) {</span></span>
+<span class="cstat-no" title="statement not covered" >      $scope.HierarchyType = HierarchyType;</span>
+<span class="cstat-no" title="statement not covered" >      $scope.load();</span>
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.load();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.globalChange = <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >      var globalChangeVar = {</span>
+        params: {
+          HierarchyType: $scope.HierarchyType.toLowerCase(),
+          textFilter: $scope.textFilter,
+          textReplace: $scope.textReplace
+        }
+      };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      $http.get('/api/tasks/globalChange', globalChangeVar).success(<span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >        $scope.load();</span>
+      });
+&nbsp;
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.mergeAll = <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >      $http.get('/api/hierarchies/merge/' + $scope.HierarchyType).success(<span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >        $scope.load();</span>
+      });
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.ValidPath = <span class="fstat-no" title="function not covered" >function() {</span></span>
+&nbsp;
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.replaceRegex = <span class="fstat-no" title="function not covered" >function(value, regex, newtext) {</span></span>
+<span class="cstat-no" title="statement not covered" >      var patt;</span>
+<span class="cstat-no" title="statement not covered" >      var newValue = value;</span>
+<span class="cstat-no" title="statement not covered" >      if (typeof regex !== 'undefined') {</span>
+<span class="cstat-no" title="statement not covered" >        if (regex.indexOf('/') &gt;= 0) {</span>
+<span class="cstat-no" title="statement not covered" >          var regexMatch = regex.match(/^\/(.*)\/([^\/]*)$/);</span>
+<span class="cstat-no" title="statement not covered" >          patt = new RegExp(regexMatch[1], regexMatch[2]);</span>
+        } else {
+<span class="cstat-no" title="statement not covered" >          patt = new RegExp(regex);</span>
+        }
+<span class="cstat-no" title="statement not covered" >        if (typeof newtext !== 'undefined' &amp;&amp; newtext.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >          newValue = value.replace(patt, newtext);</span>
+        }
+      }
+<span class="cstat-no" title="statement not covered" >      return newValue;</span>
+    };
+&nbsp;
+&nbsp;
+&nbsp;
+  });
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Nov 30 2017 21:27:04 GMT+0100 (Paris, Madrid)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

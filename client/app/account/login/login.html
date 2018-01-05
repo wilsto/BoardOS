@@ -19,10 +19,10 @@
       </div>
       <div class="form-group">
         <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-        <label class="control-label visible-ie8 visible-ie9">eMail</label>
+        <label class="control-label visible-ie8 visible-ie9">eMail or visa</label>
         <div class="input-icon">
           <i class="fa fa-user"></i>
-          <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="eMail" name="email" ng-model="user.email" required/>
+          <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="eMail or Visa" name="email" ng-model="user.email" required/>
         </div>
       </div>
       <div class="form-group">
@@ -35,10 +35,10 @@
 
         <div class="form-group has-error">
           <p class="help-block text-danger" ng-show="form.email.$error.required && form.password.$error.required && submitted">
-             Please enter your email and password.
+             Please enter your email/visa and password.
           </p>
           <p class="help-block text-danger" ng-show="form.email.$error.email && submitted">
-             Please enter a valid email.
+             Please enter a valid email or visa.
           </p>
 
           <p class="help-block text-danger">{{ errors.other }}</p>

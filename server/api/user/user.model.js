@@ -17,6 +17,7 @@ var UserSchema = new Schema({
   },
   groups: Schema.Types.Mixed,
   avatar: String,
+  visa: String,
   location: {
     type: String,
     default: 'Suresnes'

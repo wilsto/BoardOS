@@ -1,3 +1,15 @@
 .list-user-property {
-    margin-right: 25px!important;
+  margin-right: 25px!important;
+}
+
+.vacancy {
+  width: 90%;
+  margin: 20px;
+  border: 1px lightgrey solid;
+  padding: 15px;
+}
+
+.table-recurring {
+  table-layout: fixed!important;
+  width: 100px!important;
 }

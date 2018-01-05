@@ -7,30 +7,37 @@ exports.setup = function(User, config) {
       passwordField: 'password' // this is the virtual field on the model
     },
     function(email, password, done) {
+      console.log('email', email);
+      console.log('password', password);
       User.findOne({
-        email: email.toLowerCase()
-      }, function(err, user) {
-        if (err) return done(err);
+          $or: [{
+            "visa": email.toUpperCase()
+          }, {
+            "email": email.toLowerCase()
+          }]
+        },
+        function(err, user) {
+          if (err) return done(err);
 
-        if (!user) {
-          return done(null, false, {
-            message: 'This email is not registered.'
-          });
-        }
-        if (!user.authenticate(password)) {
-          return done(null, false, {
-            message: 'This password is not correct.'
-          });
-        }
-        if (!user.active) {
-          return done(null, false, {
-            message: 'This user is no longer active.'
-          });
-        }
-        user.last_connection_date = Date.now();
-        user.save(function(err) {});
-        return done(null, user);
-      });
+          if (!user) {
+            return done(null, false, {
+              message: 'This email is not registered.'
+            });
+          }
+          if (!user.authenticate(password)) {
+            return done(null, false, {
+              message: 'This password is not correct.'
+            });
+          }
+          if (!user.active) {
+            return done(null, false, {
+              message: 'This user is no longer active.'
+            });
+          }
+          user.last_connection_date = Date.now();
+          user.save(function(err) {});
+          return done(null, user);
+        });
     }
   ));
 };

@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('TasksCtrl', function($rootScope, $scope, $http, statusTask, progressStatusTask, Notification) {
+  .controller('TasksCtrl', function($rootScope, $scope, $http, statusTask, progressStatusTask, Notification, $timeout) {
     $scope.alltasks = [];
     $scope.tasks = [];
     $scope.showTasks = [];
@@ -25,6 +25,68 @@ angular.module('boardOsApp')
     $rootScope.taskStatus = statusTask;
     $rootScope.progressStatus = progressStatusTask;
 
+
+    $scope.IntroOptionsFull = {
+      steps: [{
+          element: '#step1',
+          intro: 'This is the full tooltip.'
+        },
+        {
+          element: '#step2',
+          intro: '<strong>You</strong> can also <em>include</em> HTML',
+          position: 'right'
+        },
+        {
+          element: '#step3',
+          intro: 'More features, more fun.',
+          position: 'left'
+        },
+        {
+          element: '#step4',
+          intro: 'Another step.',
+          position: 'bottom'
+        },
+        {
+          element: '#step5',
+          intro: 'Get it, use it.'
+        }
+      ],
+      showStepNumbers: true,
+      showBullets: true,
+      exitOnOverlayClick: true,
+      exitOnEsc: true,
+      nextLabel: '<span style="color:green">next</span>',
+      prevLabel: 'Previous',
+      skipLabel: 'Exit',
+      doneLabel: 'Thanks'
+    };
+
+    $scope.IntroOptions = {
+      steps: [{
+          element: '#step1',
+          intro: '<strong class="text-primary">New !</strong> in this version<br> <br> You can now action multiple tasks at the same time. ',
+          position: 'bottom'
+        },
+        {
+          element: '.styled',
+          intro: '<strong>Select</strong> one or more tasks and execute action above.',
+          position: 'right'
+        },
+        {
+          element: '#stepFinal',
+          intro: '<strong>Select</strong> one or more tasks and execute action above.',
+          position: 'right'
+        }
+      ],
+      showStepNumbers: true,
+      showBullets: true,
+      exitOnOverlayClick: true,
+      exitOnEsc: true,
+      nextLabel: '<span style="color:green">next</span>',
+      prevLabel: 'Previous',
+      skipLabel: 'Exit',
+      doneLabel: 'I got it !'
+    };
 
     $scope.filterTasks = function(data) {
       var searchName = ($scope.searchName) ? $scope.searchName.toLowerCase() : '';
@@ -86,6 +148,10 @@ angular.module('boardOsApp')
 
         //Filter and Order
         $scope.reloadTasks();
+        $timeout(function() {
+          $scope.CallMe();
+          console.log('ghdsfgqsjd');
+        }, 1000);
       });
     };
 
