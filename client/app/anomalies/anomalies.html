@@ -77,6 +77,10 @@
             </th>
             <th style="width:60px;text-align:center"  ng-click="orderByField='preventiveActions[0].metrics[0].status'; reverseSort = !reverseSort">
               <a href="#">
+                <span uib-tooltip-html="'Preventive Actions'">R.C.A.</span>
+              </a>
+            <th style="width:60px;text-align:center"  ng-click="orderByField='preventiveActions[0].metrics[0].status'; reverseSort = !reverseSort">
+              <a href="#">
                 <span uib-tooltip-html="'Preventive Actions'">P.A.</span>
               </a>
             </th>
@@ -111,12 +115,14 @@
             <th style="width:60px" >
             </th>
             <th style="width:60px" >
+            </th>
+            <th style="width:60px" >
               <input style="width:100%" ng-model="searchStatus">
             </th>
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="anomalie in anomalies|orderBy:orderByField:reverseSort track by $index">
+          <tr id="anoRow" ng-repeat="anomalie in anomalies|orderBy:orderByField:reverseSort track by $index">
 
             <td class="dont-break-out hidden-xs">
               <small class="text-muted">  {{anomalie.date | date:'mediumDate'}}</small>
@@ -127,7 +133,7 @@
               </div>
             </td>
             <td >
-              <a href="/anomalie/{{anomalie._id}}">{{anomalie.name}}</a><br>
+              <a id="anoName"  href="/anomalie/{{anomalie._id}}">{{anomalie.name}}</a><br>
               <small style="font-size:11px" class="text-muted">  {{anomalie.activity || 'ALL'}} <br /></small>
             </td>
             <td class="dont-break-out  hidden-xs">
@@ -140,17 +146,20 @@
               <span  >{{anomalie.impact}}</span>
             </td>
             <td  style="text-align:center">
-              <a href="task/{{anomalie.correctiveActions[0]._id}}" target="_blank">
-              <span class="btn btn-outline btn-xs" aria-hidden="false" ng-class="{'btn-info ':anomalie.correctiveActions[0].metrics[0].status === 'In Progress',' btn-default ':anomalie.correctiveActions[0].metrics[0].status === 'Not Started',' btn-danger ':anomalie.correctiveActions.length === 0,' btn-success':anomalie.correctiveActions[0].metrics[0].status === 'Finished'}">CA</span>
+              <a ng-class="{'disabled-href':anomalie.correctiveActions.length===0}" href="task/{{anomalie.correctiveActions[0]._id}}" target="_blank">
+              <span class="btn btn-outline btn-xs" aria-hidden="false" ng-class="{'btn-info ':anomalie.statusCA === 'In Progress',' btn-default ':anomalie.statusCA === 'Not Started',' btn-success':anomalie.statusCA === 'Finished'}">CA</span>
+            </a>
+            <td  style="text-align:center">
+              <a ng-class="{'disabled-href':anomalie.rootCauseAnalysisTasks.length===0}" href="task/{{anomalie.rootCauseAnalysisTasks[0]._id}}" target="_blank">
+              <span class="btn btn-outline btn-xs" aria-hidden="false" ng-class="{'btn-info ':anomalie.statusRCA === 'In Progress',' btn-default ':anomalie.statusRCA === 'Not Started',' btn-success':anomalie.statusRCA === 'Finished'}">RCA</span>
             </a>
             </td>
-                      <td  style="text-align:center">
-            <a href="task/{{anomalie.preventiveActions[0]._id}}" target="_blank">
-
-              <span class="btn btn-outline btn-xs" aria-hidden="false" ng-class="{'btn-info ':anomalie.preventiveActions[0].metrics[0].status === 'In Progress',' btn-default ':anomalie.preventiveActions[0].metrics[0].status === 'Not Started',' btn-danger ':anomalie.preventiveActions.length === 0,' btn-success':anomalie.preventiveActions[0].metrics[0].status === 'Finished'}">PA</span>
+            <td  style="text-align:center">
+              <a ng-class="{'disabled-href':anomalie.preventiveActions.length===0}" href="task/{{anomalie.preventiveActions[0]._id}}" target="_blank">
+              <span class="btn btn-outline btn-xs" aria-hidden="false" ng-class="{'btn-info ':anomalie.statusPA === 'In Progress',' btn-default ':anomalie.statusPA === 'Not Started',' btn-success':anomalie.statusPA === 'Finished'}">PA</span>
             </a>
             </td>
-<td>
+<td id="anoStatus" >
   <span ng-if="anomalie.status ==='Not Started' "
     class="label label-sm"
     ng-class="{'label-info':anomalie.status ==='In Progress','label-success':anomalie.status ==='Finished','label-default':anomalie.status ==='Not Started','label-lightgrey':anomalie.status =='Withdrawn','label-warning':anomalie.startDate < today}">

@@ -292,8 +292,6 @@ angular.module('boardOsApp')
               }
               if (typeTask === 'RCA') {
                 $scope.anomalie.rootCauseAnalysisTasks.splice(index, 1);
-
-
               }
               if (typeTask === 'PA') {
                 $scope.anomalie.preventiveActions.splice(index, 1);

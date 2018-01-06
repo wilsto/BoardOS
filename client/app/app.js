@@ -314,7 +314,8 @@ angular.module('boardOsApp', [
         var bln = false;
         bln = bln || ($location.path().indexOf('tasks') > 0);
         bln = bln || ($location.path().indexOf('settings') > 0);
-        bln = bln || ($location.path().indexOf('anomalie') > 0);
+        bln = bln || ($location.path().indexOf('anomalie/') > 0);
+        bln = bln || ($location.path().indexOf('anomalies') > 0);
         return bln;
       };
 

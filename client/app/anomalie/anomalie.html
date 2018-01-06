@@ -167,7 +167,8 @@
     </table>
   </div>
   <div class="modal-footer">
-    <button class="btn btn-warning" type="button" ng-click="ok()" ng-disabled="selectedTask === null && (selected.name === null || selected.impact === null || selected.category === null)">OK</button>
+    {{selected}}
+    <button class="btn btn-warning" type="button" ng-click="ok()" ng-disabled="selected.name === undefined  || selected.activity === undefined  || selected.context === undefined  || (selected.targetstartDate === undefined && selected.metrics[0].targetstartDate === undefined) || ( selected.targetEndDate === undefined&& selected.metrics[0].targetEndDate === undefined)  ||( selected.targetLoad === undefined && selected.metrics[0].targetLoad === undefined)  || (selected.trust === undefined  && selected.metrics[0].trust === undefined) ">OK</button>
     <button class="btn btn-default pull-left" type="button" ng-click="cancel()">Cancel</button>
   </div>
 </script>

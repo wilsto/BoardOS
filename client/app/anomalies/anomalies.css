@@ -2,3 +2,8 @@
   position: absolute;
   bottom: 0;
 }
+
+.disabled-href {
+     pointer-events: none;
+     cursor: default;
+  } 

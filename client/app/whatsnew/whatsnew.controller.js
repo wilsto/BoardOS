@@ -4,10 +4,29 @@
 angular.module('boardOsApp')
   .controller('WhatsnewCtrl', function($rootScope, $scope, $http, $uibModal, Auth, $location, Notification) {
 
-    Auth.getCurrentUser(function(data) {
-      $scope.currentUser = data;
-      if (_.isEmpty(data) === false) {
-        $rootScope.loadNews();
+    $scope.allPages = [];
+    $scope.infos = [];
+    $scope.showPage = [];
+
+    $scope.versions = [{
+        value: '2.3',
+        text: '2.3'
+      },
+      {
+        value: '2.2',
+        text: '2.2'
+      },
+      {
+        value: '2.1',
+        text: '2.1'
+      },
+      {
+        value: '2.0',
+        text: '2.0'
+      },
+      {
+        value: '1.0',
+        text: '1.0'
       }
     });
 
