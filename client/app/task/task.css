@@ -1,0 +1,10 @@
+.btn-toggle-text-usersatis:before {
+  content: '';
+  left: -4rem;
+}
+
+.btn-toggle-text-usersatis:after {
+  content: 'Sent';
+  right: -4rem;
+  opacity: .5;
+}

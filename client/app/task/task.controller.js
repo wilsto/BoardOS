@@ -430,6 +430,27 @@ angular.module('boardOsApp')
     };
 
 
+    $scope.reworkReasons = [{
+        value: 'Internal',
+        text: 'Internal'
+      },
+      {
+        value: 'External',
+        text: 'External'
+      }
+    ];
+
+    $scope.showreworkReason = function(thisInfo) {
+      var selected = [];
+      _.each($scope.reworkReasons, function(s) {
+        if (thisInfo.reworkReason && thisInfo.reworkReason.indexOf(s.value) >= 0) {
+          selected.push(s.text);
+        }
+      });
+      return selected.length ? selected.join(', ') : 'Not set';
+    };
+
+
     // *******************
     // Load a task
     // ******************
@@ -568,6 +589,10 @@ angular.module('boardOsApp')
           initializing = false;
         }, 800);
       }
+      //Call Intro
+      $timeout(function() {
+        $rootScope.$broadcast('ExplainToMe/intro');
+      }, 1000);
     };
 
     $scope.loadTask();
@@ -759,10 +784,39 @@ angular.module('boardOsApp')
     };
 
     $scope.removeActor = function(data, index) {
-
-
       $scope.task.actors.splice(index, 1);
     };
+
+    $scope.removeFollower = function(data, index) {
+      $scope.task.followers.splice(index, 1);
+    };
+
+
+    $scope.removeComment = function(comment) {
+      bootbox.confirm('Are you sure to delete this comment ? It can NOT be undone.', function(result) {
+        if (result) {
+          var index = _.pluck($scope.task.comments, 'date').indexOf(comment.date);
+          $scope.task.comments.splice(index, 1);
+        }
+      });
+    };
+
+    $scope.removeTodo = function(index) {
+      bootbox.confirm('Are you sure to delete this todo ? It can NOT be undone.', function(result) {
+        if (result) {
+          $scope.task.todos.splice(index, 1);
+        }
+      });
+    };
+
+    $scope.removeRework = function(index) {
+      bootbox.confirm('Are you sure to delete this rework ? It can NOT be undone.', function(result) {
+        if (result) {
+          $scope.task.metrics.splice(index, 1);
+        }
+      });
+    };
+
 
     // *******************
     // add a follower

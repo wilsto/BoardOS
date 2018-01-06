@@ -313,13 +313,24 @@ Please report with maximum of accucracy your problem to be able to correct it an
             <div class="portlet-title">
                 <div class="caption">
                   <span ng-if="key === 0">Primary </span> <span ng-if="key > 0">Re</span>Engagement <span ng-if="key > 0"> {{key}}</span>
+                  <a ng-if="key > 0" class="btn btn-default btn-xs text-muted" ng-click="removeRework($index)" uib-tooltip-html="'Remove this rework from this task'" tooltip-placement="right">
+                    <i class="fa fa-trash-o text-muted" aria-hidden="true"></i>
+                  </a>
                 </div>
                 <div class="tools">
                     <div class="pull-right" ng-init="EngagementIsExpanded[key]=(key===task.metrics.length-1 || key===0)" ng-click="EngagementIsExpanded[key]=!EngagementIsExpanded[key]">
                         <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!EngagementIsExpanded[key]" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
                         <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="EngagementIsExpanded[key]" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
                     </div>
-                    <span ng-if="key > 0" class="pull-right" style="margin-right:15px;"> <span class="label label-warning">  {{currentMetric.reworkReason}}</span></span>
+                    <span ng-if="key > 0" class="pull-right" style="margin-right:15px;">
+                      <span class="label label-warning">
+                        <a href="#" editable-select="currentMetric.reworkReason" e-ng-options="s.value as s.text for s in reworkReasons" buttons="no"  blur="submit">
+                          <span style="color:white;">
+                          {{ showreworkReason(currentMetric) }}
+                        </span>
+                        </a>
+                      </span>
+                    </span>
                 </div>
             </div>
             <div class="portlet-body" style="padding:0!important" >
@@ -381,6 +392,21 @@ Please report with maximum of accucracy your problem to be able to correct it an
 
                       <!-- FIN RECURRENCE -->
                       <!-- **************** -->
+                      <tr ng-show="!blnRecurrence && currentMetric.reworkReason" >
+                          <td>
+                              <span class="text-muted">StartDate
+                              </span>
+                          </td>
+                          <td>
+                              <span class="pull-right text-info">
+                                <!-- <a href="#" editable-bsdate="task.metrics[task.metrics.length-1].targetstartDate" e-is-open="opened.$data" e-ng-click="open($event,'$data')" e-datepicker-popup="mediumDate" e-readonly="true"> -->
+                                <md-button class="md-button-slim" ng-click="showDatePicker(currentMetric,'targetstartDate', $event)" aria-label="none" >
+                                    <span ng-class="{'mandatoryField':currentMetric.targetstartDate === undefined}">{{ (currentMetric.targetstartDate | date:'mediumDate') || 'empty' }}</span>
+                                </md-button>
+                                <!-- </a> -->
+                              </span>
+                          </td>
+                      </tr>
                         <tr ng-show="!blnRecurrence" >
                             <td>
                                 <span class="text-muted">StartDate
@@ -458,11 +484,6 @@ Please report with maximum of accucracy your problem to be able to correct it an
                 </div>
             </div>
             <div class="portlet-body" style="padding-bottom:5px;margin-bottom:0px;">
-              <div class="row">
-                <ul id="trash-can" ui-sortable="trashcan" class="sortTrash" ng-model="trash" ng-show="showTrash">
-                  Trash todo
-                </ul>
-              </div>
                 <div class="row">
                     <div class="form-group" style=";margin-left:20px;padding-bottom:10px">
                         <div class="input-group" style="width:96%">
@@ -474,55 +495,63 @@ Please report with maximum of accucracy your problem to be able to correct it an
                     </div>
                 </div>
                 <div class="row">
-                    <ul ui-sortable="sortme" class="todosPanel" ng-model="task.todos">
-                        <li class="todoTask" ng-repeat="todo in task.todos track by $index  ">
-                            <div class="circularToggleButtonView taskCheckboxNodeView " ng-class="todo.isDone ? ' circularToggleButtonView--toggledOn': 'circularToggleButtonView--toggledOff'">
-                                <div ng-click="changeStatusTodo($index)"  class="circularButtonView circularToggleButtonView-button circularButtonView--xsmall circularButtonView--onWhiteBackground circularButtonView--active">
-                                    <span class="circularButtonView-label">
-                                      <svg class="svgIcon " viewbox="0 0 32 32" title="checkmark">
-                                        <polygon points="27.672,4.786 10.901,21.557 4.328,14.984 1.5,17.812 10.901,27.214 30.5,7.615 "></polygon>
-                                      </svg>
-                                    </span>
-                                </div>
-                                <span ng-class="{'barre':todo.isDone}"><span style="color:black;" >{{todo.text}}</span></span>
-                            </div>
-                            <div class="pull-right sortButtons">
-                                <md-button  class="md-button-slim" ng-click="$parent.showTodoDatePicker(todo, $event)" aria-label="none" style="min-width:20px!important;margin:0!important;padding:0!important;border-bottom:none;">
-                                  <small class="text-muted" ng-show="todo.date">{{todo.date |date:'dd MMM' }}</small>
-                                    <div ng-hide="todo.date" class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground" uib-tooltip-html="'Add a due date to this subtask'" tooltip-placement="bottom">
-                                        <span class="circularButtonView-label">
-                                      <svg class="svgIcon task-row-due-date-icon" viewbox="0 0 32 32" title="calendar">
-                                        <rect x="16" y="16" width="2" height="2"></rect><rect x="20" y="16" width="2" height="2"></rect>
-                                        <rect x="20" y="20" width="2" height="2"></rect><rect x="16" y="20" width="2" height="2"></rect>
-                                        <rect x="8" y="20" width="2" height="2"></rect><rect x="8" y="24" width="2" height="2"></rect>
-                                        <rect x="16" y="24" width="2" height="2"></rect><rect x="12" y="16" width="2" height="2"></rect>
-                                        <rect x="12" y="20" width="2" height="2"></rect><rect x="12" y="24" width="2" height="2"></rect>
-                                        <path d="M22,2V0h-2v2h-8V0h-2v2H2v30h28V2H22z M28,30H4V12h24V30z M28,10H4V4h6v2h2V4h8v2h2V4h6V10z"></path>
-                                      </svg>
-                                    </span>
-                                    </div>
-                                </md-button>
-                                <a ng-click="AssignSubtTaskActor(todo)">
-                                    <img ng-show="todo.actor" uib-tooltip-html="'{{todo.actor.name}}'" tooltip-placement="bottom" alt="" ng-src="{{todo.actor.avatar}}" style="width:30px;height:30px;" class="img-circle" err-src="assets/images/avatars/avatar.png" />&nbsp;
-                                    <div ng-hide="todo.actor" class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground" uib-tooltip-html="'Assign this subtask'" tooltip-placement="bottom">
-                                        <span class="circularButtonView-label">
-                                      <svg class="svgIcon task-row-assignee-icon" viewbox="0 0 32 32" title="unassigned">
-                                        <path d="M20.534,16.765C23.203,15.204,25,12.315,25,9c0-4.971-4.029-9-9-9S7,4.029,7,9c0,3.315,1.797,6.204,4.466,7.765C5.962,18.651,2,23.857,2,30c0,0.681,0.065,1.345,0.159,2h27.682C29.935,31.345,30,30.681,30,30C30,23.857,26.038,18.651,20.534,16.765z M9,9c0-3.86,3.14-7,7-7s7,3.14,7,7s-3.14,7-7,7S9,12.86,9,9z M4,30c0-6.617,5.383-12,12-12s12,5.383,12,12H4z"></path>
-                                      </svg>
-                                    </span>
-                                    </div>
-                                </a>
-                                <!-- <button type="button" class=" " aria-hidden="true" ng-click="deleteTodo(todo)">&times;</button> -->
-                            </div>
-                        </li>
-                        <li ng-show="blnAssignSubtaskActor">
-                              <input class="mysearchname" type="text" placeholder="Name" ng-model="subtaskactorselected" uib-typeahead="member as member.name for member in members | filter:$viewValue:memberNamesWith | limitTo:5" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
-                              <span class="btn btn-primary" ng-click="addSubTaskActor(subtaskactorselected)">Add</span>
-                              <span class="task-or">or</span>
-                              <span class="btn btn-info  btn-sm btn-outline" ng-click="addMeToSubTaskActor()" ng-show="!mePresentInSubTaskActors">Assign to Me</span>
-                              <span class="btn btn-info  btn-sm btn-outline" ng-click="removeMeToSubTaskActor()" ng-show="mePresentInSubTaskActors">Unassign to Me</span>
-                        </li>
-                    </ul>
+                  <ul ui:sortable class="todosAnoPanel" ng-model="task.todos" style=";margin-left:15px!important">
+                    <li class="todoAno" ng-repeat="todo in task.todos track by $index  ">
+                      <div style="padding-left:3px" class="circularToggleButtonView taskCheckboxNodeView " ng-class="todo.isDone ? ' circularToggleButtonView--toggledOn': 'circularToggleButtonView--toggledOff'">
+                        <div ng-click="changeStatusTodo($index)" class="circularButtonView circularToggleButtonView-button circularButtonView--xsmall circularButtonView--onWhiteBackground circularButtonView--active">
+                          <span class="circularButtonView-label">
+                             <svg class="svgIcon " viewbox="0 0 32 32" title="checkmark">
+                               <polygon points="27.672,4.786 10.901,21.557 4.328,14.984 1.5,17.812 10.901,27.214 30.5,7.615 "></polygon>
+                             </svg>
+                           </span>
+                        </div>
+                        <span ng-class="{'barre':todo.isDone}">
+                            <span style="color:black;padding-left:5px" >
+                              <a href="#" editable-text="todo.text" buttons="no"  blur="submit">{{ todo.text || 'To Complete ' }}</a>
+                          </span>
+                        </span>
+                      </div>
+                      <div class="pull-right sortButtons">
+                        <md-button class="md-button-slim" ng-click="$parent.showTodoDatePicker(todo, $event)" aria-label="none" style="min-width:20px!important;margin:0!important;padding:0!important;border-bottom:none;">
+                          <small class="text-muted" ng-show="todo.date">{{todo.date |date:'dd MMM' }}</small>
+                          <div ng-hide="todo.date" class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground" uib-tooltip-html="'Add a due date to this subtask'" tooltip-placement="bottom">
+                            <span class="circularButtonView-label">
+                               <svg class="svgIcon task-row-due-date-icon" viewbox="0 0 32 32" title="calendar">
+                                 <rect x="16" y="16" width="2" height="2"></rect><rect x="20" y="16" width="2" height="2"></rect>
+                                 <rect x="20" y="20" width="2" height="2"></rect><rect x="16" y="20" width="2" height="2"></rect>
+                                 <rect x="8" y="20" width="2" height="2"></rect><rect x="8" y="24" width="2" height="2"></rect>
+                                 <rect x="16" y="24" width="2" height="2"></rect><rect x="12" y="16" width="2" height="2"></rect>
+                                 <rect x="12" y="20" width="2" height="2"></rect><rect x="12" y="24" width="2" height="2"></rect>
+                                 <path d="M22,2V0h-2v2h-8V0h-2v2H2v30h28V2H22z M28,30H4V12h24V30z M28,10H4V4h6v2h2V4h8v2h2V4h6V10z"></path>
+                               </svg>
+                             </span>
+                          </div>
+                        </md-button>
+                        <a ng-click="AssignSubtTaskActor(todo)">
+                           <img ng-show="todo.actor" uib-tooltip-html="'{{todo.actor.name}}'" tooltip-placement="bottom" alt="" ng-src="{{todo.actor.avatar}}" style="width:30px;height:30px;" class="img-circle" err-src="assets/images/avatars/avatar.png" />&nbsp;
+                           <div ng-hide="todo.actor" class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground" uib-tooltip-html="'Assign this subtask'" tooltip-placement="bottom">
+                               <span class="circularButtonView-label">
+                             <svg class="svgIcon task-row-assignee-icon" viewbox="0 0 32 32" title="unassigned">
+                               <path d="M20.534,16.765C23.203,15.204,25,12.315,25,9c0-4.971-4.029-9-9-9S7,4.029,7,9c0,3.315,1.797,6.204,4.466,7.765C5.962,18.651,2,23.857,2,30c0,0.681,0.065,1.345,0.159,2h27.682C29.935,31.345,30,30.681,30,30C30,23.857,26.038,18.651,20.534,16.765z M9,9c0-3.86,3.14-7,7-7s7,3.14,7,7s-3.14,7-7,7S9,12.86,9,9z M4,30c0-6.617,5.383-12,12-12s12,5.383,12,12H4z"></path>
+                             </svg>
+                           </span>
+                           </div>
+                       </a>
+                       <a class="btn btn-default btn-xs text-muted" ng-click="removeTodo($index)" uib-tooltip-html="'Remove this todo from this task'" tooltip-placement="left">
+                         <i class="fa fa-trash-o text-muted" aria-hidden="true"></i>
+                       </a>
+                        <!-- <button type="button" class=" " aria-hidden="true" ng-click="deleteTodo(todo)">&times;</button> -->
+                      </div>
+                    </li>
+                    <li ng-show="blnAssignSubtaskActor">
+                      <input class="mysearchname" type="text" placeholder="Name" ng-model="subtaskactorselected" uib-typeahead="member as member.name for member in members | filter:$viewValue:memberNamesWith | limitTo:5" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
+                      <span class="btn btn-primary" ng-click="addSubTaskActor(subtaskactorselected)">Add</span>
+                      <span class="task-or">or</span>
+                      <span class="btn btn-info  btn-sm btn-outline" ng-click="addMeToSubTaskActor()" ng-show="!mePresentInSubTaskActors">Assign to Me</span>
+                      <span class="btn btn-info  btn-sm btn-outline" ng-click="removeMeToSubTaskActor()" ng-show="mePresentInSubTaskActors">Unassign to Me</span>
+                    </li>
+                  </ul>
+
                 </div>
             </div>
 
@@ -582,10 +611,20 @@ Please report with maximum of accucracy your problem to be able to correct it an
                       </li>
                     <li>
                         <div class="pull-left" style="color:#898E95;width:65px;">Followers</div>
-                        <div class="pull-left" ng-repeat="actor in task.followers">
-                            <img uib-tooltip-html="'{{actor.name}}'" tooltip-placement="bottom" alt="" ng-src="assets/images/avatars/{{actor._id}}.png" style="width:30px;height:30px" class="img-circle" err-src="assets/images/avatars/avatar.png" />&nbsp;
+                        <div class="pull-left  RemovableAvatar TaskActors-facepileAvatar" ng-repeat="actor in task.followers">
+                            <img uib-tooltip-html="'{{actor.name}}'" tooltip-placement="right" alt="" ng-src="assets/images/avatars/{{actor._id}}.png" style="width:30px;height:30px" class="img-circle" err-src="assets/images/avatars/avatar.png" />
+                            <a class="RemoveButton RemovableAvatar-avatarRemoveButton" ng-click="removeFollower(actor, $index)">
+                              <div uib-tooltip-html="'Remove follower'" style="width:15px;height:15px;color:white;background-color:#1aafd0;"
+                              tooltip-placement="right" class="circularButtonView add-button detailsFollowersView-addButton circularButtonView--small circularButtonView--onWhiteBackground circularButtonView--active">
+                                  <span class="circularButtonView-label">
+                                    <svg class="svgIcon XIcon RemoveButton-xIcon" title="XIcon" viewbox="0 0 32 32">
+                                      <polygon points="24.485,27.314 27.314,24.485 18.828,16 27.314,7.515 24.485,4.686 16,13.172 7.515,4.686 4.686,7.515 13.172,16 4.686,24.485 7.515,27.314 16,18.828 "></polygon>
+                                    </svg>
+                                  </span>
+                              </div>
+                            </a>
                         </div>
-                        <a href="#" ng-click="openAddFollowerBox()" ng-hide="blnAddFollower">
+                        <a id="addFollower" href="#" ng-click="openAddFollowerBox()" ng-hide="blnAddFollower">
                           <div uib-tooltip-html="'Add a follower to this task.<br />Followers don\'t have actions in tasks '" tooltip-placement="bottom" class="circularButtonView add-button detailsFollowersView-addButton circularButtonView--small circularButtonView--onWhiteBackground circularButtonView--active">
                               <span class="circularButtonView-label">
                                 <svg class="svgIcon add-followers-icon" viewbox="0 0 32 32" title="plus">
@@ -763,6 +802,11 @@ Please report with maximum of accucracy your problem to be able to correct it an
                                     <span class="text-muted">
                                       User Satisfaction
                                     </span>
+                                    <span id="toggleTodo" ng-click="currentMetric.blnSentUser = !currentMetric.blnSentUser">
+                                      <button  type="button" class="btn btn-toggle btn-toggle-text-usersatis" ng-class="{'active':currentMetric.blnSentUser }" data-toggle="button" aria-pressed="false" autocomplete="off" >
+                                        <span class="handle"></span>
+                          </button>
+                          </span>
                                 </td>
                                 <td>
                                     <span class="pull-right text-info">
@@ -830,7 +874,7 @@ Please report with maximum of accucracy your problem to be able to correct it an
                     </div>
                     <div class="dont-break-out">
                         <ul class="dont-break-out" style="padding-left:0px;-webkit-padding-start: 0px!important;">
-                            <li class="todoTask" ng-repeat="comment in task.comments | orderBy:'-date' | filter:filterComments | filter:{auto:false} track by $index" style="min-height:40px;height:auto;padding:10px 0 0 0!important;display:flex;vertical-align: middle;">
+                            <li class="commentTask" ng-repeat="comment in task.comments | orderBy:'-date' | filter:filterComments | filter:{auto:false} track by $index" style="min-height:40px;height:auto;padding:10px 0 0 0!important;display:flex;vertical-align: middle;">
                                 <div class="" style="min-width:50px;">
                                     <div class="" style="display:inline-flex">
                                         <img uib-tooltip-html="'{{comment.user.name}} <br/>
@@ -840,10 +884,13 @@ Please report with maximum of accucracy your problem to be able to correct it an
                                     <br><span class="dateComment">{{comment.date | date:'d MMM'}}</span>
                                 </div>
 
-                                <div class="dont-break-out">
+                                <div class="dont-break-out" style="width:80%">
                                     <span class="autoComment" ng-if="comment.auto === 2" style="color:rgba(91, 103, 133, 0.5)">{{comment.user.name}} </span>
                                     <span class="" ng-class="{'autoComment':comment.auto}" ng-bind-html="comment.text | embed:{sanitizeHtml:false,linkTarget:'_blank'}"></span>
                                 </div>
+                                <a class="btn  btn-xs text-muted pull-right" ng-click="removeComment(comment)" uib-tooltip-html="'Remove forever this comment'" tooltip-placement="left">
+                                  <i class="fa fa-trash-o text-muted" aria-hidden="true"></i>
+                                </a>
                             </li>
                         </ul>
                     </div>
