@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">2.78% </span>
+        <span class="strong">2.17% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>1/36</span>
+        <span class='fraction'>1/46</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -32,12 +32,12 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/14</span>
+        <span class='fraction'>0/19</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">2.78% </span>
+        <span class="strong">2.17% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>1/36</span>
+        <span class='fraction'>1/46</span>
       </div>
     </div>
   </div>
@@ -161,27 +161,24 @@
 116
 117
 118
-119</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+119
+120
+121
+122
+123
+124</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -225,7 +222,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -277,6 +277,16 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use strict';
@@ -286,26 +296,18 @@ angular.module('boardOsApp')
 <span class="cstat-no" title="statement not covered" >    $scope.errors = {};</span>
 <span class="cstat-no" title="statement not covered" >    $scope.currentUser = Auth.getCurrentUser();</span>
 &nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.datafalse = false;</span>
+<span class="cstat-no" title="statement not covered" >    $scope.datatrue = true;</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >    $scope.dashboards = [];</span>
 <span class="cstat-no" title="statement not covered" >    $scope.locations = [{</span>
       value: 'Suresnes',
       text: 'Suresnes'
     }, {
-      value: 'Hongrie',
-      text: 'Hongrie'
-    }, {
-      value: 'RepThech',
-      text: 'RepThech'
-    }, {
-      value: 'Nantes',
-      text: 'Nantes'
-    }, {
       value: 'Levallois',
       text: 'Levallois'
-    }, {
-      value: 'Boulogne',
-      text: 'Boulogne'
-    }, ];
+    }];
 <span class="cstat-no" title="statement not covered" >    $scope.repeatOn = [{</span>
         value: 1,
         text: 'MO',
@@ -342,11 +344,14 @@ angular.module('boardOsApp')
 <span class="cstat-no" title="statement not covered" >      return selected.length ? selected.join(', ') : 'Not set';</span>
     };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    $scope.editInProgress = false;</span>
+<span class="cstat-no" title="statement not covered" >    $scope.$watchGroup(['currentUser.name', 'currentUser.visa', 'currentUser.avatar'], <span class="fstat-no" title="function not covered" >function(newMap, previousMap) {</span></span>
+<span class="cstat-no" title="statement not covered" >      $scope.editInProgress = true;</span>
+    }, true);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    $scope.load = <span class="fstat-no" title="function not covered" >function() {</span></span>
 <span class="cstat-no" title="statement not covered" >      $http.get('/api/recurrentTasks/list/' + $scope.currentUser._id).success(<span class="fstat-no" title="function not covered" >function(recurrentTasks) {</span></span>
 <span class="cstat-no" title="statement not covered" >        $scope.recurrentTasks = recurrentTasks;</span>
+<span class="cstat-no" title="statement not covered" >        $scope.editInProgress = false;</span>
       });
     };
 &nbsp;
@@ -396,14 +401,24 @@ angular.module('boardOsApp')
 <span class="cstat-no" title="statement not covered" >      $scope.editInProgress = true;</span>
     };
 &nbsp;
-  });
-&nbsp;</pre></td></tr>
+<span class="cstat-no" title="statement not covered" >    $scope.toggleActive = <span class="fstat-no" title="function not covered" >function(type) {</span></span>
+<span class="cstat-no" title="statement not covered" >      $http.get('/api/recurrentTasks/toggleAll/' + type + '/' + $scope.currentUser._id).success(<span class="fstat-no" title="function not covered" >function(recurrentTasks) {</span></span>
+<span class="cstat-no" title="statement not covered" >        $scope.load();</span>
+      });
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $scope.toggleOneActive = <span class="fstat-no" title="function not covered" >function(rtask) {</span></span>
+<span class="cstat-no" title="statement not covered" >      $http.get('/api/recurrentTasks/toggleOne/' + !rtask.active + '/' + rtask._id).success(<span class="fstat-no" title="function not covered" >function(recurrentTasks) {</span></span>
+<span class="cstat-no" title="statement not covered" >        $scope.load();</span>
+      });
+    };
+  });</pre></td></tr>
 </table></pre>
 <div class='push'></div><!-- for sticky footer -->
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Nov 30 2017 21:27:04 GMT+0100 (Paris, Madrid)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Jan 05 2018 17:43:44 GMT+0100 (Paris, Madrid)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

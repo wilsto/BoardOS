@@ -17,7 +17,10 @@ angular.module('boardOsApp')
     $scope.orderByField = 'date';
     $scope.reverseSort = true;
 
-    $rootScope.loadNews = function() {
+    $scope.pages = ['/', 'about', 'account', 'admin', 'anomalie', 'anomalies', 'calendar', 'dasboard', 'dasboards', 'dqm', 'hierarchies', 'KPI', 'KPIs', 'mail', 'settings', 'task', 'tasks', 'whatsnew'];
+    $scope.pagesNb = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    $scope.loadNews = function() {
       var absUrl = $location.absUrl();
       $http.get('/api/whatsnews').success(function(data) {
         $scope.infos = _.sortBy(data, 'date').reverse();

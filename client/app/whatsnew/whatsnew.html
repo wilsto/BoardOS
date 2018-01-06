@@ -133,16 +133,19 @@
               </div>
             </td>
             <td >
-                {{info.type}}
+              <span class="text-info">
+                  <a href="#" editable-select="hint.version" e-ng-options="s.value as s.text for s in versions" buttons="no"  blur="submit">
+                    {{ showVersion(hint) }}
+                  </a>
+              </span>
             </td>
             <td >
-              <a ng-click="edit(info)">
-                <div class="desc">{{info.title}}
-                </div>
-              </a>
+                <span class="dont-break-out">
+                  <a href="#" editable-textarea="hint.intro" buttons="right"  blur="submit">{{ hint.intro || 'empty'}}</a>
+                </span>
             </td>
             <td >
-                <small class="dont-break-out" style="font-size:11px"> {{info.resume}}</small>
+              <a href="#" editable-text="hint.element" buttons="no"  blur="submit">{{ hint.element || 'empty'}}</a>
             </td>
             <td >
                  {{info.info.length || 0 }}

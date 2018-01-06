@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">21.43% </span>
+        <span class="strong">7.14% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>3/14</span>
+        <span class='fraction'>1/14</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -30,14 +30,14 @@
         <span class='fraction'>0/8</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">50% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>1/2</span>
+        <span class='fraction'>0/2</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">21.43% </span>
+        <span class="strong">7.14% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>3/14</span>
+        <span class='fraction'>1/14</span>
       </div>
     </div>
   </div>
@@ -68,22 +68,21 @@
 23
 24
 25
-26
-27</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+26</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -93,41 +92,39 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use strict';
 &nbsp;
 angular.module('boardOsApp')
-  .filter('myregex', function() {
-    var patt;
-    return <span class="fstat-no" title="function not covered" >function(input, field, regex) {</span>
-<span class="cstat-no" title="statement not covered" >      if (regex &amp;&amp; regex.indexOf('/') &gt;= 0) {</span>
-<span class="cstat-no" title="statement not covered" >        var regexMatch = regex.match(/^\/(.*)\/([^\/]*)$/);</span>
-<span class="cstat-no" title="statement not covered" >        patt = new RegExp(regexMatch[1], regexMatch[2]);</span>
-      } else {
-<span class="cstat-no" title="statement not covered" >        patt = new RegExp(regex);</span>
-      }
-<span class="cstat-no" title="statement not covered" >      var out = [];</span>
+    .filter('myregex', <span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >        var patt;</span>
+<span class="cstat-no" title="statement not covered" >        return <span class="fstat-no" title="function not covered" >function(input, field, regex) {</span></span>
+<span class="cstat-no" title="statement not covered" >            if (regex &amp;&amp; regex.indexOf('/') &gt;= 0) {</span>
+<span class="cstat-no" title="statement not covered" >                var regexMatch = regex.match(/^\/(.*)\/([^\/]*)$/);</span>
+<span class="cstat-no" title="statement not covered" >                patt = new RegExp(regexMatch[1], regexMatch[2]);</span>
+            } else {
+<span class="cstat-no" title="statement not covered" >                patt = new RegExp(regex);</span>
+            }
+<span class="cstat-no" title="statement not covered" >            var out = [];</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      if (input === undefined) {</span>
-<span class="cstat-no" title="statement not covered" >        return out;</span>
-      }
+<span class="cstat-no" title="statement not covered" >            if (input === undefined) {</span>
+<span class="cstat-no" title="statement not covered" >                return out;</span>
+            }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      for (var i = 0; i &lt; input.length; i++) {</span>
-<span class="cstat-no" title="statement not covered" >        if (patt.test(input[i][field])) {</span>
-<span class="cstat-no" title="statement not covered" >          out.push(input[i]);</span>
-        }
-      }
-<span class="cstat-no" title="statement not covered" >      return out;</span>
-    };
-  });
-&nbsp;</pre></td></tr>
+<span class="cstat-no" title="statement not covered" >            for (var i = 0; i &lt; input.length; i++) {</span>
+<span class="cstat-no" title="statement not covered" >                if (patt.test(input[i][field])) {</span>
+<span class="cstat-no" title="statement not covered" >                    out.push(input[i]);</span>
+                }
+            }
+<span class="cstat-no" title="statement not covered" >            return out;</span>
+        };
+    });</pre></td></tr>
 </table></pre>
 <div class='push'></div><!-- for sticky footer -->
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Nov 30 2017 21:27:04 GMT+0100 (Paris, Madrid)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Jan 05 2018 17:43:44 GMT+0100 (Paris, Madrid)
 </div>
 </div>
 <script src="../../prettify.js"></script>

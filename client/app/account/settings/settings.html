@@ -24,15 +24,15 @@
                         <ul class="list-group">
                             <li class="list-group-item">
                                 <label for="Name" class="list-user-property text-muted "><i class="fa fa-2x fa-user"></i> Name</label>
-                                <a name="Name" href="#" editable-text="currentUser.name" buttons="yes" blur="submit">{{ currentUser.name || 'To Complete ' }}</a>
-                                <div class="pull-right">
+                                <a   id="name" name="Name" href="#" editable-text="currentUser.name" buttons="yes" blur="submit">{{ currentUser.name || 'To Complete ' }}</a>
+                                <div class="pull-right"  id="visa" >
                                     <label for="Visa" class="list-user-property text-muted "><i class="fa fa-id-card-o"></i> Visa</label>
                                     <a name="Visa" href="#" editable-text="currentUser.visa" buttons="yes" blur="submit">{{ currentUser.visa || 'To Complete ' }}</a>
                                 </div>
-                                <br><label for="Name" class="list-user-property text-muted " style="padding-left:10px"><i class="fa fa-envelope"></i> {{currentUser.email}}</label>
+                                <br><label id="email" for="email" class="list-user-property text-muted " style="padding-left:10px"><i class="fa fa-envelope"></i> {{currentUser.email}}</label>
                             </li>
                         </ul>
-                        <ul class="list-group">
+                        <ul class="list-group" id="avatar">
                             <li class="list-group-item">
                                 <label for="avatar" class="list-user-property text-muted "><i class="fa fa-2x fa-picture-o "></i> Avatar</label>
                                 <a name="avatar" href="#" editable-text="currentUser.avatar" buttons="yes" blur="submit">{{ currentUser.avatar || 'Enter avatar URL (http://)' }}</a>
@@ -44,13 +44,13 @@
             </div>
             <h3>
                 My Recurring Tasks
-                <div class="pull-right">
+                <div class="pull-right" id="newTask">
                     <a class="btn btn-primary" href="/recurrentTask/">   <i class="fa fa-plus"></i> Add one</a>
                 </div>
             </h3>
             <hr>
 
-            <div class="vacancy">
+            <div class="vacancy" id="vacancy">
                 <div class="" ng-click="toggleActive('none')">
                     <button type="button" class="btn btn-toggle" data-toggle="button" aria-pressed="false" autocomplete="off" style="margin:0">
                       <div class="handle"></div>
@@ -96,14 +96,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="recurrentTask in recurrentTasks | orderBy:'repeats' track by $index ">
+                        <tr  id="recurringRow" ng-repeat="recurrentTask in recurrentTasks | orderBy:'repeats' track by $index ">
                             <td>
-                                <button ng-click="toggleOneActive(recurrentTask)"  ng-class="{'active':recurrentTask.active}" type="button" class="btn btn-toggle" data-toggle="button" aria-pressed="false" autocomplete="off" style="margin:0">
+                                <button  id="vacancyRow" ng-click="toggleOneActive(recurrentTask)"  ng-class="{'active':recurrentTask.active}" type="button" class="btn btn-toggle" data-toggle="button" aria-pressed="false" autocomplete="off" style="margin:0">
                                   <div class="handle"></div>
                                 </button>
                             </td>
                             <td style="width:200px!important">
-                                <a href="/recurrentTask/{{recurrentTask._id}}">{{recurrentTask.name}}</a>
+                                <a id="taskName" href="/recurrentTask/{{recurrentTask._id}}">{{recurrentTask.name}}</a>
                             </td>
                             <td  style="width:200px!important">
                               <small  class="dont-break-out">

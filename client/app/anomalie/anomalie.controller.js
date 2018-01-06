@@ -2,13 +2,178 @@
 /*jshint loopfunc:true */
 
 angular.module('boardOsApp')
-  .controller('AnomalieCtrl', function($scope, $filter, $stateParams, $http, $location, $window, $timeout, Notification, $uibModal, $mdpDatePicker) {
+  .controller('AnomalieCtrl', function($scope, $rootScope, $filter, $stateParams, $http, $location, $window, $timeout, Notification, $uibModal, $mdpDatePicker) {
 
     var anomalieId = $stateParams.id || $scope.anomalie._id;
     $scope.checked = false;
 
     $scope.toggle = function() {
       $scope.checked = !$scope.checked;
+    };
+
+
+    // ***********************************
+    // TodoList
+
+    $scope.addTodo = function() {
+      if (!$scope.anomalie.todos) {
+        $scope.anomalie.todos = [];
+      }
+      $scope.anomalie.todos.push({
+        text: $scope.newTodo.text,
+        isDone: false
+      });
+      $scope.newTodo.text = ''; //Reset the text field.
+    };
+    $scope.changeStatusTodo = function(index) {
+      $scope.anomalie.todos[index].isDone = !$scope.anomalie.todos[index].isDone;
+    };
+
+    // recherche des membres
+    $http.get('/api/users/members').success(function(members) {
+      $scope.members = members;
+    });
+
+    // add a subtaskactor
+    $scope.AssignSubtTaskActor = function(todo) {
+      $scope.blnAssignSubtaskActor = true;
+      $scope.currentTodo = todo;
+    };
+
+    $scope.addSubTaskActor = function(member) {
+      $scope.currentTodo.actor = member;
+      $scope.blnAssignSubtaskActor = false;
+    };
+
+    $scope.addMeToSubTaskActor = function() {
+      var member = _.filter($scope.members, function(member) {
+        return member._id === $rootScope.currentUser._id;
+      })[0];
+      $scope.currentTodo.actor = member;
+      $scope.blnAssignSubtaskActor = false;
+    };
+
+    $scope.showTodoDatePicker = function(todo, ev) {
+      var currentdate = (todo.date) ? new Date(todo.date) : new Date();
+      $mdpDatePicker(currentdate, {
+        targetEvent: ev
+      }).then(function(selectedDate) {
+        todo.date = selectedDate.toISOString();
+      });
+    };
+
+    $scope.showDatePicker = function(item, datename, ev) {
+      var currentdate = (item[datename]) ? new Date(item[datename]) : new Date();
+      $mdpDatePicker(currentdate, {
+        targetEvent: ev
+      }).then(function(selectedDate) {
+        item[datename] = selectedDate.toISOString();
+
+      });
+    };
+
+    $scope.showWeeks = true;
+
+    $scope.today = function() {
+      $scope.date = new Date();
+    };
+    $scope.today();
+
+    $scope.toggleWeeks = function() {
+      $scope.showWeeks = !$scope.showWeeks;
+    };
+
+    $scope.clear = function() {
+      $scope.date = null;
+    };
+
+    // Disable weekend selection
+    $scope.disabled = function(date, mode) {
+      return (mode === 'day' && (date.getDay() === 0 || date.getDay() === 6));
+    };
+
+    $scope.toggleMin = function() {
+      $scope.minDate = ($scope.minDate) ? null : new Date();
+    };
+    $scope.toggleMin();
+
+    $scope.open1 = function($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+
+      $scope.opened1 = true;
+    };
+
+    $scope.open2 = function($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+
+      $scope.opened2 = true;
+    };
+
+    $scope.dateOptions = {
+      'year-format': '"yyyy"',
+      'starting-day': 1
+    };
+
+    $scope.format = 'dd-MMMM-yyyy';
+
+
+    // add an actor
+    $scope.memberNamesWith = function(member, viewValue) {
+      if (typeof member.name !== 'undefined') {
+        return member.name.toLowerCase().indexOf(viewValue.toLowerCase()) >= 0;
+      }
+    };
+
+    $scope.openAddActorBox = function() {
+      focus('actorselected');
+      $scope.blnAddActor = true;
+    };
+
+    $scope.closeAddActorBox = function() {
+      $scope.actorselected = null;
+      $scope.blnAddActor = false;
+    };
+
+    $scope.removeTodo = function(index) {
+      $scope.anomalie.todos.splice(index, 1);
+    };
+
+    // Fin TodoList
+    // ******************************************
+
+
+
+
+    $scope.addActor = function(member) {
+      var index = _.indexOf(_.pluck($scope.anomalie.actors, '_id'), member._id);
+      if (index < 0) {
+        $scope.anomalie.actors.push(member);
+        $scope.blnAddActor = false;
+        $scope.actorselected = null;
+      } else {
+        Notification.warning('Actor "' + member.name + '" already present in list');
+      }
+    };
+
+    $scope.addMeToActor = function() {
+      var member = _.filter($scope.members, function(member) {
+        return member._id === $scope.currentUser._id;
+      })[0];
+      $scope.anomalie.actors.push(member);
+      $scope.blnAddActor = false;
+      $scope.actorselected = null;
+    };
+
+    $scope.removeMeToActor = function() {
+      $scope.anomalie.actors = _.without($scope.anomalie.actors, _.findWhere($scope.anomalie.actors, {
+        _id: $scope.currentUser._id
+      }));
+    };
+
+    $scope.removeActor = function(data, index) {
+      $scope.anomalie.actors.splice(index, 1);
     };
 
 
@@ -59,6 +224,11 @@ angular.module('boardOsApp')
 
       $scope.myPromise = $http.get('/api/anomalies/' + anomalieId).success(function(anomalie) {
         $scope.anomalie = anomalie;
+
+
+        $scope.viewMode = {
+          blnTodo: anomalie.todos && anomalie.todos.length > 0
+        };
 
         $scope.impacts = [{
             value: 'Blocking',
@@ -162,6 +332,11 @@ angular.module('boardOsApp')
 
           }
         });
+
+        //Call Intro
+        $timeout(function() {
+          $rootScope.$broadcast('ExplainToMe/intro');
+        }, 1000);
       });
     };
     $scope.loadAnomalie();

@@ -1,27 +1,33 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
+<script type="text/ng-template" id="memberTemplate.html">
+   <a >
+      <img class="img-circle" ng-src="{{match.model.avatar}}" err-src="assets/images/avatars/avatar.png" > {{match.model.name}}
+   </a>
+</script>
+
 <div ng-click="toggle()" style="z-index:999;position:absolute;right:-35px;top:35% ;background-color:#222222;width:70px;height:70px;  border-radius: 35px;    -webkit-transform:rotate(-90deg);   -ms-transform:rotate(-90deg);    -moz-transform:rotate(-90deg);    -webkit-transform:rotate(-90deg);    -o-transform:rotate(-90deg);">
-<div style="font-size:14px;color:#FFF;width:70px;height:70px;text-align:center;padding-top:10px; ">Menu</div>
+  <div id="menu" style="font-size:14px;color:#FFF;width:70px;height:70px;text-align:center;padding-top:10px; ">Menu</div>
 </div>
 
-<div class="img-overlay" ng-show="blnEnlarge===true" ng-click="blnEnlarge=!blnEnlarge" >
+<div class="img-overlay" ng-show="blnEnlarge===true" ng-click="blnEnlarge=!blnEnlarge">
   <h3 class="pull-left" style="padding:8px;margin-top:0">Root Cause Map</h3>
   <small class="text-muted pull-right" style="padding:8px">Click anywhere on the map to hide it</small>
   <div class="img-overlay-canvas" id="canvas_large"></div>
 </div>
 
 
-  <!-- Script pour le template du search -->
-  <script type="text/ng-template" id="searchTaskTemplate.html">
-    <a  href="#">
+<!-- Script pour le template du search -->
+<script type="text/ng-template" id="searchTaskTemplate.html">
+  <a href="#">
        <img class="img-circle" ng-src="{{match.model.actors[0].avatar}}" err-src="assets/images/avatars/avatar.png" >
         <small class=text-muted style="margin-left:5px;margin-right:5px">   {{match.model.metrics[0].targetEndDate | date: 'mediumDate'}}</small>
         {{match.model.name}}
      </a>
-  </script>
+</script>
 
 <script type="text/ng-template" id="selectOrCreateTask.html">
   <div class="modal-header">
-      <h4 class="modal-title" ng-if="typeTask==='CA'">
+    <h4 class="modal-title" ng-if="typeTask==='CA'">
         First, we need a Corrective Action <b>(CA).</b><br>
         <img src="assets/images/correctiveaction.jpg" style="height:150px;margin:5px" class="pull-right" />
         <small>
@@ -29,7 +35,7 @@
            Establish thorough follow-up to ensure the correction is effective and recurrence has been prevented.
         </small>
       </h4>
-      <h4 class="modal-title" ng-if="typeTask==='RCA'">
+    <h4 class="modal-title" ng-if="typeTask==='RCA'">
         Next, we need a Root Cause Analysis <b>(RCA)</b>.
         <img src="assets/images/RCA.png" style="height:150px;margin:5px" class="pull-right" />
         <small>
@@ -37,7 +43,7 @@
         RCA is procedural and helps guide the problem solver to understand the real causes of problems and therefore lead to the development of a practical solution that will prevent the recurrence of that problem        <br />
         </small>
       </h4>
-      <h4 class="modal-title" ng-if="typeTask==='PA'">
+    <h4 class="modal-title" ng-if="typeTask==='PA'">
         Finally, we need a Preventive Action <b>(PA)</b>.
         <img src="assets/images/PA.jpg" style="height:150px;margin:5px" class="pull-right" />
         <small>
@@ -49,400 +55,476 @@
   </div>
   <div class="modal-body" style="padding:0" ng-if="blnSelect">
     <table class="table table-striped table-hover" style="margin-bottom:0">
-        <tbody style="text-align:left;">
-          <tr >
-              <td style="text-align:left;width:20%">
-                  <span ><i class="fa fa-crosshairs" aria-hidden="true"></i> Select a Task
+      <tbody style="text-align:left;">
+        <tr>
+          <td style="text-align:left;width:20%">
+            <span><i class="fa fa-crosshairs" aria-hidden="true"></i> Select a Task
                   </span>
-              </td>
-              <td style="text-align:right;width:80%">
-                <input  class="mysearchname" style="width:100%!important" type="text" placeholder="Enter the name of the task you search..." ng-model="mySearchTask" uib-typeahead="mySearchTask as mySearchTask.name for mySearchTask in mySearchTasks | filter:$viewValue:namesWith | orderBy:'-date' | limitTo:50"
-                  typeahead-min-length="0" typeahead-template-url="searchTaskTemplate.html"  typeahead-on-select="selectTask($item)">
-              </td>
-          </tr>
-        </tbody>
+          </td>
+          <td style="text-align:right;width:80%">
+            <input class="mysearchname" style="width:100%!important" type="text" placeholder="Enter the name of the task you search..." ng-model="mySearchTask" uib-typeahead="mySearchTask as mySearchTask.name for mySearchTask in mySearchTasks | filter:$viewValue:namesWith | orderBy:'-date' | limitTo:50"
+              typeahead-min-length="0" typeahead-template-url="searchTaskTemplate.html" typeahead-on-select="selectTask($item)">
+          </td>
+        </tr>
+      </tbody>
     </table>
   </div>
   <div class="modal-body" style="padding:0" ng-if="!blnSelect">
     <table class="table table-striped table-hover" style="margin-bottom:0">
-        <tbody style="text-align:left;">
-          <tr >
-              <td style="text-align:left;width:100%">
-                  <span ><i class="fa fa-plus-circle" aria-hidden="true"></i> Create a new task
+      <tbody style="text-align:left;">
+        <tr>
+          <td style="text-align:left;width:100%">
+            <span><i class="fa fa-plus-circle" aria-hidden="true"></i> Create a new task
                   </span>
-              </td>
-
-          </tr>
-        </tbody>
+          </td>
+        </tr>
+      </tbody>
     </table>
   </div>
   <div class="modal-body" id="modal-body-{{name}}" ng-if="!blnSelect">
-      <table class="table table-striped table-hover" style="margin-left:15px">
-          <tbody style="text-align:left;">
-            <tr >
-                <td style="text-align:left">
-                    <span class="text-muted">Name
+    <table class="table table-striped table-hover" style="margin-left:15px">
+      <tbody style="text-align:left;">
+        <tr>
+          <td style="text-align:left">
+            <span class="text-muted">Name
                     </span>
-                </td>
-                <td style="text-align:right">
-                  <a href="#"  e-style="resize:vertical;width:100%"  editable-textarea="selected.name" buttons="no" blur="submit">{{ selected.name || 'To Complete ' }}</a>
-                </td>
-            </tr>
-            <tr >
-                <td style="text-align:left">
-                    <span class="text-muted">Activity
+          </td>
+          <td style="text-align:right">
+            <a href="#" e-style="resize:vertical;width:100%" editable-textarea="selected.name" buttons="no" blur="submit">{{ selected.name || 'To Complete ' }}</a>
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align:left">
+            <span class="text-muted">Activity
                     </span>
-                </td>
-                <td style="text-align:right">
-                  <a style="display:inline-block; " href="#" editable-text="selected.activity" e-style="width: 80%;display:inline-block;" e-uib-typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:25" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
+          </td>
+          <td style="text-align:right">
+            <a style="display:inline-block; " href="#" editable-text="selected.activity" e-style="width: 80%;display:inline-block;" e-uib-typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:25" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
                     {{selected.activity || 'Please give activity' }}
                   </a>
-                </td>
-            </tr>
-            <tr>
-                <td style="text-align:left">
-                    <span class="text-muted">Context
+          </td>
+        </tr>
+        <tr>
+          <td style="text-align:left">
+            <span class="text-muted">Context
                   </span>
-                </td>
-                <td style="text-align:right" >
-                  <a href="#" editable-text="selected.context" e-style="width: 80%;display:inline-block;" e-uib-typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:50">
+          </td>
+          <td style="text-align:right">
+            <a href="#" editable-text="selected.context" e-style="width: 80%;display:inline-block;" e-uib-typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:50">
                   {{selected.context || 'Please give context' }}
                 </a>
-                </td>
-            </tr>
-            <tr uib-tooltip-html="'Give maximum of details to describe the problem with facts : Timeline, KPIs, Process, ... <br /> <br /> You need to be sure that all people who will work on this problem have the same understanding<br /> <br /> Text Area can be enlarge'" tooltip-placement="left">
-            <td style="text-align:left">
-              <span class="text-muted" >
+          </td>
+        </tr>
+        <tr uib-tooltip-html="'Give maximum of details to describe the problem with facts : Timeline, KPIs, Process, ... <br /> <br /> You need to be sure that all people who will work on this problem have the same understanding<br /> <br /> Text Area can be enlarge'"
+          tooltip-placement="left">
+          <td style="text-align:left">
+            <span class="text-muted">
                 startDate <small></small>
               </span>
-            </td>
-            <td style="text-align:right">
-              <md-button class="md-button-slim" ng-click="showDatePicker(selected,'targetstartDate', $event)" aria-label="none" >
-                  <span ng-class="{'MandatoryField':selected.targetstartDate === undefined}">{{ (selected.targetstartDate | date:'mediumDate') || 'empty' }}</span>
-              </md-button>
-            </td>
-          </tr>
-          <tr uib-tooltip-html="'Give maximum of details to describe the problem with facts : Timeline, KPIs, Process, ... <br /> <br /> You need to be sure that all people who will work on this problem have the same understanding<br /> <br /> Text Area can be enlarge'" tooltip-placement="left">
+          </td>
+          <td style="text-align:right">
+            <md-button class="md-button-slim" ng-click="showDatePicker(selected,'targetstartDate', $event)" aria-label="none">
+              <span ng-class="{'MandatoryField':selected.targetstartDate === undefined}">{{ (selected.targetstartDate | date:'mediumDate') || 'empty' }}</span>
+            </md-button>
+          </td>
+        </tr>
+        <tr uib-tooltip-html="'Give maximum of details to describe the problem with facts : Timeline, KPIs, Process, ... <br /> <br /> You need to be sure that all people who will work on this problem have the same understanding<br /> <br /> Text Area can be enlarge'"
+          tooltip-placement="left">
           <td style="text-align:left">
-            <span class="text-muted" >
+            <span class="text-muted">
               endDate <small></small>
             </span>
           </td>
           <td style="text-align:right">
-            <md-button class="md-button-slim" ng-click="showDatePicker(selected,'targetEndDate', $event)" aria-label="none" >
+            <md-button class="md-button-slim" ng-click="showDatePicker(selected,'targetEndDate', $event)" aria-label="none">
               <span ng-class="{'MandatoryField':selected.targetEndDate === undefined}"> {{ (selected.targetEndDate | date:'mediumDate') || 'empty' }}</span>
             </md-button>
           </td>
         </tr>
-        <tr uib-tooltip-html="'Give maximum of details to describe the problem with facts : Timeline, KPIs, Process, ... <br /> <br /> You need to be sure that all people who will work on this problem have the same understanding<br /> <br /> Text Area can be enlarge'" tooltip-placement="left">
-        <td style="text-align:left">
-          <span class="text-muted" >
+        <tr uib-tooltip-html="'Give maximum of details to describe the problem with facts : Timeline, KPIs, Process, ... <br /> <br /> You need to be sure that all people who will work on this problem have the same understanding<br /> <br /> Text Area can be enlarge'"
+          tooltip-placement="left">
+          <td style="text-align:left">
+            <span class="text-muted">
             workload <small></small>
           </span>
-        </td>
-        <td style="text-align:right">
-                          <a href="#" class="days" e-min="0" e-step="0.001" editable-number="selected.targetLoad" e-style="width: 100px;"  buttons="no" blur="submit">{{selected.targetLoad || 'empty'}}</a>
-        </td>
-      </tr>
-      <tr uib-tooltip-html="'Give maximum of details to describe the problem with facts : Timeline, KPIs, Process, ... <br /> <br /> You need to be sure that all people who will work on this problem have the same understanding<br /> <br /> Text Area can be enlarge'" tooltip-placement="left">
-      <td style="text-align:left">
-        <span class="text-muted" >
+          </td>
+          <td style="text-align:right">
+            <a href="#" class="days" e-min="0" e-step="0.001" editable-number="selected.targetLoad" e-style="width: 100px;" buttons="no" blur="submit">{{selected.targetLoad || 'empty'}}</a>
+          </td>
+        </tr>
+        <tr uib-tooltip-html="'Give maximum of details to describe the problem with facts : Timeline, KPIs, Process, ... <br /> <br /> You need to be sure that all people who will work on this problem have the same understanding<br /> <br /> Text Area can be enlarge'"
+          tooltip-placement="left">
+          <td style="text-align:left">
+            <span class="text-muted">
           Confidence <br>to succeed<small></small>
         </span>
-      </td>
-      <td style="text-align:right">
-        <a href="#" e-min="0" e-step="1" editable-number="selected.trust" e-style="width: 100px;"  buttons="no" blur="submit">{{selected.trust || 'empty'}}</a>
-      </td>
-    </tr>
-          </tbody>
-      </table>
+          </td>
+          <td style="text-align:right">
+            <a href="#" e-min="0" e-step="1" editable-number="selected.trust" e-style="width: 100px;" buttons="no" blur="submit">{{selected.trust || 'empty'}}</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
   <div class="modal-footer">
-          <button class="btn btn-warning" type="button" ng-click="ok()" ng-disabled="selectedTask === null && (selected.name === null || selected.impact === null || selected.category === null)">OK</button>
-          <button class="btn btn-default pull-left" type="button" ng-click="cancel()">Cancel</button>
-      </div>
+    <button class="btn btn-warning" type="button" ng-click="ok()" ng-disabled="selectedTask === null && (selected.name === null || selected.impact === null || selected.category === null)">OK</button>
+    <button class="btn btn-default pull-left" type="button" ng-click="cancel()">Cancel</button>
+  </div>
 </script>
 
-<div class="row anomalie-top">
-  <div class="col-md-2" >
-    <img src="assets/images/anomaly.png" style="width:60px;height:60px;" alt="">
+<div id="anomalie-top" class="row anomalie-top">
+  <div class="col-md-2 header-ano">
+                    <span class="img_frame"></span>
+    <img src="assets/images/anomaly.png" style="width:60px;height:60px;  vertical-align: middle;" alt="">
     <span class="text-danger" style="font-weight:bold;font-size:24px;padding-left:8px;">Anomaly</span>
   </div>
-  <div class="col-md-5" >
+  <div class="col-md-5">
     <ul>
-        <li uib-tooltip-html="'One Sentence to resume the anomaly'" tooltip-placement="bottom">
-          <span class="text-muted" >
+      <li uib-tooltip-html="'One Sentence to resume the anomaly'" tooltip-placement="bottom">
+        <span class="text-muted">
           Resume :
           </span>
-          <a href="#"   e-style="resize:vertical;" editable-textarea="anomalie.name" buttons="right">{{ anomalie.name || 'To Complete ' }}</a>
-        </li>
-        <li>
-          <span class="text-muted" >
+        <a href="#" e-style="resize:vertical;" editable-textarea="anomalie.name" buttons="right">{{ anomalie.name || 'To Complete ' }}</a>
+      </li>
+      <li>
+        <span class="text-muted">
             Date :
+          </span> {{anomalie.date | date:'mediumDate'}}
+          <span id="anoStatus" style="margin-left:15px" class="label" ng-class="{'label-info':anomalie.status ==='In Progress','label-success':anomalie.status ==='Finished','label-default':anomalie.status ==='Not Started','label-lightgrey':anomalie.status =='Withdrawn'}">
+            {{anomalie.status}}
           </span>
-            {{anomalie.date | date:'mediumDate'}}
-</li>
+
+      </li>
     </ul>
   </div>
-  <div class="col-md-5" >
+  <div class="col-md-5">
     <ul>
-        <li>Anomaly Coming From:  : <a href="/task/{{anomalie.sourceTasks[0]._id}}"> {{anomalie.sourceTasks[0].name}}</a></li>
-        <li>By : <span class="text-muted">{{anomalie.actor.name}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge badge-default">{{anomalie.actor.groups[0]}}</span></li>
+      <li>Anomaly Coming From: : <a href="/task/{{anomalie.sourceTasks[0]._id}}"> {{anomalie.sourceTasks[0].name}}</a></li>
+      <li>By : <span class="text-muted">{{anomalie.actor.name}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge badge-default">{{anomalie.actor.groups[0]}}</span></li>
     </ul>
   </div>
-  </div>
+</div>
 <hr style="margin-top:3px">
 
 <div class="row">
-  <div class="col-md-1" >
+  <div class="col-md-1">
 
-    <h3 >    Step 1</h3>
+    <h3 id="anoStep1">    Step 1</h3>
     <img style="margin-top:5px;height:80px;margin-left:auto;margin-right:auto;display: block;" src="assets/images/correctiveaction.jpg" alt="">
 
   </div>
   <div class="col-md-3">
-<div class="bg-danger" style="padding:8px;">
-  <h2 style="margin:0">Describe and correct</h2>
-  Capture specifics about the problem as well as the impact to each of the organization's overall Goals.<br>
-  <ul>
-      <li>Answer each question in the Outline.</li>
-      <li>Scan the entire perimeter to ensure no other similar nonconformity could occur.</li>
-      <li>Create a plan for actions that will be implemented to <u>correct</u> the problem.</li>
-  </ul>
-
-
-</div>
+    <div class="bg-danger" style="padding:8px;">
+      <h2 style="margin:0">Describe and correct</h2> Capture specifics about the problem as well as the impact to each of the organization's overall Goals.<br>
+      <ul>
+        <li>Answer each question in the Outline.</li>
+        <li>Scan the entire perimeter to ensure no other similar nonconformity could occur.</li>
+        <li>Create a plan for actions that will be implemented to <u>correct</u> the problem.</li>
+      </ul>
+    </div>
   </div>
   <div class="col-md-4">
     <!-- Engagement -->
     <div class="portlet sale-summary">
-        <div class="portlet-title">
-            <div class="caption">
-              <span class="badge badge-danger" aria-hidden="false">1</span>
-              Define The problem
-            </div>
-            <div class="tools">
-                <div class="pull-right" ng-init="EngagementIsExpanded[key]=(key===task.metrics.length-1 || key===0)" ng-click="EngagementIsExpanded[key]=!EngagementIsExpanded[key]">
-                    <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!EngagementIsExpanded[key]" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
-                    <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="EngagementIsExpanded[key]" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
-                </div>
-                <span ng-if="key > 0" class="pull-right" style="margin-right:15px;"> <span class="label label-warning">  {{currentMetric.reworkReason}}</span></span>
-            </div>
+      <div class="portlet-title">
+        <div class="caption">
+          <span class="badge badge-danger" aria-hidden="false">1</span> Define The problem
         </div>
-        <div class="portlet-body" style="padding:0!important" >
-            <table class="table table-striped table-hover">
-                <tbody style="text-align:left;">
-                    <tr >
-                        <td style="text-align:left">
-                            <span class="text-muted">Category
+        <div class="tools">
+          <div class="pull-right" ng-init="EngagementIsExpanded[key]=(key===task.metrics.length-1 || key===0)" ng-click="EngagementIsExpanded[key]=!EngagementIsExpanded[key]">
+            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!EngagementIsExpanded[key]" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="EngagementIsExpanded[key]" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+          </div>
+          <span ng-if="key > 0" class="pull-right" style="margin-right:15px;"> <span class="label label-warning">  {{currentMetric.reworkReason}}</span></span>
+        </div>
+      </div>
+      <div class="portlet-body" style="padding:0!important">
+        <table class="table table-striped table-hover">
+          <tbody style="text-align:left;">
+            <tr>
+              <td style="text-align:left">
+                <span class="text-muted">Category
                             </span>
-                        </td>
-                        <td style="text-align:right">
-                          <a href="#" editable-checklist="anomalie.category" e-ng-options="c.value as c.text for c in categories" buttons="no" blur="submit">
+              </td>
+              <td style="text-align:right">
+                <a href="#" editable-checklist="anomalie.category" e-ng-options="c.value as c.text for c in categories" buttons="no" blur="submit">
                             {{ showCategories() }}
                           </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left">
-                            <span class="text-muted">Impacts
+              </td>
+            </tr>
+            <tr>
+              <td style="text-align:left">
+                <span class="text-muted">Impacts
                           </span>
-                        </td>
-                        <td style="text-align:right" >
-                          <a href="#" editable-select="anomalie.impact" e-ng-options="c.value as c.text for c in impacts" buttons="no" blur="submit" >
+              </td>
+              <td style="text-align:right">
+                <a href="#" editable-select="anomalie.impact" e-ng-options="c.value as c.text for c in impacts" buttons="no" blur="submit">
                             {{ showImpacts() }}
                           </a>
-                          <a href="#" ng-show="anomalie.impact" class="days"  e-min="0" e-step="0.001" editable-number="anomalie.impactWorkload" style="margin-left:10px" e-style="width: 100px;"  buttons="no" blur="submit">{{ anomalie.impactWorkload || ' Give Details ' }}</a>
+                <a href="#" ng-show="anomalie.impact" class="days" e-min="0" e-step="0.001" editable-number="anomalie.impactWorkload" style="margin-left:10px" e-style="width: 100px;" buttons="no" blur="submit">{{ anomalie.impactWorkload || ' Give Details ' }}</a>
 
-                        </td>
-                    </tr>
-                    <tr uib-tooltip-html="'Give maximum of details to describe the problem with facts : Timeline, KPIs, Process, ... <br /> <br /> You need to be sure that all people who will work on this problem have the same understanding<br /> <br /> Text Area can be enlarge'" tooltip-placement="left">
-                    <td style="text-align:left">
-                      <span class="text-muted" >
+              </td>
+            </tr>
+            <tr uib-tooltip-html="'Give maximum of details to describe the problem with facts : Timeline, KPIs, Process, ... <br /> <br /> You need to be sure that all people who will work on this problem have the same understanding<br /> <br /> Text Area can be enlarge'"
+              tooltip-placement="left">
+              <td style="text-align:left">
+                <span class="text-muted">
                         Details <small></small>
                       </span>
-                    </td>
-                    <td style="text-align:right">
-                      <a href="#"  e-style="resize:vertical;" editable-textarea="anomalie.details" buttons="right">{{ anomalie.details || 'To Complete ' }}</a>
-                    </td>
-                  </tr>
-                </tbody>
-            </table>
-
-        </div>
+              </td>
+              <td style="text-align:right">
+                <a href="#" e-style="resize:vertical;" editable-textarea="anomalie.details" buttons="right">{{ anomalie.details || 'To Complete ' }}</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-
   </div>
   <div class="col-md-4">
-
-
     <div class="portlet sale-summary">
-        <div class="portlet-title">
-            <div class="caption">
-              <span class="badge badge-danger" aria-hidden="false">2</span>
-              Correct the problem   <small class="text-muted" style="padding-left:30px">(if applicable)</small>
-            </div>
-            <div class="tools">
-                <div class="pull-right" ng-init="EngagementIsExpanded[key]=(key===task.metrics.length-1 || key===0)" ng-click="EngagementIsExpanded[key]=!EngagementIsExpanded[key]">
-                    <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!EngagementIsExpanded[key]" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
-                    <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="EngagementIsExpanded[key]" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
-                </div>
-                <span ng-if="key > 0" class="pull-right" style="margin-right:15px;"> <span class="label label-warning">  {{currentMetric.reworkReason}}</span></span>
-            </div>
+      <div class="portlet-title">
+        <div class="caption">
+          <span class="badge badge-danger" aria-hidden="false">2</span> Correct the problem
+          <span id="toggleTodo" ng-click="viewMode.blnTodo = !viewMode.blnTodo">
+            <button  type="button" class="btn btn-toggle btn-toggle-text-todo" ng-class="{'active':viewMode.blnTodo }" data-toggle="button" aria-pressed="false" autocomplete="off" >
+              <span class="handle"></span>
+</button>
+</span>
         </div>
-        <div class="portlet-body" style="padding:0!important" >
-            <table class="table table-striped table-hover">
-                <tbody style="text-align:left;">
-                    <tr>
-                        <td>
-                            <span class="text-muted" uib-tooltip-html="'One Sentence to resume the anomaly'" tooltip-placement="left">
+        <div class="tools">
+          <div class="pull-right" ng-init="EngagementIsExpanded[key]=(key===task.metrics.length-1 || key===0)" ng-click="EngagementIsExpanded[key]=!EngagementIsExpanded[key]">
+            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!EngagementIsExpanded[key]" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="EngagementIsExpanded[key]" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+          </div>
+          <span ng-if="key > 0" class="pull-right" style="margin-right:15px;"> <span class="label label-warning">  {{currentMetric.reworkReason}}</span></span>
+        </div>
+      </div>
+      <div class="portlet-body" style="padding:0!important">
+        <table class="table table-striped table-hover">
+          <tbody style="text-align:left;">
+            <tr>
+              <td>
+                <span class="text-muted" uib-tooltip-html="'One Sentence to resume the anomaly'" tooltip-placement="left">
                             Due Date
                             </span>
-                        </td>
-                        <td style="text-align:right">
-                          <md-button class="md-button-slim" ng-click="showDatePicker(anomalie,'dueDate', $event)" aria-label="none" >
-                              <span >{{ (anomalie.dueDate | date:'mediumDate') || 'empty' }}</span>
-                          </md-button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:left">
-                              <span class="text-muted" uib-tooltip-html="'Give maximum of details to factualize the problem : KPIs, Measures, Timeline, Process, ... <br /> You need to be sure that all people who will work on this problem have the smae understanding'" tooltip-placement="left">
+              </td>
+              <td style="text-align:right">
+                <md-button class="md-button-slim" ng-click="showDatePicker(anomalie,'dueDate', $event)" aria-label="none">
+                  <span>{{ (anomalie.dueDate | date:'mediumDate') || 'empty' }}</span>
+                </md-button>
+              </td>
+            </tr>
+            <tr>
+              <td style="text-align:left">
+                <span class="text-muted" uib-tooltip-html="'Give maximum of details to factualize the problem : KPIs, Measures, Timeline, Process, ... <br /> You need to be sure that all people who will work on this problem have the smae understanding'" tooltip-placement="left">
                               Corrective Task
-                            </span>
-                        </td>
-                        <td style="text-align:right">
-                          <a href="#" class="btn btn-primary btn-outline  btn-xs " ng-click="selectOrCreateTask('CA','Select')">Select</a>
-                          <small class="text-muted" > or </small>
-                          <a href="#" class="btn btn-primary btn-outline btn-xs " ng-click="selectOrCreateTask('CA','Create')">Create Corrective Task</a>
+                </span>
+              </td>
+              <td style="text-align:right" ng-hide="viewMode.blnTodo">
+                <a href="#" class="btn btn-primary btn-outline  btn-xs " ng-click="selectOrCreateTask('CA','Select')">Select</a>
+                <small class="text-muted"> or </small>
+                <a href="#" class="btn btn-primary btn-outline btn-xs " ng-click="selectOrCreateTask('CA','Create')">Create Corrective Task</a>
+              </td>
+              <td ng-show="viewMode.blnTodo">
+                <!-- Todo -->
+                <div class="portlet-body" style="padding-bottom:0px;margin-bottom:0px;">
+                  <div class="row">
+                    <div class="form-group" style=";margin-left:20px;padding-bottom:10px;margin-bottom:0!important;padding-bottom:0!important">
+                      <div class="input-group" style="width:96%;">
+                        <input class="form-control" type="text" ng-model="newTodo.text" placeholder="Add New Todo" ng-enter="addTodo()">
+                        <span class="input-group-btn">
+                           <button class="btn btn-outline btn-info" type="button" ng-click="addTodo()">Add</button>
+                         </span>
+                      </div>
+                    </div>
+                  </div>
 
-                        </td>
-                    </tr>
-                    <tr >
-                        <td style="text-align:left">
-                            <span class="text-muted">Correction Status
-                            </span>
-                        </td>
-                        <td style="text-align:right">
-                          <table class="table table-striped" style="margin-bottom:0">
-                              <tbody style="text-align:left;">
-                                <tr ng-repeat="action in anomalie.correctiveActions" style="border-bottom:1px solid #ddd" >
-                                    <td >
-                                        <a href="/task/{{action._id}}">
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td style="text-align:left">
+                <span class="text-muted">
+                  Correction Status
+                </span><br>
+                <span id="anoCAStatus" style="margin-left:15px" class="label label-sm" ng-class="{'label-info':anomalie.statusCA ==='In Progress','label-success':anomalie.statusCA ==='Finished','label-default':anomalie.statusCA ==='Not Started','label-lightgrey':anomalie.statusCA =='Withdrawn'}">
+                  {{anomalie.statusCA}}
+                </span>
+              </td>
+              <td style="text-align:right" ng-show="anomalie.correctiveActions.length>0">
+                <table class="table table-striped" style="margin-bottom:0">
+                  <tbody style="text-align:left;">
+                    <tr ng-repeat="action in anomalie.correctiveActions" style="border-bottom:1px solid #ddd">
+                      <td>
+                        <a href="/task/{{action._id}}">
                                           {{action.name}}
                                         </a>
-                                    </td>
-                                    <td>
-                                        <span class="pull-right">
+                      </td>
+                      <td>
+                        <span class="pull-right">
                                           <span class="label label-sm"
                                             ng-class="{'label-info':action.metrics[action.metrics.length - 1].status ==='In Progress','label-success':action.metrics[action.metrics.length - 1].status ==='Finished','label-default':action.metrics[action.metrics.length - 1].status ==='Not Started','label-lightgrey':action.metrics[action.metrics.length - 1].status =='Withdrawn'}">
                                             {{action.metrics[action.metrics.length -1].status}}
                                           </span>
-                                          <a class="btn btn-default btn-xs text-muted" ng-click="removeTask('CA',$index,action)"
-                                             uib-tooltip-html="'Remove this task from action plan of this anomaly'" tooltip-placement="left" >
+                        <a class="btn btn-default btn-xs text-muted" ng-click="removeTask('CA',$index,action)" uib-tooltip-html="'Remove this task from action plan of this anomaly'" tooltip-placement="left">
                                             <i class="fa fa-trash-o text-muted" aria-hidden="true"></i>
                                           </a>
-                                        </span>
-                                    </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                        </td>
+                        </span>
+                      </td>
                     </tr>
-                </tbody>
-            </table>
-
-        </div>
+                  </tbody>
+                </table>
+              </td>
+              <td ng-show="anomalie.todos.length>0">
+                  <ul ui:sortable class="todosAnoPanel" ng-model="anomalie.todos">
+                    <li class="todoAno" ng-repeat="todo in anomalie.todos track by $index  ">
+                      <div style="padding-left:3px" class="circularToggleButtonView taskCheckboxNodeView " ng-class="todo.isDone ? ' circularToggleButtonView--toggledOn': 'circularToggleButtonView--toggledOff'">
+                        <div ng-click="changeStatusTodo($index)" class="circularButtonView circularToggleButtonView-button circularButtonView--xsmall circularButtonView--onWhiteBackground circularButtonView--active">
+                          <span class="circularButtonView-label">
+                             <svg class="svgIcon " viewbox="0 0 32 32" title="checkmark">
+                               <polygon points="27.672,4.786 10.901,21.557 4.328,14.984 1.5,17.812 10.901,27.214 30.5,7.615 "></polygon>
+                             </svg>
+                           </span>
+                        </div>
+                        <span ng-class="{'barre':todo.isDone}">
+                            <span style="color:black;padding-left:5px" >
+                              <a href="#" editable-text="todo.text" buttons="no"  blur="submit">{{ todo.text || 'To Complete ' }}</a>
+                          </span>
+                        </span>
+                      </div>
+                      <div class="pull-right sortButtons">
+                        <md-button class="md-button-slim" ng-click="$parent.showTodoDatePicker(todo, $event)" aria-label="none" style="min-width:20px!important;margin:0!important;padding:0!important;border-bottom:none;">
+                          <small class="text-muted" ng-show="todo.date">{{todo.date |date:'dd MMM' }}</small>
+                          <div ng-hide="todo.date" class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground" uib-tooltip-html="'Add a due date to this subtask'" tooltip-placement="bottom">
+                            <span class="circularButtonView-label">
+                               <svg class="svgIcon task-row-due-date-icon" viewbox="0 0 32 32" title="calendar">
+                                 <rect x="16" y="16" width="2" height="2"></rect><rect x="20" y="16" width="2" height="2"></rect>
+                                 <rect x="20" y="20" width="2" height="2"></rect><rect x="16" y="20" width="2" height="2"></rect>
+                                 <rect x="8" y="20" width="2" height="2"></rect><rect x="8" y="24" width="2" height="2"></rect>
+                                 <rect x="16" y="24" width="2" height="2"></rect><rect x="12" y="16" width="2" height="2"></rect>
+                                 <rect x="12" y="20" width="2" height="2"></rect><rect x="12" y="24" width="2" height="2"></rect>
+                                 <path d="M22,2V0h-2v2h-8V0h-2v2H2v30h28V2H22z M28,30H4V12h24V30z M28,10H4V4h6v2h2V4h8v2h2V4h6V10z"></path>
+                               </svg>
+                             </span>
+                          </div>
+                        </md-button>
+                        <a ng-click="AssignSubtTaskActor(todo)">
+                           <img ng-show="todo.actor" uib-tooltip-html="'{{todo.actor.name}}'" tooltip-placement="bottom" alt="" ng-src="{{todo.actor.avatar}}" style="width:30px;height:30px;" class="img-circle" err-src="assets/images/avatars/avatar.png" />&nbsp;
+                           <div ng-hide="todo.actor" class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground" uib-tooltip-html="'Assign this subtask'" tooltip-placement="bottom">
+                               <span class="circularButtonView-label">
+                             <svg class="svgIcon task-row-assignee-icon" viewbox="0 0 32 32" title="unassigned">
+                               <path d="M20.534,16.765C23.203,15.204,25,12.315,25,9c0-4.971-4.029-9-9-9S7,4.029,7,9c0,3.315,1.797,6.204,4.466,7.765C5.962,18.651,2,23.857,2,30c0,0.681,0.065,1.345,0.159,2h27.682C29.935,31.345,30,30.681,30,30C30,23.857,26.038,18.651,20.534,16.765z M9,9c0-3.86,3.14-7,7-7s7,3.14,7,7s-3.14,7-7,7S9,12.86,9,9z M4,30c0-6.617,5.383-12,12-12s12,5.383,12,12H4z"></path>
+                             </svg>
+                           </span>
+                           </div>
+                       </a>
+                       <a class="btn btn-default btn-xs text-muted" ng-click="removeTodo($index)" uib-tooltip-html="'Remove this task from action plan of this anomaly'" tooltip-placement="left">
+                         <i class="fa fa-trash-o text-muted" aria-hidden="true"></i>
+                       </a>
+                        <!-- <button type="button" class=" " aria-hidden="true" ng-click="deleteTodo(todo)">&times;</button> -->
+                      </div>
+                    </li>
+                    <li ng-show="blnAssignSubtaskActor">
+                      <input class="mysearchname" type="text" placeholder="Name" ng-model="subtaskactorselected" uib-typeahead="member as member.name for member in members | filter:$viewValue:memberNamesWith | limitTo:5" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
+                      <span class="btn btn-primary" ng-click="addSubTaskActor(subtaskactorselected)">Add</span>
+                      <span class="task-or">or</span>
+                      <span class="btn btn-info  btn-sm btn-outline" ng-click="addMeToSubTaskActor()" ng-show="!mePresentInSubTaskActors">Assign to Me</span>
+                      <span class="btn btn-info  btn-sm btn-outline" ng-click="removeMeToSubTaskActor()" ng-show="mePresentInSubTaskActors">Unassign to Me</span>
+                    </li>
+                  </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-
-
   </div>
 </div>
 <hr>
 <div class="row">
   <div class="col-md-1">
-    <h3 >Step 2</h3>
+    <h3>Step 2</h3>
     <img style="margin-top:5px;height:80px;margin-left:auto;margin-right:auto;display: block;" src="assets/images/RCA.png" alt="">
-
   </div>
   <div class="col-md-3">
     <div class="bg-info" style="padding:8px;">
 
-    <h2  style="margin:0">Analysis</h2>
-    Lay out the cause-and-effect relationships for the incident.
-<ul>
-    <li>Answer the question "Why did that happen?" Ask Why again.</li>
-    <li>In the more detailed analysis, ask as many Why questions as
-      necessary to thoroughly explain the issue.</li>
-    </ul>
+      <h2 style="margin:0">Analysis</h2> Lay out the cause-and-effect relationships for the incident.
+      <ul>
+        <li>Answer the question "Why did that happen?" Ask Why again.</li>
+        <li>In the more detailed analysis, ask as many Why questions as necessary to thoroughly explain the issue.</li>
+      </ul>
     </div>
   </div>
   <div class="col-md-4">
     <div class="portlet sale-summary">
-        <div class="portlet-title">
-            <div class="caption">
-              <span class="badge badge-primary" aria-hidden="false">3</span>
-        Analyse the Root Cause
-            </div>
-            <div class="tools">
-                <div class="pull-right" ng-init="EngagementIsExpanded[key]=(key===task.metrics.length-1 || key===0)" ng-click="EngagementIsExpanded[key]=!EngagementIsExpanded[key]">
-                    <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!EngagementIsExpanded[key]" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
-                    <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="EngagementIsExpanded[key]" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
-                </div>
-                <span ng-if="key > 0" class="pull-right" style="margin-right:15px;"> <span class="label label-warning">  {{currentMetric.reworkReason}}</span></span>
-            </div>
+      <div class="portlet-title">
+        <div class="caption">
+          <span class="badge badge-primary" aria-hidden="false">3</span> Analyse the Root Cause
         </div>
-        <div class="portlet-body" style="padding:0!important" >
-            <table class="table table-striped table-hover">
-                <tbody style="text-align:left;">
-                  <tr >
-                      <td style="text-align:left" >
-                            <span class="text-muted" >
+        <div class="tools">
+          <div class="pull-right" ng-init="EngagementIsExpanded[key]=(key===task.metrics.length-1 || key===0)" ng-click="EngagementIsExpanded[key]=!EngagementIsExpanded[key]">
+            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!EngagementIsExpanded[key]" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="EngagementIsExpanded[key]" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+          </div>
+          <span ng-if="key > 0" class="pull-right" style="margin-right:15px;"> <span class="label label-warning">  {{currentMetric.reworkReason}}</span></span>
+        </div>
+      </div>
+      <div class="portlet-body" style="padding:0!important">
+        <table class="table table-striped table-hover">
+          <tbody style="text-align:left;">
+            <tr>
+              <td style="text-align:left">
+                <span class="text-muted">
                             RCA Task
                           </span>
-                      </td>
-                      <td style="text-align:right">
-                        <a href="#" class="btn btn-primary btn-outline  btn-xs " ng-click="selectOrCreateTask('RCA','Select')">Select</a>
-                        <small class="text-muted" > or </small>
-                        <a href="#" class="btn btn-primary btn-outline btn-xs " ng-click="selectOrCreateTask('RCA','Create')">Create Root Cause Analysis Task</a>
-                      </td>
-                    </tr>
-                      <tr >
-                          <td style="text-align:left">
-                              <span class="text-muted">RCA Status
+              </td>
+              <td style="text-align:right">
+                <a href="#" class="btn btn-primary btn-outline  btn-xs " ng-click="selectOrCreateTask('RCA','Select')">Select</a>
+                <small class="text-muted"> or </small>
+                <a href="#" class="btn btn-primary btn-outline btn-xs " ng-click="selectOrCreateTask('RCA','Create')">Create Root Cause Analysis Task</a>
+              </td>
+            </tr>
+            <tr>
+              <td style="text-align:left">
+                <span class="text-muted">RCA Status
                               </span>
-                          </td>
-                          <td style="text-align:right">
-                            <table class="table table-striped" style="margin-bottom:0">
-                                <tbody style="text-align:left;">
-                                  <tr ng-repeat="action in anomalie.rootCauseAnalysisTasks" style="border-bottom:1px solid #ddd" >
-                                      <td >
-                                          <a href="/task/{{action._id}}">
+                              <br>
+                              <span id="anoRCAStatus" style="margin-left:15px" class="label label-sm" ng-class="{'label-info':anomalie.statusRCA ==='In Progress','label-success':anomalie.statusRCA ==='Finished','label-default':anomalie.statusRCA ==='Not Started','label-lightgrey':anomalie.statusRCA =='Withdrawn'}">
+                                {{anomalie.statusRCA}}
+                              </span>
+              </td>
+              <td style="text-align:right">
+                <table class="table table-striped" style="margin-bottom:0">
+                  <tbody style="text-align:left;">
+                    <tr ng-repeat="action in anomalie.rootCauseAnalysisTasks" style="border-bottom:1px solid #ddd">
+                      <td>
+                        <a href="/task/{{action._id}}">
                                             {{action.name}}
                                           </a>
-                                      </td>
-                                      <td>
-                                          <span class="pull-right">
+                      </td>
+                      <td>
+                        <span class="pull-right">
                                             <span class="label label-sm"
                                               ng-class="{'label-info':action.metrics[action.metrics.length - 1].status ==='In Progress','label-success':action.metrics[action.metrics.length - 1].status ==='Finished','label-default':action.metrics[action.metrics.length - 1].status ==='Not Started','label-lightgrey':action.metrics[action.metrics.length - 1].status =='Withdrawn'}">
                                               {{action.metrics[action.metrics.length -1].status}}
                                             </span>
-                                            <a class="btn btn-default btn-xs text-muted" ng-click="removeTask('RCA',$index,action)"
-                                               uib-tooltip-html="'Remove this task from action plan of this anomaly'" tooltip-placement="left" >
+                        <a class="btn btn-default btn-xs text-muted" ng-click="removeTask('RCA',$index,action)" uib-tooltip-html="'Remove this task from action plan of this anomaly'" tooltip-placement="left">
                                               <i class="fa fa-trash-o text-muted" aria-hidden="true"></i>
                                             </a>
-                                          </span>
-                                      </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                          </td>
-                      </tr>
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
 
-                </tbody>
-            </table>
+          </tbody>
+        </table>
 
-        </div>
+      </div>
     </div>
 
 
@@ -451,39 +533,38 @@
   <div class="col-md-4">
 
     <div class="portlet sale-summary">
-        <div class="portlet-title">
-            <div class="caption">
-              <span class="badge badge-primary" aria-hidden="false">4</span>
-              Root Cause Map
-            </div>
-            <div class="tools">
-                <div class="pull-right" ng-init="EngagementIsExpanded[key]=(key===task.metrics.length-1 || key===0)" ng-click="EngagementIsExpanded[key]=!EngagementIsExpanded[key]">
-                    <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!EngagementIsExpanded[key]" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
-                    <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="EngagementIsExpanded[key]" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
-                </div>
-                <span ng-if="key > 0" class="pull-right" style="margin-right:15px;"> <span class="label label-warning">  {{currentMetric.reworkReason}}</span></span>
-            </div>
+      <div class="portlet-title">
+        <div class="caption">
+          <span class="badge badge-primary" aria-hidden="false">4</span> Root Cause Map
         </div>
-        <div class="portlet-body" style="padding:0!important" >
-          <div class="row">
-            <div class="col-md-3" style="text-align:center">
-              <br>
-              <a href="http://demo.bpmn.io/" target="_blank"  class="btn btn-primary btn-outline btn-xs" style="width:100%" >Create a new map</a><br><br>
-              <label class="btn btn-primary btn-outline btn-xs" style="width:100%" >
+        <div class="tools">
+          <div class="pull-right" ng-init="EngagementIsExpanded[key]=(key===task.metrics.length-1 || key===0)" ng-click="EngagementIsExpanded[key]=!EngagementIsExpanded[key]">
+            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!EngagementIsExpanded[key]" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="EngagementIsExpanded[key]" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+          </div>
+          <span ng-if="key > 0" class="pull-right" style="margin-right:15px;"> <span class="label label-warning">  {{currentMetric.reworkReason}}</span></span>
+        </div>
+      </div>
+      <div class="portlet-body" style="padding:0!important">
+        <div class="row">
+          <div class="col-md-3" style="text-align:center">
+            <br>
+            <a href="http://demo.bpmn.io/" target="_blank" class="btn btn-primary btn-outline btn-xs" style="width:100%">Create a new map</a><br><br>
+            <label class="btn btn-primary btn-outline btn-xs" style="width:100%">
                 Load a map
                 <input type="file" id="importFile" onchange="angular.element(this).scope().uploadXmlFile()"  style="display: none;"/>
               </label><br><br>
-              <span class="btn btn-primary btn-outline  btn-xs " style="width:100%" ng-click="exportXML()" ng-if="anomalie.fiveWhy"> Export</span>
-            </div>
-            <div class="col-md-9" style="text-align:center">
-              <img style="width:100%;margin-left:auto;margin-right:auto;display: block;" src="assets/images/BPMN.IO.gif" alt="" ng-if="!anomalie.fiveWhy">
-              <small  ng-if="anomalie.fiveWhy" class="text-muted">Click to enlarge</small>
-              <div  ng-show="anomalie.fiveWhy" id="canvas" ng-init="blnEnlarge=false" ng-click="blnEnlarge=!blnEnlarge" ></div>
-            </div>
+            <span class="btn btn-primary btn-outline  btn-xs " style="width:100%" ng-click="exportXML()" ng-if="anomalie.fiveWhy"> Export</span>
+          </div>
+          <div class="col-md-9" style="text-align:center">
+            <img style="width:100%;margin-left:auto;margin-right:auto;display: block;" src="assets/images/BPMN.IO.gif" alt="" ng-if="!anomalie.fiveWhy">
+            <small ng-if="anomalie.fiveWhy" class="text-muted">Click to enlarge</small>
+            <div ng-show="anomalie.fiveWhy" id="canvas" ng-init="blnEnlarge=false" ng-click="blnEnlarge=!blnEnlarge"></div>
           </div>
         </div>
+      </div>
     </div>
-    </div>
+  </div>
 
 
 </div>
@@ -497,111 +578,111 @@
   <div class="col-md-3">
     <div class="bg-success" style="padding:8px;">
 
-    <h2  style="margin:0">Solutions</h2>
-    Identify the specific actions that will be taken to reduce the risk of a similar issue occurring.
-<ul>
-    <li>Place a possible solution above the cause that it controls.</li>
-    <li>Evaluate the different possible solutions.</li>
-    <li>Create a plan for actions that will be implemented to <u>prevent</u> the problem.</li>
-    </ul>
+      <h2 style="margin:0">Solutions</h2> Identify the specific actions that will be taken to reduce the risk of a similar issue occurring.
+      <ul>
+        <li>Place a possible solution above the cause that it controls.</li>
+        <li>Evaluate the different possible solutions.</li>
+        <li>Create a plan for actions that will be implemented to <u>prevent</u> the problem.</li>
+      </ul>
     </div>
   </div>
   <div class="col-md-4">
     <div class="portlet sale-summary">
-        <div class="portlet-title">
-            <div class="caption">
-              <span class="badge badge-success" aria-hidden="false">5</span>
-Select the solutions            </div>
-            <div class="tools">
-                <div class="pull-right" ng-init="EngagementIsExpanded[key]=(key===task.metrics.length-1 || key===0)" ng-click="EngagementIsExpanded[key]=!EngagementIsExpanded[key]">
-                    <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!EngagementIsExpanded[key]" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
-                    <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="EngagementIsExpanded[key]" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
-                </div>
-                <span ng-if="key > 0" class="pull-right" style="margin-right:15px;"> <span class="label label-warning">  {{currentMetric.reworkReason}}</span></span>
-            </div>
+      <div class="portlet-title">
+        <div class="caption">
+          <span class="badge badge-success" aria-hidden="false">5</span> Select the solutions </div>
+        <div class="tools">
+          <div class="pull-right" ng-init="EngagementIsExpanded[key]=(key===task.metrics.length-1 || key===0)" ng-click="EngagementIsExpanded[key]=!EngagementIsExpanded[key]">
+            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!EngagementIsExpanded[key]" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="EngagementIsExpanded[key]" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+          </div>
+          <span ng-if="key > 0" class="pull-right" style="margin-right:15px;"> <span class="label label-warning">  {{currentMetric.reworkReason}}</span></span>
         </div>
-        <div class="portlet-body" style="padding:0!important" >
-            <table class="table table-striped table-hover">
-                <tbody style="text-align:left;">
-                  <tr >
-                      <td style="text-align:left" >
-                            <span class="text-muted" >
+      </div>
+      <div class="portlet-body" style="padding:0!important">
+        <table class="table table-striped table-hover">
+          <tbody style="text-align:left;">
+            <tr>
+              <td style="text-align:left">
+                <span class="text-muted">
                             Solution Task
                           </span>
-                      </td>
-                      <td style="text-align:right">
-                        <a href="#" class="btn btn-primary btn-outline  btn-xs " ng-click="selectOrCreateTask('PA','Select')">Select</a>
-                        <small class="text-muted" > or </small>
-                        <a href="#" class="btn btn-primary btn-outline btn-xs " ng-click="selectOrCreateTask('PA','Create')">Create Preventive Action Task</a>
-                      </td>
-                    </tr>
-                      <tr >
-                          <td style="text-align:left">
-                              <span class="text-muted">Action Plan Status
+              </td>
+              <td style="text-align:right">
+                <a href="#" class="btn btn-primary btn-outline  btn-xs " ng-click="selectOrCreateTask('PA','Select')">Select</a>
+                <small class="text-muted"> or </small>
+                <a href="#" class="btn btn-primary btn-outline btn-xs " ng-click="selectOrCreateTask('PA','Create')">Create Preventive Action Task</a>
+              </td>
+            </tr>
+            <tr>
+              <td style="text-align:left">
+                <span class="text-muted">Action Plan Status
                               </span>
-                          </td>
-                          <td style="text-align:right">
-                            <table class="table table-striped" style="margin-bottom:0">
-                                <tbody style="text-align:left;">
-                                  <tr ng-repeat="action in anomalie.preventiveActions" style="border-bottom:1px solid #ddd" >
-                                      <td >
-                                          <a href="/task/{{action._id}}">
+                              <br>
+                              <span id="anoPAStatus" style="margin-left:15px" class="label label-sm" ng-class="{'label-info':anomalie.statusPA ==='In Progress','label-success':anomalie.statusPA ==='Finished','label-default':anomalie.statusPA ==='Not Started','label-lightgrey':anomalie.statusPA =='Withdrawn'}">
+                                {{anomalie.statusPA}}
+                              </span>
+              </td>
+              <td style="text-align:right">
+                <table class="table table-striped" style="margin-bottom:0">
+                  <tbody style="text-align:left;">
+                    <tr ng-repeat="action in anomalie.preventiveActions" style="border-bottom:1px solid #ddd">
+                      <td>
+                        <a href="/task/{{action._id}}">
                                             {{action.name}}
                                           </a>
-                                      </td>
-                                      <td>
-                                          <span class="pull-right">
+                      </td>
+                      <td>
+                        <span class="pull-right">
                                             <span class="label label-sm"
                                               ng-class="{'label-info':action.metrics[action.metrics.length - 1].status ==='In Progress','label-success':action.metrics[action.metrics.length - 1].status ==='Finished','label-default':action.metrics[action.metrics.length - 1].status ==='Not Started','label-lightgrey':action.metrics[action.metrics.length - 1].status =='Withdrawn'}">
                                               {{action.metrics[action.metrics.length -1].status}}
                                             </span>
-                                            <a class="btn btn-default btn-xs text-muted" ng-click="removeTask('PA',$index,action)"
-                                               uib-tooltip-html="'Remove this task from action plan of this anomaly'" tooltip-placement="left" >
+                        <a class="btn btn-default btn-xs text-muted" ng-click="removeTask('PA',$index,action)" uib-tooltip-html="'Remove this task from action plan of this anomaly'" tooltip-placement="left">
                                               <i class="fa fa-trash-o text-muted" aria-hidden="true"></i>
                                             </a>
-                                          </span>
-                                      </td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </td>
-                      </tr>
+                        </span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
 
-                </tbody>
-            </table>
+          </tbody>
+        </table>
 
-        </div>
+      </div>
     </div>
   </div>
   <div class="col-md-4">
     <div class="portlet sale-summary">
-        <div class="portlet-title">
-            <div class="caption">
-              <span class="badge badge-success" aria-hidden="false">6</span>
-        Measure Solution Effects
-            </div>
-            <div class="tools">
-                <div class="pull-right" ng-init="EngagementIsExpanded[key]=(key===task.metrics.length-1 || key===0)" ng-click="EngagementIsExpanded[key]=!EngagementIsExpanded[key]">
-                    <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!EngagementIsExpanded[key]" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
-                    <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="EngagementIsExpanded[key]" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
-                </div>
-                <span ng-if="key > 0" class="pull-right" style="margin-right:15px;"> <span class="label label-warning">  {{currentMetric.reworkReason}}</span></span>
-            </div>
+      <div class="portlet-title">
+        <div class="caption">
+          <span class="badge badge-success" aria-hidden="false">6</span> Measure Solution Effects
         </div>
-        <div class="portlet-body" style="padding:0!important" >
+        <div class="tools">
+          <div class="pull-right" ng-init="EngagementIsExpanded[key]=(key===task.metrics.length-1 || key===0)" ng-click="EngagementIsExpanded[key]=!EngagementIsExpanded[key]">
+            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!EngagementIsExpanded[key]" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
+            <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="EngagementIsExpanded[key]" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
+          </div>
+          <span ng-if="key > 0" class="pull-right" style="margin-right:15px;"> <span class="label label-warning">  {{currentMetric.reworkReason}}</span></span>
+        </div>
+      </div>
+      <div class="portlet-body" style="padding:0!important">
 
-          <table class="table table-striped table-hover">
-              <tbody style="text-align:left;">
-                <tr >
-                    <td style="text-align:left" >
-   <pre> <a href="#"  editable-textarea="anomalie.textEffect" buttons="no" blur="submit"  >
+        <table class="table table-striped table-hover">
+          <tbody style="text-align:left;">
+            <tr>
+              <td style="text-align:left">
+                <pre> <a href="#"  editable-textarea="anomalie.textEffect" buttons="no" blur="submit"  >
    {{ anomalie.textEffect || 'none' }}</a> </pre>
-                                      </td>
-                  </tr>
-                </tbody>
-              </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-            <!-- <table class="table table-striped table-hover">
+        <!-- <table class="table table-striped table-hover">
                 <tbody style="text-align:left;">
                   <tr >
                       <td style="text-align:left" >
@@ -652,16 +733,14 @@ Select the solutions            </div>
                 </tbody>
             </table> -->
 
-        </div>
+      </div>
     </div>
   </div>
 </div>
 <br>
 <footer class="navbar-fixed-bottom footer-task-boss">
   <div class="container">
-    <button type="button" name="button" style="margin-top:2px;margin-right:10px;width:100px;" class="btn btn-primary pull-right hidden-xs"
-        ng-click="updateAnomalie()"
-        uib-tooltip-html="'Save will  copy data to a permanent storage'" tooltip-placement="left" >Save </button>
+    <button type="button" name="button" style="margin-top:2px;margin-right:10px;width:100px;" class="btn btn-primary pull-right hidden-xs" ng-click="updateAnomalie()" uib-tooltip-html="'Save will  copy data to a permanent storage'" tooltip-placement="left">Save </button>
   </div>
 </footer>
 
@@ -669,43 +748,43 @@ Select the solutions            </div>
 <!-- MENU DROIT      -->
 <!-- *************** -->
 <div pageslide ps-open="checked" ps-speed="1" ps-push="true" class="ng-isolate-scope ng-pageslide" style="z-index: 1000; position: fixed;overflow:auto;  transition-duration: 1s; height: 100%; transition-property: top, bottom, left, right; width: 300px; top: 0px; bottom: 0px; right: -300px;background-color:#eee">
-                        <div style="padding:20px;margin-top:20px;" id="demo-right">
-                            <h3 style="width:100%;text-align:center">Actions on Anomaly</h3>
-                            <a class="btn btn-primary" style="width:100%" ng-click="toggle()">Close</a>
-                            <hr>
+  <div style="padding:20px;margin-top:20px;" id="demo-right">
+    <h3 style="width:100%;text-align:center">Actions on Anomaly</h3>
+    <a class="btn btn-primary" style="width:100%" ng-click="toggle()">Close</a>
+    <hr>
 
-                            <br><br>
-                            <div style="width:100%;  display: inline-block;"   ng-click="refreshAnomalie()">
-                              <div style="width:29%;height:70px;float:left">
-                                <img src="assets/images/refresh-icon.png" style="width:60px;" alt="">
-                              </div>
-                              <div style="width:69%;height:70px;table-cell;   vertical-align: middle; float:left;padding-left:5px">
-                                <p>Resfresh will operate again all calculations</p>
-                              </div>
-                            </div>
-                            <hr>
-                            <div style="width:100%;  display: inline-block;"   ng-click="anoPlusOne()" ng-class="{'activeActionMenu':dashboardSlide === 'Home'}">
-                              <div style="width:29%;height:70px;float:left">
-                                <img src="assets/images/coming-soon.png" style="width:70px;z-index:99999" alt="">
-                                <img src="assets/images/plus1.png" style="width:60px;z-index:99998;float:left;margin-top:-70px;" alt="">
-                              </div>
-                              <div style="width:69%;height:70px;table-cell;   vertical-align: middle; float:left;padding-left:5px" >
-                                <p>It <u style="font-weight:bold">happens again</u> ! Please count one more incident.</p>
-                              </div>
-                            </div>
-                            <hr>
-                            <div style="width:100%;  display: inline-block;"   ng-click="delete()">
-                              <div style="width:29%;height:70px;float:left">
-                                <img src="assets/images/delete.png" style="width:60px;" alt="">
-                              </div>
-                              <div style="width:69%;height:70px; display: table-cell;   vertical-align: middle; float:left;padding-left:5px">
-                                <p>Delete <u style="font-weight:bold">forever</u> this anomaly</p>
-                              </div>
-                            </div>
-                            <hr>
-
-
+    <br><br>
+    <div style="width:100%;  display: inline-block;" ng-click="refreshAnomalie()">
+      <div style="width:29%;height:70px;float:left">
+        <img src="assets/images/refresh-icon.png" style="width:60px;" alt="">
+      </div>
+      <div style="width:69%;height:70px;table-cell;   vertical-align: middle; float:left;padding-left:5px">
+        <p>Resfresh will operate again all calculations</p>
+      </div>
+    </div>
+    <hr>
+    <div style="width:100%;  display: inline-block;" ng-click="anoPlusOne()" ng-class="{'activeActionMenu':dashboardSlide === 'Home'}">
+      <div style="width:29%;height:70px;float:left">
+        <img src="assets/images/coming-soon.png" style="width:70px;z-index:99999" alt="">
+        <img src="assets/images/plus1.png" style="width:60px;z-index:99998;float:left;margin-top:-70px;" alt="">
+      </div>
+      <div style="width:69%;height:70px;table-cell;   vertical-align: middle; float:left;padding-left:5px">
+        <p>It <u style="font-weight:bold">happens again</u> ! Please count one more incident.</p>
+      </div>
+    </div>
+    <hr>
+    <div style="width:100%;  display: inline-block;" ng-click="delete()">
+      <div style="width:29%;height:70px;float:left">
+        <img src="assets/images/delete.png" style="width:60px;" alt="">
+      </div>
+      <div style="width:69%;height:70px; display: table-cell;   vertical-align: middle; float:left;padding-left:5px">
+        <p>Delete <u style="font-weight:bold">forever</u> this anomaly</p>
+      </div>
+    </div>
+    <hr>
 
 
-                        </div>
-                    </div>
+
+
+  </div>
+</div>

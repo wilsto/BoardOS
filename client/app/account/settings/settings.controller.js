@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('SettingsCtrl', function($scope, Auth, $http, Notification) {
+  .controller('SettingsCtrl', function($scope, Auth, $http, Notification, $timeout, $rootScope) {
     $scope.errors = {};
     $scope.currentUser = Auth.getCurrentUser();
 
@@ -61,6 +61,11 @@ angular.module('boardOsApp')
       $http.get('/api/recurrentTasks/list/' + $scope.currentUser._id).success(function(recurrentTasks) {
         $scope.recurrentTasks = recurrentTasks;
         $scope.editInProgress = false;
+        //Call Intro
+        $timeout(function() {
+          $rootScope.$broadcast('ExplainToMe/intro');
+        }, 1000);
+
       });
     };
 

@@ -749,7 +749,6 @@ angular.module('boardOsApp')
       $scope.task.actors.push(member);
       $scope.blnAddActor = false;
       $scope.actorselected = null;
-
     };
 
     $scope.removeMeToActor = function() {
