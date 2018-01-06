@@ -260,19 +260,22 @@ angular.module('boardOsApp')
           $scope.dataTasksSub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearTask($scope.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'count');
           $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearTask($scope.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'qty');
 
-          $scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values = _.map(_.cloneDeep($scope.dataTasksSub[subHierarchy.root + subHierarchy.name][0].values), function(v) {
+          $scope.dataTasksSubReal[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearTask($scope.subTasks[subHierarchy.root + subHierarchy.name], 'endDate', 'count');
+          $scope.dataMetricsSubReal[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearTask($scope.subTasks[subHierarchy.root + subHierarchy.name], 'endDate', 'qty');
+
+          $scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values = _.map(_.cloneDeep($scope.dataTasksSubReal[subHierarchy.root + subHierarchy.name][0].values), function(v) {
             v.value = v.count * (subHierarchy.value || 0);
             v.count = v.count * subHierarchy.value;
             return v;
           });
           $scope.dataUODiffMetricsSub[subHierarchy.root + subHierarchy.name][0].values = _.map(_.cloneDeep($scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values), function(v, k) {
-            v.value = v.count - $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values[k].count;
-            v.count = v.count - $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values[k].count;
+            v.value = v.count - $scope.dataMetricsSubReal[subHierarchy.root + subHierarchy.name][0].values[k].count;
+            v.count = v.count - $scope.dataMetricsSubReal[subHierarchy.root + subHierarchy.name][0].values[k].count;
             return v;
           });
           $scope.dataUOPerfMetricsSub[subHierarchy.root + subHierarchy.name][0].values = _.map(_.cloneDeep($scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values), function(v, k) {
-            v.value = v.count / $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values[k].count * 100;
-            v.count = v.count / $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values[k].count * 100;
+            v.value = v.count / $scope.dataMetricsSubReal[subHierarchy.root + subHierarchy.name][0].values[k].count * 100;
+            v.count = v.count / $scope.dataMetricsSubReal[subHierarchy.root + subHierarchy.name][0].values[k].count * 100;
             v.color = $scope.giveMeMyColor(v.count);
             return v;
           });
