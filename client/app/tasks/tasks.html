@@ -18,14 +18,30 @@
               </a>
             </th>
             <th style="max-width:650px;width:auto">
-              <a style="text-decoration: none" href="#" ng-click="orderByField='name'; reverseSort = !reverseSort">
+              <a id="orderName" style="text-decoration: none" href="#" ng-click="orderByField='name'; reverseSort = !reverseSort">
                 <i class="fa fa-tasks"></i>  Name <span ng-show="orderByField === 'name'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
               </a>
-              <small class="pull-right">
+              <small  style="padding-left:30px">
 
-              <a href="#" ng-click="orderByField='activity'; reverseSort = !reverseSort">
+              <a href="#" ng-click="orderByField='activity'; reverseSort = !reverseSort" class="text-muted">
                 <i class="fa fa-flash"></i>    Activity
               </a>
+            </small>
+            <small class="text-muted pull-right"  id="step1" >
+
+              <!-- Split button -->
+            <div id="multipleActions" class="btn-group" uib-dropdown>
+              <button id="split-button" type="button" class="btn btn-danger">Multiple Action</button>
+              <button type="button" class="btn btn-danger" uib-dropdown-toggle>
+                <span class="caret"></span>
+                <span class="sr-only">Split button!</span>
+              </button>
+              <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button">
+                <li role="menuitem"><a href="#" ng-click="multiOpen()"><span class="text-primary">Open</span> selected tasks in differents tabs&nbsp;&nbsp;</a></li>
+                <li role="menuitem"><a href="#" ng-click="multiDelete()"><span class="text-danger">Delete</span>  forever selected tasks</a></li>
+              </ul>
+            </div>
+
             </small>
             </th>
             <th style="width:250px;">
@@ -47,7 +63,7 @@
               <a style="text-decoration: none" href="#" ng-click="orderByField='status'; reverseSort = !reverseSort">
                 Status <span ng-show="orderByField === 'status'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
               </a>
-              <small class="pull-right">
+              <small class="pull-right" id="filterMetrics" >
               <i class="fa fa-bookmark-o text-success" aria-hidden="true"  ng-click="blnReview = (blnReview)? '':'Review'"></i>&nbsp;&nbsp;
               <i class="fa fa-question-circle-o text-danger" aria-hidden="true" ng-click="blnSuffix = (blnSuffix)? '':'Missing'"></i>&nbsp;&nbsp;
             </small>
@@ -58,7 +74,7 @@
             <th style="max-width:125px;width:125px;min-width:20px;">
               <input style="width:100%" ng-model="searchActor" placeholder="Actor name">
             </th>
-            <th style="max-width:650px;width:auto">
+            <th id="searchName" style="max-width:650px;width:auto">
               <input style="width:100%" ng-model="searchName">
             </th>
             <th style="width:250px;">
@@ -76,7 +92,7 @@
           </tr>
         </thead>
         <tbody infinite-scroll="getMoreData()" infinite-scroll-distance="3">
-          <tr ng-repeat="task in showTasks">
+          <tr id="rowTask" ng-repeat="task in showTasks">
             <td style="text-align: left">
               <div >
               <!-- <div uib-tooltip-html="'Name : <b>{{task.actors[0].name}}</b>'" tooltip-placement="top"> -->
@@ -87,8 +103,14 @@
               </div>
             </td>
             <td >
-              <a href="/task/{{task._id}}">
-                <div class="dont-break-out " ng-bind-html="task.name">
+              <!-- Checkbox for multi selection -->
+              <div  class="abc-checkbox abc-checkbox-primary pull-right">
+                <input id="checkbox{{task._id}}" class="styled" type="checkbox" ng-model="task.selected">
+                <label for="checkbox{{task._id}}">
+                </label>
+              </div>
+              <a  href="/task/{{task._id}}" target="_blank">
+                <div id="taskName" class="dont-break-out " ng-bind-html="task.name">
                 </div>
               </a>
               <small class="dont-break-out text-muted">  {{task.activity}}</small>

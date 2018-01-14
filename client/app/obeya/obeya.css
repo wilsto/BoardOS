@@ -1,0 +1,51 @@
+.bg-gray {
+  background-color: #F2F1EF;
+}
+
+.obeya-pane {
+  height: 250px;
+  border-radius: 5px;
+  padding: 10px;
+  color: #FFFFFF;
+  width: 100%;
+}
+
+.obeya-header {
+  height: 30px;
+}
+
+.obeya-body {
+  background-color: #FFFFFF;
+  border-radius: 5px;
+  height: 200px;
+  color: #000000;
+  padding: 10px;
+}
+
+.obeya-footer {
+  height: 30px;
+}
+
+.obeya-pane-blue {
+  background-color: #446CB3;
+}
+
+.obeya-pane-red {
+  background-color: #EC644B;
+}
+
+.obeya-pane-darkgray {
+  background-color: #6C7A89;
+}
+
+.obeya-pane-darkblue {
+  background-color: #013243;
+}
+
+.obeya-pane-orange {
+  background-color: #F89406;
+}
+
+.obeya-pane-gray {
+  background-color: #BDC3C7;
+}

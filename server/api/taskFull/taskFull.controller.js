@@ -856,6 +856,25 @@ exports.destroy = function(req, res) {
   });
 };
 
+// Deletes a taskFull from the DB.
+exports.destroyNoRegen = function(req, res) {
+  TaskFull.findById(req.params.id, function(err, taskFull) {
+    if (err) {
+      return handleError(res, err);
+    }
+    if (!taskFull) {
+      return res.status(404).send('Not Found');
+    }
+    taskFull.remove(function(err) {
+      if (err) {
+        return handleError(res, err);
+      }
+      return res.status(204).send('No Content');
+    });
+  });
+};
+
+
 // Get list of tasks
 exports.search = function(req, res) {
   var thisFilter = {

@@ -21,7 +21,7 @@ exports.index = function(req, res) {
       if (err) {
         return handleError(res, err);
       }
-      return res.status(200).json( infos);
+      return res.status(200).json(infos);
     });
 };
 
@@ -44,13 +44,15 @@ exports.create = function(req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.status(201).json( info);
+    return res.status(201).json(info);
   });
 };
 
 // Updates an existing info in the DB.
-exports.updateViewer = function(req, res) {
-  Whatsnew.find({}, function(err, infos) {
+exports.searchPage = function(req, res) {
+  Whatsnew.find({
+    page: req.params.id
+  }, function(err, infos) {
     if (err) {
       return handleError(res, err);
     }
@@ -58,33 +60,12 @@ exports.updateViewer = function(req, res) {
       return res.send(404);
     }
 
-    _.each(infos, function(info) {
-      var existviewer = false;
-      _.each(info.viewers, function(viewer) {
-        if (viewer.toString() === req.params.id) {
-          existviewer = true;
-        }
-      });
-      if (!existviewer) {
-        info.viewers.push(req.params.id);
-      }
-
-      info.save(function(err) {
-        if (err) {
-          return handleError(res, err);
-        }
-
-      });
-    });
-    return res.status(200).json( infos);
+    return res.status(200).json(infos[0]);
   });
 };
 
 // Updates an existing info in the DB.
 exports.update = function(req, res) {
-  if (req.body._id) {
-    delete req.body._id;
-  }
   Whatsnew.findById(req.params.id, function(err, info) {
     if (err) {
       return handleError(res, err);
@@ -92,14 +73,14 @@ exports.update = function(req, res) {
     if (!info) {
       return res.send(404);
     }
-    delete req.body.owner;
-    delete req.body.viewers;
     var updated = _.merge(info, req.body);
+    updated.markModified('hints');
+    updated.hints = req.body.hints;
     updated.save(function(err) {
       if (err) {
         return handleError(res, err);
       }
-      return res.status(200).json( info);
+      return res.status(200).json(info);
     });
   });
 };

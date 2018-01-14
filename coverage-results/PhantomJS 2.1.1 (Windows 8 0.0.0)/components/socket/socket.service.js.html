@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">38.46% </span>
+        <span class="strong">7.69% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>5/13</span>
+        <span class='fraction'>1/13</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -30,14 +30,14 @@
         <span class='fraction'>0/2</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">28.57% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>2/7</span>
+        <span class='fraction'>0/7</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">38.46% </span>
+        <span class="strong">7.69% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>5/13</span>
+        <span class='fraction'>1/13</span>
       </div>
     </div>
   </div>
@@ -100,23 +100,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -124,7 +118,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -147,20 +147,20 @@
 'use strict';
 &nbsp;
 angular.module('boardOsApp')
-  .factory('socket', function(socketFactory, $rootScope) {
+  .factory('socket', <span class="fstat-no" title="function not covered" >function(socketFactory, $rootScope) {</span>
 &nbsp;
     // socket.io now auto-configures its connection when we ommit a connection url
-    var ioSocket = io('', {
+<span class="cstat-no" title="statement not covered" >    var ioSocket = io('', {</span>
       // Send auth token on connection, you will need to DI the Auth service above
       // 'query': 'token=' + Auth.getToken()
       path: '/socket.io-client'
     });
 &nbsp;
-    var socket = socketFactory({
+<span class="cstat-no" title="statement not covered" >    var socket = socketFactory({</span>
       ioSocket: ioSocket
     });
 &nbsp;
-    return {
+<span class="cstat-no" title="statement not covered" >    return {</span>
       socket: socket,
 &nbsp;
       /**
@@ -173,8 +173,8 @@ angular.module('boardOsApp')
        * @param {Array} array
        * @param {Function} cb
        */
-      on: function(eventName, callback) {
-        socket.on(eventName, <span class="fstat-no" title="function not covered" >function() {</span>
+      on: <span class="fstat-no" title="function not covered" >function(eventName, callback) {</span>
+<span class="cstat-no" title="statement not covered" >        socket.on(eventName, <span class="fstat-no" title="function not covered" >function() {</span></span>
 <span class="cstat-no" title="statement not covered" >          var args = arguments;</span>
 <span class="cstat-no" title="statement not covered" >          $rootScope.$apply(<span class="fstat-no" title="function not covered" >function() {</span></span>
 <span class="cstat-no" title="statement not covered" >            callback.apply(socket, args);</span>
@@ -199,7 +199,7 @@ angular.module('boardOsApp')
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Nov 19 2017 17:52:49 GMT+0100 (Paris, Madrid)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Jan 14 2018 17:17:24 GMT+0100 (Paris, Madrid)
 </div>
 </div>
 <script src="../../prettify.js"></script>

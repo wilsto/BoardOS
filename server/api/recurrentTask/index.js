@@ -8,6 +8,8 @@ var router = express.Router();
 router.get('/', controller.index);
 router.get('/search', controller.search);
 router.get('/list/:userId', controller.list);
+router.get('/toggleOne/:type/:rtaskId', controller.toggleOne);
+router.get('/toggleAll/:type/:userId', controller.toggleAll);
 router.get('/:id', controller.show);
 router.post('/', controller.create);
 router.put('/:id', controller.update);

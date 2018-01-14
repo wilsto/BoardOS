@@ -46,6 +46,7 @@ var AnomalieSchema = new Schema({
   targets: [String],
 
   dueDate: Date,
+  todos: Schema.Types.Mixed,
   correctiveActions: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'TaskFull'

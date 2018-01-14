@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">2.72% </span>
+        <span class="strong">0.68% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>4/147</span>
+        <span class='fraction'>1/147</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -30,14 +30,14 @@
         <span class='fraction'>0/89</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">2.7% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>1/37</span>
+        <span class='fraction'>0/37</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">2.72% </span>
+        <span class="strong">0.68% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>4/147</span>
+        <span class='fraction'>1/147</span>
       </div>
     </div>
   </div>
@@ -380,11 +380,10 @@
 335
 336
 337
-338
-339</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+338</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -395,7 +394,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9×</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -717,12 +716,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use strict';
 &nbsp;
-angular.module('boardOsApp').factory('myLibrary', function() {
-  var pleaseWaitDiv = $('&lt;div class="modal" style="padding-top:25%" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false"&gt; \
+angular.module('boardOsApp').factory('myLibrary', <span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >  var pleaseWaitDiv = $('&lt;div class="modal" style="padding-top:25%" id="pleaseWaitDialog" data-backdrop="static" data-keyboard="false"&gt; \</span>
 		&lt;div style="margin-left:30%; margin-right:30%"&gt;\
 		&lt;div class="modal-body" style="background:white;border-radius:10px;"&gt; \
 		&lt;h2 style="margin-top:-5px"&gt;Processing...&lt;/h2&gt; \
@@ -733,7 +731,7 @@ angular.module('boardOsApp').factory('myLibrary', function() {
 		&lt;/div&gt;\
 		&lt;/div&gt;');
 &nbsp;
-  var sdo = {
+<span class="cstat-no" title="statement not covered" >  var sdo = {</span>
     showPleaseWait: <span class="fstat-no" title="function not covered" >function() {</span>
 <span class="cstat-no" title="statement not covered" >      pleaseWaitDiv.modal();</span>
     },
@@ -894,7 +892,7 @@ angular.module('boardOsApp').factory('myLibrary', function() {
 <span class="cstat-no" title="statement not covered" >      map_result.reverse(); </span>// par ordre croissant
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      $.each(data, <span class="fstat-no" title="function not covered" >function(key, item) {</span></span>
-<span class="cstat-no" title="statement not covered" >        item.month = moment(item.metrics[0].targetEndDate).format('YYYY.MM');</span>
+<span class="cstat-no" title="statement not covered" >        item.month = moment(item.metrics[0][fieldDate]).format('YYYY.MM');</span>
 <span class="cstat-no" title="statement not covered" >        $.each(map_result, <span class="fstat-no" title="function not covered" >function(keyMap, itemMap) {</span></span>
 <span class="cstat-no" title="statement not covered" >          if (itemMap.month === item.month) {</span>
 <span class="cstat-no" title="statement not covered" >            _.each(item.metrics, <span class="fstat-no" title="function not covered" >function(metric) {</span></span>
@@ -1055,15 +1053,14 @@ angular.module('boardOsApp').factory('myLibrary', function() {
 <span class="cstat-no" title="statement not covered" >      return map_result;</span>
     }
   };
-  return sdo;
-});
-&nbsp;</pre></td></tr>
+<span class="cstat-no" title="statement not covered" >  return sdo;</span>
+});</pre></td></tr>
 </table></pre>
 <div class='push'></div><!-- for sticky footer -->
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Nov 19 2017 17:52:49 GMT+0100 (Paris, Madrid)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Jan 14 2018 17:17:24 GMT+0100 (Paris, Madrid)
 </div>
 </div>
 <script src="../../prettify.js"></script>

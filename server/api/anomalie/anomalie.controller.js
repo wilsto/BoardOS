@@ -127,11 +127,16 @@ exports.update = function(req, res) {
       }
     }
   });
+  _.each(newAno.todos, function(todo) {
+    if (!todo.isDone) {
+      blnCATaskIP = true;
+    }
+    if (todo.isDone) {
+      blnCATaskEnd = true;
+    }
+  });
   newAno.correctiveActions = _.compact(_.uniq(correctiveActions));
-  console.log('blnCATaskIP', blnCATaskIP);
-  console.log('blnCATaskEnd', blnCATaskEnd);
   if (blnCATaskIP === false && blnCATaskEnd === false) {
-    console.log('CONDITION PASSED');
     newAno.statusCA = 'Not Started';
   }
   if (blnCATaskIP === true || (blnCATaskNotStarted === true && (blnCATaskIP === true || blnCATaskEnd === true))) {
@@ -235,6 +240,8 @@ exports.update = function(req, res) {
     updated.markModified('sourceTasks');
     updated.markModified('correctiveActions');
     updated.correctiveActions = newAno.correctiveActions;
+    updated.markModified('todos');
+    updated.todos = newAno.todos;
     updated.markModified('preventiveActions');
     updated.preventiveActions = newAno.preventiveActions;
     updated.markModified('rootCauseAnalysisTasks');

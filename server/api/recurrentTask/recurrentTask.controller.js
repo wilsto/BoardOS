@@ -169,7 +169,7 @@ exports.index = function(req, res) {
 // Get list of recurrentTasks
 exports.list = function(req, res) {
   var filterUser = (req.params.userId || req.query.userId) ? {
-    'actors': req.params.userId || req.query.userId
+    'actors.0': req.params.userId || req.query.userId
   } : {};
   RecurrentTask.find(filterUser, '-__v').sort({
     name: 1
@@ -179,6 +179,44 @@ exports.list = function(req, res) {
     }
     return res.status(200).json(recurrentTasks);
   });
+};
+
+// Get list of recurrentTasks
+exports.toggleOne = function(req, res) {
+  var toggleType = req.params.type;
+  var filterTask = {
+    _id: req.params.rtaskId
+  };
+  RecurrentTask.update(filterTask, {
+      $set: {
+        active: (toggleType === 'true')
+      }
+    },
+    function(err, recurrentTasks) {
+      if (err) {
+        return handleError(res, err);
+      }
+      return res.status(200).json(recurrentTasks);
+    });
+};
+
+// Get list of recurrentTasks
+exports.toggleAll = function(req, res) {
+  var toggleType = req.params.type;
+  var filterUser = (req.params.userId || req.query.userId) ? {
+    'actors.0': req.params.userId || req.query.userId
+  } : {};
+  RecurrentTask.updateMany(filterUser, {
+      $set: {
+        active: (toggleType === 'all')
+      }
+    },
+    function(err, recurrentTasks) {
+      if (err) {
+        return handleError(res, err);
+      }
+      return res.status(200).json(recurrentTasks);
+    });
 };
 
 

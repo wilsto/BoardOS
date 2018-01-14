@@ -1,30 +1,22 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('SettingsCtrl', function($scope, Auth, $http, Notification) {
+  .controller('SettingsCtrl', function($scope, Auth, $http, Notification, $timeout, $rootScope) {
     $scope.errors = {};
     $scope.currentUser = Auth.getCurrentUser();
+
+
+    $scope.datafalse = false;
+    $scope.datatrue = true;
 
     $scope.dashboards = [];
     $scope.locations = [{
       value: 'Suresnes',
       text: 'Suresnes'
     }, {
-      value: 'Hongrie',
-      text: 'Hongrie'
-    }, {
-      value: 'RepThech',
-      text: 'RepThech'
-    }, {
-      value: 'Nantes',
-      text: 'Nantes'
-    }, {
       value: 'Levallois',
       text: 'Levallois'
-    }, {
-      value: 'Boulogne',
-      text: 'Boulogne'
-    }, ];
+    }];
     $scope.repeatOn = [{
         value: 1,
         text: 'MO',
@@ -61,11 +53,19 @@ angular.module('boardOsApp')
       return selected.length ? selected.join(', ') : 'Not set';
     };
 
-    $scope.editInProgress = false;
+    $scope.$watchGroup(['currentUser.name', 'currentUser.visa', 'currentUser.avatar'], function(newMap, previousMap) {
+      $scope.editInProgress = true;
+    }, true);
 
     $scope.load = function() {
       $http.get('/api/recurrentTasks/list/' + $scope.currentUser._id).success(function(recurrentTasks) {
         $scope.recurrentTasks = recurrentTasks;
+        $scope.editInProgress = false;
+        //Call Intro
+        $timeout(function() {
+          $rootScope.$broadcast('ExplainToMe/intro');
+        }, 1000);
+
       });
     };
 
@@ -115,4 +115,15 @@ angular.module('boardOsApp')
       $scope.editInProgress = true;
     };
 
+    $scope.toggleActive = function(type) {
+      $http.get('/api/recurrentTasks/toggleAll/' + type + '/' + $scope.currentUser._id).success(function(recurrentTasks) {
+        $scope.load();
+      });
+    };
+
+    $scope.toggleOneActive = function(rtask) {
+      $http.get('/api/recurrentTasks/toggleOne/' + !rtask.active + '/' + rtask._id).success(function(recurrentTasks) {
+        $scope.load();
+      });
+    };
   });

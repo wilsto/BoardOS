@@ -93,17 +93,20 @@ body { background-color: #eeeeee; padding: 0; margin: 5px; overflow-y: scroll; }
 </style>
 </head>
 
-<body id="HTMLReporter" class="html-reporter">
-<h1>Tested in PhantomJS 2.1.1 (Windows 8 0.0.0) on Sun Nov 19 2017</h1>
+<body id="HTMLReporter" class="html-reporter showDetails">
+<h1>Tested in PhantomJS 2.1.1 (Windows 8 0.0.0) on Sun Jan 14 2018</h1>
 
 <div class="alert">
 
 
+<!-- <span class="failingAlert bar">Failed 32 specs</span> -->
+<span class="failingAlert bar"><span class="fold-buttons"><a href="#" onclick="fold();">Fold</a> | 
+  <a href="#" onclick="unfold();">Unfold</a></span>33 specs, 32 failed, 1 pending</span>
+<span class="resultsMenu bar">
+<a class="summaryMenuItem" onclick="showSummary();" href="#">Spec List<a>|<a 
+   class="detailsMenuItem" onclick="showFailures();" href="#">Failures</a>
+</span>
 
-  
-  <span class="passingAlert bar"><span class="fold-buttons"><a href="#" onclick="fold();">Fold</a> | 
-  <a href="#" onclick="unfold();">Unfold</a></span>32 specs, 0 failed, 0 pending</span>
-  
 
 
 </div>
@@ -114,194 +117,203 @@ body { background-color: #eeeeee; padding: 0; margin: 5px; overflow-y: scroll; }
   
   
   
-    <div class="suite passed">
+    <div class="suite failed">
       <span class="description">Controller: AboutCtrl</span>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should ...</span>
       </div>
     
     </div>
   
-    <div class="suite passed">
+    <div class="suite failed">
       <span class="description">Controller: CalendarCtrl</span>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should ...</span>
       </div>
     
     </div>
   
-    <div class="suite passed">
+    <div class="suite failed">
       <span class="description">Controller: DashboardCtrl New Dashboard</span>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should be visible</span>
       </div>
     
     </div>
   
-    <div class="suite passed">
+    <div class="suite failed">
       <span class="description">Directive: errSrc</span>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should make hidden element visible</span>
       </div>
     
     </div>
   
-    <div class="suite passed">
+    <div class="suite failed">
       <span class="description">Controller: GlobalCtrl</span>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should ...</span>
       </div>
     
     </div>
   
-    <div class="suite passed">
+    <div class="suite failed">
       <span class="description">Controller: hierarchiesCtrl</span>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should start on first at Context</span>
       </div>
     
     </div>
   
-    <div class="suite passed">
+    <div class="suite failed">
       <span class="description">Controller: MailCtrl</span>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should ...</span>
       </div>
     
     </div>
   
-    <div class="suite passed">
+    <div class="suite failed">
       <span class="description">Controller: MainCtrl</span>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should define Math</span>
       </div>
     
     </div>
   
-    <div class="suite passed">
+    <div class="suite failed">
       <span class="description">Filter: myregex</span>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should return the input prefixed with &quot;myregex filter:&quot;</span>
       </div>
     
     </div>
   
     <div class="suite passed">
-      <span class="description">Controller: ProcessCtrl</span>
+      <span class="description">Controller: ObeyaCtrl</span>
     
-      <div class="specSummary passed">
+      <div class="specSummary skipped">
       <span class="description">should ...</span>
       </div>
     
     </div>
   
-    <div class="suite passed">
+    <div class="suite failed">
+      <span class="description">Controller: ProcessCtrl</span>
+    
+      <div class="specSummary failed">
+      <span class="description">should ...</span>
+      </div>
+    
+    </div>
+  
+    <div class="suite failed">
       <span class="description">Controller: TaskCtrl initialisation des variables par défaut</span>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should indicate &quot;checked&quot; as false</span>
       </div>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should indicate &quot;size&quot; as 100px</span>
       </div>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should indicate &quot;parseFloat&quot; as defined in scope</span>
       </div>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should indicate &quot;forceExit&quot; as false</span>
       </div>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should indicate &quot;opened&quot; as defined in scope</span>
       </div>
     
     </div>
   
-    <div class="suite passed">
+    <div class="suite failed">
       <span class="description">Controller: TaskCtrl function toggle checked</span>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should reverse &quot;checked&quot;</span>
       </div>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should reverse &quot;checked&quot; twice back</span>
       </div>
     
     </div>
   
-    <div class="suite passed">
+    <div class="suite failed">
       <span class="description">Controller: TasksCtrl TasksCtrl Function filterTasks</span>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should return all tasks (6) at start</span>
       </div>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should return 1 task when searchActor exist in Actor</span>
       </div>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should return zero task when searchActor not exist in Actor</span>
       </div>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should return 1 task when searchName exist in name</span>
       </div>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should return zero task when searchName not exist in name</span>
       </div>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should return 4 tasks when searchName exist in Activity</span>
       </div>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should return zero task when searchName not exist in Activity</span>
       </div>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should return 4 tasks when searchContext exist in Context</span>
       </div>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should return zero task when searchContext not exist in Context</span>
       </div>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should return 4 tasks when searchStart exist in Start</span>
       </div>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should return zero task when searchStart not exist in Start</span>
       </div>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should return 4 tasks when searchEnd exist in End</span>
       </div>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should return zero task when searchEnd not exist in End</span>
       </div>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should return 4 tasks when searchStatus exist in Status</span>
       </div>
     
-      <div class="specSummary passed">
+      <div class="specSummary failed">
       <span class="description">should return zero task when searchStatus not exist in Status</span>
       </div>
     
@@ -311,6 +323,475 @@ body { background-color: #eeeeee; padding: 0; margin: 5px; overflow-y: scroll; }
 </div>
 
 <div id="details">
+  
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: AboutCtrl should ...</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60
+loaded@http://localhost:9898/context.js:162:17</div>
+    </div>
+  </div>
+  
+  
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: CalendarCtrl should ...</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/calendar/calendar.controller.spec.js?783957e40fd6f3612dfd1b1aa3b382b43a28435e (line 9)
+http://localhost:9898/base/client/app/calendar/calendar.controller.spec.js?783957e40fd6f3612dfd1b1aa3b382b43a28435e:9:1055</div>
+    </div>
+  </div>
+  
+  
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: DashboardCtrl New Dashboard should be visible</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/dashboard/dashboard.controller.spec.js?a33f1acd44edc6b2081ee10276766ce109562009 (line 9)
+http://localhost:9898/base/client/app/dashboard/dashboard.controller.spec.js?a33f1acd44edc6b2081ee10276766ce109562009:9:1107</div>
+    </div>
+  </div>
+  
+  
+  
+  <div class="specDetail failed">
+    <span class="description">Directive: errSrc should make hidden element visible</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60</div>
+    </div>
+  </div>
+  
+  
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: GlobalCtrl should ...</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60</div>
+    </div>
+  </div>
+  
+  
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: hierarchiesCtrl should start on first at Context</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/hierarchies/hierarchies.controller.spec.js?372a06d6528b9197bf7f0167e0695a334b7d9d1d (line 9)
+http://localhost:9898/base/client/app/hierarchies/hierarchies.controller.spec.js?372a06d6528b9197bf7f0167e0695a334b7d9d1d:9:1048</div>
+    </div>
+  </div>
+  
+  
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: MailCtrl should ...</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60</div>
+    </div>
+  </div>
+  
+  
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: MainCtrl should define Math</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/main/main.controller.spec.js?7c37606c6454f157103e5371ae31477500332bdc (line 9)
+http://localhost:9898/base/client/app/main/main.controller.spec.js?7c37606c6454f157103e5371ae31477500332bdc:9:1051</div>
+    </div>
+  </div>
+  
+  
+  
+  <div class="specDetail failed">
+    <span class="description">Filter: myregex should return the input prefixed with &quot;myregex filter:&quot;</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60</div>
+    </div>
+  </div>
+  
+  
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: ProcessCtrl should ...</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60</div>
+    </div>
+  </div>
+  
+  
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: TaskCtrl initialisation des variables par défaut should indicate &quot;checked&quot; as false</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/task/task.controller.spec.js?7843b2b5f8f50142d6e37cec98337a3d945982eb (line 9)
+http://localhost:9898/base/client/app/task/task.controller.spec.js?7843b2b5f8f50142d6e37cec98337a3d945982eb:9:2482</div>
+    </div>
+  </div>
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: TaskCtrl initialisation des variables par défaut should indicate &quot;size&quot; as 100px</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/task/task.controller.spec.js?7843b2b5f8f50142d6e37cec98337a3d945982eb (line 9)
+http://localhost:9898/base/client/app/task/task.controller.spec.js?7843b2b5f8f50142d6e37cec98337a3d945982eb:9:4920</div>
+    </div>
+  </div>
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: TaskCtrl initialisation des variables par défaut should indicate &quot;parseFloat&quot; as defined in scope</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/task/task.controller.spec.js?7843b2b5f8f50142d6e37cec98337a3d945982eb (line 9)
+http://localhost:9898/base/client/app/task/task.controller.spec.js?7843b2b5f8f50142d6e37cec98337a3d945982eb:9:5210</div>
+    </div>
+  </div>
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: TaskCtrl initialisation des variables par défaut should indicate &quot;forceExit&quot; as false</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/task/task.controller.spec.js?7843b2b5f8f50142d6e37cec98337a3d945982eb (line 9)
+http://localhost:9898/base/client/app/task/task.controller.spec.js?7843b2b5f8f50142d6e37cec98337a3d945982eb:9:5494</div>
+    </div>
+  </div>
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: TaskCtrl initialisation des variables par défaut should indicate &quot;opened&quot; as defined in scope</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/task/task.controller.spec.js?7843b2b5f8f50142d6e37cec98337a3d945982eb (line 9)
+http://localhost:9898/base/client/app/task/task.controller.spec.js?7843b2b5f8f50142d6e37cec98337a3d945982eb:9:5783</div>
+    </div>
+  </div>
+  
+  
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: TaskCtrl function toggle checked should reverse &quot;checked&quot;</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/task/task.controller.spec.js?7843b2b5f8f50142d6e37cec98337a3d945982eb (line 9)
+http://localhost:9898/base/client/app/task/task.controller.spec.js?7843b2b5f8f50142d6e37cec98337a3d945982eb:9:4015</div>
+    </div>
+  </div>
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: TaskCtrl function toggle checked should reverse &quot;checked&quot; twice back</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/task/task.controller.spec.js?7843b2b5f8f50142d6e37cec98337a3d945982eb (line 9)
+http://localhost:9898/base/client/app/task/task.controller.spec.js?7843b2b5f8f50142d6e37cec98337a3d945982eb:9:8054</div>
+    </div>
+  </div>
+  
+  
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: TasksCtrl TasksCtrl Function filterTasks should return all tasks (6) at start</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313 (line 9)
+http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313:9:2937,http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60</div>
+    </div>
+  </div>
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: TasksCtrl TasksCtrl Function filterTasks should return 1 task when searchActor exist in Actor</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313 (line 9)
+http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313:9:6046,http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60</div>
+    </div>
+  </div>
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: TasksCtrl TasksCtrl Function filterTasks should return zero task when searchActor not exist in Actor</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313 (line 9)
+http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313:9:6614,http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60</div>
+    </div>
+  </div>
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: TasksCtrl TasksCtrl Function filterTasks should return 1 task when searchName exist in name</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313 (line 9)
+http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313:9:7173,http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60</div>
+    </div>
+  </div>
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: TasksCtrl TasksCtrl Function filterTasks should return zero task when searchName not exist in name</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313 (line 9)
+http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313:9:7740,http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60</div>
+    </div>
+  </div>
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: TasksCtrl TasksCtrl Function filterTasks should return 4 tasks when searchName exist in Activity</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313 (line 9)
+http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313:9:8304,http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60</div>
+    </div>
+  </div>
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: TasksCtrl TasksCtrl Function filterTasks should return zero task when searchName not exist in Activity</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313 (line 9)
+http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313:9:8876,http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60</div>
+    </div>
+  </div>
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: TasksCtrl TasksCtrl Function filterTasks should return 4 tasks when searchContext exist in Context</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313 (line 9)
+http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313:9:9442,http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60</div>
+    </div>
+  </div>
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: TasksCtrl TasksCtrl Function filterTasks should return zero task when searchContext not exist in Context</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313 (line 9)
+http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313:9:10016,http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60</div>
+    </div>
+  </div>
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: TasksCtrl TasksCtrl Function filterTasks should return 4 tasks when searchStart exist in Start</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313 (line 9)
+http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313:9:10581,http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60</div>
+    </div>
+  </div>
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: TasksCtrl TasksCtrl Function filterTasks should return zero task when searchStart not exist in Start</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313 (line 9)
+http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313:9:11152,http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60</div>
+    </div>
+  </div>
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: TasksCtrl TasksCtrl Function filterTasks should return 4 tasks when searchEnd exist in End</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313 (line 9)
+http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313:9:11718,http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60</div>
+    </div>
+  </div>
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: TasksCtrl TasksCtrl Function filterTasks should return zero task when searchEnd not exist in End</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313 (line 9)
+http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313:9:12290,http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60</div>
+    </div>
+  </div>
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: TasksCtrl TasksCtrl Function filterTasks should return 4 tasks when searchStatus exist in Status</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313 (line 9)
+http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313:9:12860,http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60</div>
+    </div>
+  </div>
+  
+  <div class="specDetail failed">
+    <span class="description">Controller: TasksCtrl TasksCtrl Function filterTasks should return zero task when searchStatus not exist in Status</span>
+    <div class="stackTrace">
+      <div class="resultMessage">http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60,TypeError: undefined is not a constructor (evaluating 'createController()') in http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313 (line 9)
+http://localhost:9898/base/client/app/tasks/tasks.controller.spec.js?79fec8650775ece25463e8ca79c118267b2f9313:9:13435,http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4506:53
+forEach@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:341:24
+loadModules@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4466:12
+createInjector@http://localhost:9898/base/client/bower_components/angular/angular.js?b38201b62cd8f131f471167599bce96d640edfe2:4391:22
+workFn@http://localhost:9898/base/client/bower_components/angular-mocks/angular-mocks.js?92b8728d9bbadb1dfaf0ae8db2feb379016e043f:2513:60</div>
+    </div>
+  </div>
+  
   
 </div>
 
@@ -323,7 +804,7 @@ document.body.onkeypress = function (e) {
   switch (e.keyCode) {
     case 102: toggleFold(); break;
     case 49: showSummary(); break;
-    
+    case 50: showFailures(); break;case 50: showFailures(); break;case 50: showFailures(); break;case 50: showFailures(); break;case 50: showFailures(); break;case 50: showFailures(); break;case 50: showFailures(); break;case 50: showFailures(); break;case 50: showFailures(); break;case 50: showFailures(); break;case 50: showFailures(); break;case 50: showFailures(); break;case 50: showFailures(); break;
   }
 };
 

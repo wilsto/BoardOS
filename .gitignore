@@ -9,3 +9,7 @@ newrelic_agent.log
 server/config/environment/test\.js
 server/debug\.log
 *.log
+
+coverage-results/
+
+karma_html/

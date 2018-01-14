@@ -13,7 +13,10 @@ var RecurrentTaskSchema = new Schema({
   },
   active: {
     type: Boolean,
-    default: false
+    default: true
+  },
+  pauseTime: {
+    type: Date
   },
   description: String,
   hypothesis: String,

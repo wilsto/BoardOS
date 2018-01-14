@@ -6,7 +6,7 @@ var controller = require('./whatsnew.controller');
 var router = express.Router();
 
 router.get('/', controller.index);
-router.get('/updateViewer/:id', controller.updateViewer);
+router.get('/searchPage/:id', controller.searchPage);
 router.get('/:id', controller.show);
 router.post('/', controller.create);
 router.put('/:id', controller.update);

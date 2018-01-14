@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('TasksCtrl', function($rootScope, $scope, $http, statusTask, progressStatusTask, Notification) {
+  .controller('TasksCtrl', function($rootScope, $scope, $http, statusTask, progressStatusTask, Notification, $timeout, $window) {
     $scope.alltasks = [];
     $scope.tasks = [];
     $scope.showTasks = [];
@@ -24,7 +24,6 @@ angular.module('boardOsApp')
 
     $rootScope.taskStatus = statusTask;
     $rootScope.progressStatus = progressStatusTask;
-
 
     $scope.filterTasks = function(data) {
       var searchName = ($scope.searchName) ? $scope.searchName.toLowerCase() : '';
@@ -86,6 +85,9 @@ angular.module('boardOsApp')
 
         //Filter and Order
         $scope.reloadTasks();
+        $timeout(function() {
+          $rootScope.$broadcast('ExplainToMe/intro');
+        }, 1000);
       });
     };
 
@@ -149,35 +151,27 @@ angular.module('boardOsApp')
       $scope.suffixTask($scope.showTasks);
     };
 
-    $scope.save = function() {
-      delete $scope.task.__v;
-
-      if (typeof $scope.task._id === 'undefined') {
-        $http.post('/api/tasks', $scope.task);
-        Notification.success('Task "' + $scope.task.name + '" was created');
-      } else {
-        $http.put('/api/tasks/' + $scope.task._id, $scope.task);
-        Notification.success('Task "' + $scope.task.name + '" was updated');
-
-      }
-      $scope.load();
-    };
-
-    $scope.edit = function(task) {
-      $scope.task = {};
-      $scope.task = task;
-    };
-
-    $scope.reset = function() {
-      $scope.task = {};
-    };
-
-    $scope.delete = function(task, index) {
-      bootbox.confirm('Are you sure?', function(result) {
+    $scope.multiDelete = function() {
+      bootbox.confirm('Are you sure to delete forever the selected tasks ?', function(result) {
         if (result) {
-          $http.delete('/api/tasks/' + task._id).success(function() {
-            $scope.tasks.splice(index, 1);
-            Notification.success('Task "' + $scope.task.name + '" was deleted');
+          _.each($scope.showTasks, function(showTask) {
+            if (showTask.selected) {
+              $http.delete('/api/taskFulls/noRegen/' + showTask._id).success(function() {
+                Notification.success('Task "' + showTask.name + '" was deleted');
+              });
+            }
+          });
+        }
+      });
+    };
+
+    $scope.multiOpen = function() {
+      bootbox.confirm('Are you sure to open the selected tasks in different tabs ?', function(result) {
+        if (result) {
+          _.each($scope.showTasks, function(showTask) {
+            if (showTask.selected) {
+              $window.open('/task/' + showTask._id, '_blank');
+            }
           });
         }
       });

@@ -4,23 +4,16 @@ var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
 var WhatsnewSchema = new Schema({
-  title: String,
-  type: String,
-  resume: String,
-  info: String,
-  active: Boolean,
+  page: String,
+  hints: Schema.Types.Mixed,
+  active: {
+    type: Boolean,
+    default: true
+  },
   date: {
     type: Date,
     default: Date.now
-  },
-  owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  viewers: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  }],
+  }
 });
 
 module.exports = mongoose.model('Whatsnew', WhatsnewSchema);

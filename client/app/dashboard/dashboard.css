@@ -27,12 +27,12 @@
   transition: opacity .25s;
 }
 
-.btn-toggle:before {
+.btn-toggle-text:before {
   content: 'PERF.';
   left: -4rem;
 }
 
-.btn-toggle:after {
+.btn-toggle-text:after {
   content: 'UO';
   right: -4rem;
   opacity: .5;

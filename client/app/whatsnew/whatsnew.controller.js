@@ -4,116 +4,117 @@
 angular.module('boardOsApp')
   .controller('WhatsnewCtrl', function($rootScope, $scope, $http, $uibModal, Auth, $location, Notification) {
 
-    Auth.getCurrentUser(function(data) {
-      $scope.currentUser = data;
-      if (_.isEmpty(data) === false) {
-        $rootScope.loadNews();
+    $scope.allPages = [];
+    $scope.infos = [];
+    $scope.showPage = [];
+
+    $scope.versions = [{
+        value: '2.3',
+        text: '2.3'
+      },
+      {
+        value: '2.2',
+        text: '2.2'
+      },
+      {
+        value: '2.1',
+        text: '2.1'
+      },
+      {
+        value: '2.0',
+        text: '2.0'
+      },
+      {
+        value: '1.0',
+        text: '1.0'
       }
-    });
+    ];
+
+    $scope.positions = [{
+        value: 'top',
+        text: 'top'
+      },
+      {
+        value: 'right',
+        text: 'right'
+      },
+      {
+        value: 'left',
+        text: 'left'
+      },
+      {
+        value: 'bottom',
+        text: 'bottom'
+      }
+    ];
 
     $scope.allinfos = [];
     $scope.infos = [];
-    $rootScope.showInfos = [];
+    $scope.showInfos = [];
     $scope.orderByField = 'date';
     $scope.reverseSort = true;
 
-    $rootScope.loadNews = function() {
-      var absUrl = $location.absUrl();
+    $scope.selectedPage = '';
+    $scope.selectPage = function(page) {
+      $scope.selectedPage = page;
+      $scope.showPage = _.filter($scope.allPages, function(thispage) {
+        return thispage.page === $scope.selectedPage;
+      })[0];
+    };
+
+    $scope.pages = ['/', 'about', 'account', 'admin', 'anomalie', 'anomalies', 'calendar', 'dasboard', 'dasboards', 'dqm', 'hierarchies', 'KPI', 'KPIs', 'mail', 'settings', 'task', 'tasks', 'whatsnew'];
+    $scope.pagesNb = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    $scope.loadHints = function() {
       $http.get('/api/whatsnews').success(function(data) {
-        $scope.infos = _.sortBy(data, 'date').reverse();
+        $scope.allPages = data;
 
-        _.each(data, function(info) {
-          info.resume = info.resume || '';
-          info.info = info.info || '';
-          info.resumeHtml = info.resume.replace(new RegExp('img alt="" src="(?!http:?)', 'g'), 'img alt="" src="assets/ReleaseNotes/');
-          info.infoHtml = info.info.replace(new RegExp('img alt="" src="(?!http:?)', 'g'), 'img alt="" src="assets/ReleaseNotes/');
+        _.each($scope.allPages, function(page) {
+          var index = $scope.pages.indexOf(page.page);
+          $scope.pagesNb[index] = page.hints.length;
         });
 
-        $scope.infos.every(function(info) {
-
-          $rootScope.alreadyviewed = (info.viewers.length > 0) ? true : false;
-          _.each(info.viewers, function(viewer) {
-            $scope.thisviewed = false;
-            if (viewer._id.toString() === $scope.currentUser._id.toString()) {
-              $scope.thisviewed = true;
-            }
-          });
-
-          if ($scope.thisviewed === false) {
-
-            $rootScope.alreadyviewed = false;
-            return false;
-          }
-
-        });
-        $scope.allinfos = $scope.infos;
-        $rootScope.showInfos = $scope.infos.slice(0, 15);
+        if ($scope.selectedPage) {
+          $scope.selectPage($scope.selectedPage);
+        }
       });
     };
 
-    $scope.reloadInfos = function() {
-      $scope.infos = $scope.allinfos;
-      $rootScope.showInfos = $scope.infos.slice(0, 15);
-    };
+    $scope.loadHints();
 
-
-    $scope.getMoreData = function() {
-      var infos = $scope.allinfos;
-      $rootScope.showInfos = infos.slice(0, $rootScope.showInfos.length + 15);
+    $scope.createHint = function() {
+      if (!$scope.showPage) {
+        $scope.showPage = {
+          page: $scope.selectedPage,
+          hints: []
+        };
+      }
+      if (!$scope.showPage.hints) {
+        $scope.showPage.hints = [];
+      }
+      $scope.showPage.hints.push({
+        version: '2.3',
+        position: 'bottom'
+      });
     };
 
     $scope.save = function() {
-      delete $scope.info.__v;
-      if (typeof $scope.info._id === 'undefined') {
-
-        $http.post('/api/Whatsnews', $scope.info);
-        Notification.success('Info "' + $scope.info.title + '" was created');
-        $('#tallModal').modal('hide');
-        $rootScope.loadNews();
-
+      if (!$scope.showPage._id) {
+        $http.post('/api/Whatsnews', $scope.showPage);
+        Notification.success('Page of Hints "' + $scope.showPage.page + '" was created');
+        $scope.loadHints();
       } else {
-        $http.put('/api/Whatsnews/' + $scope.info._id, $scope.info);
-        Notification.success('Info "' + $scope.info.title + '" was updated');
-        $('#tallModal').modal('hide');
-        $rootScope.loadNews();
-
+        $http.put('/api/Whatsnews/' + $scope.showPage._id, $scope.showPage);
+        Notification.success('Page of Hints "' + $scope.showPage.page + '" was updated');
+        $scope.loadHints();
       }
-
-    };
-    $scope.createInfo = function() {
-      $scope.info = {
-        active: true,
-        owner: $scope.currentUser._id
-      };
-      $('#tallModal').modal();
     };
 
-
-    $scope.showDetails = function(info) {
-      $scope.info = info;
-    };
-
-    $scope.unshowDetails = function() {
-      $scope.info = undefined;
-    };
-
-    $scope.edit = function(info) {
-      $scope.info = {};
-      $scope.info = info;
-      $('#tallModal').modal();
-    };
-
-    $scope.reset = function() {
-      $scope.info = {};
-    };
-
-    $scope.delete = function(info, index) {
-      bootbox.confirm('Are you sure to delete this info ' + info.title + '?', function(result) {
+    $scope.delete = function(hint, index) {
+      bootbox.confirm('Are you sure to delete the hint on element ' + hint.element + '?', function(result) {
         if (result) {
-          $http.delete('/api/Whatsnews/' + info._id).success(function(data) {
-            Notification.success('Info "' + info.title + '" was deleted');
-            $rootScope.loadNews();
-          });
+          $scope.showPage.hints.splice(index, 1);
+          $scope.$apply();
         }
       });
     };

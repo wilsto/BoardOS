@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('AnomaliesCtrl', function($scope, $rootScope, $http, categoryKPI, Notification) {
+  .controller('AnomaliesCtrl', function($scope, $rootScope, $http, categoryKPI, Notification, $timeout) {
     $scope.allanomalies = [];
     $scope.anomalies = [];
     $scope.otheranomalies = [];
@@ -116,6 +116,12 @@ angular.module('boardOsApp')
         });
         $scope.allanomalies = _.sortBy(anomalies, 'name').reverse();
         $scope.anomalies = $scope.allanomalies;
+
+
+        //Call Intro
+        $timeout(function() {
+          $rootScope.$broadcast('ExplainToMe/intro');
+        }, 1000);
 
       });
     };

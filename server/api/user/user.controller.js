@@ -172,6 +172,33 @@ exports.changeGroups = function(req, res, next) {
 
 
 /**
+ *  users page Hints
+ */
+exports.pagehints = function(req, res, next) {
+  var userId = String(req.params.id);
+  var pagehints = req.body;
+  User.findById(userId, function(err, user) {
+    if (!user.pageHints) {
+      user.pageHints = [];
+    }
+    var index = _.pluck(user.pageHints, 'page').indexOf(pagehints.page);
+    console.log('_.pluck(user.pageHints, \'page\')', _.pluck(user.pageHints, 'page'));
+    console.log('index', index);
+    if (index > -1) {
+      user.pageHints[index].version = pagehints.version;
+    } else {
+      user.pageHints.push(pagehints);
+    }
+    user.markModified('pageHints');
+    console.log('user', user);
+    user.save(function(err) {
+      if (err) return validationError(res, err);
+      res.status(200).send('User Change Page Hints');
+    });
+  });
+};
+
+/**
  * Desactivate a user
  */
 exports.desactivate = function(req, res, next) {
