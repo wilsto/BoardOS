@@ -173,7 +173,7 @@ angular.module('boardOsApp').factory('myLibrary', function() {
       map_result.reverse(); // par ordre croissant
 
       $.each(data, function(key, item) {
-        item.month = moment(item.metrics[0].targetEndDate).format('YYYY.MM');
+        item.month = moment(item.metrics[0][fieldDate]).format('YYYY.MM');
         $.each(map_result, function(keyMap, itemMap) {
           if (itemMap.month === item.month) {
             _.each(item.metrics, function(metric) {

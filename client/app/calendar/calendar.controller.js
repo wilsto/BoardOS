@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('CalendarCtrl', function($scope, $http, $rootScope, $location, calendarConfig, Notification) {
+  .controller('CalendarCtrl', function($scope, $http, $rootScope, $location, calendarConfig, Notification, $window) {
     $scope.eventSources = [];
     $scope.filterNotification = 'Only For Me';
 
@@ -137,7 +137,7 @@ angular.module('boardOsApp')
     $scope.viewDate = new Date();
     $scope.calendarView = 'month';
     $scope.eventClicked = function(calendarEvent) {
-      $location.path('/' + calendarEvent.eventType + '/' + calendarEvent.eventId);
+      $window.open('/' + calendarEvent.eventType + '/' + calendarEvent.eventId, '_blank');
     };
 
     $scope.eventTimesChanged = function(calendarEvent, calendarNewEventStart, calendarNewEventEnd) {

@@ -16,6 +16,7 @@ var UserSchema = new Schema({
     default: 'user'
   },
   groups: Schema.Types.Mixed,
+  pageHints: Schema.Types.Mixed,
   avatar: String,
   visa: String,
   location: {

@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0.64% </span>
+        <span class="strong">0.63% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>3/469</span>
+        <span class='fraction'>3/475</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>0/88</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0.64% </span>
+        <span class="strong">0.63% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>3/469</span>
+        <span class='fraction'>3/475</span>
       </div>
     </div>
   </div>
@@ -1120,7 +1120,19 @@
 1075
 1076
 1077
-1078</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+1078
+1079
+1080
+1081
+1082
+1083
+1084
+1085
+1086
+1087
+1088
+1089
+1090</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
@@ -1255,6 +1267,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1289,17 +1303,25 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1384,8 +1406,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -2191,7 +2216,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2325,10 +2349,12 @@ angular.module('boardOsApp')
 <span class="cstat-no" title="statement not covered" >        $scope.subHierarchies = _.sortBy(hierarchies, ['root', 'name']);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        $scope.dataTasksSub = [];</span>
+<span class="cstat-no" title="statement not covered" >        $scope.dataTasksSubReal = [];</span>
 <span class="cstat-no" title="statement not covered" >        $scope.dataUOMetricsSub = [];</span>
 <span class="cstat-no" title="statement not covered" >        $scope.dataUODiffMetricsSub = [];</span>
 <span class="cstat-no" title="statement not covered" >        $scope.dataUOPerfMetricsSub = [];</span>
 <span class="cstat-no" title="statement not covered" >        $scope.dataMetricsSub = [];</span>
+<span class="cstat-no" title="statement not covered" >        $scope.dataMetricsSubReal = [];</span>
 <span class="cstat-no" title="statement not covered" >        $scope.dataCostSub = [];</span>
 <span class="cstat-no" title="statement not covered" >        $scope.dataQualitySub = [];</span>
 <span class="cstat-no" title="statement not covered" >        $scope.dataTimeSub = [];</span>
@@ -2382,6 +2408,10 @@ angular.module('boardOsApp')
             values: []
           }];
 &nbsp;
+<span class="cstat-no" title="statement not covered" >          $scope.dataTasksSubReal[subHierarchy.root + subHierarchy.name] = [{</span>
+            values: []
+          }];
+&nbsp;
 <span class="cstat-no" title="statement not covered" >          $scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name] = [{</span>
             values: []
           }];
@@ -2395,6 +2425,10 @@ angular.module('boardOsApp')
           }];
 &nbsp;
 <span class="cstat-no" title="statement not covered" >          $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name] = [{</span>
+            values: []
+          }];
+&nbsp;
+<span class="cstat-no" title="statement not covered" >          $scope.dataMetricsSubReal[subHierarchy.root + subHierarchy.name] = [{</span>
             values: []
           }];
 &nbsp;
@@ -2459,19 +2493,22 @@ angular.module('boardOsApp')
 <span class="cstat-no" title="statement not covered" >          $scope.dataTasksSub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearTask($scope.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'count');</span>
 <span class="cstat-no" title="statement not covered" >          $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearTask($scope.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'qty');</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >          $scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values = _.map(_.cloneDeep($scope.dataTasksSub[subHierarchy.root + subHierarchy.name][0].values), <span class="fstat-no" title="function not covered" >function(v) {</span></span>
+<span class="cstat-no" title="statement not covered" >          $scope.dataTasksSubReal[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearTask($scope.subTasks[subHierarchy.root + subHierarchy.name], 'endDate', 'count');</span>
+<span class="cstat-no" title="statement not covered" >          $scope.dataMetricsSubReal[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearTask($scope.subTasks[subHierarchy.root + subHierarchy.name], 'endDate', 'qty');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >          $scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values = _.map(_.cloneDeep($scope.dataTasksSubReal[subHierarchy.root + subHierarchy.name][0].values), <span class="fstat-no" title="function not covered" >function(v) {</span></span>
 <span class="cstat-no" title="statement not covered" >            v.value = v.count * (subHierarchy.value || 0);</span>
 <span class="cstat-no" title="statement not covered" >            v.count = v.count * subHierarchy.value;</span>
 <span class="cstat-no" title="statement not covered" >            return v;</span>
           });
 <span class="cstat-no" title="statement not covered" >          $scope.dataUODiffMetricsSub[subHierarchy.root + subHierarchy.name][0].values = _.map(_.cloneDeep($scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values), <span class="fstat-no" title="function not covered" >function(v, k) {</span></span>
-<span class="cstat-no" title="statement not covered" >            v.value = v.count - $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values[k].count;</span>
-<span class="cstat-no" title="statement not covered" >            v.count = v.count - $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values[k].count;</span>
+<span class="cstat-no" title="statement not covered" >            v.value = v.count - $scope.dataMetricsSubReal[subHierarchy.root + subHierarchy.name][0].values[k].count;</span>
+<span class="cstat-no" title="statement not covered" >            v.count = v.count - $scope.dataMetricsSubReal[subHierarchy.root + subHierarchy.name][0].values[k].count;</span>
 <span class="cstat-no" title="statement not covered" >            return v;</span>
           });
 <span class="cstat-no" title="statement not covered" >          $scope.dataUOPerfMetricsSub[subHierarchy.root + subHierarchy.name][0].values = _.map(_.cloneDeep($scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values), <span class="fstat-no" title="function not covered" >function(v, k) {</span></span>
-<span class="cstat-no" title="statement not covered" >            v.value = v.count / $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values[k].count * 100;</span>
-<span class="cstat-no" title="statement not covered" >            v.count = v.count / $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values[k].count * 100;</span>
+<span class="cstat-no" title="statement not covered" >            v.value = v.count / $scope.dataMetricsSubReal[subHierarchy.root + subHierarchy.name][0].values[k].count * 100;</span>
+<span class="cstat-no" title="statement not covered" >            v.count = v.count / $scope.dataMetricsSubReal[subHierarchy.root + subHierarchy.name][0].values[k].count * 100;</span>
 <span class="cstat-no" title="statement not covered" >            v.color = $scope.giveMeMyColor(v.count);</span>
 <span class="cstat-no" title="statement not covered" >            return v;</span>
           });
@@ -3273,14 +3310,13 @@ angular.module('boardOsApp')
 &nbsp;
     };
 &nbsp;
-  });
-&nbsp;</pre></td></tr>
+  });</pre></td></tr>
 </table></pre>
 <div class='push'></div><!-- for sticky footer -->
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Jan 05 2018 17:43:44 GMT+0100 (Paris, Madrid)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Sun Jan 14 2018 17:17:24 GMT+0100 (Paris, Madrid)
 </div>
 </div>
 <script src="../../prettify.js"></script>

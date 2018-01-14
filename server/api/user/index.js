@@ -16,6 +16,7 @@ router.put('/:id/role', auth.hasRole('admin'), controller.changeRole);
 router.put('/:id/groups', auth.hasRole('admin'), controller.changeGroups);
 router.put('/desactivate/:id', auth.hasRole('admin'), controller.desactivate);
 router.put('/:id/fullupdate', auth.hasRole('admin'), controller.update);
+router.put('/:id/pagehints', auth.isAuthenticated(), controller.pagehints);
 router.put('/:id/avatar', auth.isAuthenticated(), controller.update);
 router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);
 router.get('/:id', auth.isAuthenticated(), controller.show);

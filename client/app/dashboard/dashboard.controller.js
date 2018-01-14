@@ -126,10 +126,12 @@ angular.module('boardOsApp')
         $scope.subHierarchies = _.sortBy(hierarchies, ['root', 'name']);
 
         $scope.dataTasksSub = [];
+        $scope.dataTasksSubReal = [];
         $scope.dataUOMetricsSub = [];
         $scope.dataUODiffMetricsSub = [];
         $scope.dataUOPerfMetricsSub = [];
         $scope.dataMetricsSub = [];
+        $scope.dataMetricsSubReal = [];
         $scope.dataCostSub = [];
         $scope.dataQualitySub = [];
         $scope.dataTimeSub = [];
@@ -183,6 +185,10 @@ angular.module('boardOsApp')
             values: []
           }];
 
+          $scope.dataTasksSubReal[subHierarchy.root + subHierarchy.name] = [{
+            values: []
+          }];
+
           $scope.dataUOMetricsSub[subHierarchy.root + subHierarchy.name] = [{
             values: []
           }];
@@ -196,6 +202,10 @@ angular.module('boardOsApp')
           }];
 
           $scope.dataMetricsSub[subHierarchy.root + subHierarchy.name] = [{
+            values: []
+          }];
+
+          $scope.dataMetricsSubReal[subHierarchy.root + subHierarchy.name] = [{
             values: []
           }];
 

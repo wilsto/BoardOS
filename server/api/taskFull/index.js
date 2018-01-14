@@ -17,6 +17,7 @@ router.get('/:id', controller.show);
 router.post('/', controller.create);
 router.put('/:id/:blnexecuteDashboard', controller.update);
 router.patch('/:id', controller.update);
+router.delete('/noRegen/:id', controller.destroyNoRegen);
 router.delete('/:id', controller.destroy);
 
 module.exports = router;

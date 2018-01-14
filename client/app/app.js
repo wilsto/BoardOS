@@ -307,18 +307,6 @@ angular.module('boardOsApp', [
       $rootScope.showArianeTask = ($location.path().indexOf('task/') > 0);
       $rootScope.showArianeKPI = ($location.path().indexOf('KPI/') > 0);
       $rootScope.showArianeAno = ($location.path().indexOf('anomalies') > 0);
-
-
-      // Variable pour afficher ou non ExplainToMe
-      $rootScope.blnExplainToMe = function() {
-        var bln = false;
-        bln = bln || ($location.path().indexOf('tasks') > 0);
-        bln = bln || ($location.path().indexOf('settings') > 0);
-        bln = bln || ($location.path().indexOf('anomalie/') > 0);
-        bln = bln || ($location.path().indexOf('anomalies') > 0);
-        return bln;
-      };
-
     });
 
     // Redirect to login if route requires auth and you're not logged in

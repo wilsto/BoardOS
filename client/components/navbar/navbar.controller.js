@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('NavbarCtrl', function($scope, $rootScope, $location, Auth, $http) {
+  .controller('NavbarCtrl', function($scope, $rootScope, $location, Auth, $http, Notification) {
 
     Auth.getCurrentUser(function(data) {
       $scope.currentUser = data;
@@ -11,9 +11,23 @@ angular.module('boardOsApp')
 
           $scope.load();
           $scope.loadDashBoards();
+          $scope.loadHints();
+
         }
       }
     });
+
+    // Variable pour afficher ou non ExplainToMe
+    $scope.StartExplainToMe = function() {
+      var bln = false;
+      bln = bln || ($location.path().indexOf('tasks') > 0);
+      bln = bln || ($location.path().indexOf('settings') > 0);
+      bln = bln || ($location.path().indexOf('anomalie/') > 0);
+      bln = bln || ($location.path().indexOf('anomalies') > 0);
+      $scope.blnExplainToMe = bln;
+      return bln;
+    };
+    $scope.StartExplainToMe();
 
     $rootScope.openNav = function() {
       $rootScope.loadNews();
@@ -39,7 +53,6 @@ angular.module('boardOsApp')
         $scope.navBarTasks = tasks;
       });
     };
-
 
     $scope.ExplainToMe = function() {
       $scope.CallMeFull();
@@ -130,6 +143,7 @@ angular.module('boardOsApp')
         }
       });
     };
+
 
     $scope.loadDashBoards = function() {
       var myparams = {
