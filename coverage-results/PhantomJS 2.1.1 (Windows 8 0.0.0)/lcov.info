@@ -18,6 +18,7 @@ FN:327,(anonymous_15)
 FN:344,(anonymous_16)
 FN:353,(anonymous_17)
 FNF:17
+<<<<<<< develop
 FNH:0
 FNDA:0,(anonymous_1)
 FNDA:0,(anonymous_2)
@@ -53,12 +54,51 @@ DA:74,0
 DA:80,0
 DA:85,0
 DA:88,0
+=======
+FNH:11
+FNDA:33,(anonymous_1)
+FNDA:33,(anonymous_2)
+FNDA:33,(anonymous_3)
+FNDA:75,(anonymous_4)
+FNDA:0,(anonymous_5)
+FNDA:33,(anonymous_6)
+FNDA:15,(anonymous_7)
+FNDA:15,(anonymous_8)
+FNDA:15,(anonymous_9)
+FNDA:15,(anonymous_10)
+FNDA:0,(anonymous_11)
+FNDA:0,(anonymous_12)
+FNDA:0,(anonymous_13)
+FNDA:33,cb
+FNDA:0,(anonymous_15)
+FNDA:0,(anonymous_16)
+FNDA:33,(anonymous_17)
+DA:3,1
+DA:29,33
+DA:30,33
+DA:31,33
+DA:34,33
+DA:35,33
+DA:38,33
+DA:39,33
+DA:40,33
+DA:42,33
+DA:58,33
+DA:60,33
+DA:70,33
+DA:73,33
+DA:79,33
+DA:84,33
+DA:87,75
+DA:88,75
+>>>>>>> commit
 DA:89,0
 DA:90,0
 DA:92,0
 DA:97,0
 DA:98,0
 DA:100,0
+<<<<<<< develop
 DA:101,0
 DA:103,0
 DA:261,0
@@ -89,11 +129,44 @@ DA:297,0
 DA:298,0
 DA:301,0
 DA:302,0
+=======
+DA:102,0
+DA:260,33
+DA:262,33
+DA:263,33
+DA:264,33
+DA:266,33
+DA:267,33
+DA:268,33
+DA:269,33
+DA:270,33
+DA:271,33
+DA:272,33
+DA:273,33
+DA:274,33
+DA:278,33
+DA:279,33
+DA:280,33
+DA:281,33
+DA:282,33
+DA:283,33
+DA:284,33
+DA:287,33
+DA:288,15
+DA:289,15
+DA:290,15
+DA:296,33
+DA:297,15
+DA:300,33
+DA:301,15
+DA:303,33
+>>>>>>> commit
 DA:304,0
 DA:305,0
 DA:306,0
 DA:307,0
 DA:308,0
+<<<<<<< develop
 DA:309,0
 DA:313,0
 DA:315,0
@@ -102,11 +175,22 @@ DA:317,0
 DA:322,1
 DA:323,0
 DA:325,0
+=======
+DA:312,33
+DA:314,0
+DA:315,0
+DA:316,0
+DA:321,1
+DA:322,33
+DA:324,33
+DA:326,33
+>>>>>>> commit
 DA:327,0
 DA:328,0
 DA:344,0
 DA:345,0
 DA:346,0
+<<<<<<< develop
 DA:347,0
 DA:355,0
 DA:356,0
@@ -128,6 +212,28 @@ BRDA:316,6,0,0
 BRDA:316,6,1,0
 BRDA:316,7,0,0
 BRDA:316,7,1,0
+=======
+DA:354,33
+DA:355,33
+DA:356,33
+DA:359,33
+LF:76
+LH:57
+BRDA:34,1,0,33
+BRDA:34,1,1,0
+BRDA:87,2,0,75
+BRDA:87,2,1,0
+BRDA:88,3,0,0
+BRDA:88,3,1,75
+BRDA:96,4,0,0
+BRDA:96,4,1,0
+BRDA:267,5,0,33
+BRDA:267,5,1,0
+BRDA:315,6,0,0
+BRDA:315,6,1,0
+BRDA:315,7,0,0
+BRDA:315,7,1,0
+>>>>>>> commit
 BRF:14
 BRH:0
 end_of_record
@@ -353,10 +459,17 @@ TN:
 SF:F:\Dev\BoardOS\client\app\KPI\KPI.js
 FN:4,(anonymous_1)
 FNF:1
+<<<<<<< develop
 FNH:0
 FNDA:0,(anonymous_1)
 DA:3,1
 DA:5,0
+=======
+FNH:1
+FNDA:33,(anonymous_1)
+DA:3,1
+DA:5,33
+>>>>>>> commit
 LF:2
 LH:1
 BRF:0
@@ -506,10 +619,17 @@ TN:
 SF:F:\Dev\BoardOS\client\app\KPIs\KPIs.js
 FN:4,(anonymous_1)
 FNF:1
+<<<<<<< develop
 FNH:0
 FNDA:0,(anonymous_1)
 DA:3,1
 DA:5,0
+=======
+FNH:1
+FNDA:33,(anonymous_1)
+DA:3,1
+DA:5,33
+>>>>>>> commit
 LF:2
 LH:1
 BRF:0
@@ -555,10 +675,17 @@ TN:
 SF:F:\Dev\BoardOS\client\app\about\about.js
 FN:4,(anonymous_1)
 FNF:1
+<<<<<<< develop
 FNH:0
 FNDA:0,(anonymous_1)
 DA:3,1
 DA:5,0
+=======
+FNH:1
+FNDA:33,(anonymous_1)
+DA:3,1
+DA:5,33
+>>>>>>> commit
 LF:2
 LH:1
 BRF:0
@@ -568,10 +695,17 @@ TN:
 SF:F:\Dev\BoardOS\client\app\account\account.js
 FN:4,(anonymous_1)
 FNF:1
+<<<<<<< develop
 FNH:0
 FNDA:0,(anonymous_1)
 DA:3,1
 DA:5,0
+=======
+FNH:1
+FNDA:33,(anonymous_1)
+DA:3,1
+DA:5,33
+>>>>>>> commit
 LF:2
 LH:1
 BRF:0
@@ -955,10 +1089,17 @@ TN:
 SF:F:\Dev\BoardOS\client\app\admin\admin.js
 FN:4,(anonymous_1)
 FNF:1
+<<<<<<< develop
 FNH:0
 FNDA:0,(anonymous_1)
 DA:3,1
 DA:5,0
+=======
+FNH:1
+FNDA:33,(anonymous_1)
+DA:3,1
+DA:5,33
+>>>>>>> commit
 LF:2
 LH:1
 BRF:0
@@ -1451,10 +1592,17 @@ TN:
 SF:F:\Dev\BoardOS\client\app\anomalie\anomalie.js
 FN:4,(anonymous_1)
 FNF:1
+<<<<<<< develop
 FNH:0
 FNDA:0,(anonymous_1)
 DA:3,1
 DA:5,0
+=======
+FNH:1
+FNDA:33,(anonymous_1)
+DA:3,1
+DA:5,33
+>>>>>>> commit
 LF:2
 LH:1
 BRF:0
@@ -1641,10 +1789,17 @@ TN:
 SF:F:\Dev\BoardOS\client\app\anomalies\anomalies.js
 FN:4,(anonymous_1)
 FNF:1
+<<<<<<< develop
 FNH:0
 FNDA:0,(anonymous_1)
 DA:3,1
 DA:5,0
+=======
+FNH:1
+FNDA:33,(anonymous_1)
+DA:3,1
+DA:5,33
+>>>>>>> commit
 LF:2
 LH:1
 BRF:0
@@ -1822,10 +1977,17 @@ TN:
 SF:F:\Dev\BoardOS\client\app\calendar\calendar.js
 FN:4,(anonymous_1)
 FNF:1
+<<<<<<< develop
 FNH:0
 FNDA:0,(anonymous_1)
 DA:3,1
 DA:5,0
+=======
+FNH:1
+FNDA:33,(anonymous_1)
+DA:3,1
+DA:5,33
+>>>>>>> commit
 LF:2
 LH:1
 BRF:0
@@ -2735,10 +2897,17 @@ TN:
 SF:F:\Dev\BoardOS\client\app\dashboard\dashboard.js
 FN:4,(anonymous_1)
 FNF:1
+<<<<<<< develop
 FNH:0
 FNDA:0,(anonymous_1)
 DA:3,1
 DA:5,0
+=======
+FNH:1
+FNDA:33,(anonymous_1)
+DA:3,1
+DA:5,33
+>>>>>>> commit
 LF:2
 LH:1
 BRF:0
@@ -2879,10 +3048,17 @@ TN:
 SF:F:\Dev\BoardOS\client\app\dashboards\dashboards.js
 FN:4,(anonymous_1)
 FNF:1
+<<<<<<< develop
 FNH:0
 FNDA:0,(anonymous_1)
 DA:3,1
 DA:5,0
+=======
+FNH:1
+FNDA:33,(anonymous_1)
+DA:3,1
+DA:5,33
+>>>>>>> commit
 LF:2
 LH:1
 BRF:0
@@ -3014,10 +3190,17 @@ TN:
 SF:F:\Dev\BoardOS\client\app\dqm\dqm.js
 FN:4,(anonymous_1)
 FNF:1
+<<<<<<< develop
 FNH:0
 FNDA:0,(anonymous_1)
 DA:3,1
 DA:5,0
+=======
+FNH:1
+FNDA:33,(anonymous_1)
+DA:3,1
+DA:5,33
+>>>>>>> commit
 LF:2
 LH:1
 BRF:0
@@ -3276,10 +3459,17 @@ TN:
 SF:F:\Dev\BoardOS\client\app\help\help.js
 FN:4,(anonymous_1)
 FNF:1
+<<<<<<< develop
 FNH:0
 FNDA:0,(anonymous_1)
 DA:3,1
 DA:5,0
+=======
+FNH:1
+FNDA:33,(anonymous_1)
+DA:3,1
+DA:5,33
+>>>>>>> commit
 LF:2
 LH:1
 BRF:0
@@ -3461,10 +3651,17 @@ TN:
 SF:F:\Dev\BoardOS\client\app\hierarchies\hierarchies.js
 FN:4,(anonymous_1)
 FNF:1
+<<<<<<< develop
 FNH:0
 FNDA:0,(anonymous_1)
 DA:3,1
 DA:5,0
+=======
+FNH:1
+FNDA:33,(anonymous_1)
+DA:3,1
+DA:5,33
+>>>>>>> commit
 LF:2
 LH:1
 BRF:0
@@ -3611,10 +3808,17 @@ TN:
 SF:F:\Dev\BoardOS\client\app\mail\mail.js
 FN:4,(anonymous_1)
 FNF:1
+<<<<<<< develop
 FNH:0
 FNDA:0,(anonymous_1)
 DA:3,1
 DA:5,0
+=======
+FNH:1
+FNDA:33,(anonymous_1)
+DA:3,1
+DA:5,33
+>>>>>>> commit
 LF:2
 LH:1
 BRF:0
@@ -3870,10 +4074,17 @@ TN:
 SF:F:\Dev\BoardOS\client\app\main\main.js
 FN:4,(anonymous_1)
 FNF:1
+<<<<<<< develop
 FNH:0
 FNDA:0,(anonymous_1)
 DA:3,1
 DA:5,0
+=======
+FNH:1
+FNDA:33,(anonymous_1)
+DA:3,1
+DA:5,33
+>>>>>>> commit
 LF:2
 LH:1
 BRF:0
@@ -3966,14 +4177,23 @@ end_of_record
 TN:
 SF:F:\Dev\BoardOS\client\app\obeya\obeya.controller.js
 FN:4,(anonymous_1)
-FNF:1
-FNH:0
-FNDA:0,(anonymous_1)
+FN:9,(anonymous_2)
+FNF:2
+FNH:1
+FNDA:1,(anonymous_1)
+FNDA:0,(anonymous_2)
 DA:3,1
-LF:1
-LH:1
-BRF:0
-BRH:0
+DA:6,1
+DA:8,1
+DA:9,0
+DA:10,0
+DA:11,0
+LF:6
+LH:3
+BRDA:8,1,0,0
+BRDA:8,1,1,1
+BRF:2
+BRH:1
 end_of_record
 TN:
 SF:F:\Dev\BoardOS\client\app\obeya\obeya.controller.spec.js
@@ -3982,24 +4202,24 @@ FN:11,(anonymous_2)
 FN:13,(anonymous_3)
 FN:20,(anonymous_4)
 FNF:4
-FNH:1
+FNH:4
 FNDA:1,(anonymous_1)
-FNDA:0,(anonymous_2)
-FNDA:0,(anonymous_3)
-FNDA:0,(anonymous_4)
+FNDA:1,(anonymous_2)
+FNDA:1,(anonymous_3)
+FNDA:1,(anonymous_4)
 DA:3,1
 DA:4,1
 DA:5,1
 DA:8,1
 DA:11,1
-DA:12,0
-DA:13,0
-DA:14,0
+DA:12,1
+DA:13,1
+DA:14,1
 DA:20,1
-DA:21,0
-DA:23,0
+DA:21,1
+DA:23,1
 LF:11
-LH:6
+LH:11
 BRF:0
 BRH:0
 end_of_record
@@ -4016,9 +4236,9 @@ LF:2
 LH:1
 =======
 FNH:1
-FNDA:32,(anonymous_1)
+FNDA:33,(anonymous_1)
 DA:3,1
-DA:5,32
+DA:5,33
 LF:2
 LH:2
 >>>>>>> 0.1
@@ -4082,10 +4302,17 @@ TN:
 SF:F:\Dev\BoardOS\client\app\process\process.js
 FN:4,(anonymous_1)
 FNF:1
+<<<<<<< develop
 FNH:0
 FNDA:0,(anonymous_1)
 DA:3,1
 DA:5,0
+=======
+FNH:1
+FNDA:33,(anonymous_1)
+DA:3,1
+DA:5,33
+>>>>>>> commit
 LF:2
 LH:1
 BRF:0
@@ -5062,10 +5289,17 @@ TN:
 SF:F:\Dev\BoardOS\client\app\task\task.js
 FN:4,(anonymous_1)
 FNF:1
+<<<<<<< develop
 FNH:0
 FNDA:0,(anonymous_1)
 DA:3,1
 DA:5,0
+=======
+FNH:1
+FNDA:33,(anonymous_1)
+DA:3,1
+DA:5,33
+>>>>>>> commit
 LF:2
 LH:1
 BRF:0
@@ -5503,10 +5737,17 @@ TN:
 SF:F:\Dev\BoardOS\client\app\tasks\tasks.js
 FN:4,(anonymous_1)
 FNF:1
+<<<<<<< develop
 FNH:0
 FNDA:0,(anonymous_1)
 DA:3,1
 DA:5,0
+=======
+FNH:1
+FNDA:33,(anonymous_1)
+DA:3,1
+DA:5,33
+>>>>>>> commit
 LF:2
 LH:1
 BRF:0
@@ -5601,10 +5842,17 @@ TN:
 SF:F:\Dev\BoardOS\client\app\whatsnew\whatsnew.js
 FN:4,(anonymous_1)
 FNF:1
+<<<<<<< develop
 FNH:0
 FNDA:0,(anonymous_1)
 DA:3,1
 DA:5,0
+=======
+FNH:1
+FNDA:33,(anonymous_1)
+DA:3,1
+DA:5,33
+>>>>>>> commit
 LF:2
 LH:1
 BRF:0
@@ -5641,8 +5889,13 @@ FN:205,(anonymous_26)
 FN:211,(anonymous_27)
 FN:223,(anonymous_28)
 FNF:28
+<<<<<<< develop
 FNH:0
 FNDA:0,Auth
+=======
+FNH:4
+FNDA:33,Auth
+>>>>>>> commit
 FNDA:0,(anonymous_2)
 FNDA:0,(anonymous_3)
 FNDA:0,(anonymous_4)
@@ -5671,11 +5924,19 @@ FNDA:0,(anonymous_26)
 FNDA:0,(anonymous_27)
 FNDA:0,(anonymous_28)
 DA:3,1
+<<<<<<< develop
 DA:11,0
 DA:12,0
 DA:17,0
 DA:18,0
 DA:21,0
+=======
+DA:11,33
+DA:12,0
+DA:17,33
+DA:18,0
+DA:21,33
+>>>>>>> commit
 DA:31,0
 DA:36,0
 DA:37,0
@@ -5733,7 +5994,11 @@ LH:1
 BRDA:12,1,0,0
 BRDA:12,1,1,0
 BRDA:17,2,0,0
+<<<<<<< develop
 BRDA:17,2,1,0
+=======
+BRDA:17,2,1,33
+>>>>>>> commit
 BRDA:143,3,0,0
 BRDA:143,3,1,0
 BRDA:147,4,0,0
@@ -5755,10 +6020,17 @@ TN:
 SF:F:\Dev\BoardOS\client\components\auth\user.service.js
 FN:4,(anonymous_1)
 FNF:1
+<<<<<<< develop
 FNH:0
 FNDA:0,(anonymous_1)
 DA:3,1
 DA:5,0
+=======
+FNH:1
+FNDA:33,(anonymous_1)
+DA:3,1
+DA:5,33
+>>>>>>> commit
 LF:2
 LH:1
 BRF:0
