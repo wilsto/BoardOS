@@ -17,7 +17,7 @@
 .obeya-body {
   background-color: #FFFFFF;
   border-radius: 5px;
-  height: 250px;
+  min-height: 250px;
   color: #000000;
   padding: 10px;
 }
@@ -27,7 +27,7 @@
 }
 
 .obeya-pane-blue {
-  background-color: #446CB3;
+  background-color: #33A6BD;
 }
 
 .obeya-pane-red {
@@ -67,7 +67,21 @@
   color: #f90606;
 }
 
+.blue {
+  color: #33A6BD;
+}
+
 .badge-gray {
   background-color: #BDC3C7;
   color: #000000;
+}
+
+.fullscreen {
+  z-index: 9999;
+  width: 97%;
+  height: 94%;
+  position: fixed;
+  top: 60px;
+  left: 45px;
+  overflow-y: auto;
 }

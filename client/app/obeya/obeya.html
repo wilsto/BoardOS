@@ -11,9 +11,11 @@
           <div class="row">
             <div class="col-lg-6 col-md-12 col-xs-12">
               {{obeya.name}}
+              <br>
+              Mode :               <img src="assets/images/calendar-{{obeyaMOde}}.png" style="width:60px;height:60px;" alt="">
             </div>
             <div class="col-lg-6 col-md-12 col-xs-12">
-{{obeyaMOde}}
+              {{obeya.perimeter}}
             </div>
           </div>
         </div>
@@ -22,8 +24,6 @@
     <div class="col-md-3">
       <div class="obeya-pane obeya-pane-darkgray">
         PEOPLE
-
-
         <hr style="margin-top:0;margin-bottom:10px;">
         <div class="obeya-body">
           <div class="row">
@@ -60,8 +60,6 @@
     <div class="col-md-3">
       <div class="obeya-pane obeya-pane-gray">
         FOCUS
-
-
         <hr style="margin-top:0;margin-bottom:10px;">
         <div class="obeya-body">
           <div class="row">
@@ -78,8 +76,6 @@
     <div class="col-md-3">
       <div class="obeya-pane obeya-pane-gray">
         FOCUS
-
-
         <hr style="margin-top:0;margin-bottom:10px;">
         <div class="obeya-body">
           <div class="row">
@@ -100,33 +96,171 @@
   <br>
   <div class="row">
     <div class="col-md-3">
-      <div class="obeya-pane obeya-pane-red">
+      <div id="cardMilestones" class="obeya-pane obeya-pane-gray">
         PLAN
-
-
+        <a href="#milestones" ng-click="showCard('Milestones')">
+            <i class="fa fa-arrows-alt  pull-right"></i>
+        </a>
         <hr style="margin-top:0;margin-bottom:10px;">
         <div class="obeya-body">
           <div class="row">
-            <div class="col-lg-6 col-md-12 col-xs-12">
-              <span class="card-title">
-                <img src="assets/images/workload.png" style="width:60px;height:60px;" alt="" >
-                PLANNING
+            <div class="col-lg-6 col-md-12 col-xs-12 ">
+              <div class="obeya-cards">
+                <span class="card-title">
+                <img src="assets/images/milestone.png" style="width:60px;height:60px;" alt="" >
+                MILESTONES
               </span>
+                <ul class="list-group card-list">
+                  <li class="list-group-item" ng-if="obeyaMOde === 'week'">
+                    <img src="assets/images/calendar-week.png" style="width:15px;height:15px;" alt=""> This Week
+                    <span class="badge badge-gray">{{obeya.openTasksNb}}</span>
+                  </li>
+                  <li class="list-group-item"  ng-if="obeyaMOde === 'month'">
+                    <img src="assets/images/calendar-month.png" style="width:15px;height:15px;" alt=""> This Month
+                    <span class="badge badge-gray">{{obeya.openTasksNb}}</span>
+                  </li>
+                  <li class="list-group-item"  ng-if="obeyaMOde === 'all'">
+                    <img src="assets/images/calendar-month.png" style="width:15px;height:15px;" alt=""> All
+                    <span class="badge badge-gray">{{obeya.openTasksNb}}</span>
+                  </li>
+                  <li class="list-group-item">
+                      <i class="fa fa-gavel "></i> To Engage
+                    <span class="badge badge-gray">{{obeya.openTasksNb}}</span>
+                  </li>
+                  <li class="list-group-item">
+                    <i class="fa fa-bell "></i> With alerts
+                    <span class="badge badge-red">{{obeya.alertsValue}}</span>
+                  </li>
+
+                </ul>
+              </div>
             </div>
-            <div class="col-lg-6 col-md-12 col-xs-12">
-              <span class="card-title">
-                <img src="assets/images/savings300x300.png" style="width:60px;height:60px;" alt="" >
-                CAPACITY
+            <div class="col-lg-6 col-md-12 col-xs-12 ">
+              <div class="obeya-cards">
+                <span class="card-title">
+                <div class="row">
+                  <div class="col-md-4">
+                    <img src="assets/images/icon-capacity-planning.png" style="width:60px;height:60px;" alt="">
+                  </div>
+                  <div class="col-md-8">
+                    CAPACITY
+                  </div>
+                </div>
               </span>
+                <ul class="list-group card-list">
+                  <li class="list-group-item">
+                    <i class="fa fa-users "></i> Availability
+                    <span class="badge  badge-gray"> ? </span>
+                  </li>
+                  <li class="list-group-item">
+                    <i class="fa fa-bars "></i> Planned
+                    <span class="badge  badge-gray"> ? </span>
+                  </li>
+                  <li class="list-group-item">
+                    <i class="fa fa-bell "></i> With alerts
+                    <span class="badge badge-red"> ? </span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Liste des contexts avec engagements -->
+          <div class="row" ng-show="blnShowCard.Milestones && !milestone">
+            <div class="col-md-12">
+              <div class="portlet">
+                <div class="portlet-title">
+                  <div class="caption">
+                    <h3>
+
+                      Milestones & Engagements
+                      <small class="text-muted">What are the new engagement we must take ?</small>
+                    </h3>
+                  </div>
+                  <div class="tools">
+                  </div>
+                </div>
+                <div class="portlet-body">
+                  <div class="table-responsive">
+
+                    <table class="table table-hover">
+                      <tr>
+                        <th style="width:20%">Name
+                          <button type="button" style="margin-left:15px" class="btn btn-xs btn-primary" ng-click="createNode()"><i class="glyphicon glyphicon-asterisk"></i> Create a new root</button>
+                        </th>
+                        <th style="width:10%">Status</th>
+                        <th style="width:20%">Due Date</th>
+                        <th >Activities</th>
+                        <th style="width:10%">Action</th>
+                      </tr>
+                      <tr ng-repeat="hierarchy in hierarchies">
+                        <td style="width:20%">
+                          <span class="dont-break-out">
+                                                  <a href="#" ng-click="showContext(hierarchy)">{{ hierarchy.longname}}</a>
+                                                </span>
+                          <td style="width:10%">
+                            <button disabled title="Forecasted" type="button" class="btn btn-xs btn-default">F</button>
+                            <button disabled title="Planned" type="button" class="btn btn-xs btn-default">P</button>
+                            <button disabled title="Engaged" type="button" class="btn btn-xs btn-default">E</button>
+                            <button disabled title="Achieved" type="button" class="btn btn-xs btn-default">A</button>
+                          </td>
+                          <td style="width:20%">{{hierarchy.duedate}} </td>
+                          <td>
+                            <button disabled title="Forecasted" type="button" class="btn btn-xs btn-default">DD</button>
+                            <button disabled title="Forecasted" type="button" class="btn btn-xs btn-default">BR</button>
+                            <button disabled title="Planned" type="button" class="btn btn-xs btn-default">VIZ</button>
+                            <button disabled title="Engaged" type="button" class="btn btn-xs btn-default">DA</button>
+                            <button disabled title="Achieved" type="button" class="btn btn-xs btn-default">ANA</button>
+                            <button disabled title="Achieved" type="button" class="btn btn-xs btn-default">CM</button>
+                            <button disabled title="Achieved" type="button" class="btn btn-xs btn-default">SM</button>
+                            <button disabled title="Achieved" type="button" class="btn btn-xs btn-default">MDM</button>
+                            <button disabled title="Achieved" type="button" class="btn btn-xs btn-default">PMO</button></button>
+                          </td>
+                          <td style="width:10%">
+                            <a class="btn btn-primary btn-xs" data-nodrag="" ng-click="newSubItem(hierarchy, $index)" style="margin-right: 8px;"><span class="glyphicon glyphicon-plus"></span></a>
+                            <a class="btn btn-danger btn-xs" data-nodrag="" ng-click="delete(hierarchy, $index)"><span class="glyphicon glyphicon-remove"></span></a>
+                          </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Liste des contexts avec engagements -->
+          <div class="row" ng-show="blnShowCard.Milestones && milestone">
+            <div class="col-md-12">
+              <div class="portlet">
+                <div class="portlet-title">
+                  <div class="caption">
+                    Milestones & Engagements
+                  </div>
+                  <div class="tools">
+                  </div>
+                </div>
+                <div class="portlet-body">
+                  <div class="table-responsive">
+                    <a href="#milestones" ng-click="hideContext(milestone)">
+                        <i class="fa fa-close  pull-right"></i>
+                    </a>
+                    <a href="#" editable-text="milestone.longname"  blur="submit">{{ milestone.longname || 'empty'}}</a>
+
+                    <div class="btn-group" style="width:90%;">
+                      <tags-input ng-model="hierarchy.tags" placeholder="Add a tag" use-strings="true" on-tag-added="addGroups($tag, hierarchy._id, hierarchy.tags)" on-tag-removed="removeGroups($tag, hierarchy._id, hierarchy.tags)">
+                        <auto-complete source="loadGroups($query)" min-length="1"></auto-complete>
+                      </tags-input>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-
     <div class="col-md-3">
-      <div class="obeya-pane obeya-pane-orange">
+      <div class="obeya-pane obeya-pane-blue">
         DO
         <hr style="margin-top:0;margin-bottom:10px;">
         <div class="obeya-body">
@@ -140,12 +274,12 @@
                 </span>
                 <ul class="list-group card-list">
                   <li class="list-group-item">
-                    <i class="fa fa-tasks orange"></i> In Progress
+                    <i class="fa fa-tasks blue"></i> In Progress
                     <span class="badge badge-gray">{{obeya.openTasksNb}}</span>
                   </li>
                   <li class="list-group-item">
-                    <i class="fa fa-bell orange"></i> With alerts
-                    <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+                    <i class="fa fa-bell blue"></i> With alerts
+                    <span class="badge badge-red">{{obeya.alertsValue}}</span>
                   </li>
                 </ul>
               </div>
@@ -153,16 +287,22 @@
             <div class="col-lg-6 col-md-12 col-xs-12 ">
               <div class="obeya-cards">
                 <span class="card-title">
-                  <img src="assets/images/anomaly.png" style="width:60px;height:60px;" alt="">
-                  ANOMALIES
+                  <div class="row">
+                    <div class="col-md-4">
+                      <img src="assets/images/anomaly.png" style="width:60px;height:60px;" alt="">
+                    </div>
+                    <div class="col-md-8">
+                      PROBLEM SOLVING
+                    </div>
+                  </div>
                 </span>
                 <ul class="list-group card-list">
                   <li class="list-group-item">
-                    <i class="fa fa-bug orange"></i> To Correct
-                    <span class="badge  badge-gray">{{obeya.alertsValue}}</span>
+                    <i class="fa fa-bug blue"></i> To Correct
+                    <span class="badge  badge-red">{{obeya.alertsValue}}</span>
                   </li>
                   <li class="list-group-item">
-                    <i class="fa fa-medkit orange"></i> Corrected
+                    <i class="fa fa-medkit blue"></i> Corrected
                     <span class="badge  badge-gray">{{obeya.alertsValue}}</span>
                   </li>
                 </ul>
@@ -170,14 +310,11 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
     <div class="col-md-3">
       <div class="obeya-pane obeya-pane-darkblue">
         CHECK
-
-
         <hr style="margin-top:0;margin-bottom:10px;">
         <div class="obeya-body">
           <div class="row">
@@ -194,8 +331,6 @@
     <div class="col-md-3">
       <div class="obeya-pane obeya-pane-blue">
         ACT
-
-
         <hr style="margin-top:0;margin-bottom:10px;">
         <div class="obeya-body">
           <div class="row">

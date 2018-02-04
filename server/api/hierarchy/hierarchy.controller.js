@@ -305,6 +305,130 @@ exports.sublist = function(req, res) {
 };
 
 
+// ***********************
+// Get a single hierarchy
+// ***********************
+exports.milestones = function(req, res) {
+
+  function getPosition(string, subString, index) {
+    return string.split(subString, index).join(subString).length;
+  }
+
+  function findWithAttr(array, attr, value, attr2, value2) {
+    for (var i = 0; i < array.length; i += 1) {
+      if (array[i][attr2] === value2 && array[i][attr] === value) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  var filterPerimeter = [];
+  var sublist = []
+  var filterTaskPerimeter = {
+    $or: [],
+    metrics: {
+      $elemMatch: {
+        status: 'Finished'
+      }
+    }
+  };
+
+  Q()
+    // Get dashboards
+    .then(function() {
+      var deferred = Q.defer();
+
+      DashboardComplete.findById(req.params.dashboardId, {
+        __v: false
+      }).lean().exec(function(err, dashboard) {
+        if (dashboard.perimeter.length > 0) {
+
+          filterPerimeter = dashboard.perimeter;
+
+          _.each(filterPerimeter, function(perimeter) {
+            if (perimeter.activity === null || perimeter.activity === undefined) {
+              perimeter.activity = '';
+            }
+            if (perimeter.context === null || perimeter.context === undefined) {
+              perimeter.context = '';
+            }
+            filterTaskPerimeter['$or'].push({
+              activity: {
+                '$regex': perimeter.activity || '',
+                $options: '-im'
+              },
+              context: {
+                '$regex': perimeter.context || '',
+                $options: '-im'
+              }
+            });
+          });
+
+          console.log('filterTaskPerimeter', filterTaskPerimeter['$or']);
+          deferred.resolve(filterTaskPerimeter);
+        }
+      });
+
+      return deferred.promise;
+
+    })
+    // Get hierarchy
+    .then(function() {
+      var deferred = Q.defer();
+
+      Hierarchy.find({
+          name: req.params.id
+        },
+        function(err, hierarchy) {
+          if (err) {
+            return handleError(res, err);
+          }
+          if (!hierarchy) {
+            return res.send(404)
+          }
+
+          _.each(filterPerimeter, function(perimeter, index) {
+            var filter, filterlength, posFilter, subactivity;
+
+            if (req.params.id === 'Context') {
+
+              filter = perimeter.context.replace('^', '');
+              if (filter.charAt(filter.length - 1) === '.') {
+                filter = filter.substring(0, filter.length - 1);
+              }
+
+              _.each(hierarchy[0].list, function(context) {
+                var posFilter = context.longname.indexOf(filter);
+                filterlength = (filter.length === 0) ? -1 : filter.length;
+                if (posFilter > -1) {
+                  // position du prochain point post root
+                  var position = getPosition(context.longname.substring(posFilter + filterlength + 1), '.', 1);
+                  var subcontext = context.longname.substring(posFilter + filterlength + 1, posFilter + filterlength + position + 1);
+                  if (findWithAttr(sublist, 'root', context.longname.substring(0, posFilter + filterlength + 1), 'name', subcontext) === -1) {
+                    sublist.push({
+                      name: subcontext,
+                      root: context.longname.substring(0, posFilter + filterlength + 1),
+                      abs: true
+                    });
+                  }
+                }
+              });
+            }
+
+            if (index === filterPerimeter.length - 1) {
+              deferred.resolve(sublist);
+              return res.status(200).json(hierarchy[0].list);
+
+            }
+          });
+          return deferred.promise;
+
+        });
+    });
+};
+
+
 // Get a single hierarchy
 exports.listContext = function(req, res) {
   TaskFull.distinct('context', function(err, hierarchy) {

@@ -7,7 +7,7 @@
     <div class="col-md-3">
       <ul class="list-unstyled profile-nav">
         <li>
-          <img src="assets/images/configuration.jpg" class="img-responsive" alt=""/>
+          <img src="assets/images/configuration.jpg" class="img-responsive" alt="" />
         </li>
 
       </ul>
@@ -21,7 +21,7 @@
               <i class="fa fa-map-marker"></i><span style="color:lightgrey"> Context </span> {{KPI.context}}
             </li><br/><br/>
             <li>
-              <i class="fa fa-calendar"></i><span style="color:lightgrey"> Activity </span>  {{KPI.activity}}
+              <i class="fa fa-calendar"></i><span style="color:lightgrey"> Activity </span> {{KPI.activity}}
             </li>
           </ul>
         </div>
@@ -61,87 +61,87 @@
         <div class="portlet">
           <div class="portlet-title">
             <div class="caption">
-             <button type="button" style="margin-top:-5px" class="btn btn-primary" ng-click="createNode()"><i class="glyphicon glyphicon-asterisk"></i> Create a new root</button>
-           </div>
-           <div class="tools">
+              <button type="button" style="margin-top:-5px" class="btn btn-primary" ng-click="createNode()"><i class="glyphicon glyphicon-asterisk"></i> Create a new root</button>
+            </div>
+            <div class="tools">
+            </div>
           </div>
-        </div>
-        <div class="portlet-body">
-          <div class="table-responsive">
+          <div class="portlet-body">
+            <div class="table-responsive">
 
-          <table class="table table-hover">
-            <tr>
-              <th style="width:80%">Name</th>
-              <th style="width:20%">Action</th>
-            </tr>
-            <tr ng-repeat="hierarchy in hierarchies" ng-click="selectNode(hierarchy)">
-              <td class="dont-break-out"  style="width:80%">{{hierarchy.longname}}</td>
-              <td style="width:20%" >
-                <a class="btn btn-primary btn-xs" data-nodrag="" ng-click="newSubItem(hierarchy, $index)" style="margin-right: 8px;"><span class="glyphicon glyphicon-plus"></span></a>
-                <a class="btn btn-danger btn-xs" data-nodrag="" ng-click="delete(hierarchy, $index)"><span class="glyphicon glyphicon-remove"></span></a>
-              </td>
-            </tr>
-          </table>
-        </div>
+              <table class="table table-hover">
+                <tr>
+                  <th style="width:80%">Name</th>
+                  <th style="width:20%">Action</th>
+                </tr>
+                <tr ng-repeat="hierarchy in hierarchies" ng-click="selectNode(hierarchy)">
+                  <td class="dont-break-out" style="width:80%">{{hierarchy.longname}}</td>
+                  <td style="width:20%">
+                    <a class="btn btn-primary btn-xs" data-nodrag="" ng-click="newSubItem(hierarchy, $index)" style="margin-right: 8px;"><span class="glyphicon glyphicon-plus"></span></a>
+                    <a class="btn btn-danger btn-xs" data-nodrag="" ng-click="delete(hierarchy, $index)"><span class="glyphicon glyphicon-remove"></span></a>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="col-md-7">
-      <div class="" style="position:fixed;width:40%" >
-        <div class="portlet">
-          <div class="portlet-title"  >
-            <div class="caption">
-             Action
-           </div>
-           <div class="tools" style="margin-top:-8px">
-             <button type="submit" class="btn btn-primary" ng-click="save()">Save</button>
-          </div>
-        </div>
-        </div>
-<hr>
-        <div class="portlet" ng-show="selectedNode">
-          <div class="portlet-title">
-            <div class="caption">
-             Details
-           </div>
-           <div class="tools">
-            <button type="submit" style="margin-top:-4px" class="btn btn-success btn-xs pull-right" ng-click="saveDetails()">Save changes</button>
-          </div>
-        </div>
-        <div class="portlet-body">
-           <form role="form" class="form-horizontal" action="#">
-          <div class="form-body">
-            <div class="form-group">
-              <label  class="col-md-3 control-label">Name</label>
-              <div class="col-md-9">
-                <input  type="text" placeholder="" class="form-control" ng-model="selectedNode.longname"/>
+      <div class="col-md-7">
+        <div class="" style="position:fixed;width:40%">
+          <div class="portlet">
+            <div class="portlet-title">
+              <div class="caption">
+                Action
               </div>
-            </div>
-            <div class="form-group">
-              <label class="col-md-3 control-label">Description</label>
-              <div class="col-md-9">
-                <input type="text" placeholder="" class="form-control" ng-model="selectedNode.description"/>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-md-3 control-label">Value</label>
-              <div class="col-md-9">
-                <input type="text" placeholder="" class="form-control" ng-model="selectedNode.value" />
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-md-3 control-label">Color</label>
-              <div class="col-md-9">
-                <input type="text" placeholder="#xxxxxx" class="form-control" ng-model="selectedNode.color"/>
+              <div class="tools" style="margin-top:-8px">
+                <button type="submit" class="btn btn-primary" ng-click="save()">Save</button>
               </div>
             </div>
           </div>
-        </form>
+          <hr>
+          <div class="portlet" ng-show="selectedNode">
+            <div class="portlet-title">
+              <div class="caption">
+                Details
+              </div>
+              <div class="tools">
+                <button type="submit" style="margin-top:-4px" class="btn btn-success btn-xs pull-right" ng-click="saveDetails()">Save changes</button>
+              </div>
+            </div>
+            <div class="portlet-body">
+              <form role="form" class="form-horizontal" action="#">
+                <div class="form-body">
+                  <div class="form-group">
+                    <label class="col-md-3 control-label">Name</label>
+                    <div class="col-md-9">
+                      <input type="text" placeholder="" class="form-control" ng-model="selectedNode.longname" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-3 control-label">Description</label>
+                    <div class="col-md-9">
+                      <input type="text" placeholder="" class="form-control" ng-model="selectedNode.description" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-3 control-label">Value</label>
+                    <div class="col-md-9">
+                      <input type="text" placeholder="" class="form-control" ng-model="selectedNode.value" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-3 control-label">Color</label>
+                    <div class="col-md-9">
+                      <input type="text" placeholder="#xxxxxx" class="form-control" ng-model="selectedNode.color" />
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
+
     </div>
   </div>
-
-  </div>
-</div>
 </div>
