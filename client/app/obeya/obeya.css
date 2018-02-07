@@ -2,12 +2,19 @@
   background-color: #F2F1EF;
 }
 
+.all_walls {
+  overflow: hidden;
+  /* So the sliding bit doesn't stick out. */
+  margin: 0 auto;
+}
+
 .obeya-pane {
-  height: 300px;
+  min-height: 300px;
   border-radius: 5px;
   padding: 10px;
   color: #FFFFFF;
   width: 100%;
+  transition: transform 0.5s ease;
 }
 
 .obeya-header {
@@ -76,12 +83,176 @@
   color: #000000;
 }
 
+.badge-orange {
+  background-color: #da923e;
+  color: #000000;
+}
+
 .fullscreen {
-  z-index: 9999;
+  z-index: 99;
   width: 97%;
   height: 94%;
   position: fixed;
   top: 60px;
   left: 45px;
   overflow-y: auto;
+}
+
+.list-group-item-active{
+  background-color: rgb(104, 171, 199);
+}
+
+.container {
+  width: 240px;
+  height: 140px;
+  position: relative;
+  margin: 0 auto 40px;
+  border: 0px solid #CCC;
+  -webkit-perspective: 1100px;
+  -moz-perspective: 1100px;
+  -o-perspective: 1100px;
+  perspective: 1100px;
+}
+
+#carousel {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  -webkit-transform: translateZ( -288px);
+  -moz-transform: translateZ( -288px);
+  -o-transform: translateZ( -288px);
+  transform: translateZ( -288px);
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-transition: -webkit-transform 1s;
+  -moz-transition: -moz-transform 1s;
+  -o-transition: -o-transform 1s;
+  transition: transform 1s;
+}
+
+#carousel figure {
+  display: block;
+  position: absolute;
+  width: 186px;
+  height: 116px;
+  left: 10px;
+  top: 10px;
+  padding-top: 10px;
+  border: 2px solid black;
+  line-height: 45px;
+  font-size: 40px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+}
+
+#carousel figure>span {
+  font-size: 22px;
+  color: white;
+  text-align: center;
+}
+
+#carousel figure:nth-child(1) {
+  background: hsla( 80, 100%, 50%, 0.8);
+  color:#000000;
+}
+#carousel figure:nth-child(1) span {
+  color:#000000;
+}
+
+#carousel figure:nth-child(2) {
+  background: hsla( 120, 100%, 50%, 0.8);
+}
+
+#carousel figure:nth-child(3) {
+  background: hsla( 160, 100%, 50%, 0.8);
+}
+
+#carousel figure:nth-child(4) {
+  background: hsla( 200, 100%, 50%, 0.8);
+}
+
+#carousel figure:nth-child(5) {
+  background: hsla( 240, 100%, 50%, 0.8);
+}
+
+#carousel figure:nth-child(6) {
+  background: hsla( 280, 100%, 50%, 0.8);
+}
+
+#carousel figure:nth-child(7) {
+  background: hsla( 320, 100%, 50%, 0.8);
+}
+
+#carousel figure:nth-child(8) {
+  background: hsla( 0, 100%, 50%, 0.8);
+}
+
+#carousel figure:nth-child(9) {
+  background: hsla( 40, 100%, 50%, 0.8);
+}
+
+#carousel figure:nth-child(1) {
+  -webkit-transform: rotateY( 0deg) translateZ( 288px);
+  -moz-transform: rotateY( 0deg) translateZ( 288px);
+  -o-transform: rotateY( 0deg) translateZ( 288px);
+  transform: rotateY( 0deg) translateZ( 288px);
+}
+
+#carousel figure:nth-child(2) {
+  -webkit-transform: rotateY( 40deg) translateZ( 288px);
+  -moz-transform: rotateY( 40deg) translateZ( 288px);
+  -o-transform: rotateY( 40deg) translateZ( 288px);
+  transform: rotateY( 40deg) translateZ( 288px);
+}
+
+#carousel figure:nth-child(3) {
+  -webkit-transform: rotateY( 80deg) translateZ( 288px);
+  -moz-transform: rotateY( 80deg) translateZ( 288px);
+  -o-transform: rotateY( 80deg) translateZ( 288px);
+  transform: rotateY( 80deg) translateZ( 288px);
+}
+
+#carousel figure:nth-child(4) {
+  -webkit-transform: rotateY( 120deg) translateZ( 288px);
+  -moz-transform: rotateY( 120deg) translateZ( 288px);
+  -o-transform: rotateY( 120deg) translateZ( 288px);
+  transform: rotateY( 120deg) translateZ( 288px);
+}
+
+#carousel figure:nth-child(5) {
+  -webkit-transform: rotateY( 160deg) translateZ( 288px);
+  -moz-transform: rotateY( 160deg) translateZ( 288px);
+  -o-transform: rotateY( 160deg) translateZ( 288px);
+  transform: rotateY( 160deg) translateZ( 288px);
+}
+
+#carousel figure:nth-child(6) {
+  -webkit-transform: rotateY( 200deg) translateZ( 288px);
+  -moz-transform: rotateY( 200deg) translateZ( 288px);
+  -o-transform: rotateY( 200deg) translateZ( 288px);
+  transform: rotateY( 200deg) translateZ( 288px);
+}
+
+#carousel figure:nth-child(7) {
+  -webkit-transform: rotateY( 240deg) translateZ( 288px);
+  -moz-transform: rotateY( 240deg) translateZ( 288px);
+  -o-transform: rotateY( 240deg) translateZ( 288px);
+  transform: rotateY( 240deg) translateZ( 288px);
+}
+
+#carousel figure:nth-child(8) {
+  -webkit-transform: rotateY( 280deg) translateZ( 288px);
+  -moz-transform: rotateY( 280deg) translateZ( 288px);
+  -o-transform: rotateY( 280deg) translateZ( 288px);
+  transform: rotateY( 280deg) translateZ( 288px);
+}
+
+#carousel figure:nth-child(9) {
+  -webkit-transform: rotateY( 320deg) translateZ( 288px);
+  -moz-transform: rotateY( 320deg) translateZ( 288px);
+  -o-transform: rotateY( 320deg) translateZ( 288px);
+  transform: rotateY( 320deg) translateZ( 288px);
 }
