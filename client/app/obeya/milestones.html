@@ -1,0 +1,190 @@
+
+    <!-- START 3- Milestones & Capacity  -->
+    <div id="Wall-2" ng-if="incrementSave===2">
+      <div class="row">
+        <div class="col-md-2">
+          <div class="obeya-pane obeya-pane-darkgray">
+            Questions
+            <hr style="margin-top:0;margin-bottom:10px;">
+            <div class="obeya-body">
+              <!-- <ul>
+                <li>What are our engagements we must keep ?</li>
+                <li>What are the new engagement we must take ?</li>
+                <li>Are some engagements in alert ?</li>
+              </ul> -->
+              <h4>
+                <img src="assets/images/milestone.png" style="width:60px;height:60px;" alt="" >
+                Milestones</h4>
+              <ul class="list-group card-list">
+                <li class="list-group-item" ng-if="obeyaMode === 'week'" ng-class="{'list-group-item-active':filters === 'week'}">
+                  <img src="assets/images/calendar-week.png" style="width:15px;height:15px;" alt=""> This Week
+                  <span class="badge badge-gray">{{hierarchiesThisWeek.length}}</span>
+                </li>
+                <li class="list-group-item" ng-if="obeyaMode === 'month'" ng-class="{'list-group-item-active':filters === 'month'}">
+                  <img src="assets/images/calendar-month.png" style="width:15px;height:15px;" alt=""> This Month
+                  <span class="badge badge-gray">{{hierarchiesThisMonth.length}}</span>
+                </li>
+                <li class="list-group-item" ng-if="obeyaMode === 'all'" ng-click="showCard('Milestones','All')" ng-class="{'list-group-item-active':filters === 'All'}">
+                  <img src="assets/images/calendar-month.png" style="width:15px;height:15px;" alt=""> All
+                  <span class="badge badge-gray">{{hierarchiesSelected.length}}</span>
+                </li>
+                <li class="list-group-item" ng-click="showCard('Milestones','ToEngage')" ng-class="{'list-group-item-active':filters === 'ToEngage'}">
+                  <i class="fa fa-gavel "></i> To Engage
+                  <span class="badge" ng-class="{'badge-gray':hierarchiesToEngage.length===0, 'badge-orange':hierarchiesToEngage.length>0}">{{hierarchiesToEngage.length}}</span>
+                </li>
+                <li class="list-group-item">
+                  <i class="fa fa-bell "></i> With alerts
+                  <span class="badge " ng-class="{'badge-gray':hierarchiesWithAlerts.length===0, 'badge-red':hierarchiesWithAlerts.length>0}">{{hierarchiesWithAlerts.length}}</span>
+                </li>
+              </ul>
+              <br>
+              <h4>
+                    <img src="assets/images/icon-capacity-planning.png" style="width:60px;height:60px;"  alt="">
+                    Capacity
+              </h4>
+              <ul class="list-group card-list">
+                <li class="list-group-item">
+                  <i class="fa fa-users "></i> Availability
+                  <span class="badge  badge-gray"> ? </span>
+                </li>
+                <li class="list-group-item">
+                  <i class="fa fa-bars "></i> Planned
+                  <span class="badge  badge-gray"> ? </span>
+                </li>
+                <li class="list-group-item">
+                  <i class="fa fa-bell "></i> With alerts
+                  <span class="badge badge-red"> ? </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-10">
+          <div class="obeya-pane obeya-pane-darkgray">
+            Milestones & Engagements
+            <hr style="margin-top:0;margin-bottom:10px;">
+            <div class="obeya-body">
+              <!-- Liste des contexts avec engagements -->
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="portlet">
+                    <div class="portlet-title">
+                      <div class="caption">
+                        <h4 style="margin:0">What are the new engagement we must take ?</h4>
+                      </div>
+                      <div class="tools">
+                      </div>
+                    </div>
+                    <div class="portlet-body">
+
+                      <!-- *************** -->
+                      <!-- GRAPH MILESTONES     -->
+                      <!-- *************** -->
+                      <div id="timeline_Milestones">
+                        <vis-timeline data="timelineDataMilestones" options="timelineOptions2"></vis-timeline>
+                      </div>
+
+                      <br>
+                      <!-- *************** -->
+                      <!-- LIST MILESTONES     -->
+                      <!-- *************** -->
+
+                      <div class="table-responsive">
+                        <table class="table table-hover">
+                          <tr>
+                            <th style="width:20%">Name
+                              <button type="button" style="margin-left:15px" class="btn btn-xs btn-primary" ng-click="createNode()"><i class="glyphicon glyphicon-asterisk"></i> Create a new root</button>
+                            </th>
+                            <th style="width:15%">Status</th>
+                            <th style="width:15%">Due Date</th>
+                            <th>Activities</th>
+                            <th style="width:10%">Action</th>
+                          </tr>
+                          <tr ng-repeat="hierarchy in hierarchiesToshow">
+                            <td style="width:20%">
+                              <span class="dont-break-out">
+                            <a ng-show="milestone.id !== hierarchy.id" href="#" ng-click="showContext(hierarchy)">{{ hierarchy.longname}}</a>
+                            <a ng-show="milestone.id === hierarchy.id" href="#" editable-text="milestone.longname"  blur="submit">{{ milestone.longname || 'empty'}}</a>
+                            <div  ng-show="milestone.id === hierarchy.id"  class="btn-group" style="width:90%;">
+                              <tags-input ng-model="hierarchy.tags" placeholder="Add a tag" use-strings="true" on-tag-added="addGroups($tag, hierarchy._id, hierarchy.tags)" on-tag-removed="removeGroups($tag, hierarchy._id, hierarchy.tags)">
+                                <auto-complete source="loadGroups($query)" min-length="1"></auto-complete>
+                              </tags-input>
+                            </div>
+
+                          </span>
+                              <td style="width:15%">
+                                <div class="" ng-show="milestone.id !== hierarchy.id">
+                                  <button title="Not Applicable" type="button" class="btn btn-xs" ng-class="{'btn-info':hierarchy.status==='N/A'}">N</button>
+                                  <button title="Forecasted" type="button" class="btn btn-xs btn-default">F</button>
+                                  <button title="Planned" type="button" class="btn btn-xs btn-default">P</button>
+                                  <button title="Engaged" type="button" class="btn btn-xs btn-default">E</button>
+                                  <button title="Achieved" type="button" class="btn btn-xs btn-default">A</button>
+                                </div>
+                                <div class="" ng-show="milestone.id === hierarchy.id">
+                                  <button style="width:100px;text-align:left" title="Not Applicable" type="button" class="btn btn-xs" ng-class="{'btn-info':hierarchy.status==='N/A'}" ng-click="updateStatusMilestone(hierarchy,'N/A')">Not Applicable</button><br>
+                                  <button style="width:100px;text-align:left" title="Forecasted" type="button" class="btn btn-xs btn-default">Forecasted</button><br>
+                                  <button style="width:100px;text-align:left" title="Planned" type="button" class="btn btn-xs btn-default">Planned</button><br>
+                                  <button style="width:100px;text-align:left" title="Engaged" type="button" class="btn btn-xs btn-default">Engaged</button><br>
+                                  <button style="width:100px;text-align:left" title="Achieved" type="button" class="btn btn-xs btn-default">Achieved</button>
+                                </div>
+                              </td>
+                              <td style="width:15%">
+                                <div class="" ng-show="milestone.id !== hierarchy.id">
+                                  {{hierarchy.duedate}}
+
+                                </div>
+                                <div class="" ng-show="milestone.id === hierarchy.id">
+                                  <md-button class="md-button-slim" ng-click="showDatePicker(hierarchy,'duedate', $event)" aria-label="none">
+                                    <span ng-class="{'MandatoryField':hierarchy.duedate === undefined}"> {{ (hierarchy.duedate | date:'mediumDate') || 'empty' }}</span>
+                                  </md-button>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="" ng-show="milestone.id !== hierarchy.id">
+
+                                  <button title="Data Designer" type="button" class="btn btn-xs btn-default">DD</button>
+                                  <button title="Business Referent" type="button" class="btn btn-xs btn-default">BR</button>
+                                  <button title="Data Vizualisation" type="button" class="btn btn-xs btn-default">VIZ</button>
+                                  <button title="Data Architecture" type="button" class="btn btn-xs btn-default">DA</button>
+                                  <button title="Analytics & IHM" type="button" class="btn btn-xs btn-default">ANA</button>
+                                  <button title="Change Management" type="button" class="btn btn-xs btn-default">CM</button>
+                                  <button title="System Management" type="button" class="btn btn-xs btn-default">SM</button>
+                                  <button title="Master Data Management" type="button" class="btn btn-xs btn-default">MDM</button>
+                                  <button title="Project Office Management" type="button" class="btn btn-xs btn-default">PMO</button></button>
+                                </div>
+                                <div class="" ng-show="milestone.id === hierarchy.id">
+
+                                  <button style="width:150px;text-align:left" title="Data Designer" type="button" class="btn btn-xs btn-default">Data Designer</button><br>
+                                  <button style="width:150px;text-align:left" title="Business Referent" type="button" class="btn btn-xs btn-default">Business Referent</button><br>
+                                  <button style="width:150px;text-align:left" title="Data Vizualisation" type="button" class="btn btn-xs btn-default">Data Vizualisation</button><br>
+                                  <button style="width:150px;text-align:left" title="Data Architecture" type="button" class="btn btn-xs btn-default">Data Architecture</button><br>
+                                  <button style="width:150px;text-align:left" title="Analytics & IHM" type="button" class="btn btn-xs btn-default">Analytics & IHM</button><br>
+                                  <button style="width:150px;text-align:left" title="Change Management" type="button" class="btn btn-xs btn-default">Change Management</button><br>
+                                  <button style="width:150px;text-align:left" title="System Management" type="button" class="btn btn-xs btn-default">System Management</button><br>
+                                  <button style="width:150px;text-align:left" title="Master Data Management" type="button" class="btn btn-xs btn-default">Master Data Management</button><br>
+                                  <button style="width:150px;text-align:left" title="Project Office Management" type="button" class="btn btn-xs btn-default">Project Office Management</button></button><br>
+                                </div>
+
+                              </td>
+                              <td style="width:10%">
+                                <a class="btn btn-primary btn-xs" ng-show="milestone.id !== hierarchy.id" data-nodrag="" ng-click="newSubItem(hierarchy, $index)" style="margin-right: 8px;"><span class="glyphicon glyphicon-plus"></span></a>
+                                <a class="btn btn-danger btn-xs" ng-show="milestone.id !== hierarchy.id" data-nodrag="" ng-click="delete(hierarchy, $index)"><span class="glyphicon glyphicon-remove"></span></a>
+                                <a class="btn btn-success btn-xs" ng-show="milestone.id === hierarchy.id" href="#milestones" ng-click="hideContext(milestone)">
+                                <span class="fa fa-save"></span>
+                            </a>
+
+                              </td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>

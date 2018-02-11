@@ -78,6 +78,10 @@
   color: #33A6BD;
 }
 
+.dark-blue {
+  color: hsla(196, 97%, 13%, 0.8);
+}
+
 .badge-gray {
   background-color: #BDC3C7;
   color: #000000;
@@ -175,7 +179,7 @@
 }
 
 #carousel figure:nth-child(5) {
-  background: hsla( 240, 100%, 50%, 0.8);
+  background: hsla(196, 97%, 13%, 0.8);
 }
 
 #carousel figure:nth-child(6) {
@@ -255,4 +259,13 @@
   -moz-transform: rotateY( 320deg) translateZ( 288px);
   -o-transform: rotateY( 320deg) translateZ( 288px);
   transform: rotateY( 320deg) translateZ( 288px);
+}
+
+
+/* TIMELINE */
+/* custom styles for individual items, load this after vis.css/vis-timeline-graph2d.min.css */
+
+.vis-item.green {
+  background-color: greenyellow;
+  border-color: green;
 }
