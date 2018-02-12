@@ -1,6 +1,6 @@
 
-  <!-- START 6- Milestones & Capacity  -->
-  <div id="Wall-6" ng-if="incrementSave===6">
+  <!-- START 5- Milestones & Capacity  -->
+  <div id="Wall-4" ng-if="activeWall.id===4">
     <div class="row">
       <div class="col-md-2">
         <div class="obeya-pane obeya-pane-darkgray">
@@ -14,7 +14,7 @@
             </ul> -->
             <h4>
               <img src="assets/images/respect-icon.png" style="width:60px;height:60px;" alt="" >
-              Process</h4>
+              Respect</h4>
             <ul class="list-group card-list">
               <li class="list-group-item" ng-if="obeyaMode === 'week'" ng-class="{'list-group-item-active':filters === 'week'}">
                 <img src="assets/images/calendar-week.png" style="width:15px;height:15px;" alt=""> This Week
@@ -37,13 +37,31 @@
                 <span class="badge " ng-class="{'badge-gray':hierarchiesWithAlerts.length===0, 'badge-red':hierarchiesWithAlerts.length>0}">{{hierarchiesWithAlerts.length}}</span>
               </li>
             </ul>
-
+            <br>
+            <h4>
+                  <img src="assets/images/maitrise.png" style="width:60px;height:60px;"  alt="">
+                  Mastering
+            </h4>
+            <ul class="list-group card-list">
+              <li class="list-group-item">
+                <i class="fa fa-users "></i> Availability
+                <span class="badge  badge-gray"> ? </span>
+              </li>
+              <li class="list-group-item">
+                <i class="fa fa-bars "></i> Planned
+                <span class="badge  badge-gray"> ? </span>
+              </li>
+              <li class="list-group-item">
+                <i class="fa fa-bell "></i> With alerts
+                <span class="badge badge-red"> ? </span>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
       <div class="col-md-10">
         <div class="obeya-pane obeya-pane-darkgray">
-          Process
+          Milestones & Engagements
           <hr style="margin-top:0;margin-bottom:10px;">
           <div class="obeya-body">
 

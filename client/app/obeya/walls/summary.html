@@ -1,6 +1,6 @@
 
     <!-- START 1-SUMMARY  -->
-    <div id="Wall" ng-if="incrementSave===0">
+    <div id="Wall" ng-if="activeWall.id===0">
       <div class="row">
         <div class="col-md-4">
           <div class="obeya-pane obeya-pane-darkgray">
@@ -94,23 +94,23 @@
                     <ul class="list-group card-list">
                       <li class="list-group-item" ng-if="obeyaMode === 'week'">
                         <img src="assets/images/calendar-week.png" style="width:15px;height:15px;" alt=""> This Week
-                        <span class="badge badge-gray">{{hierarchiesThisWeek.length}}</span>
+                        <span class="badge badge-gray">{{obeya.milestones.thisWeek().length}}</span>
                       </li>
                       <li class="list-group-item" ng-if="obeyaMode === 'month'">
                         <img src="assets/images/calendar-month.png" style="width:15px;height:15px;" alt=""> This Month
-                        <span class="badge badge-gray">{{hierarchiesThisMonth.length}}</span>
+                        <span class="badge badge-gray">{{obeya.milestones.thisMonth().length}}</span>
                       </li>
                       <li class="list-group-item" ng-if="obeyaMode === 'all'" ng-click="showCard('Milestones','All')">
                         <img src="assets/images/calendar-month.png" style="width:15px;height:15px;" alt=""> All
-                        <span class="badge badge-gray">{{hierarchiesSelected.length}}</span>
+                        <span class="badge badge-gray">{{obeya.milestones.selected().length}}</span>
                       </li>
                       <li class="list-group-item" ng-click="showCard('Milestones','ToEngage')">
                         <i class="fa fa-gavel "></i> To Engage
-                        <span class="badge" ng-class="{'badge-gray':hierarchiesToEngage.length===0, 'badge-orange':hierarchiesToEngage.length>0}">{{hierarchiesToEngage.length}}</span>
+                        <span class="badge" ng-class="{'badge-gray':obeya.milestones.toEngage().length===0, 'badge-orange':obeya.milestones.toEngage().length>0}">{{obeya.milestones.toEngage().length}}</span>
                       </li>
                       <li class="list-group-item">
                         <i class="fa fa-bell "></i> With alerts
-                        <span class="badge " ng-class="{'badge-gray':hierarchiesWithAlerts.length===0, 'badge-red':hierarchiesWithAlerts.length>0}">{{hierarchiesWithAlerts.length}}</span>
+                        <span class="badge " ng-class="{'badge-gray':obeya.milestones.withAlerts().length===0, 'badge-red':obeya.milestones.withAlerts().length>0}">{{obeya.milestones.withAlerts().length}}</span>
                       </li>
                     </ul>
                   </div>

@@ -1,27 +1,67 @@
 'use strict';
 
 angular.module('boardOsApp')
-  .controller('ObeyaCtrl', function($scope, $http, Notification, $stateParams, $rootScope, dateRangeService, VisDataSet, $timeout, Milestones) {
+  .controller('ObeyaCtrl', function($scope, $http, Notification, $stateParams, $rootScope, dateRangeService, VisDataSet, $timeout, Milestones, Tasks) {
+
+    $scope.walls = [{
+      id: 0,
+      title: 'Summary',
+      name: 'Summary'
+    }, {
+      id: 1,
+      title: 'News & People',
+      name: 'News'
+    }, {
+      id: 2,
+      title: 'Engagements',
+      name: 'Milestones'
+    }, {
+      id: 3,
+      title: 'Tasks',
+      name: 'Tasks'
+    }, {
+      id: 4,
+      title: 'Performance',
+      name: 'Performance'
+    }, {
+      id: 5,
+      title: 'ProblemSolving',
+      name: 'ProblemSolving'
+    }, {
+      id: 6,
+      title: 'Process',
+      name: 'Process'
+    }, {
+      id: 7,
+      title: 'Properties',
+      name: 'Properties'
+    }];
+
+    $scope.activeWall = _.filter($scope.walls, function(wall) {
+      return wall.id === 0;
+    })[0];
 
     $scope.obeyaMode = 'all';
-    $scope.blnShowCard = {};
-    $scope.blnShowCard.Milestones = false;
-    $scope.blnShowCard.Milestone = false;
     $scope.filters = '';
 
     $scope.viewMode = {};
-    $scope.viewMode.Task = 'Timeline';
+    $scope.viewMode.Milestones = 'Timeline';
+    $scope.viewMode.Tasks = 'PDCA';
+
+
 
     if ($stateParams.id) {
       // ouverture de l'obeya
       $scope.myPromise = $http.get('/api/dashboardCompletes/' + $stateParams.id).success(function(obeya) {
         $scope.obeya = obeya;
 
+        $scope.obeya.milestones = new Milestones($scope.obeya);
+        $scope.obeya.tasks = new Tasks($scope.obeya);
+
         // appel des activités en cours
         $rootScope.$broadcast('obeya:searchTasks', $scope.obeya);
       });
     }
-    $scope.incrementSave = 0;
 
     $scope.NavCaroussel = function(increment) {
 
@@ -29,20 +69,24 @@ angular.module('boardOsApp')
       var carousel = document.getElementById('carousel');
       var panelCount = carousel.children.length;
       var theta = 0;
-      if ($scope.incrementSave > -1 && $scope.incrementSave < 8) {
-        $scope.incrementSave += increment;
+      var wallId = $scope.activeWall.id;
+      if ($scope.activeWall.id > -1 && $scope.activeWall.id < 8) {
+        wallId += increment;
       } else {
-        if ($scope.incrementSave > 0) {
-          $scope.incrementSave = 0;
+        if (wallId > 0) {
+          wallId = 0;
         } else {
-          $scope.incrementSave = 7;
+          wallId = 7;
         }
       }
-      theta += (360 / panelCount) * $scope.incrementSave * -1;
+      $scope.activeWall = _.filter($scope.walls, function(wall) {
+        return wall.id === wallId;
+      })[0];
+      theta += (360 / panelCount) * $scope.activeWall.id * -1;
       carousel.style.transform = 'translateZ( -288px ) rotateY(' + theta + 'deg)';
 
       // Effet sur les murs
-      // var wall = document.getElementById('Wall-' + $scope.incrementSave);
+      // var wall = document.getElementById('Wall-' + $scope.activeWall.id);
       // var currdeg = 0;
       // if (increment > 0) {
       //   currdeg = currdeg - 60;
@@ -73,7 +117,7 @@ angular.module('boardOsApp')
         default:
           incrementTo = 0;
       }
-      $scope.NavCaroussel(incrementTo - $scope.incrementSave);
+      $scope.NavCaroussel(incrementTo - $scope.activeWall.id);
     };
 
     $scope.hideCard = function(card) {
@@ -95,64 +139,20 @@ angular.module('boardOsApp')
     // recherche des activités en cours
     $scope.$on('obeya:searchTasks', function(event, data) {
       $http.get('/api/dashboardCompletes/showTasks/' + $stateParams.id).success(function(tasks) {
-        $scope.obeya.tasks = tasks;
-        $scope.obeya.alltasksNb = $scope.obeya.tasks.length;
-        $scope.obeya.openTasksNb = _.filter($scope.obeya.tasks, function(task) {
-          return task.metrics[task.metrics.length - 1].status !== 'Finished';
-        }).length;
+
 
         // Appel des classes de taches
         $rootScope.$broadcast('dateRangeService:updated', dateRangeService.rangeDateTxt);
 
         // Appel des engagement en cours
         $rootScope.$broadcast('obeya:searchContext', $scope.obeya);
-        console.log('obeya', $scope.obeya);
       });
 
     });
 
     $scope.$on('dateRangeService:updated', function(event, data) {
       console.log('data', data);
-      $scope.datediff = 7;
-      if (data) {
-        switch (data) {
-          case 'Last 7 Days':
-            dateRangeService.rangeDate = 'last7';
-            dateRangeService.rangeDateTxt = 'Last 7 Days';
-            $scope.datediff = 7;
-            break;
-          case 'Last 14 Days':
-            dateRangeService.rangeDate = 'last14';
-            dateRangeService.rangeDateTxt = 'Last 14 Days';
-            $scope.datediff = 14;
-            break;
-          case 'Last 30 Days':
-            dateRangeService.rangeDate = 'last30';
-            dateRangeService.rangeDateTxt = 'Last 30 Days';
-            $scope.datediff = 30;
-            break;
-          case 'Last 90 Days':
-            dateRangeService.rangeDate = 'last90';
-            dateRangeService.rangeDateTxt = 'Last 90 Days';
-            $scope.datediff = 90;
-            break;
-          case 'Last 180 Days':
-            dateRangeService.rangeDate = 'last180';
-            dateRangeService.rangeDateTxt = 'Last 180 Days';
-            $scope.datediff = 180;
-            break;
-          case 'Last 365 Days':
-            dateRangeService.rangeDate = 'last365';
-            dateRangeService.rangeDateTxt = 'Last 365 Days';
-            $scope.datediff = 365;
-            break;
-          case 'All':
-            dateRangeService.rangeDate = 'All';
-            dateRangeService.rangeDateTxt = 'All';
-            $scope.datediff = 5000;
-            break;
-        }
-      }
+      $scope.datediff = dateRangeService.datediff;
       $scope.rangeDate = dateRangeService.rangeDate;
       $timeout(function() {
         var items = new VisDataSet();
@@ -162,43 +162,8 @@ angular.module('boardOsApp')
 
         $scope.$apply(function() {
 
-          _.each($scope.obeya.tasks, function(task) {
-            task.taskSuffIcon = '';
-            if (task.metrics[task.metrics.length - 1].userSatisfaction === undefined || task.metrics[task.metrics.length - 1].deliverableStatus === undefined || task.metrics[task.metrics.length - 1].actorSatisfaction === undefined) {
-              task.taskSuffIcon = ' <i class="fa fa-question-circle-o text-danger" aria-hidden="true"></i>&nbsp;&nbsp;';
-            }
-          });
-          $scope.filteredPlanTasks = _.filter($scope.obeya.tasks, function(task) {
-            return task.metrics[task.metrics.length - 1].status === 'Not Started';
-          });
-          $scope.filteredPlanTasksLoad = _.reduce($scope.filteredPlanTasks, function(s, task) {
-            return s + parseFloat(task.metrics[task.metrics.length - 1].projectedWorkload || task.metrics[task.metrics.length - 1].targetLoad);
-          }, 0).toFixed(1);
 
-          $scope.filteredInProgressTasks = _.filter($scope.obeya.tasks, function(task) {
-            return task.metrics[task.metrics.length - 1].status === 'In Progress';
-          });
-          $scope.filteredInProgressTasksLoad = _.reduce($scope.filteredInProgressTasks, function(s, task) {
-            return s + parseFloat(task.metrics[task.metrics.length - 1].projectedWorkload || task.metrics[task.metrics.length - 1].targetLoad);
-          }, 0).toFixed(1);
 
-          $scope.filteredFinishedTasks = _.filter($scope.obeya.tasks, function(task) {
-            var a = moment(new Date());
-            var b = moment(new Date(task.metrics[task.metrics.length - 1].endDate));
-            return ($scope.datediff >= a.diff(b, 'days')) && (task.metrics[task.metrics.length - 1].status === 'Finished') && (task.reviewTask === undefined || task.reviewTask === false);
-          });
-          $scope.filteredFinishedTasksLoad = _.reduce($scope.filteredFinishedTasks, function(s, task) {
-            return s + parseFloat(task.metrics[task.metrics.length - 1].projectedWorkload || task.metrics[task.metrics.length - 1].targetLoad);
-          }, 0).toFixed(1);
-
-          $scope.filteredReviewedTasks = _.filter($scope.obeya.tasks, function(task) {
-            var a = moment(new Date());
-            var b = moment(new Date(task.metrics[task.metrics.length - 1].endDate));
-            return ($scope.datediff >= a.diff(b, 'days')) && (task.metrics[task.metrics.length - 1].status === 'Finished') && (task.reviewTask === true);
-          });
-          $scope.filteredReviewedTasksLoad = _.reduce($scope.filteredReviewedTasks, function(s, task) {
-            return s + parseFloat(task.metrics[task.metrics.length - 1].projectedWorkload || task.metrics[task.metrics.length - 1].targetLoad);
-          }, 0).toFixed(1);
 
           //Action Plan
           $scope.filteredActionPlanTasks = _.filter($scope.obeya.tasks, function(task) {
@@ -361,136 +326,54 @@ angular.module('boardOsApp')
     // recherche des engagement en cours
     $scope.$on('obeya:searchContext', function(event, data) {
 
-      $scope.obeya.milestones = new Milestones($scope.obeya);
-
       switch ($scope.filters) {
         case 'ToEngage':
-          $scope.hierarchiesToshow = $scope.obeya.milestones.toEngage();
+          $scope.milestonesToshow = $scope.obeya.milestones.toEngage();
           break;
         default:
-          $scope.hierarchiesToshow = $scope.obeya.milestones.selected();
+          $scope.milestonesToshow = $scope.obeya.milestones.selected();
       }
 
-      $http.get('/api/hierarchies/list/Context/obeya/' + $scope.obeya._id).success(function(hierarchies) {
-
-
-        // create visualization
-        var itemsMilestones = new VisDataSet({
-          type: {
-            start: 'ISODate'
-          }
-        });
-        // add items to the DataSet
-        itemsMilestones.add([{
-            id: 1,
-            content: 'subgroup0_1',
-            start: '2018-01-23',
-            className: 'green',
-            group: 'QUALITY.MOP'
-          },
-          {
-            id: 3,
-            content: 'subgroup1_1',
-            start: '2018-01-27',
-            className: '',
-            group: 'FONCTIONNEMENT.CBI'
-          }
-        ]);
-
-        $timeout(function() {
-
-          $scope.timelineOptions2 = {
-            orientation: 'top',
-            start: '2018-01-01',
-            end: '2018-05-01',
-            showCurrentTime: true,
-            zoomMin: 1000 * 60 * 60 * 24, // one day in milliseconds
-            zoomMax: 1000 * 60 * 60 * 24 * 31 * 4 // about three months in milliseconds
-          };
-
-          $scope.timelineDataMilestones = {
-            items: itemsMilestones,
-            groups: $scope.groups
-          };
-        }, 0);
-
+      // create visualization
+      var itemsMilestones = new VisDataSet({
+        type: {
+          start: 'ISODate'
+        }
       });
+      // add items to the DataSet
+      itemsMilestones.add([{
+          id: 1,
+          content: 'subgroup0_1',
+          start: '2018-01-23',
+          className: 'green',
+          group: 'QUALITY.MOP'
+        },
+        {
+          id: 3,
+          content: 'subgroup1_1',
+          start: '2018-01-27',
+          className: '',
+          group: 'FONCTIONNEMENT.CBI'
+        }
+      ]);
+
+      $timeout(function() {
+
+        $scope.timelineOptions2 = {
+          orientation: 'top',
+          start: '2018-01-01',
+          end: '2018-05-01',
+          showCurrentTime: true,
+          zoomMin: 1000 * 60 * 60 * 24, // one day in milliseconds
+          zoomMax: 1000 * 60 * 60 * 24 * 31 * 4 // about three months in milliseconds
+        };
+
+        $scope.timelineDataMilestones = {
+          items: itemsMilestones,
+          groups: $scope.groups
+        };
+      }, 0);
+
     });
-
-
-
-
-    // Plan
-    // ######
-
-    $scope.createNode = function(data) {
-      bootbox.prompt({
-        title: 'Please Enter Name of this hierarchy',
-        callback: function(result) {
-          if (result) {
-            $scope.hierarchies.push({
-              id: 'ajson' + (Math.round(Math.random() * 100000)).toString(),
-              parent: '#',
-              text: result,
-              longname: result
-            });
-            $scope.hierarchies = _.sortBy($scope.hierarchies, 'longname');
-            $scope.$apply();
-          }
-        }
-      });
-    };
-
-    $scope.newSubItem = function(hierarchy, index) {
-      bootbox.prompt({
-        title: 'Please Enter Name of this hierarchy',
-        value: hierarchy.longname,
-        callback: function(result) {
-          if (result) {
-            $scope.hierarchies.push({
-              id: 'ajson' + (Math.round(Math.random() * 100000)).toString(),
-              parent: hierarchy.id,
-              text: result,
-              longname: result
-            });
-            $scope.hierarchies = _.sortBy($scope.hierarchies, 'longname');
-            Notification.success('Milestones ' + result + 'was created');
-            $scope.saveMilestones();
-          }
-        }
-      });
-    };
-
-    $scope.delete = function(hierarchy, index) {
-      bootbox.confirm('Are you sure to remove "' + hierarchy.longname + '" ?', function(result) {
-        if (result) {
-          $scope.hierarchies.splice(index, 1);
-          $scope.saveMilestones();
-          Notification.success('Hierarchy "' + hierarchy.longname + '" was deleted');
-        }
-      });
-    };
-
-    $scope.saveMilestones = function() {
-      $http.put('/api/hierarchies/Context', $scope.hierarchies).success(function(hierarchies) {
-        $rootScope.$broadcast('obeya:searchContext', $scope.obeya);
-      });
-    };
-
-    $scope.updateStatusMilestone = function(milestone, status) {
-      _.each($scope.hierarchies, function(hierarchy) {
-        if (hierarchy.id === milestone.id) {
-          if (hierarchy.status === status) {
-            delete hierarchy.status;
-          } else {
-            hierarchy.status = status;
-          }
-
-        }
-      });
-      Notification.success('Milestones ' + milestone.longname + ' was updated');
-      $scope.saveMilestones();
-
-    };
 
   });

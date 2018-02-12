@@ -256,7 +256,7 @@ angular.module('boardOsApp', [
 
   ])
 
-  .run(function($rootScope, $location, Auth, $http, progressStatusTask, statusTask, metricTaskFields, categoryKPI, actionKPI, groupByKPI, $cookieStore, $timeout, editableOptions, dateRangeService) {
+  .run(function($rootScope, $location, Auth, $http, progressStatusTask, statusTask, metricTaskFields, categoryKPI, actionKPI, groupByKPI, $cookieStore, $timeout, editableOptions) {
 
     $rootScope.showHideWhatsNew = false;
 
@@ -294,13 +294,6 @@ angular.module('boardOsApp', [
       });
     });
 
-    $http.get('/api/hierarchies/list/Activity').success(function(activities) {
-      $rootScope.activities = activities.list;
-    });
-
-    $http.get('/api/hierarchies/list/Axis').success(function(axes) {
-      $rootScope.axes = axes.list;
-    });
     $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
       $rootScope.showArianeMain = ($location.path() === '/');
       $rootScope.showArianeDashboard = ($location.path().indexOf('dashboard/') > 0);
@@ -320,47 +313,5 @@ angular.module('boardOsApp', [
       });
     });
 
-    function cb(start, end) {
-      $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-    }
-    cb(dateRangeService.startRange, dateRangeService.endRange);
 
-    $timeout(function() {
-      $('#reportrange').daterangepicker({
-        startDate: dateRangeService.startRange,
-        endDate: dateRangeService.endRange,
-        ranges: {
-          'Last 7 Days': [moment().subtract(7, 'days'), moment()],
-          'Last 14 Days': [moment().subtract(14, 'days'), moment()],
-          'Last 30 Days': [moment().subtract(30, 'days'), moment()],
-          'Last 90 Days': [moment().subtract(90, 'days'), moment()],
-          'Last 180 Days': [moment().subtract(180, 'days'), moment()],
-          'Last 365 Days': [moment().subtract(365, 'days'), moment()],
-          'All': [moment().subtract(5000, 'days'), moment()],
-        },
-        showCustomRangeLabel: false,
-        autoApply: true
-      }, cb);
-
-      $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
-        $rootScope.$broadcast('dateRangeService:updated', picker.chosenLabel);
-        dateRangeService.startRange = picker.startDate;
-        dateRangeService.endRange = picker.endDate;
-      });
-    }, 2000);
-
-  })
-
-  .factory('dateRangeService', function() {
-
-    var rangeDate = 'last7';
-    var startRange = moment().subtract(7, 'days');
-    var endRange = moment();
-
-    // this is simplified for illustration, see edit below
-    return {
-      rangeDate: rangeDate,
-      startRange: startRange,
-      endRange: endRange,
-    };
   });
