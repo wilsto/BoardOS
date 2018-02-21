@@ -39,7 +39,7 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
         self.filterReviewed = self.filter('Finished', true, dateRangeService.datediff);
         self.filterReviewedLoad = self.load(self.filterReviewed);
 
-        console.log('self',self);
+        
       });
     };
 

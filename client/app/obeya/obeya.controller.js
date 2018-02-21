@@ -69,6 +69,7 @@ angular.module('boardOsApp')
       var carousel = document.getElementById('carousel');
       var panelCount = carousel.children.length;
       var theta = 0;
+      var prevWallId = $scope.activeWall.id;
       var wallId = $scope.activeWall.id;
       if ($scope.activeWall.id > -1 && $scope.activeWall.id < 8) {
         wallId += increment;
@@ -84,9 +85,25 @@ angular.module('boardOsApp')
       })[0];
       theta += (360 / panelCount) * $scope.activeWall.id * -1;
       carousel.style.transform = 'translateZ( -288px ) rotateY(' + theta + 'deg)';
-
       // Effet sur les murs
-      // var wall = document.getElementById('Wall-' + $scope.activeWall.id);
+      var width = document.getElementById('all_walls').offsetWidth;
+      console.log('width', width);
+      console.log('theta', theta);
+      console.log('prevWallId', prevWallId);
+      console.log('wallId', wallId);
+      var wallPrevFront = document.getElementById('wall_' + prevWallId);
+      var wallNextFront = document.getElementById('wall_' + wallId);
+      if (wallId > prevWallId) {
+        var multi = (prevWallId > 0) ? prevWallId + 1 : 1;
+        wallPrevFront.style.transform = 'translateX( -' + multi * width + 'px ) rotateY(-40deg)';
+        wallNextFront.style.transform = 'translateX( -' + width + 'px ) ';
+      } else {
+        wallPrevFront.style.transform = 'translateX( 0px ) rotateY(40deg)';
+        wallNextFront.style.transform = 'translateX(0px ) rotateY(0deg)';
+      }
+      console.log('wallPrevFront.style', $('wall_' + prevWallId).css('left'));
+      console.log('wallNextFront.style', $('wall_' + wallId).css('left'));
+
       // var currdeg = 0;
       // if (increment > 0) {
       //   currdeg = currdeg - 60;
@@ -132,9 +149,14 @@ angular.module('boardOsApp')
       $scope.milestone = undefined;
     };
 
-
-
-
+    $scope.$on('$viewContentLoaded', function() {
+      //Here your view content is fully loaded !!
+      $timeout(function() {
+        var width = $('#obeya-header').width();
+        console.log('width', width);
+        $('#all_walls').css('width', 0.98 * width + 'px');
+      }, 200);
+    });
 
     // recherche des activités en cours
     $scope.$on('obeya:searchTasks', function(event, data) {
@@ -151,7 +173,7 @@ angular.module('boardOsApp')
     });
 
     $scope.$on('dateRangeService:updated', function(event, data) {
-      console.log('data', data);
+
       $scope.datediff = dateRangeService.datediff;
       $scope.rangeDate = dateRangeService.rangeDate;
       $timeout(function() {
