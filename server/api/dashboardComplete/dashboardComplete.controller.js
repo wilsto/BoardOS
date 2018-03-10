@@ -498,7 +498,7 @@ exports.show = function(req, res) {
       if (dashboardComplete.users && dashboardComplete.users.length > 0) {
         _.each(_.compact(dashboardComplete.users), function(actor) {
           var thisuser = _.filter(usersList, function(user) {
-            return actor && user._id.toString() === actor._id.toString();
+            return actor && user && user._id && actor._id && user._id.toString() === actor._id.toString();
           });
           if (thisuser.length > 0) {
             actors.push({
