@@ -1,123 +1,150 @@
+<!-- START 1-SUMMARY  -->
+<div id="Wall" class="wall_flex" ng-if="activeWall.id===0">
 
-    <!-- START 1-SUMMARY  -->
-    <div id="Wall" >
+  <div class="obeya-pane obeya-pane-fixed-5 obeya-pane-darkgray">
+    PEOPLE
+    <hr style="margin-top:0;margin-bottom:10px;">
+    <div class="obeya-body">
       <div class="row">
-        <div class="col-md-4">
-          <div class="obeya-pane obeya-pane-darkgray">
-            PEOPLE
-            <hr style="margin-top:0;margin-bottom:10px;">
-            <div class="obeya-body">
-              <div class="row">
-                <div class="col-lg-6 col-md-12 col-xs-12">
-                  <span class="card-title">
+        <div class="col-lg-6 col-md-12 col-xs-12">
+          <span class="card-title">
                 <img src="assets/images/mood.png" style="width:100px;height:60px;" alt="" >
                 MOOD
               </span>
-                  <ul class="list-group card-list">
-                    <li class="list-group-item">
-                      <i class="fa fa-smile-o green"></i> Smile
-                      <span class="badge badge-gray">{{obeya.alertsValue}}</span>
-                    </li>
-                    <li class="list-group-item">
-                      <i class="fa fa-meh-o orange"></i> Neutral
-                      <span class="badge badge-gray">{{obeya.alertsValue}}</span>
-                    </li>
-                    <li class="list-group-item">
-                      <i class="fa fa-frown-o red"></i> Unamused
-                      <span class="badge badge-gray">{{obeya.alertsValue}}</span>
-                    </li>
-                  </ul>
-                </div>
-                <div class="col-lg-6 col-md-12 col-xs-12">
-                  <span class="card-title">
+          <ul class="list-group card-list">
+            <li class="list-group-item">
+              <i class="fa fa-smile-o green"></i> Smile
+              <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+            </li>
+            <li class="list-group-item">
+              <i class="fa fa-meh-o orange"></i> Neutral
+              <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+            </li>
+            <li class="list-group-item">
+              <i class="fa fa-frown-o red"></i> Unamused
+              <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+            </li>
+          </ul>
+        </div>
+        <div class="col-lg-6 col-md-12 col-xs-12">
+          <span class="card-title">
                 <img src="assets/images/businessman300x300.png" style="width:60px;height:60px;" alt="" >
                 WORKLOAD
               </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="obeya-pane obeya-pane-gray">
-            FOCUS
-            <hr style="margin-top:0;margin-bottom:10px;">
-            <div class="obeya-body">
-              <div class="row">
-                <div class="col-lg-6 col-md-12 col-xs-12">
-                  NEWS
-                </div>
-                <div class="col-lg-6 col-md-12 col-xs-12">
-                  TASKS & ANOS
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="obeya-pane obeya-pane-gray">
-            FOCUS
-            <hr style="margin-top:0;margin-bottom:10px;">
-            <div class="obeya-body">
-              <div class="row">
-                <div class="col-lg-6 col-md-12 col-xs-12">
-                  PROCESS
-                </div>
-                <div class="col-lg-6 col-md-12 col-xs-12">
-                  <span class="card-title">
-                <img src="assets/images/skills.png" style="width:60px;height:60px;" alt="" >
-                COMPETENCES
-              </span>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ul class="list-group card-list">
+            <li class="list-group-item">
+              <i class="fa fa-smile-o green"></i> Can help
+              <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+            </li>
+            <li class="list-group-item">
+              <i class="fa fa-meh-o orange"></i> Normal
+              <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+            </li>
+            <li class="list-group-item">
+              <i class="fa fa-meh-o orange"></i> Full
+              <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+            </li>
+            <li class="list-group-item">
+              <i class="fa fa-frown-o red"></i> Overcharged
+              <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+            </li>
+          </ul>
         </div>
       </div>
-      <br>
+    </div>
+  </div>
+
+  <div class="obeya-pane obeya-pane-fixed-5 obeya-pane-darkgray">
+    FOCUS
+    <hr style="margin-top:0;margin-bottom:10px;">
+    <div class="obeya-body">
       <div class="row">
-        <div class="col-md-4">
-          <div id="cardMilestones" class="obeya-pane obeya-pane-gray">
-            PLAN
-            <a href="#milestones" ng-click="showCard('Milestones')">
+        <div class="col-lg-6 col-md-12 col-xs-12">
+          <span class="card-title">
+                <img src="assets/images/news.png" style="height:60px;" alt="" >
+                NEWS
+              </span>
+          <ul class="list-group card-list">
+            <li class="list-group-item">
+              <img src="assets/images/operating.png" style="height:20px;" alt=""> Operating
+              <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+            </li>
+            <li class="list-group-item">
+              <img src="assets/images/projects.png" style="height:20px;" alt=""> Projects
+              <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+            </li>
+            <li class="list-group-item">
+              <i class="fa fa-gear"></i> Process
+              <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+            </li>
+            <li class="list-group-item">
+              <img src="assets/images/tools.png" style="height:20px;" alt="">  Tools
+              <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+            </li>
+          </ul>
+        </div>
+        <div class="col-lg-6 col-md-12 col-xs-12">
+          <span class="card-title">
+                <img src="assets/images/pinned.png" style="height:60px;" alt="" >
+                PINNED
+              </span>
+          <ul class="list-group card-list">
+            <li class="list-group-item">
+              <img src="assets/images/task.png" style="height:20px;" alt=""> Success
+              <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+            </li>
+            <li class="list-group-item">
+              <img src="assets/images/anomaly-icon.png" style="width:15px;" alt=""> Focus Points
+              <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="cardMilestones" class="obeya-pane obeya-pane-fixed-5 obeya-pane-gray">
+    PLAN
+    <a href="#milestones" ng-click="showCard('Milestones')">
                 <i class="fa fa-arrows-alt pull-right"></i>
             </a>
-            <hr style="margin-top:0;margin-bottom:10px;">
-            <div class="obeya-body">
-              <div class="row">
-                <div class="col-lg-6 col-md-12 col-xs-12 ">
-                  <div class="obeya-cards">
-                    <span class="card-title">
+    <hr style="margin-top:0;margin-bottom:10px;">
+    <div class="obeya-body">
+      <div class="row">
+        <div class="col-lg-6 col-md-12 col-xs-12 ">
+          <div class="obeya-cards">
+            <span class="card-title">
                       <img src="assets/images/milestone.png" style="width:60px;height:60px;" alt="" >
                       MILESTONES
                     </span>
-                    <ul class="list-group card-list">
-                      <li class="list-group-item" ng-if="obeyaMode === 'week'">
-                        <img src="assets/images/calendar-week.png" style="width:15px;height:15px;" alt=""> This Week
-                        <span class="badge badge-gray">{{obeya.milestones.thisWeek().length}}</span>
-                      </li>
-                      <li class="list-group-item" ng-if="obeyaMode === 'month'">
-                        <img src="assets/images/calendar-month.png" style="width:15px;height:15px;" alt=""> This Month
-                        <span class="badge badge-gray">{{obeya.milestones.thisMonth().length}}</span>
-                      </li>
-                      <li class="list-group-item" ng-if="obeyaMode === 'all'" ng-click="showCard('Milestones','All')">
-                        <img src="assets/images/calendar-month.png" style="width:15px;height:15px;" alt=""> All
-                        <span class="badge badge-gray">{{obeya.milestones.selected().length}}</span>
-                      </li>
-                      <li class="list-group-item" ng-click="showCard('Milestones','ToEngage')">
-                        <i class="fa fa-gavel "></i> To Engage
-                        <span class="badge" ng-class="{'badge-gray':obeya.milestones.toEngage().length===0, 'badge-orange':obeya.milestones.toEngage().length>0}">{{obeya.milestones.toEngage().length}}</span>
-                      </li>
-                      <li class="list-group-item">
-                        <i class="fa fa-bell "></i> With alerts
-                        <span class="badge " ng-class="{'badge-gray':obeya.milestones.withAlerts().length===0, 'badge-red':obeya.milestones.withAlerts().length>0}">{{obeya.milestones.withAlerts().length}}</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="col-lg-6 col-md-12 col-xs-12 ">
-                  <div class="obeya-cards">
-                    <span class="card-title">
+            <ul class="list-group card-list">
+              <li class="list-group-item" ng-if="obeyaMode === 'week'">
+                <img src="assets/images/calendar-week.png" style="width:15px;height:15px;" alt=""> This Week
+                <span class="badge badge-gray">{{obeya.milestones.thisWeek().length}}</span>
+              </li>
+              <li class="list-group-item" ng-if="obeyaMode === 'month'">
+                <img src="assets/images/calendar-month.png" style="width:15px;height:15px;" alt=""> This Month
+                <span class="badge badge-gray">{{obeya.milestones.thisMonth().length}}</span>
+              </li>
+              <li class="list-group-item" ng-if="obeyaMode === 'all'" ng-click="showCard('Milestones','All')">
+                <img src="assets/images/calendar-month.png" style="width:15px;height:15px;" alt=""> All
+                <span class="badge badge-gray">{{obeya.milestones.selected().length}}</span>
+              </li>
+              <li class="list-group-item" ng-click="showCard('Milestones','ToEngage')">
+                <i class="fa fa-gavel "></i> To Engage
+                <span class="badge" ng-class="{'badge-gray':obeya.milestones.toEngage().length===0, 'badge-orange':obeya.milestones.toEngage().length>0}">{{obeya.milestones.toEngage().length}}</span>
+              </li>
+              <li class="list-group-item">
+                <i class="fa fa-bell "></i> With alerts
+                <span class="badge " ng-class="{'badge-gray':obeya.milestones.withAlerts().length===0, 'badge-red':obeya.milestones.withAlerts().length>0}">{{obeya.milestones.withAlerts().length}}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-12 col-xs-12 ">
+          <div class="obeya-cards">
+            <span class="card-title">
                 <div class="row">
                   <div class="col-md-4">
                     <img src="assets/images/icon-capacity-planning.png" style="width:60px;height:60px;" alt="">
@@ -127,56 +154,55 @@
                   </div>
                 </div>
               </span>
-                    <ul class="list-group card-list">
-                      <li class="list-group-item">
-                        <i class="fa fa-users "></i> Availability
-                        <span class="badge  badge-gray"> ? </span>
-                      </li>
-                      <li class="list-group-item">
-                        <i class="fa fa-bars "></i> Planned
-                        <span class="badge  badge-gray"> ? </span>
-                      </li>
-                      <li class="list-group-item">
-                        <i class="fa fa-bell "></i> With alerts
-                        <span class="badge badge-red"> ? </span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
-
-            </div>
+            <ul class="list-group card-list">
+              <li class="list-group-item">
+                <i class="fa fa-users "></i> Availability
+                <span class="badge  badge-gray"> ? </span>
+              </li>
+              <li class="list-group-item">
+                <i class="fa fa-bars "></i> Planned
+                <span class="badge  badge-gray"> ? </span>
+              </li>
+              <li class="list-group-item">
+                <i class="fa fa-bell "></i> With alerts
+                <span class="badge badge-red"> ? </span>
+              </li>
+            </ul>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="obeya-pane obeya-pane-blue">
-            DO
-            <hr style="margin-top:0;margin-bottom:10px;">
-            <div class="obeya-body">
-              <div class="row">
-                <div class="col-lg-6 col-md-12 col-xs-12 ">
+      </div>
+    </div>
+  </div>
 
-                  <div class="obeya-cards">
-                    <span class="card-title">
+
+
+  <div class="obeya-pane obeya-pane-fixed-5 obeya-pane-blue">
+    DO
+    <hr style="margin-top:0;margin-bottom:10px;">
+    <div class="obeya-body">
+      <div class="row">
+        <div class="col-lg-6 col-md-12 col-xs-12 ">
+
+          <div class="obeya-cards">
+            <span class="card-title">
                   <img src="assets/images/todo.png" style="width:60px;height:60px;" alt="" >
                   TASKS
                 </span>
-                    <ul class="list-group card-list">
-                      <li class="list-group-item" ng-click="showCard('Tasks','In Progress')">
-                        <i class="fa fa-tasks blue"></i> In Progress
-                        <span class="badge badge-gray">{{obeya.openTasksNb}}</span>
-                      </li>
-                      <li class="list-group-item">
-                        <i class="fa fa-bell blue"></i> With alerts
-                        <span class="badge badge-red">{{obeya.alertsValue}}</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="col-lg-6 col-md-12 col-xs-12 ">
-                  <div class="obeya-cards">
-                    <span class="card-title">
+            <ul class="list-group card-list">
+              <li class="list-group-item" ng-click="showCard('Tasks','In Progress')">
+                <i class="fa fa-tasks blue"></i> In Progress
+                <span class="badge badge-gray">{{obeya.openTasksNb}}</span>
+              </li>
+              <li class="list-group-item">
+                <i class="fa fa-bell blue"></i> With alerts
+                <span class="badge badge-red">{{obeya.alertsValue}}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-12 col-xs-12 ">
+          <div class="obeya-cards">
+            <span class="card-title">
                   <div class="row">
                     <div class="col-md-4">
                       <img src="assets/images/anomaly.png" style="width:60px;height:60px;" alt="">
@@ -186,82 +212,101 @@
                     </div>
                   </div>
                 </span>
-                    <ul class="list-group card-list">
-                      <li class="list-group-item">
-                        <i class="fa fa-bug blue"></i> To Correct
-                        <span class="badge  badge-red">{{obeya.alertsValue}}</span>
-                      </li>
-                      <li class="list-group-item">
-                        <i class="fa fa-medkit blue"></i> Corrected
-                        <span class="badge  badge-gray">{{obeya.alertsValue}}</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="obeya-pane obeya-pane-darkblue">
-            CHECK - ACT
-            <hr style="margin-top:0;margin-bottom:10px;">
-            <div class="obeya-body">
-              <div class="row">
-                <div class="col-lg-6 col-md-12 col-xs-12">
-
-
-                  <div class="obeya-cards">
-                    <span class="card-title">
-                      <img src="assets/images/respect-icon.png" style="width:60px;height:60px;" alt="" >
-                      Respect
-                </span>
-                    <ul class="list-group card-list">
-                      <li class="list-group-item" ng-click="showCard('Tasks','In Progress')">
-                        <i class="fa fa-tasks dark-blue"></i> Quality
-                        <span class="badge badge-gray">{{obeya.openTasksNb}}</span>
-                      </li>
-                      <li class="list-group-item">
-                        <i class="fa fa-bell  dark-blue"></i> Cost
-                        <span class="badge badge-gray">{{obeya.alertsValue}}</span>
-                      </li>
-                      <li class="list-group-item">
-                        <i class="fa fa-bell  dark-blue"></i> Time
-                        <span class="badge badge-gray">{{obeya.alertsValue}}</span>
-                      </li>
-                    </ul>
-                  </div>
-
-                </div>
-                <div class="col-lg-6 col-md-12 col-xs-12">
-
-                  <div class="obeya-cards">
-                    <span class="card-title">
-                      <img src="assets/images/maitrise.png" style="width:60px;height:60px;"  alt="">
-                      Mastering
-                </span>
-                    <ul class="list-group card-list">
-                      <li class="list-group-item" ng-click="showCard('Tasks','In Progress')">
-                        <i class="fa fa-tasks  dark-blue"></i> Quality
-                        <span class="badge badge-gray">{{obeya.openTasksNb}}</span>
-                      </li>
-                      <li class="list-group-item">
-                        <i class="fa fa-bell  dark-blue"></i> Cost
-                        <span class="badge badge-gray">{{obeya.alertsValue}}</span>
-                      </li>
-                      <li class="list-group-item">
-                        <i class="fa fa-bell  dark-blue"></i> Time
-                        <span class="badge badge-gray">{{obeya.alertsValue}}</span>
-                      </li>
-                    </ul>
-                  </div>
-
-                </div>
-              </div>
-            </div>
+            <ul class="list-group card-list">
+              <li class="list-group-item">
+                <i class="fa fa-bug blue"></i> To Correct
+                <span class="badge  badge-red">{{obeya.alertsValue}}</span>
+              </li>
+              <li class="list-group-item">
+                <i class="fa fa-medkit blue"></i> Corrected
+                <span class="badge  badge-gray">{{obeya.alertsValue}}</span>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- END 1-SUMMARY  -->
+
+  <div class="obeya-pane obeya-pane-fixed-5 obeya-pane-darkblue">
+    CHECK - ACT
+    <a href="#performance" ng-click="showCard('Performance')">
+                <i class="fa fa-arrows-alt pull-right"></i>
+            </a>
+    <hr style="margin-top:0;margin-bottom:10px;">
+    <div class="obeya-body">
+      <div class="row">
+        <div class="col-lg-6 col-md-12 col-xs-12">
+          <div class="obeya-cards">
+            <span class="card-title">
+                      <img src="assets/images/respect-icon.png" style="width:60px;height:60px;" alt="" >
+                      Respect
+                </span>
+            <ul class="list-group card-list">
+              <li class="list-group-item" ng-click="showCard('Tasks','In Progress')">
+                <img src="assets/images/quality.png" style="height:20px;" alt=""> Quality
+                <span class="badge badge-gray">{{obeya.openTasksNb}}</span>
+              </li>
+              <li class="list-group-item">
+                <img src="assets/images/cost.png" style="height:20px;" alt=""> Cost
+                <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+              </li>
+              <li class="list-group-item">
+                <img src="assets/images/time.png" style="height:20px;" alt=""> Time
+                <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+        <div class="col-lg-6 col-md-12 col-xs-12">
+          <div class="obeya-cards">
+            <span class="card-title">
+              <img src="assets/images/maitrise.png" style="width:60px;height:60px;"  alt="">
+              Mastering
+            </span>
+            <ul class="list-group card-list">
+              <li class="list-group-item" ng-click="showCard('Tasks','In Progress')">
+                <img src="assets/images/quality.png" style="height:20px;" alt=""> Quality
+                <span class="badge badge-gray">{{obeya.openTasksNb}}</span>
+              </li>
+              <li class="list-group-item">
+                <img src="assets/images/cost.png" style="height:20px;" alt=""> Cost
+                <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+              </li>
+              <li class="list-group-item">
+                <img src="assets/images/time.png" style="height:20px;" alt=""> Time
+                <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="obeya-pane obeya-pane-fixed-5 obeya-pane-gray">
+    FOCUS
+    <hr style="margin-top:0;margin-bottom:10px;">
+    <div class="obeya-body">
+      <div class="row">
+        <div class="col-lg-6 col-md-12 col-xs-12">
+          <span class="card-title">
+                <img src="assets/images/process.jpg" style="height:60px;" alt="" >
+                PROCESS
+              </span>
+        </div>
+        <div class="col-lg-6 col-md-12 col-xs-12">
+          <span class="card-title">
+                <img src="assets/images/skills.jpg" style="height:60px;" alt="" >
+                SKILLS
+              </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- END 1-SUMMARY  -->
