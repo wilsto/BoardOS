@@ -1,0 +1,31 @@
+.allRoomsObeya {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.roomObeya {
+  margin-bottom: 25px;
+  height:120px;
+  margin:8px;
+  padding:5px;
+}
+
+.roomObeyaOther {
+  background-color: rgb(71, 70, 77);
+  color:white;
+}
+
+.roomObeyaMine {
+  background-color: rgba(70, 75, 77, 0.82);
+  color:white;
+}
+
+.roomObeyaPlus{
+  border: 2px solid rgba(70, 75, 77, 0.82);
+}
+
+.dashboardName {
+  width: 100%;
+  font-weight:bold;
+  text-align: center;
+}
