@@ -24,7 +24,9 @@ angular.module('boardOsApp', [
     'pageslide-directive',
     'ngEmbed',
     'ngVis',
-    'angular-intro'
+    'angular-intro',
+    'gridster',
+    'angular-radar'
   ])
   .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, NotificationProvider) {
     $urlRouterProvider.otherwise('/');

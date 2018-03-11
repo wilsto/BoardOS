@@ -20,6 +20,7 @@ module.exports = function(grunt) {
     protractor: 'grunt-protractor-runner',
     injector: 'grunt-asset-injector',
     buildcontrol: 'grunt-build-control',
+    watch: 'grunt-contrib-watch',
     coveralls: 'grunt-coveralls',
     karmacoveralls: 'grunt-karma-coveralls',
     removelogging: 'grunt-remove-logging'
@@ -67,7 +68,10 @@ module.exports = function(grunt) {
           '!<%= yeoman.client %>/{app,components}/**/*.mock.js',
           '!<%= yeoman.client %>/app/app.js'
         ],
-        tasks: ['injector:scripts', 'newer:jshint:all']
+        tasks: ['injector:scripts', 'newer:jshint:all'],
+        options:{
+           interrupt: true
+        }
       },
       injectCss: {
         files: [
