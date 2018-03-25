@@ -344,6 +344,7 @@
 }
 .dashboard .box-content {
     height: 100%;
+        width: 100%;
     padding: 5px;
 }
 .dashboard .box-header-btns {
@@ -366,3 +367,9 @@
 .dashboard .modal {
     overflow-y: hidden;
 }
+
+.chart-radar{
+		height: 400px;
+		width: 600px;
+		background-color: #fff;
+	}
