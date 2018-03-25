@@ -194,9 +194,22 @@ exports.show = function(req, res) {
 
 // Get count of tasks which start
 exports.countByMonth = function(req, res) {
+  var filter= {
+    metrics: {
+      $elemMatch: {
+        status: 'Finished'
+      }
+    }
+  };
+console.log('req.query.filterPerimeter',req.query.filterPerimeter);
+ if (req.query.filterPerimeter) {
+   var cleanPerimeter =JSON.parse( req.query.filterPerimeter.toString().replace('?', '\?'));
+   filter['$or'] = [];
+   filter[$or].push(cleanPerimeter);
+ }
   var o = {};
   o.map = function() {
-    emit((new Date(this.metrics[0].targetEndDate)).getFullYear() + '.' + ((new Date(this.metrics[0].targetEndDate)).getMonth() + 1), {
+    emit((new Date(this.metrics[0].endDate)).getFullYear() + '.' + ((new Date(this.metrics[0].endDate)).getMonth() + 1), {
       count: 1,
       qty: this.metrics[0].projectedWorkload || this.metrics[0].targetLoad
     });
@@ -213,8 +226,8 @@ exports.countByMonth = function(req, res) {
 
     return total;
   };
-
-  o.query = JSON.parse(req.query.filterPerimeter.toString().replace('?', '\?'));
+console.log('filter',filter);
+  o.query = filter;
   TaskFull.mapReduce(o, function(err, results) {
     if (err) {
       return handleError(res, err);

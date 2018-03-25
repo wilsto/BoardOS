@@ -1,58 +1,53 @@
 'use strict';
 
 angular.module('boardOsApp', [
-    'ngCookies',
-    'ngResource',
-    'ngSanitize',
-    'ui.router',
-    'mwl.calendar',
-    'ui.bootstrap',
-    'btford.socket-io',
-    'ngDialog',
-    'nvd3',
-    'ng.confirmField',
-    'ui.calendar',
-    'ui-notification',
-    'cgBusy',
-    'xeditable',
-    'ui.sortable',
-    'angular.filter',
-    'mdPickers',
-    'infinite-scroll',
-    'ngTagsInput',
-    'checklist-model',
-    'pageslide-directive',
-    'ngEmbed',
-    'ngVis',
-    'angular-intro',
-    'gridster',
-    'angular-radar'
-  ])
-  .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, NotificationProvider) {
-    $urlRouterProvider.otherwise('/');
-    $locationProvider.html5Mode(true);
-    $httpProvider.interceptors.push('authInterceptor');
+  'ngCookies',
+  'ngResource',
+  'ngSanitize',
+  'ui.router',
+  'mwl.calendar',
+  'ui.bootstrap',
+  'btford.socket-io',
+  'ngDialog',
+  'nvd3',
+  'ng.confirmField',
+  'ui.calendar',
+  'ui-notification',
+  'cgBusy',
+  'xeditable',
+  'ui.sortable',
+  'angular.filter',
+  'mdPickers',
+  'infinite-scroll',
+  'ngTagsInput',
+  'checklist-model',
+  'pageslide-directive',
+  'ngEmbed',
+  'ngVis',
+  'angular-intro',
+  'gridster',
+  'zingchart-angularjs'
 
-    //initialize get if not there
-    if (!$httpProvider.defaults.headers.get) {
-      $httpProvider.defaults.headers.get = {};
-    }
-    //disable IE ajax request caching
-    $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
-    $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
-    $httpProvider.defaults.headers.get.Pragma = 'no-cache';
+]).config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, NotificationProvider) {
+  $urlRouterProvider.otherwise('/');
+  $locationProvider.html5Mode(true);
+  $httpProvider.interceptors.push('authInterceptor');
 
-    NotificationProvider.setOptions({
-      startTop: 2,
-      positionX: 'center',
-      maxCount: 2
-    });
-  })
+  //initialize get if not there
+  if (!$httpProvider.defaults.headers.get) {
+    $httpProvider.defaults.headers.get = {};
+  }
+  //disable IE ajax request caching
+  $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
+  $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
+  $httpProvider.defaults.headers.get.Pragma = 'no-cache';
 
-  .config(['calendarConfig', function(calendarConfig) {
+  NotificationProvider.setOptions({startTop: 2, positionX: 'center', maxCount: 2});
+}).config([
+  'calendarConfig',
+  function(calendarConfig) {
 
     // View all available config
-
 
     // Change the month view template globally to a custom template
     //calendarConfig.templates.calendarMonthView = 'path/to/custom/template.html';
@@ -81,39 +76,35 @@ angular.module('boardOsApp', [
     // Make the week view more like the day view, ***with the caveat that event end times are ignored***.
     calendarConfig.showTimesOnWeekView = false;
 
-  }])
-
-  .factory('authInterceptor', function($rootScope, $q, $cookieStore, $location) {
-    return {
-      // Add authorization token to headers
-      request: function(config) {
-        config.headers = config.headers || {};
-        if ($cookieStore.get('token')) {
-          config.headers.Authorization = 'Bearer ' + $cookieStore.get('token');
-        }
-        return config;
-      },
-
-      // Intercept 401s and redirect you to login
-      responseError: function(response) {
-        if (response.status === 401) {
-          $location.path('/login');
-          // remove any stale tokens
-          $cookieStore.remove('token');
-          return $q.reject(response);
-        } else {
-          return $q.reject(response);
-        }
+  }
+]).factory('authInterceptor', function($rootScope, $q, $cookieStore, $location) {
+  return {
+    // Add authorization token to headers
+    request: function(config) {
+      config.headers = config.headers || {};
+      if ($cookieStore.get('token')) {
+        config.headers.Authorization = 'Bearer ' + $cookieStore.get('token');
       }
-    };
-  })
+      return config;
+    },
 
-  .value('cgBusyDefaults', {
-    message: 'Please wait, Processing calculation...',
-    wrapperClass: 'loadingboss'
-  })
-
-  .constant('progressStatusTask', [{
+    // Intercept 401s and redirect you to login
+    responseError: function(response) {
+      if (response.status === 401) {
+        $location.path('/login');
+        // remove any stale tokens
+        $cookieStore.remove('token');
+        return $q.reject(response);
+      } else {
+        return $q.reject(response);
+      }
+    }
+  };
+}).value('cgBusyDefaults', {
+  message: 'Please wait, Processing calculation...',
+  wrapperClass: 'loadingboss'
+}).constant('progressStatusTask', [
+  {
     value: 'On Time',
     text: 'On Time'
   }, {
@@ -122,9 +113,9 @@ angular.module('boardOsApp', [
   }, {
     value: 'Late',
     text: 'Late'
-  }])
-
-  .constant('statusTask', [{
+  }
+]).constant('statusTask', [
+  {
     value: 'Not Started',
     text: 'Not Started'
   }, {
@@ -136,9 +127,9 @@ angular.module('boardOsApp', [
   }, {
     value: 'Finished',
     text: 'Finished'
-  }])
-
-  .constant('metricTaskFields', [{
+  }
+]).constant('metricTaskFields', [
+  {
     value: 'Constant',
     text: 'Constant'
   }, {
@@ -183,9 +174,9 @@ angular.module('boardOsApp', [
   }, {
     value: 'reworkReason',
     text: 'reworkReason'
-  }])
-
-  .constant('categoryKPI', [{
+  }
+]).constant('categoryKPI', [
+  {
     value: 'Alert',
     text: 'Alert'
   }, {
@@ -197,9 +188,9 @@ angular.module('boardOsApp', [
   }, {
     value: 'Information',
     text: 'Information'
-  }])
-
-  .constant('listValuesKPI', [{
+  }
+]).constant('listValuesKPI', [
+  {
     value: 'AllValues',
     text: 'AllValues'
   }, {
@@ -217,9 +208,9 @@ angular.module('boardOsApp', [
   }, {
     value: 'ValuesMoreThan',
     text: 'ValuesMoreThan'
-  }])
-
-  .constant('actionKPI', [{
+  }
+]).constant('actionKPI', [
+  {
     value: 'Count',
     text: 'Count'
   }, {
@@ -237,83 +228,77 @@ angular.module('boardOsApp', [
   }, {
     value: 'Sum',
     text: 'Sum'
-  }])
+  }
+]).constant('groupByKPI', [
+  {
+    value: 'None',
+    text: 'None'
+  }, {
+    value: 'Day',
+    text: 'Day'
+  }, {
+    value: 'Week',
+    text: 'Week'
+  }, {
+    value: 'Month',
+    text: 'Month'
+  }, {
+    value: 'Year',
+    text: 'Year'
+  }
 
-  .constant('groupByKPI', [{
-      value: 'None',
-      text: 'None'
-    }, {
-      value: 'Day',
-      text: 'Day'
-    }, {
-      value: 'Week',
-      text: 'Week'
-    }, {
-      value: 'Month',
-      text: 'Month'
-    }, {
-      value: 'Year',
-      text: 'Year'
-    }
+]).run(function($rootScope, $location, Auth, $http, progressStatusTask, statusTask, metricTaskFields, categoryKPI, actionKPI, groupByKPI, $cookieStore, $timeout, editableOptions) {
 
-  ])
+  $rootScope.showHideWhatsNew = false;
 
-  .run(function($rootScope, $location, Auth, $http, progressStatusTask, statusTask, metricTaskFields, categoryKPI, actionKPI, groupByKPI, $cookieStore, $timeout, editableOptions) {
+  editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
+  editableOptions.blurElem = 'submit';
+  editableOptions.blurForm = 'submit';
 
-    $rootScope.showHideWhatsNew = false;
+  $rootScope.perimeter = $cookieStore.get('perimeter');
+  if (typeof $rootScope.perimeter === 'undefined') {
+    $rootScope.perimeter = {};
+    $rootScope.perimeter.name = '';
+    $rootScope.perimeter.id = '';
+    $rootScope.perimeter.activity = '';
+    $rootScope.perimeter.context = '';
+    $rootScope.perimeter.axis = '';
+    $rootScope.perimeter.category = '';
+  }
 
-    editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
-    editableOptions.blurElem = 'submit';
-    editableOptions.blurForm = 'submit';
+  $rootScope.constant = {};
+  $rootScope.constant.progressStatusTask = progressStatusTask;
+  $rootScope.constant.statusTask = statusTask;
+  $rootScope.constant.metricTaskFields = metricTaskFields;
+  $rootScope.constant.categoryKPI = categoryKPI;
+  $rootScope.constant.actionKPI = actionKPI;
+  $rootScope.constant.groupByKPI = groupByKPI;
 
-    $rootScope.perimeter = $cookieStore.get('perimeter');
-    if (typeof $rootScope.perimeter === 'undefined') {
-      $rootScope.perimeter = {};
-      $rootScope.perimeter.name = '';
-      $rootScope.perimeter.id = '';
-      $rootScope.perimeter.activity = '';
-      $rootScope.perimeter.context = '';
-      $rootScope.perimeter.axis = '';
-      $rootScope.perimeter.category = '';
-    }
-
-
-    $rootScope.constant = {};
-    $rootScope.constant.progressStatusTask = progressStatusTask;
-    $rootScope.constant.statusTask = statusTask;
-    $rootScope.constant.metricTaskFields = metricTaskFields;
-    $rootScope.constant.categoryKPI = categoryKPI;
-    $rootScope.constant.actionKPI = actionKPI;
-    $rootScope.constant.groupByKPI = groupByKPI;
-
-    // Mettre les informations transversales en mémoire
-    $http.get('/api/hierarchies/listContext').success(function(contexts) {
-      $rootScope.contexts = [];
-      _.each(contexts, function(context) {
-        $rootScope.contexts.push({
-          longname: context
-        });
-      });
+  // Mettre les informations transversales en mémoire
+  $http.get('/api/hierarchies/listContext').success(function(contexts) {
+    $rootScope.contexts = [];
+    _.each(contexts, function(context) {
+      $rootScope.contexts.push({longname: context});
     });
-
-    $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
-      $rootScope.showArianeMain = ($location.path() === '/');
-      $rootScope.showArianeDashboard = ($location.path().indexOf('dashboard/') > 0);
-      $rootScope.showArianeTask = ($location.path().indexOf('task/') > 0);
-      $rootScope.showArianeKPI = ($location.path().indexOf('KPI/') > 0);
-      $rootScope.showArianeAno = ($location.path().indexOf('anomalies') > 0);
-      $rootScope.showArianeObeya = ($location.path().indexOf('obeya/') > 0);
-    });
-
-    // Redirect to login if route requires auth and you're not logged in
-    $rootScope.$on('$stateChangeSuccess', function(event, next) {
-
-      Auth.isLoggedIn(function(loggedIn) {
-        if (next.authenticate && !loggedIn) {
-          $location.path('/login');
-        }
-      });
-    });
-
-
   });
+
+  $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+    $rootScope.showArianeMain = ($location.path() === '/');
+    $rootScope.showArianeDashboard = ($location.path().indexOf('dashboard/') > 0);
+    $rootScope.showArianeTask = ($location.path().indexOf('task/') > 0);
+    $rootScope.showArianeKPI = ($location.path().indexOf('KPI/') > 0);
+    $rootScope.showArianeAno = ($location.path().indexOf('anomalies') > 0);
+    $rootScope.showArianeObeya = ($location.path().indexOf('obeya/') > 0);
+  });
+
+  // Redirect to login if route requires auth and you're not logged in
+  $rootScope.$on('$stateChangeSuccess', function(event, next) {
+
+    Auth.isLoggedIn(function(loggedIn) {
+      if (next.authenticate && !loggedIn) {
+        $location.path('/login');
+      }
+    });
+  });
+
+});
