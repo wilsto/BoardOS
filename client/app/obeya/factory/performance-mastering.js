@@ -9,14 +9,12 @@ angular.module('boardOsApp').factory('generator', function($rootScope, $http) {
         filterPerimeter: $rootScope.filterPerimeter
       }
     }).success(function(tasks) {
-      console.log('tasks', tasks);
       var taskNb = _.map(tasks, function(task) {
         return task.value.count;
       });
-      console.log('taskNb', taskNb);
+      
       return taskNb;
     }).error(function(err) {
-      console.log('err', err);
     });
   }
   function quantiChartData() {
@@ -96,9 +94,7 @@ angular.module('boardOsApp').factory('generator', function($rootScope, $http) {
       });
       sin2.push({
         x: i,
-        y: (i % 10 === 5)
-          ? null
-          : Math.sin(i / 10) * 0.25 + 0.5
+        y: (i % 10 === 5)          ? null           : Math.sin(i / 10) * 0.25 + 0.5
       });
       cos.push({
         x: i,
@@ -418,6 +414,7 @@ angular.module('boardOsApp').factory('generator', function($rootScope, $http) {
 
     lineChart: {
       options: function() {
+        var toto = quantiOvertimeChartData();
         return {
           'graphset': [
             {
