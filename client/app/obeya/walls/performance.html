@@ -81,7 +81,8 @@
                                   </div>
                               </div>
                               <div class="box-content">
-                                <zingchart zc-json="widget.chart.options" zc-width="{{325 * widget.sizeX}}px" zc-height="{{325 * widget.sizeY}}px"></zingchart>
+                                    <nvd3 options="widget.chart.options" data="chartData[$index]"></nvd3>
+                                <!-- <zingchart zc-json="widget.chart.options" zc-width="{{325 * widget.sizeX}}px" zc-height="{{325 * widget.sizeY}}px"></zingchart> -->
                               </div>
                           </div>
                       </li>

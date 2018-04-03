@@ -1,6 +1,19 @@
 'use strict';
 
-angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, Notification, $location, $stateParams, $rootScope, dateRangeService, VisDataSet, $timeout, Milestones, Tasks, generator) {
+angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, Notification, $location, $stateParams, $rootScope, dateRangeService, VisDataSet, $timeout, Milestones, Tasks, generator, graphGenerator, dataGenerator, myLibrary) {
+
+  function arrayAverage(arr) {
+    return _.reduce(arr, function(memo, num) {
+      return memo + num;
+    }, null) / (arr.length === 0 ? 1 : arr.length);
+  }
+
+  function arraySum(arr) {
+    return _.reduce(arr, function(memo, num) {
+      return memo + num;
+    }, 0);
+  }
+
   $scope.walls = [
     {
       id: 0,
@@ -52,7 +65,7 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, Not
     // ouverture de l'obeya
     $scope.myPromise = $http.get('/api/dashboardCompletes/' + $stateParams.id).success(function(obeya) {
       $scope.obeya = obeya;
-
+console.log('obeya',obeya);
       $scope.obeya.milestones = new Milestones($scope.obeya);
       $scope.obeya.tasks = new Tasks($scope.obeya);
 
@@ -97,7 +110,7 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, Not
         }
         $scope.filterPerimeter = filterPerimeter;
         $rootScope.filterPerimeter = filterPerimeter;
-        console.log('$scope.filterPerimeter',$scope.filterPerimeter);
+        console.log('$scope.filterPerimeter', $scope.filterPerimeter);
       });
 
       // appel des activités en cours
@@ -437,7 +450,7 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, Not
       }
     }
   };
-  //console.log(generator)
+  //console.log(graphGenerator)
 
   $scope.dashboard = {
     widgets: [
@@ -449,7 +462,7 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, Not
         name: 'Quantitative Over Time',
         type: 'lineChart',
         chart: {
-          options: generator.lineChart.options()
+          options: graphGenerator.quantitativeOverTime.options()
         }
       }, {
         col: 1,
@@ -457,9 +470,9 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, Not
         sizeY: 1,
         sizeX: 1,
         name: 'Quantitative',
-        type: 'vbullet',
+        type: 'discreteBarChart',
         chart: {
-          options: generator.quantiChart.options()
+          options: graphGenerator.quantitative.options()
         }
       }, {
         col: 2,
@@ -469,7 +482,7 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, Not
         name: 'Qualitative Over Time',
         type: 'lineChart',
         chart: {
-          options: generator.lineChart.options()
+          options: graphGenerator.qualitativeOverTime.options()
         }
       }, {
         col: 3,
@@ -521,14 +534,81 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, Not
   };
 
   //make chart visible after grid have been created
-  $timeout(function() {
+  $scope.$on('obeya:refreshPerformance', function(event, data) {
+
     $scope.config.visible = true;
-  }, 200);
+    $scope.chartData = [];
+
+    // FIRST
+    dataGenerator.quantitativeOverTime.data().then(function(lineChart) {
+      var data1 = lineChart.data.slice(-13);
+      var dataLast = data1.slice(-2,-1);
+      dataLast = _.map(dataLast, function(d){
+        return [{label:'Tasks',value:d.value.count},{label:'Workload',value:d.value.qty}];
+      })[0];
+      $scope.chartData[1] = [
+        {
+          key: 'Tasks',
+          values: dataLast
+        }
+      ];
+
+
+      data1 = data1.slice(0,12);
+      var data2 = _.map(_.cloneDeep(data1), function(d) {
+        d.value.count = d.value.qty;
+        return d;
+      });
+      $scope.chartData[0] = [
+        {
+          key: 'Tasks',
+          strokeWidth: 2,
+          classed: 'dashed',
+          values: data1
+        }, {
+          key: 'Workload',
+          area: true,
+          values: data2
+        }
+      ];
+    });
+
+    // THIRD
+    console.log('$scope.obeya.tasks',$scope.obeya.tasks.length);
+    $scope.dataCost = myLibrary.displayLastYearKPI($scope.obeya.tasks.list, '_id', 'kpis', 'Cost');
+    $scope.dataQuality = myLibrary.displayLastYearKPI($scope.obeya.tasks.list, '_id', 'kpis', 'Quality');
+    $scope.dataTime = myLibrary.displayLastYearKPI($scope.obeya.tasks.list, '_id', 'kpis', 'Time');
+
+    $scope.tasksNb = arraySum(_.compact(_.map($scope.dataTasks, 'value')));
+    $scope.metricsNb = arraySum(_.compact(_.map($scope.dataMetrics, 'value')));
+    console.log('$scope.dataCost',$scope.dataCost);
+    $scope.costNb = arrayAverage(_.compact(_.map($scope.dataCost, 'value')));
+    $scope.qualityNb = arrayAverage(_.compact(_.map($scope.dataQuality, 'value')));
+    $scope.timeNb = arrayAverage(_.compact(_.map($scope.dataTime, 'value')));
+
+    $scope.chartData[2] = [
+      {
+        key: 'Quality',
+        values: $scope.dataQuality
+      }, {
+        key: 'Cost',
+        values: $scope.dataCost
+      }        , {
+        key: 'Time',
+        values: $scope.dataTime
+      }
+    ];
+
+  });
+
+
+
+
+
 
   //subscribe widget on window resize event
   angular.element(window).on('resize', function(e) {
     $scope.$broadcast('resize');
   });
-
 
 });

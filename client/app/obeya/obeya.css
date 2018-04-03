@@ -373,3 +373,7 @@
 		width: 600px;
 		background-color: #fff;
 	}
+
+  .dashed {
+    stroke-dasharray: 5,5;
+}

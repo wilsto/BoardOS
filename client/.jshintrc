@@ -17,6 +17,7 @@
   "undef": true,
   "unused": false,
   "strict": true,
+  "sub": true,
   "trailing": true,
   "smarttabs": true,
   "jasmine": true,
