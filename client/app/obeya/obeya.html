@@ -14,16 +14,12 @@
         <button id="previous" ng-click="NavCaroussel(-1)">
         <i class="fa fa-chevron-left text-muted" ></i>
         </button>
+        <button id="previous" ng-click="NavCaroussel(0)" style="margin-left:55px;">
+        <i class="fa fa-home text-muted" ></i>
+        </button>
         <div id="carousel">
-          <figure>0 <br><span> Summary</span></figure>
-          <figure>1 <br><span> News & People</span></figure>
-          <figure>2 <br><span> Engagements</span></figure>
-          <figure>3 <br><span> Tasks</span></figure>
-          <figure>4 <br><span> Performance</span></figure>
-          <figure>5 <br><span> ProblemSolving</span></figure>
-          <figure>6 <br><span> Process</span></figure>
-          <figure>7 <br><span> Communication</span></figure>
-          <figure>8 <br><span> Properties</span></figure>
+          <figure ng-repeat="wall in walls">{{wall.id}} <br><span> {{wall.title}}</span></figure>
+
         </div>
         <button id="next" ng-click="NavCaroussel(1)" class="pull-right">
       <i class="fa fa-chevron-right  text-muted" ></i>
@@ -40,13 +36,13 @@
   <!-- END CARROUSEL  -->
     <div id="all_walls">
       <div class="wall" id="wall_0" ng-include src="'app/obeya/walls/summary.html'"></div>
-      <div class="wall" id="wall_1" ng-include src="'app/obeya/walls/news.html'"></div>
-      <div class="wall" id="wall_2" ng-include src="'app/obeya/walls/milestones.html'"></div>
-      <div class="wall" id="wall_3" ng-include src="'app/obeya/walls/tasks.html'"></div>
-      <div class="wall" id="wall_4" ng-include src="'app/obeya/walls/performance.html'"></div>
-      <div class="wall" id="wall_5" ng-include src="'app/obeya/walls/anomalies.html'"></div>
-      <div class="wall" id="wall_6" ng-include src="'app/obeya/walls/process.html'"></div>
+      <div class="wall" id="wall_1" ng-include src="'app/obeya/walls/people.html'"></div>
+      <div class="wall" id="wall_2" ng-include src="'app/obeya/walls/news.html'"></div>
+      <div class="wall" id="wall_3" ng-include src="'app/obeya/walls/milestones.html'"></div>
+      <div class="wall" id="wall_4" ng-include src="'app/obeya/walls/tasks.html'"></div>
+      <div class="wall" id="wall_5" ng-include src="'app/obeya/walls/performance.html'"></div>
+      <div class="wall" id="wall_6" ng-include src="'app/obeya/walls/anomalies.html'"></div>
       <div class="wall" id="wall_7" ng-include src="'app/obeya/walls/process.html'"></div>
-      <div class="wall" id="wall_8" ng-include src="'app/obeya/walls/process.html'"></div>
+      <div class="wall" id="wall_8" ng-include src="'app/obeya/walls/properties.html'"></div>
     </div>
 </div>

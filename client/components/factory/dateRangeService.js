@@ -2,9 +2,9 @@
 
 angular.module('boardOsApp').factory('dateRangeService', function($rootScope) {
 
-  this.rangeDate = 'last7';
-  this.datediff = 7;
-  this.startRange = moment().subtract(7, 'days');
+  this.rangeDate = 'last30';
+  this.datediff = 30;
+  this.startRange = moment().subtract(30, 'days');
   this.endRange = moment();
 
   function cb(start, end) {

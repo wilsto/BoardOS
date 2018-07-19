@@ -13,11 +13,6 @@ angular.module('boardOsApp')
 
     $scope.opened = {};
 
-
-    Auth.getCurrentUser(function(data) {
-      $scope.currentUser = Auth.getCurrentUser();
-    });
-
     $scope.toggle = function() {
       $scope.checked = !$scope.checked;
     };
@@ -38,23 +33,6 @@ angular.module('boardOsApp')
       sort: function(e) {},
       connectWith: '#trash-can'
     };
-
-    $scope.trashcan = {
-      update: function(event, ui) {
-        //
-        //$(ui.draggable).fadeOut(1000);
-      }
-    };
-
-    // Mettre les informations transversales en mémoire
-    $http.get('/api/hierarchies/listContext').success(function(contexts) {
-      $rootScope.contexts = [];
-      _.each(contexts, function(context) {
-        $rootScope.contexts.push({
-          longname: context
-        });
-      });
-    });
 
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
       if (fromState.name === 'task' && toState.name !== 'task' && !$scope.forceExit) {
@@ -170,6 +148,24 @@ angular.module('boardOsApp')
 
     };
 
+    $scope.$watch('task.context', function(newVal, oldVal) {
+      $scope.blnContextValid = false;
+      _.each($rootScope.contexts, function(context) {
+        if (newVal && newVal.indexOf(context.longname)>-1) {
+          $scope.blnContextValid = true;
+        }
+      });
+    });
+
+    $scope.$watch('task.activity', function(newVal, oldVal) {
+      $scope.blnActivityValid = false;
+      _.each($rootScope.activities, function(activity) {
+        if (newVal && newVal.indexOf(activity.longname) > -1) {
+          $scope.blnActivityValid = true;
+        }
+      });
+    });
+
     $scope.$watch('task.metrics', function(newVal, oldVal) {
       if (!initializing) {
         _.each(newVal, function(metric) {
@@ -230,7 +226,7 @@ angular.module('boardOsApp')
     $scope.autoComment = function(text) {
 
       var maintenant = new Date().toISOString();
-      var currentUserId = $scope.currentUser._id;
+      var currentUserId = $rootScope.thisUser._id;
       var userid = ($scope.task._id) ? {
         _id: currentUserId
       } : currentUserId;
@@ -266,7 +262,7 @@ angular.module('boardOsApp')
         auto: false,
         date: maintenant,
         user: {
-          _id: $scope.currentUser._id
+          _id: $rootScope.thisUser._id
         }
       });
       $scope.comment.text = ''; //Reset the text field.
@@ -301,7 +297,7 @@ angular.module('boardOsApp')
           auto: false,
           date: maintenant,
           user: {
-            _id: $scope.currentUser._id
+            _id: $rootScope.thisUser._id
           }
         });
         $scope.task.metrics.push({
@@ -342,7 +338,7 @@ angular.module('boardOsApp')
         anomalie.context = $scope.task.context;
         anomalie.activity = $scope.task.activity;
 
-        anomalie.actor = $scope.currentUser._id;
+        anomalie.actor = $rootScope.thisUser._id;
 
         $scope.myPromise = $http.post('/api/anomalies', anomalie).success(function(data) {
           if (!$scope.task.anomalies) {
@@ -505,11 +501,11 @@ angular.module('boardOsApp')
             };
 
             $scope.mePresentInActors = _.filter($scope.task.actors, function(actor) {
-              return actor._id === $scope.currentUser._id;
+              return actor._id === $rootScope.thisUser._id;
             }).length > 0;
 
             $scope.mePresentInFollowers = _.filter($scope.task.followers, function(actor) {
-              return actor._id === $scope.currentUser._id;
+              return actor._id === $rootScope.thisUser._id;
             }).length > 0;
 
             $scope.KPIIsExpanded = (task.metrics[0].status === 'Finished' || task.metrics[0].status === 'Withdrawn');
@@ -559,7 +555,7 @@ angular.module('boardOsApp')
           $scope.task.comments = [{
             text: 'create task',
             date: Date.now(),
-            user: $scope.currentUser._id,
+            user: $rootScope.thisUser._id,
             auto: true
           }];
           $scope.task.metrics = [];
@@ -570,9 +566,9 @@ angular.module('boardOsApp')
           });
           $scope.task.todos = [];
           $scope.task.actors = [{
-            _id: $scope.currentUser._id,
-            name: $scope.currentUser.name,
-            avatar: $scope.currentUser.avatar
+            _id: $rootScope.thisUser._id,
+            name: $rootScope.thisUser.name,
+            avatar: $rootScope.thisUser.avatar
           }];
           $scope.task.followers = [];
           $scope.errors = {};
@@ -769,7 +765,7 @@ angular.module('boardOsApp')
 
     $scope.addMeToActor = function() {
       var member = _.filter($scope.members, function(member) {
-        return member._id === $scope.currentUser._id;
+        return member._id === $rootScope.thisUser._id;
       })[0];
       $scope.task.actors.push(member);
       $scope.blnAddActor = false;
@@ -778,7 +774,7 @@ angular.module('boardOsApp')
 
     $scope.removeMeToActor = function() {
       $scope.task.actors = _.without($scope.task.actors, _.findWhere($scope.task.actors, {
-        _id: $scope.currentUser._id
+        _id: $rootScope.thisUser._id
       }));
       //$scope.update();
     };
@@ -845,7 +841,7 @@ angular.module('boardOsApp')
 
     $scope.addMeToFollower = function() {
       var member = _.filter($scope.members, function(member) {
-        return member._id === $scope.currentUser._id;
+        return member._id === $rootScope.thisUser._id;
       })[0];
       $scope.task.followers.push(member);
       $scope.blnAddFollower = false;
@@ -854,7 +850,7 @@ angular.module('boardOsApp')
 
     $scope.removeMeToFollower = function() {
       $scope.task.followers = _.without($scope.task.followers, _.findWhere($scope.task.followers, {
-        _id: $scope.currentUser._id
+        _id: $rootScope.thisUser._id
       }));
       //$scope.update();
       $scope.loadTask();
@@ -876,7 +872,7 @@ angular.module('boardOsApp')
 
     $scope.addMeToSubTaskActor = function() {
       var member = _.filter($scope.members, function(member) {
-        return member._id === $scope.currentUser._id;
+        return member._id === $rootScope.thisUser._id;
       })[0];
       $scope.currentTodo.actor = member;
       $scope.blnAssignSubtaskActor = false;

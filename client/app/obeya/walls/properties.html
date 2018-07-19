@@ -1,0 +1,144 @@
+<!-- START 8-PROPERTIES  -->
+<div id="Wall" class="wall_flex wall_flex_nowrap" ng-if="activeWall.id===8">
+
+  <div class="obeya-pane obeya-pane-fixed-left obeya-pane-darkgray">
+    Properties
+    <hr style="margin-top:0;margin-bottom:10px;">
+    <div class="obeya-body">
+      <ul class="list-group card-list">
+        <li class="list-group-item" ng-click="showCard('Properties','Name')">
+          <i class="fa fa-id-card-o  "></i> Name
+          <span class="pull-right"> <i class="fa fa-chevron-right"></i> </span> </li>
+        <li class="list-group-item" ng-click="showCard('Properties','Perimeter')">
+          <i class="fa fa-object-group  "></i> Perimeter
+          <span class="pull-right"> <i class="fa fa-chevron-right"></i> </span> </li>
+        <li class="list-group-item" ng-click="showCard('Properties','Roles')">
+          <i class="fa fa-users"></i> Roles
+          <span class="pull-right"> <i class="fa fa-chevron-right"></i> </span> </li>
+      </ul>
+    </div>
+  </div>
+  <div class="obeya-pane pane-grow obeya-pane-darkgray">
+    Values
+    <hr style="margin-top:0;margin-bottom:10px;">
+    <div class="obeya-body">
+
+      <!-- Liste des contexts avec engagements -->
+      <div class="row">
+        <div class="col-md-12">
+          <div class="portlet">
+            <div class="portlet-title">
+              <div class="caption">
+                <h4 style="margin:0">
+                 Perimeter
+                </h4>
+              </div>
+              <div class="tools">
+              </div>
+            </div>
+            <div class="portlet-body">
+
+              <div class="" ng-if="propertiesToshow==='Name'">
+                <a href="#" style="color:black!important" editable-text="obeya.name" e-style="width: 500px" buttons="right">{{ obeya.name || 'Please give a name of your obeya' }}</a>
+
+              </div>
+              <div class="" ng-if="propertiesToshow==='Perimeter'">
+
+                <ul class="list list-inline">
+                  <li style="width:100%;border:1px dotted rgb(196, 197, 205);padding:5px;" ng-repeat="perimeterValue in obeya.perimeter">
+                    <div class="row">
+                      <div class="col-md-6">
+
+                        <i class="fa fa-flash d-block"></i>
+                        <span class="d-block text-muted">Activity</span>
+                        <a href="#" editable-text="perimeterValue.activity" class=" d-block" e-uib-typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:50">
+                            {{perimeterValue.activity || 'All' }}
+                          </a>
+                      </div>
+                      <div class="col-md-6">
+                        <i class="fa fa-map-marker d-block"></i>
+                        <span class="d-block text-muted">Context</span>
+                        <a href="#" editable-text="perimeterValue.context" class=" d-block dont-break-out" e-uib-typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:50">
+                            {{perimeterValue.context || 'All' }}
+                          </a>
+
+                        <div style="height:20px;width:20px;" class="pull-right circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground" uib-tooltip-html="'Remove this perimeter from this obeya'" tooltip-placement="right"
+                          ng-click="removePerimeter(perimeterValue, $index)">
+                          <span class="circularButtonView-label">
+                                <svg class="svgIcon add-followers-icon" viewbox="0 0 32 32" title="minus" >
+                                  <polygon points="28,14 18,14 14,14 4,14 4,18 14,18 18,18 28,18"></polygon>
+                                </svg>
+                          </span>
+                        </div>
+
+                      </div>
+                    </div>
+                  </li>
+                  <li style="width:100%;border:1px dotted rgb(196, 197, 205);padding:5px;">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div style="height:20px;width:20px" class="circularButtonView circularToggleButtonView-button circularButtonView--small circularButtonView--onWhiteBackground" uib-tooltip-html="'Add another perimeter'" tooltip-placement="bottom" ng-init="showNewPerimeter=false"
+                          ng-click="showNewPerimeter=!showNewPerimeter">
+                          <span class="circularButtonView-label">
+                          <svg class="svgIcon add-followers-icon" viewbox="0 0 32 32" title="plus" >
+                            <polygon points="28,14 18,14 18,4 14,4 14,14 4,14 4,18 14,18 14,28 18,28 18,18 28,18"></polygon>
+                          </svg>
+                    </span>
+                        </div>
+                        <span>
+                    <i class="fa fa-flash d-block"></i>
+                    <span class="d-block text-muted">Activity</span>
+                        <a href="#" editable-text="newPerimeterValue.activity" class=" d-block" e-uib-typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:50">
+                      {{newPerimeterValue.activity || 'All' }}
+                    </a>
+                        </span>
+                      </div>
+                      <div class="col-md-6">
+                        <span>
+                    <i class="fa fa-map-marker d-block"></i>
+                      <span class="d-block text-muted">Context</span>
+                        <a href="#" editable-text="newPerimeterValue.context" class=" d-block dont-break-out" e-uib-typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:50">
+                      {{newPerimeterValue.context || 'All' }}
+                    </a>
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                  <li style="margin-top:5px">
+                    <span ng-show="messageCreation" class="label label-danger">  {{messageCreation}}</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="" ng-if="propertiesToshow==='Roles'">
+                <div class="">
+                  <button style="width:250px;text-align:left" title="Data Designer" ng-click="updateObeyaRoles('DD')"  type="button" class="btn "  ng-class="{'btn-info':obeya.roles.indexOf('DD')>-1}">Data Designer</button><br>
+                  <button style="width:250px;text-align:left" title="Business Referent" ng-click="updateObeyaRoles('BR')" type="button" class="btn "  ng-class="{'btn-info':obeya.roles.indexOf('BR')>-1}">Business Referent</button><br>
+                  <button style="width:250px;text-align:left" title="Data Vizualisation" ng-click="updateObeyaRoles('VIZ')"  type="button" class="btn "  ng-class="{'btn-info':obeya.roles.indexOf('VIZ')>-1}">Data Vizualisation</button><br>
+                  <button style="width:250px;text-align:left" title="Data Architecture" ng-click="updateObeyaRoles('DA')"  type="button" class="btn "  ng-class="{'btn-info':obeya.roles.indexOf('DA')>-1}">Data Architecture</button><br>
+                  <button style="width:250px;text-align:left" title="Analytics & IHM" ng-click="updateObeyaRoles('ANA')"  type="button" class="btn "  ng-class="{'btn-info':obeya.roles.indexOf('ANA')>-1}">Analytics & IHM</button><br>
+                  <button style="width:250px;text-align:left" title="Change Management"  ng-click="updateObeyaRoles('CM')" type="button" class="btn "  ng-class="{'btn-info':obeya.roles.indexOf('CM')>-1}">Change Management</button><br>
+                  <button style="width:250px;text-align:left" title="System Management" ng-click="updateObeyaRoles('SM')"  type="button" class="btn "  ng-class="{'btn-info':obeya.roles.indexOf('SM')>-1}">System Management</button><br>
+                  <button style="width:250px;text-align:left" title="Master Data Management" ng-click="updateObeyaRoles('MDM')"  type="button" class="btn "  ng-class="{'btn-info':obeya.roles.indexOf('MDM')>-1}">Master Data Management</button><br>
+                  <button style="width:250px;text-align:left" title="Project Office Management" ng-click="updateObeyaRoles('PMO')"  type="button" class="btn "  ng-class="{'btn-info':obeya.roles.indexOf('PMO')>-1}">Project Office Management</button></button><br>
+                </div>
+              </div>
+              <br><br>
+              <div class="pull-right" style="width:200px" ng-if="!obeya._id" uib-tooltip-html="'You must fill at least 2 mandatories fields : name and (activity and/or context)to be able to save'" tooltip-placement="bottom">
+                <button type="button" name="button" style="width:200px" class="btn  btn-primary" ng-click="create()" ng-disabled="!(obeya.name && (obeya.perimeter[0].context || obeya.perimeter[0].activity))">Create</button>
+              </div>
+              <div class="pull-right" style="width:200px" ng-if="obeya._id">
+                <button type="button" name="button" style="margin-top:2px;margin-right:10px;width:100px;" class="btn btn-primary pull-right " ng-click="update()" uib-tooltip-html="'Save will  copy data to a permanent storage'" tooltip-placement="top">Save</button>
+              </div>
+              <br><br>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+    </div>
+
+  </div>
+
+</div>

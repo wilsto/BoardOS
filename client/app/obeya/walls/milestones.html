@@ -1,35 +1,34 @@
 <!-- START 3- Milestones & Capacity  -->
-<div id="Wall-2" class="wall_flex" ng-if="activeWall.id===2">
+<div id="Wall-2" class="wall_flex wall_flex_nowrap" ng-if="activeWall.id===3">
   <div class="obeya-pane obeya-pane-fixed-left obeya-pane-darkgray">
     Questions
     <hr style="margin-top:0;margin-bottom:10px;">
     <div class="obeya-body">
-      <!-- <ul>
-                <li>What are our engagements we must keep ?</li>
-                <li>What are the new engagement we must take ?</li>
-                <li>Are some engagements in alert ?</li>
-              </ul> -->
       <h4>
-                <img src="assets/images/milestone.png" style="width:60px;height:60px;" alt="" >
-                Milestones</h4>
+          <img src="assets/images/milestone.png" style="width:60px;height:60px;" alt="" > Milestones
+      </h4>
       <ul class="list-group card-list">
-        <li class="list-group-item" ng-if="obeyaMode === 'week'">
-          <img src="assets/images/calendar-week.png" style="width:15px;height:15px;" alt=""> This Week
-          <span class="badge badge-gray">{{obeya.milestones.thisWeek().length}}</span>
-        </li>
-        <li class="list-group-item" ng-if="obeyaMode === 'month'">
-          <img src="assets/images/calendar-month.png" style="width:15px;height:15px;" alt=""> This Month
-          <span class="badge badge-gray">{{obeya.milestones.thisMonth().length}}</span>
-        </li>
-        <li class="list-group-item" ng-if="obeyaMode === 'all'" ng-click="showCard('Milestones','All')">
+        <li class="list-group-item" ng-click="milestonesToshow = obeya.milestones.selected();milestonesTypeToshow='All'">
           <img src="assets/images/calendar-month.png" style="width:15px;height:15px;" alt=""> All
           <span class="badge badge-gray">{{obeya.milestones.selected().length}}</span>
         </li>
-        <li class="list-group-item" ng-click="showCard('Milestones','ToEngage')">
+        <li class="list-group-item" ng-click="milestonesToshow= obeya.milestones.toForecast();milestonesTypeToshow='Forecast'">
+          <img src="assets/images/forecast.png" alt="" style="width:20px;height:20px"> To Forecast
+          <span class="badge" ng-class="{'badge-gray':obeya.milestones.toForecast().length===0, 'badge-orange':obeya.milestones.toForecast().length>0}">{{obeya.milestones.toForecast().length}}</span>
+        </li>
+        <li class="list-group-item" ng-click="milestonesToshow= obeya.milestones.toPlan();milestonesTypeToshow='Plan'">
+          <img src="assets/images/plan.png" alt="" style="width:20px;height:20px"> To Plan
+          <span class="badge" ng-class="{'badge-gray':obeya.milestones.toPlan().length===0, 'badge-orange':obeya.milestones.toPlan().length>0}">{{obeya.milestones.toPlan().length}}</span>
+        </li>
+        <li class="list-group-item" ng-click="milestonesToshow= obeya.milestones.toEngage();milestonesTypeToshow='Engage'">
           <i class="fa fa-gavel "></i> To Engage
           <span class="badge" ng-class="{'badge-gray':obeya.milestones.toEngage().length===0, 'badge-orange':obeya.milestones.toEngage().length>0}">{{obeya.milestones.toEngage().length}}</span>
         </li>
-        <li class="list-group-item">
+        <li class="list-group-item" ng-click="milestonesToshow= obeya.milestones.toAchieve();milestonesTypeToshow='Achieve'">
+          <img src="assets/images/achieve.png" alt="" style="width:20px;height:20px"> To Achieve
+          <span class="badge" ng-class="{'badge-gray':obeya.milestones.toAchieve().length===0, 'badge-orange':obeya.milestones.toAchieve().length>0}">{{obeya.milestones.toAchieve().length}}</span>
+        </li>
+        <li class="list-group-item" ng-click="milestonesToshow= obeya.milestones.withAlerts();milestonesTypeToshow='Alerts'">
           <i class="fa fa-bell "></i> With alerts
           <span class="badge " ng-class="{'badge-gray':obeya.milestones.withAlerts().length===0, 'badge-red':obeya.milestones.withAlerts().length>0}">{{obeya.milestones.withAlerts().length}}</span>
         </li>
@@ -39,68 +38,84 @@
 
       <br>
       <h4>
-                    <img src="assets/images/icon-capacity-planning.png" style="width:60px;height:60px;"  alt="">
-                    Capacity
-              </h4>
+            <img src="assets/images/icon-capacity-planning.png" style="width:60px;height:60px;"  alt="">
+            Capacity
+      </h4>
       <ul class="list-group card-list">
         <li class="list-group-item">
           <i class="fa fa-users "></i> Availability
-          <span class="badge  badge-gray"> ? </span>
+          <span class="pull-right">   <img src="assets/images/coming-soon.png" alt="" style="width:40px;height:30px"></span>
         </li>
         <li class="list-group-item">
           <i class="fa fa-bars "></i> Planned
-          <span class="badge  badge-gray"> ? </span>
+          <span class="pull-right">   <img src="assets/images/coming-soon.png" alt="" style="width:40px;height:30px"></span>
         </li>
         <li class="list-group-item">
           <i class="fa fa-bell "></i> With alerts
-          <span class="badge badge-red"> ? </span>
+          <span class="pull-right">   <img src="assets/images/coming-soon.png" alt="" style="width:40px;height:30px"></span>
         </li>
       </ul>
     </div>
   </div>
+
   <div class="obeya-pane pane-grow obeya-pane-darkgray">
     Milestones & Engagements
     <hr style="margin-top:0;margin-bottom:10px;">
     <div class="obeya-body">
       <!-- Liste des contexts avec engagements -->
-      <div class="row">
-        <div class="col-md-12">
-          <div class="portlet">
-            <div class="portlet-title">
-              <div class="caption">
-                <h4 style="margin:0">What are the new engagement we must take ?</h4>
-              </div>
-              <div class="tools">
-              </div>
+
+      <div class="portlet">
+        <div class="portlet-title">
+          <div class="caption">
+            <h4 style="margin:0" ng-if="milestonesTypeToshow==='All'">What are all the milestones ?</h4>
+            <h4 style="margin:0" ng-if="milestonesTypeToshow==='Forecast'">What milestones do we need to forecast ?</h4>
+            <h4 style="margin:0" ng-if="milestonesTypeToshow==='Plan'">What milestones do we need to plan ?</h4>
+            <h4 style="margin:0" ng-if="milestonesTypeToshow==='Engage'">What milestones do we need to commit ?</h4>
+            <h4 style="margin:0" ng-if="milestonesTypeToshow==='Achieve'">What milestones do we need to achieve ?</h4>
+            <h4 style="margin:0" ng-if="milestonesTypeToshow==='Alerts'">What are the commitments for which we are in difficulty?</h4>
+          </div>
+          <div class="tools">
+          </div>
+        </div>
+        <div class="portlet-body">
+
+          <!-- *************** -->
+          <!-- GRAPH MILESTONES     -->
+          <!-- *************** -->
+
+          <div ng-if="viewMode.Milestones==='Timeline'">
+            <h4>Milestones to forecast <small class="text-muted"> (drag and drop to forecast)</small></h4>
+            <ul class="items-panel ">
+              <li draggable="true" class="item" ng-repeat="milestone in obeya.milestones.toForecast()">
+                {{milestone.longname}}
+              </li>
+            </ul>
+
+            <h4>Milestones forecasted, planned, engaged or achieved </h4>
+            <div id="timeline_Milestones" ng-if="viewMode.Milestones==='Timeline'">
+              <vis-timeline data="timelineDataMilestones" options="timelineOptions2"></vis-timeline>
             </div>
-            <div class="portlet-body">
+          </div>
 
-              <!-- *************** -->
-              <!-- GRAPH MILESTONES     -->
-              <!-- *************** -->
-              <div id="timeline_Milestones" ng-if="viewMode.Milestones==='Timeline'">
-                <vis-timeline data="timelineDataMilestones" options="timelineOptions2"></vis-timeline>
-              </div>
-
-              <br>
-              <!-- *************** -->
-              <!-- LIST MILESTONES     -->
-              <!-- *************** -->
-              <div class="table-responsive" ng-if="viewMode.Milestones==='List'">
-                <table class="table table-hover">
-                  <tr>
-                    <th style="width:20%">Name
-                      <button type="button" style="margin-left:15px" class="btn btn-xs btn-primary" ng-click="obeya.milestones.create()"><i class="glyphicon glyphicon-asterisk"></i> Create a new root</button>
-                    </th>
-                    <th style="width:15%">Status</th>
-                    <th style="width:15%">Due Date</th>
-                    <th>Activities</th>
-                    <th style="width:10%">Action</th>
-                  </tr>
-                  <tr ng-repeat="hierarchy in milestonesToshow">
-                    <td style="width:20%">
-                      <span class="dont-break-out">
-                            <a ng-show="milestone.id !== hierarchy.id" href="#" ng-click="showContext(hierarchy)">{{ hierarchy.longname}}</a>
+          <br>
+          <!-- *************** -->
+          <!-- LIST MILESTONES     -->
+          <!-- *************** -->
+          <div ng-if="viewMode.Milestones==='List'">
+            <table class="table table-hover">
+              <tr>
+                <th style="width:20%">Name
+                  <button type="button" style="margin-left:15px" class="btn btn-xs btn-primary" ng-click="obeya.milestones.create()"><i class="glyphicon glyphicon-asterisk"></i> Create a new root</button>
+                </th>
+                <th style="width:15%">Status</th>
+                <th style="width:15%">Due Date</th>
+                <th>Activities</th>
+                <th style="width:10%">Action</th>
+              </tr>
+              <tr ng-repeat="hierarchy in milestonesToshow">
+                <td style="width:20%">
+                  <span class="dont-break-out">
+                            <a ng-show="milestone.id !== hierarchy.id" href="#" ng-click="showContext(hierarchy)"><span style="padding-left:{{10 * countDot(hierarchy.longname)}}px;" ng-bind-html="hierarchy.longname"></span></a>
                             <a ng-show="milestone.id === hierarchy.id" href="#" editable-text="milestone.longname"  blur="submit">{{ milestone.longname || 'empty'}}</a>
                             <div  ng-show="milestone.id === hierarchy.id"  class="btn-group" style="width:90%;">
                               <tags-input ng-model="hierarchy.tags" placeholder="Add a tag" use-strings="true" on-tag-added="addGroups($tag, hierarchy._id, hierarchy.tags)" on-tag-removed="removeGroups($tag, hierarchy._id, hierarchy.tags)">
@@ -109,76 +124,72 @@
                             </div>
 
                           </span>
-                      <td style="width:15%">
-                        <div class="" ng-show="milestone.id !== hierarchy.id">
-                          <button title="Not Applicable" type="button" class="btn btn-xs" ng-class="{'btn-info':hierarchy.status==='N/A'}">N</button>
-                          <button title="Forecasted" type="button" class="btn btn-xs btn-default">F</button>
-                          <button title="Planned" type="button" class="btn btn-xs btn-default">P</button>
-                          <button title="Engaged" type="button" class="btn btn-xs btn-default">E</button>
-                          <button title="Achieved" type="button" class="btn btn-xs btn-default">A</button>
-                        </div>
-                        <div class="" ng-show="milestone.id === hierarchy.id">
-                          <button style="width:100px;text-align:left" title="Not Applicable" type="button" class="btn btn-xs" ng-class="{'btn-info':hierarchy.status==='N/A'}" ng-click="updateStatusMilestone(hierarchy,'N/A')">Not Applicable</button><br>
-                          <button style="width:100px;text-align:left" title="Forecasted" type="button" class="btn btn-xs btn-default">Forecasted</button><br>
-                          <button style="width:100px;text-align:left" title="Planned" type="button" class="btn btn-xs btn-default">Planned</button><br>
-                          <button style="width:100px;text-align:left" title="Engaged" type="button" class="btn btn-xs btn-default">Engaged</button><br>
-                          <button style="width:100px;text-align:left" title="Achieved" type="button" class="btn btn-xs btn-default">Achieved</button>
-                        </div>
-                      </td>
-                      <td style="width:15%">
-                        <div class="" ng-show="milestone.id !== hierarchy.id">
-                          {{hierarchy.duedate}}
+                  <td style="width:15%">
+                    <div class="" ng-show="milestone.id !== hierarchy.id">
+                      <button title="Not Applicable" type="button" class="btn btn-xs" ng-class="{'btn-gray':hierarchy.milestone.status==='N/A'}" ng-click="updateStatus(hierarchy,'N/A')">N</button>
+                      <button title="Forecasted" type="button" class="btn btn-xs " ng-class="{'btn-info':hierarchy.milestone.status==='Forecasted'}" ng-click="updateStatus(hierarchy,'Forecasted')">F</button>
+                      <button title="Planned" type="button" class="btn btn-xs " ng-class="{'btn-info':hierarchy.milestone.status==='Planned'}" ng-click="updateStatus(hierarchy,'Planned')">P</button>
+                      <button title="Engaged" type="button" class="btn btn-xs " ng-class="{'btn-primary':hierarchy.milestone.status==='Engaged'}" ng-click="updateStatus(hierarchy,'Engaged')">E</button>
+                      <button title="Achieved" type="button" class="btn btn-xs " ng-class="{'btn-success':hierarchy.milestone.status==='Achieved'}" ng-click="updateStatus(hierarchy,'Achieved')">A</button>
+                    </div>
+                    <div class="" ng-show="milestone.id === hierarchy.id">
+                      <button style="width:100px;text-align:left" title="Not Applicable" type="button" class="btn btn-xs btn-default" ng-class="{'btn-info':hierarchy.milestone.status==='N/A'}"  ng-click="updateStatus(hierarchy,'N/A')">Not Applicable</button><br>
+                      <button style="width:100px;text-align:left" title="Forecasted" type="button" class="btn btn-xs btn-default" ng-class="{'btn-info':hierarchy.milestone.status==='Forecasted'}" ng-click="updateStatus(hierarchy,'Forecasted')">Forecasted</button><br>
+                      <button style="width:100px;text-align:left" title="Planned" type="button" class="btn btn-xs btn-default" ng-class="{'btn-info':hierarchy.milestone.status==='Planned'}" ng-click="updateStatus(hierarchy,'Planned')">Planned</button><br>
+                      <button style="width:100px;text-align:left" title="Engaged" type="button" class="btn btn-xs btn-default" ng-class="{'btn-info':hierarchy.milestone.status==='Engaged'}"  ng-click="updateStatus(hierarchy,'Engaged')">Engaged</button><br>
+                      <button style="width:100px;text-align:left" title="Achieved" type="button" class="btn btn-xs btn-default" ng-class="{'btn-info':hierarchy.milestone.status==='Achieved'}" ng-click="updateStatus(hierarchy,'Achieved')">Achieved</button>
+                    </div>
+                  </td>
+                  <td style="width:15%">
+                    <div class="" ng-show="milestone.id !== hierarchy.id">
+                      {{hierarchy.milestone.dueDate | date:'mediumDate'}}
+                    </div>
+                    <div class="" ng-show="milestone.id === hierarchy.id">
+                      <md-button class="md-button-slim" ng-click="showDatePicker(hierarchy,'duedate', $event)" aria-label="none">
+                        <span ng-class="{'MandatoryField':hierarchy.duedate === undefined}"> {{ (hierarchy.duedate | date:'mediumDate') || 'empty' }}</span>
+                      </md-button>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="" ng-show="milestone.id !== hierarchy.id">
+                      <button title="Data Designer" type="button" class="btn btn-xs " ng-click="updateActivities(hierarchy,'DD')" ng-class="{'btn-info':hierarchy.milestone.activities.indexOf('DD')>-1}">DD</button>
+                      <button title="Business Referent" type="button" class="btn btn-xs " ng-click="updateActivities(hierarchy,'BR')" ng-class="{'btn-info':hierarchy.milestone.activities.indexOf('BR')>-1}">BR</button>
+                      <button title="Data Vizualisation" type="button" class="btn btn-xs " ng-click="updateActivities(hierarchy,'VIZ')" ng-class="{'btn-info':hierarchy.milestone.activities.indexOf('VIZ')>-1}">VIZ</button>
+                      <button title="Data Architecture" type="button" class="btn btn-xs " ng-click="updateActivities(hierarchy,'DA')" ng-class="{'btn-info':hierarchy.milestone.activities.indexOf('DA')>-1}">DA</button>
+                      <button title="Analytics & IHM" type="button" class="btn btn-xs " ng-click="updateActivities(hierarchy,'ANA')" ng-class="{'btn-info':hierarchy.milestone.activities.indexOf('ANA')>-1}">ANA</button>
+                      <button title="Change Management" type="button" class="btn btn-xs " ng-click="updateActivities(hierarchy,'CM')" ng-class="{'btn-info':hierarchy.milestone.activities.indexOf('CM')>-1}">CM</button>
+                      <button title="System Management" type="button" class="btn btn-xs " ng-click="updateActivities(hierarchy,'SM')" ng-class="{'btn-info':hierarchy.milestone.activities.indexOf('SM')>-1}">SM</button>
+                      <button title="Master Data Management" type="button" class="btn btn-xs " ng-click="updateActivities(hierarchy,'MDM')" ng-class="{'btn-info':hierarchy.milestone.activities.indexOf('MDM')>-1}">MDM</button>
+                      <button title="Project Office Management" type="button" class="btn btn-xs " ng-click="updateActivities(hierarchy,'PMO')" ng-class="{'btn-info':hierarchy.milestone.activities.indexOf('PMO')>-1}">PMO</button></button>
+                    </div>
+                    <div class="" ng-show="milestone.id === hierarchy.id">
 
-                        </div>
-                        <div class="" ng-show="milestone.id === hierarchy.id">
-                          <md-button class="md-button-slim" ng-click="showDatePicker(hierarchy,'duedate', $event)" aria-label="none">
-                            <span ng-class="{'MandatoryField':hierarchy.duedate === undefined}"> {{ (hierarchy.duedate | date:'mediumDate') || 'empty' }}</span>
-                          </md-button>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="" ng-show="milestone.id !== hierarchy.id">
+                      <button style="width:150px;text-align:left" title="Data Designer" ng-click="updateActivities(hierarchy,'DD')"  type="button" class="btn btn-xs "  ng-class="{'btn-info':hierarchy.milestone.activities.indexOf('DD')>-1}">Data Designer</button><br>
+                      <button style="width:150px;text-align:left" title="Business Referent" ng-click="updateActivities(hierarchy,'BR')" type="button" class="btn btn-xs "  ng-class="{'btn-info':hierarchy.milestone.activities.indexOf('BR')>-1}">Business Referent</button><br>
+                      <button style="width:150px;text-align:left" title="Data Vizualisation" ng-click="updateActivities(hierarchy,'VIZ')"  type="button" class="btn btn-xs "  ng-class="{'btn-info':hierarchy.milestone.activities.indexOf('VIZ')>-1}">Data Vizualisation</button><br>
+                      <button style="width:150px;text-align:left" title="Data Architecture" ng-click="updateActivities(hierarchy,'DA')"  type="button" class="btn btn-xs "  ng-class="{'btn-info':hierarchy.milestone.activities.indexOf('DA')>-1}">Data Architecture</button><br>
+                      <button style="width:150px;text-align:left" title="Analytics & IHM" ng-click="updateActivities(hierarchy,'ANA')"  type="button" class="btn btn-xs "  ng-class="{'btn-info':hierarchy.milestone.activities.indexOf('ANA')>-1}">Analytics & IHM</button><br>
+                      <button style="width:150px;text-align:left" title="Change Management"  ng-click="updateActivities(hierarchy,'CM')" type="button" class="btn btn-xs "  ng-class="{'btn-info':hierarchy.milestone.activities.indexOf('CM')>-1}">Change Management</button><br>
+                      <button style="width:150px;text-align:left" title="System Management" ng-click="updateActivities(hierarchy,'SM')"  type="button" class="btn btn-xs "  ng-class="{'btn-info':hierarchy.milestone.activities.indexOf('SM')>-1}">System Management</button><br>
+                      <button style="width:150px;text-align:left" title="Master Data Management" ng-click="updateActivities(hierarchy,'MDM')"  type="button" class="btn btn-xs "  ng-class="{'btn-info':hierarchy.milestone.activities.indexOf('MDM')>-1}">Master Data Management</button><br>
+                      <button style="width:150px;text-align:left" title="Project Office Management" ng-click="updateActivities(hierarchy,'PMO')"  type="button" class="btn btn-xs "  ng-class="{'btn-info':hierarchy.milestone.activities.indexOf('PMO')>-1}">Project Office Management</button></button><br>
+                    </div>
 
-                          <button title="Data Designer" type="button" class="btn btn-xs btn-default">DD</button>
-                          <button title="Business Referent" type="button" class="btn btn-xs btn-default">BR</button>
-                          <button title="Data Vizualisation" type="button" class="btn btn-xs btn-default">VIZ</button>
-                          <button title="Data Architecture" type="button" class="btn btn-xs btn-default">DA</button>
-                          <button title="Analytics & IHM" type="button" class="btn btn-xs btn-default">ANA</button>
-                          <button title="Change Management" type="button" class="btn btn-xs btn-default">CM</button>
-                          <button title="System Management" type="button" class="btn btn-xs btn-default">SM</button>
-                          <button title="Master Data Management" type="button" class="btn btn-xs btn-default">MDM</button>
-                          <button title="Project Office Management" type="button" class="btn btn-xs btn-default">PMO</button></button>
-                        </div>
-                        <div class="" ng-show="milestone.id === hierarchy.id">
-
-                          <button style="width:150px;text-align:left" title="Data Designer" type="button" class="btn btn-xs btn-default">Data Designer</button><br>
-                          <button style="width:150px;text-align:left" title="Business Referent" type="button" class="btn btn-xs btn-default">Business Referent</button><br>
-                          <button style="width:150px;text-align:left" title="Data Vizualisation" type="button" class="btn btn-xs btn-default">Data Vizualisation</button><br>
-                          <button style="width:150px;text-align:left" title="Data Architecture" type="button" class="btn btn-xs btn-default">Data Architecture</button><br>
-                          <button style="width:150px;text-align:left" title="Analytics & IHM" type="button" class="btn btn-xs btn-default">Analytics & IHM</button><br>
-                          <button style="width:150px;text-align:left" title="Change Management" type="button" class="btn btn-xs btn-default">Change Management</button><br>
-                          <button style="width:150px;text-align:left" title="System Management" type="button" class="btn btn-xs btn-default">System Management</button><br>
-                          <button style="width:150px;text-align:left" title="Master Data Management" type="button" class="btn btn-xs btn-default">Master Data Management</button><br>
-                          <button style="width:150px;text-align:left" title="Project Office Management" type="button" class="btn btn-xs btn-default">Project Office Management</button></button><br>
-                        </div>
-
-                      </td>
-                      <td style="width:10%">
-                        <a class="btn btn-primary btn-xs" ng-show="milestone.id !== hierarchy.id" data-nodrag="" ng-click="obeya.milestones.create(hierarchy, $index)" style="margin-right: 8px;"><span class="glyphicon glyphicon-plus"></span></a>
-                        <a class="btn btn-danger btn-xs" ng-show="milestone.id !== hierarchy.id" data-nodrag="" ng-click="delete(hierarchy, $index)"><span class="glyphicon glyphicon-remove"></span></a>
-                        <a class="btn btn-success btn-xs" ng-show="milestone.id === hierarchy.id" href="#milestones" ng-click="hideContext(milestone)">
+                  </td>
+                  <td style="width:10%">
+                    <a class="btn btn-primary btn-xs" ng-show="milestone.id !== hierarchy.id" data-nodrag="" ng-click="obeya.milestones.create(hierarchy, $index)" style="margin-right: 8px;"><span class="glyphicon glyphicon-plus"></span></a>
+                    <a class="btn btn-danger btn-xs" ng-show="milestone.id !== hierarchy.id" data-nodrag="" ng-click="delete(hierarchy, $index)"><span class="glyphicon glyphicon-remove"></span></a>
+                    <a class="btn btn-success btn-xs" ng-show="milestone.id === hierarchy.id" href="#milestones" ng-click="hideContext(milestone)">
                                 <span class="fa fa-save"></span>
                             </a>
 
-                      </td>
-                  </tr>
-                </table>
-              </div>
-            </div>
+                  </td>
+              </tr>
+            </table>
           </div>
-
         </div>
       </div>
+
     </div>
 
   </div>

@@ -229,18 +229,23 @@ Please report with maximum of accucracy your problem to be able to correct it an
                                       <div class="scrollable-dropdown-menu" style="display:inline-block; ">
                                         <i class="fa fa-flash"></i>
                                         <div class="text-muted" style="margin-right:10px;display:inline-block; ">
-                                          Activity
+                                        Activity
+                                        <i class="fa fa-check" style="color:green" ng-if="blnActivityValid"></i>
+                                        <i class="fa fa-question" style="color:orange" ng-if="!blnActivityValid"></i>
                                         </div>
                                         <a style="display:inline-block; " href="#" editable-text="task.activity" e-style="width: 500px;display:inline-block;" e-uib-typeahead="activity.longname for activity in activities | filter:$viewValue | limitTo:50" typeahead-min-length="0" typeahead-template-url="memberTemplate.html">
                                           {{task.activity || 'Please give activity' }}
                                         </a>
+
                                       </div>
                                     </li><br>
                                     <li style="margin-top:5px">
                                       <div class="scrollable-dropdown-menu" style="display:inline-block; ">
                                         <i class="fa fa-map-marker"></i>
                                         <span class="text-muted" style="margin-right:10px">
-                                          Context
+                                        Context
+                                        <i class="fa fa-check" style="color:green" ng-if="blnContextValid"></i>
+                                        <i class="fa fa-question" style="color:orange" ng-if="!blnContextValid"></i>
                                         </span>
                                           <a href="#" editable-text="task.context" e-style="width: 500px" e-uib-typeahead="context.longname for context in contexts | filter:$viewValue | limitTo:50">
                                           {{task.context || 'Please give context' }}

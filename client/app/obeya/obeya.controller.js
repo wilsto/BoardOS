@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, Notification, $location, $stateParams, $rootScope, dateRangeService, VisDataSet, $timeout, Milestones, Tasks, generator, graphGenerator, dataGenerator, myLibrary) {
+angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $window, Notification, $location, $stateParams, $rootScope, dateRangeService, VisDataSet, $timeout, Milestones, Tasks, Anomalies, generator, graphGenerator, dataGenerator, myLibrary) {
 
   function arrayAverage(arr) {
     return _.reduce(arr, function(memo, num) {
@@ -14,145 +14,177 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, Not
     }, 0);
   }
 
-  $scope.walls = [
-    {
-      id: 0,
-      title: 'Summary',
-      name: 'Summary'
-    }, {
-      id: 1,
-      title: 'News & People',
-      name: 'News'
-    }, {
-      id: 2,
-      title: 'Engagements',
-      name: 'Milestones'
-    }, {
-      id: 3,
-      title: 'Tasks',
-      name: 'Tasks'
-    }, {
-      id: 4,
-      title: 'Performance',
-      name: 'Performance'
-    }, {
-      id: 5,
-      title: 'ProblemSolving',
-      name: 'ProblemSolving'
-    }, {
-      id: 6,
-      title: 'Process',
-      name: 'Process'
-    }, {
-      id: 7,
-      title: 'Properties',
-      name: 'Properties'
-    }
-  ];
-
-  $scope.activeWall = _.filter($scope.walls, function(wall) {
-    return wall.id === 0;
-  })[0];
+  $scope.walls = [{
+    id: 0,
+    title: 'Summary',
+    name: 'Summary'
+  }, {
+    id: 1,
+    title: 'People',
+    name: 'People'
+  }, {
+    id: 2,
+    title: 'News',
+    name: 'News'
+  }, {
+    id: 3,
+    title: 'Engagements',
+    name: 'Milestones'
+  }, {
+    id: 4,
+    title: 'Tasks',
+    name: 'Tasks'
+  }, {
+    id: 5,
+    title: 'Performance',
+    name: 'Performance'
+  }, {
+    id: 6,
+    title: 'ProblemSolving',
+    name: 'ProblemSolving'
+  }, {
+    id: 7,
+    title: 'Process',
+    name: 'Process'
+  }, {
+    id: 8,
+    title: 'Properties',
+    name: 'Properties'
+  }];
 
   $scope.obeyaMode = 'all';
   $scope.filters = '';
 
   $scope.viewMode = {};
-  $scope.viewMode.Milestones = 'Timeline';
-  $scope.viewMode.Tasks = 'PDCA';
+  $scope.viewMode.Milestones = 'List';
+  $scope.viewMode.Tasks = 'overview';
+  $scope.viewMode.Anomalies = 'List';
 
-  if ($stateParams.id) {
-    // ouverture de l'obeya
-    $scope.myPromise = $http.get('/api/dashboardCompletes/' + $stateParams.id).success(function(obeya) {
-      $scope.obeya = obeya;
-console.log('obeya',obeya);
-      $scope.obeya.milestones = new Milestones($scope.obeya);
-      $scope.obeya.tasks = new Tasks($scope.obeya);
+  $scope.propertiesToshow = 'Name';
+  $scope.milestonesTypeToshow = 'All';
+  $scope.anomaliesTypeToshow = 'To correct';
 
-      if ($location.hash()) {
-        $scope.showCard($location.hash());
-      }
+  /**
+   * loadObeya
+   * @return {[type]} [description]
+   */
+  $scope.loadObeya = function() {
+    if ($stateParams.id) {
+      // ouverture de l'obeya
+      $scope.myPromise = $http.get('/api/dashboardCompletes/' + $stateParams.id).success(function(obeya) {
+        $scope.obeya = obeya;
+        $scope.obeya.milestones = new Milestones($scope.obeya);
+        $scope.obeya.anomalies = new Anomalies($scope.obeya);
+        $scope.obeya.tasks = new Tasks($scope.obeya);
 
-      var filterPerimeter = {
-        $or: [],
-        metrics: {
-          $elemMatch: {
-            status: 'Finished'
+        $rootScope.obeyaPerimeter = $scope.obeya.perimeter;
+
+        var activeWallId = ($window.sessionStorage.getItem('activeWallId')) ? activeWallId = parseInt($window.sessionStorage.getItem('activeWallId')) : 0;
+
+        $scope.activeWall = _.filter($scope.walls, function(wall) {
+          return wall.id === activeWallId;
+        })[0];
+
+        $scope.showCard($scope.activeWall.name);
+
+        var filterPerimeter = {
+          $or: [],
+          metrics: {
+            $elemMatch: {
+              status: 'Finished'
+            }
           }
-        }
-      };
-      _.each($scope.obeya.perimeter, function(perimeter) {
-        if (perimeter.activity && perimeter.context) {
-          filterPerimeter['$or'].push({
-            activity: {
-              '$regex': perimeter.activity || '',
-              $options: '-i'
-            },
-            context: {
-              '$regex': perimeter.context || '',
-              $options: '-i'
-            }
-          });
-        } else if (!perimeter.context) {
-          filterPerimeter['$or'].push({
-            activity: {
-              '$regex': perimeter.activity || '',
-              $options: '-i'
-            }
-          });
-        } else if (!perimeter.activity) {
-          filterPerimeter['$or'].push({
-            context: {
-              '$regex': perimeter.context || '',
-              $options: '-i'
-            }
-          });
-        }
-        $scope.filterPerimeter = filterPerimeter;
-        $rootScope.filterPerimeter = filterPerimeter;
-        console.log('$scope.filterPerimeter', $scope.filterPerimeter);
+        };
+        _.each($scope.obeya.perimeter, function(perimeter) {
+          if (perimeter.activity && perimeter.context) {
+            filterPerimeter['$or'].push({
+              activity: {
+                '$regex': perimeter.activity || '',
+                $options: '-i'
+              },
+              context: {
+                '$regex': perimeter.context || '',
+                $options: '-i'
+              }
+            });
+          } else if (!perimeter.context) {
+            filterPerimeter['$or'].push({
+              activity: {
+                '$regex': perimeter.activity || '',
+                $options: '-i'
+              }
+            });
+          } else if (!perimeter.activity) {
+            filterPerimeter['$or'].push({
+              context: {
+                '$regex': perimeter.context || '',
+                $options: '-i'
+              }
+            });
+          }
+          $scope.filterPerimeter = filterPerimeter;
+          $rootScope.filterPerimeter = filterPerimeter;
+        });
+
+        // appel des activités en cours
+        $rootScope.$broadcast('obeya:searchTasks', $scope.obeya);
       });
+    }
+  };
+  $scope.loadObeya();
 
-      // appel des activités en cours
-      $rootScope.$broadcast('obeya:searchTasks', $scope.obeya);
-    });
-  }
 
+
+  /**
+   * NavCarroussel
+   * // Effet sur le carrousel
+   * @param  {[type]} increment [description]
+   * @return {[type]}           [description]
+   */
   $scope.NavCaroussel = function(increment) {
-
-    // Effet sur le carrousel
     var carousel = document.getElementById('carousel');
     var panelCount = carousel.children.length;
     var theta = 0;
     var prevWallId = $scope.activeWall.id;
     var wallId = $scope.activeWall.id;
-    if ($scope.activeWall.id > -1 && $scope.activeWall.id < 8) {
+    if (increment === 0) {
+      wallId = 0;
+    } else if (($scope.activeWall.id > -1 && increment > 0 && $scope.activeWall.id < 8) || ($scope.activeWall.id > 0 && increment < 0 && $scope.activeWall.id < 8)) {
       wallId += increment;
     } else {
-      if (wallId > 0) {
+      if (wallId === 8) {
         wallId = 0;
-      } else {
-        wallId = 7;
+      } else if (wallId === 0) {
+        wallId = 8;
       }
     }
     $scope.activeWall = _.filter($scope.walls, function(wall) {
       return wall.id === wallId;
     })[0];
+    $window.sessionStorage.setItem('activeWallId', $scope.activeWall.id);
+
     theta += (360 / panelCount) * $scope.activeWall.id * -1;
     carousel.style.transform = 'translateZ( -288px ) rotateY(' + theta + 'deg)';
   };
 
+
+
+  /**
+   * ShowCard
+   * @param  {[type]} card    [description]
+   * @param  {[type]} filters [description]
+   * @return {[type]} Nothing [description]
+   */
   $scope.showCard = function(card, filters) {
-
     $scope.filters = filters;
-    $rootScope.$broadcast('obeya:searchContext', $scope.obeya);
-
     var nextWall = _.filter($scope.walls, function(wall) {
       return wall.name === card;
     })[0];
     var incrementTo = nextWall.id;
-
-    $scope.NavCaroussel(incrementTo - $scope.activeWall.id);
+    if (incrementTo !== $scope.activeWall.id) {
+      $scope.NavCaroussel(incrementTo - $scope.activeWall.id);
+    }
+    $rootScope.$broadcast('obeya:searchContext', $scope.obeya);
   };
 
   $scope.hideCard = function(card) {
@@ -170,10 +202,8 @@ console.log('obeya',obeya);
   // recherche des activités en cours
   $scope.$on('obeya:searchTasks', function(event, data) {
     $http.get('/api/dashboardCompletes/showTasks/' + $stateParams.id).success(function(tasks) {
-
       // Appel des classes de taches
       $rootScope.$broadcast('dateRangeService:updated', dateRangeService.rangeDateTxt);
-
       // Appel des engagement en cours
       $rootScope.$broadcast('obeya:searchContext', $scope.obeya);
     });
@@ -190,157 +220,117 @@ console.log('obeya',obeya);
       var arrSubGroups = [];
       var groups = new VisDataSet();
 
-      $scope.$apply(function() {
-
-        //Action Plan
-        $scope.filteredActionPlanTasks = _.filter($scope.obeya.tasks, function(task) {
-          return task.actionPlan === true;
+      // pour chaque groupe // MILESTONE
+      var milestones = $scope.obeya.milestones.selectedAndApplicable();
+      _.each(milestones, function(milestone) {
+        // on ajoute les subgroups à la liste des groupes
+        groups.add({
+          id: milestone.id,
+          content: milestone.longname
         });
-        $scope.filteredActionPlanTasksLoad = _.reduce($scope.filteredActionPlanTasks, function(s, task) {
-          return s + parseFloat(task.metrics[task.metrics.length - 1].projectedWorkload || task.metrics[task.metrics.length - 1].targetLoad);
-        }, 0).toFixed(1);
-
-        _.each($scope.filteredPlanTasks, function(task) {
-          var level0 = task.context.substring(0, task.context.indexOf('.'));
-          var suffixe = task.context.substring(task.context.indexOf('.') + 1);
-          var level1 = suffixe.substring(0, suffixe.indexOf('.'));
-          if (arrGroups.indexOf(level0) === -1) {
-            arrGroups.push(level0);
-            arrSubGroups[level0] = {
-              subgroup: []
-            };
-          }
-          if (arrSubGroups[level0].subgroup.indexOf(level1) === -1) {
-            arrSubGroups[level0].subgroup.push(level0 + '.' + level1);
-          }
-
+        if (milestone.milestone && milestone.milestone.dueDate) {
           items.add({
-            id: task._id,
-            group: level0 + '.' + level1,
-            content: '<a href="/task/' + task._id + '"">' + '<img alt="" src="' + (
+            id: milestone.id,
+            group: milestone.id,
+            content: '<img src="assets/images/milestone.png" style="width:20px;height:20px;" alt="" > ',
+            start: milestone.milestone.dueDate
+          });
+        }
+      });
+
+      groups.add({
+        id: 'NOGROUP',
+        content: 'WITHOUT MILESTONE'
+      });
+
+
+      _.each($scope.obeya.tasks.filterPlan, function(task) {
+        var group = _.filter(milestones, function(milestone) {
+          return task.context.indexOf(milestone.longname) > -1;
+        });
+        group = (group.length > 0) ? group[0].id : 'NOGROUP';
+
+        items.add({
+          id: task._id,
+          group: group,
+          content: '<a href="/task/' + task._id + '"">' + '<img alt="" src="' + (
             task.actors[0].avatar || 'assets/images/avatars/avatar.png') + '" class="img-circle" style="width:25px;height:25px;" err-src="assets/images/avatars/avatar.png"/> ' + task.name + '</a>',
-            start: new Date(task.metrics[task.metrics.length - 1].startDate || task.metrics[0].targetstartDate),
-            end: new Date(task.metrics[task.metrics.length - 1].endDate || task.metrics[0].targetEndDate),
-            className: 'label label-default'
-          });
+          start: new Date(task.metrics[task.metrics.length - 1].startDate || task.metrics[0].targetstartDate),
+          end: new Date(task.metrics[task.metrics.length - 1].endDate || task.metrics[0].targetEndDate),
+          className: 'label label-default'
         });
+      });
 
-        _.each($scope.filteredInProgressTasks, function(task) {
-          var level0 = task.context.substring(0, task.context.indexOf('.'));
-          var suffixe = task.context.substring(task.context.indexOf('.') + 1);
-          var level1 = suffixe.substring(0, suffixe.indexOf('.'));
-          if (arrGroups.indexOf(level0) === -1) {
-            arrGroups.push(level0);
-            arrSubGroups[level0] = {
-              subgroup: []
-            };
-          }
-          if (arrSubGroups[level0].subgroup.indexOf(level1) === -1) {
-            arrSubGroups[level0].subgroup.push(level0 + '.' + level1);
-          }
+      _.each($scope.obeya.tasks.filterInProgress, function(task) {
+        var group = _.filter(milestones, function(milestone) {
+          return task.context.indexOf(milestone.longname) > -1;
+        });
+        group = (group.length > 0) ? group[0].id : 'NOGROUP';
 
-          items.add({
-            id: task._id,
-            group: level0 + '.' + level1,
-            content: '<a href="/task/' + task._id + '"">' + '<img alt="" src="' + (
+        items.add({
+          id: task._id,
+          group: group,
+          content: '<a href="/task/' + task._id + '"">' + '<img alt="" src="' + (
             task.actors[0].avatar || 'assets/images/avatars/avatar.png') + '" class="img-circle" style="width:25px;height:25px;" err-src="assets/images/avatars/avatar.png"/> ' + task.name + '</a>',
-            start: new Date(task.metrics[task.metrics.length - 1].startDate || task.metrics[0].targetstartDate),
-            end: new Date(task.metrics[task.metrics.length - 1].endDate || task.metrics[0].targetEndDate),
-            className: 'label label-info '
-          });
+          start: new Date(task.metrics[task.metrics.length - 1].startDate || task.metrics[0].targetstartDate),
+          end: new Date(task.metrics[task.metrics.length - 1].endDate || task.metrics[0].targetEndDate),
+          className: 'label label-info '
         });
+      });
 
-        _.each($scope.filteredFinishedTasks, function(task) {
-          var level0 = task.context.substring(0, task.context.indexOf('.'));
-          var suffixe = task.context.substring(task.context.indexOf('.') + 1);
-          var level1 = suffixe.substring(0, suffixe.indexOf('.'));
-          if (arrGroups.indexOf(level0) === -1) {
-            arrGroups.push(level0);
-            arrSubGroups[level0] = {
-              subgroup: []
-            };
-          }
-          if (arrSubGroups[level0].subgroup.indexOf(level1) === -1) {
-            arrSubGroups[level0].subgroup.push(level0 + '.' + level1);
-          }
+      _.each($scope.obeya.tasks.filterFinished, function(task) {
+        var group = _.filter(milestones, function(milestone) {
+          return task.context.indexOf(milestone.longname) > -1;
+        });
+        group = (group.length > 0) ? group[0].id : 'NOGROUP';
 
-          items.add({
-            id: task._id,
-            group: level0 + '.' + level1,
-            content: '<a href="/task/' + task._id + '"">' + '<img alt="" src="' + (
+        items.add({
+          id: task._id,
+          group: group,
+          content: '<a href="/task/' + task._id + '"">' + '<img alt="" src="' + (
             task.actors[0].avatar || 'assets/images/avatars/avatar.png') + '" class="img-circle" style="width:25px;height:25px;" err-src="assets/images/avatars/avatar.png"/> ' + task.name + '</a>',
-            start: new Date(task.metrics[task.metrics.length - 1].startDate || task.metrics[0].targetstartDate),
-            end: new Date(task.metrics[task.metrics.length - 1].endDate || task.metrics[0].targetEndDate),
-            className: 'label label-success '
-          });
+          start: new Date(task.metrics[task.metrics.length - 1].startDate || task.metrics[0].targetstartDate),
+          end: new Date(task.metrics[task.metrics.length - 1].endDate || task.metrics[0].targetEndDate),
+          className: 'label label-success '
         });
+      });
 
-        _.each($scope.filteredReviewedTasks, function(task) {
-          var level0 = task.context.substring(0, task.context.indexOf('.'));
-          var suffixe = task.context.substring(task.context.indexOf('.') + 1);
-          var level1 = suffixe.substring(0, suffixe.indexOf('.'));
-          if (arrGroups.indexOf(level0) === -1) {
-            arrGroups.push(level0);
-            arrSubGroups[level0] = {
-              subgroup: []
-            };
-          }
-          if (arrSubGroups[level0].subgroup.indexOf(level1) === -1) {
-            arrSubGroups[level0].subgroup.push(level0 + '.' + level1);
-          }
+      _.each($scope.obeya.tasks.filterReviewed, function(task) {
 
-          items.add({
-            id: task._id,
-            group: level0 + '.' + level1,
-            content: '<a href="/task/' + task._id + '"">' + '<img alt="" src="' + (
+        var group = _.filter(milestones, function(milestone) {
+          return task.context.indexOf(milestone.longname) > -1;
+        });
+        group = (group.length > 0) ? group[0].id : 'NOGROUP';
+
+        items.add({
+          id: task._id,
+          group: group,
+          content: '<a href="/task/' + task._id + '"">' + '<img alt="" src="' + (
             task.actors[0].avatar || 'assets/images/avatars/avatar.png') + '" class="img-circle" style="width:25px;height:25px;" err-src="assets/images/avatars/avatar.png"/> ' + task.name + '</a>',
-            start: new Date(task.metrics[task.metrics.length - 1].startDate || task.metrics[0].targetstartDate),
-            end: new Date(task.metrics[task.metrics.length - 1].endDate || task.metrics[0].targetEndDate),
-            className: 'label label-success '
-          });
+          start: new Date(task.metrics[task.metrics.length - 1].startDate || task.metrics[0].targetstartDate),
+          end: new Date(task.metrics[task.metrics.length - 1].endDate || task.metrics[0].targetEndDate),
+          className: 'label label-success '
         });
+      });
 
-        // pour chaque groupe de level0
-        _.each(arrGroups, function(group) {
-
-          _.each(arrSubGroups[group], function(subgroups) {
-
-            subgroups = _.compact(_.uniq(subgroups));
-
-            if (subgroups.length === 0) {
-              groups.add({id: group, content: group});
-            } else {
-
-              // on ajoute les subgroups à la liste des groupes
-              _.each(subgroups, function(subgroup) {
-                groups.add({
-                  id: subgroup, content: subgroup.split('.')[1]
-                });
-              });
-
-              groups.add({id: group, content: group, nestedGroups: subgroups});
-            }
-
-          });
-        });
+      $timeout(function() {
         // create visualization
         $scope.timelineOptions = {
-          orientation: 'top',
-          autoResize: true,
+          orientation: 'both',
+          start: '2018-03-01',
+          end: '2018-07-01',
           showCurrentTime: true,
-          zoomKey: 'ctrlKey',
-          end: '2018-05-01',
-
-          groupOrder: 'content' // groupOrder can be a property name or a sorting function
+          zoomMin: 1000 * 60 * 60 * 24, // one day in milliseconds
+          zoomMax: 1000 * 60 * 60 * 24 * 31 * 4 // about three months in milliseconds
         };
-        $scope.groups = groups;
-        $scope.timelineData = {
+
+        $scope.timelineDataTasks = {
           items: items,
-          groups: $scope.groups
+          groups: groups
         };
-        $scope.timelineLoaded = true;
 
-      });
+        $scope.timelineLoaded = true;
+      }, 0);
     });
   });
 
@@ -348,54 +338,262 @@ console.log('obeya',obeya);
   $scope.$on('obeya:searchContext', function(event, data) {
 
     switch ($scope.filters) {
+
+      // milestone
+      case 'toForecast':
+        $scope.milestonesToshow = $scope.obeya.milestones.toForecast();
+        break;
+      case 'ToPlan':
+        $scope.milestonesToshow = $scope.obeya.milestones.toPlan();
+        break;
       case 'ToEngage':
         $scope.milestonesToshow = $scope.obeya.milestones.toEngage();
         break;
+      case 'ToAchieve':
+        $scope.milestonesToshow = $scope.obeya.milestones.toAchieve();
+        break;
+
+        // properties
+      case 'Name':
+        $scope.propertiesToshow = 'Name';
+        break;
+      case 'Perimeter':
+        $scope.propertiesToshow = 'Perimeter';
+        break;
+      case 'Roles':
+        $scope.propertiesToshow = 'Roles';
+        break;
+
+        //all
       default:
         $scope.milestonesToshow = $scope.obeya.milestones.selected();
     }
+    $scope.loadTimeline();
 
+  });
+
+  /**
+   * [description]
+   * @param  {Boolean} thisMilestone [description]
+   * @param  {[type]}  activities    [description]
+   * @return {[type]}                [description]
+   */
+  $scope.updateActivities = function(thisMilestone, activities) {
+    if (!thisMilestone.milestone) {
+      thisMilestone.milestone = {
+        activities: []
+      };
+    }
+    if (thisMilestone.milestone.activities) {
+      var allActivities = thisMilestone.milestone.activities;
+      if (allActivities.indexOf(activities) > -1) {
+        allActivities = _.reject(allActivities, function(a) {
+          return a === activities;
+        });
+        thisMilestone.milestone.activities = _.uniq(allActivities);
+      } else {
+        allActivities.push(activities);
+        thisMilestone.milestone.activities = _.uniq(allActivities);
+      }
+    } else {
+      thisMilestone.milestone.activities = [];
+      thisMilestone.milestone.activities.push(activities);
+    }
+    $scope.obeya.milestones.update(thisMilestone);
+  };
+
+  /**
+   * [description]
+   * @param  {Boolean} thisMilestone [description]
+   * @param  {[type]}  activities    [description]
+   * @return {[type]}                [description]
+   */
+  $scope.updateStatus = function(thisMilestone, status) {
+    if (!thisMilestone.milestone) {
+      thisMilestone.milestone = {
+        activities: []
+      };
+    }
+    if (thisMilestone.milestone.status) {
+      if (thisMilestone.milestone.status === status) {
+        delete thisMilestone.milestone.status;
+      } else {
+        thisMilestone.milestone.status = status;
+      }
+    } else {
+      thisMilestone.milestone.status = status;
+    }
+    $scope.obeya.milestones.update(thisMilestone);
+  };
+
+
+  /**
+   * [description]
+   * @param  {Boolean} thisMilestone [description]
+   * @param  {[type]}  activities    [description]
+   * @return {[type]}                [description]
+   */
+  $scope.updateObeyaRoles = function(role) {
+    if (!$scope.obeya.roles) {
+      $scope.obeya.roles = [];
+    }
+    if ($scope.obeya.roles.indexOf(role) > -1) {
+      $scope.obeya.roles = _.reject($scope.obeya.roles, function(arrayRole) {
+        return role === arrayRole;
+      });
+    } else {
+      $scope.obeya.roles.push(role);
+    }
+  };
+
+  /**
+   * loadTimeline
+   * @return {[type]} [description]
+   */
+  $scope.loadTimeline = function() {
     // create visualization
     var itemsMilestones = new VisDataSet({
       type: {
         start: 'ISODate'
       }
     });
-    // add items to the DataSet
-    itemsMilestones.add([
-      {
-        id: 1,
-        content: 'subgroup0_1',
-        start: '2018-01-23',
-        className: 'green',
-        group: 'QUALITY.MOP'
-      }, {
-        id: 3,
-        content: 'subgroup1_1',
-        start: '2018-01-27',
-        className: '',
-        group: 'FONCTIONNEMENT.CBI'
+
+    // Filter milestones with dates
+    var arrayMilestonesWithDate = _.filter($scope.milestonesToshow, function(milestone) {
+      return milestone.milestone && milestone.milestone.dueDate;
+    });
+
+    //Add milestone to timeline arrayData
+    var index = 0;
+
+    var arrayMilestones = _.map(arrayMilestonesWithDate, function(milestone) {
+      index++;
+      var iconMilestone;
+      var colorMilestone;
+      switch (milestone.milestone.status) {
+        case 'Forecasted':
+          iconMilestone = '<img src="assets/images/plan.png" alt="" style="width:20px;height:20px"> ';
+          colorMilestone = 'bg-gray';
+          break;
+        default:
+          iconMilestone = '';
+          colorMilestone = '';
       }
-    ]);
+      return {
+        id: index,
+        idjson: milestone.id,
+        content: iconMilestone + milestone.longname,
+        start: milestone.milestone.dueDate,
+        className: colorMilestone
+      };
+    });
 
     $timeout(function() {
+      // add arrayData to the DataSet
+      itemsMilestones.add(arrayMilestones);
 
       $scope.timelineOptions2 = {
-        orientation: 'top',
-        start: '2018-01-01',
-        end: '2018-05-01',
+        orientation: 'both',
+        start: '2018-03-01',
+        end: '2018-07-01',
         showCurrentTime: true,
+        // allow manipulation of items
+        editable: true,
         zoomMin: 1000 * 60 * 60 * 24, // one day in milliseconds
         zoomMax: 1000 * 60 * 60 * 24 * 31 * 4 // about three months in milliseconds
       };
 
       $scope.timelineDataMilestones = {
-        items: itemsMilestones,
-        groups: $scope.groups
+        items: itemsMilestones
       };
     }, 0);
 
-  });
+    $timeout(function() {
+      itemsMilestones.on('*', function(event, properties) {
+        if (event === 'update') {
+          bootbox.confirm('Are you sure to move ' + properties.data[0].content + ' to ' + properties.data[0].start + ' ?', function(result) {
+            if (result) {
+              var thisMilestone = _.filter($scope.obeya.milestones.list, function(m) {
+                return m.id === properties.data[0].idjson;
+              })[0];
+              thisMilestone.milestone.dueDate = properties.data[0].start;
+              thisMilestone.milestone.updateDate = new Date();
+              thisMilestone.milestone.updateUser = $rootScope.thisUser;
+
+              $scope.obeya.milestones.update(thisMilestone);
+
+            }
+          });
+        }
+        if (event === 'add') {
+          //milestone dans la timeline avec la bonne date
+          var objectMilestone = itemsMilestones._data[properties.items[0]];
+          //milestone de la liste avec le bon id
+          var thisMilestone = _.filter($scope.obeya.milestones.list, function(m) {
+            return m.longname === objectMilestone.content;
+          });
+          if (thisMilestone.length > 0) {
+            thisMilestone = thisMilestone[0];
+            thisMilestone.milestone = {
+              dueDate: objectMilestone.start,
+              status: objectMilestone.status,
+              updateDate: objectMilestone.updateDate,
+              updateUser: objectMilestone.updateUser
+            };
+          }
+          $scope.obeya.milestones.update(thisMilestone);
+        }
+        if (event === 'remove') {
+          bootbox.confirm('Are you sure to unplan ' + properties.oldData[0].content + ' ?', function(result) {
+            if (result) {
+              //milestone dans la timeline avec la bonne date
+              var objectMilestone = properties.oldData[0];
+              //milestone de la liste avec le bon id
+              var thisMilestone = _.filter($scope.obeya.milestones.list, function(m) {
+                return m.id === objectMilestone.idjson;
+              });
+              if (thisMilestone.length > 0) {
+                thisMilestone = thisMilestone[0];
+                thisMilestone.milestone = {
+                  updateDate: objectMilestone.updateDate,
+                  updateUser: objectMilestone.updateUser
+                };
+              }
+              $scope.obeya.milestones.update(thisMilestone);
+
+            }
+          });
+        }
+      });
+    }, 1000);
+
+
+    $scope.handleDragStart = function(event) {
+      event.dataTransfer.effectAllowed = 'move';
+      var item = {
+        id: new Date(),
+        type: 'point',
+        status: 'Forecasted',
+        content: event.target.innerHTML.trim(),
+        updateDate: new Date(),
+        updateUser: $rootScope.thisUser
+      };
+      event.dataTransfer.setData('text', JSON.stringify(item));
+    };
+
+
+    $timeout(function() { //Move code up the callstack to tell Angular to watch this
+      var items = document.querySelectorAll('.items-panel .item');
+
+      for (var i = items.length - 1; i >= 0; i--) {
+        var item = items[i];
+        item.addEventListener('dragstart', $scope.handleDragStart.bind(this), false);
+      }
+
+    }, 25);
+
+
+  };
 
   var scoreQualityOnQCT = {
     value: 30
@@ -452,70 +650,105 @@ console.log('obeya',obeya);
   };
   //console.log(graphGenerator)
 
+  var initializing = true;
+  $scope.newPerimeterValue = {};
+  $scope.timelineLoaded = false;
+
+
+  $scope.refreshDashboard = function() {
+    $scope.myPromise = $http.get('/api/dashboardCompletes/executeId/' + $stateParams.id).success(function(response) {
+      $scope.checked = !$scope.checked;
+      $scope.loadCompleteDashboard();
+    });
+  };
+
+
+  // *******************
+  // update an obeya
+  // *******************
+  $scope.update = function() {
+    delete $scope.obeya.tasks;
+    delete $scope.obeya.kpis;
+    delete $scope.obeya.alerts;
+
+    if ($scope.newPerimeterValue.activity || $scope.newPerimeterValue.context) {
+      $scope.obeya.perimeter.push({
+        activity: $scope.newPerimeterValue.activity,
+        context: $scope.newPerimeterValue.context
+      });
+    }
+    $scope.myPromise = $http.put('/api/dashboardCompletes/' + $scope.obeya._id, $scope.obeya).success(function() {
+      var logInfo = 'Obeya "' + $scope.obeya.name + '" was updated';
+      Notification.success(logInfo);
+      $scope.newPerimeterValue = {};
+      $scope.showNewPerimeter = false;
+      $scope.loadObeya();
+    });
+  };
+
+
   $scope.dashboard = {
-    widgets: [
-      {
-        col: 0,
-        row: 0,
-        sizeY: 1,
-        sizeX: 1,
-        name: 'Quantitative Over Time',
-        type: 'lineChart',
-        chart: {
-          options: graphGenerator.quantitativeOverTime.options()
-        }
-      }, {
-        col: 1,
-        row: 0,
-        sizeY: 1,
-        sizeX: 1,
-        name: 'Quantitative',
-        type: 'discreteBarChart',
-        chart: {
-          options: graphGenerator.quantitative.options()
-        }
-      }, {
-        col: 2,
-        row: 0,
-        sizeY: 1,
-        sizeX: 1,
-        name: 'Qualitative Over Time',
-        type: 'lineChart',
-        chart: {
-          options: graphGenerator.qualitativeOverTime.options()
-        }
-      }, {
-        col: 3,
-        row: 0,
-        sizeY: 1,
-        sizeX: 1,
-        name: 'Qualitative',
-        type: 'vbullet',
-        chart: {
-          options: generator.qualiChart.options()
-        }
-      }, {
-        col: 0,
-        row: 1,
-        sizeY: 1,
-        sizeX: 2,
-        name: 'Activity Performance',
-        type: 'treemap',
-        chart: {
-          options: generator.treemap.options()
-        }
-      }, {
-        col: 2,
-        row: 1,
-        sizeY: 1,
-        sizeX: 2,
-        name: 'Context Performance',
-        type: 'treemap',
-        chart: {
-          options: generator.treemap.options()
-        }
+    widgets: [{
+      col: 0,
+      row: 0,
+      sizeY: 1,
+      sizeX: 1,
+      name: 'Quantitative Over Time',
+      type: 'lineChart',
+      chart: {
+        options: graphGenerator.quantitativeOverTime.options()
       }
-    ]
+    }, {
+      col: 1,
+      row: 0,
+      sizeY: 1,
+      sizeX: 1,
+      name: 'Quantitative',
+      type: 'discreteBarChart',
+      chart: {
+        options: graphGenerator.quantitative.options()
+      }
+    }, {
+      col: 2,
+      row: 0,
+      sizeY: 1,
+      sizeX: 1,
+      name: 'Qualitative Over Time',
+      type: 'lineChart',
+      chart: {
+        options: graphGenerator.qualitativeOverTime.options()
+      }
+    }, {
+      col: 3,
+      row: 0,
+      sizeY: 1,
+      sizeX: 1,
+      name: 'Qualitative',
+      type: 'vbullet',
+      chart: {
+        options: generator.qualiChart.options()
+      }
+    }, {
+      col: 0,
+      row: 1,
+      sizeY: 1,
+      sizeX: 2,
+      name: 'Activity Performance',
+      type: 'treemap',
+      chart: {
+        options: generator.treemap.options()
+      }
+    }, {
+      col: 2,
+      row: 1,
+      sizeY: 1,
+      sizeX: 2,
+      name: 'Context Performance',
+      type: 'treemap',
+      chart: {
+        options: generator.treemap.options()
+      }
+    }]
   };
 
   // widget events
@@ -542,68 +775,70 @@ console.log('obeya',obeya);
     // FIRST
     dataGenerator.quantitativeOverTime.data().then(function(lineChart) {
       var data1 = lineChart.data.slice(-13);
-      var dataLast = data1.slice(-2,-1);
-      dataLast = _.map(dataLast, function(d){
-        return [{label:'Tasks',value:d.value.count},{label:'Workload',value:d.value.qty}];
+      var dataLast = data1.slice(-2, -1);
+      dataLast = _.map(dataLast, function(d) {
+        return [{
+          label: 'Tasks',
+          value: d.value.count
+        }, {
+          label: 'Workload',
+          value: d.value.qty
+        }];
       })[0];
-      $scope.chartData[1] = [
-        {
-          key: 'Tasks',
-          values: dataLast
-        }
-      ];
+      $scope.chartData[1] = [{
+        key: 'Tasks',
+        values: dataLast
+      }];
 
 
-      data1 = data1.slice(0,12);
+      data1 = data1.slice(0, 12);
       var data2 = _.map(_.cloneDeep(data1), function(d) {
         d.value.count = d.value.qty;
         return d;
       });
-      $scope.chartData[0] = [
-        {
-          key: 'Tasks',
-          strokeWidth: 2,
-          classed: 'dashed',
-          values: data1
-        }, {
-          key: 'Workload',
-          area: true,
-          values: data2
-        }
-      ];
+      $scope.chartData[0] = [{
+        key: 'Tasks',
+        strokeWidth: 2,
+        classed: 'dashed',
+        values: data1
+      }, {
+        key: 'Workload',
+        area: true,
+        values: data2
+      }];
     });
 
     // THIRD
-    console.log('$scope.obeya.tasks',$scope.obeya.tasks.length);
     $scope.dataCost = myLibrary.displayLastYearKPI($scope.obeya.tasks.list, '_id', 'kpis', 'Cost');
     $scope.dataQuality = myLibrary.displayLastYearKPI($scope.obeya.tasks.list, '_id', 'kpis', 'Quality');
     $scope.dataTime = myLibrary.displayLastYearKPI($scope.obeya.tasks.list, '_id', 'kpis', 'Time');
 
     $scope.tasksNb = arraySum(_.compact(_.map($scope.dataTasks, 'value')));
     $scope.metricsNb = arraySum(_.compact(_.map($scope.dataMetrics, 'value')));
-    console.log('$scope.dataCost',$scope.dataCost);
     $scope.costNb = arrayAverage(_.compact(_.map($scope.dataCost, 'value')));
     $scope.qualityNb = arrayAverage(_.compact(_.map($scope.dataQuality, 'value')));
     $scope.timeNb = arrayAverage(_.compact(_.map($scope.dataTime, 'value')));
 
-    $scope.chartData[2] = [
-      {
-        key: 'Quality',
-        values: $scope.dataQuality
-      }, {
-        key: 'Cost',
-        values: $scope.dataCost
-      }        , {
-        key: 'Time',
-        values: $scope.dataTime
-      }
-    ];
+    $scope.chartData[2] = [{
+      key: 'Quality',
+      values: $scope.dataQuality
+    }, {
+      key: 'Cost',
+      values: $scope.dataCost
+    }, {
+      key: 'Time',
+      values: $scope.dataTime
+    }];
 
   });
 
 
 
 
+
+  $scope.countDot = function count(s1) {
+    return (s1.match(new RegExp('\\.', 'g')) || []).length;
+  };
 
 
   //subscribe widget on window resize event

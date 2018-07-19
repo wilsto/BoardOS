@@ -1,6 +1,9 @@
 .bg-gray {
   background-color: #F2F1EF;
 }
+.btn-gray {
+  background-color: #8c8c8c;
+}
 
 .wall {
   width: 100%;
@@ -15,6 +18,10 @@
   align-content: space-around;
 }
 
+.wall_flex_nowrap {
+  flex-flow: row;
+}
+
 .obeya-pane {
   border-radius: 5px;
   padding: 10px;
@@ -23,7 +30,7 @@
 }
 
 .pane-fixed {
-  flex-grow: 1;
+  flex-shrink: 1;
 }
 
 .pane-grow {

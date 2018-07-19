@@ -3,20 +3,6 @@
 angular.module('boardOsApp')
   .controller('NavbarCtrl', function($scope, $rootScope, $location, Auth, $http, Notification) {
 
-    Auth.getCurrentUser(function(data) {
-      $scope.currentUser = data;
-      $rootScope.thisUser = $scope.currentUser;
-      if ($scope.currentUser) {
-        if ($scope.currentUser._id) {
-
-          $scope.load();
-          $scope.loadDashBoards();
-          $scope.loadHints();
-
-        }
-      }
-    });
-
     // Variable pour afficher ou non ExplainToMe
     $scope.StartExplainToMe = function() {
       var bln = false;
@@ -31,7 +17,7 @@ angular.module('boardOsApp')
 
     $rootScope.openNav = function() {
       $rootScope.loadNews();
-      $http.get('/api/Whatsnews/updateViewer/' + $scope.currentUser._id).success(function(infos) {
+      $http.get('/api/Whatsnews/updateViewer/' + $rootScope.thisUser._id).success(function(infos) {
         $rootScope.alreadyviewed = true;
       });
       if ($('#mySidenav').css('width') === '4px') {
@@ -41,10 +27,10 @@ angular.module('boardOsApp')
       }
     };
 
-    $scope.load = function() {
+    $scope.loadTasks = function() {
       var myparams = {
         params: {
-          userId: $scope.currentUser._id,
+          userId: $rootScope.thisUser._id,
           status: ['Not Started', 'In Progress']
         }
       };
@@ -65,7 +51,7 @@ angular.module('boardOsApp')
     });
 
     $scope.CompletedNewIntro = function() {
-      $http.put('/api/users/' + $scope.currentUser._id + '/pageHints', {
+      $http.put('/api/users/' + $rootScope.thisUser._id + '/pageHints', {
         page: $scope.pageHints,
         version: $scope.maxVersion
       }).success(function() {
@@ -103,7 +89,7 @@ angular.module('boardOsApp')
         if (data) {
           $scope.maxVersion = _.max(_.pluck(data.hints, 'version'));
           $scope.blnShownewHints = false;
-          var userVersions = _.filter($scope.currentUser.pageHints, function(page) {
+          var userVersions = _.filter($rootScope.thisUser.pageHints, function(page) {
             return page.page === $scope.pageHints;
           });
           if (userVersions.length > 0) {
@@ -148,7 +134,7 @@ angular.module('boardOsApp')
     $scope.loadDashBoards = function() {
       var myparams = {
         params: {
-          userId: $scope.currentUser._id,
+          userId: $rootScope.thisUser._id,
           quick: true
         }
       };
@@ -156,7 +142,7 @@ angular.module('boardOsApp')
         _.each(dashboards, function(dashboard) {
           dashboard.subscribed = false;
           var userlist = _.pluck(dashboard.users, '_id');
-          var userindex = userlist.indexOf($scope.currentUser._id.toString());
+          var userindex = userlist.indexOf($rootScope.thisUser._id.toString());
           if (userindex >= 0 && dashboard.users[userindex] && dashboard.users[userindex].dashboardName && dashboard.users[userindex].dashboardName.length > 0) {
             dashboard.name = dashboard.users[userindex].dashboardName;
             dashboard.subscribed = true;
@@ -198,8 +184,19 @@ angular.module('boardOsApp')
       return route === $location.path();
     };
 
-    if ($scope.currentUser && $scope.currentUser._id) {
-      $scope.load();
-      $scope.loadDashBoards();
+    if ($rootScope.thisUser && $rootScope.thisUser._id) {
+        $scope.loadTasks();
+        $scope.loadDashBoards();
+        $scope.loadHints();
+    } else {
+      Auth.getCurrentUser(function(data) {
+        $rootScope.thisUser = data;
+        if ($rootScope.thisUser && $rootScope.thisUser._id) {
+            $scope.loadTasks();
+            $scope.loadDashBoards();
+            $scope.loadHints();
+          }
+      });
     }
+
   });

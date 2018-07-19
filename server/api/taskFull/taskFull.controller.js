@@ -210,7 +210,7 @@ exports.countByMonth = function(req, res) {
   var o = {};
   o.map = function() {
     emit(
-      new Date((new Date(this.metrics[0].endDate)).getFullYear(), new Date(this.metrics[0].endDate).getMonth() + 1,1).getTime() , {
+      (new Date(this.metrics[0].endDate)).getFullYear()  + '.' + (new Date(this.metrics[0].endDate).getMonth() + 1) , {
       count: 1,
       qty: this.metrics[0].projectedWorkload || this.metrics[0].targetLoad
     }

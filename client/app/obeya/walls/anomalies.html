@@ -1,92 +1,201 @@
-
-  <!-- START 6- Milestones & Capacity  -->
-  <div id="Wall-5" ng-if="activeWall.id===5">
-    <div class="row">
-      <div class="col-md-2">
-        <div class="obeya-pane obeya-pane-darkgray">
-          Questions
-          <hr style="margin-top:0;margin-bottom:10px;">
-          <div class="obeya-body">
-            <!-- <ul>
-              <li>What are our engagements we must keep ?</li>
-              <li>What are the new engagement we must take ?</li>
-              <li>Are some engagements in alert ?</li>
-            </ul> -->
-            <h4>
-              <img src="assets/images/respect-icon.png" style="width:60px;height:60px;" alt="" >
-              Process</h4>
-            <ul class="list-group card-list">
-              <li class="list-group-item" ng-if="obeyaMode === 'week'" ng-class="{'list-group-item-active':filters === 'week'}">
-                <img src="assets/images/calendar-week.png" style="width:15px;height:15px;" alt=""> This Week
-                <span class="badge badge-gray">{{hierarchiesThisWeek.length}}</span>
-              </li>
-              <li class="list-group-item" ng-if="obeyaMode === 'month'" ng-class="{'list-group-item-active':filters === 'month'}">
-                <img src="assets/images/calendar-month.png" style="width:15px;height:15px;" alt=""> This Month
-                <span class="badge badge-gray">{{hierarchiesThisMonth.length}}</span>
-              </li>
-              <li class="list-group-item" ng-if="obeyaMode === 'all'" ng-click="showCard('Milestones','All')" ng-class="{'list-group-item-active':filters === 'All'}">
-                <img src="assets/images/calendar-month.png" style="width:15px;height:15px;" alt=""> All
-                <span class="badge badge-gray">{{hierarchiesSelected.length}}</span>
-              </li>
-              <li class="list-group-item" ng-click="showCard('Milestones','ToEngage')" ng-class="{'list-group-item-active':filters === 'ToEngage'}">
-                <i class="fa fa-gavel "></i> To Engage
-                <span class="badge" ng-class="{'badge-gray':hierarchiesToEngage.length===0, 'badge-orange':hierarchiesToEngage.length>0}">{{hierarchiesToEngage.length}}</span>
-              </li>
-              <li class="list-group-item">
-                <i class="fa fa-bell "></i> With alerts
-                <span class="badge " ng-class="{'badge-gray':hierarchiesWithAlerts.length===0, 'badge-red':hierarchiesWithAlerts.length>0}">{{hierarchiesWithAlerts.length}}</span>
-              </li>
-            </ul>
-
-          </div>
-        </div>
-      </div>
-      <div class="col-md-10">
-        <div class="obeya-pane obeya-pane-darkgray">
-          Process
-          <hr style="margin-top:0;margin-bottom:10px;">
-          <div class="obeya-body">
-
-
-            <!-- KPIs -->
-            <div class="col-md-4" id="KPI">
-                <div class="portlet sale-summary" >
-                    <div class="portlet-title">
-                        <div class="caption">
-                            KPIs
-                        </div>
-                        <div class="tools">
-                            <div class="pull-right" ng-init="KPIIsExpanded=true" ng-click="KPIIsExpanded=!KPIIsExpanded">
-                                <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="!KPIIsExpanded" viewbox="0 0 32 32" title="expand header"><g><g><polygon points="24.158,16.274 22.385,14.5 15.939,20.824 9.615,14.5 7.842,16.274 16,24.432"></polygon></g><g><polygon points="24.158,9.342 22.385,7.568 15.939,13.892 9.615,7.568 7.842,9.342 16,17.5"></polygon></g></g></svg>
-                                <svg class="svgIcon " style="width:16px;height:16px;color:#B9BCC0;fill:grey" ng-show="KPIIsExpanded" viewbox="0 0 32 32" title="collapse header"><g><g><polygon points="7.842,15.726 9.615,17.5 16.061,11.176 22.385,17.5 24.158,15.726 16,7.568"></polygon></g><g><polygon points="7.842,22.658 9.615,24.432 16.061,18.108 22.385,24.432 24.158,22.658 16,14.5"></polygon></g></g></svg>
-                            </div>
-                            <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{dashboard.kpis.length}}</span></span>
-                        </div>
-                    </div>
-                    <div class="portlet-body" style="padding:0!important;max-height:400px;overflow:auto" ng-show="KPIIsExpanded">
-                        <table class="table table-striped table-hover">
-                            <tbody style="text-align:center;">
-                                <tr ng-repeat="KPI in dashboard.kpis | orderBy:['constraint','name'] track by $index" on-finish-render uib-tooltip-html="'Contraint : {{KPI.constraint}}<br /> <br /> Description :  {{KPI.description}}  <br /> Suggestion :  {{KPI.suggestion}}'" tooltip-placement="left"  tooltip-class="tooltipkpi"  >
-                                    <td style="text-align:left;width:65%"><a href="/KPI/{{KPI.kpiId}}?type=dashboard&typeid={{dashboard._id}}&rangedate={{datediff}}">{{KPI.name}}</a></td>
-                          <td style="text-align:left;width:35%;font-size:13px">
-                            <span ng-if="KPI.calcul[rangeDate] !== undefined && KPI.calcul[rangeDate] !== null" class="badge" ng-style="{'background-color':giveMeMyColor(KPI.calcul[rangeDate], KPI.category)}" style="height:15px;line-height:10px;width:15px;margin-right: 10px">&nbsp;&nbsp;</span>                            {{KPI.calcul[rangeDate]}}
-                            <span ng-if="KPI.category === 'Goal' && KPI.calcul[rangeDate] !== undefined && KPI.calcul[rangeDate] !== null"> %</span>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  <div style="border-top:1px solide grey;width:100%">
-                    &nbsp;
-                  </div>
-                </div>
-              </div>
-
-
-            </div>
-          </div>
-        </div>
-
-      </div>
+<!-- START 6- Milestones & Capacity  -->
+<div id="Wall-5" class="wall_flex wall_flex_nowrap " ng-if="activeWall.id===6">
+  <div class="obeya-pane obeya-pane-fixed-left obeya-pane-darkgray">
+    Questions
+    <hr style="margin-top:0;margin-bottom:10px;">
+    <div class="obeya-body">
+      <h4>
+              <img src="assets/images/anomaly.png" style="width:60px;height:60px;" alt="" >
+              Anomalies</h4>
+      <ul class="list-group card-list">
+        <li class="list-group-item" ng-click="showCard('ProblemSolving','To Correct')">
+          <i class="fa fa-bug blue"></i> To Correct
+          <span class="badge  badge-red">{{obeya.alertsValue}}</span>
+        </li>
+        <li class="list-group-item" ng-click="showCard('ProblemSolving','To Prevent')">
+          <i class="fa fa-medkit blue"></i> To Prevent
+          <span class="badge  badge-orange">{{obeya.alertsValue}}</span>
+        </li>
+        <li class="list-group-item" ng-click="showCard('ProblemSolving','Prevented')">
+          <img src="assets/images/prevented.png" alt="" style="width:16px;height:16px"> Prevented
+          <span class="badge  badge-gray">{{obeya.alertsValue}}</span>
+        </li>
+      </ul>
+      <br>
+      <div ng-include src="'app/obeya/partials/viewMode.html'"></div>
     </div>
-    <!-- END PERFORMANCE -->
+
+  </div>
+  <div class="obeya-pane pane-grow  obeya-pane-darkgray">
+    Process
+    <hr style="margin-top:0;margin-bottom:10px;">
+    <div class="obeya-body">
+
+      <!-- Script pour le template du search -->
+      <script type="text/ng-template" id="myTooltipActorTemplate.html">
+        <a href="#">
+                    <img ng-src="{{anomalie.actor.avatar}}" class="img-circle" err-src="assets/images/avatars/avatar.png" />
+                    <br />
+                    <b style="color:white">{{anomalie.actor.name}}</b>
+                 </a>
+      </script>
+
+      <div class="portlet">
+        <div class="portlet-title">
+          <div class="caption">
+            <i class="fa fa-anomalie"></i>Anomalies List
+          </div>
+        </div>
+        <div class="portlet-body">
+          <table class="table table-striped table-bordered table-hover" style="max-width:100%">
+            <thead>
+              <tr>
+                <th ng-click="orderByField='date'; reverseSort = !reverseSort">
+                  <a href="#" ng-click="orderByField='date'; reverseSort = !reverseSort">
+                            <i class="fa fa-calendar"></i> Date
+                          </a>
+                </th>
+                <th style="max-width:60px;text-align:center" ng-click="orderByField='actor.groups'; reverseSort = !reverseSort">
+
+                  <a href="#" ng-click="orderByField='actor.groups'; reverseSort = !reverseSort">
+                            <i class="fa fa-users"></i> From
+                          </a>
+                </th>
+                <th>
+                  <a href="#" ng-click="orderByField='name'; reverseSort = !reverseSort">
+                            <i class="fa fa-briefcase"></i> Name
+                          </a>
+                  <small class="pull-right">
+
+                          <a href="#" ng-click="orderByField='activity'; reverseSort = !reverseSort">
+                            <i class="fa fa-flash"></i>    Activity
+                          </a>
+                        </small>
+                </th>
+                <th ng-click="orderByField='context'; reverseSort = !reverseSort">
+                  <a href="#" ng-click="orderByField='context'; reverseSort = !reverseSort">
+                            <i class="fa fa-map-marker"></i> Context
+                          </a>
+
+                </th>
+                <th style="max-width:65px;text-align:center" ng-click="orderByField='category'; reverseSort = !reverseSort">
+                  <a href="#" ng-click="orderByField='category'; reverseSort = !reverseSort">
+                            <small>Category</small>
+                          </a>
+                </th>
+                <th style="max-width:65px;text-align:center" ng-click="orderByField='impact'; reverseSort = !reverseSort">
+                  <a href="#" ng-click="orderByField='impact'; reverseSort = !reverseSort">
+                            <small>Impact</small>
+
+                          </a>
+                </th>
+                <th style="width:60px;text-align:center" ng-click="orderByField='correctiveActions[0].metrics[0].status'; reverseSort = !reverseSort">
+                  <a href="#">
+                            <span uib-tooltip-html="'Corrective Actions'">C.A.</span>
+                          </a>
+                </th>
+                <th style="width:60px;text-align:center" ng-click="orderByField='preventiveActions[0].metrics[0].status'; reverseSort = !reverseSort">
+                  <a href="#">
+                            <span uib-tooltip-html="'Preventive Actions'">R.C.A.</span>
+                          </a>
+                  <th style="width:60px;text-align:center" ng-click="orderByField='preventiveActions[0].metrics[0].status'; reverseSort = !reverseSort">
+                    <a href="#">
+                            <span uib-tooltip-html="'Preventive Actions'">P.A.</span>
+                          </a>
+                  </th>
+                  <th style="width:60px;text-align:center" ng-click="orderByField='status'; reverseSort = !reverseSort">
+                    <a href="#">
+                            <span uib-tooltip-html="'Status'">Status</span>
+                          </a>
+                  </th>
+              </tr>
+              <tr>
+                <th>
+                </th>
+                <th>
+                  <input style="width:100%" ng-model="obeya.anomalies.searchActor">
+                </th>
+                <th style="width:30%">
+                  <input style="width:100%" ng-model="searchName">
+                </th>
+                <th style="max-width:25%">
+                  <input style="width:100%" ng-model="searchContext">
+                </th>
+                <th style="max-width:60px">
+                  <input style="width:100%" ng-model="searchCategory">
+
+                </th>
+                <th style="max-width:60px">
+                  <input style="width:100%" ng-model="searchImpact">
+
+                </th>
+                <th style="width:60px">
+                </th>
+                <th style="width:60px">
+                </th>
+                <th style="width:60px">
+                </th>
+                <th style="width:60px">
+                  <input style="width:100%" ng-model="searchStatus">
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr id="anoRow" ng-repeat="anomalie in obeya.anomalies.filter()|orderBy:orderByField:reverseSort track by $index">
+
+                <td class="dont-break-out hidden-xs">
+                  <small class="text-muted">  {{anomalie.date | date:'mediumDate'}}</small>
+                </td>
+                <td style="text-align:center">
+                  <div uib-tooltip-template="'myTooltipActorTemplate.html'" tooltip-placement="right">
+                    <small class="badge badge-default"> {{anomalie.actor.groups[0]}}</small>
+                  </div>
+                </td>
+                <td>
+                  <a id="anoName" href="/anomalie/{{anomalie._id}}">{{anomalie.name}}</a><br>
+                  <small style="font-size:11px" class="text-muted">  {{anomalie.activity || 'ALL'}} <br /></small>
+                </td>
+                <td class="dont-break-out  hidden-xs">
+                  <small style="font-size:11px" class="text-muted">  {{anomalie.context || 'ALL'}} <br /> </small>
+                </td>
+                <td>
+                  <span>{{showCategories(anomalie.category)}}</span>
+                </td>
+                <td>
+                  <span>{{anomalie.impact}}</span>
+                </td>
+                <td style="text-align:center">
+                  <a ng-class="{'disabled-href':anomalie.correctiveActions.length===0}" href="task/{{anomalie.correctiveActions[0]._id}}" target="_blank">
+                          <span class="btn btn-outline btn-xs" aria-hidden="false" ng-class="{'btn-info ':anomalie.statusCA === 'In Progress',' btn-default ':anomalie.statusCA === 'Not Started',' btn-success':anomalie.statusCA === 'Finished'}">CA</span>
+                        </a>
+                  <td style="text-align:center">
+                    <a ng-class="{'disabled-href':anomalie.rootCauseAnalysisTasks.length===0}" href="task/{{anomalie.rootCauseAnalysisTasks[0]._id}}" target="_blank">
+                          <span class="btn btn-outline btn-xs" aria-hidden="false" ng-class="{'btn-info ':anomalie.statusRCA === 'In Progress',' btn-default ':anomalie.statusRCA === 'Not Started',' btn-success':anomalie.statusRCA === 'Finished'}">RCA</span>
+                        </a>
+                  </td>
+                  <td style="text-align:center">
+                    <a ng-class="{'disabled-href':anomalie.preventiveActions.length===0}" href="task/{{anomalie.preventiveActions[0]._id}}" target="_blank">
+                          <span class="btn btn-outline btn-xs" aria-hidden="false" ng-class="{'btn-info ':anomalie.statusPA === 'In Progress',' btn-default ':anomalie.statusPA === 'Not Started',' btn-success':anomalie.statusPA === 'Finished'}">PA</span>
+                        </a>
+                  </td>
+                  <td id="anoStatus">
+                    <span ng-if="anomalie.status ==='Not Started' " class="label label-sm" ng-class="{'label-info':anomalie.status ==='In Progress','label-success':anomalie.status ==='Finished','label-default':anomalie.status ==='Not Started','label-lightgrey':anomalie.status =='Withdrawn','label-warning':anomalie.startDate < today}">
+                {{anomalie.status}}
+              </span>
+                    <span ng-if="anomalie.status !=='Not Started'" class="label label-sm" ng-class="{'label-info':anomalie.status ==='In Progress','label-success':anomalie.status ==='Finished','label-default':anomalie.status ==='Not Started','label-lightgrey':anomalie.status =='Withdrawn'}">
+                {{anomalie.status}}
+              </span>
+                  </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+
+</div>
+<!-- END PERFORMANCE -->

@@ -620,12 +620,14 @@ exports.update = function(req, res) {
     updated.alerts = req.body.alerts;
     updated.perimeter = req.body.perimeter;
     updated.categories = req.body.categories;
+    updated.roles = req.body.roles;
     updated.markModified('perimeter');
     updated.markModified('categories');
     updated.markModified('tasks');
     updated.markModified('kpis');
     updated.markModified('alerts');
     updated.markModified('users');
+    updated.markModified('roles');
 
     updated.save(function(err) {
       if (err) {

@@ -26,7 +26,8 @@ angular.module('boardOsApp', [
   'ngVis',
   'angular-intro',
   'gridster',
-  'zingchart-angularjs'
+  'zingchart-angularjs',
+  'ngDragDrop'
 
 ]).config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, NotificationProvider) {
   $urlRouterProvider.otherwise('/');
@@ -42,7 +43,11 @@ angular.module('boardOsApp', [
   $httpProvider.defaults.headers.get['Cache-Control'] = 'no-cache';
   $httpProvider.defaults.headers.get.Pragma = 'no-cache';
 
-  NotificationProvider.setOptions({startTop: 2, positionX: 'center', maxCount: 2});
+  NotificationProvider.setOptions({
+    startTop: 2,
+    positionX: 'center',
+    maxCount: 2
+  });
 }).config([
   'calendarConfig',
   function(calendarConfig) {
@@ -103,134 +108,121 @@ angular.module('boardOsApp', [
 }).value('cgBusyDefaults', {
   message: 'Please wait, Processing calculation...',
   wrapperClass: 'loadingboss'
-}).constant('progressStatusTask', [
-  {
-    value: 'On Time',
-    text: 'On Time'
-  }, {
-    value: 'At Risk',
-    text: 'At Risk'
-  }, {
-    value: 'Late',
-    text: 'Late'
-  }
-]).constant('statusTask', [
-  {
-    value: 'Not Started',
-    text: 'Not Started'
-  }, {
-    value: 'In Progress',
-    text: 'In Progress'
-  }, {
-    value: 'Withdrawn',
-    text: 'Withdrawn'
-  }, {
-    value: 'Finished',
-    text: 'Finished'
-  }
-]).constant('metricTaskFields', [
-  {
-    value: 'Constant',
-    text: 'Constant'
-  }, {
-    value: 'load',
-    text: 'Load'
-  }, {
-    value: 'timeSpent',
-    text: 'Time Spent'
-  }, {
-    value: 'projectedWorkload',
-    text: 'Projected Work Load'
-  }, {
-    value: 'duration',
-    text: 'Duration'
-  }, {
-    value: 'progress',
-    text: 'Progress'
-  }, {
-    value: 'trust',
-    text: 'Trust'
-  }, {
-    value: 'startDate',
-    text: 'Start'
-  }, {
-    value: 'endDate',
-    text: 'End'
-  }, {
-    value: 'progressStatus',
-    text: 'progressStatus'
-  }, {
-    value: 'status',
-    text: 'Statut'
-  }, {
-    value: 'deliverableStatus',
-    text: 'deliverableStatus'
-  }, {
-    value: 'userSatisfaction',
-    text: 'userSatisfaction'
-  }, {
-    value: 'actorSatisfaction',
-    text: 'actorSatisfaction'
-  }, {
-    value: 'reworkReason',
-    text: 'reworkReason'
-  }
-]).constant('categoryKPI', [
-  {
-    value: 'Alert',
-    text: 'Alert'
-  }, {
-    value: 'Anticipation',
-    text: 'Anticipation'
-  }, {
-    value: 'Goal',
-    text: 'Goal'
-  }, {
-    value: 'Information',
-    text: 'Information'
-  }
-]).constant('listValuesKPI', [
-  {
-    value: 'AllValues',
-    text: 'AllValues'
-  }, {
-    value: 'UniqueValues',
-    text: 'UniqueValues'
-  }, {
-    value: 'LastValue',
-    text: 'LastValue'
-  }, {
-    value: 'FirstValue',
-    text: 'FirstValue'
-  }, {
-    value: 'ValuesLessThan',
-    text: 'ValuesLessThan'
-  }, {
-    value: 'ValuesMoreThan',
-    text: 'ValuesMoreThan'
-  }
-]).constant('actionKPI', [
-  {
-    value: 'Count',
-    text: 'Count'
-  }, {
-    value: 'List',
-    text: 'List'
-  }, {
-    value: 'Mean',
-    text: 'Mean'
-  }, {
-    value: 'Min',
-    text: 'Min'
-  }, {
-    value: 'Max',
-    text: 'Max'
-  }, {
-    value: 'Sum',
-    text: 'Sum'
-  }
-]).constant('groupByKPI', [
-  {
+}).constant('progressStatusTask', [{
+  value: 'On Time',
+  text: 'On Time'
+}, {
+  value: 'At Risk',
+  text: 'At Risk'
+}, {
+  value: 'Late',
+  text: 'Late'
+}]).constant('statusTask', [{
+  value: 'Not Started',
+  text: 'Not Started'
+}, {
+  value: 'In Progress',
+  text: 'In Progress'
+}, {
+  value: 'Withdrawn',
+  text: 'Withdrawn'
+}, {
+  value: 'Finished',
+  text: 'Finished'
+}]).constant('metricTaskFields', [{
+  value: 'Constant',
+  text: 'Constant'
+}, {
+  value: 'load',
+  text: 'Load'
+}, {
+  value: 'timeSpent',
+  text: 'Time Spent'
+}, {
+  value: 'projectedWorkload',
+  text: 'Projected Work Load'
+}, {
+  value: 'duration',
+  text: 'Duration'
+}, {
+  value: 'progress',
+  text: 'Progress'
+}, {
+  value: 'trust',
+  text: 'Trust'
+}, {
+  value: 'startDate',
+  text: 'Start'
+}, {
+  value: 'endDate',
+  text: 'End'
+}, {
+  value: 'progressStatus',
+  text: 'progressStatus'
+}, {
+  value: 'status',
+  text: 'Statut'
+}, {
+  value: 'deliverableStatus',
+  text: 'deliverableStatus'
+}, {
+  value: 'userSatisfaction',
+  text: 'userSatisfaction'
+}, {
+  value: 'actorSatisfaction',
+  text: 'actorSatisfaction'
+}, {
+  value: 'reworkReason',
+  text: 'reworkReason'
+}]).constant('categoryKPI', [{
+  value: 'Alert',
+  text: 'Alert'
+}, {
+  value: 'Anticipation',
+  text: 'Anticipation'
+}, {
+  value: 'Goal',
+  text: 'Goal'
+}, {
+  value: 'Information',
+  text: 'Information'
+}]).constant('listValuesKPI', [{
+  value: 'AllValues',
+  text: 'AllValues'
+}, {
+  value: 'UniqueValues',
+  text: 'UniqueValues'
+}, {
+  value: 'LastValue',
+  text: 'LastValue'
+}, {
+  value: 'FirstValue',
+  text: 'FirstValue'
+}, {
+  value: 'ValuesLessThan',
+  text: 'ValuesLessThan'
+}, {
+  value: 'ValuesMoreThan',
+  text: 'ValuesMoreThan'
+}]).constant('actionKPI', [{
+  value: 'Count',
+  text: 'Count'
+}, {
+  value: 'List',
+  text: 'List'
+}, {
+  value: 'Mean',
+  text: 'Mean'
+}, {
+  value: 'Min',
+  text: 'Min'
+}, {
+  value: 'Max',
+  text: 'Max'
+}, {
+  value: 'Sum',
+  text: 'Sum'
+}]).constant('groupByKPI', [{
     value: 'None',
     text: 'None'
   }, {
@@ -274,11 +266,26 @@ angular.module('boardOsApp', [
   $rootScope.constant.actionKPI = actionKPI;
   $rootScope.constant.groupByKPI = groupByKPI;
 
+
+  Auth.getCurrentUser(function(data) {
+    $rootScope.thisUser = data;
+  });
+
   // Mettre les informations transversales en mémoire
-  $http.get('/api/hierarchies/listContext').success(function(contexts) {
-    $rootScope.contexts = [];
-    _.each(contexts, function(context) {
-      $rootScope.contexts.push({longname: context});
+  $http.get('/api/hierarchies/list/Activity').success(function(activities) {
+    $rootScope.activities = activities.list;
+    $rootScope.activitiesPaths = [];
+    _.each(activities.list, function(activity) {
+      $rootScope.activitiesPaths.push(activity.longname);
+    });
+  });
+
+  // Mettre les informations transversales en mémoire
+  $http.get('/api/hierarchies/list/Context').success(function(contexts) {
+    $rootScope.contexts = contexts.list;
+    $rootScope.contextsPaths = [];
+    _.each(contexts.list, function(context) {
+      $rootScope.contextsPaths.push(context.longname);
     });
   });
 

@@ -75,7 +75,7 @@
                   <th style="width:20%">Action</th>
                 </tr>
                 <tr ng-repeat="hierarchy in hierarchies" ng-click="selectNode(hierarchy)">
-                  <td class="dont-break-out" style="width:80%">{{hierarchy.longname}}</td>
+                <td class="dont-break-out" style="width:80%"><span style="padding-left:{{10 * countDot(hierarchy.longname)}}px;" ng-bind-html="hierarchy.longname"></span></td>
                   <td style="width:20%">
                     <a class="btn btn-primary btn-xs" data-nodrag="" ng-click="newSubItem(hierarchy, $index)" style="margin-right: 8px;"><span class="glyphicon glyphicon-plus"></span></a>
                     <a class="btn btn-danger btn-xs" data-nodrag="" ng-click="delete(hierarchy, $index)"><span class="glyphicon glyphicon-remove"></span></a>
