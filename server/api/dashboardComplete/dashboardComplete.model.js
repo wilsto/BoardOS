@@ -24,6 +24,7 @@ var DashboardCompleteSchema = new Schema({
   toFeedTasksNb: Number,
   category: String,
   tags: String,
+  roles: Schema.Types.Mixed,
   owner: Schema.Types.Mixed,
   actors: Schema.Types.Mixed,
   users: Schema.Types.Mixed,

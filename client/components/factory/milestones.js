@@ -18,7 +18,7 @@ angular.module('boardOsApp').factory('Milestones', function($http, Notification,
 
     // Modification of milestones
     this.save = function() {
-      $http.put('/api/hierarchies/Context', this.list ).success(function(hierarchies) {
+      $http.put('/api/hierarchies/Context', this.list).success(function(hierarchies) {
         $rootScope.$broadcast('obeya:searchContext', hierarchies);
       });
     };
@@ -26,15 +26,29 @@ angular.module('boardOsApp').factory('Milestones', function($http, Notification,
     this.create = function(hierarchy, index) {
       var valueToShow = (hierarchy) ? hierarchy.longname : '';
       var parentToShow = (hierarchy) ? hierarchy.id : '#';
+      var self = this;
+
       bootbox.prompt({
         title: 'Please Enter Name of this milestone',
         value: valueToShow,
         callback: function(result) {
           if (result) {
-            this.add(parentToShow, result);
+            self.add(parentToShow, result);
           }
         }
       });
+    };
+
+    this.update = function(thisMilestone) {
+      _.each(this.list, function(milestone) {
+        if (milestone.id === thisMilestone.id) {
+          milestone.longname = thisMilestone.longname;
+          milestone.parent = thisMilestone.parent;
+          milestone.milestone = thisMilestone.milestone;
+        }
+      });
+      Notification.success('Milestone ' + thisMilestone.longname + ' was updated');
+      this.save();
     };
 
     this.add = function(id, value) {
@@ -75,32 +89,58 @@ angular.module('boardOsApp').factory('Milestones', function($http, Notification,
 
     // sublist of milestones
     this.selected = function() {
+      var contexts = _.map($rootScope.obeyaPerimeter, function(perimeter) {
+        return perimeter.context;
+      });
       return _.filter(this.list, function(milestone) {
-        return milestone.longname && milestone.longname.indexOf('FONCTIONNEMENT') > -1;
+        var blnSelected = false;
+        _.each(contexts, function(context) {
+          if ((milestone.longname && milestone.longname.indexOf(context) > -1) || !context) {
+            blnSelected = true;
+          }
+        });
+        return blnSelected;
       });
     };
 
-    this.thisWeek = function() {
+    // sublist of milestones
+    this.selectedAndApplicable = function() {
       return _.filter(this.selected(), function(milestone) {
-        return milestone.duedate > -1;
+        var blnSelected = false;
+        if (milestone.milestone && milestone.milestone.status !== 'N/A') {
+          blnSelected = true;
+        }
+        return blnSelected;
       });
     };
 
-    this.thisMonth = function() {
-      return _.filter(this.selected(), function(milestone) {
-        return milestone.duedate > -30;
+    this.toForecast = function() {
+      return _.filter(this.selected(), function(hierarchie) {
+        return !hierarchie.milestone || (hierarchie.milestone && !hierarchie.milestone.dueDate && hierarchie.milestone.status !== 'N/A');
+      });
+    };
+
+    this.toPlan = function() {
+      return _.filter(this.selected(), function(hierarchie) {
+        return hierarchie.milestone && hierarchie.milestone.status === 'Forecasted';
       });
     };
 
     this.toEngage = function() {
       return _.filter(this.selected(), function(hierarchie) {
-        return hierarchie.status !== 'Engaged' && hierarchie.status !== 'Achieved' && hierarchie.status !== 'N/A';
+        return hierarchie.milestone && hierarchie.milestone.status === 'Planned';
+      });
+    };
+
+    this.toAchieve = function() {
+      return _.filter(this.selected(), function(hierarchie) {
+        return hierarchie.milestone && hierarchie.milestone.status === 'Engaged';
       });
     };
 
     this.withAlerts = function() {
       return _.filter(this.selected(), function(hierarchie) {
-        return hierarchie.alerts > 0;
+        return hierarchie.milestone && (new Date(hierarchie.milestone.dueDate) < new Date() && hierarchie.milestone.status !== 'Achieved');
       });
     };
 

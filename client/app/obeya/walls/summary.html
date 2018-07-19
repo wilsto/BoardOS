@@ -3,6 +3,9 @@
 
   <div class="obeya-pane obeya-pane-fixed-5 obeya-pane-darkgray">
     PEOPLE
+    <a href="#People" ng-click="showCard('People')">
+      <i class="fa fa-arrows-alt pull-right"></i>
+    </a>
     <hr style="margin-top:0;margin-bottom:10px;">
     <div class="obeya-body">
       <div class="row">
@@ -56,6 +59,9 @@
 
   <div class="obeya-pane obeya-pane-fixed-5 obeya-pane-darkgray">
     FOCUS
+    <a href="#News" ng-click="showCard('News')">
+      <i class="fa fa-arrows-alt pull-right"></i>
+    </a>
     <hr style="margin-top:0;margin-bottom:10px;">
     <div class="obeya-body">
       <div class="row">
@@ -74,11 +80,11 @@
               <span class="badge badge-gray">{{obeya.alertsValue}}</span>
             </li>
             <li class="list-group-item">
-              <i class="fa fa-gear"></i> Process
+              <i class="fa fa-gear"></i> Run
               <span class="badge badge-gray">{{obeya.alertsValue}}</span>
             </li>
             <li class="list-group-item">
-              <img src="assets/images/tools.png" style="height:20px;" alt="">  Tools
+              <img src="assets/images/tools.png" style="height:20px;" alt=""> Tools
               <span class="badge badge-gray">{{obeya.alertsValue}}</span>
             </li>
           </ul>
@@ -106,9 +112,9 @@
 
   <div id="cardMilestones" class="obeya-pane obeya-pane-fixed-5 obeya-pane-gray">
     PLAN
-    <a href="#milestones" ng-click="showCard('Milestones')">
-                <i class="fa fa-arrows-alt pull-right"></i>
-            </a>
+    <a href="#Milestones" ng-click="showCard('Milestones')">
+      <i class="fa fa-arrows-alt pull-right"></i>
+    </a>
     <hr style="margin-top:0;margin-bottom:10px;">
     <div class="obeya-body">
       <div class="row">
@@ -119,21 +125,17 @@
                       MILESTONES
                     </span>
             <ul class="list-group card-list">
-              <li class="list-group-item" ng-if="obeyaMode === 'week'">
-                <img src="assets/images/calendar-week.png" style="width:15px;height:15px;" alt=""> This Week
-                <span class="badge badge-gray">{{obeya.milestones.thisWeek().length}}</span>
-              </li>
-              <li class="list-group-item" ng-if="obeyaMode === 'month'">
-                <img src="assets/images/calendar-month.png" style="width:15px;height:15px;" alt=""> This Month
-                <span class="badge badge-gray">{{obeya.milestones.thisMonth().length}}</span>
-              </li>
-              <li class="list-group-item" ng-if="obeyaMode === 'all'" ng-click="showCard('Milestones','All')">
-                <img src="assets/images/calendar-month.png" style="width:15px;height:15px;" alt=""> All
-                <span class="badge badge-gray">{{obeya.milestones.selected().length}}</span>
+              <li class="list-group-item" ng-click="showCard('Milestones','ToPlan')">
+                <img src="assets/images/forecast.png" alt="" style="width:20px;height:20px"> To Forecast + Plan
+                <span class="badge" ng-class="{'badge-gray':obeya.milestones.toPlan().length===0, 'badge-orange':obeya.milestones.toPlan().length>0}">{{obeya.milestones.toForecast().length + obeya.milestones.toPlan().length}}</span>
               </li>
               <li class="list-group-item" ng-click="showCard('Milestones','ToEngage')">
                 <i class="fa fa-gavel "></i> To Engage
                 <span class="badge" ng-class="{'badge-gray':obeya.milestones.toEngage().length===0, 'badge-orange':obeya.milestones.toEngage().length>0}">{{obeya.milestones.toEngage().length}}</span>
+              </li>
+              <li class="list-group-item" ng-click="showCard('Milestones','ToAchieve')">
+                <img src="assets/images/achieve.png" alt="" style="width:20px;height:20px"> To Achieve
+                <span class="badge" ng-class="{'badge-gray':obeya.milestones.toAchieve().length===0, 'badge-orange':obeya.milestones.toAchieve().length>0}">{{obeya.milestones.toAchieve().length}}</span>
               </li>
               <li class="list-group-item">
                 <i class="fa fa-bell "></i> With alerts
@@ -144,28 +146,23 @@
         </div>
         <div class="col-lg-6 col-md-12 col-xs-12 ">
           <div class="obeya-cards">
+
             <span class="card-title">
-                <div class="row">
-                  <div class="col-md-4">
-                    <img src="assets/images/icon-capacity-planning.png" style="width:60px;height:60px;" alt="">
-                  </div>
-                  <div class="col-md-8">
-                    CAPACITY
-                  </div>
-                </div>
-              </span>
+                <img src="assets/images/icon-capacity-planning.png" style="width:60px;height:60px;" alt="">
+                        CAPACITY
+                      </span>
             <ul class="list-group card-list">
               <li class="list-group-item">
                 <i class="fa fa-users "></i> Availability
-                <span class="badge  badge-gray"> ? </span>
+                <span class="pull-right">   <img src="assets/images/coming-soon.png" alt="" style="width:40px;height:30px"></span>
               </li>
               <li class="list-group-item">
                 <i class="fa fa-bars "></i> Planned
-                <span class="badge  badge-gray"> ? </span>
+                <span class="pull-right">   <img src="assets/images/coming-soon.png" alt="" style="width:40px;height:30px"></span>
               </li>
               <li class="list-group-item">
                 <i class="fa fa-bell "></i> With alerts
-                <span class="badge badge-red"> ? </span>
+                <span class="pull-right">   <img src="assets/images/coming-soon.png" alt="" style="width:40px;height:30px"></span>
               </li>
             </ul>
           </div>
@@ -178,6 +175,9 @@
 
   <div class="obeya-pane obeya-pane-fixed-5 obeya-pane-blue">
     DO
+    <a href="#Tasks" ng-click="showCard('Tasks')">
+      <i class="fa fa-arrows-alt pull-right"></i>
+    </a>
     <hr style="margin-top:0;margin-bottom:10px;">
     <div class="obeya-body">
       <div class="row">
@@ -189,9 +189,17 @@
                   TASKS
                 </span>
             <ul class="list-group card-list">
+              <li class="list-group-item" ng-click="showCard('Tasks','Plan')">
+                <i class="fa fa-tasks blue"></i> Plan
+                <span class="badge badge-gray">{{obeya.tasks.filterPlan.length}}</span>
+              </li>
               <li class="list-group-item" ng-click="showCard('Tasks','In Progress')">
                 <i class="fa fa-tasks blue"></i> In Progress
-                <span class="badge badge-gray">{{obeya.openTasksNb}}</span>
+                <span class="badge badge-gray">{{obeya.tasks.filterInProgress.length}}</span>
+              </li>
+              <li class="list-group-item" ng-click="showCard('Tasks','Finished')">
+                <img src="assets/images/task.png" alt=""> Finished
+                <span class="badge badge-gray">{{obeya.tasks.filterFinished.length + obeya.tasks.filterReviewed.length}}</span>
               </li>
               <li class="list-group-item">
                 <i class="fa fa-bell blue"></i> With alerts
@@ -202,23 +210,21 @@
         </div>
         <div class="col-lg-6 col-md-12 col-xs-12 ">
           <div class="obeya-cards">
-            <span class="card-title">
-                  <div class="row">
-                    <div class="col-md-4">
+            <span class="card-title" ng-click="showCard('ProblemSolving')">
                       <img src="assets/images/anomaly.png" style="width:60px;height:60px;" alt="">
-                    </div>
-                    <div class="col-md-8">
                       PROBLEM SOLVING
-                    </div>
-                  </div>
                 </span>
             <ul class="list-group card-list">
-              <li class="list-group-item">
+              <li class="list-group-item" ng-click="showCard('ProblemSolving','To Correct')">
                 <i class="fa fa-bug blue"></i> To Correct
                 <span class="badge  badge-red">{{obeya.alertsValue}}</span>
               </li>
-              <li class="list-group-item">
-                <i class="fa fa-medkit blue"></i> Corrected
+              <li class="list-group-item" ng-click="showCard('ProblemSolving','To Prevent')">
+                <i class="fa fa-medkit blue"></i> To Prevent
+                <span class="badge  badge-orange">{{obeya.alertsValue}}</span>
+              </li>
+              <li class="list-group-item" ng-click="showCard('ProblemSolving','Prevented')">
+                <img src="assets/images/prevented.png" alt="" style="width:16px;height:16px"> Prevented
                 <span class="badge  badge-gray">{{obeya.alertsValue}}</span>
               </li>
             </ul>
@@ -230,7 +236,7 @@
 
 
   <div class="obeya-pane obeya-pane-fixed-5 obeya-pane-darkblue">
-    CHECK - ACT
+    CHECK
     <a href="#Performance" ng-click="showCard('Performance')">
                 <i class="fa fa-arrows-alt pull-right"></i>
             </a>
@@ -244,6 +250,10 @@
                       Respect
                 </span>
             <ul class="list-group card-list">
+              <li class="list-group-item" ng-click="viewMode[activeWall.name]='overview'">
+                <img src="assets/images/overview.png" style="height:16px;" alt=""> Overview
+                <span class="pull-right"> <i class="fa fa-chevron-right"></i></span>
+              </li>
               <li class="list-group-item" ng-click="showCard('Tasks','In Progress')">
                 <img src="assets/images/quality.png" style="height:20px;" alt=""> Quality
                 <span class="badge badge-gray">{{obeya.openTasksNb}}</span>
@@ -267,6 +277,10 @@
               Mastering
             </span>
             <ul class="list-group card-list">
+              <li class="list-group-item" ng-click="viewMode[activeWall.name]='overview'">
+                <img src="assets/images/overview.png" style="height:16px;" alt=""> Overview
+                <span class="pull-right"> <i class="fa fa-chevron-right"></i></span>
+              </li>
               <li class="list-group-item" ng-click="showCard('Tasks','In Progress')">
                 <img src="assets/images/quality.png" style="height:20px;" alt=""> Quality
                 <span class="badge badge-gray">{{obeya.openTasksNb}}</span>
@@ -288,20 +302,41 @@
 
 
   <div class="obeya-pane obeya-pane-fixed-5 obeya-pane-gray">
-    FOCUS
+    ACT
+    <a href="#Process" ng-click="showCard('Process')">
+      <i class="fa fa-arrows-alt pull-right"></i>
+    </a>
     <hr style="margin-top:0;margin-bottom:10px;">
     <div class="obeya-body">
       <div class="row">
         <div class="col-lg-6 col-md-12 col-xs-12">
           <span class="card-title">
-                <img src="assets/images/process.jpg" style="height:60px;" alt="" >
-                PROCESS
+                <img src="assets/images/action_icon.jpg" style="height:60px;" alt="" >
+                ACTION PLAN
               </span>
+          <ul class="list-group card-list">
+            <li class="list-group-item" ng-click="showCard('Tasks','Plan')">
+              <i class="fa fa-tasks blue"></i> Plan
+              <span class="badge badge-gray">{{obeya.tasks.filterPlan.length}}</span>
+            </li>
+            <li class="list-group-item" ng-click="showCard('Tasks','In Progress')">
+              <i class="fa fa-tasks blue"></i> In Progress
+              <span class="badge badge-gray">{{obeya.tasks.filterInProgress.length}}</span>
+            </li>
+            <li class="list-group-item" ng-click="showCard('Tasks','Finished')">
+              <img src="assets/images/task.png" alt=""> Finished
+              <span class="badge badge-gray">{{obeya.tasks.filterFinished.length + obeya.tasks.filterReviewed.length}}</span>
+            </li>
+            <li class="list-group-item">
+              <i class="fa fa-bell blue"></i> With alerts
+              <span class="badge badge-red">{{obeya.alertsValue}}</span>
+            </li>
+          </ul>
         </div>
         <div class="col-lg-6 col-md-12 col-xs-12">
           <span class="card-title">
-                <img src="assets/images/skills.jpg" style="height:60px;" alt="" >
-                SKILLS
+                <img src="assets/images/process.jpg" style="height:60px;" alt="" >
+                PROCESS
               </span>
         </div>
       </div>

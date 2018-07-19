@@ -428,7 +428,6 @@ exports.milestones = function(req, res) {
     });
 };
 
-
 // Get a single hierarchy
 exports.listContext = function(req, res) {
   TaskFull.distinct('context', function(err, hierarchy) {

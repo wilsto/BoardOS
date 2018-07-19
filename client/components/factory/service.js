@@ -13,6 +13,16 @@ angular.module('boardOsApp').factory('myLibrary', function() {
 		</div>');
 
   var sdo = {
+    arrayAverage: function(arr) {
+      return _.reduce(arr, function(memo, num) {
+        return memo + num;
+      }, null) / (arr.length === 0 ? 1 : arr.length);
+    },
+    arraySum: function(arr) {
+      return _.reduce(arr, function(memo, num) {
+        return memo + num;
+      }, 0);
+    },
     showPleaseWait: function() {
       pleaseWaitDiv.modal();
     },
@@ -106,7 +116,6 @@ angular.module('boardOsApp').factory('myLibrary', function() {
       });
 
       map_result.reverse(); // par ordre croissant
-console.log('data',data);
       $.each(data, function(key, item) {
         item.month = moment(item.metrics[0].targetEndDate).format('YYYY.MM');
         $.each(map_result, function(keyMap, itemMap) {

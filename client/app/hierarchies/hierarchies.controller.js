@@ -66,6 +66,11 @@ angular.module('boardOsApp')
         'title': 'node 3'
       }
     ];
+
+    $scope.countDot = function count(s1) {
+      return (s1.match(new RegExp('\\.', 'g')) || []).length;
+    };
+
     $scope.load = function() {
       $http.get('/api/hierarchies/list/' + $scope.HierarchyType).success(function(hierarchies) {
         $scope.hierarchies = _.sortBy(hierarchies.list, 'longname');
@@ -106,7 +111,7 @@ angular.module('boardOsApp')
     $scope.save = function() {
       if (typeof $scope.HierarchyType !== 'undefined') {
 
-        
+
         $http.put('/api/hierarchies/' + $scope.HierarchyType, $scope.hierarchies).success(function(hierarchies) {
           Notification.success('Hierarchy "' + $scope.HierarchyType + '" was updated');
           $scope.load();
@@ -133,7 +138,7 @@ angular.module('boardOsApp')
 
 
     $scope.selectNode = function(data) {
-      
+
       if (data) {
         $scope.selectedNode = $scope.hierarchies.filter(function(obj) {
           return obj.id === data.id;
