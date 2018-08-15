@@ -2,7 +2,7 @@
 
 angular.module('boardOsApp')
   .controller('DqmCtrl', function($scope, $http) {
-    $scope.HierarchyType = 'Context';
+    $scope.HierarchyType = '';
     $scope.filterUsed = 'All';
     $scope.filterValid = 'All';
     var alltasks = {};
@@ -72,7 +72,7 @@ angular.module('boardOsApp')
         }
       };
 
-      $http.get('/api/tasks/globalChange', globalChangeVar).success(function() {
+      $http.get('/api/taskFulls/globalChange', globalChangeVar).success(function() {
         $scope.load();
       });
 

@@ -837,6 +837,50 @@ exports.updateAllTask = function(req, res) {
   });
 };
 
+// Updates an existing task in the DB.
+exports.globalChange = function(req, res) {
+  var query = {};
+  var HierarchyType = req.query.HierarchyType
+  var regex = req.query.textFilter;
+  var patt;
+  var pattOption;
+  if (regex && regex.indexOf('/') >= 0) {
+    var regexMatch = regex.match(/^\/(.*)\/([^\/]*)$/);
+    patt = new RegExp(regexMatch[1], regexMatch[2]);
+  } else {
+    patt = new RegExp(regex);
+  }
+  query[HierarchyType] = patt;
+
+  TaskFull.find(
+    query,
+    function(err, tasks) {
+      if (err) {
+        return handleError(res, err);
+      }
+      if (!tasks) {
+        return res.send(404);
+      }
+
+      // sauvegarder le précédent perimètre pour modifier les métriques
+      var newValue = {};
+      var updated;
+      var updatedMetric;
+      _.each(tasks, function(task) {
+        newValue[HierarchyType] = task[HierarchyType].replace(patt, req.query.textReplace);
+        updated = _.merge(task, newValue);
+        updated.save(function(err) {
+          if (err) {
+            return handleError(res, err);
+          }
+        });
+      });
+      return res.status(200).json('Global Change DONE');
+    });
+};
+
+
+
 // Deletes a taskFull from the DB.
 exports.destroy = function(req, res) {
   TaskFull.findById(req.params.id, function(err, taskFull) {
