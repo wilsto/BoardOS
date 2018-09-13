@@ -179,7 +179,7 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
 
         tasksMonthDetailsData.then(function(response) {
           self.listMonthDetails = response.data;
-          console.log('  SELF.LISTMONTHDETAILS', self.listMonthDetails);
+          
 
           self.subHierarchies = _.sortBy(self.listMonthDetails, ['root', 'name']);
 
