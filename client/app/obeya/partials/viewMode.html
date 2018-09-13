@@ -11,15 +11,16 @@
     <span class="pull-right"> <i class="fa fa-chevron-right"></i> </span>
   </li>
   <li class="list-group-item" ng-class="{'list-group-item-active':viewMode[activeWall.name]==='List'}" ng-click="viewMode[activeWall.name]='List'">
-    <i class="fa fa-th-list "></i>List
+    <i class="fa fa-th-list "></i> List
+    <span class="pull-right"> <i class="fa fa-chevron-right"></i></span>
+  </li>
+  <li class="list-group-item"  ng-class="{'list-group-item-active':viewMode[activeWall.name]==='Timeline'}" ng-click="viewMode[activeWall.name]='Timeline';loadTimeline();">
+    <i class="fa fa-tasks "></i> Timeline
     <span class="pull-right"> <i class="fa fa-chevron-right"></i></span>
   </li>
   <li class="list-group-item" ng-class="{'list-group-item-active':viewMode[activeWall.name]==='Calendar'}" ng-click="viewMode[activeWall.name]='Calendar'">
     <i class="fa fa-calendar "></i> Calendar
     <span class="pull-right"> <i class="fa fa-chevron-right"></i></span>
   </li>
-  <li class="list-group-item"  ng-class="{'list-group-item-active':viewMode[activeWall.name]==='Timeline'}" ng-click="viewMode[activeWall.name]='Timeline';loadTimeline();">
-    <i class="fa fa-tasks "></i>Timeline
-    <span class="pull-right"> <i class="fa fa-chevron-right"></i></span>
-  </li>
+
 </ul>

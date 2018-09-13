@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('boardOsApp').factory('Tasks', function($http, Notification, $rootScope, dateRangeService, myLibrary) {
+angular.module('boardOsApp').factory('Tasks', function($http, Notification, $rootScope, dateRangeService, calendarConfig, myLibrary) {
   // Define the Tasks function
   var Tasks = function(obeya) {
 
@@ -41,7 +41,61 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
         self.filterReviewed = self.filter('Finished', true, dateRangeService.datediff);
         self.filterReviewedLoad = self.load(self.filterReviewed);
 
+        self.filterTimeBoxed = self.filter('All', true, dateRangeService.datediff);
+        self.filterTimeBoxedLoad = self.load(self.filterReviewed);
+
         self.SubMonthDetails();
+
+
+                self.events = [];
+                _.each(self.list, function(task) {
+                  task.taskSuffIcon = '';
+                  switch (task.metrics[task.metrics.length - 1].status) {
+                    case 'In Progress':
+                      task.taskIcon = '<i class="fa fa-spinner" aria-hidden="true"></i>&nbsp;&nbsp; ';
+                      task.taskColor = calendarConfig.colorTypes.info;
+                      break;
+                    case 'Finished':
+                      if (task.reviewTask === true) {
+                        task.taskIcon = '<i class="fa fa-bookmark-o text-success" aria-hidden="true"></i>&nbsp;&nbsp; ';
+                        task.taskColor = calendarConfig.colorTypes.success;
+
+                      } else {
+                        task.taskIcon = '<i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;&nbsp; ';
+                        task.taskColor = calendarConfig.colorTypes.success;
+                      }
+                      if (task.metrics[task.metrics.length - 1].userSatisfaction === undefined || task.metrics[task.metrics.length - 1].deliverableStatus === undefined || task.metrics[task.metrics.length - 1].actorSatisfaction === undefined) {
+                        task.taskSuffIcon = ' <i class="fa fa-question-circle-o text-danger" aria-hidden="true"></i>&nbsp;&nbsp;';
+                      }
+                      break;
+                    default:
+                      task.taskIcon = '<i class="fa fa-square-o " aria-hidden="true"></i>&nbsp;&nbsp; ';
+                      task.taskColor = '';
+                  }
+
+                self.events.push({
+                    title: task.taskIcon + task.taskSuffIcon + task.name,
+                    eventType: 'task',
+                    eventId: task._id,
+                    displayEventTimes: false, // Indicates whether need to show time or not.
+                    startsAt: moment(task.metrics[task.metrics.length - 1].startDate || task.metrics[task.metrics.length - 1].targetstartDate).set({
+                      hour: 0,
+                      minute: 0,
+                      second: 0,
+                      millisecond: 0
+                    }).toDate(),
+                    endsAt: moment(task.metrics[task.metrics.length - 1].endDate || task.metrics[task.metrics.length - 1].targetEndDate).set({
+                      hour: 2,
+                      minute: 0,
+                      second: 0,
+                      millisecond: 0
+                    }).toDate(),
+                    color: task.taskColor,
+                    draggable: (task.metrics[task.metrics.length - 1].status !== 'Finished')
+                  });
+                });
+
+
       });
 
       // Fetch the tasks
@@ -127,20 +181,20 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
         self.optionsDiscreteBarChart = {
           chart: {
             type: 'discreteBarChart',
-            height: 40,
+            height: 100,
             margin: {
               top: 0,
               right: 0,
-              bottom: 2,
+              bottom: 20,
               left: 0
             },
             showYAxis: false,
-            showXAxis: false,
+            showXAxis: true,
             color: [
               '#1f77b4'
             ],
             x: function(d) {
-              return d.label;
+              return d.month;
             },
             y: function(d) {
               return d.count;
@@ -179,7 +233,7 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
 
         tasksMonthDetailsData.then(function(response) {
           self.listMonthDetails = response.data;
-          
+
 
           self.subHierarchies = _.sortBy(self.listMonthDetails, ['root', 'name']);
 
@@ -405,7 +459,8 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
         var b = (task.metrics) ? moment(new Date(task.metrics[task.metrics.length - 1].endDate)) : a;
         var blnDate = (datediff) ? (datediff >= a.diff(b, 'days')) : true;
         var blnReview = (review) ? (task.reviewTask === true) : (task.reviewTask === undefined || task.reviewTask === false);
-        return blnDate && task.metrics && task.metrics[task.metrics.length - 1].status === status && blnReview;
+        var blnReturn = (status !== 'All') ? blnDate && task.metrics && task.metrics[task.metrics.length - 1].status === status && blnReview : blnDate && task.metrics;
+        return blnReturn;
       });
     };
 

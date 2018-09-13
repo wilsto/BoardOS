@@ -58,7 +58,7 @@ angular.module('boardOsApp').factory('myLibrary', function() {
       var dateResult = [];
       var i;
       var yourDate = new Date();
-      for (i = 0; i < 12; i++) {
+      for (i = 0; i < 18; i++) {
         dateResult.push(new Date(yourDate.getFullYear(), yourDate.getMonth() - i, 1));
       }
 

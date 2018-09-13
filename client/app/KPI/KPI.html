@@ -168,7 +168,7 @@
                                 </div>
                               </td>
                               <td>
-                                  <a href="/task/{{task._id}}"><div class="desc" popover-html-unsafe="Context : {{task.context}} </p>  Activity : {{task.activity}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="right" popover-delay ="1000">{{task.name}}  <span class="label label-sm label-warning " ng-show="task.needToFeed"> Need Metric</span></div></a>
+                                  <a href="/task/{{task._id}}"><div class="desc" popover-html-unsafe="Context : {{task.context}} </p> Process : {{task.activity}} " popover-trigger="mouseenter" popover-title="Perimeter" popover-placement="right" popover-delay ="1000">{{task.name}}  <span class="label label-sm label-warning " ng-show="task.needToFeed"> Need Metric</span></div></a>
                               </td>
                               <td class="hidden-xs">
                                 {{task.metrics[0].targetstartDate | date:'mediumDate'}}<br/>
