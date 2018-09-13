@@ -491,7 +491,7 @@ exports.destroy = function(req, res) {
     if (!recurrentTask) {
       return res.status(404).send('Not Found');
     }
-    process.emit('taskChanged', recurrentTask);
+    //process.emit('taskChanged', recurrentTask);
     recurrentTask.remove(function(err) {
       if (err) {
         return handleError(res, err);

@@ -425,7 +425,7 @@ exports.create = function(req, res) {
         });
       });
     }
-    process.emit('taskChanged', taskFull);
+    //process.emit('taskChanged', taskFull);
     return res.status(201).json(taskFull);
   });
 };
@@ -656,7 +656,7 @@ exports.update = function(req, res) {
           return handleError(res, err);
         }
         if (blnexecuteDashboard === true) {
-          process.emit('taskChanged', taskFull);
+          //process.emit('taskChanged', taskFull);
         }
         TaskFull.find({
           previousTasks: req.params.id
@@ -890,7 +890,7 @@ exports.destroy = function(req, res) {
     if (!taskFull) {
       return res.status(404).send('Not Found');
     }
-    process.emit('taskChanged', taskFull);
+    //process.emit('taskChanged', taskFull);
     taskFull.remove(function(err) {
       if (err) {
         return handleError(res, err);
