@@ -648,9 +648,7 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
       }
     }
   };
-  //console.log(graphGenerator)
-
-  var initializing = true;
+  //var initializing = true;
   $scope.newPerimeterValue = {};
   $scope.timelineLoaded = false;
 

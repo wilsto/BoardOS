@@ -11,7 +11,7 @@ angular.module('boardOsApp').factory('dataGenerator', function($rootScope, $http
           }).success(function(tasks) {
             return tasks;
           }).error(function(err) {
-            console.log('err', err);
+            
           });
         }
       },
@@ -24,7 +24,7 @@ angular.module('boardOsApp').factory('dataGenerator', function($rootScope, $http
           }).success(function(tasks) {        
             return tasks;
           }).error(function(err) {
-            console.log('err', err);
+            
           });
         }
       }

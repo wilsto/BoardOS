@@ -133,7 +133,7 @@ angular.module('boardOsApp').factory('Anomalies', function($http, Notification, 
 
     // Call the initialize function for every new instance
     this.initialize();
-    console.log('GG');
+    
   };
 
   // Return a reference to the function
