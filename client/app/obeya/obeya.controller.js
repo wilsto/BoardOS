@@ -56,9 +56,9 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
   $scope.filters = '';
 
   $scope.viewMode = {};
-  $scope.viewMode.Milestones = 'List';
-  $scope.viewMode.Tasks = 'overview';
-  $scope.viewMode.Anomalies = 'List';
+  $scope.viewMode.Milestones = (JSON.parse($window.sessionStorage.getItem('viewMode')).Milestones) ? JSON.parse($window.sessionStorage.getItem('viewMode')).Milestones : 'List';
+  $scope.viewMode.Tasks =  (JSON.parse($window.sessionStorage.getItem('viewMode')).Tasks) ? JSON.parse($window.sessionStorage.getItem('viewMode')).Tasks : 'PDCA';
+  $scope.viewMode.Anomalies = (JSON.parse($window.sessionStorage.getItem('viewMode')).Anomalies) ? JSON.parse($window.sessionStorage.getItem('viewMode')).Anomalies : 'List';
 
   $scope.propertiesToshow = 'Name';
   $scope.milestonesTypeToshow = 'All';
@@ -79,12 +79,12 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
 
         $rootScope.obeyaPerimeter = $scope.obeya.perimeter;
 
-        var activeWallId = ($window.sessionStorage.getItem('activeWallId')) ? activeWallId = parseInt($window.sessionStorage.getItem('activeWallId')) : 0;
-
         $scope.activeWall = _.filter($scope.walls, function(wall) {
-          return wall.id === activeWallId;
+          return wall.id === 0;
         })[0];
 
+        var activeWallId = ($window.sessionStorage.getItem('activeWallId')) ? activeWallId = parseInt($window.sessionStorage.getItem('activeWallId')) : 0;
+        $scope.NavCaroussel(activeWallId);
         $scope.showCard($scope.activeWall.name);
 
         var filterPerimeter = {
@@ -133,7 +133,13 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
   };
   $scope.loadObeya();
 
+  $scope.$watch('viewMode', function() {
+    $window.sessionStorage.setItem('viewMode', JSON.stringify($scope.viewMode));
+  }, true);
 
+  $scope.$watch('filters', function() {
+    $window.sessionStorage.setItem('viewMode', JSON.stringify($scope.filters));
+  }, true);
 
   /**
    * NavCarroussel
@@ -317,9 +323,10 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
         // create visualization
         $scope.timelineOptions = {
           orientation: 'both',
-          start: '2018-03-01',
-          end: '2018-07-01',
+          start: moment().subtract(30, 'days'),
+          end: moment().add(60, 'days'),
           showCurrentTime: true,
+          zoomKey: 'ctrlKey',
           zoomMin: 1000 * 60 * 60 * 24, // one day in milliseconds
           zoomMax: 1000 * 60 * 60 * 24 * 31 * 4 // about three months in milliseconds
         };
@@ -843,5 +850,38 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
   angular.element(window).on('resize', function(e) {
     $scope.$broadcast('resize');
   });
+
+  // calendar
+  // **********
+  //
+  $scope.viewDate = new Date();
+  $scope.calendarView = 'week';
+  $scope.eventClicked = function(calendarEvent) {
+    $window.open('/' + calendarEvent.eventType + '/' + calendarEvent.eventId, '_blank');
+  };
+
+  $scope.eventTimesChanged = function(calendarEvent, calendarNewEventStart, calendarNewEventEnd) {
+    var updatedEvent = _.filter($scope.myTasks, function(task) {
+      return task._id === calendarEvent.eventId;
+    });
+    if (updatedEvent.length > 0) {
+
+
+      var dayDiff = moment(calendarNewEventStart).diff(moment(updatedEvent[0].metrics[0].targetstartDate), 'days');
+
+      updatedEvent[0].metrics[0].targetstartDate = moment(updatedEvent[0].metrics[0].targetstartDate).add(dayDiff, 'days').toDate();
+      updatedEvent[0].metrics[0].targetEndDate = moment(updatedEvent[0].metrics[0].targetEndDate).add(dayDiff, 'days').toDate();
+
+
+
+      $scope.myPromise = $http.put('/api/taskFulls/' + calendarEvent.eventId + '/' + false, updatedEvent[0]).success(function(data) {
+
+        var logInfo = 'Task "' + updatedEvent[0].name + '" was updated';
+        Notification.success(logInfo);
+      });
+
+    }
+  };
+
 
 });

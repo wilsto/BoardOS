@@ -4,7 +4,7 @@
 }
 
 .btn-toggle-text-usersatis:after {
-  content: 'Sent';
+  content: 'Asked';
   right: -4rem;
   opacity: .5;
 }

@@ -26,7 +26,7 @@
                   <i class="fa fa-question-sign"></i> Description
                 </th> 
 <!--                 <th class="hidden-xs">
-  <i class="fa fa-question-sign"></i> Activity
+  <i class="fa fa-question-sign"></i>Process
 </th>
 <th class="hidden-xs">
   <i class="fa fa-question-sign"></i> Context
@@ -34,7 +34,7 @@
               </tr>
             </thead>
            <tbody>
-            <tr ng-repeat="KPI in KPIs | orderBy : Activity | filter: myFilter track by KPI._id " on-finish-render>
+            <tr ng-repeat="KPI in KPIs | orderBy :Process | filter: myFilter track by KPI._id " on-finish-render>
               <td>
                <a href="/KPI/{{KPI._id}}">{{KPI.name}}</a>
              </td>
