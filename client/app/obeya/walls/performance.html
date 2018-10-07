@@ -11,21 +11,21 @@
             </ul> -->
       <h4>
               <img src="assets/images/respect-icon.png" style="width:60px;height:60px;" alt="" >
-              Respect</h4>
+              Respect Engagements</h4>
       <ul class="list-group card-list">
-        <li class="list-group-item" ng-click="showCard('Performance','In Progress')">
+        <li class="list-group-item" ng-click="viewMode[activeWall.name]='RespectOverview'" ng-class="{'list-group-item-active':viewMode[activeWall.name] === 'RespectOverview'}">
           <img src="assets/images/overview.png" style="height:20px;" alt=""> Overview
           <span class="badge badge-gray">{{obeya.openTasksNb}}</span>
         </li>
-        <li class="list-group-item" ng-click="showCard('Performance','In Progress')">
+        <li class="list-group-item" ng-click="viewMode[activeWall.name]='RespectQuality'" ng-class="{'list-group-item-active':viewMode[activeWall.name] === 'RespectQuality'}">
           <img src="assets/images/quality.png" style="height:20px;" alt=""> Quality
           <span class="badge badge-gray">{{obeya.openTasksNb}}</span>
         </li>
-        <li class="list-group-item">
+        <li class="list-group-item" ng-click="viewMode[activeWall.name]='RespectCost'" ng-class="{'list-group-item-active':viewMode[activeWall.name] === 'RespectCost'}">
           <img src="assets/images/cost.png" style="height:20px;" alt=""> Cost
           <span class="badge badge-gray">{{obeya.alertsValue}}</span>
         </li>
-        <li class="list-group-item">
+        <li class="list-group-item" ng-click="viewMode[activeWall.name]='RespectTime'" ng-class="{'list-group-item-active':viewMode[activeWall.name] === 'RespectTime'}">
           <img src="assets/images/time.png" style="height:20px;" alt=""> Time
           <span class="badge badge-gray">{{obeya.alertsValue}}</span>
         </li>
@@ -33,22 +33,22 @@
       <br>
       <h4>
           <img src="assets/images/maitrise.png" style="width:60px;height:60px;"  alt="">
-          Mastering
+          Master Process
       </h4>
       <ul class="list-group card-list">
-        <li class="list-group-item" ng-click="showCard('Performance','In Progress')">
+        <li class="list-group-item" ng-click="viewMode[activeWall.name]='MasterOverview'" ng-class="{'list-group-item-active':viewMode[activeWall.name] === 'MasterOverview'}">
           <img src="assets/images/overview.png" style="height:20px;" alt=""> Overview
           <span class="badge badge-gray">{{obeya.openTasksNb}}</span>
         </li>
-        <li class="list-group-item" ng-click="showCard('Performance','In Progress')">
+        <li class="list-group-item" ng-click="viewMode[activeWall.name]='MasterQuality'" ng-class="{'list-group-item-active':viewMode[activeWall.name] === 'MasterQuality'}">
           <img src="assets/images/quality.png" style="height:20px;" alt=""> Quality
           <span class="badge badge-gray">{{obeya.openTasksNb}}</span>
         </li>
-        <li class="list-group-item">
+        <li class="list-group-item" ng-click="viewMode[activeWall.name]='MasterCost'" ng-class="{'list-group-item-active':viewMode[activeWall.name] === 'MasterCost'}">
           <img src="assets/images/cost.png" style="height:20px;" alt=""> Cost
           <span class="badge badge-gray">{{obeya.alertsValue}}</span>
         </li>
-        <li class="list-group-item">
+        <li class="list-group-item" ng-click="viewMode[activeWall.name]='MasterTime'" ng-class="{'list-group-item-active':viewMode[activeWall.name] === 'MasterTime'}">
           <img src="assets/images/time.png" style="height:20px;" alt=""> Time
           <span class="badge badge-gray">{{obeya.alertsValue}}</span>
         </li>
@@ -64,13 +64,14 @@
       <div class="wrap-dashboard">
           <div class="dashboard">
 
-            <div class="col-md-12 col-sm-12 ">
+            <div class="col-md-12 col-sm-12 " ng-if="viewMode[activeWall.name] === 'MasterOverview'">
               <div class="label" ng-class="subs ==='Activity' ? 'label-primary':'label-default'" ng-click="showHistory('Activity')" ><span ng-if="subs ==='Activity'">{{subHierarchies.length}}</span> Sub Activities</div>
               <div class="label" ng-class="subs ==='Context' ? 'label-primary':'label-default'" ng-click="showHistory('Context')"><span ng-if="subs ==='Context'">{{subHierarchies.length}}</span> Sub Context</div>
               <small class="label label-default pull-right" style ="font-size:10px" ng-click="showEmptyRow=!showEmptyRow">Show all</small>
               <hr style="margin-top:5px">
               <!-- BEGIN OVERVIEW STATISTIC BARS-->
-              <div class="row stats-overview-cont" ng-repeat="subHierarchy in subHierarchies"  ng-if="dataTasksSubNb[subHierarchy.root + subHierarchy.name]>0 || showEmptyRow">
+              <div class="row stats-overview-cont" ng-repeat="subHierarchy in obeya.tasks.subHierarchies"  >
+                <!-- ng-if="dataTasksSubNb[subHierarchy.root + subHierarchy.name]>0 || showEmptyRow" -->
                 <!-- -->
                 <div class="col-md-2 col-sm-12">
                   <div class="stats-overview stat-block">

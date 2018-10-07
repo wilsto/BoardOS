@@ -4,8 +4,8 @@ angular.module('boardOsApp').factory('dateRangeService', function($rootScope) {
 
   this.rangeDate = 'last30';
   this.datediff = 30;
-  this.startRange = moment().subtract(30, 'days');
-  this.endRange = moment();
+  this.startRange = moment().startOf('week');
+  this.endRange =  moment().endOf('week');
 
   function cb(start, end) {
     $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
@@ -16,15 +16,13 @@ angular.module('boardOsApp').factory('dateRangeService', function($rootScope) {
     startDate: this.startRange,
     endDate: this.endRange,
     ranges: {
-      'Last 7 Days': [moment().subtract(7, 'days'), moment()],
-      'Last 14 Days': [moment().subtract(14, 'days'), moment()],
-      'Last 30 Days': [moment().subtract(30, 'days'), moment()],
-      'Last 90 Days': [moment().subtract(90, 'days'), moment()],
-      'Last 180 Days': [moment().subtract(180, 'days'), moment()],
-      'Last 365 Days': [moment().subtract(365, 'days'), moment()],
-      'All': [moment().subtract(5000, 'days'), moment()],
+      'This Day': [moment().startOf('day'), moment().endOf('day')],
+      'This Week': [moment().startOf('week'), moment().endOf('week')],
+      'Last Week': [moment().subtract(1, 'week').startOf('week'), moment().subtract(1, 'week').endOf('week')],
+      'This Month': [moment().startOf('month'), moment().endOf('month')],
+      'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
     },
-    showCustomRangeLabel: false,
+    showCustomRangeLabel: true,
     autoApply: true
   }, cb);
 
