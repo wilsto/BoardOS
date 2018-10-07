@@ -239,7 +239,7 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
 
           self.dataTasksSub = [];
           self.dataTasksSubReal = [];
-          self.dataUOMetricsSub = [];
+          self.dataUOMetricsSub = []; 
           self.dataUODiffMetricsSub = [];
           self.dataUOPerfMetricsSub = [];
           self.dataMetricsSub = [];

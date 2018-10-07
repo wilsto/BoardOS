@@ -56,9 +56,14 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
   $scope.filters = '';
 
   $scope.viewMode = {};
-  $scope.viewMode.Milestones = (JSON.parse($window.sessionStorage.getItem('viewMode')).Milestones) ? JSON.parse($window.sessionStorage.getItem('viewMode')).Milestones : 'List';
-  $scope.viewMode.Tasks =  (JSON.parse($window.sessionStorage.getItem('viewMode')).Tasks) ? JSON.parse($window.sessionStorage.getItem('viewMode')).Tasks : 'PDCA';
-  $scope.viewMode.Anomalies = (JSON.parse($window.sessionStorage.getItem('viewMode')).Anomalies) ? JSON.parse($window.sessionStorage.getItem('viewMode')).Anomalies : 'List';
+  var viewModeSession = $window.sessionStorage.getItem('viewMode')  ;
+  console.log('VIEWMODESESSION', viewModeSession);
+  viewModeSession=  (viewModeSession === 'undefined' || viewModeSession === null) ? {}:JSON.parse(viewModeSession);
+  console.log('VIEWMODESESSION', viewModeSession);
+  $scope.viewMode.Milestones = (typeof viewModeSession.Milestones !== 'undefined') ? viewModeSession.Milestones : 'List';
+  $scope.viewMode.Tasks =  (typeof viewModeSession.Tasks !== 'undefined') ? viewModeSession.Tasks : 'PDCA';
+  $scope.viewMode.Performance =  (typeof viewModeSession.Performance !== 'undefined') ? viewModeSession.Performance : 'MasterOverview';
+  $scope.viewMode.Anomalies = (typeof viewModeSession.Anomalies !== 'undefined') ? viewModeSession.Anomalies : 'List';
 
   $scope.propertiesToshow = 'Name';
   $scope.milestonesTypeToshow = 'All';
@@ -73,6 +78,7 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
       // ouverture de l'obeya
       $scope.myPromise = $http.get('/api/dashboardCompletes/' + $stateParams.id).success(function(obeya) {
         $scope.obeya = obeya;
+        console.log('$SCOPE.OBEYA', $scope.obeya);
         $scope.obeya.milestones = new Milestones($scope.obeya);
         $scope.obeya.anomalies = new Anomalies($scope.obeya);
         $scope.obeya.tasks = new Tasks($scope.obeya);
