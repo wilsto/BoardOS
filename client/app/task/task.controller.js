@@ -753,7 +753,7 @@ angular.module('boardOsApp')
 
 
     $scope.addActor = function(member) {
-      var index = _.indexOf(_.pluck($scope.task.actors, '_id'), member._id);
+      var index = _.indexOf(_.map($scope.task.actors, '_id'), member._id);
       if (index < 0) {
         $scope.task.actors.push(member);
         $scope.blnAddActor = false;
@@ -791,7 +791,7 @@ angular.module('boardOsApp')
     $scope.removeComment = function(comment) {
       bootbox.confirm('Are you sure to delete this comment ? It can NOT be undone.', function(result) {
         if (result) {
-          var index = _.pluck($scope.task.comments, 'date').indexOf(comment.date);
+          var index = _.map($scope.task.comments, 'date').indexOf(comment.date);
           $scope.task.comments.splice(index, 1);
         }
       });
@@ -829,7 +829,7 @@ angular.module('boardOsApp')
     };
 
     $scope.addFollower = function(member) {
-      var index = _.indexOf(_.pluck($scope.task.followers, '_id'), member._id);
+      var index = _.indexOf(_.map($scope.task.followers, '_id'), member._id);
       if (index < 0) {
         $scope.task.followers.push(member);
         $scope.blnAddFollower = false;
@@ -951,9 +951,9 @@ angular.module('boardOsApp')
 
     $scope.calcAverage = function(tasks, item) {
       var test = _.chain(tasks)
-        .pluck('metrics')
+        .map('metrics')
         .flatten()
-        .pluck('timeSpent')
+        .map('timeSpent')
         .unique()
         .value();
 

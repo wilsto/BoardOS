@@ -147,7 +147,7 @@ angular.module('boardOsApp')
 
 
     $scope.addActor = function(member) {
-      var index = _.indexOf(_.pluck($scope.anomalie.actors, '_id'), member._id);
+      var index = _.indexOf(_.map($scope.anomalie.actors, '_id'), member._id);
       if (index < 0) {
         $scope.anomalie.actors.push(member);
         $scope.blnAddActor = false;

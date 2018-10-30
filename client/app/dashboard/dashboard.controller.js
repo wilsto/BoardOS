@@ -767,7 +767,7 @@ angular.module('boardOsApp')
           });
 
           dashboard.subscribed = false;
-          var userlist = _.pluck(dashboard.users, '_id');
+          var userlist = _.map(dashboard.users, '_id');
 
           $scope.userindex = ($scope.currentUser) ? userlist.indexOf($scope.currentUser._id.toString()) : 0;
 

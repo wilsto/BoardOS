@@ -20,7 +20,6 @@
 <link rel="stylesheet" href="bower_components/angular-motion/dist/angular-motion.css" />
 <link rel="stylesheet" href="bower_components/fullcalendar/fullcalendar.css" />
 <link rel="stylesheet" href="bower_components/bootstrap-markdown/css/bootstrap-markdown.min.css" />
-<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
 <link rel="stylesheet" href="bower_components/ng-table/ng-table.css" />
 <link rel="stylesheet" href="bower_components/ngDialog/css/ngDialog.css" />
 <link rel="stylesheet" href="bower_components/ngDialog/css/ngDialog-theme-default.css" />
@@ -40,6 +39,7 @@
 <link rel="stylesheet" href="bower_components/intro.js/introjs.css" />
 <link rel="stylesheet" href="bower_components/angular-gridster/dist/angular-gridster.css" />
 <link rel="stylesheet" href="bower_components/nvd3/build/nv.d3.css" />
+<link rel="stylesheet" href="bower_components/font-awesome/web-fonts-with-css/css/fontawesome-all.css" />
 <!-- endbower -->
 <!-- endbuild -->
 <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
@@ -90,7 +90,7 @@
             <ul class="page-sidebar-menu" >
             <li  class="start active ">
               <a href="#">
-                <i class="fa fa-dashboard"></i>
+                <i class="fa fa-door-open"></i>
                 <span class="title">Information</span>
                 <span class="arrow "></span>
               </a>
@@ -147,7 +147,7 @@
             </li>
             <li ng-if="isAdmin">
               <a href="/hierarchies">
-                <i class="fa fa-sliders"></i>
+                <i class="fa fa-cog"></i>
                 <span class="title">Configuration</span>
                 <span class="arrow "></span>
               </a>
@@ -186,14 +186,14 @@
             </li>
             <li >
               <a href="/help/">
-                <i class="fa fa-life-saver"></i>
+                <i class="fa fa-question-circle"></i>
                 <span class="title">Help</span>
                 <span class="arrow "></span>
               </a>
               <ul class="sub-menu">
                 <li>
                   <a href="/help/">
-                    <i class="fa fa-life-saver"></i>
+                    <i class="fa fa-question-circle"></i>
                     Help me
                   </a>
                 </li>
@@ -308,7 +308,7 @@
     <script src="bower_components/angular-aria/angular-aria.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-    <script src="bower_components/lodash/dist/lodash.compat.js"></script>
+    <script src="bower_components/lodash/lodash.js"></script>
     <script src="bower_components/angular-confirm-field/app/package/js/angular-confirm-field.min.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script src="bower_components/angular-filter/dist/angular-filter.js"></script>
@@ -362,6 +362,7 @@
     <script src="bower_components/zingchart/zingchart-treemap.min.js"></script>
     <script src="bower_components/ZingChart-AngularJS/src/zingchart-angularjs.js"></script>
     <script src="bower_components/angular-dragdrop/src/angular-dragdrop.js"></script>
+    <script src="bower_components/gojs/release/go.js"></script>
     <!-- endbower -->
     <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
@@ -438,6 +439,7 @@
     <script src="components/factory/dateRangeService.js"></script>
     <script src="components/factory/focus.js"></script>
     <script src="components/factory/milestones.js"></script>
+    <script src="components/factory/ngGojs.js"></script>
     <script src="components/factory/service.js"></script>
     <script src="components/factory/tasks.js"></script>
     <script src="components/factory/util.js"></script>

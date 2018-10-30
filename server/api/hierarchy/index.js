@@ -9,6 +9,7 @@ router.get('/', controller.index);
 router.get('/listContext', controller.listContext);
 router.get('/:id', controller.show);
 router.get('/merge/:id', controller.merge);
+router.get('/list/process', controller.listProcess);
 router.get('/list/:id', controller.list);
 router.get('/sublist/:id/dashboard/:dashboardId/:modePerf', controller.sublist);
 router.get('/list/:id/obeya/:dashboardId', controller.milestones);

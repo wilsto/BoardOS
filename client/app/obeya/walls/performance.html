@@ -60,19 +60,28 @@
   <div class="obeya-pane pane-grow  obeya-pane-darkgray">
     Performance
     <hr style="margin-top:0;margin-bottom:10px;">
-    <div class="obeya-body">
+    <div class="obeya-body" style="height:99%">
       <div class="wrap-dashboard">
           <div class="dashboard">
 
             <div class="col-md-12 col-sm-12 " ng-if="viewMode[activeWall.name] === 'MasterOverview'">
               <div class="label" ng-class="subs ==='Activity' ? 'label-primary':'label-default'" ng-click="showHistory('Activity')" ><span ng-if="subs ==='Activity'">{{subHierarchies.length}}</span> Sub Activities</div>
               <div class="label" ng-class="subs ==='Context' ? 'label-primary':'label-default'" ng-click="showHistory('Context')"><span ng-if="subs ==='Context'">{{subHierarchies.length}}</span> Sub Context</div>
-              <small class="label label-default pull-right" style ="font-size:10px" ng-click="showEmptyRow=!showEmptyRow">Show all</small>
-              <hr style="margin-top:5px">
+              <div class="pull-right" style="margin-left:45px">
+                Group By
+              <div class="label" ng-class="groupPerformance ==='none' ? 'label-primary':'label-default'" ng-click="groupPerformance = 'none'"><span ng-if="groupPerformance ==='none'">{{subHierarchies.length}}</span> None</div>
+              <div class="label" ng-class="groupPerformance ==='day' ? 'label-primary':'label-default'" ng-click="groupPerformance = 'day'"><span ng-if="groupPerformance ==='day'">{{subHierarchies.length}}</span> Day</div>
+              <div class="label" ng-class="groupPerformance ==='week' ? 'label-primary':'label-default'" ng-click="groupPerformance = 'week'"><span ng-if="groupPerformance ==='week'">{{subHierarchies.length}}</span> Week</div>
+              <div class="label" ng-class="groupPerformance ==='month' ? 'label-primary':'label-default'" ng-click="groupPerformance = 'month'"><span ng-if="groupPerformance ==='month'">{{subHierarchies.length}}</span> Month</div>
+              <div class="label" ng-class="groupPerformance ==='year' ? 'label-primary':'label-default'" ng-click="groupPerformance = 'year'"><span ng-if="groupPerformance ==='year'">{{subHierarchies.length}}</span> Year</div>
+            </div>
+            <small class="label label-default pull-right" style ="font-size:10px" ng-click="showEmptyRow=!showEmptyRow">Show all</small>
+
+
+              <hr style="margin-top:15px">
               <!-- BEGIN OVERVIEW STATISTIC BARS-->
-              <div class="row stats-overview-cont" ng-repeat="subHierarchy in obeya.tasks.subHierarchies"  >
-                <!-- ng-if="dataTasksSubNb[subHierarchy.root + subHierarchy.name]>0 || showEmptyRow" -->
-                <!-- -->
+              <div class="row stats-overview-cont" ng-repeat="subHierarchy in obeya.tasks.subHierarchies" ng-if="obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].count>0 || showEmptyRow" >
+
                 <div class="col-md-2 col-sm-12">
                   <div class="stats-overview stat-block">
                     <div class="details">
@@ -81,7 +90,7 @@
                         {{subHierarchy.name}}
                         </b>
                         <br>
-                      <small class="label label-primary"> {{(dataMetricsSubNb[subHierarchy.root + subHierarchy.name]/metricsNb *100)| number:0}}%</small>
+                      <small class="label label-primary"> {{(obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].count/metricsNb *100)| number:0}}%</small>
                       <small ng-if="subHierarchy.code" class="label label-default" style="color:#000000"> {{subHierarchy.code}} </small>
                       </div>
                     </div>
@@ -92,10 +101,11 @@
                     <div class="details">
                       <div class="title">
                         <a href="#" ng-click="blnShowTasks[subHierarchy.root + subHierarchy.name]=!blnShowTasks[subHierarchy.root + subHierarchy.name]">
-                          <span style="font-weight:bold;color:#9467bd">{{dataTasksSubNb[subHierarchy.root + subHierarchy.name]| number:0}}</span>
+                          <span  ng-if="groupPerformance !== 'none'" style="font-weight:bold;color:#9467bd">{{obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].count | number:0}}</span>
                           Tasks</a>
                       </div>
-                      <nvd3 options="optionsTasks" data="dataTasksSub[subHierarchy.root + subHierarchy.name]" ng-if="dashboardSlide==='History'"></nvd3>
+                      <div ng-if="groupPerformance === 'none'" style="width:100%;text-align:right;padding-right:30px;padding-bottom:25px;font-size:34px;font-weight:bold;" ng-class="obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].count===0?'lightgrey':'purple'">{{obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].count }}</div>
+                      <nvd3 options="optionsTasks" data="dataTasksSub[subHierarchy.root + subHierarchy.name]" ng-if="groupPerformance !== 'none'"></nvd3>
                     </div>
                   </div>
                 </div>
@@ -104,82 +114,50 @@
                     <div class="details">
                       <div class="title">
                         <a href="#" ng-click="blnShowTasks[subHierarchy.root + subHierarchy.name]=!blnShowTasks[subHierarchy.root + subHierarchy.name]">
-                          <span style="font-weight:bold;color:#87CEEB">{{dataMetricsSubNb[subHierarchy.root + subHierarchy.name]| number:0}}</span>
+                          <span  ng-if="groupPerformance !== 'none'" style="font-weight:bold;color:#87CEEB">{{obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].sum | number:0}}</span>
                           Men Days</a>
                       </div>
-                      <nvd3 options="optionsLoad" data="dataMetricsSub[subHierarchy.root + subHierarchy.name]" ng-if="dashboardSlide==='History'"></nvd3>
+                      <div ng-if="groupPerformance === 'none'" style="width:100%;text-align:right;padding-right:30px;padding-bottom:25px;font-size:34px;font-weight:bold;" ng-class="obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].sum===0?'lightgrey':'dark-blue'">{{obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].sum  }}</div>
+                      <nvd3 options="optionsLoad" data="dataMetricsSub[subHierarchy.root + subHierarchy.name]" ng-if="groupPerformance !== 'none'"></nvd3>
                     </div>
                   </div>
                 </div>
-                <div class="col-md-2 col-sm-12" ng-if="!viewMode.blnPerf">
-                  <div class="stats-overview stat-block"  ng-if="dataUOMetricsSubNb[subHierarchy.root + subHierarchy.name]>0">
-                    <div class="details">
-                      <div class="title">
-                        <a href="#" ng-click="blnShowTasks[subHierarchy.root + subHierarchy.name]=!blnShowTasks[subHierarchy.root + subHierarchy.name]">
-                          <span style="font-weight:bold;color:#87CEEB">{{dataUOMetricsSubNb[subHierarchy.root + subHierarchy.name]| number:0}}</span>
-                          Men Days UO</a>  <small class="label label-default" style="color:#555555">{{subHierarchy.value}} MD</small>
-                        </div>
-                        <nvd3 options="optionsUOLoad" data="dataUOMetricsSub[subHierarchy.root + subHierarchy.name]" ng-if="dashboardSlide==='History'"></nvd3>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-2 col-sm-12" ng-if="!viewMode.blnPerf">
-                    <div class="stats-overview stat-block"  ng-if="dataUOMetricsSubNb[subHierarchy.root + subHierarchy.name]>0">
-                      <div class="details">
-                        <div class="title">
-                          <a href="#" ng-click="blnShowTasks[subHierarchy.root + subHierarchy.name]=!blnShowTasks[subHierarchy.root + subHierarchy.name]">
-                            <span style="font-weight:bold;color:#87CEEB">{{dataUODiffMetricsSubNb[subHierarchy.root + subHierarchy.name]| number:0}}</span>
-                            Diff UO</a>
-                          </div>
-                          <nvd3 options="optionsUODiff" data="dataUODiffMetricsSub[subHierarchy.root + subHierarchy.name]" ng-if="dashboardSlide==='History'"></nvd3>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-2 col-sm-12" ng-if="!viewMode.blnPerf">
-                      <div class="stats-overview stat-block"  ng-if="dataUOMetricsSubNb[subHierarchy.root + subHierarchy.name]>0">
-                        <div class="details">
-                          <div class="title">
-                            <a href="#" ng-click="blnShowTasks[subHierarchy.root + subHierarchy.name]=!blnShowTasks[subHierarchy.root + subHierarchy.name]">
-                              <span style="font-weight:bold;color:#87CEEB">{{dataUOPerfMetricsSubNb[subHierarchy.root + subHierarchy.name]| number:0}}</span>
-                              Perf UO</a>
-                            </div>
-                            <nvd3 options="optionsCosts" data="dataUOPerfMetricsSub[subHierarchy.root + subHierarchy.name]" ng-if="dashboardSlide==='History'"></nvd3>
-                          </div>
-                        </div>
-                      </div>
-                <div class="col-md-2 col-sm-12" ng-if="viewMode.blnPerf">
+                <div class="col-md-2 col-sm-12" >
                 <div class="stats-overview stat-block">
                   <div class="details">
                     <div class="title">
                       <a href="#" ng-click="blnShowKpis[subHierarchy.root + subHierarchy.name]=!blnShowKpis[subHierarchy.root + subHierarchy.name]">
-                        <span style="font-weight:bold;color:#87CEEB">{{dataQualitySubNb[subHierarchy.root + subHierarchy.name] | number:0}}% </span>
-                        Delivery</a>
+                        <span ng-if="groupPerformance !== 'none'" style="font-weight:bold;color:#87CEEB">{{obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].quality | number:0}}% </span>
+                        Quality</a>
                     </div>
-                    <nvd3 options="optionsCosts" data="dataQualitySub[subHierarchy.root + subHierarchy.name]" ng-if="dashboardSlide==='History'"></nvd3>
+                    <div ng-if="groupPerformance === 'none'" style="width:100%;text-align:right;padding-right:30px;padding-bottom:25px;font-size:34px;font-weight:bold;"  ng-class="colorKPI(obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].quality)">{{obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].quality }}</div>
+                    <nvd3 options="optionsCosts" data="obeya.tasks.dataQualitySub[subHierarchy.root + subHierarchy.name]" ></nvd3>
                   </div>
                 </div>
               </div>
-              <div class="col-md-2 col-sm-12" ng-if="viewMode.blnPerf">
+              <div class="col-md-2 col-sm-12" >
               <div class="stats-overview stat-block">
                 <div class="details">
                   <div class="title">
                     <a href="#" ng-click="blnShowKpis[subHierarchy.root + subHierarchy.name]=!blnShowKpis[subHierarchy.root + subHierarchy.name]">
-                      <span style="font-weight:bold;color:#87CEEB">{{dataCostSubNb[subHierarchy.root + subHierarchy.name] | number:0}}% </span>
+                      <span ng-if="groupPerformance !== 'none'" style="font-weight:bold;color:#87CEEB">{{obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].cost | number:0}}% </span>
                       Costs</a>
                   </div>
-                  <nvd3 options="optionsCosts" data="dataCostSub[subHierarchy.root + subHierarchy.name]" ng-if="dashboardSlide==='History'"></nvd3>
+                  <div ng-if="groupPerformance === 'none'" style="width:100%;text-align:right;padding-right:30px;padding-bottom:25px;font-size:34px;font-weight:bold"  ng-class="colorKPI(obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].cost)">{{obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].cost }}</div>
+                  <nvd3 options="optionsCosts" data="obeya.tasks.dataCostSub[subHierarchy.root + subHierarchy.name]" ></nvd3>
                 </div>
               </div>
             </div>
-            <div class="col-md-2 col-sm-12" ng-if="viewMode.blnPerf">
+            <div class="col-md-2 col-sm-12" >
             <div class="stats-overview stat-block">
               <div class="details">
                 <div class="title">
                   <a href="#" ng-click="blnShowKpis[subHierarchy.root + subHierarchy.name]=!blnShowKpis[subHierarchy.root + subHierarchy.name]">
-                    <span style="font-weight:bold;color:#87CEEB">{{dataTimeSubNb[subHierarchy.root + subHierarchy.name] | number:0}}% </span>
+                    <span ng-if="groupPerformance !== 'none'" style="font-weight:bold;color:#87CEEB">{{obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].time | number:0}}% </span>
                     Time</a>
                 </div>
-                <nvd3 options="optionsCosts" data="dataTimeSub[subHierarchy.root + subHierarchy.name]" ng-if="dashboardSlide==='History'"></nvd3>
+                <div ng-if="groupPerformance === 'none'" style="width:100%;text-align:right;padding-right:30px;padding-bottom:25px;font-size:34px;font-weight:bold;" ng-class="colorKPI(obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].time)">{{obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].time }}</div>
+                <nvd3 options="optionsCosts" data="obeya.tasks.dataTimeSub[subHierarchy.root + subHierarchy.name]" ></nvd3>
               </div>
             </div>
             </div>
@@ -229,7 +207,7 @@
                     </tr>
                   </thead>
                   <tbody infinite-scroll="getMoreData()" infinite-scroll-distance="3">
-                    <tr ng-repeat="task in subTasks[subHierarchy.root + subHierarchy.name] | orderBy:orderByField:reverseSort">
+                    <tr ng-repeat="task in obeya.tasks.subTasks[subHierarchy.root + subHierarchy.name] | orderBy:orderByField:reverseSort">
                       <td style="text-align: left">
                         <div >
                         <!-- <div uib-tooltip-html="'Name : <b>{{task.actors[0].name}}</b>'" tooltip-placement="top"> -->
@@ -311,7 +289,7 @@
                   {{kpi.name}}</a>
 
               </div>
-              <nvd3 options="optionsCosts" data="dataSubKPIs[subHierarchy.root + subHierarchy.name]['Quality'][kpi.name]" ng-if="dashboardSlide==='History'"></nvd3>
+              <nvd3 options="optionsCosts" data="dataSubKPIs[subHierarchy.root + subHierarchy.name]['Quality'][kpi.name]" ></nvd3>
             </div>
             </div>
             </div>
@@ -324,7 +302,7 @@
                   <span style="font-weight:bold;color:#87CEEB"></span>
                   {{kpi.name}}</a>
               </div>
-              <nvd3 options="optionsCosts" data="dataSubKPIs[subHierarchy.root + subHierarchy.name]['Cost'][kpi.name]" ng-if="dashboardSlide==='History'"></nvd3>
+              <nvd3 options="optionsCosts" data="dataSubKPIs[subHierarchy.root + subHierarchy.name]['Cost'][kpi.name]" ></nvd3>
             </div>
             </div>
             </div>
@@ -336,7 +314,7 @@
                   <span style="font-weight:bold;color:#87CEEB"></span>
                   {{kpi.name}}</a>
               </div>
-              <nvd3 options="optionsCosts" data="dataSubKPIs[subHierarchy.root + subHierarchy.name]['Time'][kpi.name]" ng-if="dashboardSlide==='History'"></nvd3>
+              <nvd3 options="optionsCosts" data="dataSubKPIs[subHierarchy.root + subHierarchy.name]['Time'][kpi.name]" ></nvd3>
             </div>
             </div>
             </div>

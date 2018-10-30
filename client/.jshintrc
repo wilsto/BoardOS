@@ -42,6 +42,7 @@
     "d3": true,
     "X2JS": true,
     "bootbox": true,
-    "getJSONFixture": true
+    "getJSONFixture": true,
+    "go": true
   }
 }

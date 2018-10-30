@@ -53,6 +53,7 @@
   background-color: #FFFFFF;
   border-radius: 5px;
   min-height: 250px;
+
   color: #000000;
   padding: 10px;
 }
@@ -104,6 +105,13 @@
 
 .blue {
   color: #33A6BD;
+}
+
+.purple{
+  color:#9467bd;
+}
+.lightgrey{
+  color:#c7c4cb;
 }
 
 .dark-blue {
