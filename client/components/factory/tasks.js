@@ -46,54 +46,53 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
 
         self.SubMonthDetails();
 
+        self.events = [];
+        _.each(self.list, function(task) {
+          task.taskSuffIcon = '';
+          switch (task.metrics[task.metrics.length - 1].status) {
+            case 'In Progress':
+              task.taskIcon = '<i class="fa fa-spinner" aria-hidden="true"></i>&nbsp;&nbsp; ';
+              task.taskColor = calendarConfig.colorTypes.info;
+              break;
+            case 'Finished':
+              if (task.reviewTask === true) {
+                task.taskIcon = '<i class="fa fa-bookmark-o text-success" aria-hidden="true"></i>&nbsp;&nbsp; ';
+                task.taskColor = calendarConfig.colorTypes.success;
 
-                self.events = [];
-                _.each(self.list, function(task) {
-                  task.taskSuffIcon = '';
-                  switch (task.metrics[task.metrics.length - 1].status) {
-                    case 'In Progress':
-                      task.taskIcon = '<i class="fa fa-spinner" aria-hidden="true"></i>&nbsp;&nbsp; ';
-                      task.taskColor = calendarConfig.colorTypes.info;
-                      break;
-                    case 'Finished':
-                      if (task.reviewTask === true) {
-                        task.taskIcon = '<i class="fa fa-bookmark-o text-success" aria-hidden="true"></i>&nbsp;&nbsp; ';
-                        task.taskColor = calendarConfig.colorTypes.success;
+              } else {
+                task.taskIcon = '<i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;&nbsp; ';
+                task.taskColor = calendarConfig.colorTypes.success;
+              }
+              if (task.metrics[task.metrics.length - 1].userSatisfaction === undefined || task.metrics[task.metrics.length - 1].deliverableStatus === undefined || task.metrics[task.metrics.length - 1].actorSatisfaction === undefined) {
+                task.taskSuffIcon = ' <i class="fa fa-question-circle-o text-danger" aria-hidden="true"></i>&nbsp;&nbsp;';
+              }
+              break;
+            default:
+              task.taskIcon = '<i class="fa fa-square-o " aria-hidden="true"></i>&nbsp;&nbsp; ';
+              task.taskColor = '';
+          }
 
-                      } else {
-                        task.taskIcon = '<i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;&nbsp; ';
-                        task.taskColor = calendarConfig.colorTypes.success;
-                      }
-                      if (task.metrics[task.metrics.length - 1].userSatisfaction === undefined || task.metrics[task.metrics.length - 1].deliverableStatus === undefined || task.metrics[task.metrics.length - 1].actorSatisfaction === undefined) {
-                        task.taskSuffIcon = ' <i class="fa fa-question-circle-o text-danger" aria-hidden="true"></i>&nbsp;&nbsp;';
-                      }
-                      break;
-                    default:
-                      task.taskIcon = '<i class="fa fa-square-o " aria-hidden="true"></i>&nbsp;&nbsp; ';
-                      task.taskColor = '';
-                  }
-
-                self.events.push({
-                    title: task.taskIcon + task.taskSuffIcon + task.name,
-                    eventType: 'task',
-                    eventId: task._id,
-                    displayEventTimes: false, // Indicates whether need to show time or not.
-                    startsAt: moment(task.metrics[task.metrics.length - 1].startDate || task.metrics[task.metrics.length - 1].targetstartDate).set({
-                      hour: 0,
-                      minute: 0,
-                      second: 0,
-                      millisecond: 0
-                    }).toDate(),
-                    endsAt: moment(task.metrics[task.metrics.length - 1].endDate || task.metrics[task.metrics.length - 1].targetEndDate).set({
-                      hour: 2,
-                      minute: 0,
-                      second: 0,
-                      millisecond: 0
-                    }).toDate(),
-                    color: task.taskColor,
-                    draggable: (task.metrics[task.metrics.length - 1].status !== 'Finished')
-                  });
-                });
+          self.events.push({
+            title: task.taskIcon + task.taskSuffIcon + task.name,
+            eventType: 'task',
+            eventId: task._id,
+            displayEventTimes: false, // Indicates whether need to show time or not.
+            startsAt: moment(task.metrics[task.metrics.length - 1].startDate || task.metrics[task.metrics.length - 1].targetstartDate).set({
+              hour: 0,
+              minute: 0,
+              second: 0,
+              millisecond: 0
+            }).toDate(),
+            endsAt: moment(task.metrics[task.metrics.length - 1].endDate || task.metrics[task.metrics.length - 1].targetEndDate).set({
+              hour: 2,
+              minute: 0,
+              second: 0,
+              millisecond: 0
+            }).toDate(),
+            color: task.taskColor,
+            draggable: (task.metrics[task.metrics.length - 1].status !== 'Finished')
+          });
+        });
 
 
       });
@@ -234,120 +233,24 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
         tasksMonthDetailsData.then(function(response) {
           self.listMonthDetails = response.data;
 
-
           self.subHierarchies = _.sortBy(self.listMonthDetails, ['root', 'name']);
 
-          self.dataTasksSub = [];
-          self.dataTasksSubReal = [];
-          self.dataUOMetricsSub = []; 
-          self.dataUODiffMetricsSub = [];
-          self.dataUOPerfMetricsSub = [];
-          self.dataMetricsSub = [];
-          self.dataMetricsSubReal = [];
-          self.dataCostSub = [];
-          self.dataQualitySub = [];
-          self.dataTimeSub = [];
-
-          self.dataTasksSubNb = [];
-          self.dataUOMetricsSubNb = [];
-          self.dataUODiffMetricsSubNb = [];
-          self.dataUOPerfMetricsSubNb = [];
-          self.dataMetricsSubNb = [];
-          self.dataQualitySubNb = [];
-          self.dataCostSubNb = [];
-          self.dataTimeSubNb = [];
-
-          self.dataSubKPIs = [];
-
           self.subTasks = [];
+          self.groupSubTasks = [];
           self.blnShowTasks = [];
           self.blnShowKpis = [];
           self.dataKpis = [];
           self.blnShowAllTasks = false;
           self.showEmptyRow = false;
-          self.dataQualitySubKPIs = [];
-
-          self.dataUOMetrics = [{
-            values: []
-          }];
-          self.dataUODiffMetrics = [{
-            values: []
-          }];
-          self.dataUOPerfMetrics = [{
-            values: []
-          }];
-
-          var iMonth = 0;
-          while (iMonth < 12) {
-            self.dataUOMetrics[0].values.push({
-              label: '',
-              month: '',
-              month2: iMonth,
-              total: 0,
-              value: 0,
-              count: 0
-            });
-            iMonth = iMonth + 1;
-          }
 
           _.each(self.subHierarchies, function(subHierarchy) {
 
-            self.dataTasksSub[subHierarchy.root + subHierarchy.name] = [{
-              values: []
-            }];
-
-            self.dataTasksSubReal[subHierarchy.root + subHierarchy.name] = [{
-              values: []
-            }];
-
-            self.dataUOMetricsSub[subHierarchy.root + subHierarchy.name] = [{
-              values: []
-            }];
-
-            self.dataUODiffMetricsSub[subHierarchy.root + subHierarchy.name] = [{
-              values: []
-            }];
-
-            self.dataUOPerfMetricsSub[subHierarchy.root + subHierarchy.name] = [{
-              values: []
-            }];
-
-            self.dataMetricsSub[subHierarchy.root + subHierarchy.name] = [{
-              values: []
-            }];
-
-            self.dataMetricsSubReal[subHierarchy.root + subHierarchy.name] = [{
-              values: []
-            }];
-
-            self.dataCostSub[subHierarchy.root + subHierarchy.name] = [{
-              values: []
-            }];
-
-            self.dataQualitySub[subHierarchy.root + subHierarchy.name] = [{
-              values: []
-            }];
-
-            self.dataTimeSub[subHierarchy.root + subHierarchy.name] = [{
-              values: []
-            }];
-
-            self.dataTimeSub[subHierarchy.root + subHierarchy.name] = [{
-              values: []
-            }];
-
-            self.dataKpis[subHierarchy.root + subHierarchy.name] = [{
-              values: []
-            }];
-
-            self.dataSubKPIs[subHierarchy.root + subHierarchy.name] = {
-              'Cost': [],
-              'Quality': [],
-              'Time': []
-            };
+            self.blnShowTasks[subHierarchy.root + subHierarchy.name] = false;
+            self.blnShowKpis[subHierarchy.root + subHierarchy.name] = false;
 
             self.subTasks[subHierarchy.root + subHierarchy.name] = _.sortBy(_.filter(self.list, function(task) {
               var blnReturn = false;
+              var blnReturnTimeBox = false;
 
               _.each(obeya.perimeter, function(perimeter) {
 
@@ -370,84 +273,92 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
                 }
               });
 
-              return blnReturn;
+              if ((moment(task.metrics[task.metrics.length - 1].targetEndDate) > dateRangeService.startRange) && (moment(task.metrics[task.metrics.length - 1].targetEndDate) < dateRangeService.endRange)) {
+                blnReturnTimeBox = true;
+              }
+
+              return blnReturn && blnReturnTimeBox;
+
             }), function(task) {
-              return task.metrics[0].targetEndDate;
+              return task.metrics[task.metrics.length - 1].targetEndDate;
             }).reverse();
 
-            self.blnShowTasks[subHierarchy.root + subHierarchy.name] = false;
-            self.blnShowKpis[subHierarchy.root + subHierarchy.name] = false;
+            self.groupSubTasks[subHierarchy.root + subHierarchy.name] = {
+              'none': {
+                'count': 0,
+                'sum': 0,
+                'cost': 0,
+                'quality': 0,
+                'time': 0
+              },
+              'day': {
+                'count': [],
+                'sum': [],
+                'cost': [],
+                'quality': [],
+                'time': []
+              },
+              'week': {
+                'count': [],
+                'sum': [],
+                'cost': [],
+                'quality': [],
+                'time': []
+              },
+              'month': {
+                'count': [],
+                'sum': [],
+                'cost': [],
+                'quality': [],
+                'time': []
+              },
+              'year': {
+                'count': [],
+                'sum': [],
+                'cost': [],
+                'quality': [],
+                'time': []
+              },
+            };
 
-            self.dataTasksSub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearTask(self.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'count');
-            self.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearTask(self.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'qty');
 
-            self.dataTasksSubReal[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearTask(self.subTasks[subHierarchy.root + subHierarchy.name], 'endDate', 'count');
-            self.dataMetricsSubReal[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearTask(self.subTasks[subHierarchy.root + subHierarchy.name], 'endDate', 'qty');
+            // if no group
+            self.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].count = self.subTasks[subHierarchy.root + subHierarchy.name].length;
 
-            self.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values = _.map(_.cloneDeep(self.dataTasksSubReal[subHierarchy.root + subHierarchy.name][0].values), function(v) {
-              v.value = v.count * (subHierarchy.value || 0);
-              v.count = v.count * subHierarchy.value;
-              return v;
-            });
-            self.dataUODiffMetricsSub[subHierarchy.root + subHierarchy.name][0].values = _.map(_.cloneDeep(self.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values), function(v, k) {
-              v.value = v.count - self.dataMetricsSubReal[subHierarchy.root + subHierarchy.name][0].values[k].count;
-              v.count = v.count - self.dataMetricsSubReal[subHierarchy.root + subHierarchy.name][0].values[k].count;
-              return v;
-            });
-            self.dataUOPerfMetricsSub[subHierarchy.root + subHierarchy.name][0].values = _.map(_.cloneDeep(self.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values), function(v, k) {
-              v.value = v.count / self.dataMetricsSubReal[subHierarchy.root + subHierarchy.name][0].values[k].count * 100;
-              v.count = v.count / self.dataMetricsSubReal[subHierarchy.root + subHierarchy.name][0].values[k].count * 100;
-              v.color = myLibrary.giveMeMyColor(v.count);
-              return v;
-            });
-            self.dataCostSub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearKPI(self.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'kpis', 'Cost');
-            self.dataQualitySub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearKPI(self.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'kpis', 'Quality');
-            self.dataTimeSub[subHierarchy.root + subHierarchy.name][0].values = myLibrary.displayLastYearKPI(self.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'kpis', 'Time');
+            self.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].sum = Math.round(myLibrary.arraySum(_.compact(_.map(self.subTasks[subHierarchy.root + subHierarchy.name], function(task) {
+              return task.metrics[task.metrics.length - 1].timeSpent;
+            })))* 10) / 10;
+            self.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].quality = Math.round(myLibrary.arrayAverage(_.compact(_.flattenDeep(_.map(self.subTasks[subHierarchy.root + subHierarchy.name], function(task) {
+              var value = _.map(task.kpis, function(kpi) {
+                return (kpi.constraint === 'Quality') ? kpi.calcul.task : null;
+              });
+              return value;
+            }))))* 10) / 10;
 
-            self.dataQualitySubKPIs[subHierarchy.root + subHierarchy.name] = [];
-            _.each(obeya.kpis, function(kpi) {
-              self.dataSubKPIs[subHierarchy.root + subHierarchy.name][kpi.constraint][kpi.name] = [{
-                values: []
-              }];
-              self.dataSubKPIs[subHierarchy.root + subHierarchy.name][kpi.constraint][kpi.name][0].values = myLibrary.displayLastYearKPI(self.subTasks[subHierarchy.root + subHierarchy.name], 'targetEndDate', 'kpis', kpi.constraint, kpi.name);
-            });
+            self.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].cost = Math.round(myLibrary.arrayAverage(_.compact(_.flattenDeep(_.map(self.subTasks[subHierarchy.root + subHierarchy.name], function(task) {
+              var value = _.map(task.kpis, function(kpi) {
+                return (kpi.constraint === 'Cost') ? kpi.calcul.task : null;
+              });
+              return value;
+            }))))* 10) / 10;
+            self.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].time = Math.round(myLibrary.arrayAverage(_.compact(_.flattenDeep(_.map(self.subTasks[subHierarchy.root + subHierarchy.name], function(task) {
+              var value = _.map(task.kpis, function(kpi) {
+                return (kpi.constraint === 'Time') ? kpi.calcul.task : null;
+              });
+              return value;
+            }))))* 10) / 10;
 
-            self.dataTasksSubNb[subHierarchy.root + subHierarchy.name] = myLibrary.arraySum(_.compact(_.map(self.dataTasksSub[subHierarchy.root + subHierarchy.name][0].values, 'count')));
-            self.dataUOMetricsSubNb[subHierarchy.root + subHierarchy.name] = myLibrary.arraySum(_.compact(_.map(self.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values, 'count')));
-            self.dataUODiffMetricsSubNb[subHierarchy.root + subHierarchy.name] = myLibrary.arraySum(_.compact(_.map(self.dataUODiffMetricsSub[subHierarchy.root + subHierarchy.name][0].values, 'count')));
-            self.dataMetricsSubNb[subHierarchy.root + subHierarchy.name] = myLibrary.arraySum(_.compact(_.map(self.dataMetricsSub[subHierarchy.root + subHierarchy.name][0].values, 'count')));
-            self.dataCostSubNb[subHierarchy.root + subHierarchy.name] = myLibrary.arrayAverage(_.compact(_.map(self.dataCostSub[subHierarchy.root + subHierarchy.name][0].values, 'count')));
-            self.dataQualitySubNb[subHierarchy.root + subHierarchy.name] = myLibrary.arrayAverage(_.compact(_.map(self.dataQualitySub[subHierarchy.root + subHierarchy.name][0].values, 'count')));
-            self.dataTimeSubNb[subHierarchy.root + subHierarchy.name] = myLibrary.arrayAverage(_.compact(_.map(self.dataTimeSub[subHierarchy.root + subHierarchy.name][0].values, 'count')));
+            // if group ******
+            // self.dataTasksSubNb[subHierarchy.root + subHierarchy.name] = self.dataMetricsSub[subHierarchy.root + subHierarchy.name]['none'].length;
+            // self.dataMetricsSubNb[subHierarchy.root + subHierarchy.name] =  myLibrary.arraySum(_.compact(_.map(self.dataMetricsSub[subHierarchy.root + subHierarchy.name]['none'], function(task){
+            //     return task.metrics[task.metrics.length-1].timeSpent;
+            // })));
+            // self.dataCostSubNb[subHierarchy.root + subHierarchy.name] = myLibrary.arrayAverage(_.compact(_.map(self.dataCostSub[subHierarchy.root + subHierarchy.name][0].values, 'count')));
+            // self.dataQualitySubNb[subHierarchy.root + subHierarchy.name] = myLibrary.arrayAverage(_.compact(_.map(self.dataQualitySub[subHierarchy.root + subHierarchy.name][0].values, 'count')));
+            // self.dataTimeSubNb[subHierarchy.root + subHierarchy.name] = myLibrary.arrayAverage(_.compact(_.map(self.dataTimeSub[subHierarchy.root + subHierarchy.name][0].values, 'count')));
 
-            var iMonth2 = 0;
-            while (iMonth2 < 12) {
-              self.dataUOMetrics[0].values[iMonth2].label = self.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values[iMonth2].label;
-              self.dataUOMetrics[0].values[iMonth2].month = self.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values[iMonth2].month;
-              self.dataUOMetrics[0].values[iMonth2].month2 = self.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values[iMonth2].month2;
-              self.dataUOMetrics[0].values[iMonth2].total += self.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values[iMonth2].total;
-              self.dataUOMetrics[0].values[iMonth2].value += isNaN(self.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values[iMonth2].value) ? 0 : self.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values[iMonth2].value;
-              self.dataUOMetrics[0].values[iMonth2].count += isNaN(self.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values[iMonth2].count) ? 0 : self.dataUOMetricsSub[subHierarchy.root + subHierarchy.name][0].values[iMonth2].count;
-              iMonth2 = iMonth2 + 1;
-            }
 
           });
-
-          self.dataUODiffMetrics[0].values = _.map(_.cloneDeep(self.dataUOMetrics[0].values), function(v, k) {
-            v.value = v.count - self.dataMetrics[0].values[k].count;
-            v.count = v.count - self.dataMetrics[0].values[k].count;
-            return v;
-          });
-          self.dataUOPerfMetrics[0].values = _.map(_.cloneDeep(self.dataUOMetrics[0].values), function(v, k) {
-            v.value = v.count / self.dataMetrics[0].values[k].count * 100;
-            v.count = v.count / self.dataMetrics[0].values[k].count * 100;
-            v.color = myLibrary.giveMeMyColor(v.count);
-            return v;
-          });
-
-          self.dataUOMetricsNb = myLibrary.arraySum(_.compact(_.map(self.dataUOMetrics[0].values, 'count')));
-          self.dataUODiffMetricsNb = myLibrary.arraySum(_.compact(_.map(self.dataUODiffMetrics[0].values, 'count')));
-          self.dataUOPerfMetricsNb = myLibrary.arrayAverage(_.compact(_.map(self.dataUOPerfMetrics[0].values, 'count')));
         });
       };
 

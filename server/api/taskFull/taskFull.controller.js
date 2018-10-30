@@ -116,6 +116,24 @@ exports.listHierarchies = function(req, res) {
     return res.status(200).json(taskFulls);
   });
 };
+
+// Get list of hierarchies of taskFulls
+exports.listProcess = function(req, res) {
+  var myFilter = (req.query.process) ?
+    {
+      activity: {
+        '$regex': req.query.process || '',
+        $options: '-i'
+      }
+    }
+   : {};
+  TaskFull.distinct('activity', myFilter, function(err, taskFulls) {
+    if (err) {
+      return handleError(res, err);
+    }
+    return res.status(200).json(taskFulls);
+  });
+};
 // process.on('unhandledRejection', (reason, p) => {
 //   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 //   // application specific logging, throwing an error, or other logic here

@@ -87,7 +87,7 @@ angular.module('boardOsApp')
       $scope.pageHints = '/' + $location.path().split('/')[1];
       $http.get('/api/whatsnews/searchPage' + $scope.pageHints).success(function(data) {
         if (data) {
-          $scope.maxVersion = _.max(_.pluck(data.hints, 'version'));
+          $scope.maxVersion = _.max(_.map(data.hints, 'version'));
           $scope.blnShownewHints = false;
           var userVersions = _.filter($rootScope.thisUser.pageHints, function(page) {
             return page.page === $scope.pageHints;
@@ -141,7 +141,7 @@ angular.module('boardOsApp')
       $http.get('/api/dashboardCompletes/', myparams).success(function(dashboards) {
         _.each(dashboards, function(dashboard) {
           dashboard.subscribed = false;
-          var userlist = _.pluck(dashboard.users, '_id');
+          var userlist = _.map(dashboard.users, '_id');
           var userindex = userlist.indexOf($rootScope.thisUser._id.toString());
           if (userindex >= 0 && dashboard.users[userindex] && dashboard.users[userindex].dashboardName && dashboard.users[userindex].dashboardName.length > 0) {
             dashboard.name = dashboard.users[userindex].dashboardName;

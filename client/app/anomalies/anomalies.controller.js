@@ -107,7 +107,7 @@ angular.module('boardOsApp')
         $scope.myanomalies = [];
         _.each(anomalies, function(anomalie) {
           anomalie.subscribed = false;
-          var userlist = _.pluck(anomalie.users, '_id');
+          var userlist = _.map(anomalie.users, '_id');
           var userindex = userlist.indexOf($scope.currentUser._id.toString());
           if (userindex >= 0 && anomalie.users[userindex] && anomalie.users[userindex].anomalieName && anomalie.users[userindex].anomalieName.length > 0) {
             anomalie.name = anomalie.users[userindex].anomalieName;

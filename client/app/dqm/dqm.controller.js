@@ -9,7 +9,7 @@ angular.module('boardOsApp')
     var allhierarchies = {};
 
     var filterTasks = function() {
-      var allTaskHierachies = _.pluck(_.sortBy(alltasks, $scope.HierarchyType.toLowerCase()), $scope.HierarchyType.toLowerCase());
+      var allTaskHierachies = _.map(_.sortBy(alltasks, $scope.HierarchyType.toLowerCase()), $scope.HierarchyType.toLowerCase());
       var paths = [];
       _.each(allhierarchies, function(hierarchy) {
         hierarchy.isValidPath = true;
@@ -26,7 +26,7 @@ angular.module('boardOsApp')
       });
       _.each(joinAllTasks, function(taskHierarchie) {
         taskHierarchie.isUsedPath = true;
-        taskHierarchie.isValidPath = (_.indexOf(_.pluck(allhierarchies, 'longname'), taskHierarchie) > 0);
+        taskHierarchie.isValidPath = (_.indexOf(_.map(allhierarchies, 'longname'), taskHierarchie) > 0);
         if ((taskHierarchie.isUsedPath === $scope.filterUsed || $scope.filterUsed === 'All') && (taskHierarchie.isValidPath === $scope.filterValid || $scope.filterValid === 'All')) {
           paths.push(taskHierarchie);
         }

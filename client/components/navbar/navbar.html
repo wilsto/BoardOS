@@ -32,7 +32,7 @@
         <ul class="nav navbar-nav">
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-              <i class="fa fa-dashboard"></i>
+              <i class="fa fa-tachometer-alt"></i>
               <span style="color:white"> Obeyas</span>
               <span class="badge badge-primary" ng-show="dashboards.length>0">
                 {{dashboards.length}}
@@ -45,7 +45,7 @@
                   <li ng-repeat="dashboard in dashboards | orderBy:'timebetween' track by $index">
                     <a href="/obeya/{{dashboard._id}}">
                               <span class="label label-sm label-icon label-primary">
-                                <i class="fa fa-dashboard"></i>
+                                <i class="fa fa-tachometer-alt"></i>
                               </span>&nbsp; {{dashboard.name}}
                               <span class="time pull-right" style="color:red" ng-show="dashboard.timebetween <= 0 && dashboard.timebetween !== null ">{{dashboard.timebetween}} days ago</span>
                               <span class="time pull-right" style="color:red" ng-show="dashboard.metrics[task.metrics.length - 1].progressStatus !== 'On Time'"> {{dashboard.metrics[task.metrics.length - 1].progressStatus}}  </span>

@@ -97,7 +97,7 @@ angular.module('boardOsApp')
       filtertasks = _.filter(tasks, function(task) {
         // si actor (metrics)
         if (typeof task.actors !== 'undefined') {
-          var actors = _.pluck(task.actors, '_id');
+          var actors = _.map(task.actors, '_id');
           if ($scope.currentUser && actors.indexOf($scope.currentUser._id) > -1) {
             return true;
           }

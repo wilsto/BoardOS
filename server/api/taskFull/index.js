@@ -6,6 +6,7 @@ var controller = require('./taskFull.controller');
 var router = express.Router();
 
 router.get('/', controller.index);
+router.get('/list/process', controller.listProcess);
 router.get('/list/hierarchies', controller.listHierarchies);
 router.get('/execute', controller.updateAllTask);
 router.get('/search', controller.search);

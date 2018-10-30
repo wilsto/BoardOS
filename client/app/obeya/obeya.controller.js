@@ -54,16 +54,16 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
 
   $scope.obeyaMode = 'all';
   $scope.filters = '';
+  $scope.groupPerformance = 'none';
 
   $scope.viewMode = {};
-  var viewModeSession = $window.sessionStorage.getItem('viewMode')  ;
-  console.log('VIEWMODESESSION', viewModeSession);
-  viewModeSession=  (viewModeSession === 'undefined' || viewModeSession === null) ? {}:JSON.parse(viewModeSession);
-  console.log('VIEWMODESESSION', viewModeSession);
+  var viewModeSession = $window.sessionStorage.getItem('viewMode');
+  viewModeSession = (viewModeSession === 'undefined' || viewModeSession === null) ? {} : JSON.parse(viewModeSession);
   $scope.viewMode.Milestones = (typeof viewModeSession.Milestones !== 'undefined') ? viewModeSession.Milestones : 'List';
-  $scope.viewMode.Tasks =  (typeof viewModeSession.Tasks !== 'undefined') ? viewModeSession.Tasks : 'PDCA';
-  $scope.viewMode.Performance =  (typeof viewModeSession.Performance !== 'undefined') ? viewModeSession.Performance : 'MasterOverview';
+  $scope.viewMode.Tasks = (typeof viewModeSession.Tasks !== 'undefined') ? viewModeSession.Tasks : 'PDCA';
+  $scope.viewMode.Performance = (typeof viewModeSession.Performance !== 'undefined') ? viewModeSession.Performance : 'MasterOverview';
   $scope.viewMode.Anomalies = (typeof viewModeSession.Anomalies !== 'undefined') ? viewModeSession.Anomalies : 'List';
+  $scope.viewMode.Process = (typeof viewModeSession.Process !== 'undefined') ? viewModeSession.Process : 'Workflow';
 
   $scope.propertiesToshow = 'Name';
   $scope.milestonesTypeToshow = 'All';
@@ -78,11 +78,9 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
       // ouverture de l'obeya
       $scope.myPromise = $http.get('/api/dashboardCompletes/' + $stateParams.id).success(function(obeya) {
         $scope.obeya = obeya;
-        console.log('$SCOPE.OBEYA', $scope.obeya);
         $scope.obeya.milestones = new Milestones($scope.obeya);
         $scope.obeya.anomalies = new Anomalies($scope.obeya);
         $scope.obeya.tasks = new Tasks($scope.obeya);
-
         $rootScope.obeyaPerimeter = $scope.obeya.perimeter;
 
         $scope.activeWall = _.filter($scope.walls, function(wall) {
@@ -130,10 +128,15 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
           }
           $scope.filterPerimeter = filterPerimeter;
           $rootScope.filterPerimeter = filterPerimeter;
+
         });
 
         // appel des activités en cours
         $rootScope.$broadcast('obeya:searchTasks', $scope.obeya);
+
+        // recherche des processus
+        $scope.loadProcessList();
+
       });
     }
   };
@@ -226,6 +229,8 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
 
     $scope.datediff = dateRangeService.datediff;
     $scope.rangeDate = dateRangeService.rangeDate;
+
+    $scope.obeya.tasks.SubMonthDetails();
     $timeout(function() {
       var items = new VisDataSet();
       var arrGroups = [];
@@ -777,6 +782,29 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
     visible: false
   };
 
+  $scope.colorKPI = function(number) {
+    var color;
+    if (number <= 0) {
+      color = 'lightgrey';
+    }
+    if (number > 0 && number < 70) {
+      color = 'orange';
+    }
+    if (number >= 70 && number < 90) {
+      color = 'orange';
+    }
+    if (number >= 90 && number < 110) {
+      color = 'green';
+    }
+    if (number >= 110 && number < 130) {
+      color = 'orange';
+    }
+    if (number >= 130) {
+      color = 'red';
+    }
+    return color;
+  };
+
   //make chart visible after grid have been created
   $scope.$on('obeya:refreshPerformance', function(event, data) {
 
@@ -889,5 +917,103 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
     }
   };
 
+$scope.saveDiagram = function(){
+  $scope.$broadcast('saveDiagram');
+}
+$scope.loadDiagram = function(){
+  $scope.$broadcast('loadDiagram');
+}
+$scope.printDiagram = function(){
+  $scope.$broadcast('printDiagram');
+}
+
+
+
+
+  // Process Matrix
+  var alltasks = {};
+  var allhierarchies = {};
+
+  var filterTasks = function() {
+    var paths = [];
+    _.each(allhierarchies, function(hierarchy) {
+      hierarchy.isValidPath = true;
+      hierarchy.isUsedPath = (_.indexOf(alltasks, hierarchy.longname) > 0);
+      hierarchy.level = (hierarchy.longname.match(new RegExp('\\.', 'g')) || []).length;
+
+      paths.push(hierarchy);
+    });
+    var joinAllTasks = _.map(alltasks, function(taskHierarchie) {
+      return {
+        longname: taskHierarchie,
+        type: 'task'
+      };
+    });
+    _.each(joinAllTasks, function(taskHierarchie) {
+      taskHierarchie.isUsedPath = true;
+      taskHierarchie.isValidPath = (_.indexOf(_.map(allhierarchies, 'longname'), taskHierarchie.longname) > 0);
+      taskHierarchie.level = (taskHierarchie.longname.match(new RegExp('\\.', 'g')) || []).length;
+      paths.push(taskHierarchie);
+    });
+    paths = _.sortBy(paths, 'longname');
+
+    $scope.paths = _.uniqBy(paths, function(x) {
+      return x.longname;
+    });
+
+    $scope.processFlowLevel = 2;
+
+    var processFlow = [];
+    processFlow.push({
+      'key': -1,
+      'category': 'Start',
+      'loc': '175 0',
+      'text': 'Start'
+    });
+    processFlow.push({
+      'key': -2,
+      'category': 'End',
+      'loc': '175 660',
+      'text': 'End!'
+    });
+    _.each($scope.paths, function(path, index) {
+      var newSubProcess = {};
+      if (path.level === $scope.processFlowLevel) {
+        newSubProcess.key = path.id;
+        newSubProcess.name = path.longname.replace($scope.obeya.perimeter[0].activity + '.', '');
+        newSubProcess.color = 'white';
+        processFlow.push(newSubProcess);
+      }
+    });
+    // PROCESS flow
+    console.log('PROCESSFLOW', processFlow)
+    $scope.model = new go.GraphLinksModel(
+      processFlow,
+      [{
+        from: 1,
+        to: 2
+      }]);
+  };
+
+  $scope.countDot = function count(s1) {
+    return (s1.match(new RegExp('\\.', 'g')) || []).length;
+  };
+
+  $scope.loadProcessList = function() {
+    var process = $scope.obeya.perimeter[0].activity;
+    var myparams = {
+      params: {
+        process: process
+      }
+    };
+
+    $http.get('/api/hierarchies/list/process', myparams).success(function(hierarchies) {
+      allhierarchies = _.sortBy(hierarchies, 'longname');
+      $http.get('/api/taskFulls/list/process', myparams).success(function(tasks) {
+        alltasks = _.sortBy(tasks);
+        filterTasks();
+      });
+    });
+  };
 
 });

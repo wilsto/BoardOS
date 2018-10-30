@@ -23,7 +23,6 @@
     "bootstrap-markdown": "https://github.com/toopay/bootstrap-markdown.git#~2.8.0",
     "bootstrap.growl": "~2.0.1",
     "es5-shim": "~3.0.1",
-    "font-awesome": ">=4.1.0",
     "json3": "~3.3.1",
     "moment": "^2.19.1",
     "ng-table": "~0.3.3",
@@ -46,14 +45,16 @@
     "angular-bootstrap-calendar": "^0.30.0",
     "vis": "^4.20.1",
     "angular-pageslide-directive": "^2.1.4",
-    "lodash": "2.4",
+    "lodash": "^4.17.11",
     "awesome-bootstrap-checkbox": "^1.0.0",
     "angular-intro.js": "^3.3.0",
     "angular-gridster": "^0.13.15",
     "angular-nvd3": "^1.0.9",
     "ZingChart-AngularJS": "zingchart-angularjs#^1.2.0",
     "zingchart": "^2.6.3",
-    "angular-dragdrop": "^1.0.13"
+    "angular-dragdrop": "^1.0.13",
+    "gojs": "^1.8.32",
+    "font-awesome": "^5.4.2"
   },
   "devDependencies": {
     "angular-mocks": "~1.4.x",
