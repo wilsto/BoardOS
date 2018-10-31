@@ -21,17 +21,17 @@ angular.module('boardOsApp').directive('goDiagram', function() {
             cursor: 'pointer',
             width: 150,
             height: 75,
-            margin: 10,
+            margin: 5,
             strokeWidth: 1,
             fromLinkable: true,
             toLinkable: true,
-            fromLinkableSelfNode: true,
-            toLinkableSelfNode: true,
-            fromLinkableDuplicates: true,
-            toLinkableDuplicates: true
+            fromLinkableSelfNode: false,
+            toLinkableSelfNode: false,
+            fromLinkableDuplicates: false,
+            toLinkableDuplicates: false
           }),
           $(go.TextBlock, {
-              margin: 8,
+              margin: 5,
               editable: true
             },
             new go.Binding('text', 'name').makeTwoWay())
@@ -112,6 +112,35 @@ angular.module('boardOsApp').directive('goDiagram', function() {
         };
       }
 
+      diagram.nodeTemplateMap.add('Process',
+        $(go.Node, 'Table', nodeStyle(),
+          $(go.Panel, 'Auto',
+            $(go.Shape, 'RoundedRectangle', new go.Binding('fill', 'color'), {
+              portId: '',
+              cursor: 'pointer',
+              width: 150,
+              height: 75,
+              margin: 5,
+              strokeWidth: 1,
+              fromLinkable: true,
+              toLinkable: true,
+              fromLinkableSelfNode: false,
+              toLinkableSelfNode: false,
+              fromLinkableDuplicates: false,
+              toLinkableDuplicates: false
+            }),
+            $(go.TextBlock, {
+                margin: 5,
+                editable: true
+              },
+              new go.Binding('text', 'name').makeTwoWay())
+          ),
+          // three named ports, one on each side except the top, all output only:
+          makePort('L', go.Spot.Left, go.Spot.Left, true, false),
+          makePort('R', go.Spot.Right, go.Spot.Right, true, false),
+          makePort('B', go.Spot.Bottom, go.Spot.Bottom, true, false)
+        ));
+
       diagram.nodeTemplateMap.add('Start',
         $(go.Node, 'Table', nodeStyle(),
           $(go.Panel, 'Auto',
@@ -152,12 +181,15 @@ angular.module('boardOsApp').directive('goDiagram', function() {
           // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
           $(go.Panel, 'Auto',
             $(go.Shape, 'Diamond', {
-                fill: '#00A9C9',
-                strokeWidth: 0
+                fill: '#ffffff',
+                stroke:'#000000',
+                strokeWidth: 1,
+                strokeDashArray: [4, 2]
               },
               new go.Binding('figure', 'figure')),
             $(go.TextBlock, textStyle(), {
                 margin: 8,
+                stroke:'#000000',
                 maxSize: new go.Size(160, NaN),
                 wrap: go.TextBlock.WrapFit,
                 editable: true
@@ -183,8 +215,8 @@ angular.module('boardOsApp').directive('goDiagram', function() {
               maxSize: new go.Size(200, NaN),
               wrap: go.TextBlock.WrapFit,
               textAlign: 'center',
-              editable: true,
-              font: 'bold 12pt Helvetica, Arial, sans-serif',
+              editable: false,
+              font: 'bold 11pt Helvetica, Arial, sans-serif',
               stroke: '#454545'
             },
             new go.Binding('text').makeTwoWay())
@@ -252,7 +284,7 @@ angular.module('boardOsApp').directive('goDiagram', function() {
               {
                 textAlign: 'center',
                 font: '10pt helvetica, arial, sans-serif',
-                stroke: '#3333"33',
+                stroke: '#333333',
                 editable: true
               },
               new go.Binding('text').makeTwoWay())
@@ -284,8 +316,10 @@ angular.module('boardOsApp').directive('goDiagram', function() {
                 text: 'Start'
               },
               {
-                text: 'Step',
-                color: 'white'
+                category: 'Process',
+                text: 'Process',
+                color: 'white',
+                stroke: 'black'
               },
               {
                 category: 'Conditional',
@@ -331,7 +365,6 @@ angular.module('boardOsApp').directive('goDiagram', function() {
       }
       // notice when the value of 'model' changes: update the Diagram.model
       $scope.$watch('model', function(newmodel) {
-        console.log('NEWMODEL', newmodel)
         if (!newmodel) {
           return;
         }
@@ -343,8 +376,6 @@ angular.module('boardOsApp').directive('goDiagram', function() {
         }
       });
       $scope.$watch('model.selectedNodeData.name', function(newname) {
-        console.log('NEWNAME', newname)
-        console.log('DIAGRAM.MODEL', diagram.model)
         if (!diagram.model.selectedNodeData) {
           return;
         }
@@ -368,9 +399,7 @@ angular.module('boardOsApp').directive('goDiagram', function() {
       });
 
       $scope.$on('loadDiagram', function() {
-        console.log('DIAGRAM.MODEL1 ', diagram.model)
         diagram.model = go.Model.fromJson(document.getElementById('mySavedModel').value);
-        console.log('DIAGRAM.MODEL2 ', diagram.model)
       });
 
       // print the diagram by opening a new window holding SVG images of the diagram contents for each page

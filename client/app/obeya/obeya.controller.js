@@ -919,13 +919,13 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
 
   $scope.saveDiagram = function() {
     $scope.$broadcast('saveDiagram');
-  }
+  };
   $scope.loadDiagram = function() {
     $scope.$broadcast('loadDiagram');
-  }
+  };
   $scope.printDiagram = function() {
     $scope.$broadcast('printDiagram');
-  }
+  };
 
 
   // Process Matrix
@@ -959,12 +959,17 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
       return x.longname;
     });
 
-    $scope.processFlowLevel = 2;
+    $scope.processFlowLevel = $scope.countDot($scope.obeya.perimeter[0].activity) + 1;
     $scope.processFocus = $scope.obeya.perimeter[0].activity;
 
     var processFlow = [];
     processFlow.push({
-      'key': -1,
+      'key': -5,
+      'category': 'Comment',
+      'text': $scope.processFocus + '    -    Flow of level ' + $scope.processFlowLevel,
+      'loc': '280 -40'
+    });
+    processFlow.push({      'key': -1,
       'category': 'Start',
       'loc': '175 0',
       'text': 'Start'
@@ -985,7 +990,6 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
       }
     });
     // PROCESS flow
-    console.log('PROCESSFLOW', processFlow)
     $scope.model = new go.GraphLinksModel(
       processFlow,
       [{
