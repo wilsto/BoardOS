@@ -28,24 +28,24 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
     name: 'News'
   }, {
     id: 3,
+    title: 'Process',
+    name: 'Process'
+  }, {
+    id: 4,
     title: 'Engagements',
     name: 'Milestones'
   }, {
-    id: 4,
+    id: 5,
     title: 'Tasks',
     name: 'Tasks'
   }, {
-    id: 5,
+    id: 6,
     title: 'Performance',
     name: 'Performance'
   }, {
-    id: 6,
+    id: 7,
     title: 'ProblemSolving',
     name: 'ProblemSolving'
-  }, {
-    id: 7,
-    title: 'Process',
-    name: 'Process'
   }, {
     id: 8,
     title: 'Properties',
@@ -917,17 +917,15 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
     }
   };
 
-$scope.saveDiagram = function(){
-  $scope.$broadcast('saveDiagram');
-}
-$scope.loadDiagram = function(){
-  $scope.$broadcast('loadDiagram');
-}
-$scope.printDiagram = function(){
-  $scope.$broadcast('printDiagram');
-}
-
-
+  $scope.saveDiagram = function() {
+    $scope.$broadcast('saveDiagram');
+  }
+  $scope.loadDiagram = function() {
+    $scope.$broadcast('loadDiagram');
+  }
+  $scope.printDiagram = function() {
+    $scope.$broadcast('printDiagram');
+  }
 
 
   // Process Matrix
@@ -962,6 +960,7 @@ $scope.printDiagram = function(){
     });
 
     $scope.processFlowLevel = 2;
+    $scope.processFocus = $scope.obeya.perimeter[0].activity;
 
     var processFlow = [];
     processFlow.push({

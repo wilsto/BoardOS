@@ -2,10 +2,8 @@
 
 angular.module('boardOsApp').factory('dateRangeService', function($rootScope) {
 
-  this.rangeDate = 'last30';
-  this.datediff = 30;
-  this.startRange = moment().subtract(1, 'month').startOf('month');
-  this.endRange = moment().subtract(1, 'month').endOf('month');
+  this.startRange = moment().startOf('month');
+  this.endRange =  moment().endOf('month');
 
   function cb(start, end) {
     $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
@@ -29,7 +27,7 @@ angular.module('boardOsApp').factory('dateRangeService', function($rootScope) {
   $('#reportrange').on('apply.daterangepicker', function(ev, picker) {
     this.startRange = picker.startDate;
     this.endRange = picker.endDate;
-    $rootScope.$broadcast('dateRangeService:updated', this.datediff);
+    $rootScope.$broadcast('dateRangeService:updated');
   });
 
 
