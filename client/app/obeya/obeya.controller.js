@@ -917,17 +917,6 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
     }
   };
 
-  $scope.saveDiagram = function() {
-    $scope.$broadcast('saveDiagram');
-  };
-  $scope.loadDiagram = function() {
-    $scope.$broadcast('loadDiagram');
-  };
-  $scope.printDiagram = function() {
-    $scope.$broadcast('printDiagram');
-  };
-
-
   // Process Matrix
   var alltasks = {};
   var allhierarchies = {};
@@ -961,6 +950,11 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
 
     $scope.processFlowLevel = $scope.countDot($scope.obeya.perimeter[0].activity) + 1;
     $scope.processFocus = $scope.obeya.perimeter[0].activity;
+    $scope.processFocusKey = _.compact(_.map($scope.paths, function(path) {
+      if (path.longname === $scope.processFocus) {
+        return path.id;
+      }
+    }))[0];
 
     var processFlow = [];
     processFlow.push({
@@ -969,7 +963,8 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
       'text': $scope.processFocus + '    -    Flow of level ' + $scope.processFlowLevel,
       'loc': '280 -40'
     });
-    processFlow.push({      'key': -1,
+    processFlow.push({
+      'key': -1,
       'category': 'Start',
       'loc': '175 0',
       'text': 'Start'
@@ -1017,6 +1012,27 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
         filterTasks();
       });
     });
+  };
+
+
+  $scope.saveDiagram = function() {
+    $scope.$broadcast('saveDiagram');
+  };
+
+  $rootScope.$watch('processFlowJson', function() {
+    if ($scope.processFocusKey) {
+
+      $http.patch('/api/hierarchies/Activity/' + $scope.processFocusKey, $rootScope.processFlowJson).success(function(hierarchies) {
+        Notification.success('ProcessFlow "' + $scope.processFocus + '" was updated');
+      });
+    }
+  }, true);
+
+  $scope.loadDiagram = function() {
+    $scope.$broadcast('loadDiagram');
+  };
+  $scope.printDiagram = function() {
+    $scope.$broadcast('printDiagram');
   };
 
 });

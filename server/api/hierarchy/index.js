@@ -17,6 +17,7 @@ router.get('/sublist/:id/rootActivity/:rootActivity', controller.sublist);
 router.get('/sublist/:id/rootContext/:rootContext', controller.sublist);
 router.post('/', controller.create);
 router.put('/:id', controller.update);
+router.patch('/:list/:id', controller.updateOne);
 router.patch('/:id', controller.update);
 router.delete('/:id', controller.destroy);
 

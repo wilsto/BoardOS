@@ -1,7 +1,7 @@
 /* jshint latedef: nofunc */
 'use strict';
 
-angular.module('boardOsApp').directive('goDiagram', function() {
+angular.module('boardOsApp').directive('goDiagram', function( $rootScope) {
   return {
     restrict: 'E',
     template: '<div></div>', // just an empty DIV element
@@ -395,7 +395,7 @@ angular.module('boardOsApp').directive('goDiagram', function() {
 
       $scope.$on('saveDiagram', function() {
         document.getElementById('mySavedModel').value = diagram.model.toJson();
-        diagram.isModified = false;
+        $rootScope.processFlowJson = diagram.model.toJson();
       });
 
       $scope.$on('loadDiagram', function() {

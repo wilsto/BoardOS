@@ -61,20 +61,20 @@ exports.list = function(req, res) {
 // Get a single hierarchy
 exports.listProcess = function(req, res) {
   Hierarchy.find({
-      name: 'Activity'
-    }, function(err, hierarchy) {
-      if (err) {
-        return handleError(res, err);
+    name: 'Activity'
+  }, function(err, hierarchy) {
+    if (err) {
+      return handleError(res, err);
+    }
+    if (!hierarchy) {
+      return res.send(404)
+    }
+    var listToSend = [];
+    _.each(hierarchy[0].list, function(process) {
+      if (process.longname.indexOf(req.query.process) > -1) {
+        listToSend.push(process);
       }
-      if (!hierarchy) {
-        return res.send(404)
-      }
-      var listToSend = [];
-      _.each(hierarchy[0].list, function(process) {
-        if (process.longname.indexOf(req.query.process) > -1) {
-          listToSend.push(process);
-        }
-      });
+    });
     return res.status(200).json(listToSend);
   });
 };
@@ -483,6 +483,30 @@ exports.update = function(req, res) {
     upsert: true
   }, function(err, hierarchy) {
     return res.status(200).json(hierarchy);
+  });
+};
+
+// Updates an existing hierarchy in the DB.
+exports.updateOne = function(req, res) {
+  Hierarchy.find({
+    name: req.params.list
+  }).lean().exec(function(err, hierarchy) {
+    if (err) {
+      return handleError(res, err);
+    }
+    if (!hierarchy) {
+      return res.send(404)
+    }
+    _.each(hierarchy[0].list, function(element) {
+      if (element.id === req.params.id) {
+        element.processFlow = req.body;
+      }
+    });
+    Hierarchy.update({
+      name: req.params.list
+    }, hierarchy[0], function(err, hierarchySaved) {
+      return res.status(200).json(hierarchySaved);
+    });
   });
 };
 
