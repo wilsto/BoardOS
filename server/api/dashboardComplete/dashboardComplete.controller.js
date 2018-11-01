@@ -34,10 +34,10 @@ Hierarchies.find({
 });
 
 KPI.find({}, '-__v').lean().exec(function(err, mKPI) {
-  kpis = _.where(mKPI, {
+  kpis = _.filter(mKPI, {
     category: 'Goal'
   });
-  alerts = _.where(mKPI, {
+  alerts = _.filter(mKPI, {
     category: 'Alert'
   });
   logger.info('+dashboardComplete: Goal cached : ' + kpis.length);
@@ -209,10 +209,10 @@ function createCompleteDashboard(dashboardId, callback) {
           dashboard.sublist = sublist;
         });
 
-        dashboard.openTasksNb = _.where(findtasks, function(task) {
+        dashboard.openTasksNb = _.filter(findtasks, function(task) {
           return task.metrics[task.metrics.length - 1] && (task.metrics[task.metrics.length - 1].status === 'In Progress' || task.metrics[task.metrics.length - 1].status === 'Not Started');
         }).length;
-        dashboard.toFeedTasksNb = _.where(findtasks, function(task) {
+        dashboard.toFeedTasksNb = _.filter(findtasks, function(task) {
           return task.needToFeed;
         }).length;
         dashboard.tasksNb = dashboard.tasks.length;

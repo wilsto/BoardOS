@@ -112,7 +112,7 @@
     "time-grunt": "~2.0.0"
   },
   "engines": {
-    "node": "~6.11.1"
+    "node": "~10.13.0"
   },
   "scripts": {
     "start": "node server/app.js",

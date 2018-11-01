@@ -35,7 +35,8 @@ var all = {
   // MongoDB connection options
   mongo: {
     options: {
-      useMongoClient: true
+      //useMongoClient: true
+       useNewUrlParser: true
     }
   },
 
