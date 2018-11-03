@@ -7,48 +7,45 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
     // Define the initialize function
     this.initialize = function() {
 
-      // Fetch the tasks
+      // ***************************************************
+      // Fetch the data from tasks in perimeter & timeRange
+      // ***************************************************
+      var myparams = {
+        params: {
+          startRange: dateRangeService.startRange,
+          endRange: dateRangeService.endRange
+        }
+      };
       var url = '/api/dashboardCompletes/showTasks/' + obeya._id;
-      var tasksData = $http.get(url);
+      var tasksData = $http.get(url, myparams);
       var self = this;
 
       tasksData.then(function(response) {
-        self.list = response.data;
+        self.allTasks = response.data;
 
-        self.alltasksNb = self.list.length;
+        self.allTasksNb = self.allTasks.length;
 
-        self.openTasksNb = _.filter(self.list, function(task) {
-          return task.metrics && task.metrics[task.metrics.length - 1].status !== 'Finished';
-        }).length;
+        _.each(self.allTasks, function(task) {
 
-
-        _.each(self.list, function(task) {
-          task.taskSuffIcon = '';
-          if (task.metrics && task.metrics[task.metrics.length - 1].userSatisfaction === undefined || task.metrics[task.metrics.length - 1].deliverableStatus === undefined || task.metrics[task.metrics.length - 1].actorSatisfaction === undefined) {
-            task.taskSuffIcon = ' <i class="fa fa-question-circle-o text-danger" aria-hidden="true"></i>&nbsp;&nbsp;';
+          // ajout icon si tache incomplete
+          task.taskIncompleteIcon = '';
+          if (task.metrics && task.metrics[task.metrics.length - 1].status === 'Finished' && (task.metrics && task.metrics[task.metrics.length - 1].userSatisfaction === undefined || task.metrics[task.metrics.length - 1].deliverableStatus === undefined || task.metrics[task.metrics.length - 1].actorSatisfaction === undefined)) {
+            task.taskIncompleteIcon = ' <i class="fa fa-question-circle orange" ></i>&nbsp;&nbsp;';
           }
-        });
 
-        self.filterPlan = self.filter('Not Started');
-        self.filterPlanLoad = self.load(self.filterPlan);
+          // ajout icon si tache en alerte
+          task.taskSuccessIcon = '';
+          if (task.success) {
+            task.taskSuccessIcon = ' <i class="fa fa-thumbs-up green pull-right"></i>&nbsp;&nbsp;';
+          }
 
-        self.filterInProgress = self.filter('In Progress');
-        self.filterInProgressLoad = self.load(self.filterInProgress);
+          // ajout icon si tache en alerte
+          task.taskAlertIcon = '';
+          if ((_.compact(_.map(task.alerts, 'calcul.task')).length > 0) || (task.metrics && (task.metrics[task.metrics.length - 1].status === 'Not Started' && moment(task.metrics[task.metrics.length - 1].targetEndDate) < moment()))) {
+            task.taskAlertIcon = ' <i class="fa fa-bell text-danger pull-right"></i>&nbsp;&nbsp;';
+          }
 
-        self.filterFinished = self.filter('Finished', false, dateRangeService.datediff);
-        self.filterFinishedLoad = self.load(self.filterFinished);
-
-        self.filterReviewed = self.filter('Finished', true, dateRangeService.datediff);
-        self.filterReviewedLoad = self.load(self.filterReviewed);
-
-        self.filterTimeBoxed = self.filter('All', true, dateRangeService.datediff);
-        self.filterTimeBoxedLoad = self.load(self.filterReviewed);
-
-        self.SubMonthDetails();
-
-        self.events = [];
-        _.each(self.list, function(task) {
-          task.taskSuffIcon = '';
+          // ajout icon
           switch (task.metrics[task.metrics.length - 1].status) {
             case 'In Progress':
               task.taskIcon = '<i class="fa fa-spinner" aria-hidden="true"></i>&nbsp;&nbsp; ';
@@ -56,24 +53,65 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
               break;
             case 'Finished':
               if (task.reviewTask === true) {
-                task.taskIcon = '<i class="fa fa-bookmark-o text-success" aria-hidden="true"></i>&nbsp;&nbsp; ';
+                task.taskIcon = '<i class="far fa-bookmark text-success" aria-hidden="true"></i>&nbsp;&nbsp; ';
                 task.taskColor = calendarConfig.colorTypes.success;
 
               } else {
-                task.taskIcon = '<i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;&nbsp; ';
+                task.taskIcon = '<i class="far fa-check-square" aria-hidden="true"></i>&nbsp;&nbsp; ';
                 task.taskColor = calendarConfig.colorTypes.success;
               }
-              if (task.metrics[task.metrics.length - 1].userSatisfaction === undefined || task.metrics[task.metrics.length - 1].deliverableStatus === undefined || task.metrics[task.metrics.length - 1].actorSatisfaction === undefined) {
-                task.taskSuffIcon = ' <i class="fa fa-question-circle-o text-danger" aria-hidden="true"></i>&nbsp;&nbsp;';
-              }
+
               break;
             default:
-              task.taskIcon = '<i class="fa fa-square-o " aria-hidden="true"></i>&nbsp;&nbsp; ';
+              task.taskIcon = '<i class="far fa-square" aria-hidden="true"></i>&nbsp;&nbsp; ';
               task.taskColor = '';
           }
+        });
+
+        self.filterPlan = self.filter('Not Started');
+        self.filterPlanNb = self.filterPlan.length;
+        self.filterPlanLoad = self.load(self.filterPlan);
+
+        self.filterInProgress = self.filter('In Progress');
+        self.filterInProgressNb = self.filterInProgress.length;
+        self.filterInProgressLoad = self.load(self.filterInProgress);
+
+        self.filterWithdrawn = self.filter('Withdrawn', false);
+        self.filterWithdrawnNb = self.filterWithdrawn.length;
+        self.filterWithdrawnLoad = self.load(self.filterWithdrawn);
+
+        self.filterFinished = self.filter('Finished', false);
+        self.filterFinishedNb = self.filterFinished.length;
+        self.filterFinishedLoad = self.load(self.filterFinished);
+
+        self.filterReviewed = self.filter('Finished', true);
+        self.filterReviewedNb = self.filterReviewed.length;
+        self.filterReviewedLoad = self.load(self.filterReviewed);
+        self.filterClosedNb = self.filterFinishedNb + self.filterReviewedNb + self.filterWithdrawnNb;
+
+        self.filterTasksWithSuccess = _.filter(self.allTasks, function(task) {
+          return task.success;
+        });
+        self.filterTasksWithSuccessNb = self.filterTasksWithSuccess.length;
+
+
+        self.filterTasksWithAlert = _.filter(self.allTasks, function(task) {
+          return task.taskAlertIcon !== '';
+        });
+        self.filterTasksWithAlertNb = self.filterTasksWithAlert.length;
+
+        self.filterTasksIncomplete = _.filter(self.allTasks, function(task) {
+          return task.taskIncompleteIcon !== '';
+        });
+        self.filterTasksIncompleteNb = self.filterTasksIncomplete.length;
+
+        self.SubProcessList();
+
+        self.events = [];
+        _.each(self.allTasks, function(task) {
 
           self.events.push({
-            title: task.taskIcon + task.taskSuffIcon + task.name,
+            title: task.taskIcon + task.taskIncompleteIcon + task.name,
             eventType: 'task',
             eventId: task._id,
             displayEventTimes: false, // Indicates whether need to show time or not.
@@ -93,12 +131,12 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
             draggable: (task.metrics[task.metrics.length - 1].status !== 'Finished')
           });
         });
-
-
       });
 
-      // Fetch the tasks
 
+      // ***************************************************
+      // Fetch the data from tasks group by month
+      // ***************************************************
       var filterPerimeter = {
         $or: [],
         metrics: {
@@ -137,8 +175,6 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
         self.filterPerimeter = filterPerimeter;
       });
 
-
-
       // Overview : Top graphs
       var urlMonth = '/api/taskFulls/countByMonth';
       var tasksMonthData = $http.get(urlMonth, {
@@ -148,7 +184,7 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
       });
 
       tasksMonthData.then(function(response) {
-        self.listMonth = response.data;
+        self.listMonth = response.data.results;
 
         self.dataTasks = [{
           values: []
@@ -167,8 +203,8 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
         self.dataTime = [{
           values: []
         }];
-        self.allmetricsNb = parseInt(self.listMonth.reduce(function(pv, cv) {
-          return pv + cv.value.qty;
+        self.allmetricsNb = parseInt(_.reduce(self.listMonth, function(result, v, k) {
+          return result + v.value.qty;
         }, 0));
 
         self.dataTasks[0].values = myLibrary.displayLastYear(self.listMonth, '_id', 'count', true);
@@ -189,9 +225,6 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
             },
             showYAxis: false,
             showXAxis: true,
-            color: [
-              '#1f77b4'
-            ],
             x: function(d) {
               return d.month;
             },
@@ -224,66 +257,73 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
 
       });
 
-      this.SubMonthDetails = function() {
 
-        self.subs = 'Activity';
-        var urlMonthDetails = '/api/hierarchies/sublist/' + self.subs + '/dashboard/' + obeya._id + '/false';
-        var tasksMonthDetailsData = $http.get(urlMonthDetails);
+      // ***************************************************
+      // Fetch the data from tasks in perimeter & timeRange
+      // ***************************************************
+      this.SubProcessList = function() {
 
-        tasksMonthDetailsData.then(function(response) {
-          self.listMonthDetails = response.data;
+        var process = $rootScope.obeyaPerimeter[0].activity;
+        var myparams = {
+          params: {
+            process: process
+          }
+        };
 
-          self.subHierarchies = _.sortBy(self.listMonthDetails, ['root', 'name']);
+        var processListURL = '/api/hierarchies/list/process';
+        var processListData = $http.get(processListURL, myparams);
 
-          self.subTasks = [];
-          self.groupSubTasks = [];
-          self.blnShowTasks = [];
-          self.blnShowKpis = [];
-          self.dataKpis = [];
-          self.blnShowAllTasks = false;
-          self.showEmptyRow = false;
+        processListData.then(function(response) {
+          self.processList = response.data;
 
-          _.each(self.subHierarchies, function(subHierarchy) {
+          // liste des process définis
+          _.each(self.processList, function(process) {
+            process.isValidPath = true;
+            process.isUsedPath = (_.indexOf(self.allTasks, process.longname) > 0);
+            process.level = (process.longname.match(new RegExp('\\.', 'g')) || []).length;
+            process.tasks = [];
+          });
 
-            self.blnShowTasks[subHierarchy.root + subHierarchy.name] = false;
-            self.blnShowKpis[subHierarchy.root + subHierarchy.name] = false;
+          // liste des process utilisés dans les taches
+          var allTasksProcess = _.map(_.uniqBy(self.allTasks, function(task) {
+            return task.activity;
+          }), function(taskProcess) {
+            return {
+              longname: taskProcess.activity
+            };
+          });
 
-            self.subTasks[subHierarchy.root + subHierarchy.name] = _.sortBy(_.filter(self.list, function(task) {
-              var blnReturn = false;
-              var blnReturnTimeBox = false;
+          _.each(allTasksProcess, function(taskProcess) {
+            taskProcess.isUsedPath = true;
+            taskProcess.isValidPath = (_.indexOf(_.map(self.processList, 'longname'), taskProcess.longname) > 0);
+            taskProcess.level = (taskProcess.longname.match(new RegExp('\\.', 'g')) || []).length;
+            taskProcess.tasks = [];
 
-              _.each(obeya.perimeter, function(perimeter) {
+            var lastDot = taskProcess.longname.length - taskProcess.longname.lastIndexOf('.')+1;
+            taskProcess.name = taskProcess.longname.substring(lastDot  + 1);
+            taskProcess.root = taskProcess.longname.substring(0, lastDot);
 
-                var subActivityFilter = perimeter.activity || '';
-                var subContextFilter = perimeter.context || '';
+            if (_.indexOf(_.map(self.processList, 'longname'), taskProcess.longname) < 0) {
+              self.processList.push(taskProcess);
+            }
+          });
+          self.processList = _.sortBy(self.processList, ['longname']);
 
-                subActivityFilter = subActivityFilter.replace('^', '');
-                subContextFilter = subContextFilter.replace('^', '');
 
-                if (self.subs === 'Activity' && (subHierarchy.root + subHierarchy.name).indexOf(subActivityFilter) > -1) {
-                  if (!blnReturn) {
-                    blnReturn = ((subHierarchy.root + subHierarchy.name) !== subActivityFilter && (task.activity.indexOf(subActivityFilter) === 0 && task.activity.indexOf(subHierarchy.root + subHierarchy.name) === 0 || task.activity + '$' === subHierarchy.root + subHierarchy.name) && task.context.indexOf(subContextFilter) === 0 && task.metrics[task.metrics.length - 1].status === 'Finished');
-                  }
-                }
+          _.each(self.processList, function(process) {
 
-                if (self.subs === 'Context' && (subHierarchy.root + subHierarchy.name).indexOf(subContextFilter) === 0) {
-                  if (!blnReturn) {
-                    blnReturn = ((subHierarchy.root + subHierarchy.name) !== subContextFilter && (task.context.indexOf(subContextFilter) === 0 && task.context.indexOf(subHierarchy.root + subHierarchy.name) === 0 || task.context + '$' === subHierarchy.root + subHierarchy.name) && task.activity.indexOf(subActivityFilter) > -1 && task.metrics[task.metrics.length - 1].status === 'Finished');
-                  }
-                }
-              });
-
-              if ((moment(task.metrics[task.metrics.length - 1].targetEndDate) > dateRangeService.startRange) && (moment(task.metrics[task.metrics.length - 1].targetEndDate) < dateRangeService.endRange)) {
-                blnReturnTimeBox = true;
-              }
-
-              return blnReturn && blnReturnTimeBox;
-
+            process.blnShowTasks = false;
+            // start of subtasks
+            process.tasks = _.sortBy(_.filter(self.allTasks, function(task) {
+              var blnFinish = task.metrics && task.metrics[task.metrics.length - 1].status ==='Finished';
+              var blnActivity = task.activity === process.root + '.' + process.name;
+              return blnFinish && blnActivity;
             }), function(task) {
               return task.metrics[task.metrics.length - 1].targetEndDate;
             }).reverse();
+            // end of subtasks
 
-            self.groupSubTasks[subHierarchy.root + subHierarchy.name] = {
+            process.calculGroupBy = {
               'none': {
                 'count': 0,
                 'sum': 0,
@@ -323,39 +363,40 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
 
 
             // if no group
-            self.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].count = self.subTasks[subHierarchy.root + subHierarchy.name].length;
+            process.calculGroupBy['none'].count = process.tasks.length;
 
-            self.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].sum = Math.round(myLibrary.arraySum(_.compact(_.map(self.subTasks[subHierarchy.root + subHierarchy.name], function(task) {
+            process.calculGroupBy['none'].sum = Math.round(myLibrary.arraySum(_.compact(_.map(process.tasks, function(task) {
               return task.metrics[task.metrics.length - 1].timeSpent;
-            })))* 10) / 10;
-            self.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].quality = Math.round(myLibrary.arrayAverage(_.compact(_.flattenDeep(_.map(self.subTasks[subHierarchy.root + subHierarchy.name], function(task) {
+            }))) * 10) / 10;
+            process.calculGroupBy['none'].quality = Math.round(myLibrary.arrayAverage(_.compact(_.flattenDeep(_.map(process.tasks, function(task) {
               var value = _.map(task.kpis, function(kpi) {
                 return (kpi.constraint === 'Quality') ? kpi.calcul.task : null;
               });
               return value;
-            }))))* 10) / 10;
+            })))) * 10) / 10;
 
-            self.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].cost = Math.round(myLibrary.arrayAverage(_.compact(_.flattenDeep(_.map(self.subTasks[subHierarchy.root + subHierarchy.name], function(task) {
+            process.calculGroupBy['none'].cost = Math.round(myLibrary.arrayAverage(_.compact(_.flattenDeep(_.map(process.tasks, function(task) {
               var value = _.map(task.kpis, function(kpi) {
                 return (kpi.constraint === 'Cost') ? kpi.calcul.task : null;
               });
               return value;
-            }))))* 10) / 10;
-            self.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].time = Math.round(myLibrary.arrayAverage(_.compact(_.flattenDeep(_.map(self.subTasks[subHierarchy.root + subHierarchy.name], function(task) {
+            })))) * 10) / 10;
+            process.calculGroupBy['none'].time = Math.round(myLibrary.arrayAverage(_.compact(_.flattenDeep(_.map(process.tasks, function(task) {
               var value = _.map(task.kpis, function(kpi) {
                 return (kpi.constraint === 'Time') ? kpi.calcul.task : null;
               });
               return value;
-            }))))* 10) / 10;
+            })))) * 10) / 10;
+            console.log('PROCESS', process)
 
             // if group ******
-            // self.dataTasksSubNb[subHierarchy.root + subHierarchy.name] = self.dataMetricsSub[subHierarchy.root + subHierarchy.name]['none'].length;
-            // self.dataMetricsSubNb[subHierarchy.root + subHierarchy.name] =  myLibrary.arraySum(_.compact(_.map(self.dataMetricsSub[subHierarchy.root + subHierarchy.name]['none'], function(task){
+            // self.dataTasksSubNb[process.longname] = self.dataMetricsSub[process.longname]['none'].length;
+            // self.dataMetricsSubNb[process.longname] =  myLibrary.arraySum(_.compact(_.map(self.dataMetricsSub[process.longname]['none'], function(task){
             //     return task.metrics[task.metrics.length-1].timeSpent;
             // })));
-            // self.dataCostSubNb[subHierarchy.root + subHierarchy.name] = myLibrary.arrayAverage(_.compact(_.map(self.dataCostSub[subHierarchy.root + subHierarchy.name][0].values, 'count')));
-            // self.dataQualitySubNb[subHierarchy.root + subHierarchy.name] = myLibrary.arrayAverage(_.compact(_.map(self.dataQualitySub[subHierarchy.root + subHierarchy.name][0].values, 'count')));
-            // self.dataTimeSubNb[subHierarchy.root + subHierarchy.name] = myLibrary.arrayAverage(_.compact(_.map(self.dataTimeSub[subHierarchy.root + subHierarchy.name][0].values, 'count')));
+            // self.dataCostSubNb[process.longname] = myLibrary.arrayAverage(_.compact(_.map(self.dataCostSub[process.longname][0].values, 'count')));
+            // self.dataQualitySubNb[process.longname] = myLibrary.arrayAverage(_.compact(_.map(self.dataQualitySub[process.longname][0].values, 'count')));
+            // self.dataTimeSubNb[process.longname] = myLibrary.arrayAverage(_.compact(_.map(self.dataTimeSub[process.longname][0].values, 'count')));
 
 
           });
@@ -364,13 +405,10 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
 
     };
 
-    this.filter = function(status, review, datediff) {
-      var a = moment(new Date());
-      return _.filter(this.list, function(task) {
-        var b = (task.metrics) ? moment(new Date(task.metrics[task.metrics.length - 1].endDate)) : a;
-        var blnDate = (datediff) ? (datediff >= a.diff(b, 'days')) : true;
+    this.filter = function(status, review) {
+      return _.filter(this.allTasks, function(task) {
         var blnReview = (review) ? (task.reviewTask === true) : (task.reviewTask === undefined || task.reviewTask === false);
-        var blnReturn = (status !== 'All') ? blnDate && task.metrics && task.metrics[task.metrics.length - 1].status === status && blnReview : blnDate && task.metrics;
+        var blnReturn = (status !== 'All') ? task.metrics && task.metrics[task.metrics.length - 1].status === status && blnReview : task.metrics;
         return blnReturn;
       });
     };

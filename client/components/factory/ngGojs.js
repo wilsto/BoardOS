@@ -138,7 +138,8 @@ angular.module('boardOsApp').directive('goDiagram', function( $rootScope) {
           // three named ports, one on each side except the top, all output only:
           makePort('L', go.Spot.Left, go.Spot.Left, true, false),
           makePort('R', go.Spot.Right, go.Spot.Right, true, false),
-          makePort('B', go.Spot.Bottom, go.Spot.Bottom, true, false)
+          makePort('B', go.Spot.Bottom, go.Spot.Bottom, true, false),
+          makePort('T', go.Spot.Top, go.Spot.Top, false, true)
         ));
 
       diagram.nodeTemplateMap.add('Start',
@@ -399,7 +400,8 @@ angular.module('boardOsApp').directive('goDiagram', function( $rootScope) {
       });
 
       $scope.$on('loadDiagram', function() {
-        diagram.model = go.Model.fromJson(document.getElementById('mySavedModel').value);
+        document.getElementById('mySavedModel').value = diagram.model.toJson();
+        //diagram.model = go.Model.fromJson(document.getElementById('mySavedModel').value);
       });
 
       // print the diagram by opening a new window holding SVG images of the diagram contents for each page

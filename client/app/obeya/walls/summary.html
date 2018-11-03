@@ -97,7 +97,7 @@
           <ul class="list-group card-list">
             <li class="list-group-item">
                 <i class="far fa-thumbs-up green"></i> Success
-              <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+              <span class="badge" ng-class="(obeya.tasks.filterTasksWithSuccessNb>0) ? 'badge-success':'badge-gray'">{{obeya.tasks.filterTasksWithSuccessNb}}</span>
             </li>
             <li class="list-group-item">
               <img src="assets/images/anomaly-icon.png" style="width:15px;" alt=""> Focus Points
@@ -245,20 +245,20 @@
                 </span>
             <ul class="list-group card-list">
               <li class="list-group-item" ng-click="showCard('Tasks','Plan')">
-                <i class="fa fa-tasks blue"></i> Plan
-                <span class="badge badge-gray">{{obeya.tasks.filterPlan.length}}</span>
+                <i class="far fa-map blue"></i> Plan
+                <span class="badge badge-gray">{{obeya.tasks.filterPlanNb}}</span>
               </li>
               <li class="list-group-item" ng-click="showCard('Tasks','In Progress')">
-                <i class="fa fa-tasks blue"></i> In Progress
-                <span class="badge badge-gray">{{obeya.tasks.filterInProgress.length}}</span>
+                <i class="fa fa-spinner blue"></i> In Progress
+                <span class="badge badge-gray">{{obeya.tasks.filterInProgressNb}}</span>
               </li>
               <li class="list-group-item" ng-click="showCard('Tasks','Finished')">
-                <img src="assets/images/task.png" alt=""> Finished
-                <span class="badge badge-gray">{{obeya.tasks.filterFinished.length + obeya.tasks.filterReviewed.length}}</span>
+                <i class="fa fa-check blue"></i> Finished
+                <span class="badge badge-gray">{{obeya.tasks.filterClosedNb}}</span>
               </li>
-              <li class="list-group-item">
+              <li class="list-group-item" ng-click="showCard('Tasks','Alerts')">
                 <i class="fa fa-bell blue"></i> With alerts
-                <span class="badge badge-red">{{obeya.alertsValue}}</span>
+                <span class="badge badge-red">{{obeya.tasks.filterTasksWithAlertNb}}</span>
               </li>
             </ul>
           </div>

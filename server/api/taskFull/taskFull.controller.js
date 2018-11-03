@@ -119,14 +119,13 @@ exports.listHierarchies = function(req, res) {
 
 // Get list of hierarchies of taskFulls
 exports.listProcess = function(req, res) {
-  var myFilter = (req.query.process) ?
-    {
+  var myFilter = (req.query.process) ? {
       activity: {
         '$regex': req.query.process || '',
         $options: '-i'
       }
-    }
-   : {};
+    } :
+    {};
   TaskFull.distinct('activity', myFilter, function(err, taskFulls) {
     if (err) {
       return handleError(res, err);
@@ -197,12 +196,13 @@ exports.show = function(req, res) {
             }
           });
           _.each(taskFull.followers, function(follower) {
-            follower.avatar = (follower.avatar) ? follower.avatar : 'assets/images/avatars/' + follower._id + '.png';
+            if (follower) {
+
+              follower.avatar = (follower.avatar) ? follower.avatar : 'assets/images/avatars/' + follower._id + '.png';
+            }
           });
           _.each(taskFull.comments, function(comment) {
-            console.log('COMMENT.USER', comment.user)
-            if (typeof comment.user=== 'object') {
-              console.log('CONDITION PASSED')
+            if (comment.user && typeof comment.user === 'object') {
               comment.user.avatar = (comment.user.avatar) ? comment.user.avatar : 'assets/images/avatars/' + comment.user._id + '.png';
             }
           });
@@ -214,27 +214,27 @@ exports.show = function(req, res) {
 
 // Get count of tasks which start
 exports.countByMonth = function(req, res) {
-  var filter= {
+  var filter = {
     metrics: {
       $elemMatch: {
         status: 'Finished'
       }
     }
   };
-  console.log('req.query.filterPerimeter',req.query.filterPerimeter);
- if (req.query.filterPerimeter) {
-   var cleanPerimeter =JSON.parse( req.query.filterPerimeter.toString().replace('?', '\?'));
-   filter['$or'] = [];
-   filter['$or'].push(cleanPerimeter);
- }
+  console.log('req.query.filterPerimeter', req.query.filterPerimeter);
+  if (req.query.filterPerimeter) {
+    var cleanPerimeter = JSON.parse(req.query.filterPerimeter.toString().replace('?', '\?'));
+    filter['$or'] = [];
+    filter['$or'].push(cleanPerimeter);
+  }
   var o = {};
   o.map = function() {
     emit(
-      (new Date(this.metrics[0].endDate)).getFullYear()  + '.' + (new Date(this.metrics[0].endDate).getMonth() + 1) , {
-      count: 1,
-      qty: this.metrics[0].projectedWorkload || this.metrics[0].targetLoad
-    }
-  );
+      (new Date(this.metrics[0].endDate)).getFullYear() + '.' + (new Date(this.metrics[0].endDate).getMonth() + 1), {
+        count: 1,
+        qty: this.metrics[0].projectedWorkload || this.metrics[0].targetLoad
+      }
+    );
   };
   o.reduce = function(k, values) {
     var total = {

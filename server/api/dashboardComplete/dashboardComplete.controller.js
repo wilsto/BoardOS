@@ -518,8 +518,10 @@ exports.show = function(req, res) {
 
 // Get a single dashboardComplete
 exports.showTasks = function(req, res) {
+
+  console.log('REQ.QUERY', req.query)
   DashboardComplete.findById(req.params.id)
-    .populate('tasks', ' -watchers -dashboards -alerts -comments -todos -followers -version')
+    .populate('tasks', ' -watchers -dashboards -comments -todos -followers -version')
     .populate('tasks.actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
     .lean().exec(function(err, dashboardComplete) {
       if (err) {
@@ -529,6 +531,14 @@ exports.showTasks = function(req, res) {
         return res.status(404).send('Not Found');
       }
       _.each(dashboardComplete.tasks, function(task) {
+
+        task.toDelete = true;
+        if (task.metrics[task.metrics.length - 1].targetEndDate >  JSON.parse(req.query.startRange) && task.metrics[task.metrics.length - 1].targetEndDate <  JSON.parse(req.query.endRange)) {
+          task.toDelete = false;
+        }
+        if (task.metrics[task.metrics.length - 1].status !== 'Finished') {
+          task.toDelete = false;
+        }
         var actors = [];
         _.each(_.compact(task.actors), function(actor) {
           var thisuser = _.filter(usersList, function(user) {
@@ -544,8 +554,11 @@ exports.showTasks = function(req, res) {
         });
         task.actors = actors;
       });
-
-      return res.status(200).json(dashboardComplete.tasks);
+      var filteredTasks = _.filter(dashboardComplete.tasks, function(task) {
+        return task.toDelete === false;
+      })
+      console.log('FILTEREDTASKS', filteredTasks.length)
+      return res.status(200).json(filteredTasks);
     });
 };
 

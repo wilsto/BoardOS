@@ -60,6 +60,20 @@ exports.list = function(req, res) {
 
 // Get a single hierarchy
 exports.listProcess = function(req, res) {
+
+  function getPosition(string, subString, index) {
+    return string.split(subString, index).join(subString).length;
+  }
+
+  function findWithAttr(array, attr, value, attr2, value2) {
+    for (var i = 0; i < array.length; i += 1) {
+      if (array[i][attr2] === value2 && array[i][attr] === value) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
   Hierarchy.find({
     name: 'Activity'
   }, function(err, hierarchy) {
@@ -71,10 +85,27 @@ exports.listProcess = function(req, res) {
     }
     var listToSend = [];
     _.each(hierarchy[0].list, function(process) {
-      if (process.longname.indexOf(req.query.process) > -1) {
+
+      var filter = req.query.process.replace('^', '');
+      if (filter.charAt(filter.length - 1) === '.') {
+        filter = filter.substring(0, filter.length - 1);
+      }
+
+      var posFilter = process.longname.indexOf(filter);
+      var filterlength = (filter.length === 0) ? -1 : filter.length;
+
+      if (posFilter > -1) {
+        // position du prochain point post root
+        // si c'est la liste -1 que l'on récupère
+        process.name = process.longname.substring(posFilter + filterlength + 1);
+        process.root = process.longname.substring(0, posFilter + filterlength);
+        process.code = process.description;
+        delete process.parent;
+        delete process.text;
         listToSend.push(process);
       }
     });
+    console.log('LISTTOSEND', listToSend)
     return res.status(200).json(listToSend);
   });
 };
@@ -103,7 +134,11 @@ exports.sublist = function(req, res) {
     $or: [],
     metrics: {
       $elemMatch: {
-        status: 'Finished'
+        status: 'Finished',
+        targetEndDate: {
+          $gte: '2018-09-01T00:00:00.000Z',
+          $lt: '2018-12-01T00:00:00.000Z'
+        }
       }
     }
   };
@@ -139,6 +174,9 @@ exports.sublist = function(req, res) {
             });
           });
 
+          console.dir(filterTaskPerimeter, {
+            depth: null
+          })
           deferred.resolve(filterTaskPerimeter);
         }
       });
@@ -239,6 +277,8 @@ exports.sublist = function(req, res) {
       TaskFull.find(filterTaskPerimeter, 'activity context metrics needToFeed kpis alerts').sort({
         date: 'asc'
       }).lean().exec(function(err, findtasks) {
+        console.log('FINDTASKS', findtasks.length)
+        console.log('ERR', err)
 
         _.each(filterPerimeter, function(perimeter, index2) {
 

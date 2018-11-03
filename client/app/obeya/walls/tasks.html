@@ -97,8 +97,8 @@
                       Status <span ng-show="orderByField === 'status'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
                     </a>
                     <small class="pull-right" id="filterMetrics" >
-                    <i class="fa fa-bookmark-o text-success" aria-hidden="true"  ng-click="blnReview = (blnReview)? '':'Review'"></i>&nbsp;&nbsp;
-                    <i class="fa fa-question-circle-o text-danger" aria-hidden="true" ng-click="blnSuffix = (blnSuffix)? '':'Missing'"></i>&nbsp;&nbsp;
+                    <i class="fa fa-bookmark text-success" aria-hidden="true"  ng-click="blnReview = (blnReview)? '':'Review'"></i>&nbsp;&nbsp;
+                    <i class="fa fa-question-circle orange" aria-hidden="true" ng-click="blnSuffix = (blnSuffix)? '':'Missing'"></i>&nbsp;&nbsp;
                   </small>
 
                   </th>
@@ -125,7 +125,7 @@
                 </tr>
               </thead>
               <tbody infinite-scroll="getMoreData()" infinite-scroll-distance="3">
-                <tr id="rowTask" ng-repeat="task in obeya.tasks.filterTimeBoxed">
+                <tr id="rowTask" ng-repeat="task in obeya.tasks.allTasks">
                   <td style="text-align: left">
                     <div >
                     <!-- <div uib-tooltip-html="'Name : <b>{{task.actors[0].name}}</b>'" tooltip-placement="top"> -->
@@ -176,8 +176,8 @@
                     {{task.metrics[task.metrics.length - 1].status}}
                   </span>
                 &nbsp;  <span ng-bind-html="task.icons"></span>
-                <small class="text-muted " ng-if="task.metrics[task.metrics.length - 1].status ==='In Progress'"><i>&nbsp;&nbsp;{{task.metrics[task.metrics.length - 1].progress}}%</i></small>
-                <br>
+                  <span ng-bind-html="task.taskIncompleteIcon"></span>
+                  <br>
                     <span>{{task.metrics[task.metrics.length - 1].targetLoad}} </span>
                       <span  ng-if="task.metrics[task.metrics.length - 1].projectedWorkload > task.metrics[task.metrics.length - 1].targetLoad">
                         &gt;&gt; <span class="label label-sm label-danger "> {{task.metrics[task.metrics.length - 1].projectedWorkload}}</span>
@@ -185,6 +185,9 @@
                       <span  ng-if="task.metrics[task.metrics.length - 1].projectedWorkload < task.metrics[task.metrics.length - 1].targetLoad">
                         &gt;&gt; <span class="label label-sm label-lightwarning "> {{task.metrics[task.metrics.length - 1].projectedWorkload}}</span>
                       </span>
+                      <small class="text-muted " ng-if="task.metrics[task.metrics.length - 1].status ==='In Progress'">
+                      <i>&nbsp;&nbsp;{{task.metrics[task.metrics.length - 1].progress}}%</i>
+                    </small>
                   </td>
                 </tr>
               </tbody>
@@ -294,7 +297,7 @@
                             </div>
                         </div>
                         <img ng-show="!obeya.tasks.filterPlan" src="assets/images/horizontal-loader.gif" class="img-responsive" />
-                        <div class="portlet-body" ng-show="PlanTasksIsExpanded" style="padding:0!important;height:400px;overflow:auto">
+                        <div class="portlet-body" ng-show="PlanTasksIsExpanded" style="padding:0!important;height:100%;overflow:auto">
                             <table class="table table-striped table-hover">
                                 <tbody style="text-align:left;">
                                     <tr style="background:#eee;text-align:right">
@@ -305,22 +308,23 @@
                                         </a >
                                       </td>
                                   </tr>
-                                    <tr ng-repeat="task in obeya.tasks.filterPlan | orderBy:'metrics[0].endDate'">
+                                    <tr ng-repeat="task in obeya.tasks.filterPlan | orderBy:'metrics[0].targetEndDate'">
                                       <td style="text-align: center">
                                         <img alt="" ng-src="{{task.actors[0].avatar}}" class="img-circle" style="width:30px;height:30px;" err-src="assets/images/avatars/avatar.png" uib-tooltip-html="'Name <br /> {{task.actors[0].name}}'" tooltip-placement="top"/>
                                       </td>
                                         <td >
                                             <a href="/task/{{task._id}}">
-                                              <small class="dont-break-out"> {{task.name}}</small>
+                                              <small class="dont-break-out">  {{task.name}}</small>
                                             </a >
                                         </td>
-                                        <td style="min-width:70px">
+                                        <td style="min-width:80px" ng-class="{'bg-danger':task.taskAlertIcon.length >0}">
                                             <span class="pull-right text-info">
-                                              <small class="text-muted" >
-                                                {{ (task.metrics[0].targetstartDate | date:'MMM, dd') }} &gt;
-                                              </small>
                                               <small style="color:black" >
-                                                {{ (task.metrics[0].endDate || task.metrics[0].targetEndDate | date:'MMM, dd') }}
+                                                {{ (task.metrics[0].targetEndDate | date:'dd MMM yy') }}
+                                                <br>
+                                              </small>
+                                              <small class="text-muted" >
+                                                {{ task.metrics[0].progress  }}% <span  ng-bind-html="task.taskAlertIcon"></span>
                                               </small>
                                             </span>
                                         </td>
@@ -365,7 +369,7 @@
                           </div>
                           <img ng-show="!obeya.tasks.filterInProgress" src="assets/images/horizontal-loader.gif" class="img-responsive"/>
 
-                          <div class="portlet-body" style="padding:0!important;height:400px;overflow:auto" ng-show="InProgressTasksIsExpanded">
+                          <div class="portlet-body" style="padding:0!important;height:100%;overflow:auto" ng-show="InProgressTasksIsExpanded">
                             <table class="table table-striped table-hover">
                                 <tbody style="text-align:left;">
                                     <tr ng-repeat="task in obeya.tasks.filterInProgress | orderBy:'metrics[0].endDate'">
@@ -377,13 +381,14 @@
                                           <small class="dont-break-out"> {{task.name}}</small>
                                           </a >
                                         </td>
-                                        <td style="min-width:70px">
+                                        <td style="min-width:70px"  ng-class="{'bg-danger':task.taskAlertIcon.length >0}">
                                             <span class="pull-right text-info">
-                                              <small class="text-muted" >
-                                                {{ task.metrics[0].progress  }}% &gt;
-                                              </small>
                                               <small style="color:black" >
                                                 {{ (task.metrics[0].endDate || task.metrics[0].targetEndDate | date:'MMM, dd') }}
+                                                <br>
+                                              </small>
+                                              <small class="text-muted" >
+                                                {{ task.metrics[0].progress  }}% <span  ng-bind-html="task.taskAlertIcon"></span>
                                               </small>
                                             </span>
                                         </td>
@@ -412,7 +417,7 @@
                                     <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{dashboard.alerts.length}}</span></span>
                                   </div>
                               </div>
-                              <div class="portlet-body" style="padding:0!important;max-height:400px;overflow:auto" ng-show="AlertIsExpanded">
+                              <div class="portlet-body" style="padding:0!important;max-height:100%;overflow:auto" ng-show="AlertIsExpanded">
                                   <table class="table table-striped table-hover">
                                       <tbody style="text-align:center;">
                                           <tr ng-repeat="KPI in dashboard.alerts | orderBy:'constraint' track by $index" on-finish-render uib-tooltip-html="'Contraint : {{KPI.constraint}}<br /> <br /> Description :  {{KPI.description}}  <br /> Suggestion :  {{KPI.suggestion}}'" tooltip-placement="right"  tooltip-class="tooltipkpi" >
@@ -464,7 +469,7 @@
                     </div>
                     <img ng-show="!obeya.tasks.filterFinished" src="assets/images/horizontal-loader.gif" class="img-responsive" />
 
-                    <div class="portlet-body" style="padding:0!important;height:400px;overflow:auto" ng-show="FinishedTasksIsExpanded">
+                    <div class="portlet-body" style="padding:0!important;height:100%;overflow:auto" ng-show="FinishedTasksIsExpanded">
                         <table class="table table-striped table-hover">
                             <tbody style="text-align:left;">
                                 <tr ng-repeat="task in obeya.tasks.filterFinished | orderBy:'-metrics[0].endDate'">
@@ -473,15 +478,17 @@
                                     </td>
                                     <td>
                                         <a href="/task/{{task._id}}">
-                                              <small class="dont-break-out"><span  ng-bind-html="task.taskSuffIcon"></span> {{task.name}}</small>
+                                              <small class="dont-break-out"></span> {{task.name}}</small>
 
                                             </a >
                                           </td>
-                                          <td style="min-width:70px">
+                                          <td style="min-width:70px"  ng-class="{'bg-warning':task.taskIncompleteIcon.length >0}">
                                               <span class="pull-right text-info">
                                                 <small class="text-muted" >
                                                   {{ (task.metrics[0].endDate | date:'MMM, dd') }}
                                                 </small>
+                                                <br>
+                                                <span  ng-bind-html="task.taskIncompleteIcon">
                                               </span>
                                           </td>
                                       </tr>
@@ -497,7 +504,7 @@
                   </div>
                   <div class="col-lg-3 col-md-6 col-sm-12" ng-class="{'label-success':task.metrics[0].status ==='Finished','label-lightgrey':task.metrics[0].status =='Withdrawn'}" style="padding-bottom:20px;">
                       <div class="pdcaCol">
-                          ACT
+                          ACT <small class="text-muted">(Review)</small>
                       </div>
                       <!-- Review -->
                       <div class="portlet sale-summary" >
@@ -516,7 +523,7 @@
                           </div>
                           <img ng-show="!obeya.tasks.filterReviewed" src="assets/images/horizontal-loader.gif" class="img-responsive"/>
 
-                          <div class="portlet-body" style="padding:0!important;height:400px;overflow:auto" ng-show="ReviewedTasksIsExpanded">
+                          <div class="portlet-body" style="padding:0!important;height:100%;overflow:auto" ng-show="ReviewedTasksIsExpanded">
                               <table class="table table-striped table-hover">
                                   <tbody style="text-align:left;">
                                       <tr ng-repeat="task in obeya.tasks.filterReviewed | orderBy:'-metrics[0].endDate'">
@@ -525,14 +532,16 @@
                                         </td>
                                           <td>
                                             <a href="/task/{{task._id}}">
-                                              <small class="dont-break-out"><span  ng-bind-html="task.taskSuffIcon"></span> {{task.name}}</small>
+                                              <small class="dont-break-out"> {{task.name}}</small>
 
                                             </a >
                                           </td>
-                                          <td style="min-width:70px">
+                                          <td style="min-width:70px"   ng-class="{'bg-warning':task.taskIncompleteIcon.length >0}">
                                               <span class="pull-right text-info">
                                                 <small class="text-muted" >
                                                   {{ (task.metrics[0].endDate | date:'MMM, dd') }}
+                                                  <br>
+                                                  <span  ng-bind-html="task.taskIncompleteIcon"></span>
                                                 </small>
                                               </span>
                                           </td>
@@ -561,7 +570,7 @@
                                       <span class="pull-right" style="margin-right:15px;"><small>Number:</small>  <span class="text-info">  {{task.reviews.length ||0}}</span></span>
                                   </div>
                               </div>
-                              <div class="portlet-body" style="padding:0!important;max-height:400px;overflow:auto" ng-show="ReviewIsExpanded">
+                              <div class="portlet-body" style="padding:0!important;max-height:100%;overflow:auto" ng-show="ReviewIsExpanded">
                                 <table class="table table-striped table-hover">
                                     <tbody style="text-align:center;">
                                         <tr >
@@ -628,7 +637,7 @@
         <div class="stats-overview stat-block">
           <div class="details">
             <div class="title" style="height:61px">
-                  All Workload : <span style="color:#9467bd">{{obeya.tasks.allmetricsNb}}</span>
+                  All Workload : <span style="color:#9467bd">{{obeya.tasks.workloadSum}}</span>
             </div>
           </div>
         </div>

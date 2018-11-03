@@ -92,7 +92,7 @@
 }
 
 .green {
-  color: #24751d;
+  color: #45b673;
 }
 
 .orange {
@@ -110,9 +110,35 @@
 .purple{
   color:#9467bd;
 }
+
 .lightgrey{
   color:#c7c4cb;
 }
+
+.bg-green {
+  background-color: #aee8c6;
+}
+
+.bg-orange {
+  background-color: #ffd498;
+}
+
+.bg-red {
+  background-color: #ff9393;
+}
+
+.bg-blue {
+  background-color: #90dceb;
+}
+
+.bg-purple{
+  background-color:#9467bd;
+}
+
+.bg-lightgrey{
+  background-color:#f1f0f2;
+}
+
 
 .dark-blue {
   color: hsla(196, 97%, 13%, 0.8);

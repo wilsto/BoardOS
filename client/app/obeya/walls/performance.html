@@ -1,5 +1,5 @@
 <!-- START 5- Milestones & Capacity  -->
-<div id="Wall-4" class="wall_flex"  ng-if="activeWall.id===6">
+<div id="Wall-4" class="wall_flex" ng-if="activeWall.id===6">
   <div class="obeya-pane  obeya-pane-fixed-left obeya-pane-darkgray">
     Questions
     <hr style="margin-top:0;margin-bottom:10px;">
@@ -10,8 +10,8 @@
               <li>Are some engagements in alert ?</li>
             </ul> -->
       <h4>
-              <img src="assets/images/respect-icon.png" style="width:60px;height:60px;" alt="" >
-              Respect Engagements</h4>
+        <img src="assets/images/respect-icon.png" style="width:60px;height:60px;" alt="">
+        Respect Engagements</h4>
       <ul class="list-group card-list">
         <li class="list-group-item" ng-click="viewMode[activeWall.name]='RespectOverview'" ng-class="{'list-group-item-active':viewMode[activeWall.name] === 'RespectOverview'}">
           <img src="assets/images/overview.png" style="height:20px;" alt=""> Overview
@@ -32,8 +32,8 @@
       </ul>
       <br>
       <h4>
-          <img src="assets/images/maitrise.png" style="width:60px;height:60px;"  alt="">
-          Master Process
+        <img src="assets/images/maitrise.png" style="width:60px;height:60px;" alt="">
+        Master Process
       </h4>
       <ul class="list-group card-list">
         <li class="list-group-item" ng-click="viewMode[activeWall.name]='MasterOverview'" ng-class="{'list-group-item-active':viewMode[activeWall.name] === 'MasterOverview'}">
@@ -62,275 +62,217 @@
     <hr style="margin-top:0;margin-bottom:10px;">
     <div class="obeya-body" style="height:99%">
       <div class="wrap-dashboard">
-          <div class="dashboard">
-
-            <div class="col-md-12 col-sm-12 " ng-if="viewMode[activeWall.name] === 'MasterOverview'">
-              <div class="label" ng-class="subs ==='Activity' ? 'label-primary':'label-default'" ng-click="showHistory('Activity')" ><span ng-if="subs ==='Activity'">{{subHierarchies.length}}</span> Sub Activities</div>
-              <div class="label" ng-class="subs ==='Context' ? 'label-primary':'label-default'" ng-click="showHistory('Context')"><span ng-if="subs ==='Context'">{{subHierarchies.length}}</span> Sub Context</div>
-              <div class="pull-right" style="margin-left:45px">
-                Group By
+        <div class="dashboard">
+          <h3>{{obeya.perimeter[0].activity}}</h3>
+          <div class="col-md-12 col-sm-12 " ng-if="viewMode[activeWall.name] === 'MasterOverview'">
+            <div class="label" ng-class="subs ==='Activity' ? 'label-primary':'label-default'" ng-click="showHistory('Activity')"><span ng-if="subs ==='Activity'">{{subHierarchies.length}}</span> Sub Activities</div>
+            <div class="label" ng-class="subs ==='Context' ? 'label-primary':'label-default'" ng-click="showHistory('Context')"><span ng-if="subs ==='Context'">{{subHierarchies.length}}</span> Sub Context</div>
+            <div class="pull-right" style="margin-left:45px">
+              Group By
               <div class="label" ng-class="groupPerformance ==='none' ? 'label-primary':'label-default'" ng-click="groupPerformance = 'none'"><span ng-if="groupPerformance ==='none'">{{subHierarchies.length}}</span> None</div>
               <div class="label" ng-class="groupPerformance ==='day' ? 'label-primary':'label-default'" ng-click="groupPerformance = 'day'"><span ng-if="groupPerformance ==='day'">{{subHierarchies.length}}</span> Day</div>
               <div class="label" ng-class="groupPerformance ==='week' ? 'label-primary':'label-default'" ng-click="groupPerformance = 'week'"><span ng-if="groupPerformance ==='week'">{{subHierarchies.length}}</span> Week</div>
               <div class="label" ng-class="groupPerformance ==='month' ? 'label-primary':'label-default'" ng-click="groupPerformance = 'month'"><span ng-if="groupPerformance ==='month'">{{subHierarchies.length}}</span> Month</div>
               <div class="label" ng-class="groupPerformance ==='year' ? 'label-primary':'label-default'" ng-click="groupPerformance = 'year'"><span ng-if="groupPerformance ==='year'">{{subHierarchies.length}}</span> Year</div>
             </div>
-            <small class="label label-default pull-right" style ="font-size:10px" ng-click="showEmptyRow=!showEmptyRow">Show all</small>
+            <small class="label label-default pull-right" style="font-size:10px" ng-click="showEmptyRow=!showEmptyRow">Show all</small>
 
 
-              <hr style="margin-top:15px">
-              <!-- BEGIN OVERVIEW STATISTIC BARS-->
-              <div class="row stats-overview-cont" ng-repeat="subHierarchy in obeya.tasks.subHierarchies" ng-if="obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].count>0 || showEmptyRow" >
+            <hr style="margin-top:15px">
+            <!-- BEGIN OVERVIEW STATISTIC BARS-->
+            <div class="row stats-overview-cont" ng-repeat="process in obeya.tasks.processList" ng-if="process.calculGroupBy['none'].count>0 || showEmptyRow">
 
-                <div class="col-md-2 col-sm-12">
-                  <div class="stats-overview stat-block">
-                    <div class="details">
-                      <div class="title" style="height:61px">
-                        <small class="text-muted" style="font-size:10px">{{subHierarchy.root}}</small><b ng-class="{'text-danger':!subHierarchy.abs,'text-success':subHierarchy.abs}">
-                        {{subHierarchy.name}}
-                        </b>
-                        <br>
-                      <small class="label label-primary"> {{(obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].count/metricsNb *100)| number:0}}%</small>
-                      <small ng-if="subHierarchy.code" class="label label-default" style="color:#000000"> {{subHierarchy.code}} </small>
-                      </div>
+              <div class="col-md-2 col-sm-12">
+                <div class="stats-overview stat-block">
+                  <div style="float:left;margin-top:-10px;margin-left:-28px;border:0px; background-color:#f1f0f2;padding:5px">
+                    {{process.level}}
+                  </div>
+                  <div class="details">
+                    <div class="title" style="height:61px">
+                      <b ng-class="{'text-danger':!process.isValidPath,'text-success':process.isValidPath}">
+                        {{process.name}}
+                      </b>
+                      <br>
+                      <div  style="background-color:lightgrey;text-align:right;min-width:20px;" ng-style="{'width':(process.calculGroupBy['none'].count/obeya.tasks.allTasksNb *100) + '%'}" class="text-muted"> {{(process.calculGroupBy['none'].count/obeya.tasks.allTasksNb *100)| number:0}}%</div>
+                      <small ng-if="process.code" class="label label-default" style="color:#000000"> {{process.code}} </small>
                     </div>
                   </div>
                 </div>
-                <div class="col-md-2 col-sm-12">
-                  <div class="stats-overview stat-block">
-                    <div class="details">
-                      <div class="title">
-                        <a href="#" ng-click="blnShowTasks[subHierarchy.root + subHierarchy.name]=!blnShowTasks[subHierarchy.root + subHierarchy.name]">
-                          <span  ng-if="groupPerformance !== 'none'" style="font-weight:bold;color:#9467bd">{{obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].count | number:0}}</span>
-                          Tasks</a>
-                      </div>
-                      <div ng-if="groupPerformance === 'none'" style="width:100%;text-align:right;padding-right:30px;padding-bottom:25px;font-size:34px;font-weight:bold;" ng-class="obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].count===0?'lightgrey':'purple'">{{obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].count }}</div>
-                      <nvd3 options="optionsTasks" data="dataTasksSub[subHierarchy.root + subHierarchy.name]" ng-if="groupPerformance !== 'none'"></nvd3>
-                    </div>
-                  </div>
-                </div>
-                  <div class="col-md-2 col-sm-12">
-                  <div class="stats-overview stat-block">
-                    <div class="details">
-                      <div class="title">
-                        <a href="#" ng-click="blnShowTasks[subHierarchy.root + subHierarchy.name]=!blnShowTasks[subHierarchy.root + subHierarchy.name]">
-                          <span  ng-if="groupPerformance !== 'none'" style="font-weight:bold;color:#87CEEB">{{obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].sum | number:0}}</span>
-                          Men Days</a>
-                      </div>
-                      <div ng-if="groupPerformance === 'none'" style="width:100%;text-align:right;padding-right:30px;padding-bottom:25px;font-size:34px;font-weight:bold;" ng-class="obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].sum===0?'lightgrey':'dark-blue'">{{obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].sum  }}</div>
-                      <nvd3 options="optionsLoad" data="dataMetricsSub[subHierarchy.root + subHierarchy.name]" ng-if="groupPerformance !== 'none'"></nvd3>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-2 col-sm-12" >
+              </div>
+              <div class="col-md-2 col-sm-12">
                 <div class="stats-overview stat-block">
                   <div class="details">
                     <div class="title">
-                      <a href="#" ng-click="blnShowKpis[subHierarchy.root + subHierarchy.name]=!blnShowKpis[subHierarchy.root + subHierarchy.name]">
-                        <span ng-if="groupPerformance !== 'none'" style="font-weight:bold;color:#87CEEB">{{obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].quality | number:0}}% </span>
-                        Quality</a>
+                      <a href="#" ng-click="process.blnShowTasks=!process.blnShowTasks">
+                        <span ng-if="groupPerformance !== 'none'" style="font-weight:bold;color:#9467bd">{{process.calculGroupBy['none'].count | number:0}}</span>
+                        Tasks</a>
                     </div>
-                    <div ng-if="groupPerformance === 'none'" style="width:100%;text-align:right;padding-right:30px;padding-bottom:25px;font-size:34px;font-weight:bold;"  ng-class="colorKPI(obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].quality)">{{obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].quality }}</div>
-                    <nvd3 options="optionsCosts" data="obeya.tasks.dataQualitySub[subHierarchy.root + subHierarchy.name]" ></nvd3>
+                    <div ng-if="groupPerformance === 'none'" style="width:100%;text-align:right;padding-right:30px;padding-bottom:25px;font-size:34px;font-weight:bold;" ng-class="process.calculGroupBy['none'].count===0?'lightgrey':'purple'">{{process.calculGroupBy['none'].count }}</div>
+                    <nvd3 options="optionsTasks" data="dataTasksSub[process.root + process.name]" ng-if="groupPerformance !== 'none'"></nvd3>
                   </div>
                 </div>
               </div>
-              <div class="col-md-2 col-sm-12" >
-              <div class="stats-overview stat-block">
-                <div class="details">
-                  <div class="title">
-                    <a href="#" ng-click="blnShowKpis[subHierarchy.root + subHierarchy.name]=!blnShowKpis[subHierarchy.root + subHierarchy.name]">
-                      <span ng-if="groupPerformance !== 'none'" style="font-weight:bold;color:#87CEEB">{{obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].cost | number:0}}% </span>
-                      Costs</a>
+              <div class="col-md-2 col-sm-12">
+                <div class="stats-overview stat-block">
+                  <div class="details">
+                    <div class="title">
+                      <a href="#" ng-click="process.blnShowTasks=!process.blnShowTasks">
+                        <span ng-if="groupPerformance !== 'none'" style="font-weight:bold;color:#87CEEB">{{process.calculGroupBy['none'].sum | number:0}}</span>
+                        Men Days</a>
+                    </div>
+                    <div ng-if="groupPerformance === 'none'" style="width:100%;text-align:right;padding-right:30px;padding-bottom:25px;font-size:34px;font-weight:bold;" ng-class="process.calculGroupBy['none'].sum===0?'lightgrey':'dark-blue'">{{process.calculGroupBy['none'].sum }}</div>
+                    <nvd3 options="optionsLoad" data="dataMetricsSub[process.root + process.name]" ng-if="groupPerformance !== 'none'"></nvd3>
                   </div>
-                  <div ng-if="groupPerformance === 'none'" style="width:100%;text-align:right;padding-right:30px;padding-bottom:25px;font-size:34px;font-weight:bold"  ng-class="colorKPI(obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].cost)">{{obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].cost }}</div>
-                  <nvd3 options="optionsCosts" data="obeya.tasks.dataCostSub[subHierarchy.root + subHierarchy.name]" ></nvd3>
                 </div>
               </div>
-            </div>
-            <div class="col-md-2 col-sm-12" >
-            <div class="stats-overview stat-block">
-              <div class="details">
-                <div class="title">
-                  <a href="#" ng-click="blnShowKpis[subHierarchy.root + subHierarchy.name]=!blnShowKpis[subHierarchy.root + subHierarchy.name]">
-                    <span ng-if="groupPerformance !== 'none'" style="font-weight:bold;color:#87CEEB">{{obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].time | number:0}}% </span>
-                    Time</a>
+              <div class="col-md-2 col-sm-12">
+                <div class="stats-overview stat-block" ng-class="colorBgKPI(process.calculGroupBy['none'].quality)">
+                  <div class="details">
+                    <div class="title">
+                      <img src="assets/images/quality.png" style="height:20px;" alt="">
+                      <span ng-if="groupPerformance !== 'none'" style="font-weight:bold;color:#87CEEB">{{process.calculGroupBy['none'].quality | number:0}}% </span>
+                      &nbsp;Quality
+                    </div>
+                    <div ng-if="groupPerformance === 'none'" style="width:100%;text-align:right;padding-right:30px;padding-bottom:25px;font-size:34px;font-weight:bold;" ng-class="colorKPI(process.calculGroupBy['none'].quality)">{{process.calculGroupBy['none'].quality }}</div>
+                    <nvd3 options="optionsCosts" data="obeya.tasks.dataQualitySub[process.root + process.name]"></nvd3>
+                  </div>
                 </div>
-                <div ng-if="groupPerformance === 'none'" style="width:100%;text-align:right;padding-right:30px;padding-bottom:25px;font-size:34px;font-weight:bold;" ng-class="colorKPI(obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].time)">{{obeya.tasks.groupSubTasks[subHierarchy.root + subHierarchy.name]['none'].time }}</div>
-                <nvd3 options="optionsCosts" data="obeya.tasks.dataTimeSub[subHierarchy.root + subHierarchy.name]" ></nvd3>
               </div>
-            </div>
-            </div>
+              <div class="col-md-2 col-sm-12">
+                <div class="stats-overview stat-block" ng-class="colorBgKPI(process.calculGroupBy['none'].cost)">
+                  <div class="details">
+                    <div class="title">
+                      <img src="assets/images/cost.png" style="height:20px;" alt="">
+                      <span ng-if="groupPerformance !== 'none'" style="font-weight:bold;color:#87CEEB">{{process.calculGroupBy['none'].cost | number:0}}% </span>
+                      &nbsp;Costs
+                    </div>
+                    <div ng-if="groupPerformance === 'none'" style="width:100%;text-align:right;padding-right:30px;padding-bottom:25px;font-size:34px;font-weight:bold" ng-class="colorKPI(process.calculGroupBy['none'].cost)">{{process.calculGroupBy['none'].cost }}</div>
+                    <nvd3 options="optionsCosts" data="obeya.tasks.dataCostSub[process.root + process.name]"></nvd3>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-2 col-sm-12">
+                <div class="stats-overview stat-block" ng-class="colorBgKPI(process.calculGroupBy['none'].time)">
+                  <div class="details">
+                    <div class="title">
+                      <img src="assets/images/time.png" style="height:20px;" alt="">
+                      <span ng-if="groupPerformance !== 'none'" style="font-weight:bold;color:#87CEEB">{{process.calculGroupBy['none'].time | number:0}}% </span>
+                      &nbsp;Time
+                    </div>
+                    <div ng-if="groupPerformance === 'none'" style="width:100%;text-align:right;padding-right:30px;padding-bottom:25px;font-size:34px;font-weight:bold;" ng-class="colorKPI(process.calculGroupBy['none'].time)">{{process.calculGroupBy['none'].time }}</div>
+                    <nvd3 options="optionsCosts" data="obeya.tasks.dataTimeSub[process.root + process.name]"></nvd3>
+                  </div>
+                </div>
+              </div>
 
-            <!--  DEBUT LISTE TACHES
+              <!--  DEBUT LISTE TACHES
             ******************************-->
-            <div class="row" ng-if="blnShowTasks[subHierarchy.root + subHierarchy.name]===true">
-            <div class="col-md-11 portlet-body" style="margin-left:35px;margin-top:15px">
-                <table class="table table-striped table-bordered table-hover">
-                  <thead>
-                    <tr>
-                      <th class="hidden-xs">
-                        <a style="text-decoration: none" href="#" ng-click="orderByField='actors[0].name'; reverseSort = !reverseSort">
-                          Owner <span ng-show="orderByField === 'actors[0].name'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
-                        </a>
-                      </th>
-                      <th style="min-width:300px;max-width:500px;">
-                        <a style="text-decoration: none" href="#" ng-click="orderByField='Name'; reverseSort = !reverseSort">
-                          Name <span ng-show="orderByField === 'Name'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
-                        </a>
-                      </th>
-                      <th style="width:250px;">
-                        <a style="text-decoration: none" href="#" ng-click="orderByField='activity'; reverseSort = !reverseSort">
-                         Process <span ng-show="orderByField === 'activity'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
-                        </a>
-                      </th>
-                      <th style="width:250px;">
-                        <a style="text-decoration: none" href="#" ng-click="orderByField='context'; reverseSort = !reverseSort">
-                          Contexte <span ng-show="orderByField === 'context'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
-                        </a>
-                      </th>
-                      <th style="max-width:50px;width:auto;min-width:20px;">
-                        <a style="text-decoration: none" href="#" ng-click="orderByField='metrics[task.metrics.length - 1].startDate'; reverseSort = !reverseSort">
-                          Start <span ng-show="orderByField === 'metrics[task.metrics.length - 1].startDate'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
-                        </a>
-                      </th>
-                      <th style="max-width:50px;width:auto;width:150px;">
-                        <a style="text-decoration: none" href="#" ng-click="orderByField='metrics[task.metrics.length - 1].load'; reverseSort = !reverseSort">
-                          Load <span ng-show="orderByField === 'metrics[task.metrics.length - 1].load'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
-                        </a>
-                      </th>
-                      <th style="max-width:50px;width:auto;min-width:20px;">
-                        <a style="text-decoration: none" href="#" ng-click="orderByField='metrics[task.metrics.length - 1].endDate'; reverseSort = !reverseSort">
-                          End <span ng-show="orderByField === 'metrics[task.metrics.length - 1].endDate'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
-                        </a>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody infinite-scroll="getMoreData()" infinite-scroll-distance="3">
-                    <tr ng-repeat="task in obeya.tasks.subTasks[subHierarchy.root + subHierarchy.name] | orderBy:orderByField:reverseSort">
-                      <td style="text-align: left">
-                        <div >
-                        <!-- <div uib-tooltip-html="'Name : <b>{{task.actors[0].name}}</b>'" tooltip-placement="top"> -->
-                          <img alt="" ng-src="{{ task.actors[0].avatar || 'assets/images/avatars/' + task.actors[0]._id + '.png'}} " class="img-circle" err-src="assets/images/avatars/avatar.png"/> <small class="text-muted">{{task.actors[0].name}}</small>
-                        </div>
-                      </td>
-                      <td >
-                        <a href="/task/{{task._id}}" target="_blank">
-                          <div class="desc">{{task.name}}
+              <div class="row" ng-if="process.blnShowTasks===true">
+                <div class="col-md-11 portlet-body" style="margin-left:35px;margin-top:15px">
+                  <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th class="hidden-xs">
+                          <a style="text-decoration: none" href="#" ng-click="orderByField='actors[0].name'; reverseSort = !reverseSort">
+                            Owner <span ng-show="orderByField === 'actors[0].name'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
+                          </a>
+                        </th>
+                        <th style="min-width:300px;max-width:500px;">
+                          <a style="text-decoration: none" href="#" ng-click="orderByField='Name'; reverseSort = !reverseSort">
+                            Name <span ng-show="orderByField === 'Name'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
+                          </a>
+                        </th>
+                        <th style="width:250px;">
+                          <a style="text-decoration: none" href="#" ng-click="orderByField='activity'; reverseSort = !reverseSort">
+                            Process <span ng-show="orderByField === 'activity'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
+                          </a>
+                        </th>
+                        <th style="width:250px;">
+                          <a style="text-decoration: none" href="#" ng-click="orderByField='context'; reverseSort = !reverseSort">
+                            Contexte <span ng-show="orderByField === 'context'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
+                          </a>
+                        </th>
+                        <th style="max-width:50px;width:auto;min-width:20px;">
+                          <a style="text-decoration: none" href="#" ng-click="orderByField='metrics[task.metrics.length - 1].startDate'; reverseSort = !reverseSort">
+                            Start <span ng-show="orderByField === 'metrics[task.metrics.length - 1].startDate'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i
+                                  class="fa fa-sort-desc"></i></span></span>
+                          </a>
+                        </th>
+                        <th style="max-width:50px;width:auto;width:150px;">
+                          <a style="text-decoration: none" href="#" ng-click="orderByField='metrics[task.metrics.length - 1].load'; reverseSort = !reverseSort">
+                            Load <span ng-show="orderByField === 'metrics[task.metrics.length - 1].load'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
+                          </a>
+                        </th>
+                        <th style="max-width:50px;width:auto;min-width:20px;">
+                          <a style="text-decoration: none" href="#" ng-click="orderByField='metrics[task.metrics.length - 1].endDate'; reverseSort = !reverseSort">
+                            End <span ng-show="orderByField === 'metrics[task.metrics.length - 1].endDate'"><span ng-show="!reverseSort"> &nbsp;&nbsp;&nbsp; <i class="fa fa-sort-asc"></i></span><span ng-show="reverseSort">&nbsp;&nbsp;&nbsp; <i class="fa fa-sort-desc"></i></span></span>
+                          </a>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="task in process.tasks | orderBy:orderByField:reverseSort">
+                        <td style="text-align: left">
+                          <div>
+                            <!-- <div uib-tooltip-html="'Name : <b>{{task.actors[0].name}}</b>'" tooltip-placement="top"> -->
+                            <img alt="" ng-src="{{ task.actors[0].avatar || 'assets/images/avatars/' + task.actors[0]._id + '.png'}} " class="img-circle" err-src="assets/images/avatars/avatar.png" /> <small class="text-muted">{{task.actors[0].name}}</small>
                           </div>
-                        </a>
-                      </td>
-                      <td >
+                        </td>
+                        <td>
+                          <a href="/task/{{task._id}}" target="_blank">
+                            <div class="desc">{{task.name}}
+                            </div>
+                          </a>
+                        </td>
+                        <td>
                           <small class="dont-break-out" style="font-size:11px"> {{task.activity}}</small>
 
-                      </td>
-                      <td >
+                        </td>
+                        <td>
                           <small class="dont-break-out" style="font-size:11px"> {{task.context}}</small>
 
-                      </td>
-                      <td class="hidden-xs">
-                        {{task.metrics[task.metrics.length - 1].targetstartDate | date:'mediumDate'}}<br/>
+                        </td>
+                        <td class="hidden-xs">
+                          {{task.metrics[task.metrics.length - 1].targetstartDate | date:'mediumDate'}}<br />
 
 
-                        <span class="label label-sm label-lightinfo" ng-if="task.metrics[task.metrics.length - 1].startDate > task.metrics[task.metrics.length - 1].targetstartDate " >&nbsp;&nbsp;{{task.metrics[task.metrics.length - 1].startDate | date:'mediumDate'}}</span>
-                      </td>
-                      <td class="hidden-xs">
+                          <span class="label label-sm label-lightinfo" ng-if="task.metrics[task.metrics.length - 1].startDate > task.metrics[task.metrics.length - 1].targetstartDate ">&nbsp;&nbsp;{{task.metrics[task.metrics.length - 1].startDate | date:'mediumDate'}}</span>
+                        </td>
+                        <td class="hidden-xs">
 
-                      <span ng-if="task.metrics[task.metrics.length - 1].status ==='Not Started' "
-                        class="label label-sm"
-                        ng-class="{'label-info':task.metrics[task.metrics.length - 1].status ==='In Progress','label-success':task.metrics[task.metrics.length - 1].status ==='Finished','label-default':task.metrics[task.metrics.length - 1].status ==='Not Started','label-lightgrey':task.metrics[task.metrics.length - 1].status =='Withdrawn','label-warning':task.metrics[task.metrics.length - 1].startDate < today}">
-                        {{task.metrics[task.metrics.length - 1].status}}
-                      </span>
-                      <span ng-if="task.metrics[task.metrics.length - 1].status !=='Not Started'"
-                        class="label label-sm"
-                        ng-class="{'label-info':task.metrics[task.metrics.length - 1].status ==='In Progress','label-success':task.metrics[task.metrics.length - 1].status ==='Finished','label-default':task.metrics[task.metrics.length - 1].status ==='Not Started','label-lightgrey':task.metrics[task.metrics.length - 1].status =='Withdrawn'}">
-                        {{task.metrics[task.metrics.length - 1].status}}
-                      </span>
-                    <small class="text-muted " ng-if="task.metrics[task.metrics.length - 1].status ==='In Progress'"><i>&nbsp;&nbsp;{{task.metrics[task.metrics.length - 1].progress}}%</i></small>
-                    <br>
-                        <span>{{task.metrics[task.metrics.length - 1].targetLoad}} </span>
-                          <span  ng-if="task.metrics[task.metrics.length - 1].projectedWorkload > task.metrics[task.metrics.length - 1].targetLoad">
+                          <span ng-if="task.metrics[task.metrics.length - 1].status ==='Not Started' " class="label label-sm" ng-class="{'label-info':task.metrics[task.metrics.length - 1].status ==='In Progress','label-success':task.metrics[task.metrics.length - 1].status ==='Finished','label-default':task.metrics[task.metrics.length - 1].status ==='Not Started','label-lightgrey':task.metrics[task.metrics.length - 1].status =='Withdrawn','label-warning':task.metrics[task.metrics.length - 1].startDate < today}">
+                            {{task.metrics[task.metrics.length - 1].status}}
+                          </span>
+                          <span ng-if="task.metrics[task.metrics.length - 1].status !=='Not Started'" class="label label-sm" ng-class="{'label-info':task.metrics[task.metrics.length - 1].status ==='In Progress','label-success':task.metrics[task.metrics.length - 1].status ==='Finished','label-default':task.metrics[task.metrics.length - 1].status ==='Not Started','label-lightgrey':task.metrics[task.metrics.length - 1].status =='Withdrawn'}">
+                            {{task.metrics[task.metrics.length - 1].status}}
+                          </span>
+                          <small class="text-muted " ng-if="task.metrics[task.metrics.length - 1].status ==='In Progress'"><i>&nbsp;&nbsp;{{task.metrics[task.metrics.length - 1].progress}}%</i></small>
+                          <br>
+                          <span>{{task.metrics[task.metrics.length - 1].targetLoad}} </span>
+                          <span ng-if="task.metrics[task.metrics.length - 1].projectedWorkload > task.metrics[task.metrics.length - 1].targetLoad">
                             &gt;&gt; <span class="label label-sm label-danger "> {{task.metrics[task.metrics.length - 1].projectedWorkload}}</span>
                           </span>
-                          <span  ng-if="task.metrics[task.metrics.length - 1].projectedWorkload < task.metrics[task.metrics.length - 1].targetLoad">
+                          <span ng-if="task.metrics[task.metrics.length - 1].projectedWorkload < task.metrics[task.metrics.length - 1].targetLoad">
                             &gt;&gt; <span class="label label-sm label-lightwarning "> {{task.metrics[task.metrics.length - 1].projectedWorkload}}</span>
                           </span>
-                      </td>
-                      <td class="hidden-xs">
-                        {{task.metrics[task.metrics.length - 1].targetEndDate | date:'mediumDate'}}<br/>
+                        </td>
+                        <td class="hidden-xs">
+                          {{task.metrics[task.metrics.length - 1].targetEndDate | date:'mediumDate'}}<br />
 
-                        <span class="label label-sm label-danger"  ng-if="task.metrics[task.metrics.length - 1].endDate > task.metrics[task.metrics.length - 1].targetEndDate">&nbsp;&nbsp;{{task.metrics[task.metrics.length - 1].endDate | date:'mediumDate'}}</span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-            </div>
-            </div>
-
-            <!--  DEBUT LISTE KPIS
-            ******************************-->
-
-            <div class="row" ng-if="blnShowKpis[subHierarchy.root + subHierarchy.name]===true">
-            <div class="col-md-12">
-            <hr>
-            <div class="row" >
-              <div class="col-md-6 col-sm-12">
-
-            </div>
-
-
-            <div class="col-md-2 col-sm-12" style="border:1px grey dashed;padding:5px">
-            <div class="">
-            <div class="stats-overview stat-block" ng-repeat="kpi in dashboard.kpis | filter:{constraint:'Quality'}">
-            <div class="details">
-              <div class="title">
-                <a href="#">
-                  <span style="font-weight:bold;color:#87CEEB"></span>
-                  {{kpi.name}}</a>
-
+                          <span class="label label-sm label-danger" ng-if="task.metrics[task.metrics.length - 1].endDate > task.metrics[task.metrics.length - 1].targetEndDate">&nbsp;&nbsp;{{task.metrics[task.metrics.length - 1].endDate | date:'mediumDate'}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
-              <nvd3 options="optionsCosts" data="dataSubKPIs[subHierarchy.root + subHierarchy.name]['Quality'][kpi.name]" ></nvd3>
-            </div>
-            </div>
-            </div>
-            </div>
-            <div class="col-md-2 col-sm-12" style="border:1px grey dashed;padding:5px">
-            <div class="stats-overview stat-block" ng-repeat="kpi in dashboard.kpis | filter:{constraint:'Cost'}">
-            <div class="details">
-              <div class="title">
-                <a href="#">
-                  <span style="font-weight:bold;color:#87CEEB"></span>
-                  {{kpi.name}}</a>
-              </div>
-              <nvd3 options="optionsCosts" data="dataSubKPIs[subHierarchy.root + subHierarchy.name]['Cost'][kpi.name]" ></nvd3>
-            </div>
-            </div>
-            </div>
-            <div class="col-md-2 col-sm-12" style="border:1px grey dashed;padding:5px">
-            <div class="stats-overview stat-block" ng-repeat="kpi in dashboard.kpis | filter:{constraint:'Time'}">
-            <div class="details">
-              <div class="title">
-                <a href="#">
-                  <span style="font-weight:bold;color:#87CEEB"></span>
-                  {{kpi.name}}</a>
-              </div>
-              <nvd3 options="optionsCosts" data="dataSubKPIs[subHierarchy.root + subHierarchy.name]['Time'][kpi.name]" ></nvd3>
-            </div>
-            </div>
-            </div>
 
             </div>
-            <hr>
-            </div>
-
-            </div>
-
-              </div>
-              <!-- END OVERVIEW STATISTIC BARS-->
-            </div>
-
-
+            <!-- END OVERVIEW STATISTIC BARS-->
           </div>
+
+
+        </div>
       </div>
     </div>
   </div>
