@@ -6,14 +6,19 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
 
     // Define the initialize function
     this.initialize = function() {
+      this.loadTasks();
+    }
+    this.loadTasks = function() {
 
       // ***************************************************
       // Fetch the data from tasks in perimeter & timeRange
       // ***************************************************
+      var startDate = $rootScope.startRange || dateRangeService.getDates().startRange;
+      var endRange = $rootScope.endRange || dateRangeService.getDates().endRange;
       var myparams = {
         params: {
-          startRange: dateRangeService.startRange,
-          endRange: dateRangeService.endRange
+          startRange: startDate,
+          endRange: endRange
         }
       };
       var url = '/api/dashboardCompletes/showTasks/' + obeya._id;
@@ -87,7 +92,10 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
         self.filterReviewed = self.filter('Finished', true);
         self.filterReviewedNb = self.filterReviewed.length;
         self.filterReviewedLoad = self.load(self.filterReviewed);
+
+        self.filterClosed = _.concat(self.filterFinished, self.filterReviewed, self.filterWithdrawn);
         self.filterClosedNb = self.filterFinishedNb + self.filterReviewedNb + self.filterWithdrawnNb;
+        console.log('SELF.FILTERCLOSEDNB', self.filterClosedNb)
 
         self.filterTasksWithSuccess = _.filter(self.allTasks, function(task) {
           return task.success;
@@ -279,49 +287,77 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
           // liste des process définis
           _.each(self.processList, function(process) {
             process.isValidPath = true;
-            process.isUsedPath = (_.indexOf(self.allTasks, process.longname) > 0);
+            process.isUsedPath = (_.map(self.filterClosed, 'activity').indexOf(process.longname) >= 0);
+            process.isCalculatedPath = false;
             process.level = (process.longname.match(new RegExp('\\.', 'g')) || []).length;
-            process.tasks = [];
           });
 
           // liste des process utilisés dans les taches
-          var allTasksProcess = _.map(_.uniqBy(self.allTasks, function(task) {
-            return task.activity;
-          }), function(taskProcess) {
+          var allTasksProcess = _.map(_.uniqBy(self.filterClosed, 'activity'), function(taskProcess) {
             return {
               longname: taskProcess.activity
             };
           });
 
           _.each(allTasksProcess, function(taskProcess) {
+            taskProcess.isValidPath = (_.map(self.processList, 'longname').indexOf(taskProcess.longname) >= 0);
             taskProcess.isUsedPath = true;
-            taskProcess.isValidPath = (_.indexOf(_.map(self.processList, 'longname'), taskProcess.longname) > 0);
+            taskProcess.isCalculatedPath = false;
             taskProcess.level = (taskProcess.longname.match(new RegExp('\\.', 'g')) || []).length;
-            taskProcess.tasks = [];
 
-            var lastDot = taskProcess.longname.length - taskProcess.longname.lastIndexOf('.')+1;
-            taskProcess.name = taskProcess.longname.substring(lastDot  + 1);
+            var lastDot = taskProcess.longname.lastIndexOf('.');
             taskProcess.root = taskProcess.longname.substring(0, lastDot);
+            taskProcess.name = taskProcess.longname.substring(lastDot + 1);
 
             if (_.indexOf(_.map(self.processList, 'longname'), taskProcess.longname) < 0) {
               self.processList.push(taskProcess);
             }
           });
-          self.processList = _.sortBy(self.processList, ['longname']);
+
+          self.processNb = self.processList.length;
+          self.processNotDefinedNb = _.filter(self.processList, {'isValidPath' : false}).length;
+          self.processNotUsedNb = _.filter(self.processList, {'isUsedPath' : false}).length;
+
+
+          var isUsed = _.filter(self.processList, {
+            'isUsedPath': true
+          });
+          var calculatedPaths = [];
+          _.each(self.processList, function(process) {
+            _.each(isUsed, function(usedPath) {
+              if (usedPath.longname.indexOf(process.longname) >= 0 && usedPath.longname !== process.longname) {
+                calculatedPaths.push(_.cloneDeep(process));
+              }
+            });
+          })
+          calculatedPaths = _.uniqBy(calculatedPaths, 'longname');
+          _.each(calculatedPaths, function(process) {
+            process.isCalculatedPath = true;
+          });
+          self.processList = self.processList.concat(calculatedPaths);
+
+          self.processList = _.orderBy(self.processList, ['longname', 'isCalculatedPath'], ['asc', 'desc']);
 
 
           _.each(self.processList, function(process) {
-
             process.blnShowTasks = false;
-            // start of subtasks
-            process.tasks = _.sortBy(_.filter(self.allTasks, function(task) {
-              var blnFinish = task.metrics && task.metrics[task.metrics.length - 1].status ==='Finished';
-              var blnActivity = task.activity === process.root + '.' + process.name;
-              return blnFinish && blnActivity;
-            }), function(task) {
-              return task.metrics[task.metrics.length - 1].targetEndDate;
-            }).reverse();
-            // end of subtasks
+            if (process.isCalculatedPath === false) {
+              process.tasks = _.orderBy(_.filter(self.filterClosed, function(task) {
+                var blnFinish = task.metrics && (task.metrics[task.metrics.length - 1].status === 'Finished' || task.metrics[task.metrics.length - 1].status === 'Withdrawn');
+                var blnActivity = task.activity === process.root + '.' + process.name;
+                return blnFinish && blnActivity;
+              }), function(task) {
+                return task.metrics[task.metrics.length - 1].targetEndDate;
+              }).reverse();
+            } else {
+              process.tasks = _.orderBy(_.filter(self.filterClosed, function(task) {
+                var blnFinish = task.metrics && (task.metrics[task.metrics.length - 1].status === 'Finished' || task.metrics[task.metrics.length - 1].status === 'Withdrawn');
+                var blnActivity = task.activity.indexOf(process.longname) >= 0;
+                return blnFinish && blnActivity;
+              }), function(task) {
+                return task.metrics[task.metrics.length - 1].targetEndDate;
+              }).reverse();
+            }
 
             process.calculGroupBy = {
               'none': {
@@ -387,7 +423,6 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
               });
               return value;
             })))) * 10) / 10;
-            console.log('PROCESS', process)
 
             // if group ******
             // self.dataTasksSubNb[process.longname] = self.dataMetricsSub[process.longname]['none'].length;
@@ -400,6 +435,7 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
 
 
           });
+          console.log('  SELF.PROCESSLIST', self.processList)
         });
       };
 

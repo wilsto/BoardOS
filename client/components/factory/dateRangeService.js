@@ -2,9 +2,10 @@
 
 angular.module('boardOsApp').factory('dateRangeService', function($rootScope, $window) {
 
-
   this.startRange = ($window.sessionStorage.getItem('startRange')) ? moment(new Date($window.sessionStorage.getItem('startRange'))) : moment().subtract(1, 'month').startOf('month');
-  this.endRange  = ($window.sessionStorage.getItem('endRange')) ? moment(new Date($window.sessionStorage.getItem('endRange'))) : moment().subtract(1, 'month').endOf('month');
+  this.endRange = ($window.sessionStorage.getItem('endRange')) ? moment(new Date($window.sessionStorage.getItem('endRange'))) : moment().subtract(1, 'month').endOf('month');
+  $rootScope.startRange = this.startDate;
+  $rootScope.endRange = this.endDate;
 
   function cb(start, end) {
     $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
@@ -30,15 +31,26 @@ angular.module('boardOsApp').factory('dateRangeService', function($rootScope, $w
     this.startRange = picker.startDate;
     this.endRange = picker.endDate;
 
+    $rootScope.startRange = this.startRange;
+    $rootScope.endRange = this.endRange;
+
     $window.sessionStorage.setItem('startRange', this.startRange);
     $window.sessionStorage.setItem('endRange', this.endRange);
 
     $rootScope.$broadcast('dateRangeService:updated');
   });
+
+
+  var self= this;
+  var getDates = function() {
+    return {
+      startRange: self.startRange,
+      endRange: self.endRange
+    }
+  };
   // this is simplified for illustration, see edit below
   return {
-    startRange: this.startRange,
-    endRange: this.endRange,
-  };
+    getDates: getDates
+  }
 
 });

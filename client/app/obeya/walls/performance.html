@@ -15,19 +15,19 @@
       <ul class="list-group card-list">
         <li class="list-group-item" ng-click="viewMode[activeWall.name]='RespectOverview'" ng-class="{'list-group-item-active':viewMode[activeWall.name] === 'RespectOverview'}">
           <img src="assets/images/overview.png" style="height:20px;" alt=""> Overview
-          <span class="badge badge-gray">{{obeya.openTasksNb}}</span>
+          <span class="pull-right"> <i class="fa fa-chevron-right"></i></span>
         </li>
         <li class="list-group-item" ng-click="viewMode[activeWall.name]='RespectQuality'" ng-class="{'list-group-item-active':viewMode[activeWall.name] === 'RespectQuality'}">
           <img src="assets/images/quality.png" style="height:20px;" alt=""> Quality
-          <span class="badge badge-gray">{{obeya.openTasksNb}}</span>
+          <span class="pull-right"> <i class="fa fa-chevron-right"></i></span>
         </li>
         <li class="list-group-item" ng-click="viewMode[activeWall.name]='RespectCost'" ng-class="{'list-group-item-active':viewMode[activeWall.name] === 'RespectCost'}">
           <img src="assets/images/cost.png" style="height:20px;" alt=""> Cost
-          <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+          <span class="pull-right"> <i class="fa fa-chevron-right"></i></span>
         </li>
         <li class="list-group-item" ng-click="viewMode[activeWall.name]='RespectTime'" ng-class="{'list-group-item-active':viewMode[activeWall.name] === 'RespectTime'}">
           <img src="assets/images/time.png" style="height:20px;" alt=""> Time
-          <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+          <span class="pull-right"> <i class="fa fa-chevron-right"></i></span>
         </li>
       </ul>
       <br>
@@ -38,19 +38,19 @@
       <ul class="list-group card-list">
         <li class="list-group-item" ng-click="viewMode[activeWall.name]='MasterOverview'" ng-class="{'list-group-item-active':viewMode[activeWall.name] === 'MasterOverview'}">
           <img src="assets/images/overview.png" style="height:20px;" alt=""> Overview
-          <span class="badge badge-gray">{{obeya.openTasksNb}}</span>
+          <span class="pull-right"> <i class="fa fa-chevron-right"></i></span>
         </li>
         <li class="list-group-item" ng-click="viewMode[activeWall.name]='MasterQuality'" ng-class="{'list-group-item-active':viewMode[activeWall.name] === 'MasterQuality'}">
           <img src="assets/images/quality.png" style="height:20px;" alt=""> Quality
-          <span class="badge badge-gray">{{obeya.openTasksNb}}</span>
+          <span class="pull-right"> <i class="fa fa-chevron-right"></i></span>
         </li>
         <li class="list-group-item" ng-click="viewMode[activeWall.name]='MasterCost'" ng-class="{'list-group-item-active':viewMode[activeWall.name] === 'MasterCost'}">
           <img src="assets/images/cost.png" style="height:20px;" alt=""> Cost
-          <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+          <span class="pull-right"> <i class="fa fa-chevron-right"></i></span>
         </li>
         <li class="list-group-item" ng-click="viewMode[activeWall.name]='MasterTime'" ng-class="{'list-group-item-active':viewMode[activeWall.name] === 'MasterTime'}">
           <img src="assets/images/time.png" style="height:20px;" alt=""> Time
-          <span class="badge badge-gray">{{obeya.alertsValue}}</span>
+          <span class="pull-right"> <i class="fa fa-chevron-right"></i></span>
         </li>
       </ul>
     </div>
@@ -83,24 +83,33 @@
             <div class="row stats-overview-cont" ng-repeat="process in obeya.tasks.processList" ng-if="process.calculGroupBy['none'].count>0 || showEmptyRow">
 
               <div class="col-md-2 col-sm-12">
-                <div class="stats-overview stat-block">
-                  <div style="float:left;margin-top:-10px;margin-left:-28px;border:0px; background-color:#f1f0f2;padding:5px">
-                    {{process.level}}
+                <div class="stats-overview stat-block" ng-class="{'bg-blue':process.isCalculatedPath}">
+                  <div style="float:left;margin-top:10px;margin-left:-29px;border:0px; background-color:#f1f0f2;padding:5px;text-align:center;">
+                    {{process.level}} <br>
+                    <i class="fas fa-calculator blue" ng-if="process.isCalculatedPath"> </i>
                   </div>
                   <div class="details">
                     <div class="title" style="height:61px">
+                      <small ng-if="process.code" class="label bg-lightgrey pull-right" style="color:#000000;margin-top:-8px;margin-right:-8px;"> {{process.code}} </small>
                       <b ng-class="{'text-danger':!process.isValidPath,'text-success':process.isValidPath}">
                         {{process.name}}
                       </b>
+                      <br><small class="text-muted" style="font-size:10px">
+                        {{process.root}}
+                      </small>
                       <br>
-                      <div  style="background-color:lightgrey;text-align:right;min-width:20px;" ng-style="{'width':(process.calculGroupBy['none'].count/obeya.tasks.allTasksNb *100) + '%'}" class="text-muted"> {{(process.calculGroupBy['none'].count/obeya.tasks.allTasksNb *100)| number:0}}%</div>
-                      <small ng-if="process.code" class="label label-default" style="color:#000000"> {{process.code}} </small>
+                      <div style="background-color:#90dceb;text-align:right;min-width:20px;font-size:10px" ng-style="{'width':(process.calculGroupBy['none'].count/obeya.tasks.filterClosedNb *100) + '%'}" class="text-muted">
+                        {{(process.calculGroupBy['none'].count/obeya.tasks.filterClosedNb *100)| number:0}}%
+                      </div>
+                      <span class="pull-right" style="margin-top:-14px;margin-right:-10px;">
+                        <i class="far fa-plus-square fa-2x " style="color:#ddd8d8" ng-if="process.isCalculatedPath"></i>
+                      </span>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="col-md-2 col-sm-12">
-                <div class="stats-overview stat-block">
+                <div class="stats-overview stat-block" ng-class="{'bg-blue':process.isCalculatedPath}">
                   <div class="details">
                     <div class="title">
                       <a href="#" ng-click="process.blnShowTasks=!process.blnShowTasks">
@@ -113,7 +122,7 @@
                 </div>
               </div>
               <div class="col-md-2 col-sm-12">
-                <div class="stats-overview stat-block">
+                <div class="stats-overview stat-block" ng-class="{'bg-blue':process.isCalculatedPath}">
                   <div class="details">
                     <div class="title">
                       <a href="#" ng-click="process.blnShowTasks=!process.blnShowTasks">

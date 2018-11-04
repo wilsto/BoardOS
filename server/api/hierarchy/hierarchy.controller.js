@@ -97,15 +97,15 @@ exports.listProcess = function(req, res) {
       if (posFilter > -1) {
         // position du prochain point post root
         // si c'est la liste -1 que l'on récupère
-        process.name = process.longname.substring(posFilter + filterlength + 1);
-        process.root = process.longname.substring(0, posFilter + filterlength);
+        var lastDot = process.longname.lastIndexOf('.');
+        process.root = process.longname.substring(0, lastDot);
+        process.name = process.longname.substring(lastDot + 1);
         process.code = process.description;
         delete process.parent;
         delete process.text;
         listToSend.push(process);
       }
     });
-    console.log('LISTTOSEND', listToSend)
     return res.status(200).json(listToSend);
   });
 };

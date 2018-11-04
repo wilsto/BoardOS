@@ -92,52 +92,11 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
         var activeWallId = ($window.sessionStorage.getItem('activeWallId')) ? parseInt($window.sessionStorage.getItem('activeWallId')) : 0;
         $scope.NavCaroussel(activeWallId);
         $scope.showCard($scope.activeWall.name);
-        //
-        // var filterPerimeter = {
-        //   $or: [],
-        //   metrics: {
-        //     $elemMatch: {
-        //       status: 'Finished'
-        //     }
-        //   }
-        // };
-        // _.each($scope.obeya.perimeter, function(perimeter) {
-        //   if (perimeter.activity && perimeter.context) {
-        //     filterPerimeter['$or'].push({
-        //       activity: {
-        //         '$regex': perimeter.activity || '',
-        //         $options: '-i'
-        //       },
-        //       context: {
-        //         '$regex': perimeter.context || '',
-        //         $options: '-i'
-        //       }
-        //     });
-        //   } else if (!perimeter.context) {
-        //     filterPerimeter['$or'].push({
-        //       activity: {
-        //         '$regex': perimeter.activity || '',
-        //         $options: '-i'
-        //       }
-        //     });
-        //   } else if (!perimeter.activity) {
-        //     filterPerimeter['$or'].push({
-        //       context: {
-        //         '$regex': perimeter.context || '',
-        //         $options: '-i'
-        //       }
-        //     });
-        //   }
-        //   $scope.filterPerimeter = filterPerimeter;
-        //   $rootScope.filterPerimeter = filterPerimeter;
-        //
-        // });
-
-        // appel des activités en cours
-        //$rootScope.$broadcast('obeya:searchTasks', $scope.obeya);
 
         // recherche des processus
-        $scope.loadProcessList();
+        $timeout(function() {
+          convertTasksInProcessFlow();
+        }, 3000);
 
       });
     }
@@ -216,20 +175,9 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
     $scope.milestone = undefined;
   };
 
-  // recherche des activités en cours
-  $scope.$on('obeya:searchTasks', function(event, data) {
-    $http.get('/api/dashboardCompletes/showTasks/' + $stateParams.id).success(function(tasks) {
-      // Appel des classes de taches
-      $rootScope.$broadcast('dateRangeService:updated');
-      // Appel des engagement en cours
-      $rootScope.$broadcast('obeya:searchContext', $scope.obeya);
-    });
-
-  });
-
   $scope.$on('dateRangeService:updated', function(event, data) {
 
-    $scope.obeya.tasks.SubMonthDetails();
+    $scope.obeya.tasks = new Tasks($scope.obeya);
 
     $timeout(function() {
       var items = new VisDataSet();
@@ -788,7 +736,7 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
       color = 'lightgrey';
     }
     if (number > 0 && number < 70) {
-      color = 'orange';
+      color = 'red';
     }
     if (number >= 70 && number < 90) {
       color = 'orange';
@@ -811,7 +759,7 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
       color = 'bg-lightgrey';
     }
     if (number > 0 && number < 70) {
-      color = 'bg-orange';
+      color = 'bg-red';
     }
     if (number >= 70 && number < 90) {
       color = 'bg-orange';
@@ -934,41 +882,16 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
   var allhierarchies = {};
 
   var convertTasksInProcessFlow = function() {
-    var paths = [];
-    console.log('ALLHIERARCHIES', allhierarchies)
-    _.each(allhierarchies, function(hierarchy) {
-      hierarchy.isValidPath = true;
-      hierarchy.isUsedPath = (_.indexOf(alltasks, hierarchy.longname) > 0);
-      hierarchy.level = (hierarchy.longname.match(new RegExp('\\.', 'g')) || []).length;
 
-      paths.push(hierarchy);
-    });
-    var joinAllTasks = _.map(alltasks, function(taskHierarchie) {
-      return {
-        longname: taskHierarchie,
-        type: 'task'
-      };
-    });
-    _.each(joinAllTasks, function(taskHierarchie) {
-      taskHierarchie.isUsedPath = true;
-      taskHierarchie.isValidPath = (_.indexOf(_.map(allhierarchies, 'longname'), taskHierarchie.longname) > 0);
-      taskHierarchie.level = (taskHierarchie.longname.match(new RegExp('\\.', 'g')) || []).length;
-      paths.push(taskHierarchie);
-    });
-    paths = _.sortBy(paths, 'longname');
-
-    $scope.paths = _.uniqBy(paths, function(x) {
-      return x.longname;
-    });
-
-    $scope.processFocus = _.filter($scope.paths, function(path) {
+    console.log('$SCOPE.OBEYA.TASKS.PROCESSLIST', $scope.obeya.tasks.processList)
+    $scope.processFocus = _.filter($scope.obeya.tasks.processList, function(path) {
       return path.longname === $scope.obeya.perimeter[0].activity;
     })[0];
+    console.log('  $SCOPE.PROCESSFOCUS', $scope.processFocus)
 
     $scope.processFlowLevel = $scope.processFocus.level + 1;
     $scope.processFocusName = $scope.processFocus.longname;
     $scope.processFocusKey = $scope.processFocus.id || $scope.processFocus.longname;
-
 
     var processFlow = [];
     var processLinks = [];
@@ -1003,15 +926,15 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
       });
     }
 
-    _.each($scope.paths, function(path, index) {
+    _.each($scope.obeya.tasks.processList, function(path, index) {
       var newSubProcess = {};
       if (processFlow.length === 0 || _.filter(processFlow, ['key', path.id || path.longname]).length === 0) {
         if (path.level === $scope.processFlowLevel) {
-        newSubProcess.category = 'Process';
-        newSubProcess.key = path.id || path.longname;
-        newSubProcess.name = path.longname.replace($scope.processFocusName + '.', '');
-        newSubProcess.color = 'white';
-        processFlow.push(newSubProcess);
+          newSubProcess.category = 'Process';
+          newSubProcess.key = path.id || path.longname;
+          newSubProcess.name = path.longname.replace($scope.processFocusName + '.', '');
+          newSubProcess.color = 'white';
+          processFlow.push(newSubProcess);
         }
       }
     });
@@ -1026,23 +949,6 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
 
   $scope.countDot = function count(s1) {
     return (s1.match(new RegExp('\\.', 'g')) || []).length;
-  };
-
-  $scope.loadProcessList = function() {
-    var process = $scope.obeya.perimeter[0].activity;
-    var myparams = {
-      params: {
-        process: process
-      }
-    };
-
-    $http.get('/api/hierarchies/list/process', myparams).success(function(hierarchies) {
-      allhierarchies = _.sortBy(hierarchies, 'longname');
-      $http.get('/api/taskFulls/list/process', myparams).success(function(tasks) {
-        alltasks = _.sortBy(tasks);
-        convertTasksInProcessFlow();
-      });
-    });
   };
 
 

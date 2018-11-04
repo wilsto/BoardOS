@@ -146,19 +146,19 @@
               <ul class="list-group card-list">
                 <li class="list-group-item" ng-click="showCard('Process','Full')">
                     <img src="assets/images/Process_Icon.png" style="height:25px;" alt="" >  Process
-                  <span class="badge badge-gray">{{obeya.tasks.filterPlan.length}}</span>
+                  <span class="badge badge-gray">{{obeya.tasks.processNb}}</span>
                 </li>
                 <li class="list-group-item" ng-click="showCard('Process','NotDefined')">
                   <i class="far fa-question-circle "></i>  Not defined
-                  <span class="badge badge-gray">{{obeya.tasks.filterPlan.length}}</span>
+                  <span class="badge badge-red">{{obeya.tasks.processNotDefinedNb}}</span>
                 </li>
                 <li class="list-group-item" ng-click="showCard('Process','NotUsed')">
                     <i class="far fa-pause-circle"></i>  Not Used
-                  <span class="badge badge-gray">{{obeya.tasks.filterFinished.length + obeya.tasks.filterReviewed.length}}</span>
+                  <span class="badge badge-orange">{{obeya.tasks.processNotUsedNb}}</span>
                 </li>
                 <li class="list-group-item" ng-click="showCard('Process','In Progress')">
                   <i class="far fa-star "></i> Score
-                  <span class="badge badge-gray">{{obeya.tasks.filterInProgress.length}}</span>
+                    <span class="pull-right">   <img src="assets/images/under-construction.png" alt="" style="height:25px"></span>
                 </li>
               </ul>
         </div>

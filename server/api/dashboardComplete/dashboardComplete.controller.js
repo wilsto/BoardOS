@@ -520,46 +520,49 @@ exports.show = function(req, res) {
 exports.showTasks = function(req, res) {
 
   console.log('REQ.QUERY', req.query)
-  DashboardComplete.findById(req.params.id)
-    .populate('tasks', ' -watchers -dashboards -comments -todos -followers -version')
-    .populate('tasks.actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
-    .lean().exec(function(err, dashboardComplete) {
-      if (err) {
-        return handleError(res, err);
-      }
-      if (!dashboardComplete) {
-        return res.status(404).send('Not Found');
-      }
-      _.each(dashboardComplete.tasks, function(task) {
+  if (req.query.startRange) {
 
-        task.toDelete = true;
-        if (task.metrics[task.metrics.length - 1].targetEndDate >  JSON.parse(req.query.startRange) && task.metrics[task.metrics.length - 1].targetEndDate <  JSON.parse(req.query.endRange)) {
-          task.toDelete = false;
+    DashboardComplete.findById(req.params.id)
+      .populate('tasks', ' -watchers -dashboards -comments -todos -followers -version')
+      .populate('tasks.actors', '-__v -create_date -email -hashedPassword -last_connection_date -provider -role -salt -active -location')
+      .lean().exec(function(err, dashboardComplete) {
+        if (err) {
+          return handleError(res, err);
         }
-        if (task.metrics[task.metrics.length - 1].status !== 'Finished') {
-          task.toDelete = false;
+        if (!dashboardComplete) {
+          return res.status(404).send('Not Found');
         }
-        var actors = [];
-        _.each(_.compact(task.actors), function(actor) {
-          var thisuser = _.filter(usersList, function(user) {
-            return user._id.toString() === actor.toString();
-          });
-          if (thisuser.length > 0) {
-            actors.push({
-              _id: actor,
-              avatar: (thisuser[0].avatar) ? thisuser[0].avatar : 'assets/images/avatars/' + thisuser[0]._id + '.png',
-              name: thisuser[0].name
-            });
+        _.each(dashboardComplete.tasks, function(task) {
+
+          task.toDelete = true;
+          if (task.metrics[task.metrics.length - 1].targetEndDate > JSON.parse(req.query.startRange) && task.metrics[task.metrics.length - 1].targetEndDate < JSON.parse(req.query.endRange)) {
+            task.toDelete = false;
           }
+          if (task.metrics[task.metrics.length - 1].status !== 'Finished' && task.metrics[task.metrics.length - 1].status !== 'Withdrawn') {
+            task.toDelete = false;
+          }
+          var actors = [];
+          _.each(_.compact(task.actors), function(actor) {
+            var thisuser = _.filter(usersList, function(user) {
+              return user._id.toString() === actor.toString();
+            });
+            if (thisuser.length > 0) {
+              actors.push({
+                _id: actor,
+                avatar: (thisuser[0].avatar) ? thisuser[0].avatar : 'assets/images/avatars/' + thisuser[0]._id + '.png',
+                name: thisuser[0].name
+              });
+            }
+          });
+          task.actors = actors;
         });
-        task.actors = actors;
+        var filteredTasks = _.filter(dashboardComplete.tasks, function(task) {
+          return task.toDelete === false;
+        })
+        return res.status(200).json(filteredTasks);
       });
-      var filteredTasks = _.filter(dashboardComplete.tasks, function(task) {
-        return task.toDelete === false;
-      })
-      console.log('FILTEREDTASKS', filteredTasks.length)
-      return res.status(200).json(filteredTasks);
-    });
+  }
+
 };
 
 
