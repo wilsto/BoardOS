@@ -7,7 +7,7 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
     // Define the initialize function
     this.initialize = function() {
       this.loadTasks();
-    }
+    };
     this.loadTasks = function() {
 
       // ***************************************************
@@ -95,7 +95,6 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
 
         self.filterClosed = _.concat(self.filterFinished, self.filterReviewed, self.filterWithdrawn);
         self.filterClosedNb = self.filterFinishedNb + self.filterReviewedNb + self.filterWithdrawnNb;
-        console.log('SELF.FILTERCLOSEDNB', self.filterClosedNb)
 
         self.filterTasksWithSuccess = _.filter(self.allTasks, function(task) {
           return task.success;
@@ -329,7 +328,7 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
                 calculatedPaths.push(_.cloneDeep(process));
               }
             });
-          })
+          });
           calculatedPaths = _.uniqBy(calculatedPaths, 'longname');
           _.each(calculatedPaths, function(process) {
             process.isCalculatedPath = true;
@@ -435,7 +434,6 @@ angular.module('boardOsApp').factory('Tasks', function($http, Notification, $roo
 
 
           });
-          console.log('  SELF.PROCESSLIST', self.processList)
         });
       };
 

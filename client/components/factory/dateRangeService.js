@@ -46,11 +46,11 @@ angular.module('boardOsApp').factory('dateRangeService', function($rootScope, $w
     return {
       startRange: self.startRange,
       endRange: self.endRange
-    }
+    };
   };
   // this is simplified for illustration, see edit below
   return {
     getDates: getDates
-  }
+  };
 
 });

@@ -69,6 +69,73 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
   $scope.milestonesTypeToshow = 'All';
   $scope.anomaliesTypeToshow = 'To correct';
 
+
+
+  var convertTasksInProcessFlow = function() {
+
+    $scope.processFocus = _.filter($scope.obeya.tasks.processList, function(path) {
+      return path.longname === $scope.obeya.perimeter[0].activity;
+    })[0];
+
+    $scope.processFlowLevel = $scope.processFocus.level + 1;
+    $scope.processFocusName = $scope.processFocus.longname;
+    $scope.processFocusKey = $scope.processFocus.id || $scope.processFocus.longname;
+
+    var processFlow = [];
+    var processLinks = [];
+    if ($scope.processFocus.processFlow) {
+      processFlow = $scope.processFocus.processFlow.nodeDataArray;
+      processLinks = $scope.processFocus.processFlow.linkDataArray;
+    }
+
+    if (processFlow.length === 0 || _.filter(processFlow, ['key', -5]).length === 0) {
+      processFlow.push({
+        'key': -5,
+        'category': 'Comment',
+        'text': $scope.processFocusName + '    -    Flow of level ' + $scope.processFlowLevel,
+        'loc': '280 -40'
+      });
+    }
+    if (processFlow.length === 0 || _.filter(processFlow, ['key', -1]).length === 0) {
+      processFlow.push({
+        'key': -1,
+        'category': 'Start',
+        'loc': '175 0',
+        'text': 'Start'
+      });
+    }
+
+    if (processFlow.length === 0 || _.filter(processFlow, ['key', -2]).length === 0) {
+      processFlow.push({
+        'key': -2,
+        'category': 'End',
+        'loc': '175 660',
+        'text': 'End!'
+      });
+    }
+
+    _.each($scope.obeya.tasks.processList, function(path, index) {
+      var newSubProcess = {};
+      if (processFlow.length === 0 || _.filter(processFlow, ['key', path.id || path.longname]).length === 0) {
+        if (path.level === $scope.processFlowLevel) {
+          newSubProcess.category = 'Process';
+          newSubProcess.key = path.id || path.longname;
+          newSubProcess.name = path.longname.replace($scope.processFocusName + '.', '');
+          newSubProcess.color = 'white';
+          processFlow.push(newSubProcess);
+        }
+      }
+    });
+
+    // PROCESS flow
+    $scope.model = new go.GraphLinksModel(
+      processFlow,
+      processLinks
+    );
+
+  };
+
+
   /**
    * loadObeya
    * @return {[type]} [description]
@@ -82,8 +149,6 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
         $scope.obeya.anomalies = new Anomalies($scope.obeya);
         $scope.obeya.tasks = new Tasks($scope.obeya);
         $rootScope.obeyaPerimeter = $scope.obeya.perimeter;
-
-        console.log('$SCOPE.OBEYA', $scope.obeya)
 
         $scope.activeWall = _.filter($scope.walls, function(wall) {
           return wall.id === 0;
@@ -881,71 +946,6 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
   var alltasks = {};
   var allhierarchies = {};
 
-  var convertTasksInProcessFlow = function() {
-
-    console.log('$SCOPE.OBEYA.TASKS.PROCESSLIST', $scope.obeya.tasks.processList)
-    $scope.processFocus = _.filter($scope.obeya.tasks.processList, function(path) {
-      return path.longname === $scope.obeya.perimeter[0].activity;
-    })[0];
-    console.log('  $SCOPE.PROCESSFOCUS', $scope.processFocus)
-
-    $scope.processFlowLevel = $scope.processFocus.level + 1;
-    $scope.processFocusName = $scope.processFocus.longname;
-    $scope.processFocusKey = $scope.processFocus.id || $scope.processFocus.longname;
-
-    var processFlow = [];
-    var processLinks = [];
-    if ($scope.processFocus.processFlow) {
-      processFlow = $scope.processFocus.processFlow.nodeDataArray;
-      processLinks = $scope.processFocus.processFlow.linkDataArray;
-    }
-
-    if (processFlow.length === 0 || _.filter(processFlow, ['key', -5]).length === 0) {
-      processFlow.push({
-        'key': -5,
-        'category': 'Comment',
-        'text': $scope.processFocusName + '    -    Flow of level ' + $scope.processFlowLevel,
-        'loc': '280 -40'
-      });
-    }
-    if (processFlow.length === 0 || _.filter(processFlow, ['key', -1]).length === 0) {
-      processFlow.push({
-        'key': -1,
-        'category': 'Start',
-        'loc': '175 0',
-        'text': 'Start'
-      });
-    }
-
-    if (processFlow.length === 0 || _.filter(processFlow, ['key', -2]).length === 0) {
-      processFlow.push({
-        'key': -2,
-        'category': 'End',
-        'loc': '175 660',
-        'text': 'End!'
-      });
-    }
-
-    _.each($scope.obeya.tasks.processList, function(path, index) {
-      var newSubProcess = {};
-      if (processFlow.length === 0 || _.filter(processFlow, ['key', path.id || path.longname]).length === 0) {
-        if (path.level === $scope.processFlowLevel) {
-          newSubProcess.category = 'Process';
-          newSubProcess.key = path.id || path.longname;
-          newSubProcess.name = path.longname.replace($scope.processFocusName + '.', '');
-          newSubProcess.color = 'white';
-          processFlow.push(newSubProcess);
-        }
-      }
-    });
-
-    // PROCESS flow
-    $scope.model = new go.GraphLinksModel(
-      processFlow,
-      processLinks
-    );
-
-  };
 
   $scope.countDot = function count(s1) {
     return (s1.match(new RegExp('\\.', 'g')) || []).length;
