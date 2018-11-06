@@ -43,6 +43,9 @@ npm install -g grunt-cli
 npm install -g bower
 ```
 
+```sh
+npm install -g --production windows-build-tools
+```
 ---
 
 ###Installation des dépendances au niveau de l'application

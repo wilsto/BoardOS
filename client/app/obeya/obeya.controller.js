@@ -158,10 +158,6 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
         $scope.NavCaroussel(activeWallId);
         $scope.showCard($scope.activeWall.name);
 
-        // recherche des processus
-        $timeout(function() {
-          convertTasksInProcessFlow();
-        }, 3000);
 
       });
     }
@@ -174,6 +170,11 @@ angular.module('boardOsApp').controller('ObeyaCtrl', function($scope, $http, $wi
 
   $scope.$watch('filters', function() {
     $window.sessionStorage.setItem('viewMode', JSON.stringify($scope.filters));
+  }, true);
+
+  $scope.$watch('obeya.tasks.processList', function() {
+    // recherche des processus
+    convertTasksInProcessFlow();
   }, true);
 
   /**

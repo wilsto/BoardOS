@@ -1,8 +1,10 @@
 node_modules
+node_modules2
 public
 .tmp
 .idea
 client/bower_components
+client/bower_components2
 dist
 newrelic_agent.log
 /server/config/local.env.js

@@ -47,6 +47,7 @@
     "angular-pageslide-directive": "^2.1.4",
     "lodash": "^4.17.11",
     "awesome-bootstrap-checkbox": "^1.0.0",
+    "intro.js": "^2.9.3",
     "angular-intro.js": "^3.3.0",
     "angular-gridster": "^0.13.15",
     "angular-nvd3": "^1.0.9",
@@ -54,7 +55,7 @@
     "zingchart": "^2.6.3",
     "angular-dragdrop": "^1.0.13",
     "gojs": "^1.8.32",
-    "font-awesome": "^5.4.2"
+    "font-awesome": "^5.5.0"
   },
   "devDependencies": {
     "angular-mocks": "~1.4.x",
