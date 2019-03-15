@@ -109,7 +109,7 @@
     "open": "~0.0.4",
     "requirejs": "~2.3.5",
     "should": "~13.2.3",
-    "supertest": "~3.3.0",
+    "supertest": "~4.0.1",
     "time-grunt": "~2.0.0"
   },
   "engines": {
