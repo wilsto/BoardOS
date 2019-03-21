@@ -82,7 +82,7 @@
     "grunt-rev": "~0.1.0",
     "grunt-shell": "^2.1.0",
     "grunt-shell-spawn": "^0.3.1",
-    "grunt-svgmin": "~5.0.0",
+    "grunt-svgmin": "~6.0.0",
     "grunt-usemin": "~3.1.1",
     "grunt-wiredep": "~3.0.1",
     "jit-grunt": "^0.10.0",
