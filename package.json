@@ -5,7 +5,7 @@
   "dependencies": {
     "@sendgrid/mail": "^6.1.4",
     "angular-intro.js": "^3.4.0",
-    "async": "^2.1.4",
+    "async": "^3.0.1",
     "body-parser": "^1.14.1",
     "composable-middleware": "^0.3.0",
     "compression": "^1.6.0",
