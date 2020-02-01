@@ -106,7 +106,7 @@
     "karma-requirejs": "~1.1.0",
     "karma-script-launcher": "~1.0.0",
     "newrelic": "^4.9.0",
-    "open": "~0.0.4",
+    "open": "~7.0.2",
     "requirejs": "~2.3.5",
     "should": "~13.2.3",
     "supertest": "~3.3.0",
