@@ -30,7 +30,7 @@
     "moment": "^2.19.1",
     "mongodb": "^3.1.8",
     "mongoose": "^5.3.8",
-    "morgan": "~1.9.0",
+    "morgan": "~1.10.0",
     "node-excel-export": "^1.4.1",
     "node-schedule": "^1.2.0",
     "passport": "~0.4.0",
