@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "main": "server/app.js",
   "dependencies": {
-    "@sendgrid/mail": "^6.1.4",
+    "@sendgrid/mail": "^7.0.1",
     "angular-intro.js": "^3.4.0",
     "async": "^2.1.4",
     "body-parser": "^1.14.1",
